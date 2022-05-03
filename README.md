@@ -1,1 +1,1 @@
-# SGA_CProject
+# SGA
