@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="12_Function\03_Function\RSP.c">
+    <ClCompile Include="Last.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

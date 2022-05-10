@@ -7,19 +7,25 @@
 
 void printInput(int computer, int player) 
 {
-	printf("상대: %s \n", computer == 1 ? "가위" : computer == 2 ? "바위" : "보");
-	printf("나: %s \n", player == 1 ? "가위" : player == 2 ? "바위" : player == 3 ? "보" : "유효하지 않은 번호");
+	printf("상대: %s \n", 
+		computer == 1 ? "가위" : 
+		computer == 2 ? "바위" : "보");
+
+	printf("나: %s \n", 
+		player == 1 ? "가위" : 
+		player == 2 ? "바위" : 
+		player == 3 ? "보" : "유효하지 않은 번호");
 }
 
-int randomDice(int computer)
+int randomDice()
 {
-	computer = rand() % 3 + 1;	// 1 ~ 3 사이의 랜덤한 값을 뽑습니다.
-	return computer;
+	return rand() % 3 + 1;	// 1 ~ 3 사이의 랜덤한 값을 뽑습니다.
 }
 
-void mukjipa(int computer, int player, int atkRight)
+int mukjipa(int atkRight)
 {
-	computer = randomDice(computer);
+	int computer = randomDice();
+	int player;
 
 	printf("번호를 입력하세요([1. 가위], [2. 바위], [3. 보]): ");
 	scanf_s("%i", &player);
@@ -32,28 +38,29 @@ void mukjipa(int computer, int player, int atkRight)
 	if (computer == player)
 	{
 		printf("걸렸습니다! \n");
-		printf("공격권을 가진 %s의 승리 ! \n", atkRight == 1 ? "player" : "computer");
+		printf("공격권을 가진 %s의 승리 ! \n\n\n", atkRight == 1 ? "player" : "computer");
+		return atkRight;
 	}
 	else if ((computer == 1 && player == 2) ||
 		(computer == 2 && player == 3) ||
 		(computer == 3 && player == 1))
 	{
-		printf("이겼습니다 ! 공격권은 player ! \n");
+		printf("공격권은 player ! \n");
 		atkRight = 1;
-		mukjipa(computer, player, atkRight);
+		return mukjipa(atkRight);
 	}
 	else
 	{
-		printf("졌습니다 ! 공격권은 computer ! \n");
+		printf("공격권은 computer ! \n");
 		atkRight = 2;
-		mukjipa(computer, player, atkRight);
+		return mukjipa(atkRight);
 	}
-
 }
 
-int rockScissorsPaper(int computer, int player)
+int rockScissorsPaper()
 {
-	computer = randomDice(computer);
+	int computer = randomDice();
+	int player;
 
 	printf("번호를 입력하세요([1. 가위], [2. 바위], [3. 보]): ");
 	scanf_s("%i", &player);
@@ -66,40 +73,64 @@ int rockScissorsPaper(int computer, int player)
 	if (computer == player)
 	{
 		printf("무승부 ! 다시 시도해주세요. \n");
-		rockScissorsPaper(computer, player);
+		return rockScissorsPaper();
 	}
 	else if ((computer == 1 && player == 2) ||
 		(computer == 2 && player == 3) ||
 		(computer == 3 && player == 1))
 	{
-		printf("이겼습니다 ! 공격권은 player ! \n");
+		printf("공격권은 player ! \n");
 		return 1;
 	}
 	else
 	{
-		printf("졌습니다 ! 공격권은 computer ! \n");
+		printf("공격권은 computer ! \n");
 		return 2;
 	}
 
 	printf("\n");
 }
 
+void printScoreBoard(int result, int computerWin, int playerWin)
+{
+	printf("------------------------------------\n");
+	printf("플레이어 승리 횟수: %i \n", playerWin);
+	printf("컴퓨터 승리 횟수: %i \n", computerWin);
+	printf("-------------------------------------\n\n\n");
+
+	if (playerWin == 2 || computerWin == 2)
+	{
+		printf("승부가 가려져 프로그램을 종료합니다.");
+		exit(0);
+	}
+}
+
 int main()
 {
 	srand(GetTickCount64());
-	int computer = 0;
-	int player = 0;
 
-	printf("묵찌빠 게임을 시작합니다. \n");
+	printf("묵찌빠 게임을 시작합니다. (3판 2선승제) \n");
 
+	int computerWin = 0;
+	int playerWin = 0;
 
-	printf("먼저 가위바위보를 해주세요. \n");
-	int atkRight = rockScissorsPaper(computer, player);
+	int t = 3;
+	while (t--)
+	{
+		printf("먼저 가위바위보를 해주세요. \n");
+		int atkRight = rockScissorsPaper();
 
-	printf("\n");
-	printf("묵찌빠를 시작합니다. \n");
-	mukjipa(computer, player, atkRight);
-	
+		printf("\n");
+		printf("묵찌빠를 시작합니다. \n");
+		int result = mukjipa(atkRight);
+
+		if (result == 1) playerWin++;
+		else computerWin++;
+
+		printScoreBoard(result, computerWin, playerWin);
+	}
+
+	mukjipa(2, 3, 4);
 
 	return 0;
 }

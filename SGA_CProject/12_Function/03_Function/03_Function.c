@@ -15,10 +15,20 @@ void printMonster(Monster monster)
 	printf("Atk : %i \n", monster.atk);
 }
 
+void printArray(int array[], int length)
+{
+	for (int i = 0; i < length; ++i)
+		printf("array[%i] : %i \n", i, array[i]);
+}
+
 int main()
 {
 	Monster slime = { 1, 100, 10 };
 	printMonster(slime);
+
+	int array[] = { 1,2,3,4,5 };
+
+	printArray(array, 5);
 
 	return 0;
 }
