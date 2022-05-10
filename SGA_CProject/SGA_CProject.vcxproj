@@ -18,11 +18,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="12_Function\01_Function\Simulation.c" />
-    <ClCompile Include="12_Function\01_Function\main.c" />
-    <ClCompile Include="12_Function\01_Function\Calculate.c" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
