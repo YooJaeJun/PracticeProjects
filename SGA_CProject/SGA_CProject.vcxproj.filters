@@ -15,7 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="10_Array\02_Array.c">
+    <ClCompile Include="12_Function\01_Function\Simulation.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="12_Function\01_Function\main.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="12_Function\01_Function\Calculate.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
