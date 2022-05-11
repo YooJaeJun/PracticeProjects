@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+// Swap 이라는 함수를 만들고 포인터 매개변수를 이용하여
+// Swap 을 실행하게 된다면 두 변수의 값이 서로 뒤바뀌도록 만들어주세요.
+
+void Swap(int* p1, int* p2)
+{
+	int tmp = *p1;
+	*p1 = *p2;
+	*p2 = tmp;
+}
+
+int main()
+{
+	int A = 10;
+	int B = 20;
+
+	// Swap 함수 실행 !
+	Swap(&A, &B);
+
+	printf("A : %i \n", A);
+	printf("B : %i \n", B);
+
+	return 0;
+}
+
+// Call by Value
+// 의미 : 
+// 장점 : 
+// 단점 : 
+// 사용하는 예 : 
+
+// Call By Address
+// 의미 : 
+// 장점 : 
+// 단점 : 
+// 사용하는 예 : 
