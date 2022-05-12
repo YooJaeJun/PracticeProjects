@@ -2,10 +2,10 @@
 
 // 배열을 넘겨 배열의 요소중 가장 큰 값을 반환하는 함수를 작성해주세요.
 
-int Max(const int arr[], int length)
+int Max(const int arr[], const int length)
 {
-	int ret = 1e9;
-	for (int i = 0; i < length; ++i)
+	int ret = *arr;
+	for (int i = 1; i < length; ++i)
 	{
 		if (ret > arr[i])
 			ret = arr[i];
@@ -16,7 +16,7 @@ int Max(const int arr[], int length)
 int main()
 {
 	int Arr[] = { 10, 17, 20, 11, 1, 9, 8, 2 };
-	int length = 8;
+	const int length = 8;
 
 	printf("Arr 요소 : ");
 	for (int i = 0; i < length; ++i)

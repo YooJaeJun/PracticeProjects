@@ -5,12 +5,12 @@
 // 프로그램을 만들어주세요.
 // 조건 : [] 사용 금지
 
-void FindEven(const int* const pArr)
+void FindEven(const int* const pArr, const int length)
 {
 	printf("\n");
 	printf("짝수 배열 \n");
 	printf("pArr : ");
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < length; ++i)
 	{
 		if ((*pArr + i) % 2 == 0)
 		{
@@ -24,18 +24,19 @@ void FindEven(const int* const pArr)
 int main()
 {
 	int Arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	const int length = 10;
 
 	int* pArr;
 	pArr = Arr;
 
 	printf("원래 배열 \n");
 	printf("Arr : ");
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < length; ++i)
 	{
 		printf("%i ", *Arr + i);
 	}
 
-	FindEven(pArr);
+	FindEven(pArr, length);
 
 	return 0;
 }
