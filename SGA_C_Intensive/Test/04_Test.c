@@ -7,7 +7,7 @@ int Max(const int arr[], const int length)
 	int ret = *arr;
 	for (int i = 1; i < length; ++i)
 	{
-		if (ret > arr[i])
+		if (ret < arr[i])
 			ret = arr[i];
 	}
 	return ret;
@@ -23,7 +23,7 @@ int main()
 		printf("%i ", Arr[i]);
 
 	printf("\n");
-	printf("가장 작은 수 : ");
+	printf("가장 큰 수 : ");
 	printf("%i \n", Max(Arr, length));
 
 	return 0;

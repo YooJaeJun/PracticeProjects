@@ -16,7 +16,7 @@ void ArraySwap(int Arr1[], int Arr2[])
 int main()
 {
 	int Arr1[5] = { 1, 2, 3, 4, 5 };
-    int Arr2[5] = { 10, 11, 12 ,13 ,14 };
+	int Arr2[5] = { 10, 11, 12 ,13 ,14 };
 
 	printf("Swap ÀÌÀü \n");
 	printf("Array1 : ");
