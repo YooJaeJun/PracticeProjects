@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Test\04_Test.c">
+    <ClCompile Include="Game\BlackJack.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

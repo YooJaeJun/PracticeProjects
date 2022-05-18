@@ -1,2 +1,7 @@
-﻿  04_Test.c
+﻿  BlackJack.c
+C:\Users\zoflq\source\repos\SGA\SGA_C_Intensive\Game\BlackJack.c(60,27): warning C4244: '함수': 'ULONGLONG'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\zoflq\source\repos\SGA\SGA_C_Intensive\Game\BlackJack.c(141,21): warning C4473: 'scanf_s': 서식 문자열에 대한 인수가 충분하게 전달되지 않았습니다.
+C:\Users\zoflq\source\repos\SGA\SGA_C_Intensive\Game\BlackJack.c(141,21): message : 자리 표시자 및 해당 매개 변수에는 variadic 인수가 2개 필요하지만 1개가 제공되었습니다.
+C:\Users\zoflq\source\repos\SGA\SGA_C_Intensive\Game\BlackJack.c(141,21): message : 누락된 variadic 인수 2이(가) 서식 문자열 '%c'에 필요합니다.
+C:\Users\zoflq\source\repos\SGA\SGA_C_Intensive\Game\BlackJack.c(141,21): message : 이 인수는 버퍼 크기로 사용됩니다.
   SGA_C_Intensive.vcxproj -> C:\Users\zoflq\source\repos\SGA\SGA_C_Intensive\Debug\SGA_C_Intensive.exe
