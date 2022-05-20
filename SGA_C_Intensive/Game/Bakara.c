@@ -47,8 +47,27 @@ void title()
 	printf("-----------------------------------------------------------\n");
 }
 
+void success(int* playerPlusScore, int* dealerPlusScore, int score)
+{
+	printf("정답 ! %i점을 획득합니다. \n", score);
+	if (score == 4) printf("Middle을 성공했으므로 점수가 크게 오릅니다. \n");
+	*playerPlusScore += score;
+	*dealerPlusScore -= score;
+}
+
+void fail(const int left, const int right, int* playerPlusScore, int* dealerPlusScore, int score)
+{
+	printf("실패 ! Left : %i, Right : %i 였습니다. \n", left, right);
+	if (score == -4) printf("Middle을 실패했으므로 점수가 크게 깎입니다. \n");
+	printf("점수 %i점 ! \n", score);
+	*playerPlusScore += score;
+	*dealerPlusScore -= score;
+}
+
 int main()
 {
+	// 지난 시간을 반환
+	// 밀리 세컨드
 	srand(GetTickCount64());
 
 	title();
@@ -60,11 +79,14 @@ int main()
 
 	int player = 0, dealer = 0;
 	int t = 0;
+	int playerPlusScore = 0;
+	int dealerPlusScore = 0;
+
 	while (++t <= 10)
 	{
 		printf("-----------------------------------------------------------\n");
-		printf("현재 플레이어 점수: %i \n", player);
-		printf("현재 딜러 점수:     %i \n", dealer);
+		printf("현재 플레이어 점수: %i \n", playerPlusScore);
+		printf("현재 딜러 점수:     %i \n", dealerPlusScore);
 		printf("-----------------------------------------------------------\n");
 
 		printf("딜러가 카드를 셔플합니다. \n");
@@ -77,72 +99,49 @@ int main()
 		printf("[ Left: %i, Right: ?? ] \n", left);
 
 		printf("-----------------------------------------------------------\n");
-		printf("두 수 중 어떤 수가 큰지 맞춰주세요. \n(Left가 클 것: 1. \nRight가 클 것: 2. \n둘이 같을 것(Middle): 3.) \n\n");
+		printf("두 수 중 어떤 수가 큰지 맞춰주세요. \n(Left가 클 것: 1. \nRight가 클 것: 2. \nMiddle 둘이 같을 것: 3.) \n\n");
 		int input;
 		scanf_s("%d", &input);
 
-		int playerPlusScore = 0;
-		int dealerPlusScore = 0;
 		if (input == 1)
 		{
 			if (left > right)
 			{
-				printf("정답 ! 1점을 획득합니다. \n");
-				playerPlusScore = 1;
-				dealerPlusScore = -1;
+				success(&playerPlusScore, &dealerPlusScore, 1);
 			}
 			else if (left == right)
 			{
-				printf("실패 ! Left : %i, Right : %i 였습니다. \n", left, right);
-				printf("Middle을 틀렸으므로 점수 -4점 ! \n");
-				playerPlusScore = -4;
-				dealerPlusScore = 4;
+				fail(left, right, &playerPlusScore, &dealerPlusScore, -4);
 			}
 			else
 			{
-				printf("실패 ! Left : %i, Right : %i 였습니다. \n", left, right);
-				printf("점수 -1점 ! \n");
-				playerPlusScore = -1;
-				dealerPlusScore = 1;
+				fail(left, right, &playerPlusScore, &dealerPlusScore, -1);
 			}
 		}
 		else if (input == 2)
 		{
 			if (left < right)
 			{
-				printf("정답 ! 1점을 획득합니다. \n");
-				playerPlusScore = 1;
-				dealerPlusScore = -1;
+				success(&playerPlusScore, &dealerPlusScore, 1);
 			}
 			else if (left == right)
 			{
-				printf("실패 ! Left : %i, Right : %i 였습니다. \n", left, right);
-				printf("Middle을 틀렸으므로 점수 -4점 ! \n");
-				playerPlusScore = -4;
-				dealerPlusScore = 4;
+				fail(left, right, &playerPlusScore, &dealerPlusScore, -4);
 			}
 			else
 			{
-				printf("실패 ! Left : %i, Right : %i 였습니다. \n", left, right);
-				printf("점수 -1점 ! \n");
-				playerPlusScore = -1;
-				dealerPlusScore = 1;
+				fail(left, right, &playerPlusScore, &dealerPlusScore, -1);
 			}
 		}
 		else if (input == 3)
 		{
 			if (left == right)
 			{
-				printf("정답 ! Middle 을 맞췄으므로 4점을 획득합니다. \n");
-				playerPlusScore = 4;
-				dealerPlusScore = -4;
+				success(&playerPlusScore, &dealerPlusScore, 4);
 			}
 			else
 			{
-				printf("실패 ! Left : %i, Right : %i 였습니다. \n", left, right);
-				printf("Middle을 틀렸으므로 점수 -4점 ! \n");
-				playerPlusScore = -4;
-				dealerPlusScore = 4;
+				fail(left, right, &playerPlusScore, &dealerPlusScore, -4);
 			}
 		}
 		else
@@ -151,14 +150,11 @@ int main()
 
 			if (left == right)
 			{
-				printf("Middle을 틀렸으므로 점수 -4점 ! \n");
-				playerPlusScore = -4;
+				fail(left, right, &playerPlusScore, &dealerPlusScore, -4);
 			}
 			else
 			{
-				printf("실패 ! Left : %i, Right : %i 였습니다. \n", left, right);
-				printf("점수 -1점 ! \n");
-				playerPlusScore = -1;
+				fail(left, right, &playerPlusScore, &dealerPlusScore, -1);
 			}
 		}
 
