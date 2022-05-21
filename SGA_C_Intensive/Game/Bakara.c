@@ -43,25 +43,26 @@ void printCard(int card[], int n)
 void title()
 {
 	printf("-----------------------------------------------------------\n");
-	printf("[바카라 게임] 을 시작합니다. \n");
-	printf("-----------------------------------------------------------\n");
+	printf("[바카라 게임] \n");
+	printf("1 ~ 13 사이의 숫자를 두 개를 뽑아 \n");
+	printf("왼쪽이 큰지, 오른쪽이 큰지 아니면 같은지를 맞추는 게임입니다. \n");
 }
 
-void success(int* playerPlusScore, int* dealerPlusScore, int score)
+void success(int* playerScore, int* dealerScore, int score)
 {
 	printf("정답 ! %i점을 획득합니다. \n", score);
 	if (score == 4) printf("Middle을 성공했으므로 점수가 크게 오릅니다. \n");
-	*playerPlusScore += score;
-	*dealerPlusScore -= score;
+	*playerScore += score;
+	*dealerScore -= score;
 }
 
-void fail(const int left, const int right, int* playerPlusScore, int* dealerPlusScore, int score)
+void fail(const int left, const int right, int* playerScore, int* dealerScore, int score)
 {
 	printf("실패 ! Left : %i, Right : %i 였습니다. \n", left, right);
 	if (score == -4) printf("Middle을 실패했으므로 점수가 크게 깎입니다. \n");
 	printf("점수 %i점 ! \n", score);
-	*playerPlusScore += score;
-	*dealerPlusScore -= score;
+	*playerScore += score;
+	*dealerScore -= score;
 }
 
 int main()
@@ -77,17 +78,18 @@ int main()
 	Sleep(500);
 	// printCard(card, n);
 
-	int player = 0, dealer = 0;
 	int t = 0;
-	int playerPlusScore = 0;
-	int dealerPlusScore = 0;
+	int playerScore = 0;
+	int dealerScore = 0;
 
 	while (++t <= 10)
 	{
 		printf("-----------------------------------------------------------\n");
-		printf("현재 플레이어 점수: %i \n", playerPlusScore);
-		printf("현재 딜러 점수:     %i \n", dealerPlusScore);
+		printf("현재 플레이어 점수: %i \n", playerScore);
+		printf("현재 딜러 점수:     %i \n", dealerScore);
 		printf("-----------------------------------------------------------\n");
+
+		Sleep(500);
 
 		printf("딜러가 카드를 셔플합니다. \n");
 		shuffle(card, n);
@@ -98,8 +100,10 @@ int main()
 		printf("두 장 중 한 장을 공개합니다. \n");
 		printf("[ Left: %i, Right: ?? ] \n", left);
 
+		Sleep(1000);
+
 		printf("-----------------------------------------------------------\n");
-		printf("두 수 중 어떤 수가 큰지 맞춰주세요. \n(Left가 클 것: 1. \nRight가 클 것: 2. \nMiddle 둘이 같을 것: 3.) \n\n");
+		printf("두 수 중 어떤 수가 큰지 맞춰주세요. \n(Left: 1 \nRight: 2 \nMiddle(둘이 같을 것): 3) \n\n");
 		int input;
 		scanf_s("%d", &input);
 
@@ -107,41 +111,41 @@ int main()
 		{
 			if (left > right)
 			{
-				success(&playerPlusScore, &dealerPlusScore, 1);
+				success(&playerScore, &dealerScore, 1);
 			}
 			else if (left == right)
 			{
-				fail(left, right, &playerPlusScore, &dealerPlusScore, -4);
+				fail(left, right, &playerScore, &dealerScore, -4);
 			}
 			else
 			{
-				fail(left, right, &playerPlusScore, &dealerPlusScore, -1);
+				fail(left, right, &playerScore, &dealerScore, -1);
 			}
 		}
 		else if (input == 2)
 		{
 			if (left < right)
 			{
-				success(&playerPlusScore, &dealerPlusScore, 1);
+				success(&playerScore, &dealerScore, 1);
 			}
 			else if (left == right)
 			{
-				fail(left, right, &playerPlusScore, &dealerPlusScore, -4);
+				fail(left, right, &playerScore, &dealerScore, -4);
 			}
 			else
 			{
-				fail(left, right, &playerPlusScore, &dealerPlusScore, -1);
+				fail(left, right, &playerScore, &dealerScore, -1);
 			}
 		}
 		else if (input == 3)
 		{
 			if (left == right)
 			{
-				success(&playerPlusScore, &dealerPlusScore, 4);
+				success(&playerScore, &dealerScore, 4);
 			}
 			else
 			{
-				fail(left, right, &playerPlusScore, &dealerPlusScore, -4);
+				fail(left, right, &playerScore, &dealerScore, -4);
 			}
 		}
 		else
@@ -150,27 +154,27 @@ int main()
 
 			if (left == right)
 			{
-				fail(left, right, &playerPlusScore, &dealerPlusScore, -4);
+				fail(left, right, &playerScore, &dealerScore, -4);
 			}
 			else
 			{
-				fail(left, right, &playerPlusScore, &dealerPlusScore, -1);
+				fail(left, right, &playerScore, &dealerScore, -1);
 			}
 		}
-
-		player += playerPlusScore;
-		dealer += dealerPlusScore;
 
 		printf("잠시 후 다시 셔플을 시작합니다. \n");
 		Sleep(1500);
 		system("cls");
 	}
 
-	printf("최종 플레이어 점수: %i \n", player);
-	printf("최종 딜러 점수:     %i \n", dealer);
+	printf("최종 플레이어 점수: %i \n", playerScore);
+	printf("최종 딜러 점수:     %i \n", dealerScore);
 	printf("-----------------------------------------------------------\n");
 	
-	printf("최종 승리자는 %s !!! \n", player > dealer ? "플레이어" : player < dealer ? "딜러" : "없습니다! 무승부");
+	printf("최종 승리자는 %s !!! \n", playerScore > dealerScore ? 
+		"플레이어" : 
+		playerScore < dealerScore ? 
+		"딜러" : "없습니다! 무승부");
 
 	printf("[바카라 게임] 을 종료합니다. \n");
 

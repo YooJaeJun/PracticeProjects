@@ -27,11 +27,16 @@ int mukjipa(int atkRight)
 	int computer = randomDice();
 	int player;
 
-	printf("번호를 입력하세요([1. 가위], [2. 바위], [3. 보]): ");
+	printf("번호를 입력하세요([1. 찌], [2. 묵], [3. 빠]): ");
 	scanf_s("%i", &player);
 	printf("\n");
 
-	printf("묵! 찌! 빠! \n");
+	printf("묵! \n");
+	Sleep(500);
+	printf("찌! \n");
+	Sleep(500);
+	printf("빠!\n\n");
+	Sleep(500);
 
 	printInput(computer, player);
 
@@ -65,6 +70,13 @@ int rockScissorsPaper()
 	printf("번호를 입력하세요([1. 가위], [2. 바위], [3. 보]): ");
 	scanf_s("%i", &player);
 	printf("\n");
+
+	printf("가위! \n");
+	Sleep(500);
+	printf("바위! \n");
+	Sleep(500);
+	printf("보! \n\n");
+	Sleep(500);
 
 	printInput(computer, player);
 
@@ -100,7 +112,7 @@ void printScoreBoard(int result, int computerWin, int playerWin)
 
 	if (playerWin == 2 || computerWin == 2)
 	{
-		printf("승부가 가려져 프로그램을 종료합니다.");
+		printf("승부가 가려져 프로그램을 종료합니다. \n");
 		exit(0);
 	}
 }
@@ -120,17 +132,21 @@ int main()
 		printf("먼저 가위바위보를 해주세요. \n");
 		int atkRight = rockScissorsPaper();
 
+		Sleep(1500);
+		system("cls");
+
 		printf("\n");
 		printf("묵찌빠를 시작합니다. \n");
 		int result = mukjipa(atkRight);
+
+		Sleep(1500);
+		system("cls");
 
 		if (result == 1) playerWin++;
 		else computerWin++;
 
 		printScoreBoard(result, computerWin, playerWin);
 	}
-
-	mukjipa(2, 3, 4);
 
 	return 0;
 }
