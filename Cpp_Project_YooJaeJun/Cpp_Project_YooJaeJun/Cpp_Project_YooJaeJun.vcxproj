@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="02_Constructor\01_Constructor\main.cpp" />
-    <ClCompile Include="02_Constructor\01_Constructor\SampleClass.cpp" />
+    <ClInclude Include="05_CopyConstructor\01_Sallow\Monster.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="02_Constructor\01_Constructor\SampleClass.h" />
+    <ClCompile Include="05_CopyConstructor\01_Sallow\main.cpp" />
+    <ClCompile Include="05_CopyConstructor\01_Sallow\Monster.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -8,8 +8,22 @@
 
 int main()
 {
-	Monster monster;
-	
+	string inputName;
+	int inputHp, inputAtk;
+	cout << "몬스터를 소환해주세요.\n";
+	cout << "몬스터 이름: ";
+	cin >> inputName;
+	cout << "몬스터 체력: ";
+	cin >> inputHp;
+	cout << "몬스터 공격력: ";
+	cin >> inputAtk;
+
+	Monster* monster = new Monster(inputName, inputHp, inputAtk);
+
+	monster->printInfo();
+
+	delete monster;
+	monster = nullptr;
 
 	return 0;
 }

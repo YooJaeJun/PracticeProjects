@@ -10,11 +10,19 @@ private:
 
 public:
 	Monster() = default;
-	Monster(int name, int hp, int atk)
-	{
-		this->name = name;
-		this->hp = hp;
-		this->atk = atk;
-	}
+	Monster(const string name, const int hp, const int atk);
+	~Monster();
+
+public:
+	void printInfo();
+
+public:
+	void setName(const string name);
+	void setHp(const int hp);
+	void setAtk(const int atk);
+
+	string getName() const;
+	int getHp() const;
+	int getAtk() const;
 };
 
