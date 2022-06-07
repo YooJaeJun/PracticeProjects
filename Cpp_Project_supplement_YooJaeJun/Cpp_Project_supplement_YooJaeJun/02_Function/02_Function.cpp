@@ -1,6 +1,3 @@
-#include <iostream>
-using namespace std;
-
 // Monster 라는 구조체를 선언하고
 // Monster 형식의 객체인 slime 과 fairy 를 만들어주세요.
 
@@ -21,6 +18,8 @@ using namespace std;
 // Fairy 형식의 객체의 경우 : 페어리가 마법으로 공격합니다.
 // Slime 형식의 객체의 경우 : 슬라임이 몸통으로 공격합니다.
 
+#include <iostream>
+using namespace std;
 
 class Monster
 {
@@ -31,10 +30,10 @@ protected:
 
 public:
 	Monster() : name(""), atk(0), hp(0) {}
-	Monster(string name, int atk, int hp) : name(name), atk(atk), hp(hp) {}
+	Monster(const string name, const int atk, const int hp) : name(name), atk(atk), hp(hp) {}
 
 public:
-	void Attack()
+	inline void Attack() const
 	{
 		cout << name << "이(가) " << atk << "의 공격력으로 공격합니다.\n";
 	}
@@ -42,37 +41,27 @@ public:
 
 class Fairy : public Monster
 {
-private:
+public:
 	Fairy() : Monster() {}
-	Fairy(Monster monster) 
-	{
-		this->name = monster.name;
-		this->atk = atk;
-		this->hp = hp;
-	}
+	Fairy(const Monster& monster) : Monster(monster) {}
 
 public:
-	void Attack()
+	inline void Attack() const
 	{
-		cout << name << "이(가) " << "마법으로 공격합니다." << "(공격력 : " << atk << ")" << endl;
+		cout << name << "이 " << "마법으로 공격합니다." << "(공격력 : " << atk << ")" << '\n';
 	}
 };
 
 class Slime : public Monster
 {
-private:
+public:
 	Slime() : Monster() {}
-	Slime(string name, int atk, int hp)
-	{
-		this->name = name;
-		this->atk = atk;
-		this->hp = hp;
-	}
+	Slime(const Monster& monster) : Monster(monster) {}
 
 public:
-	void Attack()
+	inline void Attack() const
 	{
-		cout << name << "이(가) " << "몸통으로 공격합니다." << "(공격력 : " << atk << ")" << endl;
+		cout << name << "가 " << "몸통으로 공격합니다." << "(공격력 : " << atk << ")" << '\n';
 	}
 };
 
