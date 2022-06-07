@@ -1,0 +1,17 @@
+﻿  소스.cpp
+C:\Users\user\source\repos\PS_YooJaeJun\PS_YooJaeJun\소스.cpp(10,22): warning C4244: '초기화 중': 'double'에서 'int64_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\PS_YooJaeJun\PS_YooJaeJun\소스.cpp(18,15): warning C4244: '인수': 'double'에서 'const _Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Ty=int64_t
+          ]
+C:\Users\user\source\repos\PS_YooJaeJun\PS_YooJaeJun\소스.cpp(18,10): warning C4244: '인수': 'int64_t'에서 'const unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\PS_YooJaeJun\PS_YooJaeJun\소스.cpp(25,6): warning C4244: '인수': 'int64_t'에서 'const unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\PS_YooJaeJun\PS_YooJaeJun\소스.cpp(28,9): warning C4244: '인수': 'int64_t'에서 'const unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\PS_YooJaeJun\PS_YooJaeJun\소스.cpp(28,29): warning C4244: '인수': 'int64_t'에서 'const unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\PS_YooJaeJun\PS_YooJaeJun\소스.cpp(36,7): warning C4244: '인수': 'int64_t'에서 'const unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\PS_YooJaeJun\PS_YooJaeJun\소스.cpp(36,19): warning C4244: '인수': 'int64_t'에서 'const unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\PS_YooJaeJun\PS_YooJaeJun\소스.cpp(36,28): warning C4244: '인수': 'int64_t'에서 'const unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\PS_YooJaeJun\PS_YooJaeJun\소스.cpp(36,38): warning C4244: '인수': 'int64_t'에서 'const unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\PS_YooJaeJun\PS_YooJaeJun\소스.cpp(40,13): warning C4244: '인수': 'int64_t'에서 'const unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  PS_YooJaeJun.vcxproj -> C:\Users\user\source\repos\PS_YooJaeJun\Debug\PS_YooJaeJun.exe
