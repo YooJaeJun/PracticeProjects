@@ -5,7 +5,7 @@ void Swap(int* a, int* b)
 {
 	int tmp = *a;
 	*a = *b;
-	*b = *a;
+	*b = tmp;
 }
 
 int main()
