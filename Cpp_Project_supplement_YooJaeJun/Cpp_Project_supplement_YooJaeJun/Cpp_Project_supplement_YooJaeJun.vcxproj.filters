@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="03_Pointer\02_Pointer.cpp">
+    <ClCompile Include="03_Pointer\03_Pointer_Simulation.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
