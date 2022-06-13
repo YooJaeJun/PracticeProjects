@@ -22,7 +22,7 @@ void swap(int* a, int* b)
 	*b = tmp;
 }
 
-void shuffle(int card[], int n)
+void shuffle(int card[], const int n)
 {
 	for (int i = n - 1; i > 0; i--)
 	{
