@@ -1,2 +1,3 @@
-﻿  03_Pointer_Simulation.cpp
+﻿  01_Dynamic.cpp
+C:\Users\zoflq\source\repos\SGA\Cpp_Project_supplement_YooJaeJun\Cpp_Project_supplement_YooJaeJun\08_Dynamic\01_Dynamic.cpp(46,35): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
   Cpp_Project_supplement_YooJaeJun.vcxproj -> C:\Users\zoflq\source\repos\SGA\Cpp_Project_supplement_YooJaeJun\x64\Debug\Cpp_Project_supplement_YooJaeJun.exe

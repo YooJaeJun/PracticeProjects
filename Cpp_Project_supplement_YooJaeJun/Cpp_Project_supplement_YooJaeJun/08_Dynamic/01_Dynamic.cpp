@@ -11,6 +11,7 @@
 
 int main()
 {
+	/*
 	// new 자료형();
 	// 자료형의 공간을 동적 할당하고 해당 공간의 주소를 반환합니다.
 
@@ -30,15 +31,20 @@ int main()
 
 	printf("16진수 : %p\n", p);
 	printf("10진수 : %d\n", p);
-
+	*/
 
 	// short  형 공간을 동적할당 받고 해당 공간의 값을 10    로 초기화한 후 출력해주세요.
 	// float  형 공간을 동적할당 받고 해당 공간의 값을 3.14f 로 초기화한 후 출력해주세요.
 	// double 형 공간을 동적할당 받고 해당 공간의 값을 1.234 로 초기화한 후 출력해주세요.
 
-	short myShort = 10;
-	short* pShort = &myShort;
-	std::cout << "pShort: " << pShort << '\n';
+	short* pShort = new short(10);
+	std::cout << "*pShort: " << *pShort << '\n';
+
+	float* pFloat = new float(3.14f);
+	std::cout << "*pFloat: " << *pFloat << '\n';
+
+	float* pDouble = new float(1.234);
+	std::cout << "*pDouble: " << *pDouble << '\n';
 
 
 	return 0;
