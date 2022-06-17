@@ -8,6 +8,7 @@ SampleClass::SampleClass(int a, int b)
 
 SampleClass::SampleClass(const SampleClass& sample)
 {
+	cout << "복사 생성자 호출 ! \n";
 	A = sample.A;
 	B = sample.B;
 }
