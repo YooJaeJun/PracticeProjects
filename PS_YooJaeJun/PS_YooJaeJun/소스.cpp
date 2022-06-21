@@ -1,102 +1,88 @@
 #include <bits/stdc++.h>
-#include <unordered_map>
 using namespace std;
 
-unordered_map<string, vector<int>> dicInfo;
+int n;
+vector<vector<string>> rel;
+vector<vector<int>> history;  // 최소성 위해 성공한 것들 세이브
+int ans = 0;
+vector<int> cur;
 
-void comb(vector<string>& vs, const int idx, const int score, const int depth, const int n)
+bool checkOverlap()
 {
-    if (depth == n)
+    vector<string> values;
+    for (auto& r : rel)
     {
-        string s;
-        for (auto& elem : vs)
+        string forSearch;
+        for (int i = 0; i < (int)cur.size(); i++)
         {
-            s += elem;
+            forSearch += r[cur[i]];
         }
-        dicInfo[s].push_back(score);
+
+        auto it = find(values.begin(), values.end(), forSearch);
+        if (it == values.end())
+        {
+            values.push_back(forSearch);
+        }
+        else return false;
+    }
+    return true;
+}
+
+bool checkMinimality()
+{
+    bool flag = false;
+    for (int i = 0; i < (int)history.size(); i++)
+    {
+        for (int j = 0; j < (int)history.size(); j++)
+        {
+            if (find(cur.begin(), cur.end(), history[i][j]) == cur.end())
+            {
+                flag = true;
+                break;
+            }
+        }
+        if (flag == false) 
+            return false;
+    }
+    return true;
+}
+
+void comb(int idx)
+{
+    if (cur.size() == n)
+    {
+        if (checkMinimality() and checkOverlap())
+        {
+            history.push_back(cur);
+            ++ans;
+        }
         return;
     }
 
-    for (int i = idx; i < 4; i++)
+    for (int i = idx; i < (int)rel[i].size(); i++)
     {
-        string tmpSave = vs[i];
-        vs[i] = "-";
-        comb(vs, i + 1, score, depth + 1, n);
-        vs[i] = tmpSave;
+        cur.push_back(i);
+        comb(i + 1);
+        cur.pop_back();
     }
 }
 
-vector<int> solution(vector<string> info, vector<string> query) {
+int solution(vector<vector<string>> relation) {
+    rel = relation;
 
-    string tmpForStream;
-    stringstream stream;
-    vector<string> vs;
-    for (auto& str : info)
+    for (int i = 1; i < (int)rel.size(); i++)
     {
-        vs.clear();
-        stream.clear();
-        stream.str(str);
-        while (stream >> tmpForStream)
-        {
-            vs.push_back(tmpForStream);
-        }
-        int score = stoi(vs.back());
-        vs.pop_back();
-
-        for (int i = 0; i <= 4; i++)
-        {
-            comb(vs, 0, score, 0, i);
-        }
+        n = i;
+        vector<int> v;
+        comb(0);
     }
 
-    vector<int> answer;
-    for (auto& str : query)
-    {
-        string tmpForSearch;
-        int score = 0;
-        int ans = 0;
-
-        for (int i = 0; i < (int)str.size(); )
-        {
-            if (str[i] == '-')
-            {
-                tmpForSearch += '-';
-                i++;
-            }
-            else if (str[i] == ' ')
-            {
-                if (str[i + 1] >= '0' and str[i + 1] <= '9')
-                {
-                    score = stoi(str.substr(i + 1, (int)str.size() - i - 1));
-                    sort(dicInfo[tmpForSearch].begin(), dicInfo[tmpForSearch].end());
-                    ans = lower_bound(dicInfo[tmpForSearch].begin(), dicInfo[tmpForSearch].end(), score) 
-                        - dicInfo[tmpForSearch].begin();
-                    ans = dicInfo[tmpForSearch].size() - ans;
-                    break;
-                }
-                else 
-                    i += 5;
-            }
-            else
-            {
-                tmpForSearch += str[i];
-                i++;
-            }
-        }
-
-        answer.push_back(ans);
-    }
-
-    return answer;
+    return ans;
 }
-
 
 int main()
 {
-    solution(
-        { "java backend junior pizza 150","python frontend senior chicken 210","python frontend senior chicken 150","cpp backend senior pizza 260","java backend junior chicken 80","python backend senior chicken 50" },
-        { "java and backend and junior and pizza 100", "python and frontend and senior and chicken 200", "cpp and - and senior and pizza 250", "- and backend and senior and - 150", "- and - and - and chicken 100", "- and - and - and - 150" }
-    );
+    solution({ {"100", "ryan", "music", "2"}, {"200", "apeach", "math", "2"}, {"300", "tube", "computer", "3"}, {"400", "con", "computer", "4"}, {"500", "muzi", "music", "3"}, {"600", "apeach", "music", "2"} });
 
     return 0;
 }
