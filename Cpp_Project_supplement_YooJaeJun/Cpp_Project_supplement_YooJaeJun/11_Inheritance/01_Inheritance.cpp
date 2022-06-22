@@ -147,8 +147,7 @@ public:
 
 	virtual int Attack() const override
 	{
-		Character::Attack();
-		return Atk + DEX;
+		return Character::Attack() + DEX;
 	}
 
 	int Skill() const
