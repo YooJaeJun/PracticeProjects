@@ -129,14 +129,20 @@ private:
 
 public:
 	Archer()
-	{ cout << "Archer 기본 생성자 호출" << '\n'; }
+	{
+		cout << "Archer 기본 생성자 호출" << '\n';
+	}
 
 	explicit Archer(const string name, const unsigned lv, const unsigned hp, const unsigned atk, const unsigned dex) :
 		Character(name, lv, hp, atk), DEX(dex)
-	{ cout << "Archer 오버로딩 생성자 호출" << '\n'; }
+	{
+		cout << "Archer 오버로딩 생성자 호출" << '\n';
+	}
 
 	virtual ~Archer()
-	{ cout << "Archer 소멸자 호출" << '\n'; }
+	{
+		cout << "Archer 소멸자 호출" << '\n';
+	}
 
 public:
 	virtual void PrintCharacter() const override
@@ -194,4 +200,3 @@ int main()
 
 	return 0;
 }
-
