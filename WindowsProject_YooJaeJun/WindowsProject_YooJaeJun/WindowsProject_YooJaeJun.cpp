@@ -1,4 +1,9 @@
 ﻿#include <Windows.h>
+#include <iostream>
+
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+
+#define PEEK
 
 /*
     WinAPI(Windows Application Programming Interface)
@@ -49,10 +54,39 @@ int APIENTRY wWinMain(_In_    HINSTANCE hInstance,      // 우리가 실행하�
 
     MSG msg;
 
+#ifndef PEEK
+    // 프로그램에 들어오는 메세지를 저장할 수 있는 구조체
+    // GetMessage : 대기하고 있는 메세지를 가져와 MSG 형태에 저장합니다.
+    //              만약 메세지가 없다면 while 문을 잠재웁니다.
+    //              WM_QUIT 메시지가 돌아온다면 false 를 반환합니다.
     while (GetMessage(&msg, nullptr, 0, 0))
     { DispatchMessage(&msg); }
+#endif  // !PEEK
 
-    return (int) msg.wParam;
+#ifdef PEEK
+    while (true)
+    {
+        // PeekMessage : 대기하고 있는 메시지가 있는지 없는지 검사합니다.
+        //               만약 메시지가 없다면 false,
+        //               있다면 true 를 반환하고 MSG 형태에 저장합니다.
+        if (PeekMessage(&msg, nullptr, NULL, NULL, PM_REMOVE))
+        {
+            if (msg.message == WM_QUIT) return (int)msg.wParam;
+
+            DispatchMessage(&msg);
+        }
+        else
+        {
+            std::cout << "Update ";
+        }
+    }
+#endif
+    // PeekMessage 사용 이유
+    // GetMessage 같은 경우 주기적으로 호출될 코드를 WM_TIMER 를 통하여 호출해야 합니다.
+    // 이렇게 WM_TIMER 를 통하여 호출해야 합니다.
+    // 해당과 같이 코드를 호출하게 되면 CPU 연산이 아닌 메시지를 통해 연산량을 결정하기 때문에 호출속도가 느립니다.
+    // PeekMessage 같은 경우 while 과 같은 cpu 연산을 통하여 메시지가 없다면 주기적으로 호출할 코드를 실행시키기
+    // 때문에 호출량 차이로 인하여 PeekMessage 를 사용합니다.
 }
 
 // Window 를 만들기 위해 Window 구조(class)를 등록합니다.
@@ -114,17 +148,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
-    case WM_PAINT:
+#ifndef PEEK
+    case WM_CREATE:
+        SetTimer(hWnd, 1, 1, NULL);
+        break;
+    case WM_TIMER:
+        std::cout << "Update ";
+        break;
+#endif
+    case WM_LBUTTONDOWN:
+        MessageBox(hWnd, L"ㅎㅎㅎㅎㅎㅎㅎ", L"ㅎ_ㅎ", MB_RETRYCANCEL);
+            break;
+    case WM_KEYDOWN :
         {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            EndPaint(hWnd, &ps);
+            if (wParam == VK_SPACE)
+                MessageBox(hWnd, L"zzzzzZZZZZZZZㅋㅋㅋㅋㅋㅋㅋzzzzzㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", L"z_z", MB_OK);
+
+
+            // if (wParam == 'A')
+            //     for (int i = 0; i < 10000; i++)
+            //     {
+            //         std::cout << "A Click ";
+            //     }
         }
         break;
-    case WM_DESTROY:
-        PostQuitMessage(0);
+    case WM_DESTROY:    // 창이 파괴되었을 때의 메세지입니다.
+        PostQuitMessage(0); // WM_QUIT 메세지를 보냅니다.
         break;
     default:
+        // DefWindowProc : 우리가 케이스로 지정하지 않은 메세지를 자동으로 처리해주는 역할입니다.
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
