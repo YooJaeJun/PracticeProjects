@@ -1,7 +1,7 @@
 ﻿#include <Windows.h>
 #include <iostream>
 
-#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+// #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
 
 #define PEEK
 
@@ -77,7 +77,7 @@ int APIENTRY wWinMain(_In_    HINSTANCE hInstance,      // 우리가 실행하�
         }
         else
         {
-            std::cout << "Update ";
+            // std::cout << "Update ";
         }
     }
 #endif
@@ -105,7 +105,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hIconSm        = LoadIcon(nullptr, IDI_APPLICATION);   // 작은 아이콘을 설정합니다.
     wcex.lpszMenuName   = nullptr;                              // 메뉴 사용 여부를 결정합니다.
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);       // 커서 아이콘을 설정합니다.
-    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);             // 화면 배경을 설정합니다.
+    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+0);             // 화면 배경을 설정합니다.
     wcex.lpszClassName  = szWindowClass;                        // 클래스 이름을 설정합니다.
 
     return RegisterClassExW(&wcex);                             // 창 클래스를 등록합니다.
@@ -144,6 +144,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+int x = 500;
+int y = 300;
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -156,20 +159,60 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         std::cout << "Update ";
         break;
 #endif
+    case WM_CREATE:
+        break;
+
+    case WM_PAINT:
+    {
+        PAINTSTRUCT ps;
+        // hdc -> 도화지
+        HDC hdc = BeginPaint(hWnd, &ps);
+
+        LineTo(hdc, x, y);
+        MoveToEx(hdc, 0, 0, NULL);
+        LineTo(hdc, 400, 800);
+
+        Rectangle(hdc, 10, 100, 300, 300);
+        // Rectangle(hdc, x - 50, 100, x + 50, 200);
+
+        Ellipse(hdc, x - 50, 200, x + 50, 500);
+
+        EndPaint(hWnd, &ps);
+    }
+    break;
+
     case WM_LBUTTONDOWN:
-        MessageBox(hWnd, L"ㅎㅎㅎㅎㅎㅎㅎ", L"ㅎ_ㅎ", MB_RETRYCANCEL);
-            break;
+        // std::cout << "😊😁👍🤣";
+        MessageBox(hWnd, L"😊😁👍🤣✔(●'◡'●)(❁´◡`❁)(❁´◡`❁)☆*: .｡. o(≧▽≦)o .｡.:*☆(❁´◡`❁)(❁´◡`❁)☆*: .｡. o(≧▽≦)o .｡.:*☆☆*: .｡. o(≧▽≦)o .｡.:*☆(*/ω＼*)(*/ω＼*):-)(❁´◡`❁)(❁´◡`❁)(❁´◡`❁)", L"z_z", MB_OK);
+
+        break;
     case WM_KEYDOWN :
         {
-            if (wParam == VK_SPACE)
-                MessageBox(hWnd, L"zzzzzZZZZZZZZㅋㅋㅋㅋㅋㅋㅋzzzzzㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", L"z_z", MB_OK);
+        InvalidateRect(hWnd, NULL, true);
 
+        if (wParam == VK_LEFT)
+        {
+            x -= 5;
+        }
+        if (wParam == VK_RIGHT) // 방향키 오른쪽
+        {
+            x += 5;
+        }
+        if (wParam == '1')
+        {
+            y -= 3;
+        }
 
-            // if (wParam == 'A')
-            //     for (int i = 0; i < 10000; i++)
-            //     {
-            //         std::cout << "A Click ";
-            //     }
+        if (wParam == VK_SPACE)
+        {
+            MessageBox(hWnd, L"ㅎㅎㅎㅎㅎㅎㅎ", L"ㅎ_ㅎ", MB_RETRYCANCEL);
+        }
+
+        // if (wParam == 'A')
+        //     for (int i = 0; i < 10000; i++)
+        //     {
+        //         std::cout << "A Click ";
+        //     }
         }
         break;
     case WM_DESTROY:    // 창이 파괴되었을 때의 메세지입니다.
@@ -181,3 +224,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     return 0;
 }
+
+
+// 과제
+
+// 윈도우 프로시저
+// 메시지 루프
+// 메시지 큐
+// 윈도우 메시지
+
+// 방향키: 화살표 이동
+// 1, 2, 3, 4번: 축소 확대 x, y
