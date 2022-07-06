@@ -17,11 +17,11 @@
     WCHAR
     wchar_t 형식을 TYPEDEF 으로 별칭을 사용한 구문입니다.
     wide character 형식이라 불립니다.
-    넓은 형태 (아스키코드로 표현하지 못하는 문자)를 사표현할 수 있습니다.
+    넓은 형태 (아스키코드로 표현하지 못하는 문자)를 표현할 수 있습니다.
     char(8bit) 와 다르게 16bit(2Byte) 형식을 저장하므로 보다 넓은 문자를 사용할 수 있습니다.
     L"" : wide char 형식의 문자열 상수 표기법입니다.
 */
-WCHAR     szTitle[100]       = L"😊😁👍🤣✔(●'◡'●)(❁´◡`❁)(❁´◡`❁)☆*: ";       // 창의 제목을 저장하는 전역변수입니다.
+WCHAR     szTitle[100]       = L"😊😁👍🤣🎁🐱‍🚀🎉😁😘👍🙌🤦‍♀️🎶😎😉🤞✌🤷‍♂️🤷‍♀️🤦‍♂️🌹🎂🤳😃👀";       // 창의 제목을 저장하는 전역변수입니다.
 WCHAR     szWindowClass[100] = L"Window";     // 윈도우 클래스 이름을 저장하는 전역변수입니다.
 
 /*
@@ -172,8 +172,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 
-int x = 100, y = 100;
-int x2 = 100, y2 = 100;
+int x = 400, y = 300;
+float scaleX = 1.0f, scaleY = 1.0f;
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -198,46 +198,47 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         HDC hdc = BeginPaint(hWnd, &ps);
 
         // 유
-        Ellipse(hdc, x, y, x2 + 100, y2 + 100);
-        MoveToEx(hdc, x - 50, y2 + 150, NULL);  // ㅡ
-        LineTo(hdc, x2 + 150, y2 + 150);
-        MoveToEx(hdc, x + 20, y2 + 150, NULL); 
-        LineTo(hdc, x + 20, y2 + 250);
-        MoveToEx(hdc, x2 + 80, y2 + 150, NULL);
-        LineTo(hdc, x2 + 80, y2 + 250);
+        Ellipse(hdc, x - 320 * scaleX, y - 120 * scaleY, 
+            x - 180 * scaleX, y + 20 * scaleY);
+        MoveToEx(hdc, x - 350 * scaleX, y + 50 * scaleY, NULL);
+        LineTo(hdc, x - 150 * scaleX, y + 50 * scaleY);
+        MoveToEx(hdc, x - 280 * scaleX, y + 50 * scaleY, NULL);
+        LineTo(hdc, x - 280 * scaleX, y + 130 * scaleY);
+        MoveToEx(hdc, x - 220 * scaleX, y + 50 * scaleY, NULL);
+        LineTo(hdc, x - 220 * scaleX, y + 130 * scaleY);
 
         // 재
-        MoveToEx(hdc, x + 200, y + 50, NULL);
-        LineTo(hdc, x2 + 300, y + 50);
-        MoveToEx(hdc, x2 + 300, y + 50, NULL);
-        LineTo(hdc, x + 200, y2 + 180);
-        MoveToEx(hdc, x + 250, y + 120, NULL);
-        LineTo(hdc, x2 + 300, y2 + 180);
+        MoveToEx(hdc, x - 100 * scaleX, y - 40 * scaleY, NULL);
+        LineTo(hdc, x + 10 * scaleX, y - 40 * scaleY);
+        MoveToEx(hdc, x + 10 * scaleX, y - 40 * scaleY, NULL);
+        LineTo(hdc, x - 100 * scaleX, y + 40 * scaleY);
+        MoveToEx(hdc, x - 40 * scaleX, y - 5 * scaleY, NULL);
+        LineTo(hdc, x + 20 * scaleX, y + 40 * scaleY);
 
-        MoveToEx(hdc, x + 340, y + 20, NULL);
-        LineTo(hdc, x + 340, y2 + 230);
-        MoveToEx(hdc, x2 + 400, y, NULL);
-        LineTo(hdc, x2 + 400, y2 + 250);
-        MoveToEx(hdc, x + 340, y + 120, NULL);  // ㅐ의 -
-        LineTo(hdc, x2 + 400, y + 120);
+        MoveToEx(hdc, x + 40 * scaleX, y - 100 * scaleY, NULL);
+        LineTo(hdc, x + 40 * scaleX, y + 110 * scaleY);
+        MoveToEx(hdc, x + 90 * scaleX, y - 120 * scaleY, NULL);
+        LineTo(hdc, x + 90 * scaleX, y + 130 * scaleY);
+        MoveToEx(hdc, x + 40 * scaleX, y + 10 * scaleY, NULL);
+        LineTo(hdc, x + 90 * scaleX, y + 10 * scaleY);
 
         // 준
-        MoveToEx(hdc, x + 500, y, NULL);
-        LineTo(hdc, x2 + 600, y);
-        MoveToEx(hdc, x2 + 600, y, NULL);
-        LineTo(hdc, x + 500, y2 + 100);
-        MoveToEx(hdc, x + 550, y + 50, NULL);
-        LineTo(hdc, x2 + 600, y2 + 100);
+        MoveToEx(hdc, x + 170 * scaleX, y - 120 * scaleY, NULL);
+        LineTo(hdc, x + 270 * scaleX, y - 120 * scaleY);
+        MoveToEx(hdc, x + 270 * scaleX, y - 120 * scaleY, NULL);
+        LineTo(hdc, x + 170 * scaleX, y - 20 * scaleY);
+        MoveToEx(hdc, x + 230 * scaleX, y - 80 * scaleY, NULL);
+        LineTo(hdc, x + 290 * scaleX, y - 20 * scaleY);
 
-        MoveToEx(hdc, x + 460, y2 + 130, NULL);
-        LineTo(hdc, x2 + 660, y2 + 130);
-        MoveToEx(hdc, x + 560, y2 + 130, NULL);
-        LineTo(hdc, x + 560, y2 + 200);
+        MoveToEx(hdc, x + 140 * scaleX, y + 20 * scaleY, NULL);
+        LineTo(hdc, x + 310 * scaleX, y + 20 * scaleY);
+        MoveToEx(hdc, x + 230 * scaleX, y + 20 * scaleY, NULL);
+        LineTo(hdc, x + 230 * scaleX, y + 100 * scaleY);
+        MoveToEx(hdc, x + 170 * scaleX, y + 50 * scaleY, NULL);
+        LineTo(hdc, x + 170 * scaleX, y + 130 * scaleY);
+        MoveToEx(hdc, x + 170 * scaleX, y + 130 * scaleY, NULL);
+        LineTo(hdc, x + 290 * scaleX, y + 130 * scaleY);
 
-        MoveToEx(hdc, x + 500, y + 180, NULL);
-        LineTo(hdc, x + 500, y2 + 250);
-        MoveToEx(hdc, x + 500, y2 + 250, NULL);
-        LineTo(hdc, x2 + 640, y2 + 250);
 
         EndPaint(hWnd, &ps);
     }
@@ -252,48 +253,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
         InvalidateRect(hWnd, NULL, true);
 
-        if (wParam == VK_LEFT)
-        {
-            x -= 8;
-            x2 -= 8;
-        }
-        if (wParam == VK_RIGHT)
-        {
-            x += 8;
-            x2 += 8;
-        }
-        if (wParam == VK_UP)
-        {
-            y -= 8;
-            y2 -= 8;
-        }
-        if (wParam == VK_DOWN)
-        {
-            y += 8;
-            y2 += 8;
-        }
+        if (wParam == VK_LEFT) x -= 8;
+        if (wParam == VK_RIGHT) x += 8;
+        if (wParam == VK_UP) y -= 8;
+        if (wParam == VK_DOWN) y += 8;
 
-        if (wParam == '1')
-        {
-            x -= 8;
-            x2 += 8;
-        }
-        if (wParam == '2')
-        {
-            x += 8;
-            x2 -= 8;
-        }
-        if (wParam == '3')
-        {
-            y -= 8;
-            y2 += 8;
-        }
-        if (wParam == '4')
-        {
-            y += 8;
-            y2 -= 8;
-        }
-
+        if (wParam == '1') scaleX += 0.1f;
+        if (wParam == '2') scaleX -= 0.1f;
+        if (wParam == '3') scaleY += 0.1f;
+        if (wParam == '4') scaleY -= 0.1f;
 
         // if (wParam == VK_SPACE)
         // {
