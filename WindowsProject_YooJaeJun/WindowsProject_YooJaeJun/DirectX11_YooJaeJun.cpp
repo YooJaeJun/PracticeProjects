@@ -63,7 +63,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     //	메인 윈도우 생성
     g_hwnd = CreateWindow(
         L"DX11",
-        L"DX11",
+        L"😊😁👍🤣🎁🐱‍🚀🎉😁😘👍🙌🤦‍♀️🎶😎😉🤞✌🤷‍♂️🤷‍♀️🤦‍♂️🌹🎂🤳😃👀😍👍🙌🤷‍♀️🤷‍♂️🎶🤦‍♀️✨👏😆🤔🤢🐱‍🏍🐱‍👤💋🐱‍💻🐱‍🐉🐱‍👓🐱‍👓🤢🤔🐱‍🏍🐱‍👤👏😆✨😃👀🙄😏🤗😍😎☺😶😴😌😖🥼🧵🎨🎟🎞🥟🍠🥡🍣🍣🦪🚝🚅🚲🚲🚞🚔",
         WS_OVERLAPPEDWINDOW,
         0,			//창의 시작 x좌표
         0,			//창의 시작 y좌표
@@ -123,11 +123,13 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     return (int)msg.wParam;
 }
 
-float posX = 400.0f;
-float posY = 300.0f;
-float scaleX = 1.0f;
-float scaleY = 1.0f;
+float posX = 230.0f;
+float posY = 200.0f;
+float scaleX = 0.7f;
+float scaleY = 0.7f;
 float seta = 1.0f;
+float posHumanX = 500;
+float posHumanY = 400;
 
 //  함수: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -161,6 +163,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         */
 
         /*
+        // 삼각형
         //                   100 * cosf(0   * R + seta) == a             100 * sinf(0   * R + seta) == b
         MoveToEx(hdc, posX + 100 * cosf(0   * R + seta) * scaleX, posY + 100 * sinf(0   * R + seta) * scaleY, NULL);
         LineTo  (hdc, posX + 100 * cosf(120 * R + seta) * scaleX, posY + 100 * sinf(120 * R + seta) * scaleY);
@@ -169,12 +172,69 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         */
 
         //                   100 * cosf(0   * R + seta) == a             100 * sinf(0   * R + seta) == b
-        MoveToEx(hdc, posX + 60 * cosf(0   * R + seta) * scaleX, posY + 60 * sinf(0   * R + seta) * scaleY, NULL);
-        for (int i = 10; i <= 360; i += 5)
+
+        // 햇님
+        MoveToEx(hdc, posX, posY, NULL);
+        for (int i = 0; i <= 720; i += 10)
         {
-            LineTo(hdc, posX + 60 * cosf(i * R + seta) * scaleX, posY + 60 * sinf(i * R + seta) * scaleY);
+            LineTo(hdc, posX + i / 5 * cosf(i * R + seta) * scaleX, 
+                posY + i / 5 * sinf(i * R + seta) * scaleY);
         }
 
+        MoveToEx(hdc, posX, posY, NULL);
+        for (int i = 0; i <= 720; i += 10)
+        {
+            LineTo(hdc, posX - i / 5 * cosf(i * R + seta) * scaleX, 
+                posY - i / 5 * sinf(i * R + seta) * scaleY);
+        }
+
+        // 아지랑이
+        for (int i = 30; i <= 360; i += 30)
+        {
+            MoveToEx(hdc, posX + 170 * cosf(i * R + seta) * scaleX,
+                posY + 170 * sinf(i * R + seta) * scaleY, NULL);
+            LineTo(hdc, posX + 250 * cosf(i * R + seta) * scaleX,
+                posY + 250 * sinf(i * R + seta) * scaleY);
+        }
+
+        // 얼굴
+        MoveToEx(hdc, posHumanX + 120 * cosf(0 * R + seta) * scaleX,
+            posHumanY + 120 * sinf(0 * R + seta) * scaleY, NULL);
+        for (int i = 40; i <= 360; i += 40)
+        {
+            LineTo(hdc, posHumanX + 120 * cosf(i * R + seta) * scaleX,
+                posHumanY + 120 * sinf(i * R + seta) * scaleY);
+        }
+
+        // 눈
+        // 왼쪽
+        MoveToEx(hdc, posHumanX + 50 * cosf(200 * R + seta) * scaleX,
+            posHumanY + 50 * sinf(200 * R + seta) * scaleY, NULL);
+        LineTo(hdc, posHumanX + 50 * cosf(140 * R + seta) * scaleX,
+            posHumanY + 50 * sinf(140 * R + seta) * scaleY);
+
+        MoveToEx(hdc, posHumanX + 70 * cosf(170 * R + seta) * scaleX,
+            posHumanY + 70 * sinf(170 * R + seta) * scaleY, NULL);
+        LineTo(hdc, posHumanX + 10 * cosf(170 * R + seta) * scaleX,
+            posHumanY + 10 * sinf(170 * R + seta) * scaleY);
+        // 오른쪽
+        MoveToEx(hdc, posHumanX + 50 * cosf(310 * R + seta) * scaleX,
+            posHumanY + 50 * sinf(310 * R + seta) * scaleY, NULL);
+        LineTo(hdc, posHumanX + 50 * cosf(250 * R + seta) * scaleX,
+            posHumanY + 50 * sinf(250 * R + seta) * scaleY);
+
+        MoveToEx(hdc, posHumanX + 70 * cosf(280 * R + seta) * scaleX,
+            posHumanY + 70 * sinf(280 * R + seta) * scaleY, NULL);
+        LineTo(hdc, posHumanX + 20 * cosf(280 * R + seta) * scaleX,
+            posHumanY + 20 * sinf(280 * R + seta) * scaleY);
+        
+        // 입
+        MoveToEx(hdc, posHumanX + 70 * cosf(10 * R + seta) * scaleX,
+            posHumanY + 70 * sinf(10 * R + seta) * scaleY, NULL);
+        LineTo(hdc, posHumanX + 30 * cosf(25 * R + seta) * scaleX,
+            posHumanY + 30 * sinf(25 * R + seta) * scaleY);
+        LineTo(hdc, posHumanX + 60 * cosf(70 * R + seta) * scaleX,
+            posHumanY + 60 * sinf(70 * R + seta) * scaleY);
 
 
         EndPaint(hWnd, &ps);
@@ -189,54 +249,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     case WM_LBUTTONDOWN:
     {
-        MessageBoxA(g_hwnd, "내용", "이름", MB_OK);
+        MessageBoxA(g_hwnd, "너무더웡", "날씨", MB_ABORTRETRYIGNORE);
     }
     case WM_KEYDOWN:
     {
         InvalidateRect(hWnd, NULL, true);
 
-        if (wParam == VK_LEFT)
-        {
-            posX -= 3;
-        }
-        if (wParam == VK_RIGHT)
-        {
-            posX += 3;
-        }
-        if (wParam == VK_UP)
-        {
-            posY -= 3;
-        }
-        if (wParam == VK_DOWN)
-        {
-            posY += 3;
-        }
+        if (wParam == VK_LEFT)  { posX -= 3; posHumanX -= 3; }
+        if (wParam == VK_RIGHT) { posX += 3; posHumanX += 3; }
+        if (wParam == VK_UP)    { posY -= 3; posHumanY -= 3; }
+        if (wParam == VK_DOWN)  { posY += 3; posHumanY += 3; }
 
-        if (wParam == '1')
-        {
-            scaleX += 0.1f;
-        }
-        if (wParam == '2')
-        {
-            scaleX -= 0.1f;
-        }
-        if (wParam == '3')
-        {
-            scaleY += 0.1f;
-        }
-        if (wParam == '4')
-        {
-            scaleY -= 0.1f;
-        }
+        if (wParam == '1') scaleX += 0.1f;
+        if (wParam == '2') scaleX -= 0.1f;
+        if (wParam == '3') scaleY += 0.1f;
+        if (wParam == '4') scaleY -= 0.1f;
 
-        if (wParam == '5')
-        {
-            seta += 0.1f;
-        }
-        if (wParam == '6')
-        {
-            seta -= 0.1f;
-        }
+        if (wParam == '5') seta += 0.1f;
+        if (wParam == '6') seta -= 0.1f;
+
+        break;
     }
     }
 
