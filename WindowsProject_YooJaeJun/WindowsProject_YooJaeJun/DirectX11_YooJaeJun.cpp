@@ -1,6 +1,10 @@
 ﻿#include "framework.h"
+#include "GameObject/Circle.h"
+#include "GameObject/ObRect.h"
+#include "GameObject/ObStar.h"
+
+
 // #include "화면 좌표계.txt"
-#define R 0.01744444
 #define MAX 20
 
 //c++ - 칼질, 조리법
@@ -123,6 +127,9 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     return (int)msg.wParam;
 }
 
+ObRect rc;
+ObRect rc2;
+
 float posX = 230.0f;
 float posY = 200.0f;
 float scaleX = 0.7f;
@@ -144,6 +151,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     //어떤 메세지가 발생되었는가를 통해 처리할 조건문
     switch (message)
     {
+    case WM_CREATE: // 창이 만들어질 때 한 번 호출
+    {
+        rc.position.x = 400.0f;
+        rc.position.y = 300.0f;
+        rc.scale.x = 1.0f;
+        rc.scale.y = 1.0f;
+        rc.rotation = 0.0f;
+
+        rc2.position.x = 400.0f;
+        rc2.position.y = 300.0f;
+        rc2.scale.x = 1.0f;
+        rc2.scale.y = 1.0f;
+        rc2.rotation = 0.0f;
+        break;
+    }
         //그리라는 메세지가 들어온경우
     case WM_PAINT:
     {
@@ -151,13 +173,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         //hdc-> 도화지
         HDC hdc = BeginPaint(hWnd, &ps);
 
+
+        rc.Render(hdc);
+
+
         /*
         Ellipse(hdc, posX - 50 * scaleX, posY + 50 * scaleY,
             posX + 50 * scaleX, posY + 150 * scaleY);
-
         MoveToEx(hdc, posX - 50 * scaleX, posY, NULL);
         LineTo(hdc, posX + 50 * scaleX, posY); // ㅡ
-
         Ellipse(hdc, posX - 50 * scaleX, posY - 150 * scaleY,
             posX + 50 * scaleX, posY - 50 * scaleY);
         */
@@ -173,18 +197,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         //                   100 * cosf(0   * R + seta) == a             100 * sinf(0   * R + seta) == b
 
+        /*
         // 햇님
         MoveToEx(hdc, posX, posY, NULL);
         for (int i = 0; i <= 720; i += 10)
         {
-            LineTo(hdc, posX + i / 5 * cosf(i * R + seta) * scaleX, 
+            LineTo(hdc, posX + i / 5 * cosf(i * R + seta) * scaleX,
                 posY + i / 5 * sinf(i * R + seta) * scaleY);
         }
 
         MoveToEx(hdc, posX, posY, NULL);
         for (int i = 0; i <= 720; i += 10)
         {
-            LineTo(hdc, posX - i / 5 * cosf(i * R + seta) * scaleX, 
+            LineTo(hdc, posX - i / 5 * cosf(i * R + seta) * scaleX,
                 posY - i / 5 * sinf(i * R + seta) * scaleY);
         }
 
@@ -227,7 +252,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             posHumanY + 70 * sinf(280 * R + seta) * scaleY, NULL);
         LineTo(hdc, posHumanX + 20 * cosf(280 * R + seta) * scaleX,
             posHumanY + 20 * sinf(280 * R + seta) * scaleY);
-        
+
         // 입
         MoveToEx(hdc, posHumanX + 70 * cosf(10 * R + seta) * scaleX,
             posHumanY + 70 * sinf(10 * R + seta) * scaleY, NULL);
@@ -235,6 +260,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             posHumanY + 30 * sinf(25 * R + seta) * scaleY);
         LineTo(hdc, posHumanX + 60 * cosf(70 * R + seta) * scaleX,
             posHumanY + 60 * sinf(70 * R + seta) * scaleY);
+        */
 
 
         EndPaint(hWnd, &ps);
@@ -253,20 +279,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     case WM_KEYDOWN:
     {
-        InvalidateRect(hWnd, NULL, true);
+        InvalidateRect(hWnd, NULL, true);   // 전에 있던 것 그대로 지울 건지, 남길 건지
 
-        if (wParam == VK_LEFT)  { posX -= 3; posHumanX -= 3; }
-        if (wParam == VK_RIGHT) { posX += 3; posHumanX += 3; }
-        if (wParam == VK_UP)    { posY -= 3; posHumanY -= 3; }
-        if (wParam == VK_DOWN)  { posY += 3; posHumanY += 3; }
+        if (wParam == VK_LEFT) { rc.position.x -= 3; posHumanX -= 3; }
+        if (wParam == VK_RIGHT) { rc.position.x += 3; posHumanX += 3; }
+        if (wParam == VK_UP) { rc.position.y -= 3; posHumanY -= 3; }
+        if (wParam == VK_DOWN) { rc.position.y += 3; posHumanY += 3; }
 
-        if (wParam == '1') scaleX += 0.1f;
-        if (wParam == '2') scaleX -= 0.1f;
-        if (wParam == '3') scaleY += 0.1f;
-        if (wParam == '4') scaleY -= 0.1f;
+        if (wParam == '1') rc.scale.x += 0.1f;
+        if (wParam == '2') rc.scale.x -= 0.1f;
+        if (wParam == '3') rc.scale.y += 0.1f;
+        if (wParam == '4') rc.scale.y -= 0.1f;
 
-        if (wParam == '5') seta += 0.1f;
-        if (wParam == '6') seta -= 0.1f;
+        if (wParam == '5') rc.rotation += 0.1f;
+        if (wParam == '6') rc.rotation -= 0.1f;
 
         break;
     }

@@ -139,10 +139,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObject\Circle.cpp" />
     <ClCompile Include="DirectX11_YooJaeJun.cpp" />
+    <ClCompile Include="GameObject\GameObject.cpp" />
+    <ClCompile Include="GameObject\ObRect.cpp" />
+    <ClCompile Include="GameObject\Vector2.cpp" />
+    <ClCompile Include="GameObject\ObStar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameObject\Circle.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GameObject\GameObject.h" />
+    <ClInclude Include="GameObject\ObRect.h" />
+    <ClInclude Include="GameObject\Vector2.h" />
+    <ClInclude Include="GameObject\ObStar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
