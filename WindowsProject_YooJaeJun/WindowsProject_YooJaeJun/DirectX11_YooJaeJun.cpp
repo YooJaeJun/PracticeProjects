@@ -187,11 +187,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         //hdc-> 도화지
         HDC hdc = BeginPaint(hWnd, &ps);
 
+
         // rc.Render(hdc);
+        /*
         cir.Render(hdc);
         cir2.Render(hdc);
         cir3.Render(hdc);
-        
+        */
 
 #pragma region region_TutorialRotate
         /*
@@ -216,28 +218,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         
         // 햇님
-        /*
-        MoveToEx(hdc, posX, posY, NULL);
+        
+        MoveToEx(hdc, posSunX, posSunY, NULL);
         for (int i = 0; i <= 720; i += 10)
         {
-            LineTo(hdc, posX + i / 5 * cosf(i * R + seta) * scaleX,
-                posY + i / 5 * sinf(i * R + seta) * scaleY);
+            LineTo(hdc, posSunX + i / 5 * cosf(i * R + seta) * scaleX,
+                posSunY + i / 5 * sinf(i * R + seta) * scaleY);
         }
 
-        MoveToEx(hdc, posX, posY, NULL);
+        MoveToEx(hdc, posSunX, posSunY, NULL);
         for (int i = 0; i <= 720; i += 10)
         {
-            LineTo(hdc, posX - i / 5 * cosf(i * R + seta) * scaleX,
-                posY - i / 5 * sinf(i * R + seta) * scaleY);
+            LineTo(hdc, posSunX - i / 5 * cosf(i * R + seta) * scaleX,
+                posSunY - i / 5 * sinf(i * R + seta) * scaleY);
         }
 
         // 아지랑이
         for (int i = 30; i <= 360; i += 30)
         {
-            MoveToEx(hdc, posX + 170 * cosf(i * R + seta) * scaleX,
-                posY + 170 * sinf(i * R + seta) * scaleY, NULL);
-            LineTo(hdc, posX + 250 * cosf(i * R + seta) * scaleX,
-                posY + 250 * sinf(i * R + seta) * scaleY);
+            MoveToEx(hdc, posSunX + 170 * cosf(i * R + seta) * scaleX,
+                posSunY + 170 * sinf(i * R + seta) * scaleY, NULL);
+            LineTo(hdc, posSunX + 250 * cosf(i * R + seta) * scaleX,
+                posSunY + 250 * sinf(i * R + seta) * scaleY);
         }
 
         // 얼굴
@@ -278,7 +280,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             posHumanY + 30 * sinf(25 * R + seta) * scaleY);
         LineTo(hdc, posHumanX + 60 * cosf(70 * R + seta) * scaleX,
             posHumanY + 60 * sinf(70 * R + seta) * scaleY);
-        */
+        
 #pragma endregion
 
         EndPaint(hWnd, &ps);
