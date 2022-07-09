@@ -1,7 +1,7 @@
 #pragma once
 #include <Windows.h>
-#include "Vector2.h"
 #include <cmath>
+#include "Vector2.h"
 #include "../framework.h"
 
 class GameObject

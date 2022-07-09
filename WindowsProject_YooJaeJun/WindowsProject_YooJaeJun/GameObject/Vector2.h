@@ -2,6 +2,6 @@
 class Vector2
 {
 public:
-	int x, y;
+	float x, y;
 };
 

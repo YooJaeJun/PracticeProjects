@@ -1,9 +1,6 @@
-﻿#include "framework.h"
-#include "GameObject/Circle.h"
+﻿#include "GameObject/Circle.h"
 #include "GameObject/ObRect.h"
 #include "GameObject/ObStar.h"
-
-
 // #include "화면 좌표계.txt"
 #define MAX 20
 
@@ -128,15 +125,19 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 }
 
 ObRect rc;
-ObRect rc2;
+Circle cir, cir2, cir3;
 
-float posX = 230.0f;
-float posY = 200.0f;
+const int region_TutorialRotate = 1;
+#pragma region region_TutorialRotate
+float posSunX = 230.0f;
+float posSunY = 200.0f;
 float scaleX = 0.7f;
 float scaleY = 0.7f;
 float seta = 1.0f;
 float posHumanX = 500;
 float posHumanY = 400;
+const float R = 0.01745329;
+#pragma endregion
 
 //  함수: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -159,11 +160,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         rc.scale.y = 1.0f;
         rc.rotation = 0.0f;
 
-        rc2.position.x = 400.0f;
-        rc2.position.y = 300.0f;
-        rc2.scale.x = 1.0f;
-        rc2.scale.y = 1.0f;
-        rc2.rotation = 0.0f;
+        cir.position.x = 400.0f;
+        cir.position.y = 300.0f;
+        cir.scale.x = 1.0f;
+        cir.scale.y = 1.0f;
+        cir.rotation = 0.0f;
+
+        cir2.position.x = 400.0f;
+        cir2.position.y = 300.0f;
+        cir2.scale.x = 2.0f;
+        cir2.scale.y = 2.0f;
+        cir2.rotation = 0.0f;
+
+        cir3.position.x = 400.0f;
+        cir3.position.y = 300.0f;
+        cir3.scale.x = 3.0f;
+        cir3.scale.y = 3.0f;
+        cir3.rotation = 0.0f;
+
         break;
     }
         //그리라는 메세지가 들어온경우
@@ -173,10 +187,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         //hdc-> 도화지
         HDC hdc = BeginPaint(hWnd, &ps);
 
+        // rc.Render(hdc);
+        cir.Render(hdc);
+        cir2.Render(hdc);
+        cir3.Render(hdc);
+        
 
-        rc.Render(hdc);
-
-
+#pragma region region_TutorialRotate
         /*
         Ellipse(hdc, posX - 50 * scaleX, posY + 50 * scaleY,
             posX + 50 * scaleX, posY + 150 * scaleY);
@@ -197,8 +214,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         //                   100 * cosf(0   * R + seta) == a             100 * sinf(0   * R + seta) == b
 
-        /*
+        
         // 햇님
+        /*
         MoveToEx(hdc, posX, posY, NULL);
         for (int i = 0; i <= 720; i += 10)
         {
@@ -261,7 +279,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         LineTo(hdc, posHumanX + 60 * cosf(70 * R + seta) * scaleX,
             posHumanY + 60 * sinf(70 * R + seta) * scaleY);
         */
-
+#pragma endregion
 
         EndPaint(hWnd, &ps);
         break;
@@ -281,18 +299,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         InvalidateRect(hWnd, NULL, true);   // 전에 있던 것 그대로 지울 건지, 남길 건지
 
-        if (wParam == VK_LEFT) { rc.position.x -= 3; posHumanX -= 3; }
-        if (wParam == VK_RIGHT) { rc.position.x += 3; posHumanX += 3; }
-        if (wParam == VK_UP) { rc.position.y -= 3; posHumanY -= 3; }
-        if (wParam == VK_DOWN) { rc.position.y += 3; posHumanY += 3; }
+        if (wParam == VK_LEFT)  { posSunX -= 3; posHumanX -= 3; rc.position.x -= 3; cir.position.x -= 3; cir2.position.x -= 3; cir3.position.x -= 3; }
+        if (wParam == VK_RIGHT) { posSunX += 3; posHumanX += 3; rc.position.x += 3; cir.position.x += 3; cir2.position.x += 3; cir3.position.x += 3; }
+        if (wParam == VK_UP)    { posSunY -= 3; posHumanY -= 3; rc.position.y -= 3; cir.position.y -= 3; cir2.position.y -= 3; cir3.position.y -= 3; }
+        if (wParam == VK_DOWN)  { posSunY += 3; posHumanY += 3; rc.position.y += 3; cir.position.y += 3; cir2.position.y += 3; cir3.position.y += 3; }
 
-        if (wParam == '1') rc.scale.x += 0.1f;
-        if (wParam == '2') rc.scale.x -= 0.1f;
-        if (wParam == '3') rc.scale.y += 0.1f;
-        if (wParam == '4') rc.scale.y -= 0.1f;
-
-        if (wParam == '5') rc.rotation += 0.1f;
-        if (wParam == '6') rc.rotation -= 0.1f;
+        if (wParam == '1') { scaleX += 0.1f; rc.scale.x  += 0.1f; cir.scale.x  += 0.1f; cir2.scale.x  += 0.1f; cir3.scale.x  += 0.1f; }
+        if (wParam == '2') { scaleX -= 0.1f; rc.scale.x  -= 0.1f; cir.scale.x  -= 0.1f; cir2.scale.x  -= 0.1f; cir3.scale.x  -= 0.1f; }
+        if (wParam == '3') { scaleY += 0.1f; rc.scale.y  += 0.1f; cir.scale.y  += 0.1f; cir2.scale.y  += 0.1f; cir3.scale.y  += 0.1f; }
+        if (wParam == '4') { scaleY -= 0.1f; rc.scale.y  -= 0.1f; cir.scale.y  -= 0.1f; cir2.scale.y  -= 0.1f; cir3.scale.y  -= 0.1f; }
+        if (wParam == '5') { seta += 0.1f;   rc.rotation += 0.1f; cir.rotation += 0.1f; cir2.rotation += 0.1f; cir3.rotation += 0.1f; }
+        if (wParam == '6') { seta -= 0.1f;   rc.rotation -= 0.1f; cir.rotation -= 0.1f; cir2.rotation -= 0.1f; cir3.rotation -= 0.1f; }
 
         break;
     }
