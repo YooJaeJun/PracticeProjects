@@ -1,0 +1,9 @@
+﻿  Item.cpp
+C:\Users\user\source\repos\OOP_YooJaeJun\OOP_YooJaeJun\Shop.h(8,6): error C2143: 구문 오류: ';'이(가) '*' 앞에 없습니다.
+C:\Users\user\source\repos\OOP_YooJaeJun\OOP_YooJaeJun\Shop.h(8,6): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+C:\Users\user\source\repos\OOP_YooJaeJun\OOP_YooJaeJun\Shop.h(8,16): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+C:\Users\user\source\repos\OOP_YooJaeJun\OOP_YooJaeJun\Shop.h(12,9): error C2065: 'Item': 선언되지 않은 식별자입니다.
+C:\Users\user\source\repos\OOP_YooJaeJun\OOP_YooJaeJun\Shop.h(12,14): error C2059: 구문 오류: '>'
+  Shop.cpp
+C:\Users\user\source\repos\OOP_YooJaeJun\OOP_YooJaeJun\Shop.cpp(25,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  코드를 생성하고 있습니다...
