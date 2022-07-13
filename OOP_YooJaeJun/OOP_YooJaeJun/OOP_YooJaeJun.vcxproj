@@ -19,14 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Item.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Shop.h" />
+    <ClCompile Include="teacher\Item.cpp" />
+    <ClCompile Include="teacher\main.cpp" />
+    <ClCompile Include="teacher\Shop.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Item.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Shop.cpp" />
+    <ClInclude Include="teacher\Item.h" />
+    <ClInclude Include="teacher\Shop.h" />
+    <ClInclude Include="teacher\stdafx.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
