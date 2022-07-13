@@ -19,14 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="teacher\Item.cpp" />
-    <ClCompile Include="teacher\main.cpp" />
-    <ClCompile Include="teacher\Shop.cpp" />
+    <ClCompile Include="Shop\Item\Armor.cpp" />
+    <ClCompile Include="Shop\Item\Etc.cpp" />
+    <ClCompile Include="Shop\Item\Item.cpp" />
+    <ClCompile Include="Shop\Item\Weapon.cpp" />
+    <ClCompile Include="Shop\main.cpp" />
+    <ClCompile Include="Shop\Unit\Player.cpp" />
+    <ClCompile Include="Shop\Unit\Shop.cpp" />
+    <ClCompile Include="Shop\Unit\Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="teacher\Item.h" />
-    <ClInclude Include="teacher\Shop.h" />
-    <ClInclude Include="teacher\stdafx.h" />
+    <ClInclude Include="Shop\Item\Armor.h" />
+    <ClInclude Include="Shop\Item\Etc.h" />
+    <ClInclude Include="Shop\Item\Item.h" />
+    <ClInclude Include="Shop\Item\Weapon.h" />
+    <ClInclude Include="Shop\Unit\Player.h" />
+    <ClInclude Include="Shop\Unit\Shop.h" />
+    <ClInclude Include="Shop\Unit\Unit.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
