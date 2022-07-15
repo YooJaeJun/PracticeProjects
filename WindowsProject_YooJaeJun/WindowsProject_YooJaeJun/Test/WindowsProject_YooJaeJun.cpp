@@ -1,4 +1,5 @@
-﻿#include "framework.h"
+﻿#include <Windows.h>
+#include <iostream>
 
 // #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
 
@@ -36,11 +37,6 @@ WCHAR     szWindowClass[100] = L"Window";     // 윈도우 클래스 이름을 �
 //HWND 접두어      Windows 핸들(창 관리자)
 HINSTANCE           g_hInst;    //프로그램 자체의 관리자         // 기본 창 클래스 이름입니다.
 HWND                g_hwnd;     //창 관리자                     // 기본 창 클래스 이름입니다.
-Scene*              mg;         // 추상화
-HDC                 g_hdc;
-HDC                 g_MemDC;
-
-
 
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -144,7 +140,6 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
     g_hInst = hInstance;
-    mg = new MainGame;
 
     // CreateWindow : 등록한 클래스로 창을 만들어주는 매크로 함수입니다.
     //               창을 제대로 만들지 못했다면 nullptr 를 반환하고
@@ -181,6 +176,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 
+int x = 400, y = 300;
+float scaleX = 1.0f, scaleY = 1.0f;
+
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -194,33 +193,89 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 #endif
     case WM_CREATE:
-        mg->Init();
-        break;
-
-    case WM_TIMER:
-        mg->Update();
         break;
 
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
         // hdc -> 도화지
-        g_hdc = BeginPaint(hWnd, &ps);
+        HDC hdc = BeginPaint(hWnd, &ps);
 
+        // 유
+        Ellipse(hdc, x - 320 * scaleX, y - 120 * scaleY,
+            x - 180 * scaleX, y + 20 * scaleY);
+        MoveToEx(hdc, x - 350 * scaleX, y + 50 * scaleY, NULL);
+        LineTo(hdc, x - 150 * scaleX, y + 50 * scaleY);
+        MoveToEx(hdc, x - 280 * scaleX, y + 50 * scaleY, NULL);
+        LineTo(hdc, x - 280 * scaleX, y + 130 * scaleY);
+        MoveToEx(hdc, x - 220 * scaleX, y + 50 * scaleY, NULL);
+        LineTo(hdc, x - 220 * scaleX, y + 130 * scaleY);
 
-        mg->Render();
+        // 재
+        MoveToEx(hdc, x - 100 * scaleX, y - 40 * scaleY, NULL);
+        LineTo(hdc, x + 10 * scaleX, y - 40 * scaleY);
+        MoveToEx(hdc, x + 10 * scaleX, y - 40 * scaleY, NULL);
+        LineTo(hdc, x - 100 * scaleX, y + 40 * scaleY);
+        MoveToEx(hdc, x - 40 * scaleX, y - 5 * scaleY, NULL);
+        LineTo(hdc, x + 20 * scaleX, y + 40 * scaleY);
+
+        MoveToEx(hdc, x + 40 * scaleX, y - 100 * scaleY, NULL);
+        LineTo(hdc, x + 40 * scaleX, y + 110 * scaleY);
+        MoveToEx(hdc, x + 90 * scaleX, y - 120 * scaleY, NULL);
+        LineTo(hdc, x + 90 * scaleX, y + 130 * scaleY);
+        MoveToEx(hdc, x + 40 * scaleX, y + 10 * scaleY, NULL);
+        LineTo(hdc, x + 90 * scaleX, y + 10 * scaleY);
+
+        // 준
+        MoveToEx(hdc, x + 170 * scaleX, y - 120 * scaleY, NULL);
+        LineTo(hdc, x + 270 * scaleX, y - 120 * scaleY);
+        MoveToEx(hdc, x + 270 * scaleX, y - 120 * scaleY, NULL);
+        LineTo(hdc, x + 170 * scaleX, y - 20 * scaleY);
+        MoveToEx(hdc, x + 230 * scaleX, y - 80 * scaleY, NULL);
+        LineTo(hdc, x + 290 * scaleX, y - 20 * scaleY);
+
+        MoveToEx(hdc, x + 140 * scaleX, y + 20 * scaleY, NULL);
+        LineTo(hdc, x + 310 * scaleX, y + 20 * scaleY);
+        MoveToEx(hdc, x + 230 * scaleX, y + 20 * scaleY, NULL);
+        LineTo(hdc, x + 230 * scaleX, y + 100 * scaleY);
+        MoveToEx(hdc, x + 170 * scaleX, y + 50 * scaleY, NULL);
+        LineTo(hdc, x + 170 * scaleX, y + 130 * scaleY);
+        MoveToEx(hdc, x + 170 * scaleX, y + 130 * scaleY, NULL);
+        LineTo(hdc, x + 290 * scaleX, y + 130 * scaleY);
+
 
         EndPaint(hWnd, &ps);
     }
     break;
 
     case WM_LBUTTONDOWN:
-
+        // std::cout << "😊😁👍🤣";
+        // MessageBox(hWnd, L"😊😁👍🤣✔(●'◡'●)(❁´◡`❁)(❁´◡`❁)☆*: .｡. o(≧▽≦)o .｡.:*☆(❁´◡`❁)(❁´◡`❁)☆*: .｡. o(≧▽≦)o .｡.:*☆☆*: .｡. o(≧▽≦)o .｡.:*☆(*/ω＼*)(*/ω＼*):-)(❁´◡`❁)(❁´◡`❁)(❁´◡`❁)", L"z_z", MB_OK);
 
         break;
     case WM_KEYDOWN:
     {
         InvalidateRect(hWnd, NULL, true);
+
+        if (wParam == VK_LEFT) x -= 8;
+        if (wParam == VK_RIGHT) x += 8;
+        if (wParam == VK_UP) y -= 8;
+        if (wParam == VK_DOWN) y += 8;
+
+        if (wParam == '1') scaleX += 0.1f;
+        if (wParam == '2') scaleX -= 0.1f;
+        if (wParam == '3') scaleY += 0.1f;
+        if (wParam == '4') scaleY -= 0.1f;
+
+        // if (wParam == VK_SPACE)
+        // {
+        //     MessageBox(hWnd, L"ㅎㅎㅎㅎㅎㅎㅎ", L"ㅎ_ㅎ", MB_RETRYCANCEL);
+        // }
+        // if (wParam == 'A')
+        //     for (int i = 0; i < 10000; i++)
+        //     {
+        //         std::cout << "A Click ";
+        //     }
     }
     break;
 
@@ -234,3 +289,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     return 0;
 }
+
+
+
+// 과제
+
+// 윈도우 프로시저
+// 메시지 루프
+// 메시지 큐
+// 윈도우 메시지
+
+// 방향키: 화살표 이동
+// 1, 2, 3, 4번: 축소 확대 x, y

@@ -18,6 +18,32 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="삼각함수.txt" />
+    <Text Include="화면 좌표계.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ObCircle.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="ObRect.cpp" />
+    <ClCompile Include="ObStar.cpp" />
+    <ClCompile Include="Types.cpp" />
+    <ClCompile Include="WindowsProject_YooJaeJun.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ObCircle.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="MainGame.h" />
+    <ClInclude Include="ObRect.h" />
+    <ClInclude Include="ObStar.h" />
+    <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="Types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleMath.inl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -116,6 +142,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>framework.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,22 +166,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="GameObject\Circle.cpp" />
-    <ClCompile Include="DirectX11_YooJaeJun.cpp" />
-    <ClCompile Include="GameObject\GameObject.cpp" />
-    <ClCompile Include="GameObject\ObRect.cpp" />
-    <ClCompile Include="GameObject\Vector2.cpp" />
-    <ClCompile Include="GameObject\ObStar.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GameObject\Circle.h" />
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="GameObject\GameObject.h" />
-    <ClInclude Include="GameObject\ObRect.h" />
-    <ClInclude Include="GameObject\Vector2.h" />
-    <ClInclude Include="GameObject\ObStar.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
