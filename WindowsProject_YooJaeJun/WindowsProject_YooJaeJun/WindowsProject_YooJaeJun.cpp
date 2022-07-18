@@ -167,6 +167,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         nullptr                  // 
     );
 
+    // 게임변수 초기화
+    mg->Init();
+
     if (!g_hwnd) return FALSE;
 
     //화면 작업 사이즈 영역 계산
@@ -180,7 +183,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     return TRUE;
 }
 
-
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -193,37 +195,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         std::cout << "Update ";
         break;
 #endif
-    case WM_CREATE:
-        mg->Init();
-        break;
 
     case WM_TIMER:
+        INPUT->Update();
         mg->Update();
         break;
 
     case WM_PAINT:
-    {
-        PAINTSTRUCT ps;
-        // hdc -> 도화지
-        g_hdc = BeginPaint(hWnd, &ps);
-
-
         mg->Render();
-
-        EndPaint(hWnd, &ps);
-    }
-    break;
-
-    case WM_LBUTTONDOWN:
-
-
         break;
-    case WM_KEYDOWN:
-    {
-        InvalidateRect(hWnd, NULL, true);
-    }
-    break;
 
+    case WM_CLOSE:
     case WM_DESTROY:    // 창이 파괴되었을 때의 메세지입니다.
         PostQuitMessage(0); // WM_QUIT 메세지를 보냅니다.
         break;

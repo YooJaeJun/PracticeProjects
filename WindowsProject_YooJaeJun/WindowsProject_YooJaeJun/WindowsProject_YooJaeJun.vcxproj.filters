@@ -1,17 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{6d7de1c7-ee91-49c5-8d15-bde77217ab13}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="System">
+      <UniqueIdentifier>{aa19d5a2-4eb8-486b-b753-231fe83f13e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -20,56 +14,50 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ObRect.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ObStar.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="ObCircle.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="MainGame.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="ObRect.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ObStar.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsProject_YooJaeJun.cpp" />
+    <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="Input.cpp">
+      <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Types.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowsProject_YooJaeJun.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameObject.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="ObCircle.h">
+      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ObRect.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ObStar.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleMath.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="ObCircle.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="framework.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MainGame.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="MainGame.h" />
+    <ClInclude Include="Input.h">
+      <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="Types.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SimpleMath.inl">
-      <Filter>헤더 파일</Filter>
-    </None>
+    <None Include="SimpleMath.inl" />
   </ItemGroup>
 </Project>

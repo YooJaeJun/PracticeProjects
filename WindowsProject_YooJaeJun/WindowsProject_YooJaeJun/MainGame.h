@@ -8,7 +8,7 @@ private:
 	ObCircle cc;
 
 public:
-	~MainGame() {}
+	~MainGame();
 
 	void Init()   override;
 	void Update() override;

@@ -23,6 +23,7 @@
     <Text Include="화면 좌표계.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="ObCircle.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MainGame.cpp" />
@@ -32,6 +33,7 @@
     <ClCompile Include="WindowsProject_YooJaeJun.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Input.h" />
     <ClInclude Include="ObCircle.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameObject.h" />
