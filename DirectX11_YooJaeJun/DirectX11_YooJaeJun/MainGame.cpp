@@ -18,8 +18,8 @@ void MainGame::Init()
 
 	rc.position.x = 100.0f;
 	rc.position.y = 200.0f;
-	rc.scale.x = 1.0f;
-	rc.scale.y = 1.0f;
+	rc.scale.x = 100.0f;
+	rc.scale.y = 100.0f;
 	rc.rotation = 0.0f;
 
 	st.position.x = 300.0f;
@@ -75,46 +75,52 @@ void MainGame::Update()
         st.position.x += DELTA * 100.0f;
         cc.position.x += DELTA * 100.0f;
     }
-    if (GetAsyncKeyState('1') & 0x8001)
+    if (INPUT->KeyPress('1'))
     {
         rc.scale.x += DELTA * 100.0f;
         st.scale.x += DELTA * 100.0f;
         cc.scale.x += DELTA * 100.0f;
     }
-    if (GetAsyncKeyState('2') & 0x8001)
+    if (INPUT->KeyPress('2'))
     {
         rc.scale.x -= DELTA * 100.0f;
         st.scale.x -= DELTA * 100.0f;
         cc.scale.x -= DELTA * 100.0f;
     }
-    if (GetAsyncKeyState('3') & 0x8001)
+    if (INPUT->KeyPress('3'))
     {
         rc.scale.y += DELTA * 100.0f;
         st.scale.y += DELTA * 100.0f;
         cc.scale.y += DELTA * 100.0f;
     }
-    if (GetAsyncKeyState('4') & 0x8001)
+    if (INPUT->KeyPress('4'))
     {
         rc.scale.y -= DELTA * 100.0f;
         st.scale.y -= DELTA * 100.0f;
         cc.scale.y -= DELTA * 100.0f;
     }
-    if (GetAsyncKeyState('5') & 0x8001)
+    if (INPUT->KeyPress('5'))
     {
-        rc.rotation += DELTA * 100.0f;
-        st.rotation += DELTA * 100.0f;
-        cc.rotation += DELTA * 100.0f;
+        rc.rotation += DELTA * 10.0f;
+        st.rotation += DELTA * 10.0f;
+        cc.rotation += DELTA * 10.0f;
     }
-    if (GetAsyncKeyState('6') & 0x8001)
+    if (INPUT->KeyPress('6'))
     {
-        rc.rotation -= DELTA * 100.0f;
-        st.rotation -= DELTA * 100.0f;
-        cc.rotation -= DELTA * 100.0f;
+        rc.rotation -= DELTA * 10.0f;
+        st.rotation -= DELTA * 10.0f;
+        cc.rotation -= DELTA * 10.0f;
     }
 
 
     //키가 눌렸을 때 wm_paint 를 발생 시켜라
     InvalidateRect(g_hwnd, NULL, false);
+
+
+    rc.Update();
+    st.Update();
+    cc.Update();
+
 }
 
 void MainGame::Render()
