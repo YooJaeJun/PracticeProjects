@@ -25,9 +25,9 @@
 //HWND 접두어      Windows 핸들(창 관리자)
 HINSTANCE           g_hInst;    //프로그램 자체의 관리자         // 기본 창 클래스 이름입니다.
 HWND                g_hwnd;     //창 관리자                     // 기본 창 클래스 이름입니다.
-Scene*              mg;         // 추상화
 HDC                 g_hdc;
 HDC                 g_MemDC;
+Scene*              mg;         // 추상화
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 //**윈도우 프로시저** (프로시저) -> 호출 당하는 함수
@@ -57,9 +57,9 @@ WCHAR     szWindowClass[100] = L"Window";     // 윈도우 클래스 이름을 �
 // APIENTRY : __stdcall 의 심볼입니다.
 // __stdcall : 프로그래머가 직접 호출해주는 것이 아닌 컴퓨터가 자동으로 호출해준 함수 호출 규정 방식
 int APIENTRY wWinMain(_In_    HINSTANCE hInstance,      // 우리가 실행하고 있는 프로그램의 시작 위치를 저장합니다.
-    _In_opt_ HINSTANCE hPrevInstance,
-    _In_     LPWSTR    lpCmdLine,
-    _In_     int       nCmdShow)
+    /*_In_opt_*/ HINSTANCE hPrevInstance,
+    /*_In_    */ LPWSTR    lpCmdLine,
+    /*_In_    */ int       nCmdShow)
 {
     // 윈도우 클래스
     WNDCLASS wc;
@@ -199,12 +199,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_CLOSE:
     case WM_DESTROY:    // 창이 파괴되었을 때의 메세지입니다.
+    {
         PostQuitMessage(0); // WM_QUIT 메세지를 보냅니다.
         break;
+    } // case
+    } // switch
 
     // DefWindowProc : 우리가 케이스로 지정하지 않은 메세지를 자동으로 처리해주는 역할입니다.
     return DefWindowProc(hWnd, message, wParam, lParam);
-    }
 }
 
 
