@@ -1,20 +1,33 @@
-﻿#include "GameObject/Circle.h"
-#include "GameObject/ObRect.h"
-#include "GameObject/ObStar.h"
-// #include "화면 좌표계.txt"
-#define MAX 20
+﻿#include "framework.h"
 
-//c++ - 칼질, 조리법
+// #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
 
-//WINAPI - 레토르트
-//기본 템플릿
+#define PEEK
 
+/*
+    WinAPI(Windows Application Programming Interface)
+    Window      : OS (Operating System)
+    Application : 응용 프로그램
+    Interface   : 함수의 집합체
+    윈도우가 제공하는 응용프로그램을 개발하는 함수들의 집합체
+*/
+
+/*
+    HINSTANCE (Instance Handle)
+    프로세서의 실행 위치를 주소값을 반환한 형식입니다.
+    프로세서란 현재 실행하고 있는 프로그램을 의미하며 프로그램은 컴퓨터 메모리에서
+    특정 위치에서 실행합니다. 우리의 프로그램에 접근하기 위해서 어디에서 실행하고 있는지
+    알고 있어야 하는데 그 위치를 저장할 수 있는 기법입니다.
+*/
 //핸들 -> 관리 감독
 //H 접두어         리소스 핸들 (자원 관리자)
 //HFONT,HBITMAP....
 //HWND 접두어      Windows 핸들(창 관리자)
 HINSTANCE           g_hInst;    //프로그램 자체의 관리자         // 기본 창 클래스 이름입니다.
 HWND                g_hwnd;     //창 관리자                     // 기본 창 클래스 이름입니다.
+Scene*              mg;         // 추상화
+HDC                 g_hdc;
+HDC                 g_MemDC;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 //**윈도우 프로시저** (프로시저) -> 호출 당하는 함수
@@ -22,49 +35,68 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 //창사이즈 재조정   바탕화면 좌표
 void SetWindowSize(int x, int y, int width, int height);
 
-//메인 진입 함수
-//윈도우를 만들고 화면에 출력
-int APIENTRY wWinMain(HINSTANCE hInstance,
-    HINSTANCE hPrevInstance,
-    LPWSTR    lpCmdLine,
-    int       nCmdShow)
+// ATOM                MyRegisterClass(HINSTANCE hInstance);
+// BOOL                InitInstance(HINSTANCE, int);
+// LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
+
+
+/*
+    WCHAR
+    wchar_t 형식을 TYPEDEF 으로 별칭을 사용한 구문입니다.
+    wide character 형식이라 불립니다.
+    넓은 형태 (아스키코드로 표현하지 못하는 문자)를 표현할 수 있습니다.
+    char(8bit) 와 다르게 16bit(2Byte) 형식을 저장하므로 보다 넓은 문자를 사용할 수 있습니다.
+    L"" : wide char 형식의 문자열 상수 표기법입니다.
+*/
+WCHAR     szTitle[100] = L"😊😁👍🤣🎁🐱‍🚀🎉😁😘👍🙌🤦‍♀️🎶😎😉🤞✌🤷‍♂️🤷‍♀️🤦‍♂️🌹🎂🤳😃👀";       // 창의 제목을 저장하는 전역변수입니다.
+WCHAR     szWindowClass[100] = L"Window";     // 윈도우 클래스 이름을 저장하는 전역변수입니다.
+
+
+// wWinMain : 창 프로그램의 시작 위치를 결정합니다.
+// main     : 콘솔 프로그램의 시작 위치를 결정합니다.
+// APIENTRY : __stdcall 의 심볼입니다.
+// __stdcall : 프로그래머가 직접 호출해주는 것이 아닌 컴퓨터가 자동으로 호출해준 함수 호출 규정 방식
+int APIENTRY wWinMain(_In_    HINSTANCE hInstance,      // 우리가 실행하고 있는 프로그램의 시작 위치를 저장합니다.
+    _In_opt_ HINSTANCE hPrevInstance,
+    _In_     LPWSTR    lpCmdLine,
+    _In_     int       nCmdShow)
 {
-    //윈도우 클래스
+    // 윈도우 클래스
     WNDCLASS wc;
 
-    //NULL값으로 시작주소부터 크기까지 초기화
+    // NULL값으로 시작주소부터 크기까지 초기화
     ZeroMemory(&wc, sizeof(WNDCLASS));
 
-    //참조하지 않은 인자에 대해 경고를 표시하지 않는다
+    // 참조하지 않은 인자에 대해 경고를 표시하지 않는다.
     UNREFERENCED_PARAMETER(lpCmdLine);
-    //| & ^ 비트연산자
+    // 비트연산자
     wc.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
-    //프로시져 넘기기 L(함수 포인터 변수) = R(함수 포인터)
+    // 프로시져 넘기기 L(함수 포이넡 변수) = R(함수 포인터)
     wc.lpfnWndProc = (WNDPROC)WndProc;
     wc.hInstance = hInstance;
-    //아이콘(프로그램 왼쪽위)
+    // 아이콘(프로그램 왼쪽 위)
     wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    //윈도우창 활성화시에 마우스커서 모양
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 
-    //ShowCursor(false);
+    // ShowCursor(false);
 
-    //윈도우창 바탕색
+    // 윈도우창 바탕색
     wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(LTGRAY_BRUSH));
     wc.lpszClassName = L"DX11";
     wc.lpszMenuName = nullptr;
 
-    //	운영체제의 레지스터에 이 프로그램을 등록한다
+    // 운영체제의 레지스터에 이 프로그램을 등록한다.
     if (!RegisterClass(&wc))
-        return FALSE; //등록이 안됬다면 프로그램 종료
+        return FALSE;   // 등록이 안됐다면 프로그램 종료
 
-     //생성된 인스턴스값 저장
     g_hInst = hInstance;
 
-    //	메인 윈도우 생성
+    mg = new MainGame();
+
+    // 메인 윈도우 생성
     g_hwnd = CreateWindow(
         L"DX11",
-        L"😊😁👍🤣🎁🐱‍🚀🎉😁😘👍🙌🤦‍♀️🎶😎😉🤞✌🤷‍♂️🤷‍♀️🤦‍♂️🌹🎂🤳😃👀😍👍🙌🤷‍♀️🤷‍♂️🎶🤦‍♀️✨👏😆🤔🤢🐱‍🏍🐱‍👤💋🐱‍💻🐱‍🐉🐱‍👓🐱‍👓🤢🤔🐱‍🏍🐱‍👤👏😆✨😃👀🙄😏🤗😍😎☺😶😴😌😖🥼🧵🎨🎟🎞🥟🍠🥡🍣🍣🦪🚝🚅🚲🚲🚞🚔",
+        L"DX11",
         WS_OVERLAPPEDWINDOW,
         0,			//창의 시작 x좌표
         0,			//창의 시작 y좌표
@@ -75,250 +107,106 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
         hInstance,	//등록될 인스턴스
         nullptr
     );
-    //핸들이 제대로 값을 가지지 못했다면 프로그램 종료
+
+    // 핸들이 제대로 값을 가지지 못했다면 프로그램 종료
     if (!g_hwnd)
         return FALSE;
 
-    //화면 작업 사이즈 영역 계산
+    // 화면 작업 사이즈 영역 계산
     SetWindowSize(0, 0, 800, 600);
 
-    //	생성한 프로그램을 디스플레이의 최상위로 올린다
-    //화면에 표시
+    // 생성한 프로그램을 디스플레이의 최상위로 올린다
+    // 화면에 표시
     ShowWindow(g_hwnd, nCmdShow);
 
-    //	메인 윈도우 갱신
+    // 메인 윈도우 갱신
     UpdateWindow(g_hwnd);
 
-    //**메시지 루프**
+    mg->Init();
+
+    // **메시지 루프**
     MSG msg;
     ZeroMemory(&msg, sizeof(MSG));
 
-    // 기본 메시지 루프입니다
-    //런타임동안 반복시킬 반복문
+    // 기본 메시지 루프: 런타임동안 반복시킬 구문
+
+#ifndef PEEK
+    // 프로그램에 들어오는 메세지를 저장할 수 있는 구조체
+    // GetMessage : 대기하고 있는 메세지를 가져와 MSG 형태에 저장합니다.
+    //              만약 메세지가 없다면 while 문을 잠재웁니다.
+    //              WM_QUIT 메시지가 돌아온다면 false 를 반환합니다.
+    while (GetMessage(&msg, nullptr, 0, 0))
+    {
+        DispatchMessage(&msg);
+    }
+#endif  // !PEEK
+
+#ifdef PEEK
     while (true)
     {
-        //GetMessage 발생한 메세지를 줄 때까지 계속 기다려서 받는 애
-        //Peek 발생할 때만 집어서 가져오는애
-        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+        // PeekMessage : 대기하고 있는 메시지가 있는지 없는지 검사합니다.
+        //               만약 메시지가 없다면 false,
+        //               있다면 true 를 반환하고 MSG 형태에 저장합니다.
+        // GetMessage 발생한 메시지를 줄 때까지 계속 기다려서 받는 애
+        // Peek 발생할 때만 집어서 가져오는 애
+        if (PeekMessage(&msg, nullptr, NULL, NULL, PM_REMOVE))
         {
-            if (msg.message == WM_QUIT)
-            {
-                break;
-            }
-            //처리
+            if (msg.message == WM_QUIT) break;
+
+            // 처리
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
         else
         {
-            //메세지를 집어오지 않을때
+            // 메시지를 집어오지 않을 때   // 1 프레임
+            TIMER->Chronometry();
+            INPUT->Update();
+            mg->Update();
+            mg->Render();
         }
     }
-    //프로그램 종료 준비
+    // 프로그램 종료 준비
 
-     //생성된 윈도우 삭제
+    // 생성된 윈도우 삭제
     DestroyWindow(g_hwnd);
-    //등록된 프로그램 해제
+    // 등록된 프로그램 해제
     UnregisterClass(L"DX11", hInstance);
 
     return (int)msg.wParam;
+    
+#endif
+    // PeekMessage 사용 이유
+    // GetMessage 같은 경우 주기적으로 호출될 코드를 WM_TIMER 를 통하여 호출해야 합니다.
+    // 이렇게 WM_TIMER 를 통하여 호출해야 합니다.
+    // 해당과 같이 코드를 호출하게 되면 CPU 연산이 아닌 메시지를 통해 연산량을 결정하기 때문에 호출속도가 느립니다.
+    // PeekMessage 같은 경우 while 과 같은 cpu 연산을 통하여 메시지가 없다면 주기적으로 호출할 코드를 실행시키기
+    // 때문에 호출량 차이로 인하여 PeekMessage 를 사용합니다.
 }
-
-ObRect rc;
-Circle cir, cir2, cir3;
-
-const int region_TutorialRotate = 1;
-#pragma region region_TutorialRotate
-float posSunX = 230.0f;
-float posSunY = 200.0f;
-float scaleX = 0.7f;
-float scaleY = 0.7f;
-float seta = 1.0f;
-float posHumanX = 500;
-float posHumanY = 400;
-const float R = 0.01745329;
-#pragma endregion
-
-//  함수: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  용도: 주 창의 메시지를 처리합니다.
-//
-//  WM_COMMAND  - 애플리케이션 메뉴를 처리합니다.
-//  WM_PAINT    - 주 창을 그립니다.
-//  WM_DESTROY  - 종료 메시지를 게시하고 반환합니다.
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    //어떤 메세지가 발생되었는가를 통해 처리할 조건문
     switch (message)
     {
-    case WM_CREATE: // 창이 만들어질 때 한 번 호출
-    {
-        rc.position.x = 400.0f;
-        rc.position.y = 300.0f;
-        rc.scale.x = 1.0f;
-        rc.scale.y = 1.0f;
-        rc.rotation = 0.0f;
-
-        cir.position.x = 400.0f;
-        cir.position.y = 300.0f;
-        cir.scale.x = 1.0f;
-        cir.scale.y = 1.0f;
-        cir.rotation = 0.0f;
-
-        cir2.position.x = 400.0f;
-        cir2.position.y = 300.0f;
-        cir2.scale.x = 2.0f;
-        cir2.scale.y = 2.0f;
-        cir2.rotation = 0.0f;
-
-        cir3.position.x = 400.0f;
-        cir3.position.y = 300.0f;
-        cir3.scale.x = 3.0f;
-        cir3.scale.y = 3.0f;
-        cir3.rotation = 0.0f;
-
+#ifndef PEEK
+    case WM_CREATE:
+        SetTimer(hWnd, 1, 1, NULL);
         break;
-    }
-        //그리라는 메세지가 들어온경우
-    case WM_PAINT:
-    {
-        PAINTSTRUCT ps;
-        //hdc-> 도화지
-        HDC hdc = BeginPaint(hWnd, &ps);
-
-
-        // rc.Render(hdc);
-        /*
-        cir.Render(hdc);
-        cir2.Render(hdc);
-        cir3.Render(hdc);
-        */
-
-#pragma region region_TutorialRotate
-        /*
-        Ellipse(hdc, posX - 50 * scaleX, posY + 50 * scaleY,
-            posX + 50 * scaleX, posY + 150 * scaleY);
-        MoveToEx(hdc, posX - 50 * scaleX, posY, NULL);
-        LineTo(hdc, posX + 50 * scaleX, posY); // ㅡ
-        Ellipse(hdc, posX - 50 * scaleX, posY - 150 * scaleY,
-            posX + 50 * scaleX, posY - 50 * scaleY);
-        */
-
-        /*
-        // 삼각형
-        //                   100 * cosf(0   * R + seta) == a             100 * sinf(0   * R + seta) == b
-        MoveToEx(hdc, posX + 100 * cosf(0   * R + seta) * scaleX, posY + 100 * sinf(0   * R + seta) * scaleY, NULL);
-        LineTo  (hdc, posX + 100 * cosf(120 * R + seta) * scaleX, posY + 100 * sinf(120 * R + seta) * scaleY);
-        LineTo  (hdc, posX + 100 * cosf(240 * R + seta) * scaleX, posY + 100 * sinf(240 * R + seta) * scaleY);
-        LineTo  (hdc, posX + 100 * cosf(0   * R + seta) * scaleX, posY + 100 * sinf(0   * R + seta) * scaleY);
-        */
-
-        //                   100 * cosf(0   * R + seta) == a             100 * sinf(0   * R + seta) == b
-
-        
-        // 햇님
-        
-        MoveToEx(hdc, posSunX, posSunY, NULL);
-        for (int i = 0; i <= 720; i += 10)
-        {
-            LineTo(hdc, posSunX + i / 5 * cosf(i * R + seta) * scaleX,
-                posSunY + i / 5 * sinf(i * R + seta) * scaleY);
-        }
-
-        MoveToEx(hdc, posSunX, posSunY, NULL);
-        for (int i = 0; i <= 720; i += 10)
-        {
-            LineTo(hdc, posSunX - i / 5 * cosf(i * R + seta) * scaleX,
-                posSunY - i / 5 * sinf(i * R + seta) * scaleY);
-        }
-
-        // 아지랑이
-        for (int i = 30; i <= 360; i += 30)
-        {
-            MoveToEx(hdc, posSunX + 170 * cosf(i * R + seta) * scaleX,
-                posSunY + 170 * sinf(i * R + seta) * scaleY, NULL);
-            LineTo(hdc, posSunX + 250 * cosf(i * R + seta) * scaleX,
-                posSunY + 250 * sinf(i * R + seta) * scaleY);
-        }
-
-        // 얼굴
-        MoveToEx(hdc, posHumanX + 120 * cosf(0 * R + seta) * scaleX,
-            posHumanY + 120 * sinf(0 * R + seta) * scaleY, NULL);
-        for (int i = 40; i <= 360; i += 40)
-        {
-            LineTo(hdc, posHumanX + 120 * cosf(i * R + seta) * scaleX,
-                posHumanY + 120 * sinf(i * R + seta) * scaleY);
-        }
-
-        // 눈
-        // 왼쪽
-        MoveToEx(hdc, posHumanX + 50 * cosf(200 * R + seta) * scaleX,
-            posHumanY + 50 * sinf(200 * R + seta) * scaleY, NULL);
-        LineTo(hdc, posHumanX + 50 * cosf(140 * R + seta) * scaleX,
-            posHumanY + 50 * sinf(140 * R + seta) * scaleY);
-
-        MoveToEx(hdc, posHumanX + 70 * cosf(170 * R + seta) * scaleX,
-            posHumanY + 70 * sinf(170 * R + seta) * scaleY, NULL);
-        LineTo(hdc, posHumanX + 10 * cosf(170 * R + seta) * scaleX,
-            posHumanY + 10 * sinf(170 * R + seta) * scaleY);
-        // 오른쪽
-        MoveToEx(hdc, posHumanX + 50 * cosf(310 * R + seta) * scaleX,
-            posHumanY + 50 * sinf(310 * R + seta) * scaleY, NULL);
-        LineTo(hdc, posHumanX + 50 * cosf(250 * R + seta) * scaleX,
-            posHumanY + 50 * sinf(250 * R + seta) * scaleY);
-
-        MoveToEx(hdc, posHumanX + 70 * cosf(280 * R + seta) * scaleX,
-            posHumanY + 70 * sinf(280 * R + seta) * scaleY, NULL);
-        LineTo(hdc, posHumanX + 20 * cosf(280 * R + seta) * scaleX,
-            posHumanY + 20 * sinf(280 * R + seta) * scaleY);
-
-        // 입
-        MoveToEx(hdc, posHumanX + 70 * cosf(10 * R + seta) * scaleX,
-            posHumanY + 70 * sinf(10 * R + seta) * scaleY, NULL);
-        LineTo(hdc, posHumanX + 30 * cosf(25 * R + seta) * scaleX,
-            posHumanY + 30 * sinf(25 * R + seta) * scaleY);
-        LineTo(hdc, posHumanX + 60 * cosf(70 * R + seta) * scaleX,
-            posHumanY + 60 * sinf(70 * R + seta) * scaleY);
-        
-#pragma endregion
-
-        EndPaint(hWnd, &ps);
+    case WM_TIMER:
+        std::cout << "Update ";
         break;
-    }
-    //파괴하거나 닫으라는 메세지가 들어온경우
-    case WM_DESTROY: case WM_CLOSE:
-    {
-        //프로그램 종료 호출 함수
-        PostQuitMessage(0);
+#endif
+
+    case WM_CLOSE:
+    case WM_DESTROY:    // 창이 파괴되었을 때의 메세지입니다.
+        PostQuitMessage(0); // WM_QUIT 메세지를 보냅니다.
         break;
-    }
-    case WM_LBUTTONDOWN:
-    {
-        MessageBoxA(g_hwnd, "너무더웡", "날씨", MB_ABORTRETRYIGNORE);
-    }
-    case WM_KEYDOWN:
-    {
-        InvalidateRect(hWnd, NULL, true);   // 전에 있던 것 그대로 지울 건지, 남길 건지
 
-        if (wParam == VK_LEFT)  { posSunX -= 3; posHumanX -= 3; rc.position.x -= 3; cir.position.x -= 3; cir2.position.x -= 3; cir3.position.x -= 3; }
-        if (wParam == VK_RIGHT) { posSunX += 3; posHumanX += 3; rc.position.x += 3; cir.position.x += 3; cir2.position.x += 3; cir3.position.x += 3; }
-        if (wParam == VK_UP)    { posSunY -= 3; posHumanY -= 3; rc.position.y -= 3; cir.position.y -= 3; cir2.position.y -= 3; cir3.position.y -= 3; }
-        if (wParam == VK_DOWN)  { posSunY += 3; posHumanY += 3; rc.position.y += 3; cir.position.y += 3; cir2.position.y += 3; cir3.position.y += 3; }
-
-        if (wParam == '1') { scaleX += 0.1f; rc.scale.x  += 0.1f; cir.scale.x  += 0.1f; cir2.scale.x  += 0.1f; cir3.scale.x  += 0.1f; }
-        if (wParam == '2') { scaleX -= 0.1f; rc.scale.x  -= 0.1f; cir.scale.x  -= 0.1f; cir2.scale.x  -= 0.1f; cir3.scale.x  -= 0.1f; }
-        if (wParam == '3') { scaleY += 0.1f; rc.scale.y  += 0.1f; cir.scale.y  += 0.1f; cir2.scale.y  += 0.1f; cir3.scale.y  += 0.1f; }
-        if (wParam == '4') { scaleY -= 0.1f; rc.scale.y  -= 0.1f; cir.scale.y  -= 0.1f; cir2.scale.y  -= 0.1f; cir3.scale.y  -= 0.1f; }
-        if (wParam == '5') { seta += 0.1f;   rc.rotation += 0.1f; cir.rotation += 0.1f; cir2.rotation += 0.1f; cir3.rotation += 0.1f; }
-        if (wParam == '6') { seta -= 0.1f;   rc.rotation -= 0.1f; cir.rotation -= 0.1f; cir2.rotation -= 0.1f; cir3.rotation -= 0.1f; }
-
-        break;
+    // DefWindowProc : 우리가 케이스로 지정하지 않은 메세지를 자동으로 처리해주는 역할입니다.
+    return DefWindowProc(hWnd, message, wParam, lParam);
     }
-    }
-
-    return (DefWindowProc(hWnd, message, wParam, lParam));
 }
+
 
 void SetWindowSize(int x, int y, int width, int height)
 {

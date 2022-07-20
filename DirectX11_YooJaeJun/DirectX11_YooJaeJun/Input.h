@@ -1,4 +1,5 @@
 #pragma once
+
 class Input : public Singleton<Input>
 {
 private:

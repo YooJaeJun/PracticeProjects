@@ -37,7 +37,7 @@ void MainGame::Init()
 
 	// WM_TIMER 메시지를 일정주기마다 발생
 	//					n 밀리초마다 발생
-	SetTimer(g_hwnd, 1, 17, NULL);		// 17 밀리초 == 60 fps
+	SetTimer(g_hwnd, 1, 10, NULL);		// 17 밀리초 == 60 fps
 }
 
 void MainGame::Update()
@@ -53,63 +53,63 @@ void MainGame::Update()
     // O         O        1001  // 키 누르고 있음 PRESS
     if (INPUT->KeyPress(VK_UP))
     {
-        rc.position.y -= 3.0f;
-        st.position.y -= 3.0f;
-        cc.position.y -= 3.0f;
+        rc.position.y -= DELTA * 100.0f;
+        st.position.y -= DELTA * 100.0f;
+        cc.position.y -= DELTA * 100.0f;
     }
     if (INPUT->KeyPress(VK_DOWN))
     {
-        rc.position.y += 3.0f;
-        st.position.y += 3.0f;
-        cc.position.y += 3.0f;
+        rc.position.y += DELTA * 100.0f;
+        st.position.y += DELTA * 100.0f;
+        cc.position.y += DELTA * 100.0f;
     }
     if (INPUT->KeyPress(VK_LEFT))
     {
-        rc.position.x -= 3.0f;
-        st.position.x -= 3.0f;
-        cc.position.x -= 3.0f;
+        rc.position.x -= DELTA * 100.0f;
+        st.position.x -= DELTA * 100.0f;
+        cc.position.x -= DELTA * 100.0f;
     }
     if (INPUT->KeyPress(VK_RIGHT))
     {
-        rc.position.x += 3.0f;
-        st.position.x += 3.0f;
-        cc.position.x += 3.0f;
+        rc.position.x += DELTA * 100.0f;
+        st.position.x += DELTA * 100.0f;
+        cc.position.x += DELTA * 100.0f;
     }
     if (GetAsyncKeyState('1') & 0x8001)
     {
-        rc.scale.x += 0.1f;
-        st.scale.x += 0.1f;
-        cc.scale.x += 0.1f;
+        rc.scale.x += DELTA * 100.0f;
+        st.scale.x += DELTA * 100.0f;
+        cc.scale.x += DELTA * 100.0f;
     }
     if (GetAsyncKeyState('2') & 0x8001)
     {
-        rc.scale.x -= 0.1f;
-        st.scale.x -= 0.1f;
-        cc.scale.x -= 0.1f;
+        rc.scale.x -= DELTA * 100.0f;
+        st.scale.x -= DELTA * 100.0f;
+        cc.scale.x -= DELTA * 100.0f;
     }
     if (GetAsyncKeyState('3') & 0x8001)
     {
-        rc.scale.y += 0.1f;
-        st.scale.y += 0.1f;
-        cc.scale.y += 0.1f;
+        rc.scale.y += DELTA * 100.0f;
+        st.scale.y += DELTA * 100.0f;
+        cc.scale.y += DELTA * 100.0f;
     }
     if (GetAsyncKeyState('4') & 0x8001)
     {
-        rc.scale.y -= 0.1f;
-        st.scale.y -= 0.1f;
-        cc.scale.y -= 0.1f;
+        rc.scale.y -= DELTA * 100.0f;
+        st.scale.y -= DELTA * 100.0f;
+        cc.scale.y -= DELTA * 100.0f;
     }
     if (GetAsyncKeyState('5') & 0x8001)
     {
-        rc.rotation += 0.1f;
-        st.rotation += 0.1f;
-        cc.rotation += 0.1f;
+        rc.rotation += DELTA * 100.0f;
+        st.rotation += DELTA * 100.0f;
+        cc.rotation += DELTA * 100.0f;
     }
     if (GetAsyncKeyState('6') & 0x8001)
     {
-        rc.rotation -= 0.1f;
-        st.rotation -= 0.1f;
-        cc.rotation -= 0.1f;
+        rc.rotation -= DELTA * 100.0f;
+        st.rotation -= DELTA * 100.0f;
+        cc.rotation -= DELTA * 100.0f;
     }
 
 

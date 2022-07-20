@@ -25,12 +25,15 @@
     <ClCompile Include="ObStar.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="WindowsProject_YooJaeJun.cpp" />
+    <ClCompile Include="DirectX11_YooJaeJun.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Input.cpp">
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Types.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
       <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,6 +57,9 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="Types.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
       <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>

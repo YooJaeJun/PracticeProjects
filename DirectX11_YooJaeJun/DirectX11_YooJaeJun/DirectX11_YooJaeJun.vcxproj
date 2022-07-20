@@ -23,15 +23,15 @@
     <Text Include="화면 좌표계.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DirectX11_YooJaeJun.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="ObCircle.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="ObRect.cpp" />
     <ClCompile Include="ObStar.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Types.cpp" />
-    <ClCompile Include="WindowsProject_YooJaeJun.cpp" />
+    <ClCompile Include="DirectX11_YooJaeJun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h" />
@@ -42,10 +42,10 @@
     <ClInclude Include="ObRect.h" />
     <ClInclude Include="ObStar.h" />
     <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DirectX11_YooJaeJun.aps" />
     <None Include="SimpleMath.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
