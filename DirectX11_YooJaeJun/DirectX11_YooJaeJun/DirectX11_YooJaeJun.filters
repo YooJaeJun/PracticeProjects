@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{6d7de1c7-ee91-49c5-8d15-bde77217ab13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{aa19d5a2-4eb8-486b-b753-231fe83f13e1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="화면 좌표계.txt" />
+    <Text Include="삼각함수.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ObCircle.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ObRect.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ObStar.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsProject_YooJaeJun.cpp" />
+    <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="Input.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Types.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ObCircle.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ObRect.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ObStar.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="MainGame.h" />
+    <ClInclude Include="Input.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>System</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleMath.inl" />
+  </ItemGroup>
+</Project>
