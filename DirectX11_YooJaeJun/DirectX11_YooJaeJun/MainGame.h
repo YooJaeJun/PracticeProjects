@@ -6,6 +6,9 @@ private:
 	ObRect rc;
 	ObStar st;
 	ObCircle cc;
+	ObLine ln;
+
+	SYSTEMTIME localTime;
 
 public:
 	~MainGame();

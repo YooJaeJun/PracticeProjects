@@ -3,8 +3,9 @@
 class ObCircle : public GameObject
 {
 public:
-	Vector2 position;
+	Vector2 vertex[60];
 
+public:
 	ObCircle();
 
 	void Render() override;

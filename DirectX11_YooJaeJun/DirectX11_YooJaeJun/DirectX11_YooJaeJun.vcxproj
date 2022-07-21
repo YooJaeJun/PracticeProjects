@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="삼각함수.txt" />
+    <Text Include="벡터.txt" />
+    <Text Include="행렬.txt" />
     <Text Include="화면 좌표계.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -27,6 +29,7 @@
     <ClCompile Include="ObCircle.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="ObLine.cpp" />
     <ClCompile Include="ObRect.cpp" />
     <ClCompile Include="ObStar.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -39,6 +42,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="MainGame.h" />
+    <ClInclude Include="ObLine.h" />
     <ClInclude Include="ObRect.h" />
     <ClInclude Include="ObStar.h" />
     <ClInclude Include="SimpleMath.h" />

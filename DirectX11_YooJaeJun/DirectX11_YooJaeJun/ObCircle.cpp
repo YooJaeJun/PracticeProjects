@@ -2,16 +2,26 @@
 
 ObCircle::ObCircle()
 {
+	for (int i = 0; i < 60; i++)
+	{
+		vertex[i] = Vector2(0.5f * cosf(6 * i * ToRadian), 
+			0.5f * sinf(6 * i * ToRadian));
+	}
 }
 
 void ObCircle::Render()
 {
-	MoveToEx(g_MemDC, position.x + 100 * cosf(0 * ToRadian + rotation) * scale.x,
-		position.y + 100 * sinf(0 * ToRadian + rotation) * scale.y, NULL);
+	Vector2 TransfVtx[60];
 
-	for (int i = 0; i <= 60; i++)
+	for (int i = 0; i < 60; i++)
 	{
-		LineTo(g_MemDC, position.x + 100 * cosf(i * 6 * ToRadian + rotation) * scale.x,
-			position.y + 100 * sinf(i * 6 * ToRadian + rotation) * scale.y);
+		TransfVtx[i] = Vector2::Transform(vertex[i], W);
 	}
+
+	MoveToEx(g_MemDC, TransfVtx[0].x, TransfVtx[0].y, NULL);
+	for (int i = 0; i < 60; i++)
+	{
+		LineTo(g_MemDC, TransfVtx[i].x, TransfVtx[i].y);
+	}
+	LineTo(g_MemDC, TransfVtx[0].x, TransfVtx[0].y);
 }

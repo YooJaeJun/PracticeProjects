@@ -16,32 +16,39 @@ void MainGame::Init()
 	ReleaseDC(g_hwnd, hdc);
 
 
-	rc.position.x = 100.0f;
-	rc.position.y = 200.0f;
-	rc.scale.x = 100.0f;
-	rc.scale.y = 100.0f;
-	rc.rotation = 0.0f;
+    rc.position.x = 400.0f;
+    rc.position.y = 200.0f;
+    rc.scale.x = 100.0f;
+    rc.scale.y = 100.0f;
+    rc.rotation = 0.0f;
 
-	st.position.x = 300.0f;
-	st.position.y = 200.0f;
-	st.scale.x = 1.0f;
-	st.scale.y = 1.0f;
-	st.rotation = 0.0f;
+    st.position.x = 100.0f;
+    st.position.y = 200.0f;
+    st.scale.x = 100.0f;
+    st.scale.y = 100.0f;
+    st.rotation = 0.0f;
 
-	cc.position.x = 500.0f;
-	cc.position.y = 200.0f;
-	cc.scale.x = 1.0f;
-	cc.scale.y = 1.0f;
-	cc.rotation = 0.0f;
+    cc.position.x = 400.0f;
+    cc.position.y = 300.0f;
+    cc.scale.x = 500.0f;
+    cc.scale.y = 500.0f;
+    cc.rotation = 0.0f;
 
+    ln.position.x = 400.0f;
+    ln.position.y = 300.0f;
+    ln.scale.x = 250.0f;
+    ln.scale.y = 250.0f;
+    ln.rotation = 0.0f;
 
 	// WM_TIMER 메시지를 일정주기마다 발생
 	//					n 밀리초마다 발생
-	SetTimer(g_hwnd, 1, 10, NULL);		// 17 밀리초 == 60 fps
+	// SetTimer(g_hwnd, 1, 10, NULL);		// 17 밀리초 == 60 fps
 }
 
 void MainGame::Update()
 {
+    GetLocalTime(&localTime);
+
 
 	// GetAsyncKeyState 메시지큐를 거치지 않고 키입력을 받아오는 함수
     //가상키코드
@@ -53,74 +60,56 @@ void MainGame::Update()
     // O         O        1001  // 키 누르고 있음 PRESS
     if (INPUT->KeyPress(VK_UP))
     {
-        rc.position.y -= DELTA * 100.0f;
-        st.position.y -= DELTA * 100.0f;
-        cc.position.y -= DELTA * 100.0f;
+        rc.position += Vector2(cosf(DIV2PI * 3.0f), sinf(DIV2PI * 3.0f)) 
+            * 100.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_DOWN))
     {
-        rc.position.y += DELTA * 100.0f;
-        st.position.y += DELTA * 100.0f;
-        cc.position.y += DELTA * 100.0f;
+        rc.position += Vector2(cosf(DIV2PI), sinf(DIV2PI))
+            * 100.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_LEFT))
     {
-        rc.position.x -= DELTA * 100.0f;
-        st.position.x -= DELTA * 100.0f;
-        cc.position.x -= DELTA * 100.0f;
+        rc.position += Vector2(cosf(PI), sinf(PI))
+            * 100.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_RIGHT))
     {
-        rc.position.x += DELTA * 100.0f;
-        st.position.x += DELTA * 100.0f;
-        cc.position.x += DELTA * 100.0f;
+        rc.position += Vector2(cosf(0), sinf(0))
+            * 100.0f * DELTA;
     }
     if (INPUT->KeyPress('1'))
     {
         rc.scale.x += DELTA * 100.0f;
-        st.scale.x += DELTA * 100.0f;
-        cc.scale.x += DELTA * 100.0f;
     }
     if (INPUT->KeyPress('2'))
     {
         rc.scale.x -= DELTA * 100.0f;
-        st.scale.x -= DELTA * 100.0f;
-        cc.scale.x -= DELTA * 100.0f;
     }
     if (INPUT->KeyPress('3'))
     {
         rc.scale.y += DELTA * 100.0f;
-        st.scale.y += DELTA * 100.0f;
-        cc.scale.y += DELTA * 100.0f;
     }
     if (INPUT->KeyPress('4'))
     {
         rc.scale.y -= DELTA * 100.0f;
-        st.scale.y -= DELTA * 100.0f;
-        cc.scale.y -= DELTA * 100.0f;
     }
     if (INPUT->KeyPress('5'))
     {
         rc.rotation += DELTA * 10.0f;
-        st.rotation += DELTA * 10.0f;
-        cc.rotation += DELTA * 10.0f;
     }
     if (INPUT->KeyPress('6'))
     {
         rc.rotation -= DELTA * 10.0f;
-        st.rotation -= DELTA * 10.0f;
-        cc.rotation -= DELTA * 10.0f;
     }
-
-
-    //키가 눌렸을 때 wm_paint 를 발생 시켜라
-    InvalidateRect(g_hwnd, NULL, false);
-
 
     rc.Update();
     st.Update();
     cc.Update();
+    ln.Update();
 
+    //키가 눌렸을 때 wm_paint 를 발생 시켜라
+    InvalidateRect(g_hwnd, NULL, false);
 }
 
 void MainGame::Render()
@@ -132,9 +121,19 @@ void MainGame::Render()
     //바탕색 깔기
     PatBlt(g_MemDC, 0, 0, 800, 600, WHITENESS);
 
+    string FPS = "FPS : " + to_string(TIMER->GetFPS());
+    TextOutA(g_MemDC, 0, 0, FPS.c_str(), FPS.size());
+
+    string time = "시간 : " + to_string(localTime.wHour) + "시 " +
+        to_string(localTime.wMinute) + "분 " +
+        to_string(localTime.wSecond) + "초 " +
+        to_string(localTime.wMilliseconds) + "밀리초 ";
+    TextOutA(g_MemDC, 0, 40, time.c_str(), time.size());
+
     rc.Render();
     st.Render();
     cc.Render();
+    ln.Render();
 
     //고속 복사 g_MemDC에서 g_hdc로
     BitBlt(g_hdc, 0, 0, 800, 600,

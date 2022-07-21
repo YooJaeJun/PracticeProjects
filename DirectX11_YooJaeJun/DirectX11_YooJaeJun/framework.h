@@ -10,12 +10,17 @@ using namespace std;
 using namespace DirectX;
 using namespace SimpleMath;
 
-#define ToRadian  0.0174532
+#define ToRadian  0.0174532f
+#define PI		  3.1415926f	// 180
+#define DIV2PI	  1.5707963f	// 90
+#define DIV4PI	  0.7853981f	// 45
+
 
 #include "GameObject.h"
 #include "ObRect.h"
 #include "ObStar.h"
 #include "ObCircle.h"
+#include "ObLine.h"
 
 #include "Types.h"
 #include "Input.h"
