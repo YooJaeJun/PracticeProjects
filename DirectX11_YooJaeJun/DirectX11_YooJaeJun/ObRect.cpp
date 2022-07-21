@@ -11,7 +11,6 @@ ObRect::ObRect()
 void ObRect::Render()
 {
     Vector2 TransfVtx[4];
-
     for (int i = 0; i < 4; i++)
     {
         TransfVtx[i] = Vector2::Transform(vertex[i], W);

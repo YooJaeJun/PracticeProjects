@@ -15,7 +15,7 @@ void MainGame::Init()
 	m_hOldBitmap = (HBITMAP)SelectObject(g_MemDC, m_hBitmap);
 	ReleaseDC(g_hwnd, hdc);
 
-
+    /*
     rc.position.x = 400.0f;
     rc.position.y = 200.0f;
     rc.scale.x = 100.0f;
@@ -27,6 +27,7 @@ void MainGame::Init()
     st.scale.x = 100.0f;
     st.scale.y = 100.0f;
     st.rotation = 0.0f;
+    */
 
     cc.position.x = 400.0f;
     cc.position.y = 300.0f;
@@ -34,11 +35,23 @@ void MainGame::Init()
     cc.scale.y = 500.0f;
     cc.rotation = 0.0f;
 
-    ln.position.x = 400.0f;
-    ln.position.y = 300.0f;
-    ln.scale.x = 250.0f;
-    ln.scale.y = 250.0f;
-    ln.rotation = 0.0f;
+    lnHour.position.x = 400.0f;
+    lnHour.position.y = 300.0f;
+    lnHour.scale.x = 180.0f;
+    lnHour.scale.y = 180.0f;
+    lnHour.rotation = 0.0f;
+
+    lnMinute.position.x = 400.0f;
+    lnMinute.position.y = 300.0f;
+    lnMinute.scale.x = 300.0f;
+    lnMinute.scale.y = 300.0f;
+    lnMinute.rotation = 0.0f;
+
+    lnSecond.position.x = 400.0f;
+    lnSecond.position.y = 300.0f;
+    lnSecond.scale.x = 400.0f;
+    lnSecond.scale.y = 400.0f;
+    lnSecond.rotation = 0.0f;
 
 	// WM_TIMER 메시지를 일정주기마다 발생
 	//					n 밀리초마다 발생
@@ -58,6 +71,7 @@ void MainGame::Update()
     // O         X        0001  // 키 뗌 UP
     // X         O        1000  // 키 누름 DOWN
     // O         O        1001  // 키 누르고 있음 PRESS
+    /*
     if (INPUT->KeyPress(VK_UP))
     {
         rc.position += Vector2(cosf(DIV2PI * 3.0f), sinf(DIV2PI * 3.0f)) 
@@ -105,8 +119,12 @@ void MainGame::Update()
 
     rc.Update();
     st.Update();
+    */
+
     cc.Update();
-    ln.Update();
+    lnHour.Update();
+    lnMinute.Update();
+    lnSecond.Update();
 
     //키가 눌렸을 때 wm_paint 를 발생 시켜라
     InvalidateRect(g_hwnd, NULL, false);
@@ -121,6 +139,7 @@ void MainGame::Render()
     //바탕색 깔기
     PatBlt(g_MemDC, 0, 0, 800, 600, WHITENESS);
 
+
     string FPS = "FPS : " + to_string(TIMER->GetFPS());
     TextOutA(g_MemDC, 0, 0, FPS.c_str(), FPS.size());
 
@@ -128,12 +147,26 @@ void MainGame::Render()
         to_string(localTime.wMinute) + "분 " +
         to_string(localTime.wSecond) + "초 " +
         to_string(localTime.wMilliseconds) + "밀리초 ";
-    TextOutA(g_MemDC, 0, 40, time.c_str(), time.size());
+    TextOutA(g_MemDC, 0, 20, time.c_str(), time.size());
 
+    string timeNum;
+    for (int i = 1; i <= 12; i++)
+    {
+        timeNum = to_string(i);
+        TextOutA(g_MemDC, 400 + 220 * cosf((i * 30 - 90) * ToRadian), 
+            300 + 220 * sinf((i * 30 - 90) * ToRadian),
+            timeNum.c_str(), timeNum.size());
+    }
+
+    /*
     rc.Render();
     st.Render();
+    */
     cc.Render();
-    ln.Render();
+    lnHour.RenderClock(localTime.wHour * 60 / 24);
+    lnMinute.RenderClock(localTime.wMinute);
+    lnSecond.RenderClock(localTime.wSecond);
+
 
     //고속 복사 g_MemDC에서 g_hdc로
     BitBlt(g_hdc, 0, 0, 800, 600,

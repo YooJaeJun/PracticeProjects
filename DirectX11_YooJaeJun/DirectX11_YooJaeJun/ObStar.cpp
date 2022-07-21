@@ -12,7 +12,6 @@ ObStar::ObStar()
 void ObStar::Render()
 {
     Vector2 TransfVtx[5];
-
     for (int i = 0; i < 5; i++)
     {
         TransfVtx[i] = Vector2::Transform(vertex[i], W);

@@ -7,8 +7,8 @@ public:
 
 public:
 	ObLine();
-
 	void Render() override;
+	void RenderClock(WORD degree);
 };
 
 

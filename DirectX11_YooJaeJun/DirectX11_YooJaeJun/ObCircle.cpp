@@ -12,7 +12,6 @@ ObCircle::ObCircle()
 void ObCircle::Render()
 {
 	Vector2 TransfVtx[60];
-
 	for (int i = 0; i < 60; i++)
 	{
 		TransfVtx[i] = Vector2::Transform(vertex[i], W);

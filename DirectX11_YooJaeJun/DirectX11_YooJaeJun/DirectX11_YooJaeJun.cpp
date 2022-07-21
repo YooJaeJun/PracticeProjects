@@ -1,8 +1,5 @@
 ﻿#include "framework.h"
-
 // #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
-
-#define PEEK
 
 /*
     WinAPI(Windows Application Programming Interface)
@@ -40,18 +37,6 @@ void SetWindowSize(int x, int y, int width, int height);
 // LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
 
-/*
-    WCHAR
-    wchar_t 형식을 TYPEDEF 으로 별칭을 사용한 구문입니다.
-    wide character 형식이라 불립니다.
-    넓은 형태 (아스키코드로 표현하지 못하는 문자)를 표현할 수 있습니다.
-    char(8bit) 와 다르게 16bit(2Byte) 형식을 저장하므로 보다 넓은 문자를 사용할 수 있습니다.
-    L"" : wide char 형식의 문자열 상수 표기법입니다.
-*/
-WCHAR     szTitle[100] = L"😊😁👍🤣🎁🐱‍🚀🎉😁😘👍🙌🤦‍♀️🎶😎😉🤞✌🤷‍♂️🤷‍♀️🤦‍♂️🌹🎂🤳😃👀";       // 창의 제목을 저장하는 전역변수입니다.
-WCHAR     szWindowClass[100] = L"Window";     // 윈도우 클래스 이름을 저장하는 전역변수입니다.
-
-
 // wWinMain : 창 프로그램의 시작 위치를 결정합니다.
 // main     : 콘솔 프로그램의 시작 위치를 결정합니다.
 // APIENTRY : __stdcall 의 심볼입니다.
@@ -82,6 +67,14 @@ int APIENTRY wWinMain(_In_    HINSTANCE hInstance,      // 우리가 실행하�
 
     // 윈도우창 바탕색
     wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(LTGRAY_BRUSH));
+    /*
+        WCHAR
+        wchar_t 형식을 TYPEDEF 으로 별칭을 사용한 구문입니다.
+        wide character 형식이라 불립니다.
+        넓은 형태 (아스키코드로 표현하지 못하는 문자)를 표현할 수 있습니다.
+        char(8bit) 와 다르게 16bit(2Byte) 형식을 저장하므로 보다 넓은 문자를 사용할 수 있습니다.
+        L"" : wide char 형식의 문자열 상수 표기법입니다.
+    */
     wc.lpszClassName = L"DX11";
     wc.lpszMenuName = nullptr;
 
@@ -96,7 +89,7 @@ int APIENTRY wWinMain(_In_    HINSTANCE hInstance,      // 우리가 실행하�
     // 메인 윈도우 생성
     g_hwnd = CreateWindow(
         L"DX11",
-        L"DX11",
+        L"윾재준 😊😁👍",
         WS_OVERLAPPEDWINDOW,
         0,			//창의 시작 x좌표
         0,			//창의 시작 y좌표
@@ -130,18 +123,11 @@ int APIENTRY wWinMain(_In_    HINSTANCE hInstance,      // 우리가 실행하�
 
     // 기본 메시지 루프: 런타임동안 반복시킬 구문
 
-#ifndef PEEK
     // 프로그램에 들어오는 메세지를 저장할 수 있는 구조체
     // GetMessage : 대기하고 있는 메세지를 가져와 MSG 형태에 저장합니다.
     //              만약 메세지가 없다면 while 문을 잠재웁니다.
     //              WM_QUIT 메시지가 돌아온다면 false 를 반환합니다.
-    while (GetMessage(&msg, nullptr, 0, 0))
-    {
-        DispatchMessage(&msg);
-    }
-#endif  // !PEEK
 
-#ifdef PEEK
     while (true)
     {
         // PeekMessage : 대기하고 있는 메시지가 있는지 없는지 검사합니다.
@@ -175,7 +161,6 @@ int APIENTRY wWinMain(_In_    HINSTANCE hInstance,      // 우리가 실행하�
 
     return (int)msg.wParam;
     
-#endif
     // PeekMessage 사용 이유
     // GetMessage 같은 경우 주기적으로 호출될 코드를 WM_TIMER 를 통하여 호출해야 합니다.
     // 이렇게 WM_TIMER 를 통하여 호출해야 합니다.
@@ -188,15 +173,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
-#ifndef PEEK
-    case WM_CREATE:
-        SetTimer(hWnd, 1, 1, NULL);
-        break;
-    case WM_TIMER:
-        std::cout << "Update ";
-        break;
-#endif
-
     case WM_CLOSE:
     case WM_DESTROY:    // 창이 파괴되었을 때의 메세지입니다.
     {
