@@ -10,6 +10,8 @@ ObRect::ObRect()
 
 void ObRect::Render()
 {
+    GameObject::Render();
+
     Vector2 TransfVtx[4];
     for (int i = 0; i < 4; i++)
     {

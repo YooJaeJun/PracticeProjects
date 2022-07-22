@@ -115,7 +115,11 @@ int APIENTRY wWinMain(_In_    HINSTANCE hInstance,      // 우리가 실행하�
     // 메인 윈도우 갱신
     UpdateWindow(g_hwnd);
 
+
     mg->Init();
+
+    GameObject::CreateStaticMember();
+
 
     // **메시지 루프**
     MSG msg;
@@ -153,6 +157,10 @@ int APIENTRY wWinMain(_In_    HINSTANCE hInstance,      // 우리가 실행하�
         }
     }
     // 프로그램 종료 준비
+
+    GameObject::DeleteStaticMember();
+
+    INPUT->DeleteSingleton();
 
     // 생성된 윈도우 삭제
     DestroyWindow(g_hwnd);

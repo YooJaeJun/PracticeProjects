@@ -11,6 +11,8 @@ ObCircle::ObCircle()
 
 void ObCircle::Render()
 {
+	GameObject::Render();
+
 	Vector2 TransfVtx[60];
 	for (int i = 0; i < 60; i++)
 	{

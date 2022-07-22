@@ -15,6 +15,11 @@ using namespace SimpleMath;
 #define DIV2PI	  1.5707963f	// 90
 #define DIV4PI	  0.7853981f	// 45
 
+#define UP Vector2(0.0f, -1.0f)
+#define DOWN Vector2(0.0f, 1.0f)
+#define RIGHT Vector2(1.0f, 0.0f)
+#define LEFT Vector2(-1.0f, 0.0f)
+
 
 #include "GameObject.h"
 #include "ObRect.h"

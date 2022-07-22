@@ -11,6 +11,8 @@ ObStar::ObStar()
 
 void ObStar::Render()
 {
+    GameObject::Render();
+
     Vector2 TransfVtx[5];
     for (int i = 0; i < 5; i++)
     {

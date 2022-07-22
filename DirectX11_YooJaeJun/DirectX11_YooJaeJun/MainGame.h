@@ -6,9 +6,9 @@ private:
 	ObRect rc;
 	ObStar st;
 	ObCircle cc;
-	ObLine lnHour;
-	ObLine lnMinute;
-	ObLine lnSecond;
+	// ObLine lnHour;
+	// ObLine lnMinute;
+	// ObLine lnSecond;
 
 	SYSTEMTIME localTime;
 

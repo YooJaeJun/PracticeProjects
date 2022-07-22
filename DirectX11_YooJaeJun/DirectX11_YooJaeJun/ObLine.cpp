@@ -8,6 +8,8 @@ ObLine::ObLine()
 
 void ObLine::Render()
 {
+    GameObject::Render();
+
     Vector2 TransfVtx[2];
 
     for (int i = 0; i < 2; i++)
@@ -19,6 +21,7 @@ void ObLine::Render()
     LineTo(g_MemDC, TransfVtx[1].x, TransfVtx[1].y);
 }
 
+/*
 void ObLine::RenderClock(WORD degree)
 {
     Vector2 TransfVtx[2];
@@ -36,3 +39,4 @@ void ObLine::RenderClock(WORD degree)
         TransfVtx[1].x, 
         TransfVtx[1].y);
 }
+*/
