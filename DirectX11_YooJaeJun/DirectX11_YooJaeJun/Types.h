@@ -28,6 +28,6 @@ public:
 	}
 	void DeleteSingleton()
 	{
-		delete GetInstance;
+		delete GetInstance();
 	}
 };

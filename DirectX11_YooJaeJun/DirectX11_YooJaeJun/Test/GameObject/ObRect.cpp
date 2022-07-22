@@ -1,4 +1,4 @@
-#include "../framework.h"
+#include "ObRect.h"
 
 ObRect::ObRect()
 {

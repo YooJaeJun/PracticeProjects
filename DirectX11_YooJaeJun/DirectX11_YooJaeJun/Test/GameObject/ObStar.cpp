@@ -1,4 +1,4 @@
-#include "../framework.h"
+#include "ObStar.h"
 
 ObStar::ObStar()
 {

@@ -79,19 +79,19 @@ void MainGame::Update()
     
     if (INPUT->KeyPress(VK_UP))
     {
-        cc.position += UP * 150.0f * DELTA;
+        cc.position += Vector2(cosf(cc.rotation + PI + DIV2PI), sinf(cc.rotation + PI + DIV2PI)) * 150.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_DOWN))
     {
-        cc.position += DOWN * 150.0f * DELTA;
+        cc.position += Vector2(cosf(cc.rotation + DIV2PI), sinf(cc.rotation + DIV2PI)) * 150.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_LEFT))
     {
-        cc.position += LEFT * 150.0f * DELTA;
+        cc.position += Vector2(cosf(cc.rotation + PI), sinf(cc.rotation + PI)) * 150.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_RIGHT))
     {
-        cc.position += RIGHT * 150.0f * DELTA;
+        cc.position += Vector2(cosf(cc.rotation), sinf(cc.rotation)) * 150.0f * DELTA;
     }
     if (INPUT->KeyPress('1'))
     {
