@@ -5,7 +5,7 @@ class MainGame : public Scene
 private:
 	ObRect rc;
 	ObStar st;
-	ObCircle cc;
+	ObCircle cc1, cc2;
 	ObLine lnHour;
 	ObLine lnMinute;
 	ObLine lnSecond;
@@ -19,4 +19,3 @@ public:
 	void Update() override;
 	void Render() override;
 };
-

@@ -5,22 +5,22 @@
 
 MainGame::~MainGame()
 {
-    KillTimer(g_hwnd, NULL);
+    // KillTimer(g_hwnd, NULL);
 }
 
 void MainGame::Init()
 {
-	//MemDc 메모리상의 dc를 하나 더 추가
-	HBITMAP	 m_hOldBitmap, m_hBitmap;
-	HDC	hdc = GetDC(g_hwnd); //기존 핸들
-	g_MemDC = CreateCompatibleDC(hdc);
-	m_hBitmap = CreateCompatibleBitmap(hdc, 800, 600);//만들 크기 -> 처음 해상도 값
-	m_hOldBitmap = (HBITMAP)SelectObject(g_MemDC, m_hBitmap);
-	ReleaseDC(g_hwnd, hdc);
+    //MemDc 메모리상의 dc를 하나 더 추가
+    HBITMAP	 m_hOldBitmap, m_hBitmap;
+    HDC	hdc = GetDC(g_hwnd); //기존 핸들
+    g_MemDC = CreateCompatibleDC(hdc);
+    m_hBitmap = CreateCompatibleBitmap(hdc, 800, 600);//만들 크기 -> 처음 해상도 값
+    m_hOldBitmap = (HBITMAP)SelectObject(g_MemDC, m_hBitmap);
+    ReleaseDC(g_hwnd, hdc);
 
 
-#ifdef mode_basicShape
     // 사각형
+#ifdef mode_basicShape
     rc.position.x = 400.0f;
     rc.position.y = 200.0f;
     rc.scale.x = 100.0f;
@@ -61,12 +61,22 @@ void MainGame::Init()
 #endif
     // 축
 #ifdef mode_axis
-    cc.position.x = 400.0f;
-    cc.position.y = 300.0f;
-    cc.scale.x = 100.0f;
-    cc.scale.y = 100.0f;
-    cc.rotation = 0.0f;
-    cc.isAxis = true;
+    cc1.position.x = 400.0f;
+    cc1.position.y = 300.0f;
+    cc1.scale.x = 100.0f;
+    cc1.scale.y = 100.0f;
+    cc1.rotation = 0.0f;
+    cc1.isAxis = true;
+
+    cc2.position.x = 200.0f;
+    cc2.position.y = 150.0f;
+    cc2.scale.x = 40.0f;
+    cc2.scale.y = 40.0f;
+    cc2.rotation = 0.0f;
+    cc2.isAxis = true;
+
+    cc2.p = &cc1.RT;
+
 #endif
 
     // WM_TIMER 메시지를 일정주기마다 발생
@@ -79,7 +89,7 @@ void MainGame::Update()
     GetLocalTime(&localTime);
 
     // 사각형
-	// GetAsyncKeyState 메시지큐를 거치지 않고 키입력을 받아오는 함수
+    // GetAsyncKeyState 메시지큐를 거치지 않고 키입력을 받아오는 함수
     //가상키코드
     // 이전호출  호출상태  비트상태  
     // X         X        0000
@@ -103,13 +113,11 @@ void MainGame::Update()
 
     lnSecond.rotation = -DIV2PI + (float)localTime.wSecond * 6.0f * ToRadian
         + (float)localTime.wMilliseconds * 0.006f * ToRadian;   //  (1000밀리세컨드 == 1초). 0.006
-    
+
     // 똑딱
     /*
     lnHour.rotation = -DIV2PI + (float)localTime.wHour * 30.0f * ToRadian;
-
     lnMinute.rotation = -DIV2PI + (float)localTime.wMinute * 6.0f * ToRadian;
-
     lnSecond.rotation = -DIV2PI + (float)localTime.wSecond * 6.0f * ToRadian;
     */
 
@@ -122,46 +130,59 @@ void MainGame::Update()
 #ifdef mode_axis
     if (INPUT->KeyPress(VK_UP))
     {
-        cc.position += Vector2(cosf(cc.rotation + PI + DIV2PI), sinf(cc.rotation + PI + DIV2PI)) * 150.0f * DELTA;
+        cc2.position += UP * 200.0f * DELTA;
+        // radian에 특정 float을 더한 것
+        // cc.position += -Vector2(cosf(cc.rotation + DIV2PI), sinf(cc.rotation + DIV2PI)) * 150.0f * DELTA;
+        // cc1.position += -cc1.GetDown() * 200.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_DOWN))
     {
-        cc.position += Vector2(cosf(cc.rotation + DIV2PI), sinf(cc.rotation + DIV2PI)) * 150.0f * DELTA;
+        cc2.position += DOWN * 200.0f * DELTA;
+        // cc.position += Vector2(cosf(cc.rotation + DIV2PI), sinf(cc.rotation + DIV2PI)) * 150.0f * DELTA;
+        // cc1.position += cc1.GetDown() * 200.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_LEFT))
     {
-        cc.position += Vector2(cosf(cc.rotation + PI), sinf(cc.rotation + PI)) * 150.0f * DELTA;
+        cc2.position += LEFT * 200.0f * DELTA;
+        // cc.position += Vector2(cosf(cc.rotation + PI), sinf(cc.rotation + PI)) * 150.0f * DELTA;
+        // cc1.position += -cc1.GetRight() * 200.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_RIGHT))
     {
-        cc.position += Vector2(cosf(cc.rotation), sinf(cc.rotation)) * 150.0f * DELTA;
+        cc2.position += RIGHT * 200.0f * DELTA;
+        // cc.position += -Vector2(cosf(cc.rotation + PI), sinf(cc.rotation + PI)) * 150.0f * DELTA;
+        // cc1.position += cc1.GetRight() * 200.0f * DELTA;
     }
     if (INPUT->KeyPress('1'))
     {
-        cc.scale.x += DELTA * 150.0f;
+        cc1.scale.x += DELTA * 150.0f;
     }
     if (INPUT->KeyPress('2'))
     {
-        cc.scale.x -= DELTA * 150.0f;
+        cc1.scale.x -= DELTA * 150.0f;
     }
     if (INPUT->KeyPress('3'))
     {
-        cc.scale.y += DELTA * 150.0f;
+        cc1.scale.y += DELTA * 150.0f;
     }
     if (INPUT->KeyPress('4'))
     {
-        cc.scale.y -= DELTA * 150.0f;
+        cc1.scale.y -= DELTA * 150.0f;
     }
     if (INPUT->KeyPress('5'))
     {
-        cc.rotation += DELTA * 10.0f;
+        cc1.rotation += DELTA * 5.0f;
     }
     if (INPUT->KeyPress('6'))
     {
-        cc.rotation -= DELTA * 10.0f;
+        cc1.rotation -= DELTA * 5.0f;
     }
 
-    cc.Update();
+    cc2.rotation = (float)localTime.wMilliseconds * 0.006f;
+
+
+    cc1.Update();
+    cc2.Update();
 #endif
 
     //키가 눌렸을 때 wm_paint 를 발생 시켜라
@@ -176,7 +197,6 @@ void MainGame::Render()
 
     //바탕색 깔기
     PatBlt(g_MemDC, 0, 0, 800, 600, WHITENESS);
-
 
 
     // 사각형
@@ -199,11 +219,11 @@ void MainGame::Render()
     for (int i = 1; i <= 12; i++)
     {
         timeNum = to_string(i);
-        TextOutA(g_MemDC, 400 + 220 * cosf((i * 30 - 90) * ToRadian), 
+        TextOutA(g_MemDC, 400 + 220 * cosf((i * 30 - 90) * ToRadian),
             300 + 220 * sinf((i * 30 - 90) * ToRadian),
             timeNum.c_str(), timeNum.size());
     }
-    
+
     lnHour.Render();
     lnMinute.Render();
     lnSecond.Render();
@@ -214,7 +234,8 @@ void MainGame::Render()
 #endif
     // 축
 #ifdef mode_axis
-    cc.Render();
+    cc1.Render();
+    cc2.Render();
 #endif
 
 

@@ -42,3 +42,20 @@ extern HWND			g_hwnd;
 extern Scene*		mg;
 extern HDC			g_hdc;
 extern HDC			g_MemDC;
+
+static float DirToRadian(Vector2 Dir)
+{
+	// 만약 단위벡터가 아닐 수도 있으니까
+	Dir.Normalize();
+	float Seta;
+	if (Dir.y < 0)
+	{
+		//	360.0 * ToRadian
+		Seta = 2.0f * PI - acosf(Dir.x);
+	}
+	else
+	{
+		Seta = acosf(Dir.x);
+	}
+	return Seta;
+}
