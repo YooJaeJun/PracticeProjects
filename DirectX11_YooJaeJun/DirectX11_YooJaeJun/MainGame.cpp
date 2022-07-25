@@ -61,22 +61,63 @@ void MainGame::Init()
 #endif
     // 축
 #ifdef mode_axis
-    cc1.position.x = 400.0f;
-    cc1.position.y = 300.0f;
-    cc1.scale.x = 100.0f;
-    cc1.scale.y = 100.0f;
-    cc1.rotation = 0.0f;
-    cc1.isAxis = true;
 
-    cc2.position.x = 200.0f;
-    cc2.position.y = 150.0f;
-    cc2.scale.x = 40.0f;
-    cc2.scale.y = 40.0f;
-    cc2.rotation = 0.0f;
-    cc2.isAxis = true;
+    for (int i = 0; i < planetNum; i++)
+    {
+        planetParent[i].position.x = 400.0f;
+        planetParent[i].position.y = 300.0f;
+        planetParent[i].scale.x = 100.0f;
+        planetParent[i].scale.y = 100.0f;
+        planetParent[i].rotation = 0.0f;
+        planetParent[i].isAxis = true;
+    }
 
-    cc2.p = &cc1.RT;
+    planet[0].position.x = 400.0f;
+    planet[0].position.y = 300.0f;
+    planet[0].scale.x = 100.0f;
+    planet[0].scale.y = 100.0f;
+    planet[0].rotation = 0.0f;
+    planet[0].isAxis = true;
 
+    planet[1].position.x = 50.0f;
+    planet[1].position.y = 50.0f;
+    planet[1].scale.x = 12.0f;
+    planet[1].scale.y = 12.0f;
+    planet[1].rotation = 0.0f;
+    planet[1].isAxis = true;
+    planet[1].p = &planetParent[1].RT;
+
+    planet[2].position.x = 80.0f;
+    planet[2].position.y = -80.0f;
+    planet[2].scale.x = 17.0f;
+    planet[2].scale.y = 17.0f;
+    planet[2].rotation = 0.0f;
+    planet[2].isAxis = true;
+    planet[2].p = &planetParent[2].RT;
+
+    planet[3].position.x = -150.0f;
+    planet[3].position.y = -50.0f;
+    planet[3].scale.x = 20.0f;
+    planet[3].scale.y = 20.0f;
+    planet[3].rotation = 0.0f;
+    planet[3].isAxis = true;
+    planet[3].p = &planetParent[3].RT;
+
+    planet[4].position.x = 200.0f;
+    planet[4].position.y = 30.0f;
+    planet[4].scale.x = 25.0f;
+    planet[4].scale.y = 25.0f;
+    planet[4].rotation = 0.0f;
+    planet[4].isAxis = true;
+    planet[4].p = &planetParent[4].RT;
+
+    planet[5].position.x = 120.0f;
+    planet[5].position.y = 280.0f;
+    planet[5].scale.x = 30.0f;
+    planet[5].scale.y = 30.0f;
+    planet[5].rotation = 0.0f;
+    planet[5].isAxis = true;
+    planet[5].p = &planetParent[5].RT;
 #endif
 
     // WM_TIMER 메시지를 일정주기마다 발생
@@ -97,11 +138,11 @@ void MainGame::Update()
     // X         O        1000  // 키 누름 DOWN
     // O         O        1001  // 키 누르고 있음 PRESS
 
+    // 사각형
 #ifdef mode_basicShape
     rc.Update();
     st.Update();
 #endif
-
     // 시계
 #ifdef mode_clock
     // 스무스
@@ -128,28 +169,29 @@ void MainGame::Update()
 #endif
     // 축
 #ifdef mode_axis
+    /*
     if (INPUT->KeyPress(VK_UP))
     {
-        cc2.position += UP * 200.0f * DELTA;
+        cc1.position += UP * 200.0f * DELTA;
         // radian에 특정 float을 더한 것
         // cc.position += -Vector2(cosf(cc.rotation + DIV2PI), sinf(cc.rotation + DIV2PI)) * 150.0f * DELTA;
         // cc1.position += -cc1.GetDown() * 200.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_DOWN))
     {
-        cc2.position += DOWN * 200.0f * DELTA;
+        cc1.position += DOWN * 200.0f * DELTA;
         // cc.position += Vector2(cosf(cc.rotation + DIV2PI), sinf(cc.rotation + DIV2PI)) * 150.0f * DELTA;
         // cc1.position += cc1.GetDown() * 200.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_LEFT))
     {
-        cc2.position += LEFT * 200.0f * DELTA;
+        cc1.position += LEFT * 200.0f * DELTA;
         // cc.position += Vector2(cosf(cc.rotation + PI), sinf(cc.rotation + PI)) * 150.0f * DELTA;
         // cc1.position += -cc1.GetRight() * 200.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_RIGHT))
     {
-        cc2.position += RIGHT * 200.0f * DELTA;
+        cc1.position += RIGHT * 200.0f * DELTA;
         // cc.position += -Vector2(cosf(cc.rotation + PI), sinf(cc.rotation + PI)) * 150.0f * DELTA;
         // cc1.position += cc1.GetRight() * 200.0f * DELTA;
     }
@@ -177,12 +219,46 @@ void MainGame::Update()
     {
         cc1.rotation -= DELTA * 5.0f;
     }
+    */
+    if (INPUT->KeyPress('Q'))
+    {
+        for (int i = 0; i < planetNum; i++)
+        {
+            planetParent[i].rotation -= DELTA * 7.0f;
+        }
+        planet[0].rotation -= DELTA * 7.0f;
+    }
+    if (INPUT->KeyPress('E'))
+    {
+        for (int i = 0; i < planetNum; i++)
+        {
+            planetParent[i].rotation += DELTA * 7.0f;
+        }
+        planet[0].rotation += DELTA * 7.0f;
+    }
 
-    cc2.rotation = (float)localTime.wMilliseconds * 0.006f;
+    planetParent[1].rotation += DELTA * 0.2f;
+    planet[1].rotation += DELTA * 0.3f;
+
+    planetParent[2].rotation += DELTA * 1.4f;
+    planet[2].rotation += DELTA * 1.0f;
+
+    planetParent[3].rotation += DELTA * 0.7f;
+    planet[3].rotation += DELTA * 0.6f;
+
+    planetParent[4].rotation += DELTA * 1.5f;
+    planet[4].rotation += DELTA * 1.2f;
+
+    planetParent[5].rotation += DELTA * 0.5f;
+    planet[5].rotation += DELTA * 0.5f;
 
 
-    cc1.Update();
-    cc2.Update();
+    for (int i = 0; i < planetNum; i++)
+    {
+        planetParent[i].Update();
+        planet[i].Update();
+    }
+
 #endif
 
     //키가 눌렸을 때 wm_paint 를 발생 시켜라
@@ -234,8 +310,15 @@ void MainGame::Render()
 #endif
     // 축
 #ifdef mode_axis
-    cc1.Render();
-    cc2.Render();
+    string FPS = "FPS : " + to_string(TIMER->GetFPS());
+    TextOutA(g_MemDC, 0, 0, FPS.c_str(), FPS.size());
+    string keyDesc = "회전 가속: Q, E";
+    TextOutA(g_MemDC, 0, 20, keyDesc.c_str(), keyDesc.size());
+
+    for (int i = 0; i < planetNum; i++)
+    {
+        planet[i].Render();
+    }
 #endif
 
 
