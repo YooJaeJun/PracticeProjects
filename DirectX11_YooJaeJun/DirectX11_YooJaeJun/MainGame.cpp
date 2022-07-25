@@ -1,4 +1,7 @@
 #include "framework.h"
+// #define mode_basicShape
+// #define mode_clock
+#define mode_axis
 
 MainGame::~MainGame()
 {
@@ -16,16 +19,8 @@ void MainGame::Init()
 	ReleaseDC(g_hwnd, hdc);
 
 
-    cc.position.x = 400.0f;
-    cc.position.y = 300.0f;
-    cc.scale.x = 100.0f;
-    cc.scale.y = 100.0f;
-    cc.rotation = 0.0f;
-
-    cc.isAxis = true;
-
+#ifdef mode_basicShape
     // 사각형
-    /*
     rc.position.x = 400.0f;
     rc.position.y = 200.0f;
     rc.scale.x = 100.0f;
@@ -37,10 +32,9 @@ void MainGame::Init()
     st.scale.x = 100.0f;
     st.scale.y = 100.0f;
     st.rotation = 0.0f;
-    */
-
+#endif
     // 시계
-    /*
+#ifdef mode_clock
     lnHour.position.x = 400.0f;
     lnHour.position.y = 300.0f;
     lnHour.scale.x = 100.0f;
@@ -58,10 +52,26 @@ void MainGame::Init()
     lnSecond.scale.x = 200.0f;
     lnSecond.scale.y = 200.0f;
     lnSecond.rotation = 0.0f;
-    */
-	// WM_TIMER 메시지를 일정주기마다 발생
-	//					n 밀리초마다 발생
-	// SetTimer(g_hwnd, 1, 10, NULL);		// 17 밀리초 == 60 fps
+
+    cc.position.x = 400.0f;
+    cc.position.y = 300.0f;
+    cc.scale.x = 500.0f;
+    cc.scale.y = 500.0f;
+    cc.rotation = 0.0f;
+#endif
+    // 축
+#ifdef mode_axis
+    cc.position.x = 400.0f;
+    cc.position.y = 300.0f;
+    cc.scale.x = 100.0f;
+    cc.scale.y = 100.0f;
+    cc.rotation = 0.0f;
+    cc.isAxis = true;
+#endif
+
+    // WM_TIMER 메시지를 일정주기마다 발생
+    //					n 밀리초마다 발생
+    // SetTimer(g_hwnd, 1, 10, NULL);		// 17 밀리초 == 60 fps
 }
 
 void MainGame::Update()
@@ -76,7 +86,40 @@ void MainGame::Update()
     // O         X        0001  // 키 뗌 UP
     // X         O        1000  // 키 누름 DOWN
     // O         O        1001  // 키 누르고 있음 PRESS
+
+#ifdef mode_basicShape
+    rc.Update();
+    st.Update();
+#endif
+
+    // 시계
+#ifdef mode_clock
+    // 스무스
+    lnHour.rotation = -DIV2PI + (float)localTime.wHour * 30.0f * ToRadian
+        + (float)localTime.wMinute * 0.5f * ToRadian;   // 1칸(30도)를 60분간 가야되서 0.5도씩
+
+    lnMinute.rotation = -DIV2PI + (float)localTime.wMinute * 6.0f * ToRadian
+        + (float)localTime.wSecond * 0.1f * ToRadian;   // 6도를 60초간
+
+    lnSecond.rotation = -DIV2PI + (float)localTime.wSecond * 6.0f * ToRadian
+        + (float)localTime.wMilliseconds * 0.006f * ToRadian;   //  (1000밀리세컨드 == 1초). 0.006
     
+    // 똑딱
+    /*
+    lnHour.rotation = -DIV2PI + (float)localTime.wHour * 30.0f * ToRadian;
+
+    lnMinute.rotation = -DIV2PI + (float)localTime.wMinute * 6.0f * ToRadian;
+
+    lnSecond.rotation = -DIV2PI + (float)localTime.wSecond * 6.0f * ToRadian;
+    */
+
+    lnHour.Update();
+    lnMinute.Update();
+    lnSecond.Update();
+    cc.Update();
+#endif
+    // 축
+#ifdef mode_axis
     if (INPUT->KeyPress(VK_UP))
     {
         cc.position += Vector2(cosf(cc.rotation + PI + DIV2PI), sinf(cc.rotation + PI + DIV2PI)) * 150.0f * DELTA;
@@ -118,27 +161,8 @@ void MainGame::Update()
         cc.rotation -= DELTA * 10.0f;
     }
 
-
-    // rc.Update();
-    // st.Update();
-    
-
-    // 시계
-    /*
-    lnHour.rotation = -DIV2PI + (float)localTime.wHour * 30.0f * ToRadian
-        + (float)localTime.wMinute * 0.5f * ToRadian;   // 1칸(30도)를 60분간 가야되서 0.5도씩
-
-    lnMinute.rotation = -DIV2PI + (float)localTime.wMinute * 6.0f * ToRadian
-        + (float)localTime.wSecond * 0.1f * ToRadian;   // 6도를 60초간
-
-    lnSecond.rotation = -DIV2PI + (float)localTime.wSecond * 6.0f * ToRadian
-        + (float)localTime.wMilliseconds * 0.006f * ToRadian;   //  (1000밀리세컨드 == 1초). 0.006
-    */
-
     cc.Update();
-    // lnHour.Update();
-    // lnMinute.Update();
-    // lnSecond.Update();
+#endif
 
     //키가 눌렸을 때 wm_paint 를 발생 시켜라
     InvalidateRect(g_hwnd, NULL, false);
@@ -154,15 +178,14 @@ void MainGame::Render()
     PatBlt(g_MemDC, 0, 0, 800, 600, WHITENESS);
 
 
-    cc.Render();
 
     // 사각형
-    /*
+#ifdef mode_basicShape
     rc.Render();
     st.Render();
-    */
+#endif
     // 시계
-    /*
+#ifdef mode_clock 
     string FPS = "FPS : " + to_string(TIMER->GetFPS());
     TextOutA(g_MemDC, 0, 0, FPS.c_str(), FPS.size());
 
@@ -180,13 +203,19 @@ void MainGame::Render()
             300 + 220 * sinf((i * 30 - 90) * ToRadian),
             timeNum.c_str(), timeNum.size());
     }
-    */
-    // lnHour.Render();
-    // lnMinute.Render();
-    // lnSecond.Render();
+    
+    lnHour.Render();
+    lnMinute.Render();
+    lnSecond.Render();
     // lnHour.RenderClock(localTime.wHour * 60 / 24);
     // lnMinute.RenderClock(localTime.wMinute);
     // lnSecond.RenderClock(localTime.wSecond);
+    cc.Render();
+#endif
+    // 축
+#ifdef mode_axis
+    cc.Render();
+#endif
 
 
     //고속 복사 g_MemDC에서 g_hdc로
