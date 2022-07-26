@@ -7,6 +7,8 @@ GameObject::GameObject()
 	scale.x = 1.0f;
 	scale.y = 1.0f;
 	rotation = 0.0f;
+	rotation2 = 0.0f;
+
 	isAxis = false;
 
 	p = nullptr;
@@ -21,13 +23,11 @@ void GameObject::Update()
 	S = Matrix::CreateScale(scale.x, scale.y, 1.0f);
 	R = Matrix::CreateRotationZ(rotation);
 	T = Matrix::CreateTranslation(position.x, position.y, 0.0f);
+	R2 = Matrix::CreateRotationZ(rotation2);
 
-	RT = R * T;
+	RT = R * T * R2;
 
-	if (p)
-	{
-		RT *= *p;
-	}
+	if (p) RT *= *p;
 
 	W = S * RT;
 }

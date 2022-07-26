@@ -7,7 +7,6 @@ private:
 	ObStar st;
 	ObCircle cc;
 	const int planetNum = 6;
-	ObCircle planetParent[6];
 	ObCircle planet[6];
 	ObLine lnHour;
 	ObLine lnMinute;

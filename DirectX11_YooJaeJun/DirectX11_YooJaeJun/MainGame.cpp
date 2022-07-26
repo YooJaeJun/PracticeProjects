@@ -61,63 +61,22 @@ void MainGame::Init()
 #endif
     // 축
 #ifdef mode_axis
-
-    for (int i = 0; i < planetNum; i++)
-    {
-        planetParent[i].position.x = 400.0f;
-        planetParent[i].position.y = 300.0f;
-        planetParent[i].scale.x = 100.0f;
-        planetParent[i].scale.y = 100.0f;
-        planetParent[i].rotation = 0.0f;
-        planetParent[i].isAxis = true;
-    }
-
-    planet[0].position.x = 400.0f;
-    planet[0].position.y = 300.0f;
+    // 태양
+    planet[0].SetWorldPos(Vector2(400.0f, 300.0f));
     planet[0].scale.x = 100.0f;
     planet[0].scale.y = 100.0f;
     planet[0].rotation = 0.0f;
     planet[0].isAxis = true;
 
-    planet[1].position.x = 50.0f;
-    planet[1].position.y = 50.0f;
-    planet[1].scale.x = 12.0f;
-    planet[1].scale.y = 12.0f;
-    planet[1].rotation = 0.0f;
-    planet[1].isAxis = true;
-    planet[1].p = &planetParent[1].RT;
-
-    planet[2].position.x = 80.0f;
-    planet[2].position.y = -80.0f;
-    planet[2].scale.x = 17.0f;
-    planet[2].scale.y = 17.0f;
-    planet[2].rotation = 0.0f;
-    planet[2].isAxis = true;
-    planet[2].p = &planetParent[2].RT;
-
-    planet[3].position.x = -150.0f;
-    planet[3].position.y = -50.0f;
-    planet[3].scale.x = 20.0f;
-    planet[3].scale.y = 20.0f;
-    planet[3].rotation = 0.0f;
-    planet[3].isAxis = true;
-    planet[3].p = &planetParent[3].RT;
-
-    planet[4].position.x = 200.0f;
-    planet[4].position.y = 30.0f;
-    planet[4].scale.x = 25.0f;
-    planet[4].scale.y = 25.0f;
-    planet[4].rotation = 0.0f;
-    planet[4].isAxis = true;
-    planet[4].p = &planetParent[4].RT;
-
-    planet[5].position.x = 120.0f;
-    planet[5].position.y = 280.0f;
-    planet[5].scale.x = 30.0f;
-    planet[5].scale.y = 30.0f;
-    planet[5].rotation = 0.0f;
-    planet[5].isAxis = true;
-    planet[5].p = &planetParent[5].RT;
+    for (int i = 0; i < planetNum; i++)
+    {
+        planet[i].SetLocalPos(Vector2(50.0f + i * 10.0f, 50.0f + i * 10.0f));
+        planet[i].scale.x = 12.0f + i * 3;
+        planet[i].scale.y = 12.0f + i * 3;
+        planet[i].rotation = 0.0f;
+        planet[i].isAxis = true;
+        planet[i].SetParentRT(planet[0]);
+    }
 #endif
 
     // WM_TIMER 메시지를 일정주기마다 발생
@@ -172,26 +131,30 @@ void MainGame::Update()
     /*
     if (INPUT->KeyPress(VK_UP))
     {
-        cc1.position += UP * 200.0f * DELTA;
+        planet[1].MoveLocalPos(UP * 200.0f * DELTA);
+        // cc1.position += UP * 200.0f * DELTA;
         // radian에 특정 float을 더한 것
         // cc.position += -Vector2(cosf(cc.rotation + DIV2PI), sinf(cc.rotation + DIV2PI)) * 150.0f * DELTA;
         // cc1.position += -cc1.GetDown() * 200.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_DOWN))
     {
-        cc1.position += DOWN * 200.0f * DELTA;
+        planet[1].MoveLocalPos(DOWN * 200.0f * DELTA);
+        // cc1.position += DOWN * 200.0f * DELTA;
         // cc.position += Vector2(cosf(cc.rotation + DIV2PI), sinf(cc.rotation + DIV2PI)) * 150.0f * DELTA;
         // cc1.position += cc1.GetDown() * 200.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_LEFT))
     {
-        cc1.position += LEFT * 200.0f * DELTA;
+        planet[1].MoveLocalPos(LEFT * 200.0f * DELTA);
+        // cc1.position += LEFT * 200.0f * DELTA;
         // cc.position += Vector2(cosf(cc.rotation + PI), sinf(cc.rotation + PI)) * 150.0f * DELTA;
         // cc1.position += -cc1.GetRight() * 200.0f * DELTA;
     }
     if (INPUT->KeyPress(VK_RIGHT))
     {
-        cc1.position += RIGHT * 200.0f * DELTA;
+        planet[1].MoveLocalPos(RIGHT * 200.0f * DELTA);
+        // cc1.position += RIGHT * 200.0f * DELTA;
         // cc.position += -Vector2(cosf(cc.rotation + PI), sinf(cc.rotation + PI)) * 150.0f * DELTA;
         // cc1.position += cc1.GetRight() * 200.0f * DELTA;
     }
@@ -222,40 +185,21 @@ void MainGame::Update()
     */
     if (INPUT->KeyPress('Q'))
     {
-        for (int i = 0; i < planetNum; i++)
-        {
-            planetParent[i].rotation -= DELTA * 7.0f;
-        }
-        planet[0].rotation -= DELTA * 7.0f;
+        planet[0].rotation -= DELTA * 360.0f * ToRadian;
     }
     if (INPUT->KeyPress('E'))
     {
-        for (int i = 0; i < planetNum; i++)
-        {
-            planetParent[i].rotation += DELTA * 7.0f;
-        }
-        planet[0].rotation += DELTA * 7.0f;
+        planet[0].rotation += DELTA * 360.0f * ToRadian;
     }
 
-    planetParent[1].rotation += DELTA * 0.2f;
-    planet[1].rotation += DELTA * 0.3f;
-
-    planetParent[2].rotation += DELTA * 1.4f;
-    planet[2].rotation += DELTA * 1.0f;
-
-    planetParent[3].rotation += DELTA * 0.7f;
-    planet[3].rotation += DELTA * 0.6f;
-
-    planetParent[4].rotation += DELTA * 1.5f;
-    planet[4].rotation += DELTA * 1.2f;
-
-    planetParent[5].rotation += DELTA * 0.5f;
-    planet[5].rotation += DELTA * 0.5f;
-
+    for (int i = 1; i < planetNum; i++)
+    {
+        planet[i].rotation += 30.0f * i * ToRadian * DELTA;
+        planet[i].rotation2 += 30.0f * i * ToRadian * DELTA;
+    }
 
     for (int i = 0; i < planetNum; i++)
     {
-        planetParent[i].Update();
         planet[i].Update();
     }
 
