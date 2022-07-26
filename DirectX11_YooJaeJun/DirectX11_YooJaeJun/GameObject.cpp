@@ -14,10 +14,6 @@ GameObject::GameObject()
 	p = nullptr;
 }
 
-GameObject::~GameObject()
-{
-}
-
 void GameObject::Update()
 {
 	S = Matrix::CreateScale(scale.x, scale.y, 1.0f);

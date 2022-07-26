@@ -1,7 +1,4 @@
 #include "framework.h"
-// #define mode_basicShape
-// #define mode_clock
-#define mode_axis
 
 MainGame::~MainGame()
 {
@@ -68,15 +65,32 @@ void MainGame::Init()
     planet[0].rotation = 0.0f;
     planet[0].isAxis = true;
 
-    for (int i = 0; i < planetNum; i++)
+    for (int i = 1; i < planetNum - 5; i++)
     {
-        planet[i].SetLocalPos(Vector2(50.0f + i * 10.0f, 50.0f + i * 10.0f));
         planet[i].scale.x = 12.0f + i * 3;
         planet[i].scale.y = 12.0f + i * 3;
         planet[i].rotation = 0.0f;
         planet[i].isAxis = true;
         planet[i].SetParentRT(planet[0]);
     }
+    planet[1].SetLocalPos(Vector2(50.0f, -50.0f));
+    planet[2].SetLocalPos(Vector2(-100.0f, 100.0f));
+    planet[3].SetLocalPos(Vector2(80.0f, 80.0f));
+    planet[4].SetLocalPos(Vector2(120.0f, -120.0f));
+    planet[5].SetLocalPos(Vector2(160.0f, 160.0f));
+
+
+    for (int i = planetNum - 5; i < planetNum; i++)
+    {
+        planet[i].SetLocalPos(Vector2(2.0f + i * 2, 2.0f + i * 2));
+        planet[i].scale.x = 8.0f;
+        planet[i].scale.y = 8.0f;
+        planet[i].rotation = 0.0f;
+        planet[i].isAxis = true;
+        planet[i].SetParentRT(planet[i - 5]);
+    }
+
+
 #endif
 
     // WM_TIMER 메시지를 일정주기마다 발생
@@ -86,8 +100,6 @@ void MainGame::Init()
 
 void MainGame::Update()
 {
-    GetLocalTime(&localTime);
-
     // 사각형
     // GetAsyncKeyState 메시지큐를 거치지 않고 키입력을 받아오는 함수
     //가상키코드
@@ -104,6 +116,8 @@ void MainGame::Update()
 #endif
     // 시계
 #ifdef mode_clock
+    GetLocalTime(&localTime);
+
     // 스무스
     lnHour.rotation = -DIV2PI + (float)localTime.wHour * 30.0f * ToRadian
         + (float)localTime.wMinute * 0.5f * ToRadian;   // 1칸(30도)를 60분간 가야되서 0.5도씩
@@ -192,17 +206,21 @@ void MainGame::Update()
         planet[0].rotation += DELTA * 360.0f * ToRadian;
     }
 
-    for (int i = 1; i < planetNum; i++)
+    for (int i = 1; i < planetNum - 5; i++)
     {
-        planet[i].rotation += 30.0f * i * ToRadian * DELTA;
-        planet[i].rotation2 += 30.0f * i * ToRadian * DELTA;
+        planet[i].rotation += 15.0f * i * ToRadian * DELTA;
+        planet[i].rotation2 += 15.0f * i * ToRadian * DELTA;
+    }
+    for (int i = planetNum - 5; i < planetNum; i++)
+    {
+        planet[i].rotation += 5.0f * i * ToRadian * DELTA;
+        planet[i].rotation2 += 5.0f * i * ToRadian * DELTA;
     }
 
     for (int i = 0; i < planetNum; i++)
     {
         planet[i].Update();
     }
-
 #endif
 
     //키가 눌렸을 때 wm_paint 를 발생 시켜라
@@ -261,6 +279,7 @@ void MainGame::Render()
 
     for (int i = 0; i < planetNum; i++)
     {
+        if (i == 6 || i == 8 || i == 9) continue;
         planet[i].Render();
     }
 #endif
