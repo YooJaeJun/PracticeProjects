@@ -68,15 +68,13 @@ void MainGame::Init()
 #ifdef mode_axis
     // 태양
     planet[0].SetWorldPos(Vector2(400.0f, 300.0f));
-    planet[0].scale.x = 100.0f;
-    planet[0].scale.y = 100.0f;
+    planet[0].SetScale(Vector2(100.0f, 100.0f));
     planet[0].rotation = 0.0f;
     planet[0].isAxis = true;
 
     for (int i = 1; i < planetNum - 5; i++)
     {
-        planet[i].scale.x = 12.0f + i * 3;
-        planet[i].scale.y = 12.0f + i * 3;
+        planet[0].SetScale(Vector2(12.0f + i * 3, 12.0f + i * 3));
         planet[i].rotation = 0.0f;
         planet[i].isAxis = true;
         planet[i].SetParentRT(planet[0]);
@@ -91,8 +89,7 @@ void MainGame::Init()
     for (int i = planetNum - 5; i < planetNum; i++)
     {
         planet[i].SetLocalPos(Vector2(2.0f + i * 2, 2.0f + i * 2));
-        planet[i].scale.x = 8.0f;
-        planet[i].scale.y = 8.0f;
+        planet[0].SetScale(Vector2(8.0f, 8.0f));
         planet[i].rotation = 0.0f;
         planet[i].isAxis = true;
         planet[i].SetParentRT(planet[i - 5]);
@@ -116,6 +113,26 @@ void MainGame::Init()
             i * 2.0f, i * 3.0f, 10.0f);
         bullet[i]->SetParentRT(enemy);
     }
+#endif
+    //
+#ifdef mode_pet
+    player.SetWorldPos(Vector2(400.0f, 300.0f));
+    player.SetScale(Vector2(100.0f, 100.0f));
+    player.rotation = 0.0f;
+    player.isAxis = true;
+
+    pet.SetWorldPos(Vector2(100.0f, 100.0f));
+    pet.SetScale(Vector2(30.0f, 30.0f));
+    pet.rotation = 0.0f;
+    pet.isAxis = true;
+    pet.SetParentRT(player);
+
+    arrow.SetWorldPos(Vector2(2000.0f, 2000.0f));
+    arrow.SetScale(Vector2(30.0f, 0.0f));
+    arrow.rotation = 0.0f;
+    arrow.isAxis = true;
+
+    isFired = false;
 #endif
 }
 
@@ -204,6 +221,8 @@ void MainGame::Update()
         // cc.position += -Vector2(cosf(cc.rotation + PI), sinf(cc.rotation + PI)) * 150.0f * DELTA;
         // cc1.position += cc1.GetRight() * 200.0f * DELTA;
     }
+    */
+    /*
     if (INPUT->KeyPress('1'))
     {
         cc1.scale.x += DELTA * 150.0f;
@@ -278,6 +297,50 @@ void MainGame::Update()
         bullet[i]->rotation2 += 3.0f * i * ToRadian * DELTA;
         bullet[i]->Update();
     }
+#endif
+    // 
+#ifdef mode_pet
+    if (INPUT->KeyPress(VK_UP))
+    {
+        player.MoveWorldPos(-player.GetDown() * 200.0f * DELTA);
+    }
+    else if (INPUT->KeyPress(VK_DOWN))
+    {
+        player.MoveWorldPos(player.GetDown() * 200.0f * DELTA);
+    }
+    if (INPUT->KeyPress(VK_LEFT))
+    {
+        player.rotation -= 120.0f * ToRadian * DELTA;
+    }
+    else if (INPUT->KeyPress(VK_RIGHT))
+    {
+        player.rotation += 120.0f * ToRadian * DELTA;
+    }
+    
+    if (INPUT->KeyPress(VK_SPACE))
+    {
+        isFired = true;
+        arrow.SetWorldPos(player.GetWorldPos());
+        arrow.rotation = DirToRadian(player.GetRight());
+        // arrow.SetWorldPos(pet.GetWorldPos());
+        // arrow.rotation = DirToRadian(pet.GetRight());
+    }
+
+    if (isFired) arrow.MoveWorldPos(arrow.GetRight() * 200.0f * DELTA);
+
+    if (INPUT->KeyDown('R'))    // 재장전
+    {
+        isFired = false;
+        arrow.SetWorldPos(player.GetWorldPos());
+    }
+
+    if (INPUT->KeyPress(VK_SPACE)) arrow.SetWorldPos(player.GetWorldPos());
+    pet.rotation2 += 50.0f * ToRadian * DELTA;
+
+    player.Update();
+    pet.Update();
+    arrow.Update();
+
 #endif
 
     //키가 눌렸을 때 wm_paint 를 발생 시켜라
@@ -415,15 +478,18 @@ void MainGame::Render()
 
     enemy->Render();
 
-
     for (int i = 0; i < bulletNum; i++)
     {
         bullet[i]->Render();
     }
-
     
 #endif
-
+    //
+#ifdef mode_pet
+    player.Render();
+    pet.Render();
+    arrow.Render();
+#endif
 
     //고속 복사 g_MemDC에서 g_hdc로
     BitBlt(g_hdc, 0, 0, 800, 600,

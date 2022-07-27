@@ -16,7 +16,7 @@ private:
 	Vector2		position;
 	Vector2		scale;
 	Matrix		S, R, T, R2, RT;
-	Matrix* p;
+	Matrix*		p;
 
 protected:
 	Matrix		W;
@@ -46,13 +46,14 @@ public:
 	}
 
 	// 이동시킬 때 +=
-	void MoveLocalPos(Vector2 Velocity) { position += Velocity; }
-	void MoveWorldPos(Vector2 Velocity)
+	void MoveLocalPos(Vector2 velocity) { position += velocity; }
+	void MoveWorldPos(Vector2 velocity)
 	{
-		if (!p) position += Velocity;
+		if (!p) position += velocity;
 		else
 		{
-			Vector2 locVelocity = Vector2::TransformNormal(Velocity, (*p).Invert());
+			//							   동차(w)를 0 => 다른 차원으로 이동
+			Vector2 locVelocity = Vector2::TransformNormal(velocity, (*p).Invert());	// 내 속도 * 역행렬 SRT * RT * (1 / RT)
 			position += locVelocity;
 		}
 	}
@@ -63,7 +64,8 @@ public:
 		if (!p) position = worldPos;
 		else
 		{
-			Vector2 localPos = Vector2::TransformNormal(worldPos, (*p).Invert());
+			//							동차(w)를 1
+			Vector2 localPos = Vector2::Transform(worldPos, (*p).Invert());
 			position += localPos;
 		}
 	}

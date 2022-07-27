@@ -30,7 +30,7 @@ void GameObject::Update()
 
 void GameObject::Render()
 {
-#ifdef mode_axis
+#ifndef mode_bulletStorm
 	if (isAxis)
 	{
 		// xรเ

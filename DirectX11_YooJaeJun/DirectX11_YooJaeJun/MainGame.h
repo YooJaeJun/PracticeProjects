@@ -3,7 +3,8 @@
 // #define mode_shapeDrawing
 // #define mode_clock
 // #define mode_axis
-#define mode_bulletStorm
+// #define mode_bulletStorm
+#define mode_pet
 
 class Enemy;
 class Bullet;
@@ -42,7 +43,13 @@ private:
 	vector<shared_ptr<Bullet>> bullet;
 	bool qState = false, eState = false;
 	ObLine line;
+#endif
+#ifdef mode_pet
+	ObRect		player;
+	ObCircle	pet;
 
+	ObLine		arrow;
+	bool		isFired;
 #endif
 
 public:
