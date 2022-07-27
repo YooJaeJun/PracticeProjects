@@ -14,14 +14,14 @@ public:
 
 private:
 	Vector2		position;
+	Vector2		scale;
 	Matrix		S, R, T, R2, RT;
-	Matrix*		p;
+	Matrix* p;
 
 protected:
 	Matrix		W;
 
 public:
-	Vector2		scale;
 	float		rotation;	// 자전용
 	float		rotation2;	// 공전용
 	bool		isAxis;
@@ -73,5 +73,8 @@ public:
 	Vector2 GetDown() const { return Vector2(RT._21, RT._22); }		// y축
 
 	void SetParentRT(GameObject& src) { p = &src.RT; }
+	void SetParentRT(shared_ptr<GameObject> src) { p = &src->RT; }
+
+	void SetScale(Vector2 other) { scale.x = other.x; scale.y = other.y; }
 };
 

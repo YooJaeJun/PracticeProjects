@@ -30,6 +30,7 @@ void GameObject::Update()
 
 void GameObject::Render()
 {
+#ifdef mode_axis
 	if (isAxis)
 	{
 		// xÃà
@@ -45,6 +46,7 @@ void GameObject::Render()
 		axis->Update();
 		axis->Render();
 	}
+#endif
 }
 
 ObLine* GameObject::axis = nullptr;

@@ -27,6 +27,12 @@
     <ClCompile Include="ObLine.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
@@ -56,6 +62,12 @@
     <ClInclude Include="ObLine.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl" />
@@ -72,6 +84,9 @@
     </Filter>
     <Filter Include="GameObject">
       <UniqueIdentifier>{ad6e9122-e107-44cc-a43a-e4d389f525e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{d27c0b69-905b-47d8-a048-0ecb9feb7f94}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

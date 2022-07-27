@@ -25,6 +25,8 @@
     <Text Include="화면 좌표계.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="ObCircle.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -37,6 +39,8 @@
     <ClCompile Include="DirectX11_YooJaeJun.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="ObCircle.h" />
     <ClInclude Include="framework.h" />

@@ -18,9 +18,9 @@ void ObRect::Render()
         TransfVtx[i] = Vector2::Transform(vertex[i], W);
     }
 
-    MoveToEx(g_MemDC, TransfVtx[0].x, TransfVtx[0].y, NULL);
-    LineTo(g_MemDC, TransfVtx[1].x, TransfVtx[1].y);
-    LineTo(g_MemDC, TransfVtx[2].x, TransfVtx[2].y);
-    LineTo(g_MemDC, TransfVtx[3].x, TransfVtx[3].y);
-    LineTo(g_MemDC, TransfVtx[0].x, TransfVtx[0].y);
+    MoveToEx(g_MemDC, (int)TransfVtx[0].x, (int)TransfVtx[0].y, NULL);
+    LineTo(g_MemDC, (int)TransfVtx[1].x, (int)TransfVtx[1].y);
+    LineTo(g_MemDC, (int)TransfVtx[2].x, (int)TransfVtx[2].y);
+    LineTo(g_MemDC, (int)TransfVtx[3].x, (int)TransfVtx[3].y);
+    LineTo(g_MemDC, (int)TransfVtx[0].x, (int)TransfVtx[0].y);
 }

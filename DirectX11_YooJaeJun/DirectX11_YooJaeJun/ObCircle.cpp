@@ -19,10 +19,10 @@ void ObCircle::Render()
 		TransfVtx[i] = Vector2::Transform(vertex[i], W);
 	}
 
-	MoveToEx(g_MemDC, TransfVtx[0].x, TransfVtx[0].y, NULL);
+	MoveToEx(g_MemDC, (int)TransfVtx[0].x, (int)TransfVtx[0].y, NULL);
 	for (int i = 0; i < 60; i++)
 	{
-		LineTo(g_MemDC, TransfVtx[i].x, TransfVtx[i].y);
+		LineTo(g_MemDC, (int)TransfVtx[i].x, (int)TransfVtx[i].y);
 	}
-	LineTo(g_MemDC, TransfVtx[0].x, TransfVtx[0].y);
+	LineTo(g_MemDC, (int)TransfVtx[0].x, (int)TransfVtx[0].y);
 }

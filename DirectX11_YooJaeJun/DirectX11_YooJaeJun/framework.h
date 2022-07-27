@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string>
 #include <chrono>
+#include <vector>
 
 using namespace std;
 
@@ -32,10 +33,12 @@ using namespace SimpleMath;
 #include "Timer.h"
 #include "MainGame.h"
 
+#include "Enemy.h"
+#include "Bullet.h"
+
 #define INPUT Input::GetInstance()
 #define TIMER Timer::GetInstance()
 #define DELTA Timer::GetInstance()->GetDeltaTime()
-
 
 extern HINSTANCE	g_hInst;
 extern HWND			g_hwnd;
@@ -59,3 +62,4 @@ static float DirToRadian(Vector2 Dir)
 	}
 	return Seta;
 }
+
