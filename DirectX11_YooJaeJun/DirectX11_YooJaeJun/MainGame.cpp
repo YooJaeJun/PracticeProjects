@@ -16,7 +16,6 @@ void MainGame::Init()
     ReleaseDC(g_hwnd, hdc);
 
 
-    // 사각형
 #ifdef mode_basicShape
     rc.position.x = 400.0f;
     rc.position.y = 200.0f;
@@ -34,11 +33,9 @@ void MainGame::Init()
     //					n 밀리초마다 발생
     // SetTimer(g_hwnd, 1, 10, NULL);		// 17 밀리초 == 60 fps
 #endif
-    // 도형 그림
 #ifdef mode_shapeDrawing
 
 #endif
-    // 시계
 #ifdef mode_clock
     lnHour.position.x = 400.0f;
     lnHour.position.y = 300.0f;
@@ -64,7 +61,6 @@ void MainGame::Init()
     cc.scale.y = 500.0f;
     cc.rotation = 0.0f;
 #endif
-    // 축(태양계)
 #ifdef mode_axis
     // 태양
     planet[0].SetWorldPos(Vector2(400.0f, 300.0f));
@@ -97,7 +93,6 @@ void MainGame::Init()
 
 
 #endif
-    // 총알폭풍
 #ifdef mode_bulletStorm
     enemy = make_shared<Enemy>();
     enemy->SetLocalPos(Vector2(400, 300));
@@ -114,8 +109,7 @@ void MainGame::Init()
         bullet[i]->SetParentRT(enemy);
     }
 #endif
-    //
-#ifdef mode_pet
+#ifdef mode_arrow
     player.SetWorldPos(Vector2(400.0f, 300.0f));
     player.SetScale(Vector2(100.0f, 100.0f));
     player.rotation = 0.0f;
@@ -127,18 +121,21 @@ void MainGame::Init()
     pet.isAxis = true;
     pet.SetParentRT(player);
 
-    arrow.SetWorldPos(Vector2(2000.0f, 2000.0f));
-    arrow.SetScale(Vector2(30.0f, 0.0f));
-    arrow.rotation = 0.0f;
-    arrow.isAxis = true;
-
-    isFired = false;
+    arrow.resize(arrowNum);
+    isFired.resize(arrowNum);
+    for (int i = 0; i < arrowNum; i++)
+    {
+        arrow[i] = make_shared<ObLine>();
+        arrow[i]->SetWorldPos(Vector2(2000.0f, 2000.0f));
+        arrow[i]->SetScale(Vector2(30.0f, 0.0f));
+        arrow[i]->rotation = 0.0f;
+        isFired[i] = false;
+    }
 #endif
 }
 
 void MainGame::Update()
 {
-    // 사각형
 #ifdef mode_basicShape
     // GetAsyncKeyState 메시지큐를 거치지 않고 키입력을 받아오는 함수
     //가상키코드
@@ -150,7 +147,6 @@ void MainGame::Update()
     rc.Update();
     st.Update();
 #endif
-    // 도형그림
 #ifdef mode_shapeDrawing
     if (INPUT->KeyPress(VK_LEFT)) { posX -= 3; posHumanX -= 3; }
     if (INPUT->KeyPress(VK_RIGHT)){ posX += 3; posHumanX += 3; }
@@ -163,7 +159,6 @@ void MainGame::Update()
     if (INPUT->KeyPress('5')) { seta += 0.1f; }
     if (INPUT->KeyPress('6')) { seta -= 0.1f; }
 #endif
-    // 시계
 #ifdef mode_clock
     GetLocalTime(&localTime);
 
@@ -189,7 +184,6 @@ void MainGame::Update()
     lnSecond.Update();
     cc.Update();
 #endif
-    // 축(태양계)
 #ifdef mode_axis
     /*
     if (INPUT->KeyPress(VK_UP))
@@ -273,7 +267,6 @@ void MainGame::Update()
         planet[i].Update();
     }
 #endif
-    // 총알폭풍
 #ifdef mode_bulletStorm
     enemy->Update();
 
@@ -298,8 +291,7 @@ void MainGame::Update()
         bullet[i]->Update();
     }
 #endif
-    // 
-#ifdef mode_pet
+#ifdef mode_arrow
     if (INPUT->KeyPress(VK_UP))
     {
         player.MoveWorldPos(-player.GetDown() * 200.0f * DELTA);
@@ -317,30 +309,47 @@ void MainGame::Update()
         player.rotation += 120.0f * ToRadian * DELTA;
     }
     
-    if (INPUT->KeyPress(VK_SPACE))
+    if (INPUT->KeyDown(VK_SPACE))
     {
-        isFired = true;
-        arrow.SetWorldPos(player.GetWorldPos());
-        arrow.rotation = DirToRadian(player.GetRight());
-        // arrow.SetWorldPos(pet.GetWorldPos());
-        // arrow.rotation = DirToRadian(pet.GetRight());
+        for (int i = 0; i < arrowNum; i++)
+        {
+            if (isFired[i] == false)
+            {
+                isFired[i] = true;
+                arrow[i]->SetWorldPos(player.GetWorldPos());
+                arrow[i]->rotation = DirToRadian(player.GetRight());
+                break;
+            }
+        }
     }
 
-    if (isFired) arrow.MoveWorldPos(arrow.GetRight() * 200.0f * DELTA);
+    for (int i = 0; i < arrowNum; i++)
+    {
+        if (isFired[i])
+        {
+            arrow[i]->MoveWorldPos(arrow[i]->GetRight() * 200.0f * DELTA);
+        }
+    }
 
     if (INPUT->KeyDown('R'))    // 재장전
     {
-        isFired = false;
-        arrow.SetWorldPos(player.GetWorldPos());
+        for (int i = 0; i < arrowNum; i++)
+        {
+            isFired[i] = false;
+            arrow[i]->SetWorldPos(Vector2(1000.0f, 1000.0f));
+        }
     }
 
-    if (INPUT->KeyPress(VK_SPACE)) arrow.SetWorldPos(player.GetWorldPos());
-    pet.rotation2 += 50.0f * ToRadian * DELTA;
+    pet.rotation2 += 60.0f * ToRadian * DELTA;
 
     player.Update();
     pet.Update();
-    arrow.Update();
+    for (int i = 0; i < arrowNum; i++)
+    {
+        arrow[i]->Update();
+    }
 
+    if (++arrowIdx >= arrowNum) arrowIdx = 0;
 #endif
 
     //키가 눌렸을 때 wm_paint 를 발생 시켜라
@@ -357,12 +366,10 @@ void MainGame::Render()
     PatBlt(g_MemDC, 0, 0, 800, 600, WHITENESS);
 
 
-    // 사각형
 #ifdef mode_basicShape
     rc.Render();
     st.Render();
 #endif
-    // 도형그림
 #ifdef mode_shapeDrawing
     // 햇님
     MoveToEx(g_MemDC, posX, posY, NULL);
@@ -426,7 +433,6 @@ void MainGame::Render()
     LineTo(g_MemDC, posHumanX + 60 * cosf(70 * R + seta) * scaleX,
         posHumanY + 60 * sinf(70 * R + seta) * scaleY);
 #endif
-    // 시계
 #ifdef mode_clock 
     string FPS = "FPS : " + to_string(TIMER->GetFPS());
     TextOutA(g_MemDC, 0, 0, FPS.c_str(), FPS.size());
@@ -454,7 +460,6 @@ void MainGame::Render()
     // lnSecond.RenderClock(localTime.wSecond);
     cc.Render();
 #endif
-    // 축(태양계)
 #ifdef mode_axis
     string FPS = "FPS : " + to_string(TIMER->GetFPS());
     TextOutA(g_MemDC, 0, 0, FPS.c_str(), FPS.size());
@@ -467,7 +472,6 @@ void MainGame::Render()
         planet[i].Render();
     }
 #endif
-    // 총알폭풍
 #ifdef mode_bulletStorm
     string FPS = "FPS : " + to_string(TIMER->GetFPS());
     TextOutA(g_MemDC, 0, 0, FPS.c_str(), (int)FPS.size());
@@ -484,11 +488,24 @@ void MainGame::Render()
     }
     
 #endif
-    //
-#ifdef mode_pet
+#ifdef mode_arrow
     player.Render();
     pet.Render();
-    arrow.Render();
+
+    string FPS = "FPS : " + to_string(TIMER->GetFPS());
+    TextOutA(g_MemDC, 0, 0, FPS.c_str(), (int)FPS.size());
+    string keyDescR = "재장전: R";
+    TextOutA(g_MemDC, 0, 20, keyDescR.c_str(), keyDescR.size());
+
+    int remainedArrow = 0;
+    for (int i = 0; i < arrowNum; i++)
+    {
+        arrow[i]->Render();
+        if (isFired[i] == false) remainedArrow++;
+    }
+    string remainArrow = to_string(remainedArrow) + "/" + to_string(arrowNum);
+    TextOutA(g_MemDC, player.GetWorldPos().x - 10, player.GetWorldPos().y - 10, remainArrow.c_str(), remainArrow.size());
+
 #endif
 
     //고속 복사 g_MemDC에서 g_hdc로

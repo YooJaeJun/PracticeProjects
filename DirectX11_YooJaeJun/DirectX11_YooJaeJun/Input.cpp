@@ -24,7 +24,7 @@ bool Input::KeyPress(int KeyCode)
 
 bool Input::KeyUp(int KeyCode)
 {
-	return keyMap[KeyCode] <= KEY_INPUT_STATUS_UP;
+	return keyMap[KeyCode] == KEY_INPUT_STATUS_UP;
 }
 
 void Input::Update()
@@ -51,9 +51,9 @@ void Input::Update()
 
 			if (oldState == 0 && state == 1)
 				keyMap[i] = KEY_INPUT_STATUS_DOWN;	// 이전 0, 현재 1 - KeyDown
-			if (oldState == 1 && state == 0)
+			else if (oldState == 1 && state == 0)
 				keyMap[i] = KEY_INPUT_STATUS_UP;	// 이전 1, 현재 0 - KeyUp
-			if (oldState == 1 && state == 1)
+			else if (oldState == 1 && state == 1)
 				keyMap[i] = KEY_INPUT_STATUS_PRESS;	// 이전 1, 현재 1 - KeyPress
 			else
 				keyMap[i] = KEY_INPUT_STATUS_NONE;

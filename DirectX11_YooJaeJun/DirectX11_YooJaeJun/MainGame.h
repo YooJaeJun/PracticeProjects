@@ -4,7 +4,7 @@
 // #define mode_clock
 // #define mode_axis
 // #define mode_bulletStorm
-#define mode_pet
+#define mode_arrow
 
 class Enemy;
 class Bullet;
@@ -44,12 +44,13 @@ private:
 	bool qState = false, eState = false;
 	ObLine line;
 #endif
-#ifdef mode_pet
+#ifdef mode_arrow
 	ObRect		player;
 	ObCircle	pet;
-
-	ObLine		arrow;
-	bool		isFired;
+	vector<shared_ptr<ObLine>> 	arrow;
+	deque<bool> isFired;
+	const int	arrowNum = 15;
+	int arrowIdx = 0;
 #endif
 
 public:
