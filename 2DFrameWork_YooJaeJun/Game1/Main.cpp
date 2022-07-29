@@ -55,43 +55,22 @@ void Main::Update()
 
 
     if (INPUT->KeyDown(VK_SPACE))
-    {
         for (int i = 0; i < MAX; i++)
-        {
-            if (!bullet[i].isFired)
-            {
-                bullet[i].isFired = true;
-
-                bullet[i].arrow.SetWorldPos(player.GetWorldPos());
-                bullet[i].arrow.rotation = Utility::DirToRadian(player.GetRight());
-
-                bullet[i].arrowPet.SetLocalPos(Vector2(40.f, 40.f));
-
+            if (bullet[i].Shoot(player)) 
                 break;
-            }
-        }
-    }
 
     for (int i = 0; i < MAX; i++)
     {
-        if (bullet[i].isFired)
-        {
-            bullet[i].arrow.MoveWorldPos(bullet[i].arrow.GetRight() * 200.0f * DELTA);
-
-            bullet[i].arrowPet.rotation2 += 400.0f * ToRadian * DELTA;
-
-            bullet[i].arrow.Update();
-            bullet[i].arrowPet.Update();
-        }
+        bullet[i].Update(player);
     }
 
     if (INPUT->KeyDown('R')) //재장전
     {
         for (int i = 0; i < MAX; i++)
         {
-            if (bullet[i].isFired)
+            if (bullet[i].arrow.isVisible)
             {
-                bullet[i].isFired = false;
+                bullet[i].arrow.isVisible = false;
                 bullet[i].arrow.SetWorldPos(Vector2(1000.0f, 1000.0f));
 
                 bullet[i].arrowPet.SetLocalPos(Vector2(40.f, 40.f));
@@ -112,12 +91,10 @@ void Main::Render()
 {
     player.Render();
     pet.Render();
+
     for (int i = 0; i < MAX; i++)
     {
-        if (bullet[i].isFired)
-        {
-            bullet[i].arrowPet.Render();
-        }
+        bullet[i].Render();
     }
 }
 
@@ -129,7 +106,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, in
 {
     app.SetAppName(L"유재준 Game1");
     app.SetInstance(instance);
-	app.InitWidthHeight(1400,800.0f);
+	app.InitWidthHeight(1400.0f, 800.0f);
 	Main* main = new Main();
 	int wParam = (int)WIN->Run(main);
 	WIN->DeleteSingleton();

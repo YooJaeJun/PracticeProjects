@@ -1,5 +1,5 @@
 #pragma once
-#define MAX 30
+#define MAX 5
 
 class Main : public Scene
 {

@@ -3,12 +3,12 @@ class Bullet
 {
 public:
     ObLine		arrow;
-    bool		isFired;
     ObCircle    arrowPet;
 
 public:
     Bullet();
-    void Update();
+    void Update(ObRect player);
     void Render();
+    bool Shoot(ObRect player);
 };
 
