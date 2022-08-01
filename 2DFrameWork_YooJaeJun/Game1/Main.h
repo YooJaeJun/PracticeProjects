@@ -1,13 +1,14 @@
 #pragma once
-#define MAX 5
+#define MAX 20
 
 class Main : public Scene
 {
 private:
 	ObRect		player;
 	ObCircle	pet;
-
 	Bullet		bullet[MAX];
+	ObRect		shootVelocityGauge;
+	ObRect		shootVelocityGaugeFrame;
 
 public:
 	virtual void Init() override;

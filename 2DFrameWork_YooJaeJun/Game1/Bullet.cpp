@@ -16,17 +16,20 @@ Bullet::Bullet()
     arrowPet.isAxis = true;
     arrowPet.SetParentRT(arrow);
     arrowPet.color = Color(0.3f, 0.3f, 0.8f, 0.5f);
+
+    arrowSpeed = 200.0f;
+    arrowPetSpeed = 400.0f;
 }
 
 void Bullet::Update(ObRect player)
 {
     if (!arrow.isVisible) return;
 
-    arrow.MoveWorldPos(arrow.GetRight() * 200.0f * DELTA);
+    arrow.MoveWorldPos(arrow.GetRight() * arrowSpeed * DELTA);
     arrow.Update();
 
     if (!arrowPet.isVisible) return;
-    arrowPet.rotation2 += 400.0f * ToRadian * DELTA;
+    arrowPet.rotation2 += arrowPetSpeed * ToRadian * DELTA;
     arrowPet.Update();
 
     Vector2 Dis = arrow.GetWorldPos() - player.GetWorldPos();
@@ -35,6 +38,7 @@ void Bullet::Update(ObRect player)
     {
         arrow.isVisible = false;
         arrowPet.isVisible = false;
+        arrowPet.rotation2 = 0.0f;
     }
 }
 
@@ -49,6 +53,9 @@ bool Bullet::Shoot(ObRect player)
         arrowPet.isVisible = true;
         arrowPet.SetLocalPos(Vector2(40.f, 40.f));
         arrow.rotation2 = 0.0f;
+
+        arrowSpeed = 200.0f;
+        arrowPetSpeed = 400.0f;
 
         return true;
     }

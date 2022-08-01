@@ -19,6 +19,22 @@ void Main::Init()
     pet.color = Color(0.8f, 0.5f, 0.3f, 0.5f);
     //pet.pivot = OFFSET_B;
     pet.SetParentRT(player);
+
+    shootVelocityGauge.SetLocalPos(Vector2(-50.0f, 70.0f));
+    shootVelocityGauge.scale = Vector2(100.0f, 20.0f);
+    shootVelocityGauge.rotation = 0.0f;
+    shootVelocityGauge.isFilled = true;
+    shootVelocityGauge.color = Color(0.2f, 0.2f, 0.7f, 1.0f);
+    shootVelocityGauge.pivot = OFFSET_L;
+    shootVelocityGauge.SetParentRT(player);
+
+    shootVelocityGaugeFrame.SetLocalPos(Vector2(-50.0f, 70.0f));
+    shootVelocityGaugeFrame.scale = Vector2(100.0f, 20.0f);
+    shootVelocityGaugeFrame.rotation = 0.0f;
+    shootVelocityGaugeFrame.isFilled = false;
+    shootVelocityGaugeFrame.color = Color(0.5f, 0.5f, 0.9f, 1.0f);
+    shootVelocityGaugeFrame.pivot = OFFSET_L;
+    shootVelocityGaugeFrame.SetParentRT(player);
 }
 
 void Main::Release()
@@ -53,34 +69,38 @@ void Main::Update()
     pet.Update(); 
 
 
+    if (INPUT->KeyPress(VK_SPACE))
+    {
+        shootVelocityGauge.scale.x += 120.0f * DELTA;
+        if (shootVelocityGauge.scale.x > 100.0f)
+        {
+            shootVelocityGauge.scale.x = 0.0f;
+        }
+    }
 
-    if (INPUT->KeyDown(VK_SPACE))
+    if (INPUT->KeyUp(VK_SPACE))
+    {
         for (int i = 0; i < MAX; i++)
-            if (bullet[i].Shoot(player)) 
+        {
+            if (bullet[i].Shoot(player))
+            {
+                bullet[i].arrowSpeed += shootVelocityGauge.scale.x * 3.0f;
+                bullet[i].arrowPetSpeed += shootVelocityGauge.scale.x * 5.5f;
                 break;
+            }
+        }
+
+        shootVelocityGauge.scale.x = 0.0f;
+    }
+
 
     for (int i = 0; i < MAX; i++)
     {
         bullet[i].Update(player);
     }
 
-    if (INPUT->KeyDown('R')) //¿Á¿Â¿¸
-    {
-        for (int i = 0; i < MAX; i++)
-        {
-            if (bullet[i].arrow.isVisible)
-            {
-                bullet[i].arrow.isVisible = false;
-                bullet[i].arrow.SetWorldPos(Vector2(1000.0f, 1000.0f));
-
-                bullet[i].arrowPet.SetLocalPos(Vector2(40.f, 40.f));
-                bullet[i].arrowPet.rotation2 = 0.0f;
-
-                bullet[i].arrow.Update();
-                bullet[i].arrowPet.Update();
-            }
-        }
-    }
+    shootVelocityGauge.Update();
+    shootVelocityGaugeFrame.Update();
 }
 
 void Main::LateUpdate()
@@ -91,15 +111,17 @@ void Main::Render()
 {
     player.Render();
     pet.Render();
-
     for (int i = 0; i < MAX; i++)
     {
         bullet[i].Render();
     }
+    shootVelocityGauge.Render();
+    shootVelocityGaugeFrame.Render();
 }
 
 void Main::ResizeScreen()
 {
+
 }
 
 int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, int command)
