@@ -96,7 +96,7 @@ void GameObject::Render()
 	if (isAxis)
 	{
 		//right
-		axisObject->SetWorldPos(GetWorldPos());
+		axisObject->SetWorldPos(GetWorldPivot());	// GetWorldPivot() 중점. 최종행렬 W에서 가져옴. RT에서 가져오는 건 GetWorldPos()
 		axisObject->rotation = Utility::DirToRadian(GetRight());
 		axisObject->scale.x = scale.x * 2.0f;
 		axisObject->color = Color(1.0f, 0.0f, 0.0f, 1.0f);
