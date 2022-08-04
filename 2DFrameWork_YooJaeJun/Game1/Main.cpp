@@ -9,7 +9,7 @@ void Main::Init()
     player.isFilled = true;
     player.isAxis = true;
     player.color = Color(0.2f, 0.1f, 0.8f, 0.5f);
-    //player.pivot = OFFSET_LT;
+    // player.pivot = OFFSET_LT;     // pivot은 원점을 옮긴다.
 
     pet.SetLocalPos(Vector2(100.0f, 100.0f));
     pet.scale = Vector2(30.0f, 30.0f);
@@ -46,21 +46,21 @@ void Main::Update()
     if (INPUT->KeyPress(VK_UP))
     {
         //player.MoveWorldPos(-player.GetDown() * 200.0f * DELTA);
-        player.MoveWorldPos(player.GetUp() * 200.0f * DELTA);
+        player.MoveWorldPos(player.GetUp() * 350.0f * DELTA);
     }
     else if (INPUT->KeyPress(VK_DOWN))
     {
         //player.MoveWorldPos(player.GetDown() * 200.0f * DELTA);
-        player.MoveWorldPos(-player.GetUp() * 200.0f * DELTA);
+        player.MoveWorldPos(-player.GetUp() * 350.0f * DELTA);
     }
 
     if (INPUT->KeyPress(VK_LEFT))
     {
-        player.rotation += 120.0f * ToRadian * DELTA;
+        player.rotation += 200.0f * ToRadian * DELTA;
     }
     else if (INPUT->KeyPress(VK_RIGHT))
     {
-        player.rotation -= 120.0f * ToRadian * DELTA;
+        player.rotation -= 200.0f * ToRadian * DELTA;
     }
 
     pet.rotation2 += 60.0f * ToRadian * DELTA;
@@ -81,14 +81,8 @@ void Main::Update()
     if (INPUT->KeyUp(VK_SPACE))
     {
         for (int i = 0; i < MAX; i++)
-        {
-            if (bullet[i].Shoot(player))
-            {
-                bullet[i].arrowSpeed += shootVelocityGauge.scale.x * 3.0f;
-                bullet[i].arrowPetSpeed += shootVelocityGauge.scale.x * 5.5f;
+            if (bullet[i].Shoot(player, shootVelocityGauge.scale.x))
                 break;
-            }
-        }
 
         shootVelocityGauge.scale.x = 0.0f;
     }
