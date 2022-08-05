@@ -4,8 +4,8 @@ class Bullet
 public:
     ObLine		arrow;
     ObCircle    arrowPet;
-    float       arrowSpeed;
-    float       arrowPetSpeed;
+    float       arrowScalar;
+    float       arrowPetScalar;
 
 public:
     Bullet();

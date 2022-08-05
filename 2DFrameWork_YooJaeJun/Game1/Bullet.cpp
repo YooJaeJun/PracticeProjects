@@ -20,20 +20,20 @@ Bullet::Bullet()
 
 void Bullet::Update(ObRect player)
 {
-    if (!arrow.isVisible) return;
+    if (!arrow.isVisible and !arrowPet.isVisible) return;
 
-    arrowSpeed *= 1.002f;
-    arrowPetSpeed *= 1.002f;
+    arrowScalar += 600.0f * DELTA;  // 초당 (상수)픽셀
+    arrowPetScalar += 500.0f * DELTA;
 
-    arrow.MoveWorldPos(arrow.GetRight() * arrowSpeed * DELTA);
+    arrow.MoveWorldPos(arrow.GetRight() * arrowScalar * DELTA);
     arrow.Update();
 
-    if (!arrowPet.isVisible) return;
-    arrowPet.rotation2 += arrowPetSpeed * ToRadian * DELTA;
+    arrowPet.rotation2 += arrowPetScalar * ToRadian * DELTA;
     arrowPet.Update();
 
     Vector2 Dis = arrow.GetWorldPos() - player.GetWorldPos();
     float dis = Dis.Length();
+
     if (dis > 1700.0f)
     {
         arrow.isVisible = false;
@@ -54,8 +54,10 @@ bool Bullet::Shoot(ObRect player, const float scalar)
         arrowPet.SetLocalPos(Vector2(40.f, 40.f));
         arrow.rotation2 = 0.0f;
 
-        arrowSpeed = 100.0f + scalar * 4.0f;
-        arrowPetSpeed = 200.0f + scalar * 4.0f;
+        // arrowScalar = -scalar * 2.0f;
+        // arrowPetScalar = -scalar * 2.0f;
+        arrowScalar = 50.0f + scalar * 10.0f;
+        arrowPetScalar = 50.0f + scalar * 15.0f;
 
         return true;
     }
@@ -64,9 +66,7 @@ bool Bullet::Shoot(ObRect player, const float scalar)
 
 void Bullet::Render()
 {
-    // if (!arrow.isVisible) return;
-    // arrow.Render();
-
-    if (!arrowPet.isVisible) return;
+    if (!arrow.isVisible and !arrowPet.isVisible) return;
+    arrow.Render();
     arrowPet.Render();
 }

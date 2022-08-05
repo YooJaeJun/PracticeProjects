@@ -3,7 +3,7 @@
 
 void Main::Init()
 {
-    player.SetWorldPos(Vector2(0.0f, 0.0f));
+    player.SetWorldPos(Vector2(-500.0f, 0.0f));
     player.scale = Vector2(100.0f, 100.0f);
     player.rotation = 0.0f;
     player.isFilled = true;
@@ -35,6 +35,8 @@ void Main::Init()
     shootVelocityGaugeFrame.color = Color(0.5f, 0.5f, 0.9f, 1.0f);
     shootVelocityGaugeFrame.pivot = OFFSET_L;
     shootVelocityGaugeFrame.SetParentRT(player);
+
+    // lastPos = player.GetWorldPos();
 }
 
 void Main::Release()
@@ -43,24 +45,27 @@ void Main::Release()
 
 void Main::Update()
 {
+    // player.color = Color(RANDOM->Float(), RANDOM->Float(), RANDOM->Float(), 1.0f);
+    // player.SetWorldPos(lastPos);
+
     if (INPUT->KeyPress(VK_UP))
     {
         //player.MoveWorldPos(-player.GetDown() * 200.0f * DELTA);
-        player.MoveWorldPos(player.GetUp() * 350.0f * DELTA);
+        player.MoveWorldPos(player.GetUp() * 450.0f * DELTA);
     }
     else if (INPUT->KeyPress(VK_DOWN))
     {
         //player.MoveWorldPos(player.GetDown() * 200.0f * DELTA);
-        player.MoveWorldPos(-player.GetUp() * 350.0f * DELTA);
+        player.MoveWorldPos(-player.GetUp() * 450.0f * DELTA);
     }
 
     if (INPUT->KeyPress(VK_LEFT))
     {
-        player.rotation += 200.0f * ToRadian * DELTA;
+        player.rotation += 250.0f * ToRadian * DELTA;
     }
     else if (INPUT->KeyPress(VK_RIGHT))
     {
-        player.rotation -= 200.0f * ToRadian * DELTA;
+        player.rotation -= 250.0f * ToRadian * DELTA;
     }
 
     pet.rotation2 += 60.0f * ToRadian * DELTA;
@@ -76,6 +81,12 @@ void Main::Update()
         {
             shootVelocityGauge.scale.x = 0.0f;
         }
+
+        lastPos = player.GetWorldPos();
+        // player.SetWorldPos(lastPos + Vector2(RANDOM->Float(-1.0f, 1.0f), RANDOM->Float(-1.0f, 1.0f)));
+        player.SetWorldPos(lastPos + Vector2(RANDOM->Float(-3.0f, 3.0f), RANDOM->Float(-1.0f, 1.0f)));
+
+        player.Update();
     }
 
     if (INPUT->KeyUp(VK_SPACE))
@@ -97,6 +108,7 @@ void Main::Update()
     shootVelocityGaugeFrame.Update();
 }
 
+// ex. 충돌. 이동 뒤 발생
 void Main::LateUpdate()
 {
 }

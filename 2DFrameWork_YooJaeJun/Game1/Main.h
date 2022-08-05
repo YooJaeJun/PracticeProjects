@@ -10,6 +10,8 @@ private:
 	ObRect		shootVelocityGauge;
 	ObRect		shootVelocityGaugeFrame;
 
+	Vector2		lastPos;
+
 public:
 	virtual void Init() override;
 	virtual void Release() override; //«ÿ¡¶
