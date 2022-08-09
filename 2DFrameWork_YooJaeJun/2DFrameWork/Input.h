@@ -9,7 +9,10 @@ private:
     unsigned char keyOldState[256];
     unsigned char keyMap[256];
 
-    enum 
+    Vector2       mouseScreenPos;
+    Vector2       mouseWorldPos;
+
+    enum
     {
         KEY_INPUT_STATUS_DOWN,
         KEY_INPUT_STATUS_PRESS,
@@ -25,5 +28,8 @@ public:
     bool KeyPress(int KeyCode);//누르고있을때
     bool KeyUp(int KeyCode); //눌렀다가 떼었을때 최초1회
     void Update();
+
+    Vector2 GetScreenMousePos() { return mouseScreenPos; }
+    Vector2 GetWorldMousePos() { return mouseWorldPos; }
 };
 

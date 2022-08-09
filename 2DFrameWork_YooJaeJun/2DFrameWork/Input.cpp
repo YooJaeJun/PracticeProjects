@@ -2,10 +2,10 @@
 
 Input::Input()
 {
-	//시작주소로부터 어디까지 전부 0으로 초기화
-	ZeroMemory(keyState, sizeof(keyState));
-	ZeroMemory(keyOldState, sizeof(keyOldState));
-	ZeroMemory(keyMap, sizeof(keyMap));
+    //시작주소로부터 어디까지 전부 0으로 초기화
+    ZeroMemory(keyState, sizeof(keyState));
+    ZeroMemory(keyOldState, sizeof(keyOldState));
+    ZeroMemory(keyMap, sizeof(keyMap));
 }
 
 Input::~Input()
@@ -29,6 +29,9 @@ bool Input::KeyUp(int KeyCode)
 
 void Input::Update()
 {
+    mouseWorldPos.x = mouseScreenPos.x - 640.0f;
+    mouseWorldPos.y = mouseScreenPos.y < 0 ? mouseScreenPos.y + 360.0f : -mouseScreenPos.y + 360.0f;
+
     //메모리복사 keyOldState = keyState 
     memcpy(keyOldState, keyState, sizeof(keyOldState));
 

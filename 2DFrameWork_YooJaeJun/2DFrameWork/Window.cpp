@@ -7,7 +7,7 @@ WPARAM Window::Run(Scene* main)
 {
 	Window::main = main;
 	//Window->D3D->main
-	Create(); 
+	Create();
 	D3D->Create();
 	GameObject::CreateStaticMember();
 	ObRect::CreateStaticMember();
@@ -184,6 +184,12 @@ LRESULT Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	if (Gui::MsgProc(handle, message, wParam, lParam))
 		return true;
+
+	if (message == WM_MOUSEMOVE)
+	{
+		INPUT->mouseScreenPos.x = (float)LOWORD(lParam);
+		INPUT->mouseScreenPos.y = (float)HIWORD(lParam);
+	}
 
 	if (message == WM_SIZE)
 	{

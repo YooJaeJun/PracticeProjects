@@ -1,6 +1,6 @@
 ﻿#pragma once
 //Popup Console
-// #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
 
 //C
 #include <Windows.h>

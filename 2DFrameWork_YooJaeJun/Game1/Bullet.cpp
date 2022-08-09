@@ -2,16 +2,14 @@
 
 Bullet::Bullet()
 {
-    arrow.SetWorldPos(Vector2(1000.0f, 1000.0f));
+    arrow.SetWorldPos(Vector2(2000.0f, 2000.0f));
     arrow.scale.x = 30.0f;
-    arrow.scale.y = 30.0f;
     arrow.rotation = 0.0f;
     arrow.isVisible = false;
+    //isFired = false;
 
-    arrowPet.SetWorldPos(Vector2(1000.0f, 1000.0f));
-    arrowPet.scale.x = 20.0f;
-    arrowPet.scale.y = 20.0f;
-    arrowPet.rotation = 0.0f;
+    arrowPet.SetLocalPos(Vector2(30.0f, 30.0f));
+    arrowPet.scale = Vector2(20.0f, 20.0f);
     arrowPet.isVisible = false;
     arrowPet.isAxis = true;
     arrowPet.SetParentRT(arrow);
@@ -20,53 +18,62 @@ Bullet::Bullet()
 
 void Bullet::Update(ObRect player)
 {
-    if (!arrow.isVisible and !arrowPet.isVisible) return;
+    if (!arrow.isVisible) return;
+    if (!arrowPet.isVisible) return;
 
-    arrowScalar += 600.0f * DELTA;  // 초당 (상수)픽셀
-    arrowPetScalar += 500.0f * DELTA;
+    //scalar += 300.0f * DELTA;
+    //cout << scalar << endl;
 
-    arrow.MoveWorldPos(arrow.GetRight() * arrowScalar * DELTA);
+    gravity += 600.0f * DELTA;
+
+    Vector2 velocity = fireDir * arrowScalar + DOWN * gravity;
+
+    arrow.MoveWorldPos(velocity * DELTA);
+    arrowPet.rotation2 += 360.0f * ToRadian * DELTA;
+
+    arrow.rotation = Utility::DirToRadian(velocity);
+
     arrow.Update();
-
-    arrowPet.rotation2 += arrowPetScalar * ToRadian * DELTA;
     arrowPet.Update();
 
     Vector2 Dis = arrow.GetWorldPos() - player.GetWorldPos();
+
     float dis = Dis.Length();
 
-    if (dis > 1700.0f)
+    if (dis > 2000.0f)
     {
         arrow.isVisible = false;
         arrowPet.isVisible = false;
-        arrowPet.rotation2 = 0.0f;
     }
-}
-
-bool Bullet::Shoot(ObRect player, const float scalar)
-{
-    if (!arrow.isVisible && !arrowPet.isVisible)
-    {
-        arrow.isVisible = true;
-        arrow.SetWorldPos(player.GetWorldPos());
-        arrow.rotation = Utility::DirToRadian(player.GetRight());
-
-        arrowPet.isVisible = true;
-        arrowPet.SetLocalPos(Vector2(40.f, 40.f));
-        arrow.rotation2 = 0.0f;
-
-        // arrowScalar = -scalar * 2.0f;
-        // arrowPetScalar = -scalar * 2.0f;
-        arrowScalar = 50.0f + scalar * 10.0f;
-        arrowPetScalar = 50.0f + scalar * 15.0f;
-
-        return true;
-    }
-    return false;
 }
 
 void Bullet::Render()
 {
-    if (!arrow.isVisible and !arrowPet.isVisible) return;
     arrow.Render();
     arrowPet.Render();
+}
+
+bool Bullet::Shoot(ObRect player, float scalar, Vector2 firePos)
+{
+    if (!arrow.isVisible)
+    {
+        arrow.isVisible = true;
+        arrowPet.isVisible = true;
+
+        arrow.SetWorldPos(firePos);
+        arrow.rotation = Utility::DirToRadian(player.GetRight());
+
+        //              150 ~ 450
+        //this->scalar = -scalar * 5.0f;
+        arrowScalar = 150.0f + scalar * 5.0f;
+        arrowPetScalar = 100.0f + scalar * 3.0f;
+        fireDir = player.GetRight();
+
+        gravity = 0.0f;
+
+        arrowPet.rotation2 = 0.0f;
+
+        return true;
+    }
+    return false;
 }
