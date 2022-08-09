@@ -3,12 +3,12 @@
 
 void Main::Init()
 {
-    xAxis.scale.x = 1280.0f;
+    xAxis.scale.x = 1200.0f;
     xAxis.color = Color(1.0f, 0.0f, 0.0f, 1.0f);
     xAxis.pivot = OFFSET_N;
     xAxis.Update();
 
-    yAxis.scale.x = 1080.0f;
+    yAxis.scale.x = 600.0f;
     yAxis.color = Color(0.0f, 1.0f, 0.0f, 1.0f);
     yAxis.pivot = OFFSET_N;
     yAxis.rotation = DIV2PI;
@@ -66,25 +66,42 @@ void Main::Update()
     // player.color = Color(RANDOM->Float(), RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), 1.0f);
     // player.SetWorldPos(lastPos);
 
-    if (INPUT->KeyPress(VK_UP) || INPUT->KeyPress(0x57))    // W
+    if (INPUT->KeyPress(VK_UP))
     {
-        // player.MoveWorldPos(player.GetUp() * 400.0f * DELTA);
-        player.MoveWorldPos(UP * 400.0f * DELTA);
+        CAM->position += UP * 200.0f * DELTA;
     }
-    else if (INPUT->KeyPress(VK_DOWN) || INPUT->KeyPress(0x53)) // S
+    else if (INPUT->KeyPress(VK_DOWN))
     {
-        // player.MoveWorldPos(-player.GetUp() * 400.0f * DELTA);
-        player.MoveWorldPos(DOWN * 400.0f * DELTA);
+        CAM->position += DOWN * 200.0f * DELTA;
     }
-    if (INPUT->KeyPress(VK_LEFT) || INPUT->KeyPress(0x41))  // A
+    if (INPUT->KeyPress(VK_RIGHT))
     {
-        // player.MoveWorldPos(-player.GetRight() * 400.0f * DELTA);
-        player.MoveWorldPos(LEFT * 400.0f * DELTA);
+        CAM->position += RIGHT * 200.0f * DELTA;
     }
-    else if (INPUT->KeyPress(VK_RIGHT) || INPUT->KeyPress(0x44))    // D
+    else if (INPUT->KeyPress(VK_LEFT))
     {
-        // player.MoveWorldPos(player.GetRight() * 400.0f * DELTA);
-        player.MoveWorldPos(RIGHT * 400.0f * DELTA);
+        CAM->position += LEFT * 200.0f * DELTA;
+    }
+
+    if (INPUT->KeyPress('W'))
+    {
+        player.MoveWorldPos(player.GetUp() * 400.0f * DELTA);
+        // player.MoveWorldPos(UP * 400.0f * DELTA);
+    }
+    else if (INPUT->KeyPress('S'))
+    {
+        player.MoveWorldPos(-player.GetUp() * 400.0f * DELTA);
+        // player.MoveWorldPos(DOWN * 400.0f * DELTA);
+    }
+    if (INPUT->KeyPress('A'))
+    {
+        player.MoveWorldPos(-player.GetRight() * 400.0f * DELTA);
+        // player.MoveWorldPos(LEFT * 400.0f * DELTA);
+    }
+    else if (INPUT->KeyPress('D'))
+    {
+        player.MoveWorldPos(player.GetRight() * 400.0f * DELTA);
+        // player.MoveWorldPos(RIGHT * 400.0f * DELTA);
     }
 
     // player.rotation += 200.0f * ToRadian * DELTA;
