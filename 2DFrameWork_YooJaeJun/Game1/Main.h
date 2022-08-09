@@ -14,6 +14,9 @@ private:
 
 	GameObject	firePos;
 
+	ObLine		xAxis;
+	ObLine		yAxis;
+
 public:
 	virtual void Init() override;
 	virtual void Release() override; //«ÿ¡¶

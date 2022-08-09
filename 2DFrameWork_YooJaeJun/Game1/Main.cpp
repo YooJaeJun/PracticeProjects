@@ -3,6 +3,17 @@
 
 void Main::Init()
 {
+    xAxis.scale.x = 1280.0f;
+    xAxis.color = Color(1.0f, 0.0f, 0.0f, 1.0f);
+    xAxis.pivot = OFFSET_N;
+    xAxis.Update();
+
+    yAxis.scale.x = 1080.0f;
+    yAxis.color = Color(0.0f, 1.0f, 0.0f, 1.0f);
+    yAxis.pivot = OFFSET_N;
+    yAxis.rotation = DIV2PI;
+    yAxis.Update();
+
     player.SetWorldPos(Vector2(0.0f, 0.0f));
     player.scale = Vector2(80.0f, 80.0f);
     player.rotation = 0.0f;
@@ -49,6 +60,9 @@ void Main::Update()
     cout << "Mouse : " << INPUT->GetWorldMousePos().x << ","
         << INPUT->GetWorldMousePos().y << endl;
 
+    Vector2 dir = INPUT->GetWorldMousePos() - player.GetWorldPos();
+    player.rotation = Utility::DirToRadian(dir);
+
     // player.color = Color(RANDOM->Float(), RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), 1.0f);
     // player.SetWorldPos(lastPos);
 
@@ -74,10 +88,6 @@ void Main::Update()
     }
 
     // player.rotation += 200.0f * ToRadian * DELTA;
-
-    Vector2 Dis = INPUT->GetWorldMousePos() - player.GetWorldPos();
-    player.rotation = Utility::DirToRadian(Dis);
-
 
     if (INPUT->KeyDown(VK_LBUTTON))
     {
@@ -129,6 +139,8 @@ void Main::LateUpdate()
 
 void Main::Render()
 {
+    xAxis.Render();
+    yAxis.Render();
     player.Render();
     pet.Render();
     playerShootGauge.Render();
@@ -148,7 +160,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, in
 {
     app.SetAppName(L"À¯ÀçÁØ Game1");
     app.SetInstance(instance);
-    app.InitWidthHeight(1280.0f, 720.0f);
+    app.InitWidthHeight(1200.0f, 600.0f);
     Main* main = new Main();
     int wParam = (int)WIN->Run(main);
     WIN->DeleteSingleton();
