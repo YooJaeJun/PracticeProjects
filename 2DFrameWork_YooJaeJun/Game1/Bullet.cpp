@@ -23,58 +23,18 @@ void Bullet::Update(ObRect player)
 
     //scalar += 300.0f * DELTA;
 
-    // gravity += 600.0f * DELTA;
-    // Vector2 velocity = fireDir * arrowScalar + DOWN * gravity;
+    gravity += 600.0f * DELTA;
+    Vector2 velocity = fireDir * arrowScalar + DOWN * gravity;
 
-
-    Vector2 arrowPos = arrow.GetWorldPos();
-    float halfWidth = app.GetHalfWidth();
-    float halfHeight = app.GetHalfHeight();
-    Vector2 cameraPos = CAM->position;
-    Vector2 velocity;
-    
-    // x 초과
-    if (arrowPos.x < -halfWidth + cameraPos.x ||
-        arrowPos.x > halfWidth + cameraPos.x)
-    {
-        fireDir.x = -fireDir.x;
-        velocity = fireDir * arrowScalar;
-        if (arrowPos.x < -halfWidth + cameraPos.x)
-            arrow.SetWorldPosX(-halfWidth + cameraPos.x);
-
-        else if (arrowPos.x > halfWidth + cameraPos.x)
-            arrow.SetWorldPosX(halfWidth + cameraPos.x);
-    }
-    // y 초과
-    else if (arrowPos.y < -halfHeight + cameraPos.y ||
-        arrowPos.y > halfHeight + cameraPos.y)
-    {
-        fireDir.y = -fireDir.y;
-        velocity = fireDir * arrowScalar;
-        if (arrowPos.y < -halfHeight + cameraPos.y)
-            arrow.SetWorldPosY(-halfHeight + cameraPos.y);
-
-        else if (arrowPos.y > halfHeight + cameraPos.y)
-            arrow.SetWorldPosY(halfHeight + cameraPos.y);
-    }
-    // 일반
-    else
-    {
-        velocity = fireDir * arrowScalar;
-        arrow.MoveWorldPos(velocity * DELTA);
-    }
-
-    arrowPet.rotation2 += 360.0f * ToRadian * DELTA;
-
+    arrow.MoveWorldPos(velocity * DELTA);
     arrow.rotation = Utility::DirToRadian(velocity);
 
-
-
+    arrowPet.rotation2 += 360.0f * ToRadian * DELTA;
 
     arrow.Update();
     arrowPet.Update();
 
-    Vector2 Dis = arrow.GetWorldPos() - player.GetWorldPos();
+    /*Vector2 Dis = arrow.GetWorldPos() - player.GetWorldPos();
 
     float dis = Dis.Length();
 
@@ -82,6 +42,35 @@ void Bullet::Update(ObRect player)
     {
         arrow.isVisible = false;
         arrowPet.isVisible = false;
+    }*/
+}
+
+void Bullet::LateUpdate()
+{
+    // 위
+    if (arrow.GetWorldPos().y >= app.GetHalfHeight() + CAM->position.y)
+    {
+        fireDir.y *= -1.0f;
+        arrow.SetWorldPosY(app.GetHalfHeight() + CAM->position.y);
+    }
+    // 아래
+    if (arrow.GetWorldPos().y <= -app.GetHalfHeight() /* + CAM->position.y*/)
+    {
+        fireDir.y *= -1.0f;
+        arrowScalar = 150.0f + arrowScalar * 5.0f;
+        arrow.SetWorldPosY(-app.GetHalfHeight() /*+ CAM->position.y */);
+    }
+    // 오른쪽
+    if (arrow.GetWorldPos().x >= app.GetHalfWidth() + CAM->position.x)
+    {
+        fireDir.x *= -1.0f;
+        arrow.SetWorldPosX(app.GetHalfWidth() + CAM->position.x);
+    }
+    // 왼쪽
+    if (arrow.GetWorldPos().x <= -app.GetHalfWidth() + CAM->position.x)
+    {
+        fireDir.x *= -1.0f;
+        arrow.SetWorldPosX(-app.GetHalfWidth() + CAM->position.x);
     }
 }
 

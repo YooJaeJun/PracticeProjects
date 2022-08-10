@@ -144,10 +144,10 @@ void Main::Update()
 
 void Main::LateUpdate()
 {
-    /*lastPos = player.GetWorldPos();
-    player.SetWorldPos(lastPos + Vector2(RANDOM->Float(-30,30), RANDOM->Float(-30, 30)));
-
-    player.Update();*/
+    for (int i = 0; i < MAX; i++)
+    {
+        bullet[i].LateUpdate();
+    }
 }
 
 void Main::Render()

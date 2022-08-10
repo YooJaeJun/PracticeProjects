@@ -15,6 +15,7 @@ public:
 public:
     Bullet();
     void Update(ObRect player);
+    void LateUpdate();
     void Render();
     bool Shoot(ObRect player, float scalar, Vector2 firePos);
 };
