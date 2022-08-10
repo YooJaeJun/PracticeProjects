@@ -9,7 +9,7 @@ Bullet::Bullet()
     //isFired = false;
 
     arrowPet.SetLocalPos(Vector2(30.0f, 30.0f));
-    arrowPet.scale = Vector2(20.0f, 20.0f);
+    arrowPet.scale = Vector2(15.0f, 15.0f);
     arrowPet.isVisible = false;
     arrowPet.isAxis = true;
     arrowPet.SetParentRT(arrow);
@@ -22,16 +22,54 @@ void Bullet::Update(ObRect player)
     if (!arrowPet.isVisible) return;
 
     //scalar += 300.0f * DELTA;
-    //cout << scalar << endl;
 
-    gravity += 600.0f * DELTA;
+    // gravity += 600.0f * DELTA;
+    // Vector2 velocity = fireDir * arrowScalar + DOWN * gravity;
 
-    Vector2 velocity = fireDir * arrowScalar + DOWN * gravity;
 
-    arrow.MoveWorldPos(velocity * DELTA);
+    Vector2 arrowPos = arrow.GetWorldPos();
+    float halfWidth = app.GetHalfWidth();
+    float halfHeight = app.GetHalfHeight();
+    Vector2 cameraPos = CAM->position;
+    Vector2 velocity;
+    
+    // x 초과
+    if (arrowPos.x < -halfWidth + cameraPos.x ||
+        arrowPos.x > halfWidth + cameraPos.x)
+    {
+        fireDir.x = -fireDir.x;
+        velocity = fireDir * arrowScalar;
+        if (arrowPos.x < -halfWidth + cameraPos.x)
+            arrow.SetWorldPosX(-halfWidth + cameraPos.x);
+
+        else if (arrowPos.x > halfWidth + cameraPos.x)
+            arrow.SetWorldPosX(halfWidth + cameraPos.x);
+    }
+    // y 초과
+    else if (arrowPos.y < -halfHeight + cameraPos.y ||
+        arrowPos.y > halfHeight + cameraPos.y)
+    {
+        fireDir.y = -fireDir.y;
+        velocity = fireDir * arrowScalar;
+        if (arrowPos.y < -halfHeight + cameraPos.y)
+            arrow.SetWorldPosY(-halfHeight + cameraPos.y);
+
+        else if (arrowPos.y > halfHeight + cameraPos.y)
+            arrow.SetWorldPosY(halfHeight + cameraPos.y);
+    }
+    // 일반
+    else
+    {
+        velocity = fireDir * arrowScalar;
+        arrow.MoveWorldPos(velocity * DELTA);
+    }
+
     arrowPet.rotation2 += 360.0f * ToRadian * DELTA;
 
     arrow.rotation = Utility::DirToRadian(velocity);
+
+
+
 
     arrow.Update();
     arrowPet.Update();

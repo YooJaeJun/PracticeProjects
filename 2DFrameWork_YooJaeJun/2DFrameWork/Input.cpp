@@ -30,9 +30,13 @@ bool Input::KeyUp(int KeyCode)
 void Input::Update()
 {
     // Screen To World
+    // mouseWorldPos.x = mouseScreenPos.x - app.GetHalfWidth();
     mouseWorldPos.x = -app.GetHalfWidth() + mouseScreenPos.x + CAM->position.x;
-    // mouseWorldPos.y = app.GetHeight() - app.GetHalfHeight() - mouseScreenPos.y ;     // y증가량이 다를 때 
+
+    // mouseWorldPos.y = app.GetHeight() - mouseScreenPos.y - app.GetHalfHeight();
+    // mouseWorldPos.y = app.GetHeight() - app.GetHalfHeight() - mouseScreenPos.y ;
     mouseWorldPos.y = app.GetHalfHeight() - mouseScreenPos.y + CAM->position.y;
+
 
     //메모리복사 keyOldState = keyState 
     memcpy(keyOldState, keyState, sizeof(keyOldState));

@@ -86,22 +86,18 @@ void Main::Update()
     if (INPUT->KeyPress('W'))
     {
         player.MoveWorldPos(player.GetUp() * 400.0f * DELTA);
-        // player.MoveWorldPos(UP * 400.0f * DELTA);
     }
     else if (INPUT->KeyPress('S'))
     {
         player.MoveWorldPos(-player.GetUp() * 400.0f * DELTA);
-        // player.MoveWorldPos(DOWN * 400.0f * DELTA);
     }
     if (INPUT->KeyPress('A'))
     {
         player.MoveWorldPos(-player.GetRight() * 400.0f * DELTA);
-        // player.MoveWorldPos(LEFT * 400.0f * DELTA);
     }
     else if (INPUT->KeyPress('D'))
     {
         player.MoveWorldPos(player.GetRight() * 400.0f * DELTA);
-        // player.MoveWorldPos(RIGHT * 400.0f * DELTA);
     }
 
     // player.rotation += 200.0f * ToRadian * DELTA;

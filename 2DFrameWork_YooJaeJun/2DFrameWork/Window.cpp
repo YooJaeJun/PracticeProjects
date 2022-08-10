@@ -133,7 +133,7 @@ void Window::Load()
 	if (fin.is_open())
 	{
 		string temp;
-		fin >> temp >> app.width >> app.height;
+		// fin >> temp >> app.width >> app.height;
 		fin >> temp >> app.x >> app.y;
 		fin.close();
 	}
@@ -160,7 +160,7 @@ void Window::Save()
 	fout.open(file.c_str(), ios::out);
 	if (fout.is_open())
 	{
-		fout << "Size " << app.width << " " << app.height << endl;
+		// fout << "Size " << app.width << " " << app.height << endl;
 		fout << "Pos " << app.x << " " << app.y << endl;
 		fout.close();
 	}
@@ -170,7 +170,6 @@ void Window::Save()
 
 void Window::Destroy()
 {
-
 	if (app.fullScreen == true)
 		ChangeDisplaySettings(NULL, 0);
 
