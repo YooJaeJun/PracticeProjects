@@ -15,7 +15,6 @@ class GameObject
 {
 	//static member
 private:
-	static ObLine*			axisObject;
 	static ID3D11Buffer*	WVPBuffer;
 	static ID3D11Buffer*	colorBuffer;
 
@@ -33,6 +32,7 @@ private:
 	Matrix		S, R, T, R2, RT, Pi, WVP;
 	Matrix*		P;
 	Vector2		position;
+	static ObLine* axisObject;
 
 protected:
 	Matrix		W;
@@ -66,7 +66,9 @@ public:
 public:
 	//위치 받아오기
 	Vector2 GetLocalPos()	{ return position;}
-	Vector2 GetWorldPos()	{ return Vector2(RT._41, RT._42); }
+	Vector2 GetWorldPos()	{ 
+		return Vector2(RT._41, RT._42); 
+	}
 	Vector2 GetWorldPivot() { return Vector2(W._41, W._42); }
 	//위치를 고정할때 =
 	void	SetLocalPos(Vector2 location)	{ position = location; }

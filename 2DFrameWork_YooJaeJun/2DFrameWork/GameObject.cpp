@@ -103,11 +103,11 @@ void GameObject::Render()
 		axisObject->Update();
 		axisObject->Render();
 		//up
-		axisObject->rotation= Utility::DirToRadian(GetUp());
+		/*axisObject->rotation= Utility::DirToRadian(GetUp());
 		axisObject->scale.x = scale.y * 2.0f;
 		axisObject->color = Color(0.0f, 1.0f, 0.0f, 1.0f);
 		axisObject->Update();
-		axisObject->Render();
+		axisObject->Render();*/
 	}
 	switch (space)
 	{

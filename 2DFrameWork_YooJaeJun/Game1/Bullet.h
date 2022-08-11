@@ -2,11 +2,11 @@
 class Bullet
 {
 public:
-    ObLine		arrow;
+    ObLine		hitbox;
     ObCircle    arrowPet;
     //bool		isFired;
 
-    float       arrowScalar;
+    float       scalar;
     float       arrowPetScalar;
     Vector2     fireDir;
 
