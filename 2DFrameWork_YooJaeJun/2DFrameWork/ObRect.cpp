@@ -120,7 +120,7 @@ void ObRect::Render()
             &fillVertexBuffer,
             &stride,
             &offset);
-        D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+        D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);   // 그릴 모양
         D3D->GetDC()->Draw(4, 0);
     }
     else

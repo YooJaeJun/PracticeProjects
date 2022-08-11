@@ -60,6 +60,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{54A271
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Txt", "Txt", "{BC1DD457-26F1-4145-994B-7D33F751C292}"
 	ProjectSection(SolutionItems) = preProject
+		렌더링 파이프라인.txt = 렌더링 파이프라인.txt
 		Txt\벡터.txt = Txt\벡터.txt
 		Txt\삼각함수.txt = Txt\삼각함수.txt
 		Txt\좌표해상도.txt = Txt\좌표해상도.txt

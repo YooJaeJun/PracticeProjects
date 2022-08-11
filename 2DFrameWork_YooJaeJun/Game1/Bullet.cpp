@@ -51,27 +51,35 @@ void Bullet::LateUpdate()
     if (hitbox.GetWorldPos().y >= app.GetHalfHeight() + CAM->position.y)
     {
         fireDir.y *= -1.0f;
-        gravity -= gravity * gravityCoef;
+        gravity *= -1.0f;
+        scalar *= 0.7f;
+
         hitbox.SetWorldPosY(app.GetHalfHeight() + CAM->position.y);
     }
     // 아래
     if (hitbox.GetWorldPos().y <= -app.GetHalfHeight() + CAM->position.y)
     {
         fireDir.y *= -1.0f;
-        gravity -= gravity * gravityCoef;
-        if (gravityCoef > 0.0f) gravityCoef -= 0.1f;
-        // arrow.SetWorldPosY(-app.GetHalfHeight() + CAM->position.y);
+        gravity *= -1.0f;
+        scalar *= 0.7f;
+        gravity *= 0.7f;
+
+        hitbox.SetWorldPosY(-app.GetHalfHeight() + CAM->position.y);
     }
     // 오른쪽
     if (hitbox.GetWorldPos().x >= app.GetHalfWidth() + CAM->position.x)
     {
         fireDir.x *= -1.0f;
+        scalar *= 0.7f;
+
         hitbox.SetWorldPosX(app.GetHalfWidth() + CAM->position.x);
     }
     // 왼쪽
     if (hitbox.GetWorldPos().x <= -app.GetHalfWidth() + CAM->position.x)
     {
         fireDir.x *= -1.0f;
+        scalar *= 0.7f;
+
         hitbox.SetWorldPosX(-app.GetHalfWidth() + CAM->position.x);
     }
 }
@@ -94,7 +102,7 @@ bool Bullet::Shoot(ObRect player, float scalar, Vector2 firePos)
 
         //              150 ~ 450
         //this->scalar = -scalar * 5.0f;
-        scalar = 150.0f + scalar * 5.0f;
+        this->scalar = 150.0f + scalar * 5.0f;
         arrowPetScalar = 100.0f + scalar * 3.0f;
         fireDir = player.GetRight();
 
