@@ -11,6 +11,7 @@ public:
     Vector2     fireDir;
 
     float       gravity;
+    float       gravityCoef;
 
 public:
     Bullet();

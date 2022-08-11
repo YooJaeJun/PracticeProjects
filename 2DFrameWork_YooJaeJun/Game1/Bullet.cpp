@@ -25,19 +25,19 @@ void Bullet::Update(ObRect player)
 
     gravity += 600.0f * DELTA;
     Vector2 velocity = fireDir * arrowScalar + DOWN * gravity;
+    // cout << "gravity: " << gravity << '\n';
 
     arrow.MoveWorldPos(velocity * DELTA);
-    arrow.rotation = Utility::DirToRadian(velocity);
 
+    arrow.rotation = Utility::DirToRadian(velocity);
     arrowPet.rotation2 += 360.0f * ToRadian * DELTA;
+
 
     arrow.Update();
     arrowPet.Update();
 
     /*Vector2 Dis = arrow.GetWorldPos() - player.GetWorldPos();
-
     float dis = Dis.Length();
-
     if (dis > 2000.0f)
     {
         arrow.isVisible = false;
@@ -51,14 +51,16 @@ void Bullet::LateUpdate()
     if (arrow.GetWorldPos().y >= app.GetHalfHeight() + CAM->position.y)
     {
         fireDir.y *= -1.0f;
+        gravity -= gravity * gravityCoef;
         arrow.SetWorldPosY(app.GetHalfHeight() + CAM->position.y);
     }
     // 아래
-    if (arrow.GetWorldPos().y <= -app.GetHalfHeight() /* + CAM->position.y*/)
+    if (arrow.GetWorldPos().y <= -app.GetHalfHeight() + CAM->position.y)
     {
         fireDir.y *= -1.0f;
-        arrowScalar = 150.0f + arrowScalar * 5.0f;
-        arrow.SetWorldPosY(-app.GetHalfHeight() /*+ CAM->position.y */);
+        gravity -= gravity * gravityCoef;
+        if (gravityCoef > 0.0f) gravityCoef -= 0.1f;
+        // arrow.SetWorldPosY(-app.GetHalfHeight() + CAM->position.y);
     }
     // 오른쪽
     if (arrow.GetWorldPos().x >= app.GetHalfWidth() + CAM->position.x)
@@ -97,6 +99,7 @@ bool Bullet::Shoot(ObRect player, float scalar, Vector2 firePos)
         fireDir = player.GetRight();
 
         gravity = 0.0f;
+        gravityCoef = 1.9f;
 
         arrowPet.rotation2 = 0.0f;
 

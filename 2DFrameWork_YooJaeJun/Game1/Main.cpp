@@ -3,12 +3,12 @@
 
 void Main::Init()
 {
-    xAxis.scale.x = 1200.0f;
+    xAxis.scale.x = 1280.0f;
     xAxis.color = Color(1.0f, 0.0f, 0.0f, 1.0f);
     xAxis.pivot = OFFSET_N;
     xAxis.Update();
 
-    yAxis.scale.x = 600.0f;
+    yAxis.scale.x = 720.0f;
     yAxis.color = Color(0.0f, 1.0f, 0.0f, 1.0f);
     yAxis.pivot = OFFSET_N;
     yAxis.rotation = DIV2PI;
@@ -173,7 +173,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, in
 {
     app.SetAppName(L"À¯ÀçÁØ Game1");
     app.SetInstance(instance);
-    app.InitWidthHeight(1200.0f, 600.0f);
+    app.InitWidthHeight(1280.0f, 720.0f);
     Main* main = new Main();
     int wParam = (int)WIN->Run(main);
     WIN->DeleteSingleton();
