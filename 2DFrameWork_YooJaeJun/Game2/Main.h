@@ -14,6 +14,8 @@ private:
 	short				state;
 	enum class estate { run, end };
 
+	ObLine lines[7];	// 종료 문자 렌더할 선들
+
 public:
 	float width;
 	float height;

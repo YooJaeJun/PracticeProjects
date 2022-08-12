@@ -9,6 +9,7 @@ void Main::Init()
     
     enemy = make_shared<Unit>();
     enemy->hitbox.SetWorldPos(Vector2(500.0f, -250.0f));
+    enemy->hitbox.rotationY = 180.0f * ToRadian;
     enemy->name = "2p";
 
     for (int i = 0; i < bulletMax; i++) 
@@ -26,6 +27,28 @@ void Main::Init()
     cout << "½ÃÀÛ \n";
     cout << "-----\n\n";
     cout << "1p ÅÏ \n";
+
+
+    for (auto& line : lines)
+    {
+        line.scale.x = 100.0f;
+        line.color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    lines[0].SetWorldPos(Vector2(-100.0f, 120.0f));
+    lines[1].SetWorldPos(Vector2(0.0f, 120.0f));
+    lines[1].rotation = -90.0f * ToRadian;
+    lines[2].SetWorldPos(Vector2(0.0f, 120.0f));
+    lines[3].SetWorldPos(Vector2(100.0f, 120.0f));
+    lines[3].rotation = -90.0f * ToRadian;
+
+    lines[4].SetWorldPos(Vector2(-120.0f, 0.0f));
+    lines[4].scale.x = 240.0f;
+
+    lines[5].SetWorldPos(Vector2(0.0f, -20.0f));
+    lines[5].rotation = -120.0f * ToRadian;
+    lines[6].SetWorldPos(Vector2(0.0f, -20.0f));
+    lines[6].rotation = -60.0f * ToRadian;
 }
 
 void Main::Release()
@@ -72,6 +95,8 @@ void Main::Act(shared_ptr<Unit> unit)
 
 void Main::Update()
 {
+    if (state == (int)estate::end) return;
+
     if (INPUT->KeyDown('R'))
     {
         state = (int)estate::run;
@@ -97,6 +122,8 @@ void Main::Update()
     }
 
     ground->Update();
+
+    for (auto& line : lines) line.Update();
 }
 
 void Main::LateUpdate()
@@ -159,6 +186,12 @@ void Main::LateUpdate()
 
 void Main::Render()
 {
+    // if (state == (int)estate::end)
+    // {
+        for (auto& line : lines) line.Render();
+        //return;
+    // }
+
     player->Render();
     enemy->Render();
 

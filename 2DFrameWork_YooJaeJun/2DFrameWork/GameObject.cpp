@@ -62,6 +62,8 @@ GameObject::GameObject()
 	scale.y = 1.0f;
 
 	rotation = 0;
+	rotationX = 0;
+	rotationY = 0;
 	rotation2 = 0;
 	color = Color(0.5, 0.5, 0.5, 0.5);
 	isVisible = true;
@@ -78,10 +80,12 @@ void GameObject::Update()
 	Pi = Matrix::CreateTranslation(pivot.x, pivot.y, 0.0f);
 	S = Matrix::CreateScale(scale.x, scale.y, 1.0f);
 	R = Matrix::CreateRotationZ(rotation);
+	RX = Matrix::CreateRotationX(rotationX);	//
+	RY = Matrix::CreateRotationY(rotationY);
 	T = Matrix::CreateTranslation(position.x, position.y, 0.0f);
 	R2 = Matrix::CreateRotationZ(rotation2);
 
-	RT = R * T * R2;
+	RT = R * RX * RY * T * R2;
 	
 	//P의 주소가 있으면
 	if (P)
@@ -89,6 +93,7 @@ void GameObject::Update()
 		RT *= *P;
 	}
 	W = Pi * S * RT;
+
 }
 
 void GameObject::Render()

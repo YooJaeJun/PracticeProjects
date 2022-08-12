@@ -51,6 +51,9 @@ public:
 	COLLIDER	collider;
 	bool		colOnOff;
 
+	Matrix		RX, RY;
+	float		rotationX, rotationY;
+
 	//member function
 public:
 	GameObject();

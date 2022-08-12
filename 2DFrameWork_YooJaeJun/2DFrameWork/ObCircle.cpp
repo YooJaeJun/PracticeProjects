@@ -7,13 +7,13 @@ void ObCircle::CreateStaticMember()
     VertexPC* Vertex;
     Vertex = new VertexPC[360 * 3];
 
-    Color col1 = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
     for (UINT i = 0; i < 360; i++)
     {
         Vertex[i * 3].position.x = 0.0f;
         Vertex[i * 3].position.y = 0.0f;
         Vertex[i * 3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+        // Vertex[i * 3].color = Color(RANDOM->Float(), RANDOM->Float(), RANDOM->Float(), 1.0f);    // 삼각형 360개 확인
+
 
         //0 1 2 ... 359
         Vertex[i * 3 + 1].position.x = cosf(i * ToRadian) * 0.5f;

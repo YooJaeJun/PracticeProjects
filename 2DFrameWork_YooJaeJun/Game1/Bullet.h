@@ -2,7 +2,7 @@
 class Bullet
 {
 public:
-    ObLine		hitbox;
+    ObLine		arrow;
     ObCircle    arrowPet;
     //bool		isFired;
 
