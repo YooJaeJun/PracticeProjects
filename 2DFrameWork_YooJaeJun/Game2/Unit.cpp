@@ -2,12 +2,12 @@
 
 Unit::Unit()
 {
-    Init();
+    Init(Vector2(-500.0f, -250.0f));
 }
 
-void Unit::Init()
+void Unit::Init(const Vector2& pos)
 {
-    hitbox.SetWorldPos(Vector2(-500.0f, -300.0f));
+    hitbox.SetWorldPos(pos);
     hitbox.scale = Vector2(80.0f, 80.0f);
     hitbox.rotation = 0.0f;
     hitbox.isFilled = true;
@@ -75,20 +75,22 @@ void Unit::Move()
     }
 }
 
-void Unit::HitFrom(float damage)
+bool Unit::HitFrom(float damage)
 {
-    hitState = true;
+    hitState = true;    // Update에서 피격 이펙트 처리
     hpGauge.scale.x -= damage;
-    cout << name << "충돌!  Hp " << hpGauge.scale.x << "/" << hpGaugeFrame.scale.x << '\n';
+    cout << name << " 피격!  Hp " << hpGauge.scale.x << "/" << hpGaugeFrame.scale.x << '\n';
     if (hpGauge.scale.x <= 0.0f)
     {
         hpGauge.scale.x = 0.0f;
         hitbox.SetWorldPos(Vector2(2000.0f, 2000.0f));
         hitbox.isVisible = false;
-        cout << "------------------------------\n";
+        cout << "--------------------\n";
         cout << name << "사망!  게임 종료! \n";
-        cout << "------------------------------\n";
+        cout << "--------------------\n";
+        return true;
     }
+    return false;
 }
 
 void Unit::Update()
@@ -97,6 +99,7 @@ void Unit::Update()
     {
         hitEffectTime += 100.0f * DELTA;
         hitbox.color = Color(1.0f, RANDOM->Float(0.0f, 0.4f), RANDOM->Float(0.0f, 0.4f), 1.0f);
+        hitbox.SetWorldPos(Vector2(hitbox.GetWorldPos().x + RANDOM->Float(-2.0f, 2.0f), hitbox.GetWorldPos().y));
         if (hitEffectTime > 30.0f)
         {
             hitState = false;
@@ -105,6 +108,7 @@ void Unit::Update()
         }
     }
 
+    lastPos = hitbox.GetWorldPos();
 
     hitbox.Update();
     shootGauge.Update();

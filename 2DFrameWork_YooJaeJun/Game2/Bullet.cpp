@@ -2,6 +2,11 @@
 
 Bullet::Bullet()
 {
+    Init();
+}
+
+void Bullet::Init()
+{
     hitbox.SetWorldPos(Vector2(2000.0f, 2000.0f));
     hitbox.scale = Vector2(15.0f, 15.0f);
     hitbox.rotation = 0.0f;
@@ -33,7 +38,7 @@ void Bullet::Update(ObCircle player)
     }
 }
 
-void Bullet::LateUpdate()
+bool Bullet::LateUpdate()
 {
     if (hitbox.isVisible and
         (hitbox.GetWorldPos().y >= app.GetHalfHeight() + CAM->position.y or
@@ -44,7 +49,9 @@ void Bullet::LateUpdate()
         hitbox.SetWorldPos(Vector2(2000.0f, 2000.0f));
         hitbox.isVisible = false;
         cout << "º® Ãæµ¹! \n";
+        return true;
     }
+    return false;
 }
 
 void Bullet::Render()
