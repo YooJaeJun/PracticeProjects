@@ -3,12 +3,43 @@
   <ItemGroup>
     <ClInclude Include="Main.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="Unit.h" />
+    <ClInclude Include="Bullet.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Game">
+      <UniqueIdentifier>{a09c9430-4c27-4bb9-9f73-73e3c92387dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

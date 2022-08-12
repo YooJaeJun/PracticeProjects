@@ -9,7 +9,7 @@ private:
 
 	ObRect		playerShootGauge;
 	ObRect		playerShootGaugeFrame;
-	Bullet		bullet[MAX];
+	Bullet		bullets[MAX];
 	Vector2		lastPos;
 
 	GameObject	firePos;

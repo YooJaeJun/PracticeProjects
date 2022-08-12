@@ -121,7 +121,7 @@ void Main::Update()
     {
         for (int i = 0; i < MAX; i++)
         {
-            if (bullet[i].Shoot(player, playerShootGauge.scale.x, firePos.GetWorldPos()))
+            if (bullets[i].Shoot(player, playerShootGauge.scale.x, firePos.GetWorldPos()))
             {
                 break;
             }
@@ -135,7 +135,7 @@ void Main::Update()
 
     for (int i = 0; i < MAX; i++)
     {
-        bullet[i].Update(player);
+        bullets[i].Update(player);
     }
     playerShootGauge.Update();
     playerShootGaugeFrame.Update();
@@ -146,7 +146,7 @@ void Main::LateUpdate()
 {
     for (int i = 0; i < MAX; i++)
     {
-        bullet[i].LateUpdate();
+        bullets[i].LateUpdate();
     }
 }
 
@@ -160,7 +160,7 @@ void Main::Render()
     playerShootGaugeFrame.Render();
     for (int i = 0; i < MAX; i++)
     {
-        bullet[i].Render();
+        bullets[i].Render();
     }
     firePos.Render();
 }

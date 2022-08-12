@@ -25,12 +25,12 @@ void ObRect::CreateStaticMember()
     Vertex[2].position.x = 0.5f;
     Vertex[2].position.y = -0.5f;
     //파란색
-    Vertex[2].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+    Vertex[2].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[3].position.x = 0.5f;
     Vertex[3].position.y = 0.5f;
     //파란색
-    Vertex[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+    Vertex[3].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     //CreateVertexBuffer
     {

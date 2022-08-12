@@ -8,10 +8,12 @@ Bullet::Bullet()
 void Bullet::Init()
 {
     hitbox.SetWorldPos(Vector2(2000.0f, 2000.0f));
-    hitbox.scale = Vector2(15.0f, 15.0f);
+    hitbox.scale = Vector2(25.0f, 25.0f);
     hitbox.rotation = 0.0f;
     hitbox.isVisible = false;
     hitbox.color = Color(0.3f, 1.0f, 0.3f, 1.0f);
+    hitEffectTime = 0.0f;
+    state = (int)estate::die;
 }
 
 void Bullet::Update(ObCircle player)
@@ -19,9 +21,8 @@ void Bullet::Update(ObCircle player)
     if (!hitbox.isVisible) return;
 
     //scalar += 300.0f * DELTA;
-
     gravity += 600.0f * DELTA;
-    Vector2 velocity = fireDir * scalar + DOWN * gravity;
+    velocity = fireDir * scalar + DOWN * gravity;
     
     hitbox.MoveWorldPos(velocity * DELTA);
 
@@ -30,11 +31,14 @@ void Bullet::Update(ObCircle player)
     
     hitbox.Update();
 
-    Vector2 Dis = hitbox.GetWorldPos() - player.GetWorldPos();
-    float dis = Dis.Length();
-    if (dis > 2000.0f)
+    if (state == (int)estate::hit)
     {
-        hitbox.isVisible = false;
+        hitEffectTime += 100.0f * DELTA;
+        if (hitEffectTime > 30.0f)
+        {
+            state = (int)estate::die;
+            hitEffectTime = 0.0f;
+        }
     }
 }
 
@@ -46,10 +50,7 @@ bool Bullet::LateUpdate()
         hitbox.GetWorldPos().x >= app.GetHalfWidth() + CAM->position.x or
         hitbox.GetWorldPos().x <= -app.GetHalfWidth() + CAM->position.x))
     {
-        hitbox.SetWorldPos(Vector2(2000.0f, 2000.0f));
-        hitbox.isVisible = false;
-        cout << "벽 충돌! \n";
-        return true;
+        return HitFrom(999.0f);
     }
     return false;
 }
@@ -59,10 +60,12 @@ void Bullet::Render()
     hitbox.Render();
 }
 
+
 bool Bullet::Shoot(ObCircle player, float scalar, Vector2 firePos)
 {
     if (hitbox.isVisible) return false;
 
+    state = (int)estate::alive;
     hitbox.isVisible = true;
 
     hitbox.SetWorldPos(firePos);
@@ -73,5 +76,14 @@ bool Bullet::Shoot(ObCircle player, float scalar, Vector2 firePos)
 
     gravity = 0.0f;
 
+    return true;
+}
+
+bool Bullet::HitFrom(const float damage)
+{
+    state = (int)estate::hit;
+    hitbox.SetWorldPos(Vector2(2000.0f, 2000.0f));
+    hitbox.isVisible = false;
+    cout << "벽 충돌! \n";
     return true;
 }
