@@ -2,7 +2,8 @@
 class Platform
 {
 public:
-	ObRect		hitbox;
+	shared_ptr<GameObject>		hitbox;
+	string						name;
 
 public:
 	void Init();

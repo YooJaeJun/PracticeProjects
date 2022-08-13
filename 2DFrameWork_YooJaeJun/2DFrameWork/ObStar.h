@@ -1,10 +1,17 @@
 #pragma once
 class ObStar : public GameObject
 {
-public:
-	Vector2 vertex[5];
+private:
+    static const int VertexCount = 31;
+    static ID3D11Buffer* fillVertexBuffer;
+    static ID3D11Buffer* vertexBuffer;
 
-	ObStar();
-	void Render() override;
+public:
+    static void CreateStaticMember();
+    static void DeleteStaticMember();
+
+public:
+    ObStar();
+    void Render()override;
 };
 

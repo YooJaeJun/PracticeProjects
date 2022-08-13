@@ -10,6 +10,7 @@ enum class COLLIDER
 	NONE,
 	RECT,
 	CIRCLE, // 가운데가 0,0인
+	STAR
 };
 class GameObject
 {

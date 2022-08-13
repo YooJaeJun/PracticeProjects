@@ -2,16 +2,17 @@
 class Bullet : public Unit
 {
 public:
-    float       scalar;
-    Vector2     fireDir;
+    float           scalar;
+    Vector2         fireDir;
+    const float     damage = 40.0f;
 
 public:
     Bullet();
     void Init();
-    void Update(ObCircle player);
+    void Update();
     bool LateUpdate() override;
     void Render() override;
-    bool Shoot(ObCircle player, float scalar, Vector2 firePos);
-    bool HitFrom(const float damage);
+    bool Shoot(const shared_ptr<GameObject> player, float scalar, const Vector2 firePos);
+    bool HitFrom(const string& attacker, const float damage);
 };
 

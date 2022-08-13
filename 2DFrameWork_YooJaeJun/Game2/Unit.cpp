@@ -7,17 +7,10 @@ Unit::Unit()
 
 void Unit::Init()
 {
-    hitbox.SetWorldPos(Vector2(2000.0f, 2000.0f));
-    hitbox.scale = Vector2(80.0f, 80.0f);
-    hitbox.rotation = 30.0f * ToRadian;
-    hitbox.isFilled = true;
-    hitbox.isAxis = false;
-    hitbox.color = Color(0.2f, 0.2f, 0.8f, 1.0f);
-    hitbox.pivot = OFFSET_N;
-
+    gravity = 600.0f * DELTA;
+    velocity = Vector2(0.0f, 0.0f);
     hitEffectTime = 0.0f;
     state = (int)estate::alive;
-
     onGround = true;
 }
 
@@ -29,8 +22,10 @@ bool Unit::HitFrom(const float damage)
 
 void Unit::Update()
 {
-    lastPos = hitbox.GetWorldPos();
-    hitbox.Update();
+    if (hitbox->isVisible)
+    {
+        lastPos = hitbox->GetWorldPos();
+    }
 }
 
 bool Unit::LateUpdate()
@@ -40,5 +35,4 @@ bool Unit::LateUpdate()
 
 void Unit::Render()
 {
-    hitbox.Render();
 }

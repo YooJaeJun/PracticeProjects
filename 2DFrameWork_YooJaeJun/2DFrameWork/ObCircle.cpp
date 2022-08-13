@@ -11,7 +11,7 @@ void ObCircle::CreateStaticMember()
     {
         Vertex[i * 3].position.x = 0.0f;
         Vertex[i * 3].position.y = 0.0f;
-        Vertex[i * 3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+        Vertex[i * 3].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
         // Vertex[i * 3].color = Color(RANDOM->Float(), RANDOM->Float(), RANDOM->Float(), 1.0f);    // 삼각형 360개 확인
 
 

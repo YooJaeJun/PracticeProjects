@@ -73,6 +73,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sound", "Sound", "{031D9208
 		..\..\..\..\Desktop\Framework\Contents\Sound\gun.wav = ..\..\..\..\Desktop\Framework\Contents\Sound\gun.wav
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game3", "Game3\Game3.vcxproj", "{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -105,6 +107,14 @@ Global
 		{E4AABC26-46D5-436A-BE00-FF12933156D1}.Release|x64.Build.0 = Release|x64
 		{E4AABC26-46D5-436A-BE00-FF12933156D1}.Release|x86.ActiveCfg = Release|Win32
 		{E4AABC26-46D5-436A-BE00-FF12933156D1}.Release|x86.Build.0 = Release|Win32
+		{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}.Debug|x64.ActiveCfg = Debug|x64
+		{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}.Debug|x64.Build.0 = Debug|x64
+		{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}.Debug|x86.ActiveCfg = Debug|Win32
+		{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}.Debug|x86.Build.0 = Debug|Win32
+		{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}.Release|x64.ActiveCfg = Release|x64
+		{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}.Release|x64.Build.0 = Release|x64
+		{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}.Release|x86.ActiveCfg = Release|Win32
+		{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

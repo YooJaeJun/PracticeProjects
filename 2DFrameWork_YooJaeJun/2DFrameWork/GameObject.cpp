@@ -81,7 +81,7 @@ void GameObject::Update()
 	S = Matrix::CreateScale(scale.x, scale.y, 1.0f);
 	R = Matrix::CreateRotationZ(rotation);
 	RX = Matrix::CreateRotationX(rotationX);	//
-	RY = Matrix::CreateRotationY(rotationY);
+	RY = Matrix::CreateRotationY(rotationY);	//
 	T = Matrix::CreateTranslation(position.x, position.y, 0.0f);
 	R2 = Matrix::CreateRotationZ(rotation2);
 

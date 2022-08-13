@@ -2,12 +2,18 @@
 class Player : public Unit
 {
 public:
-	GameObject	firePos;
+	ObRect		firePos;
 	ObRect		muzzle;
 	ObRect		shootGauge;
 	ObRect		shootGaugeFrame;
 	ObRect		hpGauge;
 	ObRect		hpGaugeFrame;
+	ObCircle	wheels[2];
+	ObRect		wheelProps[2];
+	Color		hitboxColor;
+	Color		muzzleColor;
+	Color		wheelColor;
+	Color		wheelPropColor;
 
 public:
 	Player();

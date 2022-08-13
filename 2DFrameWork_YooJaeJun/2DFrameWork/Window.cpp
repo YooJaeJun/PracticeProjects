@@ -14,6 +14,7 @@ WPARAM Window::Run(Scene* main)
 	ObLine::CreateStaticMember();
 	ObCircle::CreateStaticMember();
 	ObImage::CreateStaticMember();
+	ObStar::CreateStaticMember();
 	main->Init();
 	MSG msg = { 0 };
 	while (true)
@@ -51,6 +52,7 @@ WPARAM Window::Run(Scene* main)
 	ObLine::DeleteStaticMember();
 	ObCircle::DeleteStaticMember();
 	ObImage::DeleteStaticMember();
+	ObStar::DeleteStaticMember();
 
 	main->Release();
 	TIMER->DeleteSingleton();

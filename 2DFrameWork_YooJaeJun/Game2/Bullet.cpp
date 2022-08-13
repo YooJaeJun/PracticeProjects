@@ -7,29 +7,34 @@ Bullet::Bullet()
 
 void Bullet::Init()
 {
-    hitbox.SetWorldPos(Vector2(2000.0f, 2000.0f));
-    hitbox.scale = Vector2(25.0f, 25.0f);
-    hitbox.rotation = 0.0f;
-    hitbox.isVisible = false;
-    hitbox.color = Color(0.3f, 1.0f, 0.3f, 1.0f);
+    Unit::Init();
+    hitbox = make_shared<ObCircle>();
+    hitbox->SetWorldPos(Vector2(2000.0f, 2000.0f));
+    hitbox->scale = Vector2(25.0f, 25.0f);
+    hitbox->rotation = 0.0f;
+    hitbox->isVisible = false;
+    hitbox->color = Color(0.3f, 1.0f, 0.3f, 1.0f);
+
     hitEffectTime = 0.0f;
     state = (int)estate::die;
+    name = "총알";
 }
 
-void Bullet::Update(ObCircle player)
+void Bullet::Update()
 {
-    if (!hitbox.isVisible) return;
+    Unit::Update();
+    if (!hitbox->isVisible) return;
 
     //scalar += 300.0f * DELTA;
     gravity += 600.0f * DELTA;
     velocity = fireDir * scalar + DOWN * gravity;
     
-    hitbox.MoveWorldPos(velocity * DELTA);
+    hitbox->MoveWorldPos(velocity * DELTA);
 
-    hitbox.rotation = Utility::DirToRadian(velocity);
+    hitbox->rotation = Utility::DirToRadian(velocity);
 
     
-    hitbox.Update();
+    hitbox->Update();
 
     if (state == (int)estate::hit)
     {
@@ -44,46 +49,49 @@ void Bullet::Update(ObCircle player)
 
 bool Bullet::LateUpdate()
 {
-    if (hitbox.isVisible and
-        (hitbox.GetWorldPos().y >= app.GetHalfHeight() + CAM->position.y or
-        hitbox.GetWorldPos().y <= -app.GetHalfHeight() + CAM->position.y or
-        hitbox.GetWorldPos().x >= app.GetHalfWidth() + CAM->position.x or
-        hitbox.GetWorldPos().x <= -app.GetHalfWidth() + CAM->position.x))
+    Unit::LateUpdate();
+    if (hitbox->isVisible and
+        (/*hitbox->GetWorldPos().y >= app.GetHalfHeight() + CAM->position.y or*/
+        hitbox->GetWorldPos().y <= -app.GetHalfHeight() + CAM->position.y or
+        hitbox->GetWorldPos().x >= app.GetHalfWidth() + CAM->position.x or
+        hitbox->GetWorldPos().x <= -app.GetHalfWidth() + CAM->position.x))
     {
-        return HitFrom(999.0f);
+        return HitFrom("범위 밖", 999.0f);
     }
     return false;
 }
 
 void Bullet::Render()
 {
-    hitbox.Render();
+    Unit::Render();
+    hitbox->Render();
 }
 
 
-bool Bullet::Shoot(ObCircle player, float scalar, Vector2 firePos)
+bool Bullet::Shoot(const shared_ptr<GameObject> player, float scalar, const Vector2 firePos)
 {
-    if (hitbox.isVisible) return false;
+    if (hitbox->isVisible) return false;
 
     state = (int)estate::alive;
-    hitbox.isVisible = true;
+    hitbox->isVisible = true;
+    lastPos = firePos;
+    hitbox->SetWorldPos(firePos);
+    hitbox->rotation = Utility::DirToRadian(player->GetRight());
 
-    hitbox.SetWorldPos(firePos);
-    hitbox.rotation = Utility::DirToRadian(player.GetRight());
-
-    this->scalar = 150.0f + scalar * 7.0f;
-    fireDir = player.GetRight();
+    this->scalar = 200.0f + scalar * 8.0f;
+    fireDir = player->GetRight();
 
     gravity = 0.0f;
+
 
     return true;
 }
 
-bool Bullet::HitFrom(const float damage)
+bool Bullet::HitFrom(const string& attacker, const float damage)
 {
     state = (int)estate::hit;
-    hitbox.SetWorldPos(Vector2(2000.0f, 2000.0f));
-    hitbox.isVisible = false;
-    cout << "벽 충돌! \n";
+    hitbox->SetWorldPos(Vector2(2000.0f, 2000.0f));
+    hitbox->isVisible = false;
+    cout << attacker << " 충돌! \n";
     return true;
 }
