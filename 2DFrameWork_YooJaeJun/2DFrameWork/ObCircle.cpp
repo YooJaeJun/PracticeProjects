@@ -18,13 +18,55 @@ void ObCircle::CreateStaticMember()
         //0 1 2 ... 359
         Vertex[i * 3 + 1].position.x = cosf(i * ToRadian) * 0.5f;
         Vertex[i * 3 + 1].position.y = sinf(i * ToRadian) * 0.5f;
-        Vertex[i * 3 + 1].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+        // Vertex[i * 3 + 1].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
         //1 2 3 .. 360
         Vertex[i * 3 + 2].position.x = cosf((i + 1) * ToRadian) * 0.5f;
         Vertex[i * 3 + 2].position.y = sinf((i + 1) * ToRadian) * 0.5f;
-        Vertex[i * 3 + 2].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+        // Vertex[i * 3 + 2].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+
+
+
+        if (i >= 0 and i < 120)
+        {
+            Vertex[i * 3 + 1].color = Color(
+                1.0f - 1.0f / 120.0f * i,
+                1.0f / 120.0f * i,
+                0.0f);
+
+            Vertex[i * 3 + 2].color = Color(
+                1.0f - 1.0f / 120.0f * i,
+                1.0f / 120.0f * i,
+                0.0f);
+        }
+        else if (i >= 120 and i < 240)
+        {
+            Vertex[i * 3 + 1].color = Color(
+                0.0f,
+                1.0f - 1.0f / 120.0f * (i - 120),
+                1.0f / 120.0f * (i - 120));
+
+            Vertex[i * 3 + 2].color = Color(
+                0.0f,
+                1.0f - 1.0f / 120.0f * (i - 120),
+                1.0f / 120.0f * (i - 120));
+        }
+        else
+        {
+            Vertex[i * 3 + 1].color = Color(
+                1.0f / 120.0f * (i - 240),
+                0.0f,
+                1.0f - 1.0f / 120.0f * (i - 240));
+
+            Vertex[i * 3 + 2].color = Color(
+                1.0f / 120.0f * (i - 240),
+                0.0f,
+                1.0f - 1.0f / 120.0f * (i - 240));
+        }
     }
+
+
+
     //정점들이 버퍼로 옮겨지는 코드
     {
         D3D11_BUFFER_DESC desc;

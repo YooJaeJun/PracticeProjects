@@ -168,12 +168,12 @@ void Player::Move()
         if (INPUT->KeyPress(VK_RIGHT))
         {
             hitbox->SetWorldPos(pos + RIGHT * 300.0f * DELTA);
-            for (auto& wheel : wheels) wheel.rotation -= 300.0f * ToRadian * DELTA;
+            for (auto& wheel : wheels) wheel.rotation -= 350.0f * ToRadian * DELTA;
         }
         else if (INPUT->KeyPress(VK_LEFT))
         {
             hitbox->SetWorldPos(pos + LEFT * 300.0f * DELTA);
-            for (auto& wheel : wheels) wheel.rotation += 300.0f * ToRadian * DELTA;
+            for (auto& wheel : wheels) wheel.rotation += 350.0f * ToRadian * DELTA;
         }
         if (INPUT->KeyPress(VK_UP))
         {

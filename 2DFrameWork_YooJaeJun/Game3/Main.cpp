@@ -6,9 +6,7 @@ void Main::Init()
     circle.SetWorldPos(Vector2(0.0f, 0.0f));
     circle.scale = Vector2(700.0f, 700.0f);
     circle.isFilled = true;
-    circle.isAxis = true;
-    circle.color = Color(0.5f, 0.1f, 0.8f, 1.0f);
-    circle.pivot = OFFSET_N;
+    // circle.color = Color(0.5f, 0.1f, 0.8f, 1.0f);
 }
 
 void Main::Release()

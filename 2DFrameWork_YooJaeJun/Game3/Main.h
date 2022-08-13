@@ -1,6 +1,4 @@
 #pragma once
-#define MAX 30
-
 class Main : public Scene
 {
 private:
