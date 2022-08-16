@@ -170,6 +170,7 @@
     <ClInclude Include="ObLine.h" />
     <ClInclude Include="ObRect.h" />
     <ClInclude Include="ObStar.h" />
+    <ClInclude Include="ObStarPointed.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
@@ -193,6 +194,7 @@
     <ClCompile Include="ObLine.cpp" />
     <ClCompile Include="ObRect.cpp" />
     <ClCompile Include="ObStar.cpp" />
+    <ClCompile Include="ObStarPointed.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />

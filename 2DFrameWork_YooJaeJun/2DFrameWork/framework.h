@@ -93,6 +93,7 @@ extern Application app;//Extern Global
 #include "Utility.h"
 #include "ObRect.h"
 #include "ObStar.h"
+#include "ObStarPointed.h"
 #include "ObCircle.h"
 #include "ObLine.h"
 #include "ObImage.h"

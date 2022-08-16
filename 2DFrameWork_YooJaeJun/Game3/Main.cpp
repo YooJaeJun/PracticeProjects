@@ -3,10 +3,13 @@
 
 void Main::Init()
 {
-    circle.SetWorldPos(Vector2(0.0f, 0.0f));
-    circle.scale = Vector2(700.0f, 700.0f);
+    circle.SetWorldPos(Vector2(200.0f, 0.0f));
+    circle.scale = Vector2(200.0f, 200.0f);
     circle.isFilled = true;
-    // circle.color = Color(0.5f, 0.1f, 0.8f, 1.0f);
+
+    cc.SetWorldPos(Vector2(-200.0f, 0.0f));
+    cc.scale = Vector2(200.0f, 200.0f);
+    cc.isFilled = true;
 }
 
 void Main::Release()
@@ -16,7 +19,7 @@ void Main::Release()
 void Main::Update()
 {
     circle.Update();
-    circle.color = Color(0.2f, 0.1f, 0.8f, 0.5f);
+    cc.Update();
 }
 
 void Main::LateUpdate()
@@ -26,6 +29,7 @@ void Main::LateUpdate()
 void Main::Render()
 {
     circle.Render();
+    cc.Render();
 }
 
 void Main::ResizeScreen()

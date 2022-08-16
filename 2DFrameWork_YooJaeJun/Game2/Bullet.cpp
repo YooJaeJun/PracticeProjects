@@ -87,11 +87,11 @@ bool Bullet::Shoot(const shared_ptr<GameObject> player, float scalar, const Vect
     return true;
 }
 
-bool Bullet::HitFrom(const string& attacker, const float damage)
+bool Bullet::HitFrom(const string& hitter, const float damage)
 {
     state = (int)estate::hit;
     hitbox->SetWorldPos(Vector2(2000.0f, 2000.0f));
     hitbox->isVisible = false;
-    cout << attacker << " 충돌! \n";
+    cout << hitter << " 충돌! \n";
     return true;
 }

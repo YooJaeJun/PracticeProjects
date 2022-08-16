@@ -213,7 +213,7 @@ void Main::LateUpdate()
                     else
                     {
                         turn = (int)eturn::player;
-                        cout << '\n' << player->name << " 턴 \n";
+                        cout << '\n' << enemy->name << " 턴 \n";
                     }
                 }
                 else if (enemyHit)
@@ -227,7 +227,7 @@ void Main::LateUpdate()
                     else
                     {
                         turn = (int)eturn::enemy;
-                        cout << '\n' << enemy->name << " 턴 \n";
+                        cout << '\n' << player->name << " 턴 \n";
                     }
                 }
             }
@@ -316,12 +316,12 @@ void Main::TurnUpdate()
     if (lastTurn == (int)eturn::player)
     {
         turn = (int)eturn::enemy;
-        cout << '\n' << player->name << " 턴 \n";
+        cout << '\n' << enemy->name << " 턴 \n";
     }
     else if (lastTurn == (int)eturn::enemy)
     {
         turn = (int)eturn::player;
-        cout << '\n' << enemy->name << " 턴 \n";
+        cout << '\n' << player->name << " 턴 \n";
     }
 }
 

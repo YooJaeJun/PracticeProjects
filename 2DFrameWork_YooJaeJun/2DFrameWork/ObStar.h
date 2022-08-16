@@ -2,7 +2,7 @@
 class ObStar : public GameObject
 {
 private:
-    static const int VertexCount = 31;
+    static const int VertexCountForFill = 31;
     static ID3D11Buffer* fillVertexBuffer;
     static ID3D11Buffer* vertexBuffer;
 

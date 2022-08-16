@@ -11,7 +11,7 @@ void ObCircle::CreateStaticMember()
     {
         Vertex[i * 3].position.x = 0.0f;
         Vertex[i * 3].position.y = 0.0f;
-        Vertex[i * 3].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+        Vertex[i * 3].color = Color(0.3333f, 0.3333f, 0.3333f, 1.0f);
         // Vertex[i * 3].color = Color(RANDOM->Float(), RANDOM->Float(), RANDOM->Float(), 1.0f);    // 삼각형 360개 확인
 
 
@@ -26,7 +26,33 @@ void ObCircle::CreateStaticMember()
         // Vertex[i * 3 + 2].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
 
+        // r->g
+        if (i < 120)
+        {
+            float color1 = i / 120.0f;
+            float color2 = (i + 1) / 120.0f;
+            Vertex[i * 3 + 1].color = Color(1.0f - color1, color1, 0.0f, 1.0f);
+            Vertex[i * 3 + 2].color = Color(1.0f - color2, color2, 0.0f, 1.0f);
+        }
+        else if (i < 240)
+        {
+            float color1 = (i - 120.0f) / 120.0f;
+            float color2 = ((i - 120.0f) + 1) / 120.0f;
+            Vertex[i * 3 + 1].color = Color(0.0f, 1.0f - color1, color1, 1.0f);
+            Vertex[i * 3 + 2].color = Color(0.0f, 1.0f - color2, color2, 1.0f);
+        }
+        else
+        {
+            float color1 = (i - 240.0f) / 120.0f;
+            float color2 = ((i - 240.0f) + 1) / 120.0f;
+            Vertex[i * 3 + 1].color = Color(color1, 1.0f - color1, 0.0f, 1.0f);
+            Vertex[i * 3 + 2].color = Color(color2, 1.0f - color2, 0.0f, 1.0f);
+        }
+        
 
+
+
+        /*
         if (i >= 0 and i < 120)
         {
             Vertex[i * 3 + 1].color = Color(
@@ -63,11 +89,13 @@ void ObCircle::CreateStaticMember()
                 0.0f,
                 1.0f - 1.0f / 120.0f * (i - 240));
         }
+        */
     }
 
 
 
     //정점들이 버퍼로 옮겨지는 코드
+    //익명 스코프
     {
         D3D11_BUFFER_DESC desc;
         desc = { 0 }; //멤버변수 전부 0으로

@@ -23,7 +23,7 @@
     <ClInclude Include="ObRect.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="ObStar.h">
+    <ClInclude Include="ObStarPointed.h">
       <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Random.h">
@@ -65,6 +65,9 @@
     <ClInclude Include="SceneManager.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="ObStar.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -96,7 +99,7 @@
     <ClCompile Include="ObRect.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="ObStar.cpp">
+    <ClCompile Include="ObStarPointed.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Random.cpp">
@@ -134,6 +137,9 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="ObStar.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

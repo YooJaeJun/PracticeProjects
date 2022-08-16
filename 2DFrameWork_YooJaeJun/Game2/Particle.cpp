@@ -9,7 +9,7 @@ void Particle::Init(const int idx)
 {
 	Unit::Init();
 
-	hitbox = make_shared<ObStar>();
+	hitbox = make_shared<ObStarPointed>();
 	hitbox->SetWorldPos(Vector2(2000.0f, 2000.0f));
 	hitbox->rotation = 36.0f * idx * ToRadian;
 	hitbox->scale = Vector2(15.0f, 15.0f);

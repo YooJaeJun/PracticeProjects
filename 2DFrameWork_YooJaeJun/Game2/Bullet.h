@@ -13,6 +13,6 @@ public:
     bool LateUpdate() override;
     void Render() override;
     bool Shoot(const shared_ptr<GameObject> player, float scalar, const Vector2 firePos);
-    bool HitFrom(const string& attacker, const float damage);
+    bool HitFrom(const string& hitter, const float damage);
 };
 
