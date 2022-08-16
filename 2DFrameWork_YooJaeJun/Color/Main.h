@@ -3,7 +3,7 @@ class Main : public Scene
 {
 private:
 	ObCircle	circle;
-	ObStar		cc;
+	ObStar		star;
 
 public:
 	virtual void Init() override;

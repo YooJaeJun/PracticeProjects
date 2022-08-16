@@ -24,7 +24,7 @@ void ObStar::CreateStaticMember()
     //
     Vertex[1].position.x = Vertex[4].position.x = -0.7f;
     Vertex[1].position.y = Vertex[4].position.y = 0.4f;
-    Vertex[1].color = Vertex[4].color = Color(0.1f, 0.1f, 0.1f, 1.0f);
+    Vertex[1].color = Vertex[4].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[2].position.x = -0.1f;
     Vertex[2].position.y = -0.15f;
@@ -37,7 +37,7 @@ void ObStar::CreateStaticMember()
     //
     Vertex[7].position.x = Vertex[10].position.x = 0.7f;
     Vertex[7].position.y = Vertex[10].position.y = 0.4f;
-    Vertex[7].color = Vertex[10].color = Color(0.2f, 0.2f, 0.2f, 1.0f);
+    Vertex[7].color = Vertex[10].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[8].position.x = -0.1f;
     Vertex[8].position.y = 0.15f;
@@ -50,7 +50,7 @@ void ObStar::CreateStaticMember()
     //
     Vertex[13].position.x = Vertex[16].position.x = -0.5f;
     Vertex[13].position.y = Vertex[16].position.y = -0.5f;
-    Vertex[13].color = Vertex[16].color = Color(0.3f, 0.3f, 0.3f, 1.0f);
+    Vertex[13].color = Vertex[16].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[14].position.x = -0.1f;
     Vertex[14].position.y = 0.15f;
@@ -63,7 +63,7 @@ void ObStar::CreateStaticMember()
     //
     Vertex[19].position.x = Vertex[22].position.x = 0.5f;
     Vertex[19].position.y = Vertex[22].position.y = -0.5f;
-    Vertex[19].color = Vertex[22].color = Color(0.4f, 0.4f, 0.4f, 1.0f);
+    Vertex[19].color = Vertex[22].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[20].position.x = 0.1f;
     Vertex[20].position.y = 0.15f;
@@ -76,7 +76,7 @@ void ObStar::CreateStaticMember()
     //
     Vertex[25].position.x = Vertex[28].position.x = 0.0f;
     Vertex[25].position.y = Vertex[28].position.y = 0.8f;
-    Vertex[25].color = Vertex[28].color = Color(0.5f, 0.5f, 0.5f, 1.0f);
+    Vertex[25].color = Vertex[28].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[26].position.x = -0.15f;
     Vertex[26].position.y = 0.0f;

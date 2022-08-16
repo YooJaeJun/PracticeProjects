@@ -5,12 +5,12 @@ VisualStudioVersion = 16.0.32002.261
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "2DFrameWork", "2DFrameWork\2DFrameWork.vcxproj", "{C2138BC9-A195-455F-91A6-5FF469EB5E61}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game1", "Game1\Game1.vcxproj", "{62755BC4-7433-469B-8413-314F6EC62971}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Practice", "Practice\Practice.vcxproj", "{62755BC4-7433-469B-8413-314F6EC62971}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C2138BC9-A195-455F-91A6-5FF469EB5E61} = {C2138BC9-A195-455F-91A6-5FF469EB5E61}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game2", "Game2\Game2.vcxproj", "{E4AABC26-46D5-436A-BE00-FF12933156D1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fortress", "Fortress\Fortress.vcxproj", "{E4AABC26-46D5-436A-BE00-FF12933156D1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C2138BC9-A195-455F-91A6-5FF469EB5E61} = {C2138BC9-A195-455F-91A6-5FF469EB5E61}
 	EndProjectSection
@@ -73,7 +73,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sound", "Sound", "{031D9208
 		..\..\..\..\Desktop\Framework\Contents\Sound\gun.wav = ..\..\..\..\Desktop\Framework\Contents\Sound\gun.wav
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game3", "Game3\Game3.vcxproj", "{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Color", "Color\Color.vcxproj", "{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
