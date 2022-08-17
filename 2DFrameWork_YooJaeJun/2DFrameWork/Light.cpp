@@ -6,8 +6,13 @@ Light::Light()
     light.screenPos = Vector2(app.GetHalfWidth(), app.GetHalfHeight());
     //조명 반지름
     light.radius = 3000.0f;
+
+    // 색감이 진하거나 얕을 때 수정!!
     //조명색
+    // 
+    // light.lightColor = Color(0.5f, 0.5f, 0.5f, 0.5f); // 안에 섞을 색
     light.lightColor = Color(0.7f, 0.7f, 0.7f, 0.5f); // 안에 섞을 색
+
     //경계밖 색
     light.outColor = Color(0.0f, 0.0f, 0.0f, 0.5f); //밖에 섞을 색
     light.select = 0;

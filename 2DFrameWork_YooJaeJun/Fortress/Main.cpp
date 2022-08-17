@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "Main.h"
 
 void Main::Init()
@@ -78,9 +78,9 @@ void Main::Init()
     state = (int)estate::run;
     turn = (int)eturn::player;
     cout << "\n------\n";
-    cout << "½ºµû¶Ñ (Àç½ÃÀÛÀº RÅ°ÀÓ) \n";
+    cout << "ìŠ¤ë”°ëšœ (ì¬ì‹œì‘ì€ Rí‚¤ì„) \n";
     cout << "------\n\n";
-    cout << "1p ÅÏ \n";
+    cout << "1p í„´ \n";
 
 }
 
@@ -183,13 +183,13 @@ void Main::LateUpdate()
 
     for (auto& bullet : bullets)
     {
-        // Ãæµ¹ ½Ã ÅÏ º¯°æ
+        // ì¶©ëŒ ì‹œ í„´ ë³€ê²½
         if (bullet->LateUpdate())
         {
             TurnUpdate();
         }
 
-        // Ãæµ¹
+        // ì¶©ëŒ
         if (bullet->hitbox->isVisible)
         {
             bool playerHit = player->hitbox->Intersect(&*bullet->hitbox);
@@ -206,28 +206,28 @@ void Main::LateUpdate()
                 {
                     bullet->HitFrom("1p", 999.0f);
 
-                    if (player->HitFrom(bullet->damage))  // true: »ç¸Á
+                    if (player->HitFrom(bullet->damage))  // true: ì‚¬ë§
                     {
                         End();
                     }
                     else
                     {
                         turn = (int)eturn::player;
-                        cout << '\n' << enemy->name << " ÅÏ \n";
+                        cout << '\n' << enemy->name << " í„´ \n";
                     }
                 }
                 else if (enemyHit)
                 {
                     bullet->HitFrom("2p", 999.0f);
 
-                    if (enemy->HitFrom(bullet->damage))     // true: »ç¸Á
+                    if (enemy->HitFrom(bullet->damage))     // true: ì‚¬ë§
                     {
                         End();
                     }
                     else
                     {
                         turn = (int)eturn::enemy;
-                        cout << '\n' << player->name << " ÅÏ \n";
+                        cout << '\n' << player->name << " í„´ \n";
                     }
                 }
             }
@@ -241,13 +241,13 @@ void Main::LateUpdate()
                     {
                         particle->Spawn(bullet->lastPos);
                     }
-                    bullet->HitFrom("º®", 999.0f);
+                    bullet->HitFrom("ë²½", 999.0f);
                     TurnUpdate();
                 }
             }
 
-        }   // Ãæµ¹ Á¾·á
-    }   // ¸ğµç bullet Å½»ö Á¾·á
+        }   // ì¶©ëŒ ì¢…ë£Œ
+    }   // ëª¨ë“  bullet íƒìƒ‰ ì¢…ë£Œ
 }
 
 void Main::Render()
@@ -307,7 +307,7 @@ void Main::Act(shared_ptr<Player> unit)
 
         lastTurn = turn;
         turn = (int)eturn::neutral;
-        cout << "... turn ´ë±â ... \n";
+        cout << "... turn ëŒ€ê¸° ... \n";
     }
 }
 
@@ -316,25 +316,25 @@ void Main::TurnUpdate()
     if (lastTurn == (int)eturn::player)
     {
         turn = (int)eturn::enemy;
-        cout << '\n' << enemy->name << " ÅÏ \n";
+        cout << '\n' << enemy->name << " í„´ \n";
     }
     else if (lastTurn == (int)eturn::enemy)
     {
         turn = (int)eturn::player;
-        cout << '\n' << player->name << " ÅÏ \n";
+        cout << '\n' << player->name << " í„´ \n";
     }
 }
 
 void Main::End()
 {
     state = (int)estate::end;
-    cout << "Àç½ÃÀÛ: R \n";
+    cout << "ì¬ì‹œì‘: R \n";
 }
 
 
 int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, int command)
 {
-	app.SetAppName(L"Ÿ¶ÀçÁØÀÇ ½Å³ª´Â µµÇü Æ÷Æ®¸®½º ¢Ø^_^¢Ö");
+	app.SetAppName(L"ìœ¾ì¬ì¤€ì˜ ë³„ì´ ë‚´ë¦¬ëŠ” í¬íŠ¸ë¦¬ìŠ¤ ğŸ˜€");
 	app.SetInstance(instance);
     app.background = Color(0.2f, 0.2f, 0.2f, 1.0f);
 	Main* main = new Main();

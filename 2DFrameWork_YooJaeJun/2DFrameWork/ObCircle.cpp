@@ -51,8 +51,6 @@ void ObCircle::CreateStaticMember()
         }
         
 
-
-
         /*
         if (i >= 0 and i < 120)
         {

@@ -86,7 +86,7 @@ void GameObject::Update()
 	R2 = Matrix::CreateRotationZ(rotation2);
 
 	RT = R * RX * RY * T * R2;
-	
+
 	//P의 주소가 있으면
 	if (P)
 	{
@@ -108,7 +108,7 @@ void GameObject::Render()
 		axisObject->Update();
 		axisObject->Render();
 		//up
-		axisObject->rotation= Utility::DirToRadian(GetUp());
+		axisObject->rotation = Utility::DirToRadian(GetUp());
 		axisObject->scale.x = scale.y * 2.0f;
 		axisObject->color = Color(0.0f, 1.0f, 0.0f, 1.0f);
 		axisObject->Update();
@@ -161,7 +161,7 @@ bool GameObject::Intersect(Vector2 coord)
 
 			return IntersectRectCoord(rc1, coord);
 		}
-		
+
 	}
 	else if (collider == COLLIDER::CIRCLE)
 	{
@@ -190,7 +190,7 @@ bool GameObject::Intersect(GameObject* ob)
 			{
 				return Utility::IntersectRectRect(this, ob);
 			}
-			
+
 		}
 		//사각형과 원
 		else if (ob->collider == COLLIDER::CIRCLE)

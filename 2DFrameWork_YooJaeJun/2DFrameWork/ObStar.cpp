@@ -19,74 +19,52 @@ void ObStar::CreateStaticMember()
     {
         Vertex[i].position.x = 0.0f;
         Vertex[i].position.y = 0.0f;
-        Vertex[i].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+        Vertex[i].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
     }
     //
-    Vertex[1].position.x = Vertex[4].position.x = -0.7f;
-    Vertex[1].position.y = Vertex[4].position.y = 0.4f;
-    Vertex[1].color = Vertex[4].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    Vertex[1].position.x = -0.5f;
+    Vertex[1].position.y = 0.2f;
+    Vertex[1].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
-    Vertex[2].position.x = -0.1f;
-    Vertex[2].position.y = -0.15f;
-    Vertex[2].color = Color(0.0f, 0.0f, 0.0f, 0.0f);
+    Vertex[2].position.x = 0.3f;
+    Vertex[2].position.y = -0.4f;
+    Vertex[2].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
-    Vertex[5].position.x = 0.1f;
-    Vertex[5].position.y = 0.15f;
+    //
+    Vertex[4].position.x = -0.5f;
+    Vertex[4].position.y = 0.2f;
+    Vertex[4].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+
+    Vertex[5].position.x = 0.5f;
+    Vertex[5].position.y = 0.2f;
     Vertex[5].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     //
-    Vertex[7].position.x = Vertex[10].position.x = 0.7f;
-    Vertex[7].position.y = Vertex[10].position.y = 0.4f;
-    Vertex[7].color = Vertex[10].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    Vertex[7].position.x = -0.5f;
+    Vertex[7].position.y = 0.2f;
+    Vertex[7].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
-    Vertex[8].position.x = -0.1f;
-    Vertex[8].position.y = 0.15f;
+    Vertex[8].position.x = 0.3f;
+    Vertex[8].position.y = -0.4f;
     Vertex[8].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
-    Vertex[11].position.x = 0.1f;
-    Vertex[11].position.y = -0.15f;
+    //
+    Vertex[10].position.x = 0.0f;
+    Vertex[10].position.y = 0.6f;
+    Vertex[10].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+
+    Vertex[11].position.x = -0.3f;
+    Vertex[11].position.y = -0.4f;
     Vertex[11].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     //
-    Vertex[13].position.x = Vertex[16].position.x = -0.5f;
-    Vertex[13].position.y = Vertex[16].position.y = -0.5f;
-    Vertex[13].color = Vertex[16].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    Vertex[13].position.x = 0.5f;
+    Vertex[13].position.y = 0.2f;
+    Vertex[13].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
-    Vertex[14].position.x = -0.1f;
-    Vertex[14].position.y = 0.15f;
+    Vertex[14].position.x = -0.3f;
+    Vertex[14].position.y = -0.4f;
     Vertex[14].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    Vertex[17].position.x = 0.1f;
-    Vertex[17].position.y = -0.15f;
-    Vertex[17].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    //
-    Vertex[19].position.x = Vertex[22].position.x = 0.5f;
-    Vertex[19].position.y = Vertex[22].position.y = -0.5f;
-    Vertex[19].color = Vertex[22].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    Vertex[20].position.x = 0.1f;
-    Vertex[20].position.y = 0.15f;
-    Vertex[20].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    Vertex[23].position.x = -0.1f;
-    Vertex[23].position.y = -0.15f;
-    Vertex[23].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    //
-    Vertex[25].position.x = Vertex[28].position.x = 0.0f;
-    Vertex[25].position.y = Vertex[28].position.y = 0.8f;
-    Vertex[25].color = Vertex[28].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    Vertex[26].position.x = -0.15f;
-    Vertex[26].position.y = 0.0f;
-    Vertex[26].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    Vertex[29].position.x = 0.15f;
-    Vertex[29].position.y = 0.0f;
-    Vertex[29].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-
 
     //CreateVertexBuffer
     {
@@ -110,28 +88,28 @@ void ObStar::CreateStaticMember()
 
     Vertex = new VertexPC[6];
 
-    Vertex[0].position.x = -0.7f;
-    Vertex[0].position.y = 0.4f;
+    Vertex[0].position.x = -0.5f;
+    Vertex[0].position.y = 0.2f;
     Vertex[0].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
-    Vertex[1].position.x = 0.7f;
-    Vertex[1].position.y = 0.4f;
+    Vertex[1].position.x = 0.5f;
+    Vertex[1].position.y = 0.2f;
     Vertex[1].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
-    Vertex[2].position.x = -0.5f;
-    Vertex[2].position.y = -0.5f;
+    Vertex[2].position.x = -0.3f;
+    Vertex[2].position.y = -0.4f;
     Vertex[2].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[3].position.x = 0.0f;
-    Vertex[3].position.y = 0.8f;
+    Vertex[3].position.y = 0.6f;
     Vertex[3].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
-    Vertex[4].position.x = 0.5f;
-    Vertex[4].position.y = -0.5f;
+    Vertex[4].position.x = 0.3f;
+    Vertex[4].position.y = -0.4f;
     Vertex[4].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
-    Vertex[5].position.x = -0.7f;
-    Vertex[5].position.y = 0.4f;
+    Vertex[5].position.x = -0.5f;
+    Vertex[5].position.y = 0.2f;
     Vertex[5].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     //CreateVertexBuffer
