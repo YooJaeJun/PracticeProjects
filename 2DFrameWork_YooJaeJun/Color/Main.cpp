@@ -7,6 +7,11 @@ void Main::Init()
     circle.scale = Vector2(700.0f, 700.0f);
     circle.isFilled = true;
 
+    pl.SetWorldPos(Vector2(0.0f, 0.0f));
+    pl.scale = Vector2(700.0f, 700.0f);
+    pl.isFilled = true;
+    pl.color = Color(0.5f, 0.0f, 0.0f, 1.0f);
+
     stars[0].SetWorldPos(Vector2(0.0f, 0.0f));
     stars[0].scale = Vector2(500.0f, 500.0f);
     stars[0].rotation = -20.0f * ToRadian;
@@ -43,6 +48,7 @@ void Main::Release()
 
 void Main::Update()
 {
+    pl.Update();
     circle.Update();
     for(auto& star : stars) star.Update();
 }
@@ -53,8 +59,9 @@ void Main::LateUpdate()
 
 void Main::Render()
 {
+    pl.Render();
     // circle.Render();
-    for (auto& star : stars) star.Render();
+    // for (auto& star : stars) star.Render();
 }
 
 void Main::ResizeScreen()

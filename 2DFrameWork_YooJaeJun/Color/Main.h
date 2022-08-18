@@ -2,6 +2,7 @@
 class Main : public Scene
 {
 private:
+	ObCircle	pl;
 	ObCircle	circle;
 	ObStar		stars[5];
 
