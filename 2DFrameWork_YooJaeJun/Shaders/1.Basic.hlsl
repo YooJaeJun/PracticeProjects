@@ -1,7 +1,8 @@
 
 struct VertexInput
 {
-    float4 position : POSITION0; //용도
+	// GPU는 16바이트씩 읽는다. float 4바이트 * 4
+    float4 position : POSITION0; //시멘틱 -> 용도
     float4 color : COLOR0;
 };
 // PI
@@ -37,9 +38,10 @@ PixelInput VS(VertexInput input)
     PixelInput output;
     
     output.position = mul(input.position, WVP);
+	// 그라데이션 효과를 위해 벡터에서 반 보다 작은 부분은 벡터를 더 작게, 다른 부분은 벡터를 더 크게
     output.color = input.color + (color * 2.0f - 1.0f);
-    saturate(output.color);
-    
+	// saturate: 1보다 크면 1, 0보다 작으면 0, 사잇값은 그대로.
+    saturate(output.color); 
     return output;
 }
 
