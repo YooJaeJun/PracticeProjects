@@ -142,7 +142,4 @@
       <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\Game1\렌더링 파이프라인.txt" />
-  </ItemGroup>
 </Project>
