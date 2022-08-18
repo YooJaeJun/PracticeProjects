@@ -18,7 +18,7 @@ void GameObject::CreateStaticMember()
 		desc.MiscFlags = 0;
 		desc.StructureByteStride = 0;
 
-		HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, &WVPBuffer);
+		HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, &WVPBuffer);	// WVPBuffer 최종행렬
 		assert(SUCCEEDED(hr));
 	}
 	D3D->GetDC()->VSSetConstantBuffers(0, 1, &WVPBuffer);
@@ -124,9 +124,9 @@ void GameObject::Render()
 		break;
 	}
 
-	WVP = WVP.Transpose();
-
+	WVP = WVP.Transpose();	// 전치행렬: 행 우선에서 열 우선으로 변경해줌. GPU 연산이 열 우선이 더 빠름
 	{
+		// subresource와 map 함수를 이용. CPU와 GPU의 중복 접근을 막음
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		D3D->GetDC()->Map(WVPBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 		memcpy_s(mappedResource.pData, sizeof(Matrix), &WVP, sizeof(Matrix));
