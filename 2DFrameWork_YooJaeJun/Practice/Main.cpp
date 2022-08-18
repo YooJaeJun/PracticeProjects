@@ -49,6 +49,17 @@ void Main::Init()
     playerShootGaugeFrame.color = Color(0.5f, 0.5f, 0.9f, 1.0f);
     playerShootGaugeFrame.pivot = OFFSET_L;
     playerShootGaugeFrame.SetParentRT(player);
+
+    float randScale = 0.0f;
+    for (auto& star : stars)
+    {
+        star.SetWorldPos(Vector2(RANDOM->Float(-2000.0f, 2000.0f), RANDOM->Float(-2000.0f, 2000.0f)));
+        randScale = RANDOM->Float(50.0f, 200.0f);
+        star.scale = Vector2(randScale, randScale);
+        star.rotation = RANDOM->Float(0.0f, 360.0f) * ToRadian;
+        star.color = Color(RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f));
+        star.isFilled = true;
+    }
 }
 
 void Main::Release()
@@ -85,19 +96,27 @@ void Main::Update()
 
     if (INPUT->KeyPress('W'))
     {
-        player.MoveWorldPos(player.GetUp() * 400.0f * DELTA);
+        // player.MoveWorldPos(player.GetUp() * 400.0f * DELTA);
+        player.MoveWorldPos(UP * 400.0f * DELTA);
+        CAM->position.y += 400.0f * DELTA;
     }
     else if (INPUT->KeyPress('S'))
     {
-        player.MoveWorldPos(-player.GetUp() * 400.0f * DELTA);
+        // player.MoveWorldPos(-player.GetUp() * 400.0f * DELTA);
+        player.MoveWorldPos(DOWN * 400.0f * DELTA);
+        CAM->position.y -= 400.0f * DELTA;
     }
     if (INPUT->KeyPress('A'))
     {
-        player.MoveWorldPos(-player.GetRight() * 400.0f * DELTA);
+        // player.MoveWorldPos(-player.GetRight() * 400.0f * DELTA);
+        player.MoveWorldPos(LEFT * 400.0f * DELTA);
+        CAM->position.x -= 400.0f * DELTA;
     }
     else if (INPUT->KeyPress('D'))
     {
-        player.MoveWorldPos(player.GetRight() * 400.0f * DELTA);
+        // player.MoveWorldPos(player.GetRight() * 400.0f * DELTA);
+        player.MoveWorldPos(RIGHT * 400.0f * DELTA);
+        CAM->position.x += 400.0f * DELTA;
     }
 
     // player.rotation += 200.0f * ToRadian * DELTA;
@@ -140,6 +159,8 @@ void Main::Update()
     playerShootGauge.Update();
     playerShootGaugeFrame.Update();
     firePos.Update();
+
+    for (auto& star : stars) star.Update();
 }
 
 void Main::LateUpdate()
@@ -163,6 +184,7 @@ void Main::Render()
         bullets[i].Render();
     }
     firePos.Render();
+    for (auto& star : stars) star.Render();
 }
 
 void Main::ResizeScreen()

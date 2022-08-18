@@ -17,6 +17,8 @@ private:
 	ObLine		xAxis;
 	ObLine		yAxis;
 
+	ObStar		stars[30];
+
 public:
 	virtual void Init() override;
 	virtual void Release() override; //«ÿ¡¶
