@@ -23,7 +23,7 @@ void ObStar::CreateStaticMember()
 
         Vertex[i * 3 + 1].position.x = cosf(i * 144 * ToRadian) * 0.5f;
         Vertex[i * 3 + 1].position.y = sinf(i * 144 * ToRadian) * 0.5f;
-        Vertex[i * 3 + 1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+        Vertex[i * 3 + 1].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
         Vertex[i * 3 + 2].position.x = cosf((i + 1) * 144 * ToRadian) * 0.5f;
         Vertex[i * 3 + 2].position.y = sinf((i + 1) * 144 * ToRadian) * 0.5f;
