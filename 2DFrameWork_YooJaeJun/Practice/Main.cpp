@@ -3,12 +3,12 @@
 
 void Main::Init()
 {
-    xAxis.scale.x = 1280.0f;
+    xAxis.scale.x = 4000.0f;
     xAxis.color = Color(1.0f, 0.0f, 0.0f, 1.0f);
     xAxis.pivot = OFFSET_N;
     xAxis.Update();
 
-    yAxis.scale.x = 720.0f;
+    yAxis.scale.x = 4000.0f;
     yAxis.color = Color(0.0f, 1.0f, 0.0f, 1.0f);
     yAxis.pivot = OFFSET_N;
     yAxis.rotation = DIV2PI;
@@ -53,17 +53,21 @@ void Main::Init()
     float randScale = 0.0f;
     for (auto& star : stars)
     {
-        star.SetWorldPos(Vector2(RANDOM->Float(-1000.0f, 1000.0f), RANDOM->Float(-1000.0f, 1000.0f)));
-        randScale = RANDOM->Float(10.0f, 70.0f);
-        star.scale = Vector2(randScale, randScale);
-        star.rotation = RANDOM->Float(0.0f, 360.0f) * ToRadian;
-        star.color = Color(RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), 1.0f);
-        star.isFilled = true;
+        star = new ObStar();
+        star->SetWorldPos(Vector2(RANDOM->Float(-1000.0f, 1000.0f), RANDOM->Float(-1000.0f, 1000.0f)));
+        star->scale.x = star->scale.y = RANDOM->Float(10.0f, 80.0f);
+        star->color = Color(RANDOM->Float(), RANDOM->Float(), RANDOM->Float(), 1.0f);
+        star->rotation = RANDOM->Float(0.0f, 360.0f) * ToRadian;
+        star->isFilled = true;
     }
 }
 
 void Main::Release()
 {
+    for (auto& star : stars)
+    {
+        SafeDelete(star);
+    }
 }
 
 void Main::Update()
@@ -92,34 +96,26 @@ void Main::Update()
     }
 
 
-    lastPos = player.GetWorldPos();
-    camLastPos = Vector2(CAM->position.x, CAM->position.y);
-    Vector2 sub = lastPos - camLastPos;
-    CAM->position += sub * 3.0f * DELTA;
-
-    cout << "CAM Pos: (" << CAM->position.x << ',' << CAM->position.y << ")\n";
-
-
     if (INPUT->KeyPress('W'))
     {
         // player.MoveWorldPos(player.GetUp() * 400.0f * DELTA);
-        player.MoveWorldPos(UP * 400.0f * DELTA);
+        player.MoveWorldPos(UP * 600.0f * DELTA);
     }
     else if (INPUT->KeyPress('S'))
     {
         // player.MoveWorldPos(-player.GetUp() * 400.0f * DELTA);
-        player.MoveWorldPos(DOWN * 400.0f * DELTA);
+        player.MoveWorldPos(DOWN * 600.0f * DELTA);
     }
 
     if (INPUT->KeyPress('A'))
     {
         // player.MoveWorldPos(-player.GetRight() * 400.0f * DELTA);
-        player.MoveWorldPos(LEFT * 400.0f * DELTA);
+        player.MoveWorldPos(LEFT * 600.0f * DELTA);
     }
     else if (INPUT->KeyPress('D'))
     {
         // player.MoveWorldPos(player.GetRight() * 400.0f * DELTA);
-        player.MoveWorldPos(RIGHT * 400.0f * DELTA);
+        player.MoveWorldPos(RIGHT * 600.0f * DELTA);
     }
 
 
@@ -163,11 +159,23 @@ void Main::Update()
     playerShootGaugeFrame.Update();
     firePos.Update();
 
-    for (auto& star : stars) star.Update();
+    for (auto& star : stars) star->Update();
 }
 
 void Main::LateUpdate()
 {
+    player.SetWorldPosX(Utility::Saturate(player.GetWorldPos().x, -1000.0f, 1000.0f));
+    player.SetWorldPosY(Utility::Saturate(player.GetWorldPos().y, -1000.0f, 1000.0f));
+    CAM->position.x = Utility::Saturate(CAM->position.x, -1000.0f + app.GetHalfWidth(), 1000.0f - app.GetHalfWidth());
+    CAM->position.y = Utility::Saturate(CAM->position.y, -1000.0f + app.GetHalfHeight(), 1000.0f - app.GetHalfHeight());
+
+
+    Vector2 velocity = player.GetWorldPos() - CAM->position;
+    CAM->position += velocity * DELTA;
+
+    cout << "CAM Pos: (" << CAM->position.x << ',' << CAM->position.y << ")\n";
+
+
     for (int i = 0; i < MAX; i++)
     {
         bullets[i].LateUpdate();
@@ -176,7 +184,7 @@ void Main::LateUpdate()
 
 void Main::Render()
 {
-    for (auto& star : stars) star.Render();
+    for (auto& star : stars) star->Render();
     xAxis.Render();
     yAxis.Render();
     player.Render();
@@ -201,7 +209,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, in
     app.InitWidthHeight(1280.0f, 720.0f);
     Main* main = new Main();
     int wParam = (int)WIN->Run(main);
-    WIN->DeleteSingleton();
-    SafeDelete(main);
+    WIN->DeleteSingleton();     // 창이 없어지고 난 후 
+    SafeDelete(main);           // 메모리 해제
     return wParam;
 }

@@ -17,9 +17,8 @@ private:
 	ObLine		xAxis;
 	ObLine		yAxis;
 
-	ObStar		stars[60];
+	ObStar*		stars[100];
 	Vector2		camLastPos;
-	float		camScalar = 1.0f;
 
 public:
 	virtual void Init() override;
