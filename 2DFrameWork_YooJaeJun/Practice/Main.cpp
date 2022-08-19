@@ -19,7 +19,7 @@ void Main::Init()
     player.rotation = 0.0f;
     player.isFilled = true;
     player.isAxis = true;
-    player.color = Color(0.2f, 0.1f, 0.8f, 0.5f);
+    player.color = Color(0.2f, 0.1f, 0.8f, 1.0f);
     player.pivot = OFFSET_N;
 
     firePos.SetLocalPos(Vector2(160.0f, 0.0f));
@@ -39,7 +39,7 @@ void Main::Init()
     playerShootGauge.scale = Vector2(100.0f, 20.0f);
     playerShootGauge.rotation = 0.0f;
     playerShootGauge.isFilled = true;
-    playerShootGauge.color = Color(0.2f, 0.2f, 0.7f, 1.0f);
+    playerShootGauge.color = Color(0.2f, 0.1f, 0.6f, 1.0f);
     playerShootGauge.pivot = OFFSET_L;
     playerShootGauge.SetParentRT(player);
 
@@ -53,11 +53,11 @@ void Main::Init()
     float randScale = 0.0f;
     for (auto& star : stars)
     {
-        star.SetWorldPos(Vector2(RANDOM->Float(-2000.0f, 2000.0f), RANDOM->Float(-2000.0f, 2000.0f)));
-        randScale = RANDOM->Float(50.0f, 200.0f);
+        star.SetWorldPos(Vector2(RANDOM->Float(-1000.0f, 1000.0f), RANDOM->Float(-1000.0f, 1000.0f)));
+        randScale = RANDOM->Float(10.0f, 70.0f);
         star.scale = Vector2(randScale, randScale);
         star.rotation = RANDOM->Float(0.0f, 360.0f) * ToRadian;
-        star.color = Color(RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f));
+        star.color = Color(RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), 1.0f);
         star.isFilled = true;
     }
 }
@@ -68,14 +68,11 @@ void Main::Release()
 
 void Main::Update()
 {
-    cout << "Mouse : " << INPUT->GetWorldMousePos().x << ","
-        << INPUT->GetWorldMousePos().y << endl;
+    // cout << "Mouse : " << INPUT->GetWorldMousePos().x << ","
+    //     << INPUT->GetWorldMousePos().y << endl;
 
     Vector2 dir = INPUT->GetWorldMousePos() - player.GetWorldPos();
     player.rotation = Utility::DirToRadian(dir);
-
-    // player.color = Color(RANDOM->Float(), RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), 1.0f);
-    // player.SetWorldPos(lastPos);
 
     if (INPUT->KeyPress(VK_UP))
     {
@@ -94,32 +91,38 @@ void Main::Update()
         CAM->position += LEFT * 200.0f * DELTA;
     }
 
+
+    lastPos = player.GetWorldPos();
+    camLastPos = Vector2(CAM->position.x, CAM->position.y);
+    Vector2 sub = lastPos - camLastPos;
+    CAM->position += sub * 3.0f * DELTA;
+
+    cout << "CAM Pos: (" << CAM->position.x << ',' << CAM->position.y << ")\n";
+
+
     if (INPUT->KeyPress('W'))
     {
         // player.MoveWorldPos(player.GetUp() * 400.0f * DELTA);
         player.MoveWorldPos(UP * 400.0f * DELTA);
-        CAM->position.y += 400.0f * DELTA;
     }
     else if (INPUT->KeyPress('S'))
     {
         // player.MoveWorldPos(-player.GetUp() * 400.0f * DELTA);
         player.MoveWorldPos(DOWN * 400.0f * DELTA);
-        CAM->position.y -= 400.0f * DELTA;
     }
+
     if (INPUT->KeyPress('A'))
     {
         // player.MoveWorldPos(-player.GetRight() * 400.0f * DELTA);
         player.MoveWorldPos(LEFT * 400.0f * DELTA);
-        CAM->position.x -= 400.0f * DELTA;
     }
     else if (INPUT->KeyPress('D'))
     {
         // player.MoveWorldPos(player.GetRight() * 400.0f * DELTA);
         player.MoveWorldPos(RIGHT * 400.0f * DELTA);
-        CAM->position.x += 400.0f * DELTA;
     }
 
-    // player.rotation += 200.0f * ToRadian * DELTA;
+
 
     if (INPUT->KeyDown(VK_LBUTTON))
     {
@@ -173,6 +176,7 @@ void Main::LateUpdate()
 
 void Main::Render()
 {
+    for (auto& star : stars) star.Render();
     xAxis.Render();
     yAxis.Render();
     player.Render();
@@ -184,7 +188,6 @@ void Main::Render()
         bullets[i].Render();
     }
     firePos.Render();
-    for (auto& star : stars) star.Render();
 }
 
 void Main::ResizeScreen()
