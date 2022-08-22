@@ -2,18 +2,22 @@
 
 Bullet::Bullet()
 {
+    Color basicColor = Color(0.9f, 0.5f, 0.3f, 1.0f);
+
     arrow.SetWorldPos(Vector2(2000.0f, 2000.0f));
     arrow.scale.x = 30.0f;
     arrow.rotation = 0.0f;
     arrow.isVisible = false;
+    arrow.color = basicColor;
     //isFired = false;
 
     arrowPet.SetLocalPos(Vector2(30.0f, 30.0f));
     arrowPet.scale = Vector2(15.0f, 15.0f);
     arrowPet.isVisible = false;
     arrowPet.isAxis = true;
+    arrowPet.isFilled = false;
     arrowPet.SetParentRT(arrow);
-    arrowPet.color = Color(0.3f, 0.3f, 0.8f, 0.5f);
+    arrowPet.color = basicColor;
 }
 
 void Bullet::Update(ObRect player)

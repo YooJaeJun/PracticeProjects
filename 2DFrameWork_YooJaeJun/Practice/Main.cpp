@@ -3,8 +3,13 @@
 
 void Main::Init()
 {
-    bg = new ObImage(L"Haul.jpg");
-    bg->scale = Vector2(2560.0f, 1024.0f);
+    x = 2560.0f;
+    y = 1440.0f;
+
+    Color basicColor = Color(0.9f, 0.5f, 0.3f, 1.0f);
+
+    bg = new ObImage(L"Background_Ruin.jpg");
+    bg->scale = Vector2(x, y);
     bg->Update();
 
     xAxis.scale.x = 4000.0f;
@@ -23,7 +28,7 @@ void Main::Init()
     player.rotation = 0.0f;
     player.isFilled = true;
     player.isAxis = true;
-    player.color = Color(0.2f, 0.1f, 0.8f, 1.0f);
+    player.color = basicColor;
     player.pivot = OFFSET_N;
 
     firePos.SetLocalPos(Vector2(160.0f, 0.0f));
@@ -36,24 +41,25 @@ void Main::Init()
     pet.rotation = 0.0f;
     pet.isAxis = true;
     pet.isFilled = false;
-    pet.color = Color(0.8f, 0.5f, 0.3f, 1.0f);
+    pet.color = basicColor;
     pet.SetParentRT(player);
 
     playerShootGauge.SetLocalPos(Vector2(-50.0f, 60.0f));
     playerShootGauge.scale = Vector2(100.0f, 20.0f);
     playerShootGauge.rotation = 0.0f;
     playerShootGauge.isFilled = true;
-    playerShootGauge.color = Color(0.2f, 0.1f, 0.6f, 1.0f);
+    playerShootGauge.color = basicColor;
     playerShootGauge.pivot = OFFSET_L;
     playerShootGauge.SetParentRT(player);
 
     playerShootGaugeFrame.SetLocalPos(Vector2(-50.0f, 60.0f));
     playerShootGaugeFrame.scale = Vector2(100.0f, 20.0f);
     playerShootGaugeFrame.isFilled = false;
-    playerShootGaugeFrame.color = Color(0.5f, 0.5f, 0.9f, 1.0f);
+    playerShootGaugeFrame.color = basicColor;
     playerShootGaugeFrame.pivot = OFFSET_L;
     playerShootGaugeFrame.SetParentRT(player);
 
+    /*
     float randScale = 0.0f;
     for (auto& star : stars)
     {
@@ -66,6 +72,7 @@ void Main::Init()
 
         // star->space = SPACE::SCREEN;
     }
+    */
 }
 
 void Main::Release()
@@ -106,22 +113,26 @@ void Main::Update()
     {
         // player.MoveWorldPos(player.GetUp() * 400.0f * DELTA);
         player.MoveWorldPos(UP * 600.0f * DELTA);
+        CAM->position += UP * 300.0f * DELTA;
     }
     else if (INPUT->KeyPress('S'))
     {
         // player.MoveWorldPos(-player.GetUp() * 400.0f * DELTA);
         player.MoveWorldPos(DOWN * 600.0f * DELTA);
+        CAM->position += DOWN * 300.0f * DELTA;
     }
 
     if (INPUT->KeyPress('A'))
     {
         // player.MoveWorldPos(-player.GetRight() * 400.0f * DELTA);
         player.MoveWorldPos(LEFT * 600.0f * DELTA);
+        CAM->position += LEFT * 300.0f * DELTA;
     }
     else if (INPUT->KeyPress('D'))
     {
         // player.MoveWorldPos(player.GetRight() * 400.0f * DELTA);
         player.MoveWorldPos(RIGHT * 600.0f * DELTA);
+        CAM->position += RIGHT * 300.0f * DELTA;
     }
 
 
@@ -157,62 +168,56 @@ void Main::Update()
     player.Update();
     pet.Update();
 
-    for (int i = 0; i < MAX; i++)
-    {
-        bullets[i].Update(player);
-    }
+    for (int i = 0; i < MAX; i++) bullets[i].Update(player);
     playerShootGauge.Update();
     playerShootGaugeFrame.Update();
     firePos.Update();
 
-    for (auto& star : stars) star->Update();
+    // for (auto& star : stars) star->Update();
 }
 
 void Main::LateUpdate()
 {
-    player.SetWorldPosX(Utility::Saturate(player.GetWorldPos().x, -bg->scale.x / 2, bg->scale.x / 2));
-    player.SetWorldPosY(Utility::Saturate(player.GetWorldPos().y, -bg->scale.y / 2, bg->scale.y / 2));
-
-    // CAM->position.x = Utility::Saturate(CAM->position.x, -bg->scale.x / 2 + app.GetHalfWidth(), bg->scale.x / 2 - app.GetHalfWidth());
-    // CAM->position.y = Utility::Saturate(CAM->position.y, -bg->scale.y / 2 + app.GetHalfHeight(), bg->scale.y / 2 - app.GetHalfHeight());
+    float scaleX = bg->scale.x / 2 - 50.0f;
+    float scaleY = bg->scale.y / 2 - 25.0f;
+    player.SetWorldPosX(Utility::Saturate(player.GetWorldPos().x, -scaleX, scaleX));
+    player.SetWorldPosY(Utility::Saturate(player.GetWorldPos().y, -scaleY, scaleY));
+    CAM->position.x = Utility::Saturate(CAM->position.x, -scaleX + app.GetHalfWidth(), scaleX - app.GetHalfWidth());
+    CAM->position.y = Utility::Saturate(CAM->position.y, -scaleY + app.GetHalfHeight(), scaleY - app.GetHalfHeight());
 
     
-    
-
-    player.rotation = Utility::Saturate(player.rotation, 0.0f, PI);
-    player.Update();
-
-
-
-    Vector2 velocity = player.GetWorldPos() - CAM->position;
-    CAM->position += velocity * 3.0f * DELTA;
+    // Vector2 velocity = player.GetWorldPos() - CAM->position;
+    // CAM->position += velocity * 3.0f * DELTA;
 
     cout << "CAM Pos: (" << CAM->position.x << ',' << CAM->position.y << ")\n";
 
+
+    // player.rotation = Utility::Saturate(player.rotation, 0.0f, PI);
+    // player.Update();
+
+    for (int i = 0; i < MAX; i++) bullets[i].LateUpdate();
+
+
     ImGui::SliderAngle("Angle", &player.rotation);
-
-
-
-    for (int i = 0; i < MAX; i++)
-    {
-        bullets[i].LateUpdate();
-    }
+    float playerX = player.GetWorldPos().x;
+    float playerY = player.GetWorldPos().y;
+    ImGui::SliderFloat("Player X", &playerX, -x / 2, x / 2);
+    ImGui::SliderFloat("Player Y", &playerY, -y / 2, y / 2);
+    ImGui::SliderFloat("Camera X", &CAM->position.x, -x / 2, x / 2);
+    ImGui::SliderFloat("Camera Y", &CAM->position.y, -y / 2, y / 2);
 }
 
 void Main::Render()
 {
     bg->Render();
-    for (auto& star : stars) star->Render();
+    // for (auto& star : stars) star->Render();
     xAxis.Render();
     yAxis.Render();
     player.Render();
     pet.Render();
     playerShootGauge.Render();
     playerShootGaugeFrame.Render();
-    for (int i = 0; i < MAX; i++)
-    {
-        bullets[i].Render();
-    }
+    for (int i = 0; i < MAX; i++) bullets[i].Render();
     firePos.Render();
 }
 

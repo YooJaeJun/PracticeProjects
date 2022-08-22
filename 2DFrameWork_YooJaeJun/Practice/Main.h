@@ -4,6 +4,9 @@
 class Main : public Scene
 {
 private:
+	float		x;
+	float		y;
+
 	ObRect		player;
 	ObCircle	pet;
 

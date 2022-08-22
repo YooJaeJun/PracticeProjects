@@ -33,7 +33,7 @@ WPARAM Window::Run(Scene* main)
 			TIMER->Chronometry(app.fixFrame);
 			INPUT->Update();
 			SOUND->Update();
-			//GUI->Update();
+			GUI->Update();
 			main->Update();
 			main->LateUpdate();
 			CAM->Set();
@@ -42,7 +42,7 @@ WPARAM Window::Run(Scene* main)
 			D3D->Clear(app.background);
 			{
 				main->Render();
-				//GUI->Render();
+				GUI->Render();
 			}
 			D3D->Present();
 		}
