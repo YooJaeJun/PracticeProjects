@@ -80,8 +80,8 @@ void GameObject::Update()
 	Pi = Matrix::CreateTranslation(pivot.x, pivot.y, 0.0f);
 	S = Matrix::CreateScale(scale.x, scale.y, 1.0f);
 	R = Matrix::CreateRotationZ(rotation);
-	RX = Matrix::CreateRotationX(rotationX);	//
-	RY = Matrix::CreateRotationY(rotationY);	//
+	RX = Matrix::CreateRotationX(rotationX);	// 추가
+	RY = Matrix::CreateRotationY(rotationY);	// 추가
 	T = Matrix::CreateTranslation(position.x, position.y, 0.0f);
 	R2 = Matrix::CreateRotationZ(rotation2);
 
@@ -117,7 +117,7 @@ void GameObject::Render()
 	switch (space)
 	{
 	case SPACE::WORLD:
-		WVP = W * CAM->GetVP();
+		WVP = W * CAM->GetVP();		// V: 카메라 영향을 받는다.
 		break;
 	case SPACE::SCREEN:
 		WVP = W * CAM->GetP();
