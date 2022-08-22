@@ -20,6 +20,9 @@ private:
 	ObStar*		stars[100];
 	Vector2		camLastPos;
 
+	ObImage*	bg;
+
+
 public:
 	virtual void Init() override;
 	virtual void Release() override; //«ÿ¡¶

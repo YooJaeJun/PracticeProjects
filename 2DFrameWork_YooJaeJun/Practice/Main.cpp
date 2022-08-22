@@ -3,6 +3,10 @@
 
 void Main::Init()
 {
+    bg = new ObImage(L"Haul.jpg");
+    bg->scale = Vector2(2560.0f, 1024.0f);
+    bg->Update();
+
     xAxis.scale.x = 4000.0f;
     xAxis.color = Color(1.0f, 0.0f, 0.0f, 1.0f);
     xAxis.pivot = OFFSET_N;
@@ -59,6 +63,8 @@ void Main::Init()
         star->color = Color(RANDOM->Float(), RANDOM->Float(), RANDOM->Float(), 1.0f);
         star->rotation = RANDOM->Float(0.0f, 360.0f) * ToRadian;
         star->isFilled = true;
+
+        // star->space = SPACE::SCREEN;
     }
 }
 
@@ -164,16 +170,27 @@ void Main::Update()
 
 void Main::LateUpdate()
 {
-    player.SetWorldPosX(Utility::Saturate(player.GetWorldPos().x, -1000.0f, 1000.0f));
-    player.SetWorldPosY(Utility::Saturate(player.GetWorldPos().y, -1000.0f, 1000.0f));
-    CAM->position.x = Utility::Saturate(CAM->position.x, -1000.0f + app.GetHalfWidth(), 1000.0f - app.GetHalfWidth());
-    CAM->position.y = Utility::Saturate(CAM->position.y, -1000.0f + app.GetHalfHeight(), 1000.0f - app.GetHalfHeight());
+    player.SetWorldPosX(Utility::Saturate(player.GetWorldPos().x, -bg->scale.x / 2, bg->scale.x / 2));
+    player.SetWorldPosY(Utility::Saturate(player.GetWorldPos().y, -bg->scale.y / 2, bg->scale.y / 2));
+
+    // CAM->position.x = Utility::Saturate(CAM->position.x, -bg->scale.x / 2 + app.GetHalfWidth(), bg->scale.x / 2 - app.GetHalfWidth());
+    // CAM->position.y = Utility::Saturate(CAM->position.y, -bg->scale.y / 2 + app.GetHalfHeight(), bg->scale.y / 2 - app.GetHalfHeight());
+
+    
+    
+
+    player.rotation = Utility::Saturate(player.rotation, 0.0f, PI);
+    player.Update();
+
 
 
     Vector2 velocity = player.GetWorldPos() - CAM->position;
-    CAM->position += velocity * DELTA;
+    CAM->position += velocity * 3.0f * DELTA;
 
     cout << "CAM Pos: (" << CAM->position.x << ',' << CAM->position.y << ")\n";
+
+    ImGui::SliderAngle("Angle", &player.rotation);
+
 
 
     for (int i = 0; i < MAX; i++)
@@ -184,6 +201,7 @@ void Main::LateUpdate()
 
 void Main::Render()
 {
+    bg->Render();
     for (auto& star : stars) star->Render();
     xAxis.Render();
     yAxis.Render();
