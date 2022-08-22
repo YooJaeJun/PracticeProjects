@@ -13,7 +13,7 @@ void Main::Init()
     pl.isFilled = true;
     pl.color = Color(0.5f, 0.0f, 0.0f, 1.0f);
     */
-
+    /*
     for (auto& star : stars)
     {
         star.SetWorldPos(Vector2(RANDOM->Float(-2000.0f, 2000.0f), RANDOM->Float(-2000.0f, 2000.0f)));
@@ -21,6 +21,7 @@ void Main::Init()
         star.rotation = RANDOM->Float(0.0f, 360.0f) * ToRadian;
         star.isFilled = true;
     }
+    */
 }
 
 void Main::Release()
@@ -29,9 +30,12 @@ void Main::Release()
 
 void Main::Update()
 {
+    ImGui::ColorEdit3("Color", (float*)&pl.color, ImGuiColorEditFlags_PickerHueWheel);
+    
+
     // pl.Update();
     // circle.Update();
-    for(auto& star : stars) star.Update();
+    // for(auto& star : stars) star.Update();
 }
 
 void Main::LateUpdate()
@@ -42,7 +46,7 @@ void Main::Render()
 {
     // pl.Render();
     // circle.Render();
-    for (auto& star : stars) star.Render();
+    // for (auto& star : stars) star.Render();
 }
 
 void Main::ResizeScreen()
