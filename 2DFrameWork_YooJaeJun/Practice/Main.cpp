@@ -178,12 +178,16 @@ void Main::Update()
 
 void Main::LateUpdate()
 {
+
     float scaleX = bg->scale.x / 2 - 50.0f;
     float scaleY = bg->scale.y / 2 - 25.0f;
     player.SetWorldPosX(Utility::Saturate(player.GetWorldPos().x, -scaleX, scaleX));
     player.SetWorldPosY(Utility::Saturate(player.GetWorldPos().y, -scaleY, scaleY));
-    CAM->position.x = Utility::Saturate(CAM->position.x, -scaleX + app.GetHalfWidth(), scaleX - app.GetHalfWidth());
-    CAM->position.y = Utility::Saturate(CAM->position.y, -scaleY + app.GetHalfHeight(), scaleY - app.GetHalfHeight());
+    
+    // CAM->position.x = Utility::Saturate(CAM->position.x, -scaleX + app.GetHalfWidth(), scaleX - app.GetHalfWidth());
+    // CAM->position.y = Utility::Saturate(CAM->position.y, -scaleY + app.GetHalfHeight(), scaleY - app.GetHalfHeight());
+    CAM->position.x = (x - app.GetWidth()) * player.GetWorldPos().x / x;
+    CAM->position.y = (y - app.GetHeight()) * player.GetWorldPos().y / y;
 
     
     // Vector2 velocity = player.GetWorldPos() - CAM->position;
@@ -195,8 +199,9 @@ void Main::LateUpdate()
     // player.rotation = Utility::Saturate(player.rotation, 0.0f, PI);
     // player.Update();
 
-    for (int i = 0; i < MAX; i++) bullets[i].LateUpdate();
 
+
+    for (auto& bullet : bullets) bullet.LateUpdate();
 
     ImGui::SliderAngle("Angle", &player.rotation);
     float playerX = player.GetWorldPos().x;
