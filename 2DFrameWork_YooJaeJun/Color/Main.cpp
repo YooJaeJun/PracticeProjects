@@ -22,6 +22,9 @@ void Main::Init()
         star.isFilled = true;
     }
     */
+    rect.scale = Vector2(255.0f, 255.0f);
+    rect.isFilled = true;
+    rect.color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void Main::Release()
@@ -30,16 +33,27 @@ void Main::Release()
 
 void Main::Update()
 {
-    ImGui::ColorEdit3("Color", (float*)&pl.color, ImGuiColorEditFlags_PickerHueWheel);
-    
-
+    // ImGui::ColorEdit3("Color", (float*)&pl.color, ImGuiColorEditFlags_PickerHueWheel);
     // pl.Update();
     // circle.Update();
     // for(auto& star : stars) star.Update();
+    rect.Update();
+
+    Vector2 mousePos = INPUT->GetWorldMousePos();
+    ImGui::SliderFloat("Mouse X", &mousePos.x, -app.GetWidth(), app.GetWidth());
+    ImGui::SliderFloat("Mouse Y", &mousePos.y, -app.GetHeight(), app.GetHeight());
 }
 
 void Main::LateUpdate()
 {
+    if (rect.Intersect(INPUT->GetWorldMousePos()))
+    {
+        // rect.color = Color(INPUT->GetWorldMousePos().x, INPUT->GetWorldMousePos().y, INPUT->GetWorldMousePos().y, 1.0f);
+    }
+    else
+    {
+        rect.color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    }
 }
 
 void Main::Render()
@@ -47,6 +61,7 @@ void Main::Render()
     // pl.Render();
     // circle.Render();
     // for (auto& star : stars) star.Render();
+    rect.Render();
 }
 
 void Main::ResizeScreen()

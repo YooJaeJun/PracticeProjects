@@ -5,6 +5,7 @@ private:
 	ObCircle	pl;
 	ObCircle	circle;
 	ObStar		stars[30];
+	ObRect		rect;
 
 public:
 	virtual void Init() override;
