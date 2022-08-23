@@ -15,7 +15,7 @@ void Camera::Set()
 {
     //뷰행렬 -> 역이동행렬
     V = Matrix::CreateTranslation(-position.x, -position.y, 0.0f);
-    //프로젝션 -> 투영행렬
+    //프로젝션 -> 투영행렬      // 원근 투영 대신 직교 투영 쓸 것
     P = Matrix::CreateOrthographic(app.GetWidth(), app.GetHeight(), 0.0f, 10.0f);
 
     VP = V * P;
@@ -23,8 +23,8 @@ void Camera::Set()
 
 void Camera::ResizeScreen()
 {
-    /*viewport.x = 200.0f;
-    viewport.y = 200.0f;*/
+    // viewport.x = 200.0f;
+    // viewport.y = 200.0f;
 
     viewport.width = app.GetWidth();
     viewport.height = app.GetHeight();
