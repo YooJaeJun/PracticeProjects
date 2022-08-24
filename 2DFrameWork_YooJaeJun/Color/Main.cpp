@@ -22,9 +22,10 @@ void Main::Init()
         star.isFilled = true;
     }
     */
-    rect.scale = Vector2(255.0f, 255.0f);
+    rect.scale = Vector2(400.0f, 400.0f);
     rect.isFilled = true;
     rect.color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    rect.isAxis = true;
 }
 
 void Main::Release()
@@ -39,21 +40,56 @@ void Main::Update()
     // for(auto& star : stars) star.Update();
     rect.Update();
 
-    Vector2 mousePos = INPUT->GetWorldMousePos();
-    ImGui::SliderFloat("Mouse X", &mousePos.x, -app.GetWidth(), app.GetWidth());
-    ImGui::SliderFloat("Mouse Y", &mousePos.y, -app.GetHeight(), app.GetHeight());
 }
 
 void Main::LateUpdate()
 {
-    if (rect.Intersect(INPUT->GetWorldMousePos()))
+    Vector2 mousePos = INPUT->GetWorldMousePos();
+    float rad = Utility::DirToRadian(mousePos);
+    float degree = rad * 180.0f / PI;
+    float degreePlus = degree < 0.0f ? degree + 360.0f : degree;
+    float r = 0.0f, g = 0.0f, b = 0.0f;
+    
+    if (rect.Intersect(mousePos))
     {
-        // rect.color = Color(INPUT->GetWorldMousePos().x, INPUT->GetWorldMousePos().y, INPUT->GetWorldMousePos().y, 1.0f);
+        /*
+        if (degreePlus >= 0.0f and degreePlus < 120.0f)
+        {
+            float color = degreePlus / 120.0f;
+            r = 1.0f - color;
+            g = color;
+        }
+        else if (degreePlus >= 120.0f and degreePlus < 240.0f)
+        {
+            float color = (degreePlus - 120.0f) / 120.0f;
+            g = 1.0f - color;
+            b = color;
+        }
+        else
+        {
+            float color = (degreePlus - 240.0f) / 120.0f;
+            b = 1.0f - color;
+            r = color;
+        }
+        */
+        r = mousePos.x * 1.0f / (rect.scale.x / 2);
+        g = mousePos.y * 1.0f / (rect.scale.y / 2);
+        r = max(0.0f, r);
+        g = max(0.0f, g);
+        b = 0.5f;
     }
-    else
-    {
-        rect.color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-    }
+    rect.color = Color(r, g, b, 1.0f);
+
+
+    ImGui::SliderFloat("Mouse X", &mousePos.x, -app.GetWidth(), app.GetWidth());
+    ImGui::SliderFloat("Mouse Y", &mousePos.y, -app.GetHeight(), app.GetHeight());
+    ImGui::SliderFloat("rad", &rad, -PI, PI);
+    ImGui::SliderFloat("degree(-180~180)", &degree, -180.0f, 180.0f);
+    ImGui::SliderFloat("degree(0~360)", &degreePlus, 0.0f, 360.0f);
+    float colors[3] = { r, g, b };
+    ImGui::InputFloat3("RGB(0~1)", colors);
+    int colors255[3] = { r * 255, g * 255, b * 255 };
+    ImGui::InputInt3("RGB(0~255)", colors255);
 }
 
 void Main::Render()

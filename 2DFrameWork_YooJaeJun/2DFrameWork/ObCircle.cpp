@@ -50,45 +50,6 @@ void ObCircle::CreateStaticMember()
             Vertex[i * 3 + 2].color = Color(color2, 0.0f, 1.0f - color2, 1.0f);
         }
         */
-
-        /*
-        if (i >= 0 and i < 120)
-        {
-            Vertex[i * 3 + 1].color = Color(
-                1.0f - 1.0f / 120.0f * i,
-                1.0f / 120.0f * i,
-                0.0f);
-
-            Vertex[i * 3 + 2].color = Color(
-                1.0f - 1.0f / 120.0f * i,
-                1.0f / 120.0f * i,
-                0.0f);
-        }
-        else if (i >= 120 and i < 240)
-        {
-            Vertex[i * 3 + 1].color = Color(
-                0.0f,
-                1.0f - 1.0f / 120.0f * (i - 120),
-                1.0f / 120.0f * (i - 120));
-
-            Vertex[i * 3 + 2].color = Color(
-                0.0f,
-                1.0f - 1.0f / 120.0f * (i - 120),
-                1.0f / 120.0f * (i - 120));
-        }
-        else
-        {
-            Vertex[i * 3 + 1].color = Color(
-                1.0f / 120.0f * (i - 240),
-                0.0f,
-                1.0f - 1.0f / 120.0f * (i - 240));
-
-            Vertex[i * 3 + 2].color = Color(
-                1.0f / 120.0f * (i - 240),
-                0.0f,
-                1.0f - 1.0f / 120.0f * (i - 240));
-        }
-        */
     }
 
 

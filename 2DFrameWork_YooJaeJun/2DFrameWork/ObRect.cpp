@@ -15,29 +15,22 @@ void ObRect::CreateStaticMember()
 
     // 방향이 채도, 스칼라가 명도(얼마나 밝은지)
     //빨간색
-    Vertex[0].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    Vertex[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
     Vertex[1].position.x = -0.5f;
     Vertex[1].position.y = 0.5f;
     //빨간색
-    Vertex[1].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    Vertex[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
     Vertex[2].position.x = 0.5f;
     Vertex[2].position.y = -0.5f;
     //파란색
-    Vertex[2].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+    Vertex[2].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[3].position.x = 0.5f;
     Vertex[3].position.y = 0.5f;
     //파란색
-    Vertex[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-
-    Vector2 v = INPUT->GetWorldMousePos();
-    if (Intersect(v))
-    {
-
-    }
-
+    Vertex[3].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
 
     //CreateVertexBuffer
