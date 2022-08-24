@@ -7,6 +7,11 @@ private:
 	ObStar		stars[30];
 	ObRect		rect;
 
+	ObRect*		rc;
+	Vector2		lastPos;
+	ObCircle*	cc;
+	ObRect*		rc2;
+
 public:
 	virtual void Init() override;
 	virtual void Release() override; //«ÿ¡¶

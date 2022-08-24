@@ -22,10 +22,24 @@ void Main::Init()
         star.isFilled = true;
     }
     */
-    rect.scale = Vector2(400.0f, 400.0f);
+    /*rect.scale = Vector2(400.0f, 400.0f);
     rect.isFilled = true;
     rect.color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-    rect.isAxis = true;
+    rect.isAxis = true;*/
+    rc = new ObRect();
+    rc->SetWorldPos(Vector2(0.0f, 0.0f));
+    rc->scale = Vector2(100.0f, 100.0f);
+    rc->collider = COLLIDER::RECT;
+
+    rc2 = new ObRect();
+    rc2->SetWorldPos(Vector2(-300.0f, 0.0f));
+    rc2->scale = Vector2(100.0f, 100.0f);
+    rc2->collider = COLLIDER::RECT;
+
+    cc = new ObCircle();
+    cc->SetWorldPos(Vector2(300.0f, 0.0f));
+    cc->scale = Vector2(100.0f, 100.0f);
+    cc->collider = COLLIDER::CIRCLE;
 }
 
 void Main::Release()
@@ -38,13 +52,34 @@ void Main::Update()
     // pl.Update();
     // circle.Update();
     // for(auto& star : stars) star.Update();
-    rect.Update();
-
+    // rect.Update();
+    rc->Update();
+    rc2->Update();
+    cc->Update();
 }
 
 void Main::LateUpdate()
 {
-    Vector2 mousePos = INPUT->GetWorldMousePos();
+    // 사각형과 마우스 좌표
+    if (rc->Intersect(INPUT->GetWorldMousePos()))
+    {
+        Vector2 dir = INPUT->GetWorldMousePos() - rc->GetWorldPos();
+        dir.Normalize();
+        rc->color = Color(dir.x, dir.y, 0.5f, 1.0f);
+        // rc->MoveWorldPos(-dir * 100.0f * DELTA);
+
+        if (INPUT->KeyPress(VK_LBUTTON))
+        {
+            Vector2 velocity = INPUT->GetWorldMousePos() - lastPos;
+            rc->MoveWorldPos(velocity);
+        }
+    }
+    else
+    {
+        rc->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+    /*Vector2 mousePos = INPUT->GetWorldMousePos();
     float rad = Utility::DirToRadian(mousePos);
     float degree = rad * 180.0f / PI;
     float degreePlus = degree < 0.0f ? degree + 360.0f : degree;
@@ -52,26 +87,6 @@ void Main::LateUpdate()
     
     if (rect.Intersect(mousePos))
     {
-        /*
-        if (degreePlus >= 0.0f and degreePlus < 120.0f)
-        {
-            float color = degreePlus / 120.0f;
-            r = 1.0f - color;
-            g = color;
-        }
-        else if (degreePlus >= 120.0f and degreePlus < 240.0f)
-        {
-            float color = (degreePlus - 120.0f) / 120.0f;
-            g = 1.0f - color;
-            b = color;
-        }
-        else
-        {
-            float color = (degreePlus - 240.0f) / 120.0f;
-            b = 1.0f - color;
-            r = color;
-        }
-        */
         r = mousePos.x * 1.0f / (rect.scale.x / 2);
         g = mousePos.y * 1.0f / (rect.scale.y / 2);
         r = max(0.0f, r);
@@ -89,7 +104,48 @@ void Main::LateUpdate()
     float colors[3] = { r, g, b };
     ImGui::InputFloat3("RGB(0~1)", colors);
     int colors255[3] = { r * 255, g * 255, b * 255 };
-    ImGui::InputInt3("RGB(0~255)", colors255);
+    ImGui::InputInt3("RGB(0~255)", colors255);*/
+
+
+    // 원과 마우스 좌표
+    if (cc->Intersect(INPUT->GetWorldMousePos()))
+    {
+        Vector2 dir = INPUT->GetWorldMousePos() - cc->GetWorldPos();
+        dir.Normalize();
+        cc->color = Color(dir.x, dir.y, 0.5f, 1.0f);
+
+        if (INPUT->KeyPress(VK_LBUTTON))
+        {
+            Vector2 velocity = INPUT->GetWorldMousePos() - lastPos;
+            cc->MoveWorldPos(velocity);
+        }
+    }
+    else
+    {
+        cc->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+
+    // 사각형과 사각형 충돌
+    if (rc->Intersect(rc2))
+    {
+        Vector2 dir = rc->GetWorldPos() - rc2->GetWorldPos();
+        dir.Normalize();
+        rc2->MoveWorldPos(-dir);
+    }
+
+    // 사각형과 원 충돌
+    if (rc->Intersect(cc))
+    {
+        Vector2 dir = rc->GetWorldPos() - cc->GetWorldPos();
+        dir.Normalize();
+        cc->MoveWorldPos(-dir);
+    }
+
+
+
+
+    lastPos = INPUT->GetWorldMousePos();
 }
 
 void Main::Render()
@@ -97,7 +153,10 @@ void Main::Render()
     // pl.Render();
     // circle.Render();
     // for (auto& star : stars) star.Render();
-    rect.Render();
+    // rect.Render();
+    rc->Render();
+    rc2->Render();
+    cc->Render();
 }
 
 void Main::ResizeScreen()
