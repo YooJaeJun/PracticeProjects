@@ -143,6 +143,7 @@ bool Utility::IntersectRectCircle(RECT & rc, CIRCLE & cc)
     return false;
 }
 
+/*
 bool Utility::IntersectRectCircle(GameObject * ob1, GameObject * ob2, COLDIR & result)
 {
     Vector2 rectPivot = ob1->GetWorldPivot();
@@ -182,6 +183,7 @@ bool Utility::IntersectRectCircle(GameObject * ob1, GameObject * ob2, COLDIR & r
     result = COLDIR::NONE;
     return false;
 }
+*/
 
 bool Utility::IntersectCircleCoord(CIRCLE & cc, Vector2 coord)
 {

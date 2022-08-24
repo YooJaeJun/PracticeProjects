@@ -1,11 +1,11 @@
 #pragma once
-enum COLDIR
+/*enum COLDIR
 {
     NONE,
     UPDOWN,
     LEFTRIGHT,
     EDGE
-};
+};*/
 namespace Utility
 {
     //충돌타입
@@ -36,7 +36,7 @@ namespace Utility
     //네모 원
     bool IntersectRectCircle(RECT & rc, CIRCLE & cc);
 
-    bool IntersectRectCircle(GameObject* ob1, GameObject* ob2, COLDIR& result);
+    // bool IntersectRectCircle(GameObject* ob1, GameObject* ob2, COLDIR& result);
 
     float DirToRadian(Vector2 Dir);
 

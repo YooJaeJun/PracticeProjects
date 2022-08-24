@@ -143,15 +143,15 @@ void GameObject::Render()
 bool GameObject::Intersect(Vector2 coord)
 {
 	if (not colOnOff) return false;
-
+	
 	if (collider == COLLIDER::RECT)
 	{
-		if (GetRight() == RIGHT) //회전X
-		{
+		// if (GetRight() == RIGHT) //회전X
+		// {
 			Utility::RECT rc(GetWorldPivot(), scale);
 			return IntersectRectCoord(rc, coord);
-		}
-		else //회전
+		// }
+		/*else //회전
 		{
 			Vector2 rcpivot = Vector2::Transform(pivot, S);
 			Utility::RECT rc1(rcpivot, scale);
@@ -160,8 +160,8 @@ bool GameObject::Intersect(Vector2 coord)
 			coord = Vector2::Transform(coord, rcInverse);
 
 			return IntersectRectCoord(rc1, coord);
-		}
-
+		}*/
+	
 	}
 	else if (collider == COLLIDER::CIRCLE)
 	{
