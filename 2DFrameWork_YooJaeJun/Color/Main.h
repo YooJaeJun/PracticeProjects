@@ -9,9 +9,9 @@ private:
 
 	Vector2		lastPos;
 	ObRect*		rc;
-	ObRect*		rc2;
+	ObRect*		target;
 	ObCircle*	cc;
-	ObCircle*	cc2;
+	ObCircle*	targetCc;
 
 public:
 	virtual void Init() override;

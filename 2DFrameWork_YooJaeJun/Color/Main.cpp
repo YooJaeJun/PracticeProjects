@@ -31,20 +31,20 @@ void Main::Init()
     rc->scale = Vector2(100.0f, 100.0f);
     rc->collider = COLLIDER::RECT;
 
-    rc2 = new ObRect();
-    rc2->SetWorldPos(Vector2(-100.0f, 0.0f));
-    rc2->scale = Vector2(100.0f, 100.0f);
-    rc2->collider = COLLIDER::RECT;
+    target = new ObRect();
+    target->SetWorldPos(Vector2(-100.0f, 0.0f));
+    target->scale = Vector2(100.0f, 100.0f);
+    target->collider = COLLIDER::RECT;
 
     cc = new ObCircle();
     cc->SetWorldPos(Vector2(100.0f, 0.0f));
     cc->scale = Vector2(100.0f, 100.0f);
     cc->collider = COLLIDER::CIRCLE;
 
-    cc2 = new ObCircle();
-    cc2->SetWorldPos(Vector2(300.0f, 0.0f));
-    cc2->scale = Vector2(100.0f, 100.0f);
-    cc2->collider = COLLIDER::CIRCLE;
+    targetCc = new ObCircle();
+    targetCc->SetWorldPos(Vector2(300.0f, 0.0f));
+    targetCc->scale = Vector2(100.0f, 100.0f);
+    targetCc->collider = COLLIDER::CIRCLE;
 }
 
 void Main::Release()
@@ -58,32 +58,15 @@ void Main::Update()
     // circle.Update();
     // for(auto& star : stars) star.Update();
     // rect.Update();
+    ImGui::SliderAngle("Rotation", &rc->rotation);
     rc->Update();
-    rc2->Update();
+    target->Update();
     cc->Update();
-    cc2->Update();
+    targetCc->Update();
 }
 
 void Main::LateUpdate()
 {
-    // 사각형과 마우스 좌표
-    if (rc->Intersect(INPUT->GetWorldMousePos()))
-    {
-        Vector2 dir = INPUT->GetWorldMousePos() - rc->GetWorldPos();
-        dir.Normalize();
-        rc->color = Color(dir.x, dir.y, 0.5f, 1.0f);
-        // rc->MoveWorldPos(-dir * 100.0f * DELTA);
-
-        if (INPUT->KeyPress(VK_LBUTTON))
-        {
-            Vector2 velocity = INPUT->GetWorldMousePos() - lastPos;
-            rc->MoveWorldPos(velocity);
-        }
-    }
-    else
-    {
-        rc->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-    }
     /*
     Vector2 mousePos = INPUT->GetWorldMousePos();
     float rad = Utility::DirToRadian(mousePos);
@@ -114,73 +97,84 @@ void Main::LateUpdate()
     ImGui::InputInt3("RGB(0~255)", colors255);
     */
 
-    // 원과 마우스 좌표
-    
-    if (cc->Intersect(INPUT->GetWorldMousePos()))
+    // 사각형과 마우스 좌표
+    if (target->Intersect(INPUT->GetWorldMousePos()))
     {
-        Vector2 dir = INPUT->GetWorldMousePos() - cc->GetWorldPos();
+        Vector2 dir = INPUT->GetWorldMousePos() - target->GetWorldPos();
         dir.Normalize();
-        cc->color = Color(dir.x, dir.y, 0.5f, 1.0f);
-        
+        target->color = Color(dir.x, dir.y, 0.5f, 1.0f);
+        // rc->MoveWorldPos(-dir * 100.0f * DELTA);
+
         if (INPUT->KeyPress(VK_LBUTTON))
         {
             Vector2 velocity = INPUT->GetWorldMousePos() - lastPos;
-            cc->MoveWorldPos(velocity);
+            target->MoveWorldPos(velocity);
         }
     }
     else
     {
-        cc->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+        target->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+    // 원과 마우스 좌표
+    if (targetCc->Intersect(INPUT->GetWorldMousePos()))
+    {
+        Vector2 dir = INPUT->GetWorldMousePos() - targetCc->GetWorldPos();
+        dir.Normalize();
+        targetCc->color = Color(dir.x, dir.y, 0.5f, 1.0f);
+        
+        if (INPUT->KeyPress(VK_LBUTTON))
+        {
+            Vector2 velocity = INPUT->GetWorldMousePos() - lastPos;
+            targetCc->MoveWorldPos(velocity);
+        }
+    }
+    else
+    {
+        targetCc->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
     }
     
 
+    target->Update();   // 위치 먼저 갱신!!!
 
-
-    // 사각형과 사각형 충돌
-    if (rc->Intersect(rc2))
+    // 사각형과 사각형
+    if (target->Intersect(rc))
     {
-        Vector2 dir = rc->GetWorldPos() - rc2->GetWorldPos();
-        dir.Normalize();
-        rc2->MoveWorldPos(-dir * 5.0f);
-
-        // float rcR = rc->GetWorldPos().x + rc->scale.x / 2;
-        // float rc2L = rc2->GetWorldPos().x - rc2->scale.x / 2;
-        // float moveX = 0.0f;
-        // if (rcR > rc2L) moveX = rc2L - rcR;
-
-        // float rcD = rc->GetWorldPos().y - rc->scale.y / 2;
-        // float rc2U = rc2->GetWorldPos().y + rc2->scale.y / 2;
-        // float moveY = 0.0f;
-        // if (rcD < rc2U) moveY = rc2U - rcD;
-
-        // rc2->MoveWorldPos(Vector2(-moveX, 0.0f));
-        // moveX = 0.0f;
+        Vector2 velocity = INPUT->GetWorldMousePos() - lastPos;
+        rc->MoveWorldPos(velocity);
+    }
+    else
+    {
+        target->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
     }
 
-    // 사각형과 원 충돌
-    if (rc->Intersect(cc2))
+
+    cc->Update();
+
+    // 사각형과 원
+    if (target->Intersect(cc))
     {
-        Vector2 dir = rc->GetWorldPos() - cc2->GetWorldPos();
-        dir.Normalize();
-        cc2->MoveWorldPos(-dir * 5.0f);
+        Vector2 velocity = INPUT->GetWorldMousePos() - lastPos;
+        cc->MoveWorldPos(velocity);
+    }
+    else
+    {
+        target->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
     }
 
-    // 원과 사각형 충돌
-    if (cc->Intersect(rc2))
-    {
-        Vector2 dir = cc->GetWorldPos() - rc2->GetWorldPos();
-        dir.Normalize();
-        rc2->MoveWorldPos(-dir * 5.0f);
-    }
 
-    // 원과 원 충돌
-    if (cc->Intersect(cc2))
-    {
-        Vector2 dir = cc->GetWorldPos() - cc2->GetWorldPos();
-        dir.Normalize();
-        cc2->MoveWorldPos(-dir * 5.0f);
-    }
+    targetCc->Update();
 
+    // 사각형과 원
+    if (targetCc->Intersect(cc))
+    {
+        Vector2 velocity = INPUT->GetWorldMousePos() - lastPos;
+        cc->MoveWorldPos(velocity);
+    }
+    else
+    {
+        target->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    }
 
 
 
@@ -194,9 +188,9 @@ void Main::Render()
     // for (auto& star : stars) star.Render();
     // rect.Render();
     rc->Render();
-    rc2->Render();
+    target->Render();
     cc->Render();
-    cc2->Render();
+    targetCc->Render();
 }
 
 void Main::ResizeScreen()
