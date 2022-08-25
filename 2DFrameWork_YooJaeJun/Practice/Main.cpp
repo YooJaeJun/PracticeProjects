@@ -113,26 +113,26 @@ void Main::Update()
     {
         // player.MoveWorldPos(player.GetUp() * 400.0f * DELTA);
         player.MoveWorldPos(UP * 600.0f * DELTA);
-        CAM->position += UP * 300.0f * DELTA;
+        // CAM->position += UP * 300.0f * DELTA;
     }
     else if (INPUT->KeyPress('S'))
     {
         // player.MoveWorldPos(-player.GetUp() * 400.0f * DELTA);
         player.MoveWorldPos(DOWN * 600.0f * DELTA);
-        CAM->position += DOWN * 300.0f * DELTA;
+        // CAM->position += DOWN * 300.0f * DELTA;
     }
 
     if (INPUT->KeyPress('A'))
     {
         // player.MoveWorldPos(-player.GetRight() * 400.0f * DELTA);
         player.MoveWorldPos(LEFT * 600.0f * DELTA);
-        CAM->position += LEFT * 300.0f * DELTA;
+        // CAM->position += LEFT * 300.0f * DELTA;
     }
     else if (INPUT->KeyPress('D'))
     {
         // player.MoveWorldPos(player.GetRight() * 400.0f * DELTA);
         player.MoveWorldPos(RIGHT * 600.0f * DELTA);
-        CAM->position += RIGHT * 300.0f * DELTA;
+        // CAM->position += RIGHT * 300.0f * DELTA;
     }
 
 
