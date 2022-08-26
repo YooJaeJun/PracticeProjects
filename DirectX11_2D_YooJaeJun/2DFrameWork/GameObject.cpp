@@ -146,21 +146,21 @@ bool GameObject::Intersect(Vector2 coord)
 	
 	if (collider == COLLIDER::RECT)
 	{
-		// if (GetRight() == RIGHT) //회전X
-		// {
+		if (GetRight() == RIGHT) //회전X			// 1이나 0이나 0.5는 부동소수점 오차 없어서 == 비교 가능
+		{
 			Utility::RECT rc(GetWorldPivot(), scale);
 			return IntersectRectCoord(rc, coord);
-		// }
-		/*else //회전
+		}
+		else //회전
 		{
-			Vector2 rcpivot = Vector2::Transform(pivot, S);
+			Vector2 rcpivot = Vector2::Transform(pivot, S);		// 피벗 다시 원점 위치
 			Utility::RECT rc1(rcpivot, scale);
 
 			Matrix rcInverse = RT.Invert();
-			coord = Vector2::Transform(coord, rcInverse);
+			coord = Vector2::Transform(coord, rcInverse);		// 마우스도 사각형의 체계로. SRT * (1/RT). scale만 남음
 
 			return IntersectRectCoord(rc1, coord);
-		}*/
+		}
 	
 	}
 	else if (collider == COLLIDER::CIRCLE)
