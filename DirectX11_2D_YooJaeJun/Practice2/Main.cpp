@@ -58,7 +58,7 @@ void Main::Update()
     // circle.Update();
     // for(auto& star : stars) star.Update();
     // rect.Update();
-    ImGui::SliderAngle("Rotation", &rc->rotation);
+    ImGui::SliderAngle("Rotation", &targetRc->rotation);
     rc->Update();
     targetRc->Update();
     cc->Update();
