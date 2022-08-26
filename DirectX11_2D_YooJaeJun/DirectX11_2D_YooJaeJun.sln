@@ -60,6 +60,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{54A271
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Txt", "Txt", "{BC1DD457-26F1-4145-994B-7D33F751C292}"
 	ProjectSection(SolutionItems) = preProject
+		Txt\렌더링 파이프라인.txt = Txt\렌더링 파이프라인.txt
 		Txt\벡터.txt = Txt\벡터.txt
 		Txt\삼각함수.txt = Txt\삼각함수.txt
 		Txt\좌표해상도.txt = Txt\좌표해상도.txt
@@ -73,6 +74,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sound", "Sound", "{031D9208
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Practice2", "Practice2\Practice2.vcxproj", "{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Arkanoid", "Arkanoid\Arkanoid.vcxproj", "{C8395219-6E5A-405B-9916-FE5311EFA8DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -114,6 +117,14 @@ Global
 		{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}.Release|x64.Build.0 = Release|x64
 		{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}.Release|x86.ActiveCfg = Release|Win32
 		{B1A746B8-EE65-4FEC-BB83-3D822D9F8552}.Release|x86.Build.0 = Release|Win32
+		{C8395219-6E5A-405B-9916-FE5311EFA8DB}.Debug|x64.ActiveCfg = Debug|x64
+		{C8395219-6E5A-405B-9916-FE5311EFA8DB}.Debug|x64.Build.0 = Debug|x64
+		{C8395219-6E5A-405B-9916-FE5311EFA8DB}.Debug|x86.ActiveCfg = Debug|Win32
+		{C8395219-6E5A-405B-9916-FE5311EFA8DB}.Debug|x86.Build.0 = Debug|Win32
+		{C8395219-6E5A-405B-9916-FE5311EFA8DB}.Release|x64.ActiveCfg = Release|x64
+		{C8395219-6E5A-405B-9916-FE5311EFA8DB}.Release|x64.Build.0 = Release|x64
+		{C8395219-6E5A-405B-9916-FE5311EFA8DB}.Release|x86.ActiveCfg = Release|Win32
+		{C8395219-6E5A-405B-9916-FE5311EFA8DB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
