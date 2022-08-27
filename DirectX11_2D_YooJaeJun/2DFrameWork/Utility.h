@@ -23,18 +23,18 @@ namespace Utility
     };
 
     //사각형 원 과 좌표
-    bool IntersectRectCoord(RECT & rc, Vector2 coord);
-    bool IntersectCircleCoord(CIRCLE & cc, Vector2 coord);
+    IntersectPos IntersectRectCoord(RECT & rc, Vector2 coord);
+    IntersectPos IntersectCircleCoord(CIRCLE & cc, Vector2 coord);
 
     //네모 네모
-    bool IntersectRectRect(RECT & rc1, RECT & rc2);
+    IntersectPos IntersectRectRect(RECT & rc1, RECT & rc2);
     //OBB
-    bool IntersectRectRect(GameObject * ob1, GameObject * ob2);
+    IntersectPos IntersectRectRect(GameObject * ob1, GameObject * ob2);
 
     //원 원
-    bool IntersectCircleCircle(CIRCLE & cc1, CIRCLE & cc2);
+    IntersectPos IntersectCircleCircle(CIRCLE & cc1, CIRCLE & cc2);
     //네모 원
-    bool IntersectRectCircle(RECT & rc, CIRCLE & cc);
+    IntersectPos IntersectRectCircle(RECT & rc, CIRCLE & cc);
 
     // bool IntersectRectCircle(GameObject* ob1, GameObject* ob2, COLDIR& result);
 

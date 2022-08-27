@@ -27,13 +27,6 @@ void Main::Init()
         bullet = make_shared<Bullet>();
     }
 
-
-    for (auto& line : lines)
-    {
-        line.scale.x = 100.0f;
-        line.color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
     for (auto& star : stars)
     {
         star.scale = Vector2(25.0f, 25.0f);
@@ -59,23 +52,31 @@ void Main::Init()
     }
 
 
-    lines[0].SetWorldPos(Vector2(-100.0f, 120.0f));
-    lines[1].SetWorldPos(Vector2(0.0f, 120.0f));
-    lines[1].rotation = -90.0f * ToRadian;
-    lines[2].SetWorldPos(Vector2(0.0f, 120.0f));
-    lines[3].SetWorldPos(Vector2(100.0f, 120.0f));
-    lines[3].rotation = -90.0f * ToRadian;
-
-    lines[4].SetWorldPos(Vector2(-120.0f, 0.0f));
-    lines[4].scale.x = 240.0f;
-
-    lines[5].SetWorldPos(Vector2(0.0f, -20.0f));
-    lines[5].rotation = -120.0f * ToRadian;
-    lines[6].SetWorldPos(Vector2(0.0f, -20.0f));
-    lines[6].rotation = -60.0f * ToRadian;
 
 
-    state = (int)estate::run;
+    for (auto& line : endingLines)
+    {
+        line.scale.x = 100.0f;
+        line.color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    endingLines[0].SetWorldPos(Vector2(-100.0f, 120.0f));
+    endingLines[1].SetWorldPos(Vector2(0.0f, 120.0f));
+    endingLines[1].rotation = -90.0f * ToRadian;
+    endingLines[2].SetWorldPos(Vector2(0.0f, 120.0f));
+    endingLines[3].SetWorldPos(Vector2(100.0f, 120.0f));
+    endingLines[3].rotation = -90.0f * ToRadian;
+
+    endingLines[4].SetWorldPos(Vector2(-120.0f, 0.0f));
+    endingLines[4].scale.x = 240.0f;
+
+    endingLines[5].SetWorldPos(Vector2(0.0f, -20.0f));
+    endingLines[5].rotation = -120.0f * ToRadian;
+    endingLines[6].SetWorldPos(Vector2(0.0f, -20.0f));
+    endingLines[6].rotation = -60.0f * ToRadian;
+
+
+    state = (int)eState::run;
     turn = (int)eturn::player;
     cout << "\n------\n";
     cout << "스따뚜 (재시작은 R키임) \n";
@@ -93,7 +94,7 @@ void Main::Update()
     if (INPUT->KeyDown('R'))
     {
         Init();
-        state = (int)estate::run;
+        state = (int)eState::run;
         player->Init();
         enemy->Init();
         enemy->hitbox->rotationY = 180.0f * ToRadian;
@@ -109,9 +110,9 @@ void Main::Update()
             particles[i]->Init(i);
         }
     }
-    if (state == (int)estate::end)
+    if (state == (int)eState::end)
     {
-        for (auto& line : lines) line.Update();
+        for (auto& line : endingLines) line.Update();
         return;
     }
 
@@ -145,7 +146,7 @@ void Main::Update()
 
 void Main::LateUpdate()
 {
-    if (state == (int)estate::end) return;
+    if (state == (int)eState::end) return;
 
     if (player->LateUpdate() || enemy->LateUpdate())
     {
@@ -252,9 +253,9 @@ void Main::LateUpdate()
 
 void Main::Render()
 {
-    if (state == (int)estate::end)
+    if (state == (int)eState::end)
     {
-        for (auto& line : lines)
+        for (auto& line : endingLines)
         {
             line.Render();
         }
@@ -327,7 +328,7 @@ void Main::TurnUpdate()
 
 void Main::End()
 {
-    state = (int)estate::end;
+    state = (int)eState::end;
     cout << "재시작: R \n";
 }
 

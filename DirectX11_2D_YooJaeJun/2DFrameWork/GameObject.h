@@ -62,9 +62,9 @@ public:
 
 	virtual void Update();
 	virtual void Render();
-	bool Intersect(Vector2 coord);
-	bool Intersect(GameObject* ob);
-	bool IntersectScreenMouse(Vector2 coord);
+	IntersectPos Intersect(Vector2 coord);
+	IntersectPos Intersect(GameObject* ob);
+	IntersectPos IntersectScreenMouse(Vector2 coord);
 
 	//getter setter
 public:

@@ -14,29 +14,29 @@ Utility::CIRCLE::CIRCLE(Vector2 pivot, Vector2 scale)
     radius = scale.x * 0.5f;
 }
 
-bool Utility::IntersectRectCoord(RECT & rc, Vector2 coord)
+IntersectPos Utility::IntersectRectCoord(RECT & rc, Vector2 coord)
 {
     if (rc.min.x < coord.x && coord.x < rc.max.x &&
         rc.min.y < coord.y && coord.y < rc.max.y)
     {
-        return true;
+        return IntersectPos::common;
     }
-    return false;
+    return IntersectPos::none;
 }
 
-bool Utility::IntersectRectRect(RECT & rc1, RECT & rc2)
+IntersectPos Utility::IntersectRectRect(RECT & rc1, RECT & rc2)
 {
     if (rc1.min.x < rc2.max.x &&
         rc1.max.x > rc2.min.x &&
         rc1.min.y < rc2.max.y &&
         rc1.max.y > rc2.min.y)
     {
-        return true;
+        return IntersectPos::common;
     }
-    return false;
+    return IntersectPos::none;
 }
 
-bool Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
+IntersectPos Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
 {
     //중심점
     Vector2 rc1Pivot = ob1->GetWorldPivot();
@@ -67,7 +67,7 @@ bool Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
     //ob1에서 두벡터가 투영된 길이
     float b = ob1->scale.x * 0.5f;
 
-    if (c > a + b)return false;
+    if (c > a + b) return IntersectPos::none;
 
     //ob1의 Up축 비교
     //       절대값(내적 a . b)
@@ -79,7 +79,7 @@ bool Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
     //ob1에서 두벡터가 투영된 길이
     b = ob1->scale.y * 0.5f;
 
-    if (c > a + b)return false;
+    if (c > a + b) return IntersectPos::none;
 
     //ob2의 Right축 비교
     //       절대값(내적 a . b)
@@ -91,7 +91,7 @@ bool Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
     //ob2에서 두벡터가 투영된 길이
     b = ob2->scale.x * 0.5f;
 
-    if (c > a + b)return false;
+    if (c > a + b) return IntersectPos::none;
 
     //ob2의 Up축 비교
     //       절대값(내적 a . b)
@@ -103,12 +103,12 @@ bool Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
     //ob2에서 두벡터가 투영된 길이
     b = ob2->scale.y * 0.5f;
 
-    if (c > a + b)return false;
+    if (c > a + b) return IntersectPos::none;
 
-    return true;
+    return IntersectPos::common;
 }
 
-bool Utility::IntersectRectCircle(RECT & rc, CIRCLE & cc)
+IntersectPos Utility::IntersectRectCircle(RECT & rc, CIRCLE & cc)
 {
     Vector2 rectPivot = (rc.min + rc.max) * 0.5f;
     Vector2 RectScale = rc.max - rc.min;
@@ -117,13 +117,13 @@ bool Utility::IntersectRectCircle(RECT & rc, CIRCLE & cc)
 
     if (IntersectRectCoord(Wrect, cc.pivot))
     {
-        return true;
+        return IntersectPos::leftRight;
     }
 
     RECT Hrect(rectPivot, RectScale + Vector2(0.0f, cc.radius * 2.0f));
     if (IntersectRectCoord(Hrect, cc.pivot))
     {
-        return true;
+        return IntersectPos::topBottom;
     }
 
     Vector2 edge[4];
@@ -136,11 +136,11 @@ bool Utility::IntersectRectCircle(RECT & rc, CIRCLE & cc)
     {
         if (IntersectCircleCoord(cc, edge[i]))
         {
-            return true;
+            return IntersectPos::edge;
         }
     }
 
-    return false;
+    return IntersectPos::none;
 }
 
 /*
@@ -185,25 +185,25 @@ bool Utility::IntersectRectCircle(GameObject * ob1, GameObject * ob2, COLDIR & r
 }
 */
 
-bool Utility::IntersectCircleCoord(CIRCLE & cc, Vector2 coord)
+IntersectPos Utility::IntersectCircleCoord(CIRCLE & cc, Vector2 coord)
 {
     Vector2 Distance = cc.pivot - coord;
     if (Distance.Length() < cc.radius)
     {
-        return true;
+        return IntersectPos::common;
     }
-    return false;
+    return IntersectPos::none;
 }
 
-bool Utility::IntersectCircleCircle(CIRCLE & cc1, CIRCLE & cc2)
+IntersectPos Utility::IntersectCircleCircle(CIRCLE & cc1, CIRCLE & cc2)
 {
     Vector2 distance = cc1.pivot - cc2.pivot;
     if (distance.Length() < cc1.radius + cc2.radius)
     {
-        return true;
+        return IntersectPos::common;
     }
 
-    return false;
+    return IntersectPos::none;
 }
 
 float Utility::DirToRadian(Vector2 Dir)

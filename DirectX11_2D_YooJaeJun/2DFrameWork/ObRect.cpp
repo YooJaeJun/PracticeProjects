@@ -17,11 +17,11 @@ void ObRect::CreateStaticMember()
 
     Vertex[1].position.x = -0.5f;
     Vertex[1].position.y = 0.5f;
-    Vertex[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+    Vertex[1].color = Color(0.3f, 0.3f, 0.3f, 1.0f);
 
     Vertex[2].position.x = 0.5f;
     Vertex[2].position.y = -0.5f;
-    Vertex[2].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    Vertex[2].color = Color(0.6f, 0.6f, 0.6f, 1.0f);
 
     Vertex[3].position.x = 0.5f;
     Vertex[3].position.y = 0.5f;

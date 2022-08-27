@@ -12,8 +12,8 @@ private:
 	short					lastTurn;	// 발사 전 마지막 턴을 가진 사람
 	enum class eturn		{ neutral, player, enemy };
 	short					state;
-	enum class estate		{ run, end };
-	ObLine					lines[7];	// 종료 문자 렌더링할 선들
+	enum class eState		{ run, end };
+	ObLine					endingLines[7];	// 종료 문자 렌더링할 선들
 	static const int		starCount = 12;
 	ObStarPointed			stars[starCount];
 	static const int		particleCount = 10;

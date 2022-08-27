@@ -1,23 +1,43 @@
 #pragma once
+const int brickCnt = 36;
+const int brickRow = 6;
+const int brickCol = 6;
+const int bulletMax = 12;
+
 class Main : public Scene
 {
 private:
-	Vector2				ballLastPos;
-	ObCircle*			ball;
-	Vector2				ballFireDir;
-	float				ballScalar;
-	
-	ObRect*				bricks[16];
-	int					brickLife[16];
-	float				brickHitTime[16];
-	enum class estate	{ idle, hit };
-	estate				brickState[16];
+	int						restartKey;
+	bool					endFlag;
+	enum class eGameState	{ process, end };
+	eGameState				gameState;
+	ObLine*					endingLines[7];
 
-	ObRect*				walls[4];
+	Vector2					ballLastPos;
+	ObCircle*				ball;
+	Vector2					ballFireDir;
+	float					ballScalar;
+
+	ObRect*					bricks[brickCnt];
+	int						brickLife[brickCnt];
+	float					brickHitTime[brickCnt];
+	enum class eState		{ idle, hit };
+	eState					brickState[brickCnt];
+
+	ObRect*					walls[4];
 	
-	ObRect*				bar;
-	Vector2				barDir;
-	float				barScalar;
+	ObRect*					bar;
+	Vector2					barDir;
+	float					barScalar;
+
+	IntersectPos			interPos;
+
+	ObRect*					itemBullet;
+	ObCircle*				bullets[bulletMax];
+	bool					bulletFired[bulletMax];
+	int						bulletFireCnt;
+	bool					bulletFireState;
+	float					bulletFireTime;
 
 public:
 	virtual void Init() override;
