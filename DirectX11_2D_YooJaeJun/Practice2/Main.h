@@ -13,6 +13,9 @@ private:
 	ObCircle*	cc;
 	ObCircle*	targetCc;
 
+	Unit*		player1;
+	Unit*		player2;
+
 public:
 	virtual void Init() override;
 	virtual void Release() override; //«ÿ¡¶

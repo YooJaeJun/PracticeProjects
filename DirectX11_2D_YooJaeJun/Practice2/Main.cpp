@@ -26,7 +26,7 @@ void Main::Init()
     rect.isFilled = true;
     rect.color = Color(0.0f, 0.0f, 0.0f, 1.0f);
     rect.isAxis = true;*/
-    rc = new ObRect();
+    /*rc = new ObRect();
     rc->SetWorldPos(Vector2(-200.0f, 200.0f));
     rc->scale = Vector2(100.0f, 100.0f);
     rc->collider = COLLIDER::RECT;
@@ -44,7 +44,12 @@ void Main::Init()
     targetCc = new ObCircle();
     targetCc->SetWorldPos(Vector2(200.0f, -200.0f));
     targetCc->scale = Vector2(100.0f, 100.0f);
-    targetCc->collider = COLLIDER::CIRCLE;
+    targetCc->collider = COLLIDER::CIRCLE; */
+    player1 = new Unit;
+    player1->obj = new ObCircle;
+    player1->obj->SetWorldPos(Vector2(0.0f, -100.0f));
+    player1->obj->scale = Vector2(50.0f, 50.0f);
+    player1->obj->collider = COLLIDER::CIRCLE;
 }
 
 void Main::Release()
@@ -58,7 +63,17 @@ void Main::Update()
     // circle.Update();
     // for(auto& star : stars) star.Update();
     // rect.Update();
+    // ImGui::ColorEdit3("Color", (float*)&cc->color, ImGuiColorEditFlags_PickerHueBar);
     ImGui::SliderAngle("Rotation", &targetRc->rotation);
+    ImGui::Button("Button");    // ImGui::SameLine();
+    ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
+    // ImGui::SliderFloat2("Scale", &cc->scale.x, 1.0f, 500.0f, "%.0f");
+    ImGui::Text("p1 score: ", &player1->score, 1.0f, 500.0f, "%.0f");
+    ImGui::Text("p2 score: ", &player2->score, 1.0f, 500.0f, "%.0f");
+
+    
+
+
     rc->Update();
     targetRc->Update();
     cc->Update();
@@ -166,6 +181,12 @@ void Main::LateUpdate()
     {
         Vector2 velocity = INPUT->GetWorldMousePos() - lastPos;
         cc->MoveWorldPos(velocity);
+    }
+
+
+    if (ball->obj->Intersect())
+    {
+
     }
 
 
