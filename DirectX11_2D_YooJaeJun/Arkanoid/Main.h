@@ -3,6 +3,7 @@ const int brickCnt = 36;
 const int brickRow = 6;
 const int brickCol = 6;
 const int bulletMax = 12;
+const int starMax = 6;
 
 class Main : public Scene
 {
@@ -13,31 +14,18 @@ private:
 	eGameState				gameState;
 	ObLine*					endingLines[7];
 
-	Vector2					ballLastPos;
-	ObCircle*				ball;
-	Vector2					ballFireDir;
-	float					ballScalar;
+	Ball*					ball;
+	Bar*					bar;
+	NonMover*				walls[4];
+	Brick*					bricks[brickCnt];
 
-	ObRect*					bricks[brickCnt];
-	int						brickLife[brickCnt];
-	float					brickHitTime[brickCnt];
-	enum class eState		{ idle, hit };
-	eState					brickState[brickCnt];
+	Item*					bulletBrick;
+	Ball*					bullets[bulletMax];
 
-	ObRect*					walls[4];
-	
-	ObRect*					bar;
-	Vector2					barDir;
-	float					barScalar;
+	Item*					starStormBrick;
+	Ball*					starStorms[starMax];
 
 	IntersectPos			interPos;
-
-	ObRect*					itemBullet;
-	ObCircle*				bullets[bulletMax];
-	bool					bulletFired[bulletMax];
-	int						bulletFireCnt;
-	bool					bulletFireState;
-	float					bulletFireTime;
 
 public:
 	virtual void Init() override;
