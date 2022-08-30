@@ -178,6 +178,45 @@ void Main::Update()
 
 void Main::LateUpdate()
 {
+    /*
+    // 사각형과 마우스 좌표
+    if (targetRc->Intersect(INPUT->GetWorldMousePos()))
+    {
+        Vector2 dir = INPUT->GetWorldMousePos() - targetRc->GetWorldPos();
+        dir.Normalize();
+        targetRc->color = Color(dir.x, dir.y, 0.5f, 1.0f);
+        // rc->MoveWorldPos(-dir * 100.0f * DELTA);
+
+        if (INPUT->KeyPress(VK_LBUTTON))
+        {
+            Vector2 velocity = INPUT->GetWorldMousePos() - lastPos;
+            targetRc->MoveWorldPos(velocity);
+        }
+    }
+    else
+    {
+        targetRc->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+    // 원과 마우스 좌표
+    if (targetCc->Intersect(INPUT->GetWorldMousePos()))
+    {
+        Vector2 dir = INPUT->GetWorldMousePos() - targetCc->GetWorldPos();
+        dir.Normalize();
+        targetCc->color = Color(dir.x, dir.y, 0.5f, 1.0f);
+        
+        if (INPUT->KeyPress(VK_LBUTTON))
+        {
+            Vector2 velocity = INPUT->GetWorldMousePos() - lastPos;
+            targetCc->MoveWorldPos(velocity);
+        }
+    }
+    else
+    {
+        targetCc->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+    }
+    */
+
 
     float scaleX = bg->scale.x / 2 - 50.0f;
     float scaleY = bg->scale.y / 2 - 25.0f;
