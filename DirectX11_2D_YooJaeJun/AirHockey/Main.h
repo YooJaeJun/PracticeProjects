@@ -2,14 +2,15 @@
 class Main : public Scene
 {
 private:
-	Character*				player1;
-	Character*				player2;
-	Character*				ball;
-	Character*				line;
-	Character*				walls[4];
-	Character*				goalPost1;
-	Character*				goalPost2;
-	IntersectPos			intersectPos;
+	Character*		players[2];
+	Character*		ball;
+	Character*		line;
+	Character*		walls[4];
+	Character*		goalPosts[2];
+	IntersectPos	intersectPos;
+	Color			colorRed = Color(0.7f, 0.0f, 0.0f);
+	Color			colorBlue = Color(0.0f, 0.0f, 0.7f);
+
 
 public:
 	virtual void Init() override;

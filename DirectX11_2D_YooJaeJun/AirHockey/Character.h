@@ -13,6 +13,7 @@ public:
 	enum class eState	{ idle, hit };
 	eState				state;
 	float				hitTime;
+	Color				originColor;
 
 public:
 	virtual void Init(Vector2 pos = Vector2(0.0f, 0.0f));

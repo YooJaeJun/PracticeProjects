@@ -3,25 +3,21 @@
 
 void Main::Init()
 {
-    player1 = new Character;
-    player1->obj = new ObCircle;
-    player1->Init();
-    player1->scalar = 350.0f;
-    player1->obj->collider = COLLIDER::CIRCLE;
-    player1->type = Character::eType::p1;
-    player1->obj->scale = Vector2(50.0f, 50.0f);
-    player1->obj->color = Color(0.5f, 0.5f, 0.5f);
-    player1->score = 0;
+    for (auto& player : players)
+    {
+        player = new Character;
+        player->obj = new ObCircle;
+        player->Init();
+        player->scalar = 350.0f;
+        player->obj->collider = COLLIDER::CIRCLE;
+        player->obj->scale = Vector2(50.0f, 50.0f);
+        player->score = 0;
+    }
+    players[0]->type = Character::eType::p1;
+    players[0]->obj->color = colorRed;
+    players[1]->type = Character::eType::p2;
+    players[1]->obj->color = colorBlue;
 
-    player2 = new Character;
-    player2->obj = new ObCircle;
-    player2->Init();
-    player2->scalar = 350.0f;
-    player2->obj->collider = COLLIDER::CIRCLE;
-    player2->type = Character::eType::p2;
-    player2->obj->scale = Vector2(50.0f, 50.0f);
-    player2->obj->color = Color(0.5f, 0.5f, 0.5f);
-    player2->score = 0;
 
     ball = new Character;
     ball->obj = new ObCircle;
@@ -40,19 +36,20 @@ void Main::Init()
     line->obj->color = Color(0.0f, 0.0f, 0.0f);
 
 
-    goalPost1 = new Character;
-    goalPost1->obj = new ObRect;
-    goalPost1->obj->SetWorldPos(Vector2(0.0f, 385.0f));
-    goalPost1->obj->scale = Vector2(150.0f, 30.0f);
-    goalPost1->obj->collider = COLLIDER::RECT;
-    goalPost1->type = Character::eType::post;
-
-    goalPost2 = new Character;
-    goalPost2->obj = new ObRect;
-    goalPost2->obj->SetWorldPos(Vector2(0.0f, -385.0f));
-    goalPost2->obj->scale = Vector2(150.0f, 30.0f);
-    goalPost2->obj->collider = COLLIDER::RECT;
-    goalPost2->type = Character::eType::post;
+    for (auto& goalPost : goalPosts)
+    {
+        goalPost = new Character;
+        goalPost->obj = new ObRect;
+        goalPost->obj->scale = Vector2(150.0f, 30.0f);
+        goalPost->obj->collider = COLLIDER::RECT;
+        goalPost->type = Character::eType::post;
+    }
+    goalPosts[0]->obj->SetWorldPos(Vector2(0.0f, 385.0f));
+    goalPosts[0]->obj->color = colorRed;
+    goalPosts[0]->originColor = colorRed;
+    goalPosts[1]->obj->SetWorldPos(Vector2(0.0f, -385.0f));
+    goalPosts[1]->obj->color = colorBlue;
+    goalPosts[1]->originColor = colorBlue;
 
 
     for (auto& wall : walls)
@@ -78,17 +75,17 @@ void Main::Spawn()
     ball->Init();
     ball->scalar = 0.0f;
     ball->obj->SetWorldPos(Vector2(0.0f, 0.0f));
-    player1->obj->SetWorldPos(Vector2(0.0f, 200.0f));
-    player2->obj->SetWorldPos(Vector2(0.0f, -200.0f));
+    players[0]->obj->SetWorldPos(Vector2(0.0f, 200.0f));
+    players[1]->obj->SetWorldPos(Vector2(0.0f, -200.0f));
 }
 
 void Main::Release()
 {
-    delete player1;
-    delete player2;
-    delete ball;
-    delete line;
-    for (auto& wall : walls) delete wall;
+    for (auto& player : players) SafeDelete(player);
+    SafeDelete(ball);
+    SafeDelete(line);
+    for (auto& goalPost : goalPosts) SafeDelete(goalPost);
+    for (auto& wall : walls) SafeDelete(wall);
 }
 
 void Main::Update()
@@ -97,12 +94,25 @@ void Main::Update()
     {
         Spawn();
     }
-    player1->Update();
-    player2->Update();
+
+    float radius = players[0]->obj->scale.x / 2;
+    for (auto& player : players) player->Update();  // 위치 먼저 갱신
+
+    float plx = Utility::Saturate(players[0]->obj->GetWorldPos().x, -200.0f + radius, 200.0f - radius);
+    float ply = Utility::Saturate(players[0]->obj->GetWorldPos().y, -400.0f + radius, -radius);
+    players[0]->obj->SetWorldPosX(plx);
+    players[0]->obj->SetWorldPosY(ply);
+
+    plx = Utility::Saturate(players[1]->obj->GetWorldPos().x, -200.0f + radius, 200.0f - radius);
+    ply = Utility::Saturate(players[1]->obj->GetWorldPos().y, radius, 400.0f - radius);
+    players[1]->obj->SetWorldPosX(plx);
+    players[1]->obj->SetWorldPosY(ply);
+
+    for (auto& player : players) player->Update();
+
     ball->Update();
     line->Update();
-    goalPost1->Update();
-    goalPost2->Update();
+    for (auto& goalPost : goalPosts) goalPost->Update();
     for (auto& wall : walls) wall->Update();
 }
 
@@ -110,20 +120,21 @@ void Main::LateUpdate()
 {
     ball->Update();   // 위치 먼저 갱신
 
-    intersectPos = ball->obj->Intersect(player1->obj);
+    intersectPos = ball->obj->Intersect(players[0]->obj);
     if (intersectPos)
     {
-        ball->Bounce(intersectPos, player1, Character::eType::p1);
+        ball->Bounce(intersectPos, players[0], Character::eType::p1);
     }
 
-    intersectPos = ball->obj->Intersect(player2->obj);
+    ball->Update();   // 위치 먼저 갱신
+
+    intersectPos = ball->obj->Intersect(players[1]->obj);
     if (intersectPos)
     {
-        ball->Bounce(intersectPos, player2, Character::eType::p2);
+        ball->Bounce(intersectPos, players[1], Character::eType::p2);
     }
 
-    player1->LateUpdate();
-    player2->LateUpdate();
+    for (auto& player : players) player->LateUpdate();
     
 
     for (auto& wall : walls)
@@ -136,23 +147,23 @@ void Main::LateUpdate()
     }
 
 
-    if (ball->obj->Intersect(goalPost1->obj))
+    if (ball->obj->Intersect(goalPosts[0]->obj))
     {
         Spawn();
-        player2->score++;
-        goalPost1->state = Character::eState::hit;
+        players[1]->score++;
+        goalPosts[0]->state = Character::eState::hit;
     }
-    if (ball->obj->Intersect(goalPost2->obj))
+    if (ball->obj->Intersect(goalPosts[1]->obj))
     {
         Spawn();
-        player1->score++;
-        goalPost2->state = Character::eState::hit;
+        players[0]->score++;
+        goalPosts[1]->state = Character::eState::hit;
     }
     ball->LateUpdate();
 
 
-    player1->lastPos = player1->obj->GetWorldPos();
-    player2->lastPos = player2->obj->GetWorldPos();
+    players[0]->lastPos = players[0]->obj->GetWorldPos();
+    players[1]->lastPos = players[1]->obj->GetWorldPos();
     ball->lastPos = ball->obj->GetWorldPos();
 
 
@@ -163,8 +174,8 @@ void Main::LateUpdate()
     ImGui::End();
 
     ImGui::Begin("Score");
-    ImGui::Text("p1 score : %d", player1->score);
-    ImGui::Text("p2 score : %d", player2->score);
+    ImGui::Text("Blue score : %d", players[0]->score);
+    ImGui::Text("Red score : %d", players[1]->score);
     ImGui::Text("Restart : R");
     ImGui::End();
 
@@ -175,10 +186,8 @@ void Main::Render()
 {
     line->Render();
     for (auto& wall : walls) wall->Render();
-    goalPost1->Render();
-    goalPost2->Render();
-    player1->Render();
-    player2->Render();
+    for (auto& goalPost : goalPosts) goalPost->Render();
+    for (auto& player : players) player->Render();
     ball->Render();
 }
 
