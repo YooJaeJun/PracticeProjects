@@ -72,11 +72,11 @@ void Main::Init()
 
 void Main::Spawn()
 {
+    players[0]->obj->SetWorldPos(Vector2(0.0f, -200.0f));
+    players[1]->obj->SetWorldPos(Vector2(0.0f, 200.0f));
     ball->Init();
     ball->scalar = 0.0f;
     ball->obj->SetWorldPos(Vector2(0.0f, 0.0f));
-    players[0]->obj->SetWorldPos(Vector2(0.0f, 200.0f));
-    players[1]->obj->SetWorldPos(Vector2(0.0f, -200.0f));
 }
 
 void Main::Release()
@@ -95,9 +95,9 @@ void Main::Update()
         Spawn();
     }
 
-    float radius = players[0]->obj->scale.x / 2;
     for (auto& player : players) player->Update();  // 위치 먼저 갱신
 
+    float radius = players[0]->obj->scale.x / 2;
     float plx = Utility::Saturate(players[0]->obj->GetWorldPos().x, -200.0f + radius, 200.0f - radius);
     float ply = Utility::Saturate(players[0]->obj->GetWorldPos().y, -400.0f + radius, -radius);
     players[0]->obj->SetWorldPosX(plx);

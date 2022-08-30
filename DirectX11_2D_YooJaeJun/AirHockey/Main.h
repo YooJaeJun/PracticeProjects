@@ -8,8 +8,8 @@ private:
 	Character*		walls[4];
 	Character*		goalPosts[2];
 	IntersectPos	intersectPos;
-	Color			colorRed = Color(0.7f, 0.0f, 0.0f);
-	Color			colorBlue = Color(0.0f, 0.0f, 0.7f);
+	Color			colorRed = Color(0.8f, 0.0f, 0.0f);
+	Color			colorBlue = Color(0.0f, 0.0f, 0.8f);
 
 
 public:
