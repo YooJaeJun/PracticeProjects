@@ -77,6 +77,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AirHockey", "AirHockey\AirH
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Arkanoid", "Arkanoid\Arkanoid.vcxproj", "{C8395219-6E5A-405B-9916-FE5311EFA8DB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Practice2", "Practice2\Practice2.vcxproj", "{8AD78E69-09CE-4002-9E48-77AAD467614C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -125,6 +127,14 @@ Global
 		{C8395219-6E5A-405B-9916-FE5311EFA8DB}.Release|x64.Build.0 = Release|x64
 		{C8395219-6E5A-405B-9916-FE5311EFA8DB}.Release|x86.ActiveCfg = Release|Win32
 		{C8395219-6E5A-405B-9916-FE5311EFA8DB}.Release|x86.Build.0 = Release|Win32
+		{8AD78E69-09CE-4002-9E48-77AAD467614C}.Debug|x64.ActiveCfg = Debug|x64
+		{8AD78E69-09CE-4002-9E48-77AAD467614C}.Debug|x64.Build.0 = Debug|x64
+		{8AD78E69-09CE-4002-9E48-77AAD467614C}.Debug|x86.ActiveCfg = Debug|Win32
+		{8AD78E69-09CE-4002-9E48-77AAD467614C}.Debug|x86.Build.0 = Debug|Win32
+		{8AD78E69-09CE-4002-9E48-77AAD467614C}.Release|x64.ActiveCfg = Release|x64
+		{8AD78E69-09CE-4002-9E48-77AAD467614C}.Release|x64.Build.0 = Release|x64
+		{8AD78E69-09CE-4002-9E48-77AAD467614C}.Release|x86.ActiveCfg = Release|Win32
+		{8AD78E69-09CE-4002-9E48-77AAD467614C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

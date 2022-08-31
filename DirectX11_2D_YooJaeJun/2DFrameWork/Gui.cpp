@@ -76,10 +76,10 @@ void Gui::Update()
 
 
 
-	ImGui::Begin("Detail");
+	// ImGui::Begin("Detail");
 	//if (target)
 	//	target->RenderDetail();
-	ImGui::End();
+	// ImGui::End();
 }
 
 void Gui::Render()
