@@ -3,7 +3,9 @@
 class Main : public Scene
 {
 private:
-
+	ObRect*		player;
+	ObRect*		boss;
+	ObCircle*	effect;
 
 public:
 	virtual void Init() override;

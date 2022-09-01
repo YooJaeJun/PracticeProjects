@@ -3,15 +3,12 @@
 class Main : public Scene
 {
 private:
-	ObRect* player;
-	deque<ObRect>	trails;
+	ObRect*			player;
+	deque<ObRect*>	trails;
 	float			trailTimer;
 	float			trailSpawnTimer;
 	float			trailDuration;
-	float			trailDestroyStartTimer;
-	float			trailDestroyTimer;
 	int				trailNum;
-	int				trailNumBefore;
 
 public:
 	virtual void Init() override;
@@ -20,6 +17,4 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 	virtual void ResizeScreen() override;
-
-	void SetTrailNum(const int size);
 };

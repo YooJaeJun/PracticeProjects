@@ -3,49 +3,54 @@
 
 void Main::Init()
 {
-    trailTimer = 0.3f;
-    trailNum = 10;
-    trailDuration = trailTimer * (float)trailNum;
-    trailNumBefore = trailNum;
-
     player = new ObRect;
     player->scale = Vector2(100.0f, 100.0f);
-    player->SetWorldPos(Vector2(0.0f, 0.0f));
-    player->collider = COLLIDER::RECT;
+
+    trailTimer = 0.3f;
+    trailNum = 10;
+    trailSpawnTimer = 0.0f;
+    
+    trails.resize(trailNum);
+
+    for (auto& trail : trails)
+    {
+        trail = new ObRect;
+        trail->isVisible = false;
+        trail->scale = Vector2(100.0f, 100.0f);
+    }
 }
 
 void Main::Release()
 {
     SafeDelete(player);
+    for (auto& trail : trails) SafeDelete(trail);
 }
 
 void Main::Update()
 {
-    if (trailNumBefore != trailNum)
-    {
-        while (trails.empty() == false) trails.pop_back();
-        trailSpawnTimer = 0.0f;
-        trailDestroyStartTimer = 0.0f;
-        trailNumBefore = trailNum;
-    }
-
     ImGui::SliderFloat("trailTimer", &trailTimer, 0.0f, 2.0f);
     ImGui::Text("trailDuration: %f", trailDuration);
-    ImGui::SliderInt("trailNum", &trailNum, 1, 30);
     ImGui::Text("Tracer: R");
-    for (auto& trail : trails) trail.Update();
+    trailDuration = trailTimer * (float)trailNum;
 
-
-
-    if (INPUT->KeyDown('R'))
+    
+    if (ImGui::SliderInt("trailNum", &trailNum, 1, 30))
     {
-        while (trails.size() > 1) trails.pop_back();
-        player->SetWorldPos(trails[0].GetWorldPos());
-        player->rotation = trails[0].rotation;
-        player->Update();
-        trailSpawnTimer = 0.0f;
-        trailDestroyStartTimer = 0.0f;
+        for (auto& trail : trails) SafeDelete(trail);
+
+        trails.resize(trailNum);
+
+        for (auto& trail : trails)
+        {
+            trail = new ObRect;
+            trail->isVisible = false;
+            trail->scale = Vector2(100.0f, 100.0f);
+            trailSpawnTimer = 0.0f;
+        }
     }
+
+    for (auto& trail : trails) trail->Update();
+
 
     if (INPUT->KeyPress(VK_LEFT))
     {
@@ -65,37 +70,32 @@ void Main::Update()
         player->MoveWorldPos(-player->GetRight() * 250.0f * DELTA);
     }
 
-    player->Update();
-
-    if (trailNum != 0) trailDuration = trailTimer * (float)trailNum;
-
-
-
-    trailSpawnTimer += 1.0f * DELTA;
-    if (trailSpawnTimer >= trailTimer)
+    if (INPUT->KeyDown('R'))
     {
+        player->SetWorldPos(trails[0]->GetWorldPos());
+        player->rotation = trails[0]->rotation;
+        player->Update();
         trailSpawnTimer = 0.0f;
-        ObRect trail;
-        trail.SetWorldPos(player->GetWorldPos());
-        trail.rotation = player->rotation;
-        trail.scale = player->scale;
-        trails.push_back(trail);
-    }
-    for (auto& trail : trails) trail.Update();
-
-
-
-    trailDestroyStartTimer += 1.0f * DELTA;
-    if (trailDestroyStartTimer >= trailDuration)
-    {
-        trailDestroyTimer += 1.0f * DELTA;
-        if (trailDestroyTimer >= trailTimer)
+        for (auto& trail : trails)
         {
-            trailDestroyTimer = 0.0f;
-            trails.pop_front();
+            trail->isVisible = false;
+            trail->SetWorldPos(player->GetWorldPos());
+            trail->rotation = player->rotation;
         }
     }
-    for (auto& trail : trails) trail.Update();
+
+    if (TIMER->GetTick(trailSpawnTimer, trailTimer))
+    {
+        trails[0]->isVisible = true;
+        trails[0]->SetWorldPos(player->GetWorldPos());
+        trails[0]->rotation = player->rotation;
+        trails.push_back(trails[0]);
+        trails.pop_front();
+    }
+
+    player->Update();
+
+    for (auto& trail : trails) trail->Update();
 }
 
 void Main::LateUpdate()
@@ -104,23 +104,12 @@ void Main::LateUpdate()
 
 void Main::Render()
 {
-    for (auto& trail : trails) trail.Render();
+    for (auto& trail : trails) trail->Render();
     player->Render();
 }
 
 void Main::ResizeScreen()
 {
-}
-
-
-void Main::SetTrailNum(const int size)
-{
-    trails.resize(size);
-    for (auto& trail : trails)
-    {
-        trail.scale = Vector2(100.0f, 100.0f);
-        trail.isVisible = false;
-    }
 }
 
 int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, int command)
