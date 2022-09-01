@@ -7,6 +7,8 @@ private:
 	ObRect*		boss;
 	ObCircle*	effect;
 
+	ObImage*	bg;
+
 public:
 	virtual void Init() override;
 	virtual void Release() override;

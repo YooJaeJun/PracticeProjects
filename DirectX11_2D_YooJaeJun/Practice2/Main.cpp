@@ -3,6 +3,10 @@
 
 void Main::Init()
 {
+    bg = new ObImage(L"zzangu_3.jpg");
+    bg->scale = Vector2(100.0f, 100.0f);
+    bg->uv = Vector4(213.0f / 401.0f, 115.0f / 400.0f, 312.0f / 401.0f, 183.0f / 400.0f);
+
     player = new ObRect;
     player->scale = Vector2(200.0f, 100.0f);
     player->collider = COLLIDER::RECT;
@@ -31,30 +35,25 @@ void Main::Release()
 
 void Main::Update()
 {
+    ImGui::SliderFloat2("Scale", (float*)&bg->scale, 0.0f, 800.0f);
+    ImGui::SliderFloat4("UV", (float*)&bg->uv, 0.0f, 1.0f);
+    bg->Update();
+
     player->SetWorldPos(INPUT->GetWorldMousePos());
     player->Update();
 
 
     boss->Update();
-
-
     
     if (boss->Intersect(player))
     {
-        effect->SetWorldPos(Vector2(player->GetWorldPos().x,
-            player->GetWorldPos().y));
-
-        effect->Update();
-
         float radius = boss->scale.x / 2;
-        effect->SetWorldPosX(Utility::Saturate(
-            effect->GetWorldPos().x,
-            boss->GetWorldPos().x - radius,
-            boss->GetWorldPos().x + radius));
-        effect->SetWorldPosY(Utility::Saturate(
-            effect->GetWorldPos().y,
-            boss->GetWorldPos().y - radius,
-            boss->GetWorldPos().y + radius));
+        float minX = boss->GetWorldPos().x - radius;
+        float maxX = boss->GetWorldPos().x + radius;
+        effect->SetWorldPosX(Utility::Saturate(player->GetWorldPos().x, minX, maxX));
+        float minY = boss->GetWorldPos().y - radius;
+        float maxY = boss->GetWorldPos().y + radius;
+        effect->SetWorldPosY(Utility::Saturate(player->GetWorldPos().y, minY, maxY));
     }
 
     effect->Update();
@@ -66,6 +65,7 @@ void Main::LateUpdate()
 
 void Main::Render()
 {
+    bg->Render();
     player->Render();
     boss->Render();
     effect->Render();
