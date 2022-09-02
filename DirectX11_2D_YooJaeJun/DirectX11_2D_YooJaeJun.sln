@@ -81,6 +81,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Practice2", "Practice2\Prac
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{CAE7E4E9-C028-43E7-A562-FD3AAABD6C6F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SlidingPuzzle", "SlidingPuzzle\SlidingPuzzle.vcxproj", "{5C490124-4FA7-414E-A2E6-7143FD840FFA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -145,6 +147,14 @@ Global
 		{CAE7E4E9-C028-43E7-A562-FD3AAABD6C6F}.Release|x64.Build.0 = Release|x64
 		{CAE7E4E9-C028-43E7-A562-FD3AAABD6C6F}.Release|x86.ActiveCfg = Release|Win32
 		{CAE7E4E9-C028-43E7-A562-FD3AAABD6C6F}.Release|x86.Build.0 = Release|Win32
+		{5C490124-4FA7-414E-A2E6-7143FD840FFA}.Debug|x64.ActiveCfg = Debug|x64
+		{5C490124-4FA7-414E-A2E6-7143FD840FFA}.Debug|x64.Build.0 = Debug|x64
+		{5C490124-4FA7-414E-A2E6-7143FD840FFA}.Debug|x86.ActiveCfg = Debug|Win32
+		{5C490124-4FA7-414E-A2E6-7143FD840FFA}.Debug|x86.Build.0 = Debug|Win32
+		{5C490124-4FA7-414E-A2E6-7143FD840FFA}.Release|x64.ActiveCfg = Release|x64
+		{5C490124-4FA7-414E-A2E6-7143FD840FFA}.Release|x64.Build.0 = Release|x64
+		{5C490124-4FA7-414E-A2E6-7143FD840FFA}.Release|x86.ActiveCfg = Release|Win32
+		{5C490124-4FA7-414E-A2E6-7143FD840FFA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
