@@ -16,7 +16,7 @@ void Character::Update()
     // º¼
     if (type == eType::ball)
     {
-        float rgb = scalar / 600.0f;
+        float rgb = scalar / 400.0f;
         obj->color = Color(rgb, rgb, rgb);
     }
     // º¼
@@ -24,7 +24,7 @@ void Character::Update()
     {
         if (state == eState::hit)
         {
-            scalar -= 50.0f * DELTA;
+            scalar -= 80.0f * DELTA;
             if (scalar <= 0.0f)
             {
                 scalar = 0.0f;
@@ -126,7 +126,7 @@ void Character::Bounce(IntersectPos interPos, Character* other, eType type)
     Vector2 direction;
     if (type == eType::p1 or type == eType::p2)
     {
-        scalar += 5000.0f * DELTA;
+        scalar += 4000.0f * DELTA;
         if (scalar > 600.0f) scalar = 600.0f;
 
         direction = obj->GetWorldPos() - other->obj->GetWorldPos();

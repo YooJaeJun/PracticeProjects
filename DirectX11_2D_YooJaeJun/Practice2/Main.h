@@ -3,11 +3,12 @@
 class Main : public Scene
 {
 private:
-	ObRect*		player;
+	ObRect*		hitbox;
 	ObRect*		boss;
 	ObCircle*	effect;
 
-	ObImage*	bg;
+	ObImage*	hitboxImg;
+	ObImage*	bossImg;
 
 public:
 	virtual void Init() override;

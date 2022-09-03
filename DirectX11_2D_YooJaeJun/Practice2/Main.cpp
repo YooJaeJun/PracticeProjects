@@ -3,60 +3,66 @@
 
 void Main::Init()
 {
-    bg = new ObImage(L"zzangu_3.jpg");
-    bg->scale = Vector2(100.0f, 100.0f);
-    bg->uv = Vector4(213.0f / 401.0f, 115.0f / 400.0f, 312.0f / 401.0f, 183.0f / 400.0f);
+    hitbox = new ObRect;
+    hitbox->scale = Vector2(200.0f, 100.0f);
+    hitbox->collider = COLLIDER::RECT;
+    hitbox->isFilled = false;
+    hitbox->color = Color(0.0f, 0.0f, 0.0f);
 
-    player = new ObRect;
-    player->scale = Vector2(200.0f, 100.0f);
-    player->collider = COLLIDER::RECT;
-    player->isFilled = false;
-    player->color = Color(0.0f, 0.0f, 0.0f);
+    hitboxImg = new ObImage(L"RazerBeam.PNG");
+    hitboxImg->scale = Vector2(200.0f, 100.0f);
+    hitboxImg->uv = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
 
-    boss   = new ObRect;
+    boss = new ObRect;
     boss->scale = Vector2(200.0f, 200.0f);
     boss->collider = COLLIDER::RECT;
     boss->isFilled = false;
     boss->color = Color(0.0f, 0.0f, 0.0f);
 
+    bossImg = new ObImage(L"mole.jpg");
+    bossImg->scale = Vector2(200.0f, 200.0f);
+    bossImg->uv = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
+
     effect = new ObCircle;
     effect->scale = Vector2(30.0f, 30.0f);
     effect->collider = COLLIDER::CIRCLE;
-    effect->isFilled = false;
-    effect->color = Color(0.0f, 0.0f, 0.0f);
+    effect->color = Color(0.9f, 0.2f, 0.1f);
 }
 
 void Main::Release()
 {
-    SafeDelete(player);
+    SafeDelete(hitbox);
     SafeDelete(boss);
     SafeDelete(effect);
 }
 
 void Main::Update()
 {
-    ImGui::SliderFloat2("Scale", (float*)&bg->scale, 0.0f, 800.0f);
-    ImGui::SliderFloat4("UV", (float*)&bg->uv, 0.0f, 1.0f);
-    bg->Update();
+    ImGui::SliderFloat2("Scale", (float*)&boss->scale, 0.0f, 800.0f);
+    bossImg->scale = boss->scale;
+    ImGui::SliderFloat4("UV", (float*)&bossImg->uv, 0.0f, 1.0f);
 
-    player->SetWorldPos(INPUT->GetWorldMousePos());
-    player->Update();
-
+    hitbox->SetWorldPos(INPUT->GetWorldMousePos());
+    hitbox->Update();
+    hitboxImg->SetWorldPos(hitbox->GetWorldPos());
 
     boss->Update();
     
-    if (boss->Intersect(player))
+    if (boss->Intersect(hitbox))
     {
         float radius = boss->scale.x / 2;
         float minX = boss->GetWorldPos().x - radius;
         float maxX = boss->GetWorldPos().x + radius;
-        effect->SetWorldPosX(Utility::Saturate(player->GetWorldPos().x, minX, maxX));
+        effect->SetWorldPosX(Utility::Saturate(hitbox->GetWorldPos().x, minX, maxX));
+        radius = boss->scale.y / 2;
         float minY = boss->GetWorldPos().y - radius;
         float maxY = boss->GetWorldPos().y + radius;
-        effect->SetWorldPosY(Utility::Saturate(player->GetWorldPos().y, minY, maxY));
+        effect->SetWorldPosY(Utility::Saturate(hitbox->GetWorldPos().y, minY, maxY));
     }
-
     effect->Update();
+
+    hitboxImg->Update();
+    bossImg->Update();
 }
 
 void Main::LateUpdate()
@@ -65,9 +71,10 @@ void Main::LateUpdate()
 
 void Main::Render()
 {
-    bg->Render();
-    player->Render();
+    hitbox->Render();
     boss->Render();
+    bossImg->Render();
+    hitboxImg->Render();
     effect->Render();
 }
 
