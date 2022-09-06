@@ -83,6 +83,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SlidingPuzzle", "SlidingPuzzle\SlidingPuzzle.vcxproj", "{5C490124-4FA7-414E-A2E6-7143FD840FFA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sonic", "Sonic\Sonic.vcxproj", "{8DF75B2D-DE37-408E-BA92-A26E36764A8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -155,6 +157,14 @@ Global
 		{5C490124-4FA7-414E-A2E6-7143FD840FFA}.Release|x64.Build.0 = Release|x64
 		{5C490124-4FA7-414E-A2E6-7143FD840FFA}.Release|x86.ActiveCfg = Release|Win32
 		{5C490124-4FA7-414E-A2E6-7143FD840FFA}.Release|x86.Build.0 = Release|Win32
+		{8DF75B2D-DE37-408E-BA92-A26E36764A8B}.Debug|x64.ActiveCfg = Debug|x64
+		{8DF75B2D-DE37-408E-BA92-A26E36764A8B}.Debug|x64.Build.0 = Debug|x64
+		{8DF75B2D-DE37-408E-BA92-A26E36764A8B}.Debug|x86.ActiveCfg = Debug|Win32
+		{8DF75B2D-DE37-408E-BA92-A26E36764A8B}.Debug|x86.Build.0 = Debug|Win32
+		{8DF75B2D-DE37-408E-BA92-A26E36764A8B}.Release|x64.ActiveCfg = Release|x64
+		{8DF75B2D-DE37-408E-BA92-A26E36764A8B}.Release|x64.Build.0 = Release|x64
+		{8DF75B2D-DE37-408E-BA92-A26E36764A8B}.Release|x86.ActiveCfg = Release|Win32
+		{8DF75B2D-DE37-408E-BA92-A26E36764A8B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
