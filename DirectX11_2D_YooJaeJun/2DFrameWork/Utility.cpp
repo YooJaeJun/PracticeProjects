@@ -16,8 +16,8 @@ Utility::CIRCLE::CIRCLE(Vector2 pivot, Vector2 scale)
 
 IntersectPos Utility::IntersectRectCoord(RECT & rc, Vector2 coord)
 {
-    if (rc.min.x < coord.x && coord.x < rc.max.x &&
-        rc.min.y < coord.y && coord.y < rc.max.y)
+    if (rc.min.x <= coord.x && coord.x <= rc.max.x &&
+        rc.min.y <= coord.y && coord.y <= rc.max.y)
     {
         return IntersectPos::common;
     }
@@ -26,10 +26,10 @@ IntersectPos Utility::IntersectRectCoord(RECT & rc, Vector2 coord)
 
 IntersectPos Utility::IntersectRectRect(RECT & rc1, RECT & rc2)
 {
-    if (rc1.min.x < rc2.max.x &&
-        rc1.max.x > rc2.min.x &&
-        rc1.min.y < rc2.max.y &&
-        rc1.max.y > rc2.min.y)
+    if (rc1.min.x <= rc2.max.x &&
+        rc1.max.x >= rc2.min.x &&
+        rc1.min.y <= rc2.max.y &&
+        rc1.max.y >= rc2.min.y)
     {
         return IntersectPos::common;
     }

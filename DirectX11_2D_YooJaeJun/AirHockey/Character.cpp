@@ -1,3 +1,4 @@
+#include "..\Sonic\Character.h"
 #include "stdafx.h"
 
 void Character::Init(Vector2 pos)
@@ -57,6 +58,10 @@ void Character::LateUpdate()
 void Character::Render()
 {
 	obj->Render();
+}
+
+void Character::Init()
+{
 }
 
 void Character::Release()

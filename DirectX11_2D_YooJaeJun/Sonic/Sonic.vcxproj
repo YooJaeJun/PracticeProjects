@@ -142,11 +142,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Character.h" />
+    <ClInclude Include="Floor.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="Sonic.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Floor.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="Sonic.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

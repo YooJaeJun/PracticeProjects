@@ -107,35 +107,8 @@ int main()
 				(c0 == "1蚊" && c1 == "8蚊") || (c0 == "8蚊" && c1 == "1蚊"))
 				players[i].result = "堡动";
 
-			else if (c0PopInt == 10 && c1PopInt == 10)
-				players[i].result = "10动";
-
-			else if (c0PopInt == 9 && c1PopInt == 9)
-				players[i].result = "9动";
-
-			else if (c0PopInt == 8 && c1PopInt == 8)
-				players[i].result = "8动";
-
-			else if (c0PopInt == 7 && c1PopInt == 7)
-				players[i].result = "7动";
-
-			else if (c0PopInt == 6 && c1PopInt == 6)
-				players[i].result = "6动";
-
-			else if (c0PopInt == 5 && c1PopInt == 5)
-				players[i].result = "5动";
-
-			else if (c0PopInt == 4 && c1PopInt == 4)
-				players[i].result = "4动";
-
-			else if (c0PopInt == 3 && c1PopInt == 3)
-				players[i].result = "3动";
-
-			else if (c0PopInt == 2 && c1PopInt == 2)
-				players[i].result = "2动";
-
-			else if (c0PopInt == 1 && c1PopInt == 1)
-				players[i].result = "1动";
+			else if (c0PopInt == c1PopInt)
+				players[i].result = to_string(c0PopInt) + "动";
 
 			else if ((c0PopInt == 1 && c1PopInt == 2) || (c0PopInt == 2 && c1PopInt == 1))
 				players[i].result = "舅府";

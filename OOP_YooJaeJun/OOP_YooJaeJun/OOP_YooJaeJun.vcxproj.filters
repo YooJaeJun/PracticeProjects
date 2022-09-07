@@ -6,6 +6,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Seotda\main.cpp" />
+    <ClCompile Include="Move\main.cpp" />
   </ItemGroup>
 </Project>
