@@ -20,6 +20,8 @@ void Sonic::Init()
     run->SetParentRT(*col);
     run->uv = Vector4(0.0f, 0.0f, 1.0f / 4.0f, 1.0f);
     run->pivot = OFFSET_B;
+    run->maxFrame.x = 4;
+    run->ChangeAnim(ANIMSTATE::LOOP, 0.05f);
 
     spin = new ObImage(L"spin.bmp");
     spin->scale = Vector2(240.0f / 5.0f * 2.0f, 48.0f * 2.0f);
@@ -27,6 +29,8 @@ void Sonic::Init()
     spin->uv = Vector4(0.0f, 0.0f, 1.0f / 5.0f, 1.0f);
     spin->isVisible = false;
     spin->pivot = OFFSET_B;
+    spin->maxFrame.x = 5;
+    spin->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
 
     timerRun = 0.0f;
     intervalRun = 0.05f;
@@ -74,22 +78,15 @@ void Sonic::Update()
         timerSpin = 0.0f;
         timerSpin2 = 0.0f;
 
-        if (TIMER->GetTick(timerRun, intervalRun))
-        {
-            timerRun = 0.0f;
-            run->uv.x += 1.0f / 4.0f;
-            run->uv.z += 1.0f / 4.0f;
-            if (run->uv.x >= 1.0f)
-            {
-                run->uv.x = 0.0f;
-                run->uv.z = 1.0f / 4.0f;
-            }
-        }
-
         // run->spin
         if (INPUT->KeyDown(VK_DOWN))
         {
             state = State::spin;
+
+            run->isVisible = false;
+            spin->isVisible = true;
+            col->scale = spin->scale;
+            spin->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
         }
 
         // run->jump
@@ -103,12 +100,15 @@ void Sonic::Update()
 
             state = State::jump;
             onGround = false;
+
+            run->isVisible = false;
+            spin->isVisible = true;
+            col->scale = spin->scale;
+            spin->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
         }
     }
     else if (state == State::spin)
     {
-        SpinAnim();
-
         // spin->run
         if (INPUT->KeyUp(VK_DOWN))
         {
@@ -125,8 +125,6 @@ void Sonic::Update()
     else if (state == State::jump)
     {
         gravity += 1500.0f * DELTA;
-
-        SpinAnim();
 
         // jump->doubleJump
         if (INPUT->KeyDown(VK_SPACE))
@@ -147,8 +145,7 @@ void Sonic::Update()
     else if (state == State::doubleJump)
     {  
         gravity += 1500.0f * DELTA;
-
-        SpinAnim();
+        col->scale = spin->scale;
 
         // doubleJump->run
         if (onGround)
@@ -195,41 +192,6 @@ void Sonic::Render()
     Character::Render();
     run->Render();
     spin->Render();
-}
-
-
-void Sonic::SpinAnim()
-{
-    run->isVisible = false;
-    spin->isVisible = true;
-    col->scale = spin->scale;
-
-
-    // spin2 anim
-    if (TIMER->GetTick(timerSpin2, intervalSpin2))
-    {
-        spin->uv.x = 4.0f / 5.0f;
-        spin->uv.z = 1.0f;
-        timerSpin = 0.0f;
-        timerSpin2 = intervalSpin2;
-
-        if (INPUT->KeyUp(VK_DOWN))
-        {
-            timerSpin2 = 0.0f;
-        }
-    }
-    // spin1 anim
-    else if (TIMER->GetTick(timerSpin, intervalSpin))
-    {
-        timerSpin = 0.0f;
-        spin->uv.x += 1.0f / 5.0f;
-        spin->uv.z += 1.0f / 5.0f;
-        if (spin->uv.x >= 1.0f)
-        {
-            spin->uv.x = 0.0f;
-            spin->uv.z = 1.0f / 5.0f;
-        }
-    }
 }
 
 void Sonic::Fall()

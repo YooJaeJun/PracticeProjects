@@ -1,11 +1,12 @@
 #pragma once
+const int floorMax = 10;
 
 class Main : public Scene
 {
 private:
 	Sonic*		sonic;
 	Obstacle*	rock[2];
-	Floor*		floor[10];
+	Floor*		floor[floorMax];
 
 public:
 	virtual void Init() override;

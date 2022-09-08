@@ -36,6 +36,10 @@ void Main::Release()
 
 void Main::Update()
 {
+    ImGui::SliderFloat("DeltaScale", &app.deltaScale, 0.01f, 100.0f);
+    app.deltaScale += 0.1f * TIMER->GetDelta();
+    app.deltaScale = Utility::Saturate(app.deltaScale, 1.0f, 10.0f);
+
     ImGui::Text("Restart : R");
     ImGui::SliderFloat("speed", &floor[0]->speed, 1.5f, 15.0f);
     if (INPUT->KeyDown('R') || 
@@ -47,6 +51,14 @@ void Main::Update()
 
     sonic->Update();
 
+
+    for(auto& elem : floor)
+    {
+        if (sonic->col->GetWorldPos().x - elem->col->GetWorldPos().x > 800.0f)
+        {
+            elem->col->MoveWorldPos(Vector2(79.0f * 2.5f * floorMax, 0.0f));
+        }
+    }
 
     // 오브젝트 스폰
     for (auto& elem : floor)
