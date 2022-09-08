@@ -19,13 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="Main.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClCompile Include="EffectSaturate\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Main.cpp" />
+    <ClInclude Include="EffectSaturate\Main.h" />
+    <ClInclude Include="EffectSaturate\stdafx.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
