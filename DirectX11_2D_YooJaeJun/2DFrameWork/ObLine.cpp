@@ -8,11 +8,11 @@ void ObLine::CreateStaticMember()
 
     Vertex[0].position.x = -0.5f;
     Vertex[0].position.y = 0.0f;
-    Vertex[0].color = Color(0, 0, 0, 1.0f);
+    Vertex[0].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[1].position.x = 0.5f;
     Vertex[1].position.y = 0.0f;
-    Vertex[1].color = Color(0, 0, 0, 1.0f);
+    Vertex[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
     //CreateVertexBuffer
     {

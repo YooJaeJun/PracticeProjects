@@ -3,12 +3,27 @@
 class Main : public Scene
 {
 private:
-	ObRect*			player;
-	deque<ObRect*>	trails;
-	float			trailTimer;
-	float			trailSpawnTimer;
-	float			trailDuration;
-	int				trailNum;
+	vector<Room*>				rooms;
+	enum class State			{ move, node, triangle, spanning, passage };
+	State						state;
+	
+	// MST - Prim
+	class Edge
+	{
+	public:
+		int node;
+		float dist;
+		float dir;
+	public:
+		bool operator>(const Edge other) const
+		{
+			return dist > other.dist;
+		}
+	};
+	vector<vector<Edge>>								roomsLinked;
+	priority_queue<Edge, vector<Edge>, greater<Edge>>	edgePq;
+	vector<bool>										visited;
+	vector<ObLine*>										edges;
 
 public:
 	virtual void Init() override;

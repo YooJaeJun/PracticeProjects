@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <deque>
+#include <queue>
 #include <chrono>
 #include <random>
 #include <iostream>
