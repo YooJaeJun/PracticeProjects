@@ -4,13 +4,13 @@ using namespace std;
 
 void Main::Init()
 {
-    rooms.resize(20);
-    roomsLinked.resize(20);
+    rooms.resize(roomMax);
+    edges.resize(roomMax);
     for (auto& room : rooms)
     {
         room = new Room();
-        room->col->scale.x = RANDOM->Float(50.0f, 150.0f);
-        room->col->scale.y = RANDOM->Float(50.0f, 150.0f);
+        room->col->scale.x = RANDOM->Float(20.0f, 150.0f);
+        room->col->scale.y = RANDOM->Float(20.0f, 150.0f);
         room->col->SetWorldPosX(RANDOM->Float(-50.0f, 50.0f));
         room->col->SetWorldPosY(RANDOM->Float(-50.0f, 50.0f));
         room->col->isFilled = false;
@@ -19,10 +19,6 @@ void Main::Init()
     }
 
     visited.resize(400);
-    for (auto& elem : edges)
-    {
-        elem = new ObLine();
-    }
 
     state = State::move;
 }
@@ -30,6 +26,11 @@ void Main::Init()
 void Main::Release()
 {
     for (auto& elem : rooms) SafeDelete(elem);
+    for (auto& elem : lines) SafeDelete(elem);
+    lines.clear();
+    edges.clear();
+    visited.clear();
+    passages.clear();
 }
 
 void Main::Update()
@@ -69,14 +70,14 @@ void Main::Update()
     {
         for (int i = 0; i < rooms.size(); i++)
         {
-            if (rooms[i]->col->scale.x > 80.0f && rooms[i]->col->scale.y > 80.0f)
+            if (rooms[i]->col->scale.x * rooms[i]->col->scale.y >= 5000.0f)
             {
                 rooms[i]->col->isFilled = true;
                 rooms[i]->selected = true;
             }
         }
     }
-    case Main::State::triangle:
+    case Main::State::link:
     {
         int lineIdx = 0;
         int size = rooms.size();
@@ -86,15 +87,15 @@ void Main::Update()
             {
                 if (rooms[i]->selected && rooms[j]->selected)
                 {
-                    // MST 위함
+                    // MST 위한 준비 
                     Vector2 velocity = rooms[j]->col->GetWorldPos() - rooms[i]->col->GetWorldPos();
-                    float dist = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+                    float dist = velocity.x * velocity.x + velocity.y * velocity.y;
                     Vector2 dir1 = velocity;
                     Vector2 dir2 = -velocity;
                     float rotation1 = Utility::DirToRadian(dir1);
                     float rotation2 = Utility::DirToRadian(dir2);
-                    roomsLinked[i].push_back({ j, dist, rotation1 });
-                    roomsLinked[j].push_back({ i, dist, rotation2 });
+                    edges[i].push_back({ j, dist, rotation1 });
+                    edges[j].push_back({ i, dist, rotation2 });
                 }
                 lineIdx++;
             }
@@ -105,50 +106,72 @@ void Main::Update()
     case Main::State::spanning:
     {
         // MST - Prim
-        int start = 0;
         for (int i = 0; i < rooms.size(); i++)
         {
             if (rooms[i]->selected)
             {
-                edgePq.push({ roomsLinked[i][0].node, roomsLinked[i][0].dist, roomsLinked[i][0].dir });
-                start = i;
+                edgePq.push({ edges[i][0].node, edges[i][0].dist, edges[i][0].dir, edges[i][0].node });
                 break;
             }
         }
         while (false == edgePq.empty())
         {
-            int here = edgePq.top().node;
-            float hereDist = edgePq.top().dist;
-            float hereDir = edgePq.top().dir;
+            int curNode = edgePq.top().node;
+            float curDist = edgePq.top().dist;
+            float curDir = edgePq.top().dir;
+            int beforeNode = edgePq.top().beforeNode;
 
             edgePq.pop();
 
-            if (visited[here]) continue;
-            visited[here] = true;
+            if (visited[curNode]) continue;
+            visited[curNode] = true;
 
-            ObLine* edge = new ObLine();
-            edge->SetWorldPos(rooms[start]->col->GetWorldPos());
-            edge->color = rooms[start]->col->color;
-            edge->scale.x = hereDist;
-            edge->rotation = hereDir;
-            edges.push_back(edge);
-
-            start = here;
-
-            for (int i = 0; i < roomsLinked[here].size(); i++)
+            if (curNode != beforeNode)  // 첨엔 같게 세팅했기 때문
             {
-                int there = roomsLinked[here][i].node;
-                float thereDist = roomsLinked[here][i].dist;
-                float thereDir = roomsLinked[here][i].dir;
-                edgePq.push({ there, thereDist, thereDir });
+                ObLine* line = new ObLine();
+                line->SetWorldPos(rooms[beforeNode]->col->GetWorldPos());
+                line->color = rooms[beforeNode]->col->color;
+                line->scale.x = sqrt(curDist);
+                line->rotation = curDir;
+                line->collider = COLLIDER::LINE;
+                lines.push_back(line);
+            }
+
+            for (int i = 0; i < edges[curNode].size(); i++)
+            {
+                int nextNode = edges[curNode][i].node;
+                float nextDist = edges[curNode][i].dist;
+                float nextDir = edges[curNode][i].dir;
+                edgePq.push({ nextNode, nextDist, nextDir, curNode });
             }
         }
+        Sleep(1000);
         state = State::passage;
         break;
     }
     case Main::State::passage:
     {
-        int a = 1;
+        for (auto& line : lines)
+        {
+            for (auto& room : rooms)
+            {
+                if (room->selected == false &&
+                    room->col->Intersect(line))
+                {
+                    room->col->isFilled = true;
+                }
+            }
+        }
+
+        for (auto& line : lines)
+        {
+        }
+        state = State::tile;
+        break;
+    }
+    case Main::State::tile:
+    {
+        int a = 2;
         break;
     }
     default:
@@ -159,7 +182,8 @@ void Main::Update()
 
 
     for (auto& elem : rooms) elem->Update();
-    for (auto& elem : edges) elem->Update();
+    for (auto& elem : lines) if (elem) elem->Update();
+    for (auto& elem : passages) if (elem) elem->Update();
 }
 
 void Main::LateUpdate()
@@ -169,7 +193,8 @@ void Main::LateUpdate()
 void Main::Render()
 {
     for (auto& elem : rooms) elem->Render();
-    for (auto& elem : edges) elem->Render();
+    for (auto& elem : lines) if (elem) elem->Render();
+    for (auto& elem : passages) if (elem) elem->Render();
 }
 
 void Main::ResizeScreen()

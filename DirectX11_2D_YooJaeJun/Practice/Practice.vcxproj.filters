@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="EffectSaturate\Main.cpp" />
+    <ClCompile Include="Intersect\Main.cpp" />
+    <ClCompile Include="Intersect\Delaunay.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EffectSaturate\Main.h" />
-    <ClInclude Include="EffectSaturate\stdafx.h" />
+    <ClInclude Include="Intersect\Main.h" />
+    <ClInclude Include="Intersect\stdafx.h" />
+    <ClInclude Include="Intersect\Delaunay.h" />
   </ItemGroup>
 </Project>

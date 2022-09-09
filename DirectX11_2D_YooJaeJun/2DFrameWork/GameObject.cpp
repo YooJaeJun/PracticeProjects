@@ -140,9 +140,9 @@ void GameObject::Render()
 	}
 }
 
-IntersectPos GameObject::Intersect(Vector2 coord)
+colPos GameObject::Intersect(Vector2 coord)
 {
-	if (not colOnOff) return IntersectPos::none;
+	if (not colOnOff) return colPos::none;
 	
 	if (collider == COLLIDER::RECT)
 	{
@@ -168,17 +168,52 @@ IntersectPos GameObject::Intersect(Vector2 coord)
 		Utility::CIRCLE cc(GetWorldPivot(), scale);
 		return Utility::IntersectCircleCoord(cc, coord);
 	}
-	return IntersectPos::none;
+	return colPos::none;
 }
 
-IntersectPos GameObject::Intersect(GameObject* ob)
+colPos GameObject::Intersect(GameObject* ob)
 {
-	if (colOnOff == false or ob->colOnOff == false) return IntersectPos::none;
+	if (colOnOff == false or ob->colOnOff == false) return colPos::none;
 
-	if (collider == COLLIDER::RECT)
+	if (collider == COLLIDER::LINE)
 	{
-		//사각형과 사각형
-		if (ob->collider == COLLIDER::RECT)
+		Utility::LINE l(GetWorldPos(), Vector2(GetWorldPos().x + cos(rotation) * scale.x, GetWorldPos().y + sin(rotation) * scale.x));
+		cout << "begin  " << l.begin.x << ", " << l.begin.y << '\n';
+		cout << "end  " << l.end.x << ", " << l.end.y << '\n';
+		// 선 선
+		if (ob->collider == COLLIDER::LINE)
+		{
+			Utility::LINE l2(ob->GetWorldPos(), 
+				Vector2(ob->GetWorldPos().x + cos(ob->rotation) * ob->scale.x,
+					ob->GetWorldPos().y + sin(ob->rotation) * ob->scale.x));
+			return Utility::IntersectLineLine(l, l2);
+		}
+		// 선 사각형
+		else if (ob->collider == COLLIDER::RECT)
+		{
+			Utility::RECT rc(ob->GetWorldPivot(), ob->scale);
+			return Utility::IntersectRectLine(rc, l);
+		}
+		// 선 원
+		else if (ob->collider == COLLIDER::CIRCLE)
+		{
+			Utility::CIRCLE cc(ob->GetWorldPivot(), ob->scale);
+			return Utility::IntersectCircleLine(cc, l);
+		}
+	}
+	else if (collider == COLLIDER::RECT)
+	{
+		// 사각형 선
+		if (ob->collider == COLLIDER::LINE)
+		{
+			Utility::RECT rc(GetWorldPivot(), scale);
+			Utility::LINE l(ob->GetWorldPos(),
+				Vector2(ob->GetWorldPos().x + cos(ob->rotation) * ob->scale.x,
+					ob->GetWorldPos().y + sin(ob->rotation) * ob->scale.x));
+			return Utility::IntersectRectLine(rc, l);
+		}
+		// 사각형 사각형
+		else if (ob->collider == COLLIDER::RECT)
 		{
 			if (GetRight() == RIGHT && ob->GetRight() == RIGHT)
 			{
@@ -192,7 +227,7 @@ IntersectPos GameObject::Intersect(GameObject* ob)
 			}
 
 		}
-		//사각형과 원
+		// 사각형 원
 		else if (ob->collider == COLLIDER::CIRCLE)
 		{
 			if (GetRight() == RIGHT)
@@ -216,8 +251,17 @@ IntersectPos GameObject::Intersect(GameObject* ob)
 	}
 	else if (collider == COLLIDER::CIRCLE)
 	{
-		//원과 사각형
-		if (ob->collider == COLLIDER::RECT)
+		// 원 선
+		if (ob->collider == COLLIDER::LINE)
+		{
+			Utility::CIRCLE cc(GetWorldPivot(), scale);
+			Utility::LINE l(ob->GetWorldPos(),
+				Vector2(ob->GetWorldPos().x + cos(ob->rotation) * ob->scale.x,
+					ob->GetWorldPos().y + sin(ob->rotation) * ob->scale.x));
+			return Utility::IntersectCircleLine(cc, l);
+		}
+		// 원 사각형
+		else if (ob->collider == COLLIDER::RECT)
 		{
 			if (GetRight() == RIGHT)
 			{
@@ -237,7 +281,7 @@ IntersectPos GameObject::Intersect(GameObject* ob)
 				return IntersectRectCircle(rc1, cc2);
 			}
 		}
-		//원과 원
+		// 원 원
 		else if (ob->collider == COLLIDER::CIRCLE)
 		{
 			Utility::CIRCLE cc1(GetWorldPivot(), scale);
@@ -245,10 +289,10 @@ IntersectPos GameObject::Intersect(GameObject* ob)
 			return Utility::IntersectCircleCircle(cc1, cc2);
 		}
 	}
-	return IntersectPos::none;
+	return colPos::none;
 }
 
-IntersectPos GameObject::IntersectScreenMouse(Vector2 coord)
+colPos GameObject::IntersectScreenMouse(Vector2 coord)
 {
 	coord.y = app.GetHalfHeight() - coord.y;
 	coord.x = coord.x - app.GetHalfWidth();

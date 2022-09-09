@@ -2,10 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Main.h" />
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="Room.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -16,6 +16,9 @@
   <ItemGroup>
     <Filter Include="GameObject">
       <UniqueIdentifier>{05cf287f-5ccb-4e1c-a923-b6196b408b30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DelaunayTriangluation">
+      <UniqueIdentifier>{19b72309-959f-4633-a11e-cccfc80d41ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

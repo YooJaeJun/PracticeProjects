@@ -8,6 +8,7 @@ enum class SPACE
 enum class COLLIDER
 {
 	NONE,
+	LINE,
 	RECT,
 	CIRCLE, // 가운데가 0,0인
 	STAR
@@ -62,9 +63,9 @@ public:
 
 	virtual void Update();
 	virtual void Render();
-	IntersectPos Intersect(Vector2 coord);
-	IntersectPos Intersect(GameObject* ob);
-	IntersectPos IntersectScreenMouse(Vector2 coord);
+	colPos Intersect(Vector2 coord);
+	colPos Intersect(GameObject* ob);
+	colPos IntersectScreenMouse(Vector2 coord);
 
 	//getter setter
 public:

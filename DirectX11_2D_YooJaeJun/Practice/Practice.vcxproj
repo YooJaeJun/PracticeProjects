@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EffectSaturate\Main.cpp" />
+    <ClCompile Include="Intersect\Delaunay.cpp" />
+    <ClCompile Include="Intersect\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EffectSaturate\Main.h" />
-    <ClInclude Include="EffectSaturate\stdafx.h" />
+    <ClInclude Include="Intersect\Delaunay.h" />
+    <ClInclude Include="Intersect\Main.h" />
+    <ClInclude Include="Intersect\stdafx.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
