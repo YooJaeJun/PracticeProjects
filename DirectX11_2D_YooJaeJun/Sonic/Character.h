@@ -3,7 +3,6 @@ class Character
 {
 public:
 	GameObject* col;
-	float		speed;
 	int			hp;
 
 public:

@@ -1,186 +1,147 @@
 #include "stdafx.h"
 
+Sonic::Sonic()
+{
+	Init();
+}
+
 void Sonic::Init()
 {
-    Character::Init();
-    speed = 0.0f;
-    hp = 5;
+	Character::Init();
+	hp = 5;
 
-    col = new ObRect();
-    col->scale = Vector2(192.0f / 4.0f * 2.0f, 60.0f * 2.0f);
-    col->collider = COLLIDER::RECT;
-    col->isFilled = false;
-    col->color = Color(1.0f, 1.0f, 1.0f);
-    col->pivot = OFFSET_B;
-    col->SetWorldPosX(-300.0f);
-    col->SetWorldPosY(-app.GetHalfHeight() + 48.0f * 3.0f);
+	col = new ObRect();
+	col->scale = Vector2(192.0f / 4.0f, 60.0f) * 2.0f;
+	col->pivot = OFFSET_B;
+	col->isFilled = false;
+	col->SetWorldPosX(-500.0f);
+	col->SetWorldPosY(-app.GetHalfHeight() + 48.0f * 2.5f);
 
-    run = new ObImage(L"run.bmp");
-    run->scale = Vector2(192.0f / 4.0f * 2.0f, 60.0f * 2.0f);
-    run->SetParentRT(*col);
-    run->uv = Vector4(0.0f, 0.0f, 1.0f / 4.0f, 1.0f);
-    run->pivot = OFFSET_B;
-    run->maxFrame.x = 4;
-    run->ChangeAnim(ANIMSTATE::LOOP, 0.05f);
+	run = new ObImage(L"run.bmp");
+	run->pivot = OFFSET_B;
+	run->scale = Vector2(192.0f / 4.0f, 60.0f) * 2.0f;
+	run->uv = Vector4(0.0f, 0.0f, 1.0f / 4.0f, 1.0f);
+	run->maxFrame.x = 4;
+	run->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+	run->SetParentRT(*col);
 
-    spin = new ObImage(L"spin.bmp");
-    spin->scale = Vector2(240.0f / 5.0f * 2.0f, 48.0f * 2.0f);
-    spin->SetParentRT(*col);
-    spin->uv = Vector4(0.0f, 0.0f, 1.0f / 5.0f, 1.0f);
-    spin->isVisible = false;
-    spin->pivot = OFFSET_B;
-    spin->maxFrame.x = 5;
-    spin->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
+	spin = new ObImage(L"spin.bmp");
+	spin->pivot = OFFSET_B;
+	spin->scale = Vector2(240.0f / 5.0f, 48.0f) * 2.0f;
+	spin->uv = Vector4(0.0f, 0.0f, 1.0f / 5.0f, 1.0f);
+	spin->isVisible = false;
+	spin->maxFrame.x = 5;
+	spin->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	spin->SetParentRT(*col);
 
-    timerRun = 0.0f;
-    intervalRun = 0.05f;
-    timerSpin = 0.0f;
-    intervalSpin = 0.05f;
-    timerSpin2 = 0.0f;
-    intervalSpin2 = 0.5f;
+	state = State::RUN;
+	gravity = 0.0f;
+	doubleJump = false;
 
-    gravity = 0.0f;
-    onGround = false;
-
-    timerHit = 0.0f;
-    intervalHit = 1.5f;
-
-    camOriginPos = CAM->position;
+	timerHit = 0.0f;
 }
 
 void Sonic::Release()
 {
-    Character::Release();
-    SafeDelete(run);
-    SafeDelete(spin);
+	Character::Release();
+	SafeDelete(run);
+	SafeDelete(spin);
 }
 
 void Sonic::Update()
 {
-    Character::Update();
+	ImGui::SliderInt("Hp", &hp, 1, 5);
+	if (hp <= 0)
+	{
+		hp = 0;
+		ImGui::Text("You died, but the test must go on.");
+	}
 
-    ImGui::SliderInt("Hp", &hp, 0, 5);
-    if (hp <= 0)
-    {
-        hp = 0;
-        ImGui::Text("You are dead, but the test must go on.");
-    }
+	if (col->GetWorldPos().y + col->scale.y < -app.GetHalfHeight())
+	{
+		hp -= 2;
+		hit = true;
+		col->SetWorldPosY(-app.GetHalfHeight() + 48.0f * 2.5f);
+		col->Update();
+	}
 
-    Vector2 velocity = DOWN * gravity * DELTA;
-    col->MoveWorldPos(velocity);
+	if (hit)
+	{
+		run->color = Color(0.5f, 0.5f, 0.5f, RANDOM->Float());
+		spin->color = Color(0.5f, 0.5f, 0.5f, RANDOM->Float());
+		col->SetWorldPosX(col->GetWorldPos().x + RANDOM->Float(-1.0f, 1.0f));
+		col->SetWorldPosY(col->GetWorldPos().y + RANDOM->Float(-1.0f, 1.0f));
 
-    // 런, 스핀 애니
-    if (state == State::run)
-    {
-        col->scale = run->scale;
-        run->isVisible = true;
-        spin->isVisible = false;
-        timerSpin = 0.0f;
-        timerSpin2 = 0.0f;
+		// 중력 안 받게
+		if (col->GetWorldPos().y < -app.GetHalfHeight() + 48.0f * 2.5f)
+		{
+			col->SetWorldPosY(-app.GetHalfHeight() + 48.0f * 2.5f);
+			gravity = 0.0f;
+		}
 
-        // run->spin
-        if (INPUT->KeyDown(VK_DOWN))
-        {
-            state = State::spin;
+		if (TIMER->GetTick(timerHit, 2.5f))
+		{
+			run->color = Color(0.5f, 0.5f, 0.5f, 1.0f);
+			spin->color = Color(0.5f, 0.5f, 0.5f, 1.0f);
+			timerHit = 0.0f;
+			hit = false;
+		}
+	}
 
-            run->isVisible = false;
-            spin->isVisible = true;
-            col->scale = spin->scale;
-            spin->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
-        }
+	col->MoveWorldPos(RIGHT * 200.0f * DELTA);
+	CAM->position += RIGHT * 200.0f * DELTA;
 
-        // run->jump
-        if (INPUT->KeyDown(VK_SPACE))
-        {
-            gravity = -800.0f;
-            // jump상태가 된 직후 Main의 LateUpdate에서 충돌이 일어나 다시 run상태가 되어버리는 문제 해결 위함
-            Vector2 velocity = DOWN * gravity * DELTA;
-            col->MoveWorldPos(velocity);
-            col->Update();
+	if (state == State::RUN)
+	{
+		//run -> spin
+		if (INPUT->KeyDown(VK_DOWN))
+		{
+			state = State::SPIN;
+			col->scale = spin->scale;
+			run->isVisible = false;
+			spin->isVisible = true;
+			spin->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+		}
 
-            state = State::jump;
-            onGround = false;
+		//run -> jump
+		if (INPUT->KeyDown(VK_SPACE))
+		{
+			state = State::JUMP;
 
-            run->isVisible = false;
-            spin->isVisible = true;
-            col->scale = spin->scale;
-            spin->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
-        }
-    }
-    else if (state == State::spin)
-    {
-        // spin->run
-        if (INPUT->KeyUp(VK_DOWN))
-        {
-            state = State::run;
-        }
-        // spin->jump
-        if (INPUT->KeyDown(VK_SPACE))
-        {
-            gravity = -800.0f;
-            state = State::jump;
-            onGround = false;
-        }
-    }
-    else if (state == State::jump)
-    {
-        gravity += 1500.0f * DELTA;
+			gravity = -700.0f;
+			col->scale = spin->scale;
+			run->isVisible = false;
+			spin->isVisible = true;
+			doubleJump = false;
+			spin->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+		}
+	}
+	else if (state == State::SPIN)
+	{
+		//spin -> run
+		if (INPUT->KeyUp(VK_DOWN))
+		{
+			state = State::RUN;
+			col->scale = run->scale;
+			run->isVisible = true;
+			spin->isVisible = false;
+		}
+	}
+	else if (state == State::JUMP)
+	{
+		if (INPUT->KeyDown(VK_SPACE) && !doubleJump)
+		{
+			doubleJump = true;
+			gravity = -700.0f;
+		}
+	}
 
-        // jump->doubleJump
-        if (INPUT->KeyDown(VK_SPACE))
-        {
-            gravity = -800.0f;
-            state = State::doubleJump;
-        }
+	col->MoveWorldPos(DOWN * gravity * DELTA);
+	gravity += 700.0f * DELTA;
 
-        // jump->run
-        if (onGround)
-        {
-            gravity = 0.0f;
-            col->SetWorldPosY(lastPos.y);        // 착지 시 한 번 더 뚫고 들어가는 문제 해결 위함
-            col->Update();
-            state = State::run;
-        }
-    }
-    else if (state == State::doubleJump)
-    {  
-        gravity += 1500.0f * DELTA;
-        col->scale = spin->scale;
-
-        // doubleJump->run
-        if (onGround)
-        {
-            gravity = 0.0f;
-            col->SetWorldPosY(lastPos.y);       // 착지 시 한 번 더 뚫고 들어가는 문제 해결 위함
-            col->Update();
-            state = State::run;
-        }
-    }
-
-    if ((int)state != 0) cout << (int)state << '\n';
-
-    if (hit)
-    {
-        timerHit += 1.0f * DELTA;
-        run->color = Color(RANDOM->Float(0.8f, 1.0f), RANDOM->Float(0.4f, 0.6f), RANDOM->Float(0.4f, 0.6f));
-        spin->color = Color(RANDOM->Float(0.8f, 1.0f), RANDOM->Float(0.4f, 0.6f), RANDOM->Float(0.4f, 0.6f));
-        // CAM->position.x = RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f);
-        CAM->position.x = RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f);
-        if (TIMER->GetTick(timerHit, intervalHit))
-        {
-            run->color = Color(0.5f, 0.5f, 0.5f);
-            spin->color = Color(0.5f, 0.5f, 0.5f);
-            timerHit = 0.0f;
-            CAM->position = camOriginPos;
-            hit = false;
-        }
-    }
-
-    run->Update();
-    spin->Update();
-
-    lastPos = col->GetWorldPos();
-    lastState = state;
+	col->Update();
+	run->Update();
+	spin->Update();
 }
 
 void Sonic::LateUpdate()
@@ -189,25 +150,35 @@ void Sonic::LateUpdate()
 
 void Sonic::Render()
 {
-    Character::Render();
-    run->Render();
-    spin->Render();
+	col->Render();
+	run->Render();
+	spin->Render();
 }
 
-void Sonic::Fall()
+void Sonic::LandOn()
 {
-    if (false == onGround)
-    {
-        if (lastState == State::run) state = State::doubleJump;
-        else state = lastState;
-    }
+	col->SetWorldPosY(-app.GetHalfHeight() + 48.0f * 2.5f);
+	gravity = 0.0f;
+
+	//jump -> run
+	if (state == State::JUMP)
+	{
+		state = State::RUN;
+		col->scale = run->scale;
+		run->isVisible = true;
+		spin->isVisible = false;
+	}
+
+	col->Update();
+	run->Update();
+	spin->Update();
 }
 
 void Sonic::Hit()
 {
-    if (false == hit)
-    {
-        hp--;
-    }
-    hit = true;
+	if (false == hit)
+	{
+		hp--;
+		hit = true;
+	}
 }
