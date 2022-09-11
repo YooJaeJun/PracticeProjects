@@ -1,11 +1,19 @@
 #pragma once
-class Floor : public Character
+enum class ItemType
+{
+	NONE,
+	LIFE,
+	BOOST
+};
+
+class Item : public Character
 {
 public:
-	ObImage* img;
+	ObImage*	img;
+	ItemType	type;
 
 public:
-	Floor();
+	Item();
 
 	virtual void Init() override;
 	virtual void Release() override;

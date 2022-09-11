@@ -81,7 +81,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SlidingPuzzle", "SlidingPuzzle\SlidingPuzzle.vcxproj", "{5C490124-4FA7-414E-A2E6-7143FD840FFA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sonic", "Sonic\Sonic.vcxproj", "{8DF75B2D-DE37-408E-BA92-A26E36764A8B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Run", "Run\Run.vcxproj", "{8DF75B2D-DE37-408E-BA92-A26E36764A8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

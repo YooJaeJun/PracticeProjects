@@ -15,4 +15,3 @@ public:
 
 	void Spawn(const float diff, const int maxn);
 };
-

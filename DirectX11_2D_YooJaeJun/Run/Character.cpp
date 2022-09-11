@@ -12,7 +12,7 @@ void Character::Release()
 
 void Character::Update()
 {
-	col->Update();
+	if (col) col->Update();
 }
 
 void Character::LateUpdate()
@@ -21,5 +21,5 @@ void Character::LateUpdate()
 
 void Character::Render()
 {
-	col->Render();
+	if (col) col->Render();
 }

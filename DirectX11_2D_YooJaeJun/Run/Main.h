@@ -1,13 +1,20 @@
 #pragma once
-const int floorMax = 10;
-const int rockMax = 3;
+const int floorMax = 12;
+const int obstacleMax = 3;
+const int backgroundMax = 4;
+const int itemMax = 4;
 
 class Main : public Scene
 {
 private:
-	Sonic*		sonic;
+	Player*		player;
 	Floor*		floor[floorMax];
-	Obstacle*	rock[rockMax];
+	Obstacle*	obstacle[obstacleMax];
+	Background*	background[backgroundMax];
+	Item*		item[itemMax];
+	UI*			gauge;
+	UI*			gaugeBg;
+	UI*			gaugeProp;
 
 public:
 	virtual void Init() override;
