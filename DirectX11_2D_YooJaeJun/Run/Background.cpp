@@ -8,23 +8,24 @@ void Background::Init()
 {
     Character::Init();
     col = nullptr;
+    // idle->pivot = OFFSET_L;
 }
 
 void Background::Release()
 {
     Character::Release();
-    SafeDelete(img);
+    SafeDelete(idle);
 }
 
 void Background::Update()
 {
     Character::Update();
 
-    if (CAM->position.x - img->GetWorldPos().x > img->scale.x + app.GetHalfWidth())
+    if (CAM->position.x - idle->GetWorldPos().x > idle->scale.x)
     {
-        img->SetWorldPosX(img->GetWorldPos().x + img->scale.x * 2);
+        idle->MoveWorldPos(Vector2(idle->scale.x * 2, 0.0f));
     }
-    img->Update();
+    idle->Update();
 }
 
 void Background::LateUpdate()
@@ -33,15 +34,13 @@ void Background::LateUpdate()
 
 void Background::Render()
 {
-    img->Render();
+    idle->Render();
     Character::Render();
 }
 
 void Background::Spawn()
 {
-    img->pivot = OFFSET_L;
-    img->scale.x = imgSize.x * app.GetWidth() / imgSize.x;
-    img->scale.y = imgSize.y * app.GetWidth() / imgSize.x;
-    img->SetWorldPosX(0.0f);
-    img->SetWorldPosY(-app.GetHalfHeight() + imgSize.y * app.GetHeight() / imgSize.x);
+    idle->scale.x = imgSize.x * app.GetWidth() / imgSize.x;
+    idle->scale.y = imgSize.y * app.GetHeight() / imgSize.y;
+    idle->SetWorldPosX(CAM->position.x + 0.0f);
 }

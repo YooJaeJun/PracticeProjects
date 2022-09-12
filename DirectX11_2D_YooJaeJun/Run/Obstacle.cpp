@@ -9,35 +9,43 @@ void Obstacle::Init()
 {
     Character::Init();
 
-    col = new ObCircle();
-    col->scale = Vector2(61.0f * 2.0f, 62.0f * 2.0f);
-    col->collider = COLLIDER::CIRCLE;
+    col = new ObRect();
+    col->collider = COLLIDER::RECT;
+    col->isVisible = true;
     col->isFilled = false;
     col->color = Color(1.0f, 0.0f, 0.0f);
-    col->SetWorldPosX(app.GetHalfWidth() + col->scale.x + RANDOM->Float(600.0f, 3000.0f));
-    col->SetWorldPosY(RANDOM->Float(-200.0f, 0.0f));
 
-    img = new ObImage(L"rock.bmp");
-    img->scale = Vector2(61.0f * 2.0f, 62.0f * 2.0f);
-    img->SetParentRT(*col);
+    isHit = false;
+    lastPosY = 0.0f;
 }
 
 void Obstacle::Release()
 {
     Character::Release();
-    SafeDelete(img);
+    SafeDelete(idle);
 }
 
 void Obstacle::Update()
 {
     Character::Update();
+    idle->Update();
 
-    if (col->GetWorldPos().x + col->scale.x / 2 < -app.GetHalfWidth())
+    if (isHit)
     {
-        col->SetWorldPosX(app.GetHalfWidth() + col->scale.x + RANDOM->Float(600.0f, 3000.0f));
-        col->SetWorldPosY(RANDOM->Float(-200.0f, 0.0f));
+        col->MoveWorldPos(Vector2(2500.0f, 1500.0f) * DELTA);
+        col->rotation += 20.0f * DELTA;
+
+        if (col->GetWorldPos().y > app.GetHalfHeight() + 400.0f)
+        {
+            col->SetWorldPos(Vector2(CAM->position.x - 800.0f, lastPosY));
+            col->rotation = 0.0f;
+            isHit = false;
+        }
     }
-    img->Update();
+    else
+    {
+        lastPosY = col->GetWorldPos().y;
+    }
 }
 
 void Obstacle::LateUpdate()
@@ -46,24 +54,26 @@ void Obstacle::LateUpdate()
 
 void Obstacle::Render()
 {
-    img->Render();
+    idle->Render();
     Character::Render();
 }
 
-void Obstacle::Spawn(const float diff, const int maxn)
+void Obstacle::Spawn(const float origin, const int idx)
 {
-    if (diff - col->GetWorldPos().x > 500.0f)
-    {
-        col->SetWorldPosX(diff + app.GetWidth() + RANDOM->Float(100.0f, 1000.0f));
-        col->SetWorldPosY(RANDOM->Float(-200.0f, 0.0f));
+    col->SetWorldPosX(origin + app.GetWidth() + 100.0f * (idx + 1));
 
-        if (RANDOM->Int(0, 5))
-        {
-            col->colOnOff = true;
-        }
-        else
-        {
-            col->colOnOff = false;
-        }
+    int totalPercent = 3;
+    if (RANDOM->Int(1, totalPercent) == 1)
+    {
+        col->colOnOff = true;
     }
+    else
+    {
+        col->colOnOff = false;
+    }
+}
+
+void Obstacle::Hit()
+{
+    isHit = true;
 }

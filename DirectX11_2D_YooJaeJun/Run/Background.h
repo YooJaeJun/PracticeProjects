@@ -2,7 +2,6 @@
 class Background : public Character
 {
 public:
-	ObImage*	img;
 	Vector2		imgSize;
 
 public:

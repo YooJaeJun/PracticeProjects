@@ -2,7 +2,8 @@
 class Obstacle : public Character
 {
 public:
-	ObImage* img;
+	bool	isHit;
+	float	lastPosY;
 
 public:
 	Obstacle();
@@ -13,5 +14,6 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-	void Spawn(const float diff, const int maxn);
+	void Spawn(const float origin, const int idx);
+	void Hit();
 };

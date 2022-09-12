@@ -3,13 +3,14 @@ enum class UIType
 {
 	NONE,
 	PROP,
-	GAUGE
+	GAUGE,
+	FONT
 };
 
 class UI : public Character
 {
 public:
-	ObImage*	img;
+	Vector2		imgSize;
 
 public:
 	UI();
@@ -19,5 +20,9 @@ public:
 	virtual void Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
+
+	void Spawn(const float coefX, const float coefY);
+	bool DownGauge();
+	void Hit(const float damage);
 };
 

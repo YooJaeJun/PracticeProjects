@@ -2,7 +2,6 @@
 class Floor : public Character
 {
 public:
-	ObImage* img;
 
 public:
 	Floor();
@@ -14,6 +13,6 @@ public:
 	virtual void Render() override;
 
 	void Spawn(const int idx);
-	void SpawnRandom(const float diff, const int maxn);
+	void SpawnRandom(const float origin, const int maxn);
 };
 

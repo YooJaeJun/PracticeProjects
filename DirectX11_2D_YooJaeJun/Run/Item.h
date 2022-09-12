@@ -3,13 +3,13 @@ enum class ItemType
 {
 	NONE,
 	LIFE,
-	BOOST
+	BOOST,
+	SCORE
 };
 
 class Item : public Character
 {
 public:
-	ObImage*	img;
 	ItemType	type;
 
 public:
@@ -21,6 +21,6 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-	void Spawn(const float diff, const int maxn);
+	void Spawn(const float origin, const int maxn);
 };
 

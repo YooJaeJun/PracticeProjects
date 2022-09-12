@@ -2,7 +2,6 @@
 
 void Character::Init()			
 {
-	hp = 1;
 }
 
 void Character::Release()
