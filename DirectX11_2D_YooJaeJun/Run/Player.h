@@ -1,9 +1,10 @@
 #pragma once
-enum class State
+enum class PlState
 {
 	RUN,
 	SLIDE,
 	JUMP,
+	DOUBLEJUMP,
 	BOOST,
 	DIE
 };
@@ -18,19 +19,22 @@ public:
 	ObImage*	hit;
 	ObImage*	boost;
 	ObImage*	die;
-	State		state;
+	PlState		state;
 	float		gravity;
-	bool		isDoubleJump;
 	bool		isHit;
-	float		timerHit;
+	float		timeHit;
 	bool		isHitAnim;
-	float		timerHitAnim;
+	float		timeHitAnim;
 	float		speed;
 	float		speedOrigin;
 	bool		isBoost;
-	float		timerBoost;
+	float		timeBoost;
 	bool		isLand;
-	float		timerLand;
+	float		timeLand;
+	bool		downJump;
+	bool		downDoubleJump;
+	bool		downSlide;
+	bool		upSlide;
 
 public:
 	Player();
@@ -41,6 +45,10 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
+	void Jump();
+	void DoubleJump();
+	void Slide();
+	void CancelSlide();
 	void Spawn();
 	void LandOn();
 	void Hit(const float damage);

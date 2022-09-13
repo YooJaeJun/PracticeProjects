@@ -7,10 +7,17 @@ enum class UIType
 	FONT
 };
 
+enum class Anchor
+{
+	NONE,
+	LEFTTOP,
+	LEFTBOTTOM,
+	RIGHTBOTTOM
+};
+
 class UI : public Character
 {
 public:
-	Vector2		imgSize;
 
 public:
 	UI();
@@ -21,7 +28,7 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-	void Spawn(const float coefX, const float coefY);
+	void Spawn(const Anchor anchor, const float coefX, const float coefY);
 	bool DownGauge();
 	void Hit(const float damage);
 };

@@ -88,18 +88,17 @@ void Player::Init()
 	die->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
 	die->SetParentRT(*col);
 
-	state = State::RUN;
+	state = PlState::RUN;
 	gravity = 0.0f;
 	speed = speedOrigin = 400.0f;
-	isDoubleJump = false;
 	isHit = false;
-	timerHit = 0.0f;
+	timeHit = 0.0f;
 	isHitAnim = false;
-	timerHitAnim = 0.0f;
+	timeHitAnim = 0.0f;
 	isBoost = false;
-	timerBoost = 0.0f;
+	timeBoost = 0.0f;
 	isLand = false;
-	timerLand = 0.0f;
+	timeLand = 0.0f;
 }
 
 void Player::Release()
@@ -112,9 +111,11 @@ void Player::Release()
 
 void Player::Update()
 {
+	cout << "Player State " << (int)state << '\n';
+
 	speed += 10.0f * DELTA;
 
-	if (state == State::DIE)
+	if (state == PlState::DIE)
 	{
 		isHit = false;
 		speed = 0.0f;
@@ -124,7 +125,7 @@ void Player::Update()
 			gravity = 0.0f;
 		}
 	}
-	else if (state == State::RUN)
+	else if (state == PlState::RUN)
 	{
 		if (isHitAnim)
 		{
@@ -132,7 +133,7 @@ void Player::Update()
 			hit->isVisible = true;
 			land->isVisible = false;
 
-			if (TIMER->GetTick(timerHitAnim, 0.4f))	// 히트 애니용
+			if (TIMER->GetTick(timeHitAnim, 0.4f))	// 히트 애니용
 			{
 				hit->isVisible = false;
 				idle->isVisible = true;
@@ -142,13 +143,13 @@ void Player::Update()
 		}
 		else if (isLand)
 		{
-			if (TIMER->GetTick(timerLand, 0.2f))
+			if (TIMER->GetTick(timeLand, 0.2f))
 			{
 				col->scale.x = idle->scale.x * scaleCoefX;
 				col->scale.y = idle->scale.y * scaleCoefY;
 				land->isVisible = false;
 				idle->isVisible = true;
-				timerLand = 0.0f;
+				timeLand = 0.0f;
 				isLand = false;
 			}
 		}
@@ -167,77 +168,36 @@ void Player::Update()
 		//run -> slide
 		if (INPUT->KeyPress(VK_DOWN))
 		{
-			state = State::SLIDE;
-
-			col->scale.x = slide->scale.x * scaleCoefX;
-			col->scale.y = slide->scale.y * 0.25f;
-			idle->isVisible = false;
-			slide->isVisible = true;
-			land->isVisible = false;
-			boost->isVisible = false;
-			hit->isVisible = false;
-			isHitAnim = false;
-			slide->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+			Slide();
 		}
 		//run -> jump
 		if (INPUT->KeyDown(VK_SPACE))
 		{
-			state = State::JUMP;
-
-			gravity = -800.0f;
-			col->scale.x = jump->scale.x * scaleCoefX;
-			col->scale.y = jump->scale.y * 0.4f;
-			idle->isVisible = false;
-			jump->isVisible = true;
-			land->isVisible = false;
-			boost->isVisible = false;
-			hit->isVisible = false;
-			isHitAnim = false;
-			jump->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+			Jump();
 		}
 	}
-	else if (state == State::SLIDE)
+	else if (state == PlState::SLIDE)
 	{
 		//slide -> run
 		if (INPUT->KeyUp(VK_DOWN))
 		{
-			state = State::RUN;
-			col->scale.x = idle->scale.x * scaleCoefX;
-			col->scale.y = idle->scale.y * scaleCoefY;
-			idle->isVisible = true;
-			slide->isVisible = false;
-			hit->isVisible = false;
-			isHitAnim = false;
+			CancelSlide();
 		}
 		//slide -> jump
 		if (INPUT->KeyDown(VK_SPACE))
 		{
-			state = State::JUMP;
-
-			gravity = -800.0f;
-			col->scale.x = jump->scale.x * scaleCoefX;
-			col->scale.y = jump->scale.y * 0.4f;
-			slide->isVisible = false;
-			jump->isVisible = true;
-			hit->isVisible = false;
-			isHitAnim = false;
-			jump->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+			Jump();
 		}
 	}
-	else if (state == State::JUMP)
+	else if (state == PlState::JUMP)
 	{
-		if (INPUT->KeyDown(VK_SPACE) && !isDoubleJump)
+		if (INPUT->KeyDown(VK_SPACE))
 		{
-			gravity = -800.0f;
-			col->scale.x = doubleJump->scale.x * scaleCoefX;
-			col->scale.y = doubleJump->scale.y * scaleCoefY;
-			isDoubleJump = true;
-			jump->isVisible = false;
-			doubleJump->isVisible = true;
-			hit->isVisible = false;
-			isHitAnim = false;
-			doubleJump->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+			DoubleJump();
 		}
+	}
+	else if (state == PlState::DOUBLEJUMP)
+	{
 	}
 
 	if (isHit)
@@ -261,7 +221,7 @@ void Player::Update()
 			gravity = 0.0f;	// 중력 안 받게
 		}
 
-		if (TIMER->GetTick(timerHit, 1.5f))
+		if (TIMER->GetTick(timeHit, 1.5f))
 		{
 			Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
 			idle->color =
@@ -273,7 +233,7 @@ void Player::Update()
 				boost->color =
 				c;
 
-			timerHit = 0.0f;
+			timeHit = 0.0f;
 			isHit = false;
 		}
 	}
@@ -285,11 +245,12 @@ void Player::Update()
 			Spawn();
 			gravity = 0.0f;	// 중력 안 받게
 		}
-		if (TIMER->GetTick(timerBoost, 5.0f))
+		if (TIMER->GetTick(timeBoost, 4.0f))
 		{
 			speed = speedOrigin;
-			timerBoost = 0.0f;
+			timeBoost = 0.0f;
 			isBoost = false;
+			isHit = true;
 		}
 	}
 
@@ -326,6 +287,68 @@ void Player::Render()
 	die->Render();
 }
 
+
+void Player::Jump()
+{
+	state = PlState::JUMP;
+	gravity = -800.0f;
+	col->scale.x = jump->scale.x * scaleCoefX;
+	col->scale.y = jump->scale.y * 0.4f;
+
+	idle->isVisible = false;
+	slide->isVisible = false;
+	jump->isVisible = true;
+	land->isVisible = false;
+	boost->isVisible = false;
+	hit->isVisible = false;
+	isHitAnim = false;
+
+	jump->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+}
+
+void Player::DoubleJump()
+{
+	state = PlState::DOUBLEJUMP;
+	gravity = -800.0f;
+	col->scale.x = doubleJump->scale.x * scaleCoefX;
+	col->scale.y = doubleJump->scale.y * scaleCoefY;
+
+	jump->isVisible = false;
+	doubleJump->isVisible = true;
+	hit->isVisible = false;
+	isHitAnim = false;
+
+	doubleJump->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+}
+
+void Player::Slide()
+{
+	state = PlState::SLIDE;
+	col->scale.x = slide->scale.x * scaleCoefX;
+	col->scale.y = slide->scale.y * 0.25f;
+
+	idle->isVisible = false;
+	slide->isVisible = true;
+	land->isVisible = false;
+	boost->isVisible = false;
+	hit->isVisible = false;
+	isHitAnim = false;
+
+	slide->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+}
+
+void Player::CancelSlide()
+{
+	state = PlState::RUN;
+	col->scale.x = idle->scale.x * scaleCoefX;
+	col->scale.y = idle->scale.y * scaleCoefY;
+
+	idle->isVisible = true;
+	slide->isVisible = false;
+	hit->isVisible = false;
+	isHitAnim = false;
+}
+
 void Player::Spawn()
 {
 	col->SetWorldPosX(CAM->position.x - app.GetHalfWidth() + col->scale.x * 2.0f);
@@ -338,12 +361,12 @@ void Player::LandOn()
 	gravity = 0.0f;
 
 	//jump -> run (착지 애니메이션)
-	if (state == State::JUMP)
+	if (state == PlState::JUMP || state == PlState::DOUBLEJUMP)
 	{
-		state = State::RUN;
+		state = PlState::RUN;
 		col->scale.x = land->scale.x * scaleCoefX;
 		col->scale.y = land->scale.y * scaleCoefY;
-		isDoubleJump = false;
+
 		jump->isVisible = false;
 		doubleJump->isVisible = false;
 		land->isVisible = true;
@@ -360,6 +383,10 @@ void Player::Hit(const float damage)
 		// hp -= damage;	// 게이지 개념으로
 		if (damage > 0)
 		{
+			gravity = 500.0f;
+			isHit = true;
+			isHitAnim = true;
+
 			idle->isVisible = false;
 			slide->isVisible = false;
 			jump->isVisible = false;
@@ -370,19 +397,13 @@ void Player::Hit(const float damage)
 			die->isVisible = false;
 
 			hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
-
-			gravity = 500.0f;
-
-			isHit = true;
-			isHitAnim = true;
-			isDoubleJump = false;
 		}
 	}
 }
 
 void Player::Boost()
 {
-	timerBoost = 0.0f;
+	timeBoost = 0.0f;
 
 	if (false == isBoost)
 	{
@@ -394,9 +415,9 @@ void Player::Boost()
 
 void Player::Die()
 {
-	if (state != State::DIE)
+	if (state != PlState::DIE)
 	{
-		state = State::DIE;
+		state = PlState::DIE;
 		col->scale.x = 0.0f;
 		col->scale.y = 0.0f;
 

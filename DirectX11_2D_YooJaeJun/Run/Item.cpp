@@ -52,13 +52,13 @@ void Item::Spawn(const float origin, const int maxn)
     {
         totalPercent = 3;
         col->SetWorldPosX(CAM->position.x + app.GetHalfWidth() + col->scale.x);
-        col->SetWorldPosY(-app.GetHalfHeight() + RANDOM->Float(200.0f, 400.0f));
+        col->SetWorldPosY(-app.GetHalfHeight() + RANDOM->Float(300.0f, 400.0f));
     }
     else if (type == ItemType::BOOST)
     {
         totalPercent = 3;
         col->SetWorldPosX(CAM->position.x + app.GetHalfWidth() + col->scale.x);
-        col->SetWorldPosY(-app.GetHalfHeight() + RANDOM->Float(200.0f, 400.0f));
+        col->SetWorldPosY(-app.GetHalfHeight() + RANDOM->Float(300.0f, 400.0f));
     }
 
     if (RANDOM->Int(1, totalPercent) == 1)

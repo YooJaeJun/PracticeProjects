@@ -22,7 +22,6 @@ void Main::Init()
 			elem->idle = new ObImage(L"Cookie/Oven2.png");
 			elem->imgSize = Vector2(862.0f, 320.0f);
 		}
-		elem->Init();
 		elem->Spawn();
 		idx++;
 	}
@@ -37,7 +36,8 @@ void Main::Init()
 		elem = new Floor;
 		elem->Spawn(idx);
 		elem->idle = new ObImage(L"Cookie/Floor.png");
-		elem->idle->scale = Vector2(79.0f, 48.0f) * 2.5f;
+		elem->imgSize = Vector2(79.0f, 48.0f);
+		elem->idle->scale = elem->imgSize * 2.5f;
 		elem->idle->SetParentRT(*elem->col);
 		elem->idle->pivot = OFFSET_LT;
 		idx++;
@@ -50,9 +50,11 @@ void Main::Init()
 		elem->col->pivot = OFFSET_B;
 		elem->col->SetWorldPosX(app.GetWidth());
 		elem->col->SetWorldPosY(-app.GetHalfHeight() + 48.0f * 2.5f);
+		elem->imgSize = Vector2(87.0f, 118.0f);
 		elem->scaleCoefX = 0.4f;
 		elem->scaleCoefY = 0.7f;
-		elem->col->scale = Vector2(87.0f * elem->scaleCoefX, 118.0f * elem->scaleCoefY);
+		elem->col->scale.x = elem->imgSize.x * elem->scaleCoefX;
+		elem->col->scale.y = elem->imgSize.y * elem->scaleCoefY;
 		elem->idle = new ObImage(L"Cookie/land0001_tm001_jp1B.png");
 		elem->idle->scale = Vector2(87.0f * 0.8f, 118.0f * 0.8f);
 		elem->idle->SetParentRT(*elem->col);
@@ -67,11 +69,14 @@ void Main::Init()
 		elem->col->pivot = OFFSET_B;
 		elem->col->SetWorldPosX(app.GetWidth());
 		elem->col->SetWorldPosY(-app.GetHalfHeight() + 400.0f);
+		elem->imgSize = Vector2(165.0f, 493.0f);
 		elem->scaleCoefX = 0.9f;
 		elem->scaleCoefY = 1.0f;
-		elem->col->scale = Vector2(165.0f * elem->scaleCoefX, 493.0f * elem->scaleCoefY);
+		elem->col->scale.x = elem->imgSize.x * elem->scaleCoefX;
+		elem->col->scale.y = elem->imgSize.y * elem->scaleCoefY;
 		elem->idle = new ObImage(L"Cookie/land0001_tm001_sdA.png");
-		elem->idle->scale = Vector2(165.0f * elem->scaleCoefX, 493.0f * elem->scaleCoefY);
+		elem->idle->scale.x = elem->imgSize.x * elem->scaleCoefX;
+		elem->idle->scale.y = elem->imgSize.y * elem->scaleCoefY;
 		elem->idle->SetParentRT(*elem->col);
 		elem->idle->pivot = OFFSET_B;
 		idx++;
@@ -83,7 +88,11 @@ void Main::Init()
 		elem = new Item;
 		elem->idle = new ObImage(L"Cookie/JellyBin.png");
 		elem->idle->maxFrame.x = 1;
-		elem->idle->scale = Vector2(25.0f / elem->idle->maxFrame.x, 34.0f);
+		elem->imgSize = Vector2(25.0f, 34.0f);
+		elem->col->scale.x = elem->imgSize.x / elem->idle->maxFrame.x;
+		elem->col->scale.y = elem->imgSize.y;
+		elem->idle->scale.x = elem->imgSize.x / elem->idle->maxFrame.x;
+		elem->idle->scale.y = elem->imgSize.y;
 		elem->idle->SetParentRT(*elem->col);
 		elem->type = ItemType::SCORE;
 		elem->Spawn(0.0f, idx);
@@ -96,7 +105,13 @@ void Main::Init()
 		elem = new Item;
 		elem->idle = new ObImage(L"Cookie/Life.png");
 		elem->idle->maxFrame.x = 1;
-		elem->idle->scale = Vector2(80.0f / elem->idle->maxFrame.x, 106.0f) * 0.75f;
+		elem->imgSize = Vector2(80.0f, 106.0f);
+		elem->scaleCoefX = 0.75f;
+		elem->scaleCoefY = 0.75f;
+		elem->col->scale.x = elem->imgSize.x / elem->idle->maxFrame.x * elem->scaleCoefX;
+		elem->col->scale.y = elem->imgSize.y * elem->scaleCoefY;
+		elem->idle->scale.x = elem->imgSize.x / elem->idle->maxFrame.x * elem->scaleCoefX;
+		elem->idle->scale.y = elem->imgSize.y * elem->scaleCoefY;
 		elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 		elem->idle->SetParentRT(*elem->col);
 		elem->type = ItemType::LIFE;
@@ -110,7 +125,13 @@ void Main::Init()
 		elem = new Item;
 		elem->idle = new ObImage(L"Cookie/ItemBoost.png");
 		elem->idle->maxFrame.x = 4;
-		elem->idle->scale = Vector2(348.0f / elem->idle->maxFrame.x, 85.0f) * 0.75f;
+		elem->imgSize = Vector2(348.0f, 85.0f);
+		elem->scaleCoefX = 0.75f;
+		elem->scaleCoefY = 0.75f;
+		elem->col->scale.x = elem->imgSize.x / elem->idle->maxFrame.x * elem->scaleCoefX;
+		elem->col->scale.y = elem->imgSize.y * elem->scaleCoefY;
+		elem->idle->scale.x = elem->imgSize.x / elem->idle->maxFrame.x * elem->scaleCoefX;
+		elem->idle->scale.y = elem->imgSize.y * elem->scaleCoefY;
 		elem->idle->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 		elem->idle->SetParentRT(*elem->col);
 		elem->type = ItemType::BOOST;
@@ -125,17 +146,17 @@ void Main::Init()
 	gauge[0]->idle = new ObImage(L"Cookie/gaugebg_heart02.png");
 	gauge[0]->imgSize = Vector2(750.0f, 46.0f);
 	gauge[0]->idle->scale = gauge[0]->imgSize;
-	gauge[0]->Spawn(20.0f, -10.0f);
+	gauge[0]->Spawn(Anchor::LEFTTOP, 20.0f, -10.0f);
 
 	gauge[1]->idle = new ObImage(L"Cookie/gauge_heart_orange.png");
 	gauge[1]->imgSize = Vector2(750.0f, 46.0f);
 	gauge[1]->idle->scale = gauge[1]->imgSize;
-	gauge[1]->Spawn(20.0f, -10.0f);
+	gauge[1]->Spawn(Anchor::LEFTTOP, 20.0f, -10.0f);
 
 	gauge[2]->idle = new ObImage(L"Cookie/icon_heartLife.png");
 	gauge[2]->imgSize = Vector2(54.0f, 54.0f);
 	gauge[2]->idle->scale = gauge[2]->imgSize;
-	gauge[2]->Spawn(0.0f, -5.0f);
+	gauge[2]->Spawn(Anchor::LEFTTOP, 0.0f, -5.0f);
 
 	for (auto& elem : gauge)
 	{
@@ -152,12 +173,49 @@ void Main::Init()
 			fontScore[i][j]->idle = new ObImage(name);
 			fontScore[i][j]->idle->space = SPACE::SCREEN;
 			fontScore[i][j]->idle->isVisible = false;
-			fontScore[i][j]->idle->scale = Vector2(28.0f, 38.0f);
+			fontScore[i][j]->imgSize = Vector2(28.0f, 38.0f);
+			fontScore[i][j]->idle->scale = fontScore[i][j]->imgSize;
 			fontScore[i][j]->idle->SetWorldPosX(-app.GetHalfWidth() + 50.0f + 28.0f * i);
 			fontScore[i][j]->idle->SetWorldPosY(app.GetHalfHeight() - 80.0f);
 		}
 	}
 	fontScore[0][0]->idle->isVisible = true;
+
+	btnJump[0] = new UI;
+	btnJump[0]->idle = new ObImage(L"Cookie/btn_jump_no.png");
+	btnJump[1] = new UI;
+	btnJump[1]->idle = new ObImage(L"Cookie/btn_jump_dim.png");
+	for (auto& elem : btnJump)
+	{
+		elem->imgSize = Vector2(236.0f, 178.0f);
+		elem->scaleCoefX = 0.7f;
+		elem->scaleCoefY = 0.7f;
+		elem->idle->scale.x = elem->imgSize.x * elem->scaleCoefX;
+		elem->idle->scale.y = elem->imgSize.y * elem->scaleCoefY;
+		elem->idle->space = SPACE::SCREEN;
+		elem->Spawn(Anchor::LEFTBOTTOM, 20.0f, 20.0f);
+		elem->idle->pivot = OFFSET_LB;
+		elem->idle->collider = COLLIDER::RECT;
+	}
+	btnJump[1]->idle->isVisible = false;
+
+	btnSlide[0] = new UI;
+	btnSlide[0]->idle = new ObImage(L"Cookie/btn_slide_no.png");
+	btnSlide[1] = new UI;
+	btnSlide[1]->idle = new ObImage(L"Cookie/btn_slide_dim.png");
+	for (auto& elem : btnSlide)
+	{
+		elem->imgSize = Vector2(236.0f, 178.0f);
+		elem->scaleCoefX = 0.7f;
+		elem->scaleCoefY = 0.7f;
+		elem->idle->scale.x = elem->imgSize.x * elem->scaleCoefX;
+		elem->idle->scale.y = elem->imgSize.y * elem->scaleCoefY;
+		elem->idle->space = SPACE::SCREEN;
+		elem->Spawn(Anchor::RIGHTBOTTOM, -20.0f, 20.0f);
+		elem->idle->pivot = OFFSET_RB;
+		elem->idle->collider = COLLIDER::RECT;
+	}
+	btnSlide[1]->idle->isVisible = false;
 }
 
 void Main::Release()
@@ -172,6 +230,10 @@ void Main::Release()
 	for (auto& elem : itemBoost) elem->Release();
 	for (auto& elem : gauge) elem->Release();
 	for (auto& elem : fontScore) for(auto& elem2 : elem) elem2->Release();
+	btnSlide[0]->Release();
+	btnSlide[1]->Release();
+	btnJump[0]->Release();
+	btnJump[1]->Release();
 }
 
 void Main::Update()
@@ -179,6 +241,13 @@ void Main::Update()
 	if (gameState == GameState::END)
 	{
 		player->Die();
+	}
+	else
+	{
+		for (auto& elem : background)
+		{
+			elem->idle->MoveWorldPos(Vector2(350.0f * DELTA, 0.0f));	// 배경은 원경이라 느리게 스크롤링
+		}
 	}
 
 	if (INPUT->KeyDown('R'))
@@ -261,7 +330,6 @@ void Main::Update()
 
 	player->Update();
 
-
 	if (false == gauge[1]->DownGauge())
 	{
 		gameState = GameState::END;
@@ -269,6 +337,11 @@ void Main::Update()
 	for (auto& elem : gauge) elem->Update();
 
 	for (auto& elem : fontScore) for (auto& elem2 : elem) elem2->Update();
+
+	btnSlide[0]->Update();
+	btnSlide[1]->Update();
+	btnJump[0]->Update();
+	btnJump[1]->Update();
 }
 
 void Main::LateUpdate()
@@ -293,7 +366,7 @@ void Main::LateUpdate()
 	for (auto& elem : obstacleBottom)
 	{
 		if (!elem->col->colOnOff) continue;
-		if (elem->col->Intersect(player->col))
+		if (elem->isCol && elem->col->Intersect(player->col))
 		{
 			if (player->isBoost)
 			{
@@ -312,7 +385,7 @@ void Main::LateUpdate()
 	for (auto& elem : obstacleTop)
 	{
 		if (!elem->col->colOnOff) continue;
-		if (elem->col->Intersect(player->col))
+		if (elem->isCol && elem->col->Intersect(player->col))
 		{
 			if (player->isBoost)
 			{
@@ -357,6 +430,54 @@ void Main::LateUpdate()
 		{
 			player->Boost();
 			elem->col->colOnOff = false;
+		}
+	}
+
+	if (INPUT->KeyDown(VK_LBUTTON))
+	{
+		if (btnJump[0]->idle->Intersect(INPUT->GetWorldMousePos() - CAM->position))
+		{
+			if (player->state == PlState::DOUBLEJUMP)
+			{
+			}
+			else if (player->state == PlState::JUMP)
+			{
+				player->DoubleJump();
+			}
+			else
+			{
+				player->Jump();
+			}
+		}
+	}
+	else if (INPUT->KeyPress(VK_LBUTTON))
+	{
+		if (btnJump[0]->idle->Intersect(INPUT->GetWorldMousePos() - CAM->position))
+		{
+			btnJump[0]->idle->isVisible = false;
+			btnJump[1]->idle->isVisible = true;
+		}
+		if (btnSlide[0]->idle->Intersect(INPUT->GetWorldMousePos() - CAM->position))
+		{
+			btnSlide[0]->idle->isVisible = false;
+			btnSlide[1]->idle->isVisible = true;
+
+			if (player->state == PlState::RUN)
+			{
+				player->Slide();
+			}
+		}
+	}
+	else if (INPUT->KeyUp(VK_LBUTTON))
+	{
+		btnJump[0]->idle->isVisible = true;
+		btnJump[1]->idle->isVisible = false;
+		btnSlide[0]->idle->isVisible = true;
+		btnSlide[1]->idle->isVisible = false;
+
+		if (player->state == PlState::SLIDE)
+		{
+			player->CancelSlide();
 		}
 	}
 
@@ -411,6 +532,11 @@ void Main::Render()
 
 	for (auto& elem : gauge) elem->Render();
 	for (auto& elem : fontScore) for (auto& elem2 : elem) elem2->Render();
+
+	btnSlide[0]->Render();
+	btnSlide[1]->Render();
+	btnJump[0]->Render();
+	btnJump[1]->Render();
 }
 
 void Main::ResizeScreen()
@@ -452,9 +578,9 @@ void Main::ResizeScreen()
 		elem->col->SetWorldPosY(-app.GetHalfHeight() + 200.0f);
 	}
 
-	gauge[0]->Spawn(20.0f, -10.0f);
-	gauge[1]->Spawn(20.0f, -10.0f);
-	gauge[2]->Spawn(0.0f, -5.0f);
+	gauge[0]->Spawn(Anchor::LEFTTOP, 20.0f, -10.0f);
+	gauge[1]->Spawn(Anchor::LEFTTOP, 20.0f, -10.0f);
+	gauge[2]->Spawn(Anchor::LEFTTOP, 0.0f, -5.0f);
 
 	for (int i = 0; i < fontDigitMax; i++)
 	{
@@ -464,6 +590,11 @@ void Main::ResizeScreen()
 			fontScore[i][j]->idle->SetWorldPosY(app.GetHalfHeight() - 80.0f);
 		}
 	}
+
+	btnJump[0]->Spawn(Anchor::LEFTBOTTOM, 20.0f, 20.0f);
+	btnJump[1]->Spawn(Anchor::LEFTBOTTOM, 20.0f, 20.0f);
+	btnSlide[0]->Spawn(Anchor::RIGHTBOTTOM, -20.0f, 20.0f);
+	btnSlide[1]->Spawn(Anchor::RIGHTBOTTOM, -20.0f, 20.0f);
 }
 
 void Main::ChangeScoreUI()

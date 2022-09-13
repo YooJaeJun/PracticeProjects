@@ -2,13 +2,13 @@
 
 Background::Background()
 {
+    Init();
 }
 
 void Background::Init()
 {
     Character::Init();
     col = nullptr;
-    // idle->pivot = OFFSET_L;
 }
 
 void Background::Release()

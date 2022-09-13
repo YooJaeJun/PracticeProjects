@@ -17,6 +17,7 @@ void Obstacle::Init()
 
     isHit = false;
     lastPosY = 0.0f;
+    isCol = true;
 }
 
 void Obstacle::Release()
@@ -32,14 +33,15 @@ void Obstacle::Update()
 
     if (isHit)
     {
-        col->MoveWorldPos(Vector2(2500.0f, 1500.0f) * DELTA);
+        col->MoveWorldPos(Vector2(3500.0f,1000.0f) * DELTA);
         col->rotation += 20.0f * DELTA;
 
         if (col->GetWorldPos().y > app.GetHalfHeight() + 400.0f)
         {
-            col->SetWorldPos(Vector2(CAM->position.x - 800.0f, lastPosY));
+            col->SetWorldPos(Vector2(CAM->position.x - 2000.0f, lastPosY));
             col->rotation = 0.0f;
             isHit = false;
+            isCol = true;
         }
     }
     else
@@ -76,4 +78,5 @@ void Obstacle::Spawn(const float origin, const int idx)
 void Obstacle::Hit()
 {
     isHit = true;
+    isCol = false;
 }

@@ -4,6 +4,7 @@ class Obstacle : public Character
 public:
 	bool	isHit;
 	float	lastPosY;
+	bool	isCol;
 
 public:
 	Obstacle();

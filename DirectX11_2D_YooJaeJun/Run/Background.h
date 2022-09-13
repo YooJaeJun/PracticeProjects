@@ -2,7 +2,6 @@
 class Background : public Character
 {
 public:
-	Vector2		imgSize;
 
 public:
 	Background();

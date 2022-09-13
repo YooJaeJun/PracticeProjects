@@ -33,15 +33,28 @@ void UI::Render()
     Character::Render();
 }
 
-void UI::Spawn(const float coefX, const float coefY)
+void UI::Spawn(const Anchor anchor, const float coefX, const float coefY)
 {
-    idle->SetWorldPos(Vector2(-app.GetHalfWidth() + coefX, app.GetHalfHeight() + coefY));
+    switch (anchor)
+    {
+    case Anchor::LEFTTOP:
+        idle->SetWorldPos(Vector2(-app.GetHalfWidth() + coefX, app.GetHalfHeight() + coefY));
+        break;
+    case Anchor::LEFTBOTTOM:
+        idle->SetWorldPos(Vector2(-app.GetHalfWidth() + coefX, -app.GetHalfHeight() + coefY));
+        break;
+    case Anchor::RIGHTBOTTOM:
+        idle->SetWorldPos(Vector2(app.GetHalfWidth() + coefX, -app.GetHalfHeight() + coefY));
+        break;
+    }
 }
 
 bool UI::DownGauge()
 {
     if (idle->scale.x <= 0.0f)
     {
+        idle->scale.x = 0.0f;
+        idle->uv.z = 0.0f;
         return false;
     }
     else
