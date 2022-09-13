@@ -8,29 +8,21 @@ void Main::Init()
 	gameState = GameState::PROGRESS;
 	CAM->position = Vector2(0.0f, 0.0f);
 
-	int idx = 0;
-	for (auto& elem : background)
-	{
-		elem = new Background;
-		if (idx >= 0 && idx < 2)
-		{
-			elem->idle = new ObImage(L"Cookie/Oven1.png");
-			elem->imgSize = Vector2(569.0f, 320.0f);
-		}
-		else
-		{
-			elem->idle = new ObImage(L"Cookie/Oven2.png");
-			elem->imgSize = Vector2(862.0f, 320.0f);
-		}
-		elem->Spawn();
-		idx++;
-	}
-	background[1]->idle->SetWorldPosX(CAM->position.x + background[1]->idle->scale.x);
-	background[3]->idle->SetWorldPosX(CAM->position.x + background[3]->idle->scale.x);
+	bg1 = new Background;
+	bg1->idle = new ObImage(L"Cookie/Oven1.png");
+	bg1->imgSize = Vector2(569.0f, 320.0f);
+	bg1->idle->space = SPACE::SCREEN;
+	bg1->Spawn();
+
+	bg2 = new Background;
+	bg2->idle = new ObImage(L"Cookie/Oven2.png");
+	bg2->imgSize = Vector2(862.0f, 320.0f);
+	bg2->idle->space = SPACE::SCREEN;
+	bg2->Spawn();
 
 	player = new Player();
 
-	idx = 0;
+	int idx = 0;
 	for (auto& elem : floor)
 	{
 		elem = new Floor;
@@ -220,7 +212,8 @@ void Main::Init()
 
 void Main::Release()
 {
-	for (auto& elem : background) elem->Release();
+	bg1->Release();
+	bg2->Release();
 	player->Release();
 	for (auto& elem : floor) elem->Release();
 	for (auto& elem : obstacleBottom) elem->Release();
@@ -229,7 +222,7 @@ void Main::Release()
 	for (auto& elem : itemLife) elem->Release();
 	for (auto& elem : itemBoost) elem->Release();
 	for (auto& elem : gauge) elem->Release();
-	for (auto& elem : fontScore) for(auto& elem2 : elem) elem2->Release();
+	for (auto& elem : fontScore) for (auto& elem2 : elem) elem2->Release();
 	btnSlide[0]->Release();
 	btnSlide[1]->Release();
 	btnJump[0]->Release();
@@ -244,21 +237,18 @@ void Main::Update()
 	}
 	else
 	{
-		for (auto& elem : background)
-		{
-			elem->idle->MoveWorldPos(Vector2(350.0f * DELTA, 0.0f));	// 배경은 원경이라 느리게 스크롤링
-		}
+		bg1->idle->uv.x += DELTA / bg1->imgSize.x * 50.0f;
+		bg1->idle->uv.z += DELTA / bg1->imgSize.x * 50.0f;
+		bg1->Update();
+		bg2->idle->uv.x += DELTA / bg2->imgSize.x * 100.0f;
+		bg2->idle->uv.z += DELTA / bg2->imgSize.x * 100.0f;
+		bg2->Update();
 	}
 
 	if (INPUT->KeyDown('R'))
 	{
 		Release();
 		Init();
-	}
-
-	for (auto& elem : background)
-	{
-		elem->Update();
 	}
 
 	for (auto& elem : floor)
@@ -483,20 +473,18 @@ void Main::LateUpdate()
 
 	if (lastScore != score)
 	{
- 		ChangeScoreUI();
+		ChangeScoreUI();
 		lastScore = score;
 	}
 }
 
 void Main::Render()
 {
-	for (auto& elem : background)
-	{
-		elem->Render();
-	}
+	bg1->Render();
+	bg2->Render();
 
 	player->Render();
-	
+
 	for (auto& elem : floor)
 	{
 		if (!elem->col->colOnOff) continue;
@@ -543,12 +531,8 @@ void Main::ResizeScreen()
 {
 	player->Spawn();
 
-	for (auto& elem : background)
-	{
-		elem->Spawn();
-	}
-	background[1]->idle->SetWorldPosX(CAM->position.x + background[1]->idle->scale.x);
-	background[3]->idle->SetWorldPosX(CAM->position.x + background[3]->idle->scale.x);
+	bg1->Spawn();
+	bg2->Spawn();
 
 	int idx = 0;
 	for (auto& elem : floor)
@@ -557,7 +541,7 @@ void Main::ResizeScreen()
 		idx++;
 	}
 
-	for (auto& elem : obstacleBottom) 
+	for (auto& elem : obstacleBottom)
 	{
 		elem->col->SetWorldPosY(-app.GetHalfHeight() + 48.0f * 2.5f);
 	}

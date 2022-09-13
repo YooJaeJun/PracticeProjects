@@ -20,6 +20,8 @@ private:
 	int			score;
 	int			lastScore;
 	GameState	gameState;
+	Background* bg1;
+	Background*	bg2;
 	Background* background[backgroundMax];
 	Player*		player;
 	Floor*		floor[floorMax];
