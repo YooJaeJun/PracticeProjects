@@ -10,7 +10,7 @@ void Main::Init()
 
 	bg1 = new Background;
 
-	player = new Player();
+	player = new Airplane();
 }
 
 void Main::Release()

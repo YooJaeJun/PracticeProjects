@@ -20,7 +20,7 @@ private:
 	int			lastScore;
 	GameState	gameState;
 	Background* bg1;
-	Player*		player;
+	Airplane*	player;
 
 public:
 	virtual void Init() override;
