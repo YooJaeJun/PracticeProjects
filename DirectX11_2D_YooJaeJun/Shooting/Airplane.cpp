@@ -8,23 +8,21 @@ Airplane::Airplane()
 void Airplane::Init()
 {
 	Character::Init();
-	scaleCoef = Vector2(0.8f, 0.8f);
 
 	col = new ObRect();
 	col->pivot = OFFSET_T;
-	idleImgSize = Vector2(224.0f, 40.0f);
-	col->scale = Vector2(idleImgSize.x / 7.0f, idleImgSize.y) * scaleCoef;
+	col->scale = Vector2(224.0f / 7.0f, 40.0f) * 0.8f;
 	col->color = Color(1.0f, 1.0f, 1.0f);
 	col->isFilled = false;
 	Spawn();
 
 	idle = new ObImage(L"LeftRight.png");
 	idle->pivot = OFFSET_T;
+	idleImgSize = Vector2(224.0f, 40.0f);
 	idle->maxFrame.x = 7;
-	idle->scale = Vector2(idleImgSize.x / idle->maxFrame.x, idleImgSize.y) * 3.0f;
+	idle->scale = Vector2(idleImgSize.x / idle->maxFrame.x, idleImgSize.y) * 2.4f;
 	idle->SetWorldPosY(idle->scale.y / 2.5f);
-	idle->uv = Vector4(3.0f / idle->maxFrame.x, 0.0f, 4.0f / idle->maxFrame.x, 1.0f);
-	idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+	idle->uv = Vector4(0.0f, 0.0f, 1.0f / idle->maxFrame.x, 1.0f);
 	idle->SetParentRT(*col);
 
 	boost = new ObImage(L"Start.png");
@@ -58,11 +56,11 @@ void Airplane::Init()
 
 	key = 0.0f;
 	moveDir = Vector2(0.0f, 0.0f);
+	speed = 300.0f;
 
 	state = PlState::RUN;
 	timeLeft = 0.0f;
 	timeRight = 0.0f;
-	speed = speedOrigin = 300.0f;
 	isHit = false;
 	timeHit = 0.0f;
 	isHitAnim = false;
@@ -78,14 +76,12 @@ void Airplane::Release()
 
 void Airplane::Update()
 {
+	cout << idle->uv.x << ' ' << idle->uv.z << '\n';
+
 	if (state == PlState::DIE)
 	{
 		isHit = false;
 		speed = 0.0f;
-		if (col->GetWorldPos().x < -app.GetHalfHeight() + 48.0f * 2.5f)
-		{
-			col->SetWorldPosY(-app.GetHalfHeight() + 48.0f * 2.5f);
-		}
 	}
 	else if (state == PlState::RUN)
 	{
@@ -127,6 +123,7 @@ void Airplane::Update()
 		else
 		{
 			moveDir.x = 0.0f;
+
 			if (key < -DELTA * 1.5f)
 			{
 				key += DELTA * 1.5f;
@@ -157,7 +154,7 @@ void Airplane::Update()
 			moveDir.y = 0.0f;
 		}
 
-		idle->maxFrame.x = int(key + 3);
+		idle->frame.x = (int)(key + 3.0f);
 
 		moveDir.Normalize();
 		col->MoveWorldPos(moveDir * speed * DELTA);
@@ -257,6 +254,7 @@ void Airplane::Boost()
 		speedOrigin = speed;
 		speed *= 2.0f;
 		isBoost = true;
+		key = 0.0f;
 	}
 }
 
@@ -266,8 +264,8 @@ void Airplane::CancelBoost()
 	idle->isVisible = true;
 	boost->isVisible = false;
 	isBoost = false;
-	idle->uv.x = 3.0f / 7.0f;
-	idle->uv.z = 4.0f / 7.0f;
+	idle->uv.x = 0.0f;
+	idle->uv.z = 1.0f / 7.0f;
 }
 
 void Airplane::Die()

@@ -6,10 +6,10 @@
     <ClInclude Include="Character.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="Background.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Background.h">
+    <ClInclude Include="Airplane.h">
       <Filter>GameObject</Filter>
     </ClInclude>
   </ItemGroup>
@@ -18,10 +18,10 @@
     <ClCompile Include="Character.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="Background.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Background.cpp">
+    <ClCompile Include="Airplane.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
