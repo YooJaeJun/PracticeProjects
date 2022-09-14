@@ -10,13 +10,13 @@ void Main::Init()
 
 	bg1 = new Background;
 	bg1->idle = new ObImage(L"Cookie/Oven1.png");
-	bg1->imgSize = Vector2(569.0f, 320.0f);
+	bg1->idleImgSize = Vector2(569.0f, 320.0f);
 	bg1->idle->space = SPACE::SCREEN;
 	bg1->Spawn();
 
 	bg2 = new Background;
 	bg2->idle = new ObImage(L"Cookie/Oven2.png");
-	bg2->imgSize = Vector2(862.0f, 320.0f);
+	bg2->idleImgSize = Vector2(862.0f, 320.0f);
 	bg2->idle->space = SPACE::SCREEN;
 	bg2->Spawn();
 
@@ -28,8 +28,8 @@ void Main::Init()
 		elem = new Floor;
 		elem->Spawn(idx);
 		elem->idle = new ObImage(L"Cookie/Floor.png");
-		elem->imgSize = Vector2(79.0f, 48.0f);
-		elem->idle->scale = elem->imgSize * 2.5f;
+		elem->idleImgSize = Vector2(79.0f, 48.0f);
+		elem->idle->scale = elem->idleImgSize * 2.5f;
 		elem->idle->SetParentRT(*elem->col);
 		elem->idle->pivot = OFFSET_LT;
 		idx++;
@@ -42,11 +42,11 @@ void Main::Init()
 		elem->col->pivot = OFFSET_B;
 		elem->col->SetWorldPosX(app.GetWidth());
 		elem->col->SetWorldPosY(-app.GetHalfHeight() + 48.0f * 2.5f);
-		elem->imgSize = Vector2(87.0f, 118.0f);
-		elem->scaleCoefX = 0.4f;
-		elem->scaleCoefY = 0.7f;
-		elem->col->scale.x = elem->imgSize.x * elem->scaleCoefX;
-		elem->col->scale.y = elem->imgSize.y * elem->scaleCoefY;
+		elem->idleImgSize = Vector2(87.0f, 118.0f);
+		elem->scaleCoef.x = 0.4f;
+		elem->scaleCoef.y = 0.7f;
+		elem->col->scale.x = elem->idleImgSize.x * elem->scaleCoef.x;
+		elem->col->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
 		elem->idle = new ObImage(L"Cookie/land0001_tm001_jp1B.png");
 		elem->idle->scale = Vector2(87.0f * 0.8f, 118.0f * 0.8f);
 		elem->idle->SetParentRT(*elem->col);
@@ -61,14 +61,14 @@ void Main::Init()
 		elem->col->pivot = OFFSET_B;
 		elem->col->SetWorldPosX(app.GetWidth());
 		elem->col->SetWorldPosY(-app.GetHalfHeight() + 400.0f);
-		elem->imgSize = Vector2(165.0f, 493.0f);
-		elem->scaleCoefX = 0.9f;
-		elem->scaleCoefY = 1.0f;
-		elem->col->scale.x = elem->imgSize.x * elem->scaleCoefX;
-		elem->col->scale.y = elem->imgSize.y * elem->scaleCoefY;
+		elem->idleImgSize = Vector2(165.0f, 493.0f);
+		elem->scaleCoef.x = 0.9f;
+		elem->scaleCoef.y = 1.0f;
+		elem->col->scale.x = elem->idleImgSize.x * elem->scaleCoef.x;
+		elem->col->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
 		elem->idle = new ObImage(L"Cookie/land0001_tm001_sdA.png");
-		elem->idle->scale.x = elem->imgSize.x * elem->scaleCoefX;
-		elem->idle->scale.y = elem->imgSize.y * elem->scaleCoefY;
+		elem->idle->scale.x = elem->idleImgSize.x * elem->scaleCoef.x;
+		elem->idle->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
 		elem->idle->SetParentRT(*elem->col);
 		elem->idle->pivot = OFFSET_B;
 		idx++;
@@ -80,11 +80,11 @@ void Main::Init()
 		elem = new Item;
 		elem->idle = new ObImage(L"Cookie/JellyBin.png");
 		elem->idle->maxFrame.x = 1;
-		elem->imgSize = Vector2(25.0f, 34.0f);
-		elem->col->scale.x = elem->imgSize.x / elem->idle->maxFrame.x;
-		elem->col->scale.y = elem->imgSize.y;
-		elem->idle->scale.x = elem->imgSize.x / elem->idle->maxFrame.x;
-		elem->idle->scale.y = elem->imgSize.y;
+		elem->idleImgSize = Vector2(25.0f, 34.0f);
+		elem->col->scale.x = elem->idleImgSize.x / elem->idle->maxFrame.x;
+		elem->col->scale.y = elem->idleImgSize.y;
+		elem->idle->scale.x = elem->idleImgSize.x / elem->idle->maxFrame.x;
+		elem->idle->scale.y = elem->idleImgSize.y;
 		elem->idle->SetParentRT(*elem->col);
 		elem->type = ItemType::SCORE;
 		elem->Spawn(0.0f, idx);
@@ -97,13 +97,13 @@ void Main::Init()
 		elem = new Item;
 		elem->idle = new ObImage(L"Cookie/Life.png");
 		elem->idle->maxFrame.x = 1;
-		elem->imgSize = Vector2(80.0f, 106.0f);
-		elem->scaleCoefX = 0.75f;
-		elem->scaleCoefY = 0.75f;
-		elem->col->scale.x = elem->imgSize.x / elem->idle->maxFrame.x * elem->scaleCoefX;
-		elem->col->scale.y = elem->imgSize.y * elem->scaleCoefY;
-		elem->idle->scale.x = elem->imgSize.x / elem->idle->maxFrame.x * elem->scaleCoefX;
-		elem->idle->scale.y = elem->imgSize.y * elem->scaleCoefY;
+		elem->idleImgSize = Vector2(80.0f, 106.0f);
+		elem->scaleCoef.x = 0.75f;
+		elem->scaleCoef.y = 0.75f;
+		elem->col->scale.x = elem->idleImgSize.x / elem->idle->maxFrame.x * elem->scaleCoef.x;
+		elem->col->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
+		elem->idle->scale.x = elem->idleImgSize.x / elem->idle->maxFrame.x * elem->scaleCoef.x;
+		elem->idle->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
 		elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 		elem->idle->SetParentRT(*elem->col);
 		elem->type = ItemType::LIFE;
@@ -117,13 +117,13 @@ void Main::Init()
 		elem = new Item;
 		elem->idle = new ObImage(L"Cookie/ItemBoost.png");
 		elem->idle->maxFrame.x = 4;
-		elem->imgSize = Vector2(348.0f, 85.0f);
-		elem->scaleCoefX = 0.75f;
-		elem->scaleCoefY = 0.75f;
-		elem->col->scale.x = elem->imgSize.x / elem->idle->maxFrame.x * elem->scaleCoefX;
-		elem->col->scale.y = elem->imgSize.y * elem->scaleCoefY;
-		elem->idle->scale.x = elem->imgSize.x / elem->idle->maxFrame.x * elem->scaleCoefX;
-		elem->idle->scale.y = elem->imgSize.y * elem->scaleCoefY;
+		elem->idleImgSize = Vector2(348.0f, 85.0f);
+		elem->scaleCoef.x = 0.75f;
+		elem->scaleCoef.y = 0.75f;
+		elem->col->scale.x = elem->idleImgSize.x / elem->idle->maxFrame.x * elem->scaleCoef.x;
+		elem->col->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
+		elem->idle->scale.x = elem->idleImgSize.x / elem->idle->maxFrame.x * elem->scaleCoef.x;
+		elem->idle->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
 		elem->idle->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 		elem->idle->SetParentRT(*elem->col);
 		elem->type = ItemType::BOOST;
@@ -136,18 +136,18 @@ void Main::Init()
 		elem = new UI;
 	}
 	gauge[0]->idle = new ObImage(L"Cookie/gaugebg_heart02.png");
-	gauge[0]->imgSize = Vector2(750.0f, 46.0f);
-	gauge[0]->idle->scale = gauge[0]->imgSize;
+	gauge[0]->idleImgSize = Vector2(750.0f, 46.0f);
+	gauge[0]->idle->scale = gauge[0]->idleImgSize;
 	gauge[0]->Spawn(Anchor::LEFTTOP, 20.0f, -10.0f);
 
 	gauge[1]->idle = new ObImage(L"Cookie/gauge_heart_orange.png");
-	gauge[1]->imgSize = Vector2(750.0f, 46.0f);
-	gauge[1]->idle->scale = gauge[1]->imgSize;
+	gauge[1]->idleImgSize = Vector2(750.0f, 46.0f);
+	gauge[1]->idle->scale = gauge[1]->idleImgSize;
 	gauge[1]->Spawn(Anchor::LEFTTOP, 20.0f, -10.0f);
 
 	gauge[2]->idle = new ObImage(L"Cookie/icon_heartLife.png");
-	gauge[2]->imgSize = Vector2(54.0f, 54.0f);
-	gauge[2]->idle->scale = gauge[2]->imgSize;
+	gauge[2]->idleImgSize = Vector2(54.0f, 54.0f);
+	gauge[2]->idle->scale = gauge[2]->idleImgSize;
 	gauge[2]->Spawn(Anchor::LEFTTOP, 0.0f, -5.0f);
 
 	for (auto& elem : gauge)
@@ -165,8 +165,8 @@ void Main::Init()
 			fontScore[i][j]->idle = new ObImage(name);
 			fontScore[i][j]->idle->space = SPACE::SCREEN;
 			fontScore[i][j]->idle->isVisible = false;
-			fontScore[i][j]->imgSize = Vector2(28.0f, 38.0f);
-			fontScore[i][j]->idle->scale = fontScore[i][j]->imgSize;
+			fontScore[i][j]->idleImgSize = Vector2(28.0f, 38.0f);
+			fontScore[i][j]->idle->scale = fontScore[i][j]->idleImgSize;
 			fontScore[i][j]->idle->SetWorldPosX(-app.GetHalfWidth() + 50.0f + 28.0f * i);
 			fontScore[i][j]->idle->SetWorldPosY(app.GetHalfHeight() - 80.0f);
 		}
@@ -179,11 +179,11 @@ void Main::Init()
 	btnJump[1]->idle = new ObImage(L"Cookie/btn_jump_dim.png");
 	for (auto& elem : btnJump)
 	{
-		elem->imgSize = Vector2(236.0f, 178.0f);
-		elem->scaleCoefX = 0.7f;
-		elem->scaleCoefY = 0.7f;
-		elem->idle->scale.x = elem->imgSize.x * elem->scaleCoefX;
-		elem->idle->scale.y = elem->imgSize.y * elem->scaleCoefY;
+		elem->idleImgSize = Vector2(236.0f, 178.0f);
+		elem->scaleCoef.x = 0.7f;
+		elem->scaleCoef.y = 0.7f;
+		elem->idle->scale.x = elem->idleImgSize.x * elem->scaleCoef.x;
+		elem->idle->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
 		elem->idle->space = SPACE::SCREEN;
 		elem->Spawn(Anchor::LEFTBOTTOM, 20.0f, 20.0f);
 		elem->idle->pivot = OFFSET_LB;
@@ -197,11 +197,11 @@ void Main::Init()
 	btnSlide[1]->idle = new ObImage(L"Cookie/btn_slide_dim.png");
 	for (auto& elem : btnSlide)
 	{
-		elem->imgSize = Vector2(236.0f, 178.0f);
-		elem->scaleCoefX = 0.7f;
-		elem->scaleCoefY = 0.7f;
-		elem->idle->scale.x = elem->imgSize.x * elem->scaleCoefX;
-		elem->idle->scale.y = elem->imgSize.y * elem->scaleCoefY;
+		elem->idleImgSize = Vector2(236.0f, 178.0f);
+		elem->scaleCoef.x = 0.7f;
+		elem->scaleCoef.y = 0.7f;
+		elem->idle->scale.x = elem->idleImgSize.x * elem->scaleCoef.x;
+		elem->idle->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
 		elem->idle->space = SPACE::SCREEN;
 		elem->Spawn(Anchor::RIGHTBOTTOM, -20.0f, 20.0f);
 		elem->idle->pivot = OFFSET_RB;
@@ -237,11 +237,11 @@ void Main::Update()
 	}
 	else
 	{
-		bg1->idle->uv.x += DELTA / bg1->imgSize.x * 50.0f;
-		bg1->idle->uv.z += DELTA / bg1->imgSize.x * 50.0f;
+		bg1->idle->uv.x += DELTA / bg1->idleImgSize.x * 50.0f;
+		bg1->idle->uv.z += DELTA / bg1->idleImgSize.x * 50.0f;
 		bg1->Update();
-		bg2->idle->uv.x += DELTA / bg2->imgSize.x * 100.0f;
-		bg2->idle->uv.z += DELTA / bg2->imgSize.x * 100.0f;
+		bg2->idle->uv.x += DELTA / bg2->idleImgSize.x * 100.0f;
+		bg2->idle->uv.z += DELTA / bg2->idleImgSize.x * 100.0f;
 		bg2->Update();
 	}
 

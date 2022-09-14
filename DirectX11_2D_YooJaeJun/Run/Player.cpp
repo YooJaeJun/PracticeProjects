@@ -8,11 +8,11 @@ Player::Player()
 void Player::Init()
 {
 	Character::Init();
-	scaleCoefX = 0.3f;
-	scaleCoefY = 0.45f;
+	scaleCoef.x = 0.3f;
+	scaleCoef.y = 0.45f;
 
 	col = new ObRect();
-	col->scale = Vector2(1288.0f / 4.0f * scaleCoefX, 322.0f * scaleCoefY);
+	col->scale = Vector2(1288.0f / 4.0f * scaleCoef.x, 322.0f * scaleCoef.y);
 	col->pivot = OFFSET_B;
 	col->isFilled = false;
 	Spawn();
@@ -145,8 +145,8 @@ void Player::Update()
 		{
 			if (TIMER->GetTick(timeLand, 0.2f))
 			{
-				col->scale.x = idle->scale.x * scaleCoefX;
-				col->scale.y = idle->scale.y * scaleCoefY;
+				col->scale.x = idle->scale.x * scaleCoef.x;
+				col->scale.y = idle->scale.y * scaleCoef.y;
 				land->isVisible = false;
 				idle->isVisible = true;
 				timeLand = 0.0f;
@@ -292,7 +292,7 @@ void Player::Jump()
 {
 	state = PlState::JUMP;
 	gravity = -800.0f;
-	col->scale.x = jump->scale.x * scaleCoefX;
+	col->scale.x = jump->scale.x * scaleCoef.x;
 	col->scale.y = jump->scale.y * 0.4f;
 
 	idle->isVisible = false;
@@ -310,8 +310,8 @@ void Player::DoubleJump()
 {
 	state = PlState::DOUBLEJUMP;
 	gravity = -800.0f;
-	col->scale.x = doubleJump->scale.x * scaleCoefX;
-	col->scale.y = doubleJump->scale.y * scaleCoefY;
+	col->scale.x = doubleJump->scale.x * scaleCoef.x;
+	col->scale.y = doubleJump->scale.y * scaleCoef.y;
 
 	jump->isVisible = false;
 	doubleJump->isVisible = true;
@@ -324,7 +324,7 @@ void Player::DoubleJump()
 void Player::Slide()
 {
 	state = PlState::SLIDE;
-	col->scale.x = slide->scale.x * scaleCoefX;
+	col->scale.x = slide->scale.x * scaleCoef.x;
 	col->scale.y = slide->scale.y * 0.25f;
 
 	idle->isVisible = false;
@@ -340,8 +340,8 @@ void Player::Slide()
 void Player::CancelSlide()
 {
 	state = PlState::RUN;
-	col->scale.x = idle->scale.x * scaleCoefX;
-	col->scale.y = idle->scale.y * scaleCoefY;
+	col->scale.x = idle->scale.x * scaleCoef.x;
+	col->scale.y = idle->scale.y * scaleCoef.y;
 
 	idle->isVisible = true;
 	slide->isVisible = false;
@@ -364,8 +364,8 @@ void Player::LandOn()
 	if (state == PlState::JUMP || state == PlState::DOUBLEJUMP)
 	{
 		state = PlState::RUN;
-		col->scale.x = land->scale.x * scaleCoefX;
-		col->scale.y = land->scale.y * scaleCoefY;
+		col->scale.x = land->scale.x * scaleCoef.x;
+		col->scale.y = land->scale.y * scaleCoef.y;
 
 		jump->isVisible = false;
 		doubleJump->isVisible = false;

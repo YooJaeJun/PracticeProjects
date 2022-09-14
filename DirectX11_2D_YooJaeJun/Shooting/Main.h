@@ -1,5 +1,4 @@
 #pragma once
-const int floorMax = 12;
 const int obstacleBottomMax = 2;
 const int obstacleTopMax = 2;
 const int backgroundMax = 4;
@@ -21,18 +20,7 @@ private:
 	int			lastScore;
 	GameState	gameState;
 	Background* bg1;
-	Background*	bg2;
 	Player*		player;
-	Floor*		floor[floorMax];
-	Obstacle*	obstacleBottom[obstacleBottomMax];
-	Obstacle*	obstacleTop[obstacleTopMax];
-	Item*		itemJelly[itemJellyMax];
-	Item*		itemLife[itemLifeMax];
-	Item*		itemBoost[itemBoostMax];
-	UI*			gauge[3];
-	UI*			fontScore[fontDigitMax][10];	// ÀÚ¸´¼ö, ³Ñ¹ö0~9
-	UI*			btnJump[2];
-	UI*			btnSlide[2];
 
 public:
 	virtual void Init() override;
@@ -41,6 +29,4 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 	virtual void ResizeScreen() override;
-
-	void ChangeScoreUI();
 };

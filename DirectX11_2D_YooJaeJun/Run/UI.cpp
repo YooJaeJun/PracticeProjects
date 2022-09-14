@@ -59,14 +59,14 @@ bool UI::DownGauge()
     }
     else
     {
-        idle->scale.x -= imgSize.x / 50.0f * DELTA;
-        idle->uv.z = idle->scale.x / imgSize.x;
+        idle->scale.x -= idleImgSize.x / 50.0f * DELTA;
+        idle->uv.z = idle->scale.x / idleImgSize.x;
     }
     return true;
 }
 
 void UI::Hit(const float damage)
 {
-    idle->scale.x = min(idle->scale.x - damage, imgSize.x);
-    idle->uv.z = min(idle->scale.x / imgSize.x, 1.0f);
+    idle->scale.x = min(idle->scale.x - damage, idleImgSize.x);
+    idle->uv.z = min(idle->scale.x / idleImgSize.x, 1.0f);
 }
