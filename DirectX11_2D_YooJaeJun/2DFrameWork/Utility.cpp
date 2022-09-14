@@ -41,15 +41,6 @@ colPos Utility::IntersectLineLine(LINE& l1, LINE& l2)
         return l.x <= r.x;
     };
 
-    auto ccw = [&](const Vector2& v1, const Vector2& v2, const Vector2& v3)
-    {
-        float res = v1.x * v2.y + v2.x * v3.y + v3.x * v1.y
-            - (v1.y * v2.x + v2.y * v3.x + v3.y * v1.x);
-        if (res > 0) return 1;
-        if (res < 0) return -1;
-        else return 0;
-    };
-
     //두 선분이 한 직선 위에 있거나, 끝점이 겹치는 경우
     float ab = ccw(l1.begin, l1.end, l2.begin) * ccw(l1.begin, l1.end, l2.end);
     float cd = ccw(l2.begin, l2.end, l1.begin) * ccw(l2.begin, l2.end, l1.end);

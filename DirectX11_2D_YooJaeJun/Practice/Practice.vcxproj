@@ -19,13 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Intersect\Delaunay.cpp" />
-    <ClCompile Include="Intersect\Main.cpp" />
+    <ClInclude Include="DelaunayTriangulation\delaunay.h" />
+    <ClInclude Include="DelaunayTriangulation\edge.h" />
+    <ClInclude Include="DelaunayTriangulation\numeric.h" />
+    <ClInclude Include="DelaunayTriangulation\triangle.h" />
+    <ClInclude Include="DelaunayTriangulation\vector2.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Intersect\Delaunay.h" />
-    <ClInclude Include="Intersect\Main.h" />
-    <ClInclude Include="Intersect\stdafx.h" />
+    <ClCompile Include="DelaunayTriangulation\delaunay.cpp" />
+    <ClCompile Include="DelaunayTriangulation\edge.cpp" />
+    <ClCompile Include="DelaunayTriangulation\main.cpp" />
+    <ClCompile Include="DelaunayTriangulation\tests.cpp" />
+    <ClCompile Include="DelaunayTriangulation\triangle.cpp" />
+    <ClCompile Include="DelaunayTriangulation\vector2.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

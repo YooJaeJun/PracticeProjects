@@ -165,12 +165,14 @@
     <ClInclude Include="Gui.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Numeric.h" />
     <ClInclude Include="ObCircle.h" />
     <ClInclude Include="ObImage.h" />
     <ClInclude Include="ObLine.h" />
     <ClInclude Include="ObRect.h" />
     <ClInclude Include="ObStar.h" />
     <ClInclude Include="ObStarPointed.h" />
+    <ClInclude Include="ObTriangle.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
@@ -195,6 +197,7 @@
     <ClCompile Include="ObRect.cpp" />
     <ClCompile Include="ObStar.cpp" />
     <ClCompile Include="ObStarPointed.cpp" />
+    <ClCompile Include="ObTriangle.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -203,6 +206,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Numeric.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

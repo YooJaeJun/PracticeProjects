@@ -1,5 +1,7 @@
 #pragma once
 
+class Numeric;
+
 namespace Utility
 {
     //충돌타입

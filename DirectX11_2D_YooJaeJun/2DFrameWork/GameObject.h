@@ -9,6 +9,7 @@ enum class COLLIDER
 {
 	NONE,
 	LINE,
+	TRIANGLE,
 	RECT,
 	CIRCLE, // 가운데가 0,0인
 	STAR

@@ -68,6 +68,12 @@
     <ClInclude Include="ObStar.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="ObTriangle.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Numeric.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -140,6 +146,12 @@
     </ClCompile>
     <ClCompile Include="ObStar.cpp">
       <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ObTriangle.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Numeric.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

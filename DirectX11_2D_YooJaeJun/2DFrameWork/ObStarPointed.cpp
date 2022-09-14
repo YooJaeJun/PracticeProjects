@@ -13,9 +13,9 @@ void ObStarPointed::CreateStaticMember()
     vertex[3] = Vector2(0.5f * cosf(216 * ToRadian), 0.5f * sinf(216 * ToRadian));
     vertex[4] = Vector2(0.5f * cosf(288 * ToRadian), 0.5f * sinf(288 * ToRadian));*/
 
-    Vertex = new VertexPC[VertexCountForFill];
+    Vertex = new VertexPC[vertexCountForFill];
 
-    for (int i = 0; i < VertexCountForFill; i += 3)
+    for (int i = 0; i < vertexCountForFill; i += 3)
     {
         Vertex[i].position.x = 0.0f;
         Vertex[i].position.y = 0.0f;
@@ -93,7 +93,7 @@ void ObStarPointed::CreateStaticMember()
         D3D11_BUFFER_DESC desc;
         desc = { 0 };
         desc.Usage = D3D11_USAGE_DEFAULT;//버퍼를 읽고 쓰는 방법
-        desc.ByteWidth = sizeof(VertexPC) * VertexCountForFill; //버퍼 크기 (바이트)입니다.
+        desc.ByteWidth = sizeof(VertexPC) * vertexCountForFill; //버퍼 크기 (바이트)입니다.
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;//버퍼가 파이프 라인에 바인딩되는 방법을 식별하십시오
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -183,7 +183,7 @@ void ObStarPointed::Render()
             &stride,
             &offset);
         D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);   // 그릴 모양
-        D3D->GetDC()->Draw(VertexCountForFill, 0);
+        D3D->GetDC()->Draw(vertexCountForFill, 0);
     }
     else
     {

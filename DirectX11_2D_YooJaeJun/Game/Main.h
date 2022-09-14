@@ -4,10 +4,14 @@ const int roomMax = 50;
 class Main : public Scene
 {
 private:
-	vector<Room*>				rooms;
-	enum class State			{ move, node, link, spanning, passage, tile };
-	State						state;
-	
+	vector<Room*>		rooms;
+	enum class State	{ move, node, triangulate, spanning, passage, tile };
+	State				state;
+
+	Delaunay			triangulation;
+	vector<ObTriangle>	triangles;
+	vector<ObLine>		edges;
+
 	// MST - Prim
 	class Edge
 	{
@@ -22,7 +26,7 @@ private:
 			return dist > other.dist;
 		}
 	};
-	vector<vector<Edge>>								edges;
+	// vector<vector<Edge>>								edges;
 	priority_queue<Edge, vector<Edge>, greater<Edge>>	edgePq;
 	deque<bool>											visited;
 	vector<ObLine*>										lines;

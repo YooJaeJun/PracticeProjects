@@ -100,16 +100,18 @@ extern Application app;//Extern Global
 #include "Sound.h"
 #include "Light.h"
 #include "SceneManager.h"
+#include "Numeric.h"
 
 #include "VertexType.h"
 #include "Shader.h"
 #include "GameObject.h"
 #include "Utility.h"
+#include "ObLine.h"
+#include "ObTriangle.h"
 #include "ObRect.h"
 #include "ObStar.h"
 #include "ObStarPointed.h"
 #include "ObCircle.h"
-#include "ObLine.h"
 #include "ObImage.h"
 
 //Singleton Macro

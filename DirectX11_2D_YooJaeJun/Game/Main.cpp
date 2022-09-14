@@ -77,8 +77,23 @@ void Main::Update()
             }
         }
     }
-    case Main::State::link:
+
+    case Main::State::triangulate:
     {
+        vector<Vector2> points;
+
+        for (auto& elem : rooms)
+        {
+            if (elem->selected)
+            {
+                points.push_back(elem->col->GetWorldPos());
+            }
+        }
+
+        triangles = triangulation.triangulate(points);
+        edges = triangulation.edges;
+
+        /*
         int lineIdx = 0;
         int size = rooms.size();
         for (int i = 0; i < size; i++)
@@ -100,12 +115,15 @@ void Main::Update()
                 lineIdx++;
             }
         }
+        */
+
         state = State::spanning;
         break;
     }
     case Main::State::spanning:
     {
         // MST - Prim
+        /*
         for (int i = 0; i < rooms.size(); i++)
         {
             if (rooms[i]->selected)
@@ -146,11 +164,13 @@ void Main::Update()
             }
         }
         Sleep(1000);
+        */
         state = State::passage;
         break;
     }
     case Main::State::passage:
     {
+        /*
         for (auto& line : lines)
         {
             for (auto& room : rooms)
@@ -166,6 +186,7 @@ void Main::Update()
         for (auto& line : lines)
         {
         }
+        */
         state = State::tile;
         break;
     }

@@ -39,10 +39,7 @@ void ObLine::DeleteStaticMember()
 {
     vertexBuffer->Release();
 }
-ObLine::ObLine()
-{
-    pivot = OFFSET_L;
-}
+
 
 void ObLine::Render()
 {
@@ -65,4 +62,38 @@ void ObLine::Render()
         &offset);
 
     D3D->GetDC()->Draw(2, 0);
+}
+
+
+ObLine::ObLine()
+    : v(Vector2(0.0f, 0.0f)), w(Vector2(0.0f, 0.0f))
+{
+    pivot = OFFSET_L;
+}
+
+ObLine::ObLine(const Vector2& v1, const Vector2& v2)
+    : v(v1), w(v2)
+{
+    pivot = OFFSET_L;
+}
+
+ObLine& ObLine::operator=(const ObLine& e)
+{
+    v.x = e.v.x;
+    v.y = e.v.y;
+    w.x = e.w.x;
+    w.y = e.w.y;
+    return *this;
+}
+
+bool ObLine::operator==(const ObLine& e) const
+{
+    return ((this->v) == e.v && (this->w) == e.w) ||
+        ((this->v) == e.w && (this->w) == e.v);
+}
+
+bool ObLine::almost_equal_line(const ObLine& e1, const ObLine& e2)
+{
+    return	(almost_equal_vector(e1.v, e2.v) && almost_equal_vector(e1.w, e2.w)) ||
+        (almost_equal_vector(e1.v, e2.w) && almost_equal_vector(e1.w, e2.v));
 }
