@@ -9,9 +9,9 @@ void Airplane::Init()
 {
 	Character::Init();
 
-	col = new ObRect();
+	col = new ObCircle();
 	col->pivot = OFFSET_T;
-	col->scale = Vector2(224.0f / 7.0f, 40.0f) * 0.8f;
+	col->scale = Vector2(30.0f, 30.0f);
 	col->color = Color(1.0f, 1.0f, 1.0f);
 	col->isFilled = false;
 	Spawn();
@@ -21,20 +21,20 @@ void Airplane::Init()
 	idleImgSize = Vector2(224.0f, 40.0f);
 	idle->maxFrame.x = 7;
 	idle->scale = Vector2(idleImgSize.x / idle->maxFrame.x, idleImgSize.y) * 2.4f;
-	idle->SetWorldPosY(idle->scale.y / 2.5f);
 	idle->uv = Vector4(0.0f, 0.0f, 1.0f / idle->maxFrame.x, 1.0f);
 	idle->SetParentRT(*col);
+	idle->SetLocalPosY(40.0f);
 
 	boost = new ObImage(L"Start.png");
 	boost->pivot = OFFSET_T;
 	idleImgSize = Vector2(352.0f, 120.0f);
 	boost->maxFrame.x = 11;
 	boost->scale = Vector2(idleImgSize.x / boost->maxFrame.x, idleImgSize.y) * 2.4f;
-	boost->SetWorldPosY(idle->scale.y / 2.5f);
 	boost->uv = Vector4(0.0f, 0.0f, 1.0f / boost->maxFrame.x, 1.0f);
 	boost->isVisible = false;
 	boost->ChangeAnim(ANIMSTATE::LOOP, 0.05f);
 	boost->SetParentRT(*col);
+	boost->SetLocalPosY(40.0f);
 
 	hit = new ObImage(L"Cookie/Hit.png");
 	hit->pivot = OFFSET_T;
@@ -59,8 +59,7 @@ void Airplane::Init()
 	speed = 300.0f;
 
 	state = PlState::RUN;
-	timeLeft = 0.0f;
-	timeRight = 0.0f;
+	timeShoot = 0.0f;
 	isHit = false;
 	timeHit = 0.0f;
 	isHitAnim = false;

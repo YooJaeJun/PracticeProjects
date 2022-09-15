@@ -144,15 +144,19 @@
   <ItemGroup>
     <ClInclude Include="Airplane.h" />
     <ClInclude Include="Background.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Airplane.cpp" />
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

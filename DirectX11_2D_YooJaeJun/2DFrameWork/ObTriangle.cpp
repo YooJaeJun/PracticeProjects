@@ -136,24 +136,26 @@ bool ObTriangle::ContainsVertex(const Vector2& v) const
 
 bool ObTriangle::CircumCircleContains(const Vector2& v) const
 {
-    const float ab = a.LengthSquared();
-    const float cd = b.LengthSquared();
-    const float ef = c.LengthSquared();
+    long double dA = a.LengthSquared();
+    long double dB = b.LengthSquared();
+    long double dC = c.LengthSquared();
 
-    const float ax = a.x;
-    const float ay = a.y;
-    const float bx = b.x;
-    const float by = b.y;
-    const float cx = c.x;
-    const float cy = c.y;
+    long double ax = a.x;
+    long double ay = a.y;
+    long double bx = b.x;
+    long double by = b.y;
+    long double cx = c.x;
+    long double cy = c.y;
 
-    // 외접원 공식
-    const float circum_x = (ab * (cy - by) + cd * (ay - cy) + ef * (by - ay)) / (ax * (cy - by) + bx * (ay - cy) + cx * (by - ay));
-    const float circum_y = (ab * (cx - bx) + cd * (ax - cx) + ef * (bx - ax)) / (ay * (cx - bx) + by * (ax - cx) + cy * (bx - ax));
+    long double test1 = (dA * (cy - by) + dB * (ay - cy) + dC * (by - ay));
+    long double test2 = (ax * (cy - by) + bx * (ay - cy) + cx * (by - ay));
 
-    const Vector2 circum(circum_x / 2, circum_y / 2);
-    const float circum_radius = Vector2::Distance(a, circum);
-    const float dist = Vector2::Distance(v, circum);
+    long double circum_x = (dA * (cy - by) + dB * (ay - cy) + dC * (by - ay)) / (ax * (cy - by) + bx * (ay - cy) + cx * (by - ay));
+    long double circum_y = (dA * (cx - bx) + dB * (ax - cx) + dC * (bx - ax)) / (ay * (cx - bx) + by * (ax - cx) + cy * (bx - ax));
+
+    Vector2 circum(circum_x / 2, circum_y / 2);
+    float circum_radius = Vector2::Distance(a, circum);
+    float dist = Vector2::Distance(v, circum);
     return dist <= circum_radius;
 }
 

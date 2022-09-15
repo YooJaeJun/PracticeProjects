@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Main.h" />
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="Character.h">
       <Filter>GameObject</Filter>
     </ClInclude>
@@ -12,6 +11,13 @@
     <ClInclude Include="Airplane.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -22,6 +28,12 @@
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Airplane.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>

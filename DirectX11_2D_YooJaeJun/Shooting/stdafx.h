@@ -5,3 +5,5 @@
 #include "Character.h"
 #include "Background.h"
 #include "Airplane.h"
+#include "Bullet.h"
+#include "UI.h"

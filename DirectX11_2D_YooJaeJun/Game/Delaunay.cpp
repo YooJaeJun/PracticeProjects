@@ -38,10 +38,13 @@ const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<Vector2>& verti
 
 		for (auto& t : triangles)
 		{
-			t.isBad = true;
-			polygon.push_back(ObLine(t.a, t.b));
-			polygon.push_back(ObLine(t.b, t.c));
-			polygon.push_back(ObLine(t.c, t.a));
+			if (t.CircumCircleContains(p))
+			{
+				t.isBad = true;
+				polygon.push_back(ObLine(t.a, t.b));
+				polygon.push_back(ObLine(t.b, t.c));
+				polygon.push_back(ObLine(t.c, t.a));
+			}
 		}
 
 		triangles.erase(std::remove_if(begin(triangles), end(triangles), [](ObTriangle& t) {

@@ -16,8 +16,7 @@ public:
 	ObImage*	hit;
 	ObImage*	die;
 	PlState		state;
-	float		timeLeft;
-	float		timeRight;
+	float		timeShoot;
 	bool		isHit;
 	float		timeHit;
 	bool		isHitAnim;
