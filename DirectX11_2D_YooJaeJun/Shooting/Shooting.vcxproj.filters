@@ -24,6 +24,12 @@
     <ClInclude Include="Player.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -46,6 +52,12 @@
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>

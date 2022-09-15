@@ -1,10 +1,13 @@
 #pragma once
+const int bulletMax = 20;
 
 class Player : public Airplane
 {
 public:
-	ObImage*	boost;
-	bool		isBoost;
+	ObImage*		boost;
+	bool			isBoost;
+
+	PlayerBullet*	bullet[bulletMax];
 
 public:
 	Player();

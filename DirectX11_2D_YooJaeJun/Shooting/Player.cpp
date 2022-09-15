@@ -64,16 +64,27 @@ void Player::Init()
 
 	state = PlaneState::RUN;
 	isBoost = false;
+
+	for (auto& elem : bullet)
+	{
+		elem = new PlayerBullet;
+	}
 }
 
 void Player::Release()
 {
 	Character::Release();
 	SafeDelete(idle);
+	for (auto& elem : bullet)
+	{
+		elem->Release();
+	}
 }
 
 void Player::Update()
 {
+	ImGui::SliderFloat("Alpha", &idle->color.w, 0.0f, 1.0f);
+
 	if (state == PlaneState::DIE)
 	{
 		isHit = false;
@@ -196,8 +207,24 @@ void Player::Update()
 		}
 	}
 
+
+
+	if (INPUT->KeyDown(VK_CONTROL))
+	{
+		for (auto& elem : bullet)
+		{
+			if (false == elem->isFired)
+			{
+				elem->Shoot(col->GetWorldPos());
+				break;
+			}
+		}
+	}
+
+
 	boost->Update();
 	Airplane::Update();
+	for (auto& elem : bullet) elem->Update();
 }
 
 void Player::LateUpdate()
@@ -208,6 +235,7 @@ void Player::Render()
 {
 	boost->Render();
 	Airplane::Render();
+	for (auto& elem : bullet) elem->Render();
 }
 
 

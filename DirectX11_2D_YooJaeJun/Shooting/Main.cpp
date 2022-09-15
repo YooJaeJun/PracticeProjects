@@ -13,11 +13,6 @@ void Main::Init()
 	
 	boss = new Enemy;
 
-	for (auto& elem : bullet)
-	{
-		elem = new Bullet;
-	}
-
 	for (int i = 0; i < fontDigitMax; i++)
 	{
 		for (int j = 0; j < 10; j++)
@@ -73,7 +68,6 @@ void Main::Release()
 	bg1->Release();
 	player->Release();
 	boss->Release();
-	for (auto& elem : bullet) elem->Release();
 	for (auto& elem : fontCurBullet) for (auto& elem2 : elem) elem2->Release();
 	for (auto& elem : fontMaxBullet) for (auto& elem2 : elem) elem2->Release();
 	fontSlash->Release();
@@ -86,6 +80,15 @@ void Main::Update()
 		Release();
 		Init();
 	}
+
+	ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
+
+	if (ImGui::Button("vSync"))
+	{
+		cout << app.vSync << endl;
+		app.vSync = !app.vSync;
+	}
+
 
 	if (gameState == GameState::END)
 	{
@@ -109,19 +112,12 @@ void Main::Update()
 
 	int curRemainBullet = 0;
 
-	if (INPUT->KeyDown(VK_CONTROL))
-	{
-		for (auto& elem : bullet)
-		{
-			if (false == elem->isFired)
-			{
-				elem->Shoot(player->col->GetWorldPos());
-				break;
-			}
-		}
-	}
+	player->Update();
 
-	for (auto& elem : bullet)
+	boss->Update();
+
+
+	for (auto& elem : player->bullet)
 	{
 		if (false == elem->isFired)
 		{
@@ -129,10 +125,6 @@ void Main::Update()
 		}
 		elem->Update();
 	}
-
-	player->Update();
-
-	boss->Update();
 
 	if (lastRemainBullet != curRemainBullet)
 	{
@@ -147,7 +139,7 @@ void Main::Update()
 
 void Main::LateUpdate()
 {
-	for (auto& elem : bullet)
+	for (auto& elem : player->bullet)
 	{
 		if (boss->col->Intersect(elem->col))
 		{
@@ -162,7 +154,6 @@ void Main::Render()
 	bg1->Render();
 	player->Render();
 	boss->Render();
-	for (auto& elem : bullet) elem->Render();
 
 	for (auto& elem : fontCurBullet) for (auto& elem2 : elem) elem2->Render();
 	for (auto& elem : fontMaxBullet) for (auto& elem2 : elem) elem2->Render();
@@ -173,7 +164,7 @@ void Main::ResizeScreen()
 {
 	bg1->Spawn();
 	player->Spawn();
-	for (auto& elem : bullet) elem->Spawn();
+	for (auto& elem : player->bullet) elem->Spawn();
 
 	for (int i = 0; i < fontDigitMax; i++)
 	{

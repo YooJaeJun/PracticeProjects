@@ -1,5 +1,4 @@
 #pragma once
-const int bulletMax = 20;
 const int fontDigitMax = 2;
 
 enum class GameState
@@ -17,7 +16,6 @@ private:
 	Background* bg1;
 	Player*		player;
 	Enemy*		boss;
-	Bullet*		bullet[bulletMax];
 	UI*			fontCurBullet[fontDigitMax][10];
 	UI*			fontMaxBullet[fontDigitMax][10];
 	UI*			fontSlash;
