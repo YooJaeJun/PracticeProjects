@@ -6,6 +6,8 @@ public:
 	ObImage*	idle;
 	Vector2		idleImgSize;
 	Vector2		scaleCoef;
+	int			maxHp;
+	int			curHp;
 
 public:
 	virtual void Init();

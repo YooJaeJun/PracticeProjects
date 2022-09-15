@@ -6,8 +6,13 @@ void Main::Init()
 	score = 0;
 	lastScore = 0;
 	gameState = GameState::PROGRESS;
+	
 	bg1 = new Background;
-	player = new Airplane;
+	
+	player = new Player;
+	
+	boss = new Enemy;
+
 	for (auto& elem : bullet)
 	{
 		elem = new Bullet;
@@ -27,6 +32,7 @@ void Main::Init()
 			fontMaxBullet[i][j]->idle->scale = fontMaxBullet[i][j]->idleImgSize;
 			fontMaxBullet[i][j]->idle->SetWorldPosX(app.GetHalfWidth() - 50.0f - 28.0f * i);
 			fontMaxBullet[i][j]->idle->SetWorldPosY(-app.GetHalfHeight() + 50.0f);
+			fontMaxBullet[i][j]->anchor = Anchor::RIGHTBOTTOM;
 		}
 	}
 	for (int i = 0; i < fontDigitMax; i++)
@@ -43,6 +49,7 @@ void Main::Init()
 			fontCurBullet[i][j]->idle->scale = fontCurBullet[i][j]->idleImgSize;
 			fontCurBullet[i][j]->idle->SetParentRT(*fontMaxBullet[fontDigitMax - 1][0]->idle);
 			fontCurBullet[i][j]->idle->SetLocalPosX(-60.0f - 28.0f * i);
+			fontCurBullet[i][j]->anchor = Anchor::RIGHTBOTTOM;
 		}
 	}
 
@@ -54,6 +61,7 @@ void Main::Init()
 	fontSlash->idle->scale = fontSlash->idleImgSize;
 	fontSlash->idle->SetParentRT(*fontMaxBullet[fontDigitMax - 1][0]->idle);
 	fontSlash->idle->SetLocalPosX(-30.0f);
+	fontSlash->anchor = Anchor::RIGHTBOTTOM;
 
 	lastRemainBullet = 0;
 
@@ -64,11 +72,8 @@ void Main::Release()
 {
 	bg1->Release();
 	player->Release();
-	for (auto& elem : bullet)
-	{
-		elem->Release();
-	}
-
+	boss->Release();
+	for (auto& elem : bullet) elem->Release();
 	for (auto& elem : fontCurBullet) for (auto& elem2 : elem) elem2->Release();
 	for (auto& elem : fontMaxBullet) for (auto& elem2 : elem) elem2->Release();
 	fontSlash->Release();
@@ -127,6 +132,8 @@ void Main::Update()
 
 	player->Update();
 
+	boss->Update();
+
 	if (lastRemainBullet != curRemainBullet)
 	{
 		ChangeFont(fontCurBullet, curRemainBullet);
@@ -140,12 +147,21 @@ void Main::Update()
 
 void Main::LateUpdate()
 {
+	for (auto& elem : bullet)
+	{
+		if (boss->col->Intersect(elem->col))
+		{
+			elem->Reload();
+			boss->Hit(1);
+		}
+	}
 }
 
 void Main::Render()
 {
 	bg1->Render();
 	player->Render();
+	boss->Render();
 	for (auto& elem : bullet) elem->Render();
 
 	for (auto& elem : fontCurBullet) for (auto& elem2 : elem) elem2->Render();
@@ -163,7 +179,7 @@ void Main::ResizeScreen()
 	{
 		for (int j = 0; j < 10; j++)
 		{
-			fontMaxBullet[i][j]->Spawn(Anchor::RIGHTBOTTOM, -50.0f - 28.0f * i, 50.0f);
+			fontMaxBullet[i][j]->Spawn(-50.0f - 28.0f * i, 50.0f);
 		}
 	}
 }

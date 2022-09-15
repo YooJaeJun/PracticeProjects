@@ -8,6 +8,7 @@ Bullet::Bullet()
 void Bullet::Init()
 {
     Character::Init();
+
     col = new ObRect();
     col->scale = Vector2(68.0f / 7.0f, 48.0f * 0.8f);
     col->color = Color(1.0f, 1.0f, 1.0f);

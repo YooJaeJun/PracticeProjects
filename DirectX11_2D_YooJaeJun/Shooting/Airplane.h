@@ -1,28 +1,37 @@
 #pragma once
-enum class PlState
+const int bombMax = 5;
+
+enum class PlaneState
 {
 	RUN,
 	BOOST,
 	DIE
 };
 
+enum class PlaneType
+{
+	PLAYER,
+	ENEMY,
+	BOSS
+};
+
 class Airplane : public Character
 {
 public:
+	PlaneType	type;
 	float		key;
 	Vector2		moveDir;
 	float		speed;
-	ObImage*	boost;
 	ObImage*	hit;
 	ObImage*	die;
-	PlState		state;
+	ObImage*	bomb[bombMax];
+	PlaneState	state;
 	float		timeShoot;
 	bool		isHit;
 	float		timeHit;
 	bool		isHitAnim;
 	float		timeHitAnim;
 	float		speedOrigin;
-	bool		isBoost;
 
 public:
 	Airplane();
@@ -33,10 +42,8 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-	void Spawn();
-	void Hit(const float damage);
-	void Boost();
-	void CancelBoost();
-	void Die();
+	virtual void Spawn();
+	virtual void Hit(const float damage);
+	virtual void Die();
 };
 

@@ -138,17 +138,20 @@ void Main::Init()
 	gauge[0]->idle = new ObImage(L"Cookie/gaugebg_heart02.png");
 	gauge[0]->idleImgSize = Vector2(750.0f, 46.0f);
 	gauge[0]->idle->scale = gauge[0]->idleImgSize;
-	gauge[0]->Spawn(Anchor::LEFTTOP, 20.0f, -10.0f);
+	gauge[0]->anchor = Anchor::LEFTTOP;
+	gauge[0]->Spawn(20.0f, -10.0f);
 
 	gauge[1]->idle = new ObImage(L"Cookie/gauge_heart_orange.png");
 	gauge[1]->idleImgSize = Vector2(750.0f, 46.0f);
 	gauge[1]->idle->scale = gauge[1]->idleImgSize;
-	gauge[1]->Spawn(Anchor::LEFTTOP, 20.0f, -10.0f);
+	gauge[1]->anchor = Anchor::LEFTTOP;
+	gauge[1]->Spawn(20.0f, -10.0f);
 
 	gauge[2]->idle = new ObImage(L"Cookie/icon_heartLife.png");
 	gauge[2]->idleImgSize = Vector2(54.0f, 54.0f);
 	gauge[2]->idle->scale = gauge[2]->idleImgSize;
-	gauge[2]->Spawn(Anchor::LEFTTOP, 0.0f, -5.0f);
+	gauge[2]->anchor = Anchor::LEFTTOP;
+	gauge[2]->Spawn(0.0f, -5.0f);
 
 	for (auto& elem : gauge)
 	{
@@ -185,7 +188,9 @@ void Main::Init()
 		elem->idle->scale.x = elem->idleImgSize.x * elem->scaleCoef.x;
 		elem->idle->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
 		elem->idle->space = SPACE::SCREEN;
-		elem->Spawn(Anchor::LEFTBOTTOM, 20.0f, 20.0f);
+		elem->anchor = Anchor::LEFTBOTTOM;
+		elem->anchor = Anchor::LEFTBOTTOM;
+		elem->Spawn(20.0f, 20.0f);
 		elem->idle->pivot = OFFSET_LB;
 		elem->idle->collider = COLLIDER::RECT;
 	}
@@ -203,7 +208,8 @@ void Main::Init()
 		elem->idle->scale.x = elem->idleImgSize.x * elem->scaleCoef.x;
 		elem->idle->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
 		elem->idle->space = SPACE::SCREEN;
-		elem->Spawn(Anchor::RIGHTBOTTOM, -20.0f, 20.0f);
+		elem->anchor = Anchor::RIGHTBOTTOM;
+		elem->Spawn(-20.0f, 20.0f);
 		elem->idle->pivot = OFFSET_RB;
 		elem->idle->collider = COLLIDER::RECT;
 	}
@@ -562,9 +568,9 @@ void Main::ResizeScreen()
 		elem->col->SetWorldPosY(-app.GetHalfHeight() + 200.0f);
 	}
 
-	gauge[0]->Spawn(Anchor::LEFTTOP, 20.0f, -10.0f);
-	gauge[1]->Spawn(Anchor::LEFTTOP, 20.0f, -10.0f);
-	gauge[2]->Spawn(Anchor::LEFTTOP, 0.0f, -5.0f);
+	gauge[0]->Spawn(20.0f, -10.0f);
+	gauge[1]->Spawn(20.0f, -10.0f);
+	gauge[2]->Spawn(0.0f, -5.0f);
 
 	for (int i = 0; i < fontDigitMax; i++)
 	{
@@ -575,10 +581,10 @@ void Main::ResizeScreen()
 		}
 	}
 
-	btnJump[0]->Spawn(Anchor::LEFTBOTTOM, 20.0f, 20.0f);
-	btnJump[1]->Spawn(Anchor::LEFTBOTTOM, 20.0f, 20.0f);
-	btnSlide[0]->Spawn(Anchor::RIGHTBOTTOM, -20.0f, 20.0f);
-	btnSlide[1]->Spawn(Anchor::RIGHTBOTTOM, -20.0f, 20.0f);
+	btnJump[0]->Spawn(20.0f, 20.0f);
+	btnJump[1]->Spawn(20.0f, 20.0f);
+	btnSlide[0]->Spawn(-20.0f, 20.0f);
+	btnSlide[1]->Spawn(-20.0f, 20.0f);
 }
 
 void Main::ChangeScoreUI()

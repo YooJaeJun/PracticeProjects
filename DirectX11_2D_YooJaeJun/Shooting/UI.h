@@ -18,6 +18,7 @@ enum class Anchor
 class UI : public Character
 {
 public:
+	Anchor	anchor;
 
 public:
 	UI();
@@ -28,7 +29,7 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-	void Spawn(const Anchor anchor, const float coefX, const float coefY);
+	void Spawn(const float coefX, const float coefY);
 	bool DownGauge();
 	void Hit(const float damage);
 };

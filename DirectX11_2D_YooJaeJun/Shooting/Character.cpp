@@ -2,6 +2,8 @@
 
 void Character::Init()
 {
+	maxHp = 1;
+	curHp = 1;
 }
 
 void Character::Release()

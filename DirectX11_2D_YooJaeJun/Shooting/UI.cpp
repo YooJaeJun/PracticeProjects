@@ -33,7 +33,7 @@ void UI::Render()
     Character::Render();
 }
 
-void UI::Spawn(const Anchor anchor, const float coefX, const float coefY)
+void UI::Spawn(const float coefX, const float coefY)
 {
     switch (anchor)
     {
