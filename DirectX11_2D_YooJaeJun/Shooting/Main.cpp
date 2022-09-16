@@ -89,7 +89,6 @@ void Main::Update()
 		app.vSync = !app.vSync;
 	}
 
-
 	if (gameState == GameState::END)
 	{
 		player->Die();
@@ -108,15 +107,11 @@ void Main::Update()
 	}
 	bg1->Update();
 
-
-
-	int curRemainBullet = 0;
-
 	player->Update();
 
 	boss->Update();
 
-
+	int curRemainBullet = 0;
 	for (auto& elem : player->bullet)
 	{
 		if (false == elem->isFired)
@@ -141,10 +136,11 @@ void Main::LateUpdate()
 {
 	for (auto& elem : player->bullet)
 	{
-		if (boss->col->Intersect(elem->col))
+		if (boss->state != PlaneState::DIE && 
+			boss->col->Intersect(elem->col))
 		{
-			elem->Reload();
-			boss->Hit(1);
+			elem->col->SetWorldPos(Vector2(2000.0f, 2000.0f));
+			boss->Hit(elem->damage);
 		}
 	}
 }

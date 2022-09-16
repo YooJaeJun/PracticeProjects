@@ -10,7 +10,7 @@ void Enemy::Init()
 	Character::Init();
 	Airplane::Init();
 	type = PlaneType::ENEMY;
-	maxHp = curHp = 10;
+	maxHp = curHp = 50;
 
 	col = new ObRect();
 	col->scale.x = 126.0f;
@@ -70,16 +70,17 @@ void Enemy::Update()
 	if (state == PlaneState::DIE)
 	{
 		isHit = false;
+		idle->color.w = 0.2f;
 		for (auto& elem : bomb)
 		{
-			if (TIMER->GetTick(timeBombBetween, 0.2f))
+			if (TIMER->GetTick(timeBombBetween, 0.3f))
 			{
 				elem->SetLocalPosX(RANDOM->Float(-50.0f, 50.0f));
 				elem->SetLocalPosY(RANDOM->Float(-50.0f, 50.0f));
 				elem->isVisible = true;
 			}
 		}
-		if (TIMER->GetTick(timeHit, 1.5f))
+		if (TIMER->GetTick(timeHit, 2.5f))
 		{
 			state = PlaneState::RUN;
 			col->SetWorldPos(Vector2(2000.0f, 2000.0f));

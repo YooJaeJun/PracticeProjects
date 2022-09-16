@@ -71,7 +71,7 @@ void Airplane::Spawn()
 void Airplane::Hit(const float damage)
 {
 	isHit = true;
-	curHp -= 1;
+	curHp -= damage;
 	if (curHp <= 0)
 	{
 		curHp = 0;

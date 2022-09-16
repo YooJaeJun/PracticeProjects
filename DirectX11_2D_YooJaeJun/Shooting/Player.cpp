@@ -208,8 +208,7 @@ void Player::Update()
 		}
 	}
 
-
-	if (TIMER->GetTick(timeFire, 0.2f))
+	if (TIMER->GetTick(timeFire, 0.1f))
 	{
 		for (auto& elem : bullet)
 		{
@@ -221,6 +220,26 @@ void Player::Update()
 				}
 				elem->Shoot(col->GetWorldPos());
 				break;
+			}
+		}
+	}
+
+	bool flagNoBullet = false;
+	for (auto& elem : bullet)
+	{
+		if (false == elem->isFired)
+		{
+			flagNoBullet = true;
+			break;
+		}
+	}
+	if (false == flagNoBullet)
+	{
+		if (TIMER->GetTick(timeReload, 1.0f))
+		{
+			for (auto& elem : bullet)
+			{
+				elem->Reload();
 			}
 		}
 	}

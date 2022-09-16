@@ -13,22 +13,14 @@ void Bullet::Init()
 void Bullet::Release()
 {
     Character::Release();
-    SafeDelete(idle);
 }
 
 void Bullet::Update()
 {
-    idle->Update();
-
     if (isFired)
     {
         Vector2 velocity = UP * speed * DELTA;
         col->MoveWorldPos(velocity);
-    }
-
-    if (col->GetWorldPos().y > app.GetHeight() + 1000.0f)
-    {
-        Reload();
     }
 
     Character::Update();

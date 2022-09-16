@@ -23,17 +23,6 @@ void EnemyBullet::Release()
 
 void EnemyBullet::Update()
 {
-    if (isFired)
-    {
-        Vector2 velocity = UP * speed * DELTA;
-        col->MoveWorldPos(velocity);
-    }
-
-    if (col->GetWorldPos().y > app.GetHeight() + 1000.0f)
-    {
-        Reload();
-    }
-
     Character::Update();
 }
 

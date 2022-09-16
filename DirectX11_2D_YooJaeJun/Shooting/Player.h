@@ -9,6 +9,7 @@ public:
 	PlayerBullet*	bullet[bulletMax];
 	int				level;
 	float			timeFire;
+	float			timeReload;
 
 public:
 	Player();
