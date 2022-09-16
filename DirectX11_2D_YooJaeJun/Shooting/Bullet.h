@@ -4,6 +4,7 @@ class Bullet : public Character
 public:
 	bool	isFired;
 	float	speed;
+	float	damage;
 
 public:
 	Bullet();
@@ -14,7 +15,7 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-	void Spawn();
-	void Shoot(const Vector2& coord);
-	void Reload();
+	virtual void Spawn();
+	virtual void Shoot(const Vector2& coord);
+	virtual void Reload();
 };

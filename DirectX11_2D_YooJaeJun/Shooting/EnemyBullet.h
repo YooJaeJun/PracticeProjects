@@ -11,8 +11,4 @@ public:
 	virtual void Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
-
-	void Spawn();
-	void Shoot(const Vector2& coord);
-	void Reload();
 };

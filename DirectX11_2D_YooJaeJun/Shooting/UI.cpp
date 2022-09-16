@@ -14,13 +14,11 @@ void UI::Init()
 void UI::Release()
 {
     Character::Release();
-    SafeDelete(idle);
 }
 
 void UI::Update()
 {
     Character::Update();
-    idle->Update();
 }
 
 void UI::LateUpdate()
@@ -29,7 +27,6 @@ void UI::LateUpdate()
 
 void UI::Render()
 {
-    idle->Render();
     Character::Render();
 }
 

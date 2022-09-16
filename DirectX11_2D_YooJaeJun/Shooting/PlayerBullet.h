@@ -1,8 +1,10 @@
 #pragma once
+
 class PlayerBullet : public Bullet
 {
 public:
 	ObImage*		img[4];
+	int				level;
 
 public:
 	PlayerBullet();
@@ -13,7 +15,10 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-	void Spawn();
-	void Shoot(const Vector2& coord);
-	void Reload();
+	int GetLevel() { return level; }
+	void ChangeLevel(const int level);
+
+	virtual void Spawn() override;
+	virtual void Shoot(const Vector2& coord) override;
+	virtual void Reload() override;
 };

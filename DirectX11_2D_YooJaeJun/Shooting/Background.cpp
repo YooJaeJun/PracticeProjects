@@ -20,13 +20,11 @@ void Background::Init()
 void Background::Release()
 {
     Character::Release();
-    SafeDelete(idle);
 }
 
 void Background::Update()
 {
     Character::Update();
-    idle->Update();
 }
 
 void Background::LateUpdate()
@@ -35,7 +33,6 @@ void Background::LateUpdate()
 
 void Background::Render()
 {
-    idle->Render();
     Character::Render();
 }
 

@@ -6,8 +6,9 @@ class Player : public Airplane
 public:
 	ObImage*		boost;
 	bool			isBoost;
-
 	PlayerBullet*	bullet[bulletMax];
+	int				level;
+	float			timeFire;
 
 public:
 	Player();

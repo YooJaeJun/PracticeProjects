@@ -8,6 +8,7 @@ Airplane::Airplane()
 void Airplane::Init()
 {
 	Character::Init();
+
 	type = PlaneType::PLAYER;
 	key = 0.0f;
 	moveDir = Vector2(0.0f, 0.0f);
@@ -28,7 +29,6 @@ void Airplane::Init()
 void Airplane::Release()
 {
 	Character::Release();
-	SafeDelete(idle);
 	for (auto& elem : bomb) SafeDelete(elem);
 }
 
@@ -44,10 +44,10 @@ void Airplane::Update()
 		}
 	}
 
-	if (col) col->Update();
-	if (idle) idle->Update();
 	if (hit) hit->Update();
 	if (die) die->Update();
+
+	Character::Update();
 }
 
 void Airplane::LateUpdate()
@@ -56,10 +56,9 @@ void Airplane::LateUpdate()
 
 void Airplane::Render()
 {
-	if (idle) idle->Render();
 	if (hit) hit->Render();
 	if (die) die->Render();
-	if (col) col->Render();
+	Character::Render();
 }
 
 

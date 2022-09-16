@@ -69,21 +69,22 @@ void Player::Init()
 	{
 		elem = new PlayerBullet;
 	}
+
+	level = 0;
+	timeFire = 0.0f;
 }
 
 void Player::Release()
 {
-	Character::Release();
-	SafeDelete(idle);
-	for (auto& elem : bullet)
-	{
-		elem->Release();
-	}
+	Airplane::Release();
+	for (auto& elem : bullet) elem->Release();
 }
 
 void Player::Update()
 {
 	ImGui::SliderFloat("Alpha", &idle->color.w, 0.0f, 1.0f);
+
+	ImGui::SliderInt("Level", &level, 0, 3);
 
 	if (state == PlaneState::DIE)
 	{
@@ -208,19 +209,21 @@ void Player::Update()
 	}
 
 
-
-	if (INPUT->KeyDown(VK_CONTROL))
+	if (TIMER->GetTick(timeFire, 0.2f))
 	{
 		for (auto& elem : bullet)
 		{
 			if (false == elem->isFired)
 			{
+				if (level != elem->level)
+				{
+					elem->ChangeLevel(level);
+				}
 				elem->Shoot(col->GetWorldPos());
 				break;
 			}
 		}
 	}
-
 
 	boost->Update();
 	Airplane::Update();

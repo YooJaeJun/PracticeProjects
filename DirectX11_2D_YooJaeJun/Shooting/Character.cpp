@@ -8,11 +8,13 @@ void Character::Init()
 
 void Character::Release()
 {
-	SafeDelete(col);
+	if (idle) SafeDelete(idle);
+	if (col) SafeDelete(col);
 }
 
 void Character::Update()
 {
+	if (idle) idle->Update();
 	if (col) col->Update();
 }
 
@@ -22,5 +24,6 @@ void Character::LateUpdate()
 
 void Character::Render()
 {
+	if (idle) idle->Render();
 	if (col) col->Render();
 }
