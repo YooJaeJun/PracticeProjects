@@ -1,5 +1,6 @@
 #pragma once
-const int enemyMax = 1;
+const int enemyMax = 3;
+const int bossMax = 1;
 
 class Main : public Scene
 {
@@ -7,6 +8,7 @@ private:
 	UI*			bg;
 	Player*		player;
 	Enemy*		enemy[enemyMax];
+	Boss*		boss[bossMax];
 
 public:
 	virtual void Init() override;

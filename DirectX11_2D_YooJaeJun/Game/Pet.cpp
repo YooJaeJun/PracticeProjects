@@ -19,7 +19,3 @@ void Pet::LateUpdate()
 void Pet::Render()
 {
 }
-
-void Pet::Spawn()
-{
-}

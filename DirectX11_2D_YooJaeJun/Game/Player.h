@@ -1,7 +1,7 @@
 #pragma once
 const int playerBulletMax = 5;
 
-class Player : public Character
+class Player : public Unit
 {
 public:
 	Player();
@@ -11,27 +11,10 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-	void Spawn();
-	void Hit(const float damage);
-	void Die();
-
 public:
-	ObImage*		idle;
-	ObImage*		walk;
-	ObImage*		roll;
-	ObImage*		hit;
-	ObImage*		die;
 	ObImage*		respawn;
-	Weapon*			weapon;
 	PlayerBullet*	bullet[playerBulletMax];
-	State			state;
 	bool			canFire;
-	float			timeFire;
-	float			timeReload;
-	float			timeHit;
-	bool			isHit;
-	bool			isHitAnim;
-	float			timeHitAnim;
-
+	float			timeRoll;
 };
 

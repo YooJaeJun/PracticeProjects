@@ -9,8 +9,14 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
+	void Spawn(const Vector2& coord, const Vector2& fireDir);
+	void Hit(const float damage);
+	void Reload();
+
 public:
+	ObImage*	idle;
 	bool		isFired;
 	Vector2		moveDir;
 	int			damage;
+	float		timeRespawn;
 };

@@ -8,8 +8,4 @@ public:
 	virtual void Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
-
-public:
-	ObImage*	img;
-	Vector2		imgSize;
 };

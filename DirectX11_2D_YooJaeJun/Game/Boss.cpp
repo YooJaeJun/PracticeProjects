@@ -1,8 +1,9 @@
 #include "stdafx.h"
 
-Enemy::Enemy()
+Boss::Boss()
 {
-	float bulletCoef = 3.0f;
+	int idx = 0;
+	float bulletCoef = 4.0f;
 
 	for (auto& elem : bullet)
 	{
@@ -13,6 +14,8 @@ Enemy::Enemy()
 		elem->idle->scale.x = 8.0f * bulletCoef;
 		elem->idle->scale.y = 8.0f * bulletCoef;
 		elem->idle->SetParentRT(*elem->col);
+		elem->moveDir = Vector2(cos(idx * 4.0f * ToRadian), sin(idx * 4.0f * ToRadian));
+		idx++;
 	}
 
 	curHp = maxHp = 1;
@@ -24,18 +27,16 @@ Enemy::Enemy()
 	timeHitAnim = 0.0f;
 }
 
-void Enemy::Release()
+void Boss::Release()
 {
 	Unit::Release();
-	for (auto& elem : bullet) elem->Release();
+	SafeDelete(hpGuage);
 }
 
-void Enemy::Update()
+void Boss::Update()
 {
 	Unit::Update();
 
-	moveDir = dest - col->GetWorldPos();
-	moveDir.Normalize();
 	col->MoveWorldPos(moveDir * scalar * DELTA);
 
 	if (isHit)
@@ -46,8 +47,8 @@ void Enemy::Update()
 		}
 	}
 
-	if (state != State::die && 
-		TIMER->GetTick(timeFire, 1.0f))
+	if (state != State::die &&
+		TIMER->GetTick(timeFire, 3.0f))
 	{
 		for (auto& elem : bullet)
 		{
@@ -56,23 +57,33 @@ void Enemy::Update()
 			elem->Spawn(Vector2(
 				weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
 				weapon->idle->GetWorldPivot().y),
-				moveDir);
-			break;
+				elem->moveDir);
+			cout << elem->moveDir.x << ',' << elem->moveDir.y << '\n';
 		}
 	}
 
 	idle->Update();
-	for (auto& elem : bullet) if (elem) elem->Update();
+
+	for (auto& elem : bullet)
+	{
+		elem->Update();
+	}
+
+	hpGuage->img->scale.x = (float)curHp / maxHp * hpGuage->imgSize.x;
+	hpGuage->img->uv.z = hpGuage->img->scale.x / hpGuage->imgSize.x;
+	hpGuage->Update();
 }
 
-void Enemy::LateUpdate()
+void Boss::LateUpdate()
 {
 	Unit::LateUpdate();
 	for (auto& elem : bullet) if (elem) elem->LateUpdate();
+	hpGuage->LateUpdate();
 }
 
-void Enemy::Render()
+void Boss::Render()
 {
 	for (auto& elem : bullet) if (elem) elem->Render();
+	hpGuage->Render();
 	Unit::Render();
 }

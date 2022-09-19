@@ -1,6 +1,6 @@
 #pragma once
 
-class Pet : public Character
+class Pet : public Unit
 {
 public:
 	Pet();
@@ -9,13 +9,5 @@ public:
 	virtual void Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
-
-	void Spawn();
-
-public:
-	ObCircle* col;
-	ObImage* idle;
-	ObImage* walk;
-	State			state;
 };
 

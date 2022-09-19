@@ -12,7 +12,7 @@ Character::Character()
 
 void Character::Release() 
 {
-	if (col) SafeDelete(col);
+	SafeDelete(col);
 }
 
 void Character::Update()
@@ -20,7 +20,8 @@ void Character::Update()
 	if (col) col->Update();
 }
 
-void Character::LateUpdate() {}
+void Character::LateUpdate() 
+{}
 
 void Character::Render()
 {

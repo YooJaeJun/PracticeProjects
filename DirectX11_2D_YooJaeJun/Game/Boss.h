@@ -1,12 +1,18 @@
 #pragma once
+const int bossBulletMax = 60;
 
-class PlayerBullet : public Bullet
+class Boss : public Unit
 {
 public:
-	PlayerBullet();
+	Boss();
 
 	virtual void Release() override;
 	virtual void Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
+
+public:
+	UI*				hpGuage;
+	EnemyBullet*	bullet[bossBulletMax];
 };
+

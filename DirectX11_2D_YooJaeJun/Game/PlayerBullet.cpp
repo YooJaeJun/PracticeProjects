@@ -13,36 +13,28 @@ PlayerBullet::PlayerBullet()
 
 void PlayerBullet::Release()
 {
-    SafeDelete(img);
     Bullet::Release();
 }
 
 void PlayerBullet::Update()
 {
-    img->Update();
     Bullet::Update();
+
+    if (isFired)
+    {
+        if (TIMER->GetTick(timeRespawn, 2.0f))
+        {
+            Reload();
+        }
+    }
 }
 
 void PlayerBullet::LateUpdate()
 {
+    Bullet::LateUpdate();
 }
 
 void PlayerBullet::Render()
 {
-    img->Render();
     Bullet::Render();
-}
-
-void PlayerBullet::Spawn(const Vector2& coord, const Vector2 fireDir)
-{
-    col->SetWorldPos(coord);
-    col->rotation = Utility::DirToRadian(fireDir);
-    moveDir = fireDir;
-    isFired = true;
-}
-
-void PlayerBullet::Reload()
-{
-    col->SetWorldPos(Vector2(2000.0f, 2000.0f));
-    isFired = false;
 }

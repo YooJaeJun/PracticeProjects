@@ -2,21 +2,18 @@
 
 Weapon::Weapon()
 {
-	col = new ObRect;
-	col->isFilled = false;
-	col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void Weapon::Release()
 {
-	SafeDelete(idle);
 	Character::Release();
+	SafeDelete(idle);
 }
 
 void Weapon::Update()
 {
-	idle->Update();
 	Character::Update();
+	idle->Update();
 }
 
 void Weapon::LateUpdate()
