@@ -11,6 +11,7 @@
 #include <vector>
 #include <deque>
 #include <queue>
+#include <unordered_map>
 #include <chrono>
 #include <random>
 #include <iostream>
@@ -113,6 +114,8 @@ extern Application app;//Extern Global
 #include "ObStarPointed.h"
 #include "ObCircle.h"
 #include "ObImage.h"
+
+#include "Delaunay.h"
 
 //Singleton Macro
 #define	D3D			Direct3D11::GetInstance()

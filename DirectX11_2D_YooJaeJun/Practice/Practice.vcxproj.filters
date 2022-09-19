@@ -1,18 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="DelaunayTriangulation\vector2.h" />
-    <ClInclude Include="DelaunayTriangulation\delaunay.h" />
-    <ClInclude Include="DelaunayTriangulation\edge.h" />
-    <ClInclude Include="DelaunayTriangulation\numeric.h" />
-    <ClInclude Include="DelaunayTriangulation\triangle.h" />
+    <ClCompile Include="ProcedureDungeonGeneration\Main.cpp" />
+    <ClCompile Include="ProcedureDungeonGeneration\Room.cpp" />
+    <ClCompile Include="ProcedureDungeonGeneration\Grid.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DelaunayTriangulation\delaunay.cpp" />
-    <ClCompile Include="DelaunayTriangulation\edge.cpp" />
-    <ClCompile Include="DelaunayTriangulation\main.cpp" />
-    <ClCompile Include="DelaunayTriangulation\tests.cpp" />
-    <ClCompile Include="DelaunayTriangulation\triangle.cpp" />
-    <ClCompile Include="DelaunayTriangulation\vector2.cpp" />
+    <ClInclude Include="ProcedureDungeonGeneration\Main.h" />
+    <ClInclude Include="ProcedureDungeonGeneration\Room.h" />
+    <ClInclude Include="ProcedureDungeonGeneration\stdafx.h" />
+    <ClInclude Include="ProcedureDungeonGeneration\Grid.h" />
   </ItemGroup>
 </Project>

@@ -22,6 +22,8 @@ public:
     ObLine(ObLine&&) = default;
     ObLine(const Vector2& v1, const Vector2& v2);
 
+    bool operator<(const ObLine& other) const; // visited 판별용
+    bool operator>(const ObLine& other) const;  // priority_queue 정렬용
     ObLine& operator=(const ObLine& e);
     ObLine& operator=(ObLine&&) = default;
     bool operator ==(const ObLine & e) const;

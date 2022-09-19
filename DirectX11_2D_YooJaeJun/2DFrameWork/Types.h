@@ -4,15 +4,37 @@ struct Int2
 {
 	int x;
 	int y;
-	Int2()
-	{
-		x = 0;
-		y = 0;
-	}
-	Int2(int x, int y)
+	Int2() : x(0), y(0) {}
+	Int2(const int x, const int y)
 	{
 		this->x = x;
 		this->y = y;
+	}
+};
+
+// 추가 이유
+// 1. 들로네 삼각분할 시 MST 이용 위해 노드 별 간선을 map형태로 저장해야 됨
+// 2. map에서 항이 2개 이상인 key 저장 위해선 operator<()가 있어야 함
+// 3. 기존 Vector2는 operator<() 가 없어서 저장하지 못해 추가
+struct Float2
+{
+	float x;
+	float y;
+	Float2() : x(0.0f), y(0.0f) {}
+	Float2(const Float2& other) : x(other.x), y(other.y) {}
+	Float2(const Vector2& other) : x(other.x), y(other.y) {}
+	Float2(const float x, const float y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+	bool operator<(const Float2& other) const
+	{
+		return x < other.x || (!(other.x < x) && y < other.y);
+	}
+	bool operator>(const Float2& other) const
+	{
+		return x > other.x || (!(other.x > x) && y > other.y);
 	}
 };
 

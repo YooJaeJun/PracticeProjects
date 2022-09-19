@@ -12,7 +12,7 @@ void ObLine::CreateStaticMember()
 
     Vertex[1].position.x = 0.5f;
     Vertex[1].position.y = 0.0f;
-    Vertex[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+    Vertex[1].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     //CreateVertexBuffer
     {
@@ -75,6 +75,22 @@ ObLine::ObLine(const Vector2& v1, const Vector2& v2)
     : v(v1), w(v2)
 {
     pivot = OFFSET_L;
+    SetWorldPos(Vector2(v));
+    rotation = Utility::DirToRadian(w - v);
+    scale.x = v.Distance(v, w);
+}
+
+bool ObLine::operator<(const ObLine& other) const
+{
+    return Float2(v) < Float2(other.v) ||
+        (!(Float2(other.v) < Float2(v)) && Float2(w) < Float2(other.w));
+    // return (v.x < other.v.x || (!(other.v.x < v.x) && v.y < other.v.y)) ||
+    //     (w.x < other.w.x || (!(other.w.x < w.x) && w.y < other.w.y));
+}
+
+bool ObLine::operator>(const ObLine& other) const
+{
+    return scale.x > other.scale.x;
 }
 
 ObLine& ObLine::operator=(const ObLine& e)
@@ -83,6 +99,9 @@ ObLine& ObLine::operator=(const ObLine& e)
     v.y = e.v.y;
     w.x = e.w.x;
     w.y = e.w.y;
+    SetWorldPos(Vector2(v));
+    rotation = Utility::DirToRadian(w - v);
+    scale.x = v.Distance(v, w);
     return *this;
 }
 

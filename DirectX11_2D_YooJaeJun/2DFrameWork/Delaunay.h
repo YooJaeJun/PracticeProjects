@@ -2,9 +2,10 @@
 class Delaunay
 {
 public:
-	std::vector<ObTriangle>	triangles;
-	std::vector<ObLine>		edges;
-	std::vector<Vector2>	vertices;
+	vector<ObTriangle>	triangles;
+	vector<ObLine>		edges;
+	vector<Vector2>		vertices;
+	map<Float2, vector<Float2>>	nodes;
 
 public:
 	Delaunay() = default;

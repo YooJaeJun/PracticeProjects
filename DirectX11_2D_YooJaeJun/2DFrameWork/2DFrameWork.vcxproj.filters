@@ -74,6 +74,9 @@
     <ClInclude Include="Numeric.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="Delaunay.h">
+      <Filter>Algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -84,6 +87,9 @@
     </Filter>
     <Filter Include="GameObject\Member">
       <UniqueIdentifier>{09dc338e-ffeb-4250-8eb8-8d54dd34faf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithm">
+      <UniqueIdentifier>{3dbe9af7-f89b-4833-bc0b-71b680bf67ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +158,9 @@
     </ClCompile>
     <ClCompile Include="Numeric.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Delaunay.cpp">
+      <Filter>Algorithm</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

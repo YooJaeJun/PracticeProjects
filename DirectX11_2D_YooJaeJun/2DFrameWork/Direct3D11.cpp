@@ -185,7 +185,6 @@ void Direct3D11::Create()
 		desc.AntialiasedLineEnable = false; 
 		device->CreateRasterizerState(&desc, &rasterizerState);
 		deviceContext->RSSetState(rasterizerState);
-
 		rasterizerState->Release();
 	}
 	//알파값 처리

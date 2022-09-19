@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camara.h" />
+    <ClInclude Include="Delaunay.h" />
     <ClInclude Include="Direct3D11.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameObject.h" />
@@ -186,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Delaunay.cpp" />
     <ClCompile Include="Direct3D11.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gui.cpp" />

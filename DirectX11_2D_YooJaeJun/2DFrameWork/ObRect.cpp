@@ -13,15 +13,15 @@ void ObRect::CreateStaticMember()
     Vertex[0].position.x = -0.5f;
     Vertex[0].position.y = -0.5f;
     // 방향이 채도, 스칼라가 명도(얼마나 밝은지)
-    Vertex[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+    Vertex[0].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[1].position.x = -0.5f;
     Vertex[1].position.y = 0.5f;
-    Vertex[1].color = Color(0.3f, 0.3f, 0.3f, 1.0f);
+    Vertex[1].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[2].position.x = 0.5f;
     Vertex[2].position.y = -0.5f;
-    Vertex[2].color = Color(0.6f, 0.6f, 0.6f, 1.0f);
+    Vertex[2].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[3].position.x = 0.5f;
     Vertex[3].position.y = 0.5f;
@@ -52,11 +52,11 @@ void ObRect::CreateStaticMember()
     //VertexCount = 5;
     Vertex[0].position.x = -0.5f;
     Vertex[0].position.y = -0.5f;
-    Vertex[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+    Vertex[0].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[1].position.x = -0.5f;
     Vertex[1].position.y = 0.5f;
-    Vertex[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+    Vertex[1].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     Vertex[2].position.x = 0.5f;
     Vertex[2].position.y = 0.5f;
@@ -68,7 +68,7 @@ void ObRect::CreateStaticMember()
 
     Vertex[4].position.x = -0.5f;
     Vertex[4].position.y = -0.5f;
-    Vertex[4].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+    Vertex[4].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     //CreateVertexBuffer
     {

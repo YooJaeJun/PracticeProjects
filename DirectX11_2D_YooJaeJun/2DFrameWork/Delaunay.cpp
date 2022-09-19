@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "framework.h"
 
 const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<Vector2>& vertices)
 {
@@ -11,7 +11,7 @@ const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<Vector2>& verti
 	float maxX = minX;
 	float maxY = minY;
 
-	for(const auto& elem : vertices)
+	for (const auto& elem : vertices)
 	{
 		if (elem.x < minX) minX = elem.x;
 		if (elem.y < minY) minY = elem.y;
@@ -27,8 +27,8 @@ const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<Vector2>& verti
 
 	const Vector2 p1(midX - 20 * deltaMax, midY - deltaMax);
 	const Vector2 p2(midX, midY + 20 * deltaMax);
-	const Vector2 p3(midX - 20 * deltaMax, midY - deltaMax);
-	
+	const Vector2 p3(midX + 20 * deltaMax, midY - deltaMax);
+
 	// Create a list of triangles, and add the supertriangle in it
 	triangles.push_back(ObTriangle(p1, p2, p3));
 
@@ -48,7 +48,7 @@ const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<Vector2>& verti
 		}
 
 		triangles.erase(std::remove_if(begin(triangles), end(triangles), [](ObTriangle& t) {
-				return t.isBad;
+			return t.isBad;
 			}), end(triangles));
 
 		for (auto e1 = begin(polygon); e1 != end(polygon); e1++)
@@ -80,6 +80,13 @@ const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<Vector2>& verti
 		edges.push_back(ObLine(t.a, t.b));
 		edges.push_back(ObLine(t.b, t.c));
 		edges.push_back(ObLine(t.c, t.a));
+
+		nodes[Float2(t.a)].push_back(Float2(t.b));
+		nodes[Float2(t.a)].push_back(Float2(t.c));
+		nodes[Float2(t.b)].push_back(Float2(t.a));
+		nodes[Float2(t.b)].push_back(Float2(t.c));
+		nodes[Float2(t.c)].push_back(Float2(t.a));
+		nodes[Float2(t.c)].push_back(Float2(t.b));
 	}
 
 	return triangles;

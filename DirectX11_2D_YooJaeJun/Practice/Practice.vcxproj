@@ -19,19 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DelaunayTriangulation\delaunay.h" />
-    <ClInclude Include="DelaunayTriangulation\edge.h" />
-    <ClInclude Include="DelaunayTriangulation\numeric.h" />
-    <ClInclude Include="DelaunayTriangulation\triangle.h" />
-    <ClInclude Include="DelaunayTriangulation\vector2.h" />
+    <ClCompile Include="ProcedureDungeonGeneration\Grid.cpp" />
+    <ClCompile Include="ProcedureDungeonGeneration\Main.cpp" />
+    <ClCompile Include="ProcedureDungeonGeneration\Room.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DelaunayTriangulation\delaunay.cpp" />
-    <ClCompile Include="DelaunayTriangulation\edge.cpp" />
-    <ClCompile Include="DelaunayTriangulation\main.cpp" />
-    <ClCompile Include="DelaunayTriangulation\tests.cpp" />
-    <ClCompile Include="DelaunayTriangulation\triangle.cpp" />
-    <ClCompile Include="DelaunayTriangulation\vector2.cpp" />
+    <ClInclude Include="ProcedureDungeonGeneration\Grid.h" />
+    <ClInclude Include="ProcedureDungeonGeneration\Main.h" />
+    <ClInclude Include="ProcedureDungeonGeneration\Room.h" />
+    <ClInclude Include="ProcedureDungeonGeneration\stdafx.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

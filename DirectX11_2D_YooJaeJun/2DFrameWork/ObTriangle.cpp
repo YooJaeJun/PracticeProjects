@@ -147,9 +147,6 @@ bool ObTriangle::CircumCircleContains(const Vector2& v) const
     long double cx = c.x;
     long double cy = c.y;
 
-    long double test1 = (dA * (cy - by) + dB * (ay - cy) + dC * (by - ay));
-    long double test2 = (ax * (cy - by) + bx * (ay - cy) + cx * (by - ay));
-
     long double circum_x = (dA * (cy - by) + dB * (ay - cy) + dC * (by - ay)) / (ax * (cy - by) + bx * (ay - cy) + cx * (by - ay));
     long double circum_y = (dA * (cx - bx) + dB * (ax - cx) + dC * (bx - ax)) / (ay * (cx - bx) + by * (ax - cx) + cy * (bx - ax));
 
