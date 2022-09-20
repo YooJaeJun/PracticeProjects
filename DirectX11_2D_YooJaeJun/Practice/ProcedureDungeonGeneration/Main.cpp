@@ -24,6 +24,11 @@ void Main::Init()
 void Main::Release()
 {
     for (auto& elem : rooms) SafeDelete(elem);
+    nodes.clear();
+    triangulation.nodes.clear();
+    triangulation.edges.clear();
+    triangulation.triangles.clear();
+    triangulation.vertices.clear();
     visited.clear();
     lines.clear();
     linesMST.clear();
@@ -36,6 +41,7 @@ void Main::Update()
     {
         Release();
         Init();
+        state = State::move;
     }
     
     switch (state)
@@ -110,7 +116,7 @@ void Main::Update()
         }
         */
 
-        state = State::spanning;
+        // state = State::spanning;
         break;
     }
     case Main::State::spanning:
@@ -248,7 +254,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, in
     app.SetAppName(L"유재준 Game");
     app.SetInstance(instance);
     app.background = Color(0.0f, 0.0f, 0.0f, 1.0f);
-    app.InitWidthHeight(1280.0f, 720.0f);
+    app.InitWidthHeight(750.0f, 1000.0f);
     Main* main = new Main();
     int wParam = (int)WIN->Run(main);
     WIN->DeleteSingleton();     // 창이 없어지고 난 후 

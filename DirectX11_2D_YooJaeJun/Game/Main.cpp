@@ -275,18 +275,26 @@ void Main::LateUpdate()
     {
         for (auto& enemyElem : enemy)
         {
-            if (bulletElem->col->Intersect(enemyElem->col))
+            if (abs(bulletElem->col->GetWorldPos().x - enemyElem->col->GetWorldPos().x) < 100 &&
+                abs(bulletElem->col->GetWorldPos().y - enemyElem->col->GetWorldPos().y) < 100)
             {
-                enemyElem->Hit(1);
-                bulletElem->Hit(1);
+                if (bulletElem->col->Intersect(enemyElem->col))
+                {
+                    enemyElem->Hit(1);
+                    bulletElem->Hit(1);
+                }
             }
         }
         for (auto& bossElem : boss)
         {
-            if (bulletElem->col->Intersect(bossElem->col))
+            if (abs(bulletElem->col->GetWorldPos().x - bossElem->col->GetWorldPos().x) < 100 &&
+                abs(bulletElem->col->GetWorldPos().y - bossElem->col->GetWorldPos().y) < 100)
             {
-                bossElem->Hit(1);
-                bulletElem->Hit(1);
+                if (bulletElem->col->Intersect(bossElem->col))
+                {
+                    bossElem->Hit(1);
+                    bulletElem->Hit(1);
+                }
             }
         }
     }
@@ -294,33 +302,49 @@ void Main::LateUpdate()
     // ÇÇ°Ý
     for (auto& enemyElem : enemy)
     {
-        if (enemyElem->col->Intersect(player->col))
+        if (abs(enemyElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
+            abs(enemyElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
         {
-            player->Hit(1.0f);
+            if (enemyElem->col->Intersect(player->col))
+            {
+                player->Hit(1.0f);
+            }
         }
 
         for (auto& bulletElem : enemyElem->bullet)
         {
-            if (bulletElem->col->Intersect(player->col))
+            if (abs(bulletElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
+                abs(bulletElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
             {
-                player->Hit(1);
-                bulletElem->Hit(1);
+                if (bulletElem->col->Intersect(player->col))
+                {
+                    player->Hit(1);
+                    bulletElem->Hit(1);
+                }
             }
         }
     }
     for (auto& bossElem : boss)
     {
-        if (bossElem->col->Intersect(player->col))
+        if (abs(bossElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
+            abs(bossElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
         {
-            player->Hit(1.0f);
+            if (bossElem->col->Intersect(player->col))
+            {
+                player->Hit(1.0f);
+            }
         }
 
         for (auto& bulletElem : bossElem->bullet)
         {
-            if (bulletElem->col->Intersect(player->col))
+            if (abs(bulletElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
+                abs(bulletElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
             {
-                player->Hit(1);
-                bulletElem->Hit(1);
+                if (bulletElem->col->Intersect(player->col))
+                {
+                    player->Hit(1);
+                    bulletElem->Hit(1);
+                }
             }
         }
     }

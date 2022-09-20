@@ -73,6 +73,7 @@ void Player::Update()
 			moveDir.y = 0.0f;
 		}
 
+		moveDir.Normalize();
 		col->MoveWorldPos(moveDir * scalar * DELTA);
 
 		if (INPUT->KeyPress(VK_LBUTTON))
@@ -109,9 +110,7 @@ void Player::Update()
 	}
 	else if (state == State::roll)
 	{
-		Vector2 dir = dest - col->GetWorldPos();
-		dir.Normalize();
-		col->MoveWorldPos(dir * (scalar + 100.0f) * DELTA);
+		col->MoveWorldPos(moveDir * (scalar + 100.0f) * DELTA);
 		if (TIMER->GetTick(timeRoll, 0.5f))
 		{
 			state = State::idle;

@@ -11,7 +11,7 @@ public:
 
 	void Spawn(const Vector2& coord, const Vector2& fireDir);
 	void Hit(const float damage);
-	void Reload();
+	virtual void Reload();
 
 public:
 	ObImage*	idle;

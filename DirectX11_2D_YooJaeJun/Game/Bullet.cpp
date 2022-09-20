@@ -20,6 +20,7 @@ void Bullet::Update()
 
     if (isFired)
     {
+        moveDir.Normalize();
         Vector2 velocity = moveDir * scalar * DELTA;
         col->MoveWorldPos(velocity);
     }
