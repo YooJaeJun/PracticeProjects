@@ -1,10 +1,5 @@
 #pragma once
 
-enum class bossPattern
-{
-	circular, string
-};
-
 class BossBullet : public Bullet
 {
 public:

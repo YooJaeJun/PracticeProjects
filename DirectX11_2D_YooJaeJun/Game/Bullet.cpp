@@ -48,23 +48,14 @@ void Bullet::Spawn(const Vector2& coord, const Vector2& fireDir)
 
 void Bullet::Hit(const float damage)
 {
-    if (false == isHit)
-    {
-        if (damage > 0)
-        {
-            col->colOnOff = false;
-            col->isVisible = false;
-            idle->isVisible = false;
-            isFired = false;
-        }
-    }
+    Reload();
 }
 
 void Bullet::Reload()
 {
     col->colOnOff = true;
     col->isVisible = true;
+    col->SetWorldPos(Vector2(2000.0f, 2000.0f));
     idle->isVisible = true;
     isFired = false;
-    col->SetWorldPos(Vector2(2000.0f, 2000.0f));
 }

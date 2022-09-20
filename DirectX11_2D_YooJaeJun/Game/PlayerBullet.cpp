@@ -22,7 +22,7 @@ void PlayerBullet::Update()
 
     if (isFired)
     {
-        if (TIMER->GetTick(timeRespawn, 2.0f))
+        if (TIMER->GetTick(timeRespawn, 3.0f))
         {
             Reload();
         }

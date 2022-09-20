@@ -1,5 +1,5 @@
 #pragma once
-const int playerBulletMax = 5;
+const int playerBulletMax = 20;
 
 class Player : public Unit
 {

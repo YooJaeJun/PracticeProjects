@@ -163,8 +163,8 @@ void Main::Init()
         elem->col = new ObCircle;
         elem->col->scale.x = 30.0f * enemyScaleCoef;
         elem->col->scale.y = 30.0f * enemyScaleCoef;
-        elem->col->SetWorldPosX(200.0f);
-        elem->col->SetWorldPosY(0.0f);
+        elem->col->SetWorldPosX(0.0f);
+        elem->col->SetWorldPosY(400.0f);
         elem->col->color = Color(1.0f, 1.0f, 1.0f);
         elem->col->isFilled = false;
 
@@ -219,7 +219,7 @@ void Main::Init()
 
         elem->hpGuage = new UI;
         elem->hpGuage->img = new ObImage(L"Cookie/Time.png");
-        elem->hpGuage->imgSize.x = 242.0f;
+        elem->hpGuage->imgSize.x = 242.0f * 3.0f;
         elem->hpGuage->imgSize.y = 86.0f;
         elem->hpGuage->img->scale.x = elem->hpGuage->imgSize.x * 0.5f;
         elem->hpGuage->img->scale.y = elem->hpGuage->imgSize.y * 0.5f;
@@ -259,17 +259,14 @@ void Main::Update()
     }
     for (auto& elem : boss)
     {
+        elem->dest = player->col->GetWorldPos();
+        elem->weapon->col->rotation = Utility::DirToRadian(player->col->GetWorldPos());
         elem->Update();
     }
-
-    for (auto& elem : boss) elem->Update();
 }
 
 void Main::LateUpdate()
 {
-    player->LateUpdate();
-    for(auto& elem : enemy) elem->LateUpdate();
-
     // 타격
     for (auto& bulletElem : player->bullet)
     {
@@ -300,56 +297,61 @@ void Main::LateUpdate()
     }
 
     // 피격
-    for (auto& enemyElem : enemy)
+    if (false == player->godMode)
     {
-        if (abs(enemyElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
-            abs(enemyElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
+        for (auto& enemyElem : enemy)
         {
-            if (enemyElem->col->Intersect(player->col))
+            if (abs(enemyElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
+                abs(enemyElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
             {
-                player->Hit(1.0f);
-            }
-        }
-
-        for (auto& bulletElem : enemyElem->bullet)
-        {
-            if (abs(bulletElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
-                abs(bulletElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
-            {
-                if (bulletElem->col->Intersect(player->col))
+                if (enemyElem->col->Intersect(player->col))
                 {
-                    player->Hit(1);
-                    bulletElem->Hit(1);
+                    player->Hit(1.0f);
                 }
             }
-        }
-    }
-    for (auto& bossElem : boss)
-    {
-        if (abs(bossElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
-            abs(bossElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
-        {
-            if (bossElem->col->Intersect(player->col))
-            {
-                player->Hit(1.0f);
-            }
-        }
 
-        for (auto& bulletElem : bossElem->bullet)
-        {
-            if (abs(bulletElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
-                abs(bulletElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
+            for (auto& bulletElem : enemyElem->bullet)
             {
-                if (bulletElem->col->Intersect(player->col))
+                if (abs(bulletElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
+                    abs(bulletElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
                 {
-                    player->Hit(1);
-                    bulletElem->Hit(1);
+                    if (bulletElem->col->Intersect(player->col))
+                    {
+                        player->Hit(1);
+                        bulletElem->Hit(1);
+                    }
                 }
             }
+            enemyElem->LateUpdate();
+        }
+        for (auto& bossElem : boss)
+        {
+            if (abs(bossElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
+                abs(bossElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
+            {
+                if (bossElem->col->Intersect(player->col))
+                {
+                    player->Hit(1.0f);
+                }
+            }
+
+            for (auto& bulletElem : bossElem->bullet)
+            {
+                if (abs(bulletElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
+                    abs(bulletElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
+                {
+                    if (bulletElem->col->Intersect(player->col))
+                    {
+                        player->Hit(1);
+                        bulletElem->Hit(1);
+                    }
+                }
+            }
+            bossElem->LateUpdate();
         }
     }
 
-    for (auto& elem : boss) elem->LateUpdate();
+    player->LateUpdate();
 }
 
 void Main::Render()

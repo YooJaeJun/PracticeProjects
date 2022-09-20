@@ -62,6 +62,9 @@
     <ClInclude Include="BossBullet.h">
       <Filter>GameObject\Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="StringBulletData.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -102,6 +105,9 @@
       <Filter>GameObject\Unit</Filter>
     </ClCompile>
     <ClCompile Include="BossBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="StringBulletData.cpp">
       <Filter>GameObject\Bullet</Filter>
     </ClCompile>
   </ItemGroup>

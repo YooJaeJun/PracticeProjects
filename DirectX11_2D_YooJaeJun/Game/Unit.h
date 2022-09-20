@@ -27,5 +27,6 @@ public:
 	bool		isHit;
 	bool		isHitAnim;
 	float		timeHitAnim;
+	bool		godMode;
 };
 

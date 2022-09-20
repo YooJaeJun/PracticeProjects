@@ -13,6 +13,7 @@
 #include "Unit.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "StringBulletData.h"
 #include "Boss.h"
 #include "Pet.h"
 #include "UI.h"

@@ -22,7 +22,7 @@ void EnemyBullet::Update()
 
     if (isFired)
     {
-        if (TIMER->GetTick(timeRespawn, 3.0f))
+        if (TIMER->GetTick(timeRespawn, 4.0f))
         {
             Reload();
         }

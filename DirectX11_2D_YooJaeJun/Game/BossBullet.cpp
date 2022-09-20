@@ -19,14 +19,6 @@ void BossBullet::Release()
 void BossBullet::Update()
 {
     Bullet::Update();
-
-    if (isFired)
-    {
-        if (TIMER->GetTick(timeRespawn, 3.0f))
-        {
-            Reload();
-        }
-    }
 }
 
 void BossBullet::LateUpdate()

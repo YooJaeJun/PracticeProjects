@@ -106,6 +106,7 @@ void Player::Update()
 			idle->isVisible = false;
 			roll->isVisible = true;
 			roll->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
+			godMode = true;
 		}
 	}
 	else if (state == State::roll)
@@ -116,6 +117,7 @@ void Player::Update()
 			state = State::idle;
 			idle->isVisible = true;
 			roll->isVisible = false;
+			godMode = false;
 		}
 	}
 
