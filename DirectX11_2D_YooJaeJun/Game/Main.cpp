@@ -18,8 +18,8 @@ void Main::Init()
 
     player = new Player;
     player->col = new ObCircle;
-    player->col->scale.x = 15.0f * playerScaleCoef;
-    player->col->scale.y = 15.0f * playerScaleCoef;
+    player->col->scale.x = 12.0f * playerScaleCoef;
+    player->col->scale.y = 12.0f * playerScaleCoef;
     player->col->SetWorldPosX(0.0f);
     player->col->SetWorldPosY(0.0f);
     player->col->color = Color(1.0f, 1.0f, 1.0f);
@@ -39,7 +39,7 @@ void Main::Init()
     {
         if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
         {
-            elem->reverseLR = true;
+            elem->rotationY = PI;
         }
         elem->maxFrame.x = 3;
         elem->scale.x = 48.0f / 3.0f * playerScaleCoef;
@@ -63,7 +63,7 @@ void Main::Init()
     {
         if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
         {
-            elem->reverseLR = true;
+            elem->rotationY = PI;
         }
         elem->maxFrame.x = 6;
         elem->scale.x = 90.0f / 6.0f * playerScaleCoef;
@@ -88,7 +88,7 @@ void Main::Init()
     {
         if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
         {
-            elem->reverseLR = true;
+            elem->rotationY = PI;
         }
         elem->maxFrame.x = 9;
         elem->scale.x = 168.0f / 9.0f * playerScaleCoef;
@@ -171,7 +171,7 @@ void Main::Init()
         {
             if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
             {
-                elem2->reverseLR = true;
+                elem2->rotationY = PI;
             }
             elem2->maxFrame.x = 2;
             elem2->scale.x = 29.0f / 2.0f * enemyScaleCoef;
@@ -195,7 +195,7 @@ void Main::Init()
         {
             if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
             {
-                elem2->reverseLR = true;
+                elem2->rotationY = PI;
             }
             elem2->maxFrame.x = 2;
             elem2->scale.x = 29.0f / 2.0f * enemyScaleCoef;
@@ -239,17 +239,19 @@ void Main::Init()
         elem->weapon->idle->SetParentRT(*elem->weapon->col);
     }
 
+
+    // º¸½º
     float bossScaleCoef = 3.0f;
     float bossWeaponScaleCoef = 2.0f;
 
     for (auto& elem : boss)
     {
         elem = new Boss;
-        elem->curHp = elem->maxHp = 40;
+        elem->curHp = elem->maxHp = 30;
 
         elem->col = new ObCircle;
-        elem->col->scale.x = 30.0f * enemyScaleCoef;
-        elem->col->scale.y = 30.0f * enemyScaleCoef;
+        elem->col->scale.x = 25.0f * enemyScaleCoef;
+        elem->col->scale.y = 25.0f * enemyScaleCoef;
         elem->col->SetWorldPosX(0.0f);
         elem->col->SetWorldPosY(400.0f);
         elem->col->color = Color(1.0f, 1.0f, 1.0f);
@@ -269,7 +271,7 @@ void Main::Init()
         {
             if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
             {
-                elem2->reverseLR = true;
+                elem2->rotationY = PI;
             }
             elem2->maxFrame.x = 2;
             elem2->scale.x = 40.0f / 2.0f * enemyScaleCoef;
@@ -293,7 +295,7 @@ void Main::Init()
         {
             if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
             {
-                elem2->reverseLR = true;
+                elem2->rotationY = PI;
             }
             elem2->maxFrame.x = 2;
             elem2->scale.x = 40.0f / 2.0f * enemyScaleCoef;

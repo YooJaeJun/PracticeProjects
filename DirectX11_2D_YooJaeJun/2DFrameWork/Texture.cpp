@@ -21,7 +21,6 @@ ID3D11ShaderResourceView* Texture::LoadTexture(wstring file)
     //중복된게 없다.
     if (iter == textureList.end())
     {
-
         ID3D11ShaderResourceView* temp;
         wstring path = L"../Contents/Images/" + file;
 
@@ -30,6 +29,7 @@ ID3D11ShaderResourceView* Texture::LoadTexture(wstring file)
 
         HRESULT hr = CreateShaderResourceView(D3D->GetDevice(), image.GetImages(), image.GetImageCount(),
             image.GetMetadata(), &temp);
+
         Check(hr);
         textureList[file] = temp;
         return temp;

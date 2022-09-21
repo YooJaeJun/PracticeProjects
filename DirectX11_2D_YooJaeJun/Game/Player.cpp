@@ -73,9 +73,16 @@ void Player::Update()
 			moveDir.y = 0.0f;
 		}
 
-		idle[curDir]->isVisible = false;
-		walk[curDir]->isVisible = true;
-		roll[curDir]->isVisible = false;
+		if (moveDir.x == 0 && moveDir.y == 0)
+		{
+			idle[curDir]->isVisible = true;
+			walk[curDir]->isVisible = false;
+		}
+		else
+		{
+			idle[curDir]->isVisible = false;
+			walk[curDir]->isVisible = true;
+		}
 
 		moveDir.Normalize();
 		col->MoveWorldPos(moveDir * scalar * DELTA);

@@ -112,6 +112,8 @@ void Unit::Update()
 		else
 		{
 			idle[curDir]->isVisible = true;
+			if (idle[curDir]->color.w == 1.0f) idle[curDir]->color.w = 1.0f;
+			if (walk[curDir]->color.w == 1.0f) walk[curDir]->color.w = 1.0f;
 			hit->isVisible = false;
 		}
 	}

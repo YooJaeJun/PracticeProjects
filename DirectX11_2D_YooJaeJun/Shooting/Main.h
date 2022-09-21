@@ -20,6 +20,7 @@ private:
 	UI*			fontMaxBullet[fontDigitMax][10];
 	UI*			fontSlash;
 	int			lastRemainBullet;
+	ObRect*		menu;
 
 public:
 	virtual void Init() override;

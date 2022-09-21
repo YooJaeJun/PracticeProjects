@@ -61,6 +61,12 @@ void Main::Init()
 	lastRemainBullet = 0;
 
 	ChangeFont(fontMaxBullet, bulletMax);
+
+	menu = new ObRect();
+	menu->scale = Vector2(100.0f, 50.0f);
+	menu->space = SPACE::SCREEN;
+	menu->pivot = OFFSET_LT;
+	menu->SetWorldPos(Vector2(-app.GetHalfWidth(), app.GetHalfHeight()));
 }
 
 void Main::Release()
@@ -88,6 +94,13 @@ void Main::Update()
 		cout << app.vSync << endl;
 		app.vSync = !app.vSync;
 	}
+
+	if (ImGui::Button("reverseLR"))
+	{
+		player->idle->reverseLR = !player->idle->reverseLR;
+	}
+
+	ImGui::SliderFloat("rotationY", &player->idle->rotationY, 0.0f, PI);
 
 	if (gameState == GameState::END)
 	{
@@ -130,6 +143,8 @@ void Main::Update()
 	for (auto& elem : fontCurBullet) for (auto& elem2 : elem) elem2->Update();
 	for (auto& elem : fontMaxBullet) for (auto& elem2 : elem) elem2->Update();
 	fontSlash->Update();
+
+	menu->Update();
 }
 
 void Main::LateUpdate()
@@ -143,6 +158,15 @@ void Main::LateUpdate()
 			boss->Hit(elem->damage);
 		}
 	}
+
+	if (menu->IntersectScreenMouse(INPUT->GetScreenMousePos()))
+	{
+		menu->color = Color(1.0f, 0.0f, 0.0f, 1.0f);
+	}
+	else
+	{
+		menu->color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+	}
 }
 
 void Main::Render()
@@ -154,6 +178,8 @@ void Main::Render()
 	for (auto& elem : fontCurBullet) for (auto& elem2 : elem) elem2->Render();
 	for (auto& elem : fontMaxBullet) for (auto& elem2 : elem) elem2->Render();
 	fontSlash->Render();
+
+	menu->Render();
 }
 
 void Main::ResizeScreen()
