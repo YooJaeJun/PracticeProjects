@@ -5,16 +5,16 @@ Player::Player()
 	scalar = 300.0f;
 	curHp = maxHp = 10000;
 
-	float bulletCoef = 3.0f;
+	float bulletCoef = 1.5f;
 
 	for (auto& elem : bullet)
 	{
 		elem = new PlayerBullet;
-		elem->col->scale.x = 8.0f * bulletCoef;
-		elem->col->scale.y = 8.0f * bulletCoef;
-		elem->idle = new ObImage(L"EnterTheGungeon/Player_0_Bullet_0.png");
-		elem->idle->scale.x = 8.0f * bulletCoef;
-		elem->idle->scale.y = 8.0f * bulletCoef;
+		elem->col->scale.x = 19.0f * bulletCoef;
+		elem->col->scale.y = 19.0f * bulletCoef;
+		elem->idle = new ObImage(L"EnterTheGungeon/Player_0/Bullet_0.png");
+		elem->idle->scale.x = 19.0f * bulletCoef;
+		elem->idle->scale.y = 19.0f * bulletCoef;
 		elem->idle->SetParentRT(*elem->col);
 	}
 
@@ -39,21 +39,23 @@ void Player::Update()
 	dest = INPUT->GetWorldMousePos();
 
 	CAM->position.x = Utility::Saturate((dest.x + idle[curDir]->GetWorldPos().x) / 2,
-		idle[curDir]->GetWorldPos().x - 200.0f,
-		idle[curDir]->GetWorldPos().x + 200.0f);
+		idle[curDir]->GetWorldPos().x - 250.0f,
+		idle[curDir]->GetWorldPos().x + 250.0f);
 	CAM->position.y = Utility::Saturate((dest.y + idle[curDir]->GetWorldPos().y) / 2,
-		idle[curDir]->GetWorldPos().y - 200.0f,
-		idle[curDir]->GetWorldPos().y + 200.0f);
+		idle[curDir]->GetWorldPos().y - 250.0f,
+		idle[curDir]->GetWorldPos().y + 250.0f);
 
 	if (state == State::idle)
 	{
 		if (INPUT->KeyPress('A'))
 		{
 			moveDir.x = -1.0f;
+			col->rotationY = PI;
 		}
 		else if (INPUT->KeyPress('D'))
 		{
 			moveDir.x = 1.0f;
+			col->rotationY = 0.0f;
 		}
 		else
 		{
@@ -76,11 +78,11 @@ void Player::Update()
 		if (moveDir.x == 0 && moveDir.y == 0)
 		{
 			idle[curDir]->isVisible = true;
-			walk[curDir]->isVisible = false;
+			for(auto& elem : walk) elem->isVisible = false;
 		}
 		else
 		{
-			idle[curDir]->isVisible = false;
+			for (auto& elem : idle) elem->isVisible = false;
 			walk[curDir]->isVisible = true;
 		}
 
@@ -97,10 +99,7 @@ void Player::Update()
 
 					Vector2 dir = INPUT->GetWorldMousePos() - col->GetWorldPos();
 					dir.Normalize();
-					elem->Spawn(Vector2(
-						weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
-						weapon->idle->GetWorldPivot().y),
-						dir);
+					elem->Spawn(firePos->GetWorldPos(), dir);
 					break;
 				}
 				canFire = false;
@@ -114,8 +113,8 @@ void Player::Update()
 		else if (INPUT->KeyPress(VK_RBUTTON))
 		{
 			state = State::roll;
-			idle[curDir]->isVisible = false;
-			walk[curDir]->isVisible = false;
+			for (auto& elem : idle) elem->isVisible = false;
+			for (auto& elem : walk) elem->isVisible = false;
 			roll[curDir]->isVisible = true;
 			roll[curDir]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
 			godMode = true;
@@ -128,8 +127,8 @@ void Player::Update()
 		{
 			state = State::idle;
 			idle[curDir]->isVisible = true;
-			walk[curDir]->isVisible = false;
-			roll[curDir]->isVisible = false;
+			for (auto& elem : walk) elem->isVisible = false;
+			for (auto& elem : roll) elem->isVisible = false;
 			godMode = false;
 		}
 	}

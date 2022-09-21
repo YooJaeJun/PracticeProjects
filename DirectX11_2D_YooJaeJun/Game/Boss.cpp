@@ -14,7 +14,7 @@ Boss::Boss()
     stringBullet.inputString = "abcdefghijklmnopqrstuvwxyz";
     bullet.resize(stringBullet.inputString.size() * 25);
 
-    InitBullet();
+    SetPattern();
 
     stringBullet.SetStringBullet();
 }
@@ -66,7 +66,7 @@ void Boss::Update()
                 stringBullet.inputString = s;
                 size = stringBullet.inputString.size();
                 bullet = vector<BossBullet*>(size * 25);
-                InitBullet();
+                SetPattern();
                 stringBullet.SetStringBullet();
             }
 
@@ -119,22 +119,6 @@ void Boss::Render()
     hpGuage->Render();
 }
 
-void Boss::InitBullet()
-{
-    float bulletCoef = 3.0f;
-
-    for (auto& elem : bullet)
-    {
-        elem = new BossBullet;
-        elem->col->scale.x = 8.0f * bulletCoef;
-        elem->col->scale.y = 8.0f * bulletCoef;
-        elem->idle = new ObImage(L"EnterTheGungeon/Enemy_0_Bullet.png");
-        elem->idle->scale.x = 8.0f * bulletCoef;
-        elem->idle->scale.y = 8.0f * bulletCoef;
-        elem->idle->SetParentRT(*elem->col);
-    }
-}
-
 void Boss::SetPattern()
 {
     pattern = bossPattern::string;
@@ -150,7 +134,7 @@ void Boss::SetPattern()
             elem = new BossBullet;
             elem->col->scale.x = 8.0f * bulletCoef;
             elem->col->scale.y = 8.0f * bulletCoef;
-            elem->idle = new ObImage(L"EnterTheGungeon/Enemy_0_Bullet.png");
+            elem->idle = new ObImage(L"EnterTheGungeon/Boss_0/Bullet_0.png");
             elem->idle->scale.x = 8.0f * bulletCoef;
             elem->idle->scale.y = 8.0f * bulletCoef;
             elem->idle->SetParentRT(*elem->col);
@@ -160,7 +144,6 @@ void Boss::SetPattern()
     }
     else if (pattern == bossPattern::string)
     {
-        stringBullet.inputString = "abcd";
         stringBullet.coefMidForTarget = 0.0f;
         stringBullet.SetStringBullet();
         bullet.resize(stringBullet.inputString.size() * 25);
@@ -172,7 +155,7 @@ void Boss::SetPattern()
             elem = new BossBullet;
             elem->col->scale.x = 8.0f * bulletCoef;
             elem->col->scale.y = 8.0f * bulletCoef;
-            elem->idle = new ObImage(L"EnterTheGungeon/Enemy_0_Bullet.png");
+            elem->idle = new ObImage(L"EnterTheGungeon/Boss_0/Bullet_1.png");
             elem->idle->scale.x = 8.0f * bulletCoef;
             elem->idle->scale.y = 8.0f * bulletCoef;
             elem->idle->SetParentRT(*elem->col);

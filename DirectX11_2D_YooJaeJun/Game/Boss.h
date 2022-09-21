@@ -16,7 +16,6 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-	void InitBullet();
 	void SetPattern();
 
 public:

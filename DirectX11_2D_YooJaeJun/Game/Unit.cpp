@@ -10,6 +10,7 @@ Unit::Unit()
 	isHitAnim = 0.0f;
 	timeHitAnim = 0.0f;
 	godMode = false;
+	rotationForMouseBefore = rotationForMouse = Vector2(0.0f, 0.0f);
 }
 
 void Unit::Release()
@@ -17,10 +18,11 @@ void Unit::Release()
 	Character::Release();
 	for(auto& elem : idle) SafeDelete(elem);
 	for(auto& elem : walk) SafeDelete(elem);
-	for(auto& elem : roll) SafeDelete(elem);
+	if (roll[curDir]) for(auto& elem : roll) SafeDelete(elem);
 	SafeDelete(hit);
 	SafeDelete(die);
 	SafeDelete(weapon);
+	SafeDelete(firePos);
 }
 
 void Unit::Update()
@@ -56,12 +58,41 @@ void Unit::Update()
 	{
 		curDir = back;
 	}
+	else if (moveDir.y == -1.0f)
+	{
+		curDir = front;
+	}
 	else
 	{
-		curDir = beforeCurDir;
+		curDir = beforeDir;
 	}
 
+
 	weapon->col->rotation = Utility::DirToRadian(dest - weapon->col->GetWorldPos());
+
+	rotationForMouse = dest - col->GetWorldPos();
+	
+	if (rotationForMouse.x >= 0.0f)
+	{
+		if (rotationForMouseBefore.x < 0.0f)
+		{
+			swap(weapon->idle->uv.y, weapon->idle->uv.w);
+			weapon->col->SetLocalPosX(18.0f);
+			weapon->col->pivot = Vector2(0.4f, 0.25f);
+			weapon->idle->pivot = Vector2(0.4f, 0.25f);
+		}
+	}
+	else
+	{
+		if (rotationForMouseBefore.x >= 0.0f)
+		{
+			swap(weapon->idle->uv.y, weapon->idle->uv.w);
+			weapon->col->SetLocalPosX(-18.0f);
+			weapon->col->pivot = Vector2(0.4f, -0.25f);
+			weapon->idle->pivot = Vector2(0.4f, -0.25f);
+		}
+	}
+
 
 	if (state == State::die)
 	{
@@ -70,9 +101,9 @@ void Unit::Update()
 		col->colOnOff = false;
 
 		if (col) col->isVisible = false;
-		if (idle[curDir]) idle[curDir]->isVisible = false;
-		if (walk[curDir]) walk[curDir]->isVisible = false;
-		if (roll[curDir]) roll[curDir]->isVisible = false;
+		for (auto& elem : idle) elem->isVisible = false;
+		for (auto& elem : walk) elem->isVisible = false;
+		if (roll[curDir]) for (auto& elem : roll) elem->isVisible = false;
 		if (hit) hit->isVisible = false;
 		weapon->col->isVisible = false;
 		weapon->idle->isVisible = false;
@@ -82,24 +113,24 @@ void Unit::Update()
 		if (isHitAnim)
 		{
 			Color c = Color(0.5f, 0.5f, 0.5f, RANDOM->Float());
-			if (idle[curDir]) idle[curDir]->color = c;
-			if (walk[curDir]) walk[curDir]->color = c;
-			if (roll[curDir]) roll[curDir]->color = c;
+			for (auto& elem : idle) elem->color = c;
+			for (auto& elem : walk) elem->color = c;
+			if (roll[curDir]) for (auto& elem : roll) elem->color = c;
 			if (hit)  hit->color = c;
 			if (die)  die->color = c;
 
 			col->SetWorldPosX(col->GetWorldPos().x + RANDOM->Float(-1.0f, 1.0f));
 			col->SetWorldPosY(col->GetWorldPos().y + RANDOM->Float(-1.0f, 1.0f));
 
-			idle[curDir]->isVisible = false;
+			for (auto& elem : idle) elem->isVisible = false;
 			hit->isVisible = true;
 
 			if (TIMER->GetTick(timeHitAnim, 0.4f))	// 히트 애니용
 			{
 				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
-				if (idle[curDir]) idle[curDir]->color = c;
-				if (walk[curDir]) walk[curDir]->color = c;
-				if (roll[curDir]) roll[curDir]->color = c;
+				for (auto& elem : idle) elem->color = c;
+				for (auto& elem : walk) elem->color = c;
+				if (roll[curDir]) for (auto& elem : roll) elem->color = c;
 				if (hit)  hit->color = c;
 				if (die)  die->color = c;
 
@@ -118,14 +149,16 @@ void Unit::Update()
 		}
 	}
 
-	beforeCurDir = curDir;
+	beforeDir = curDir;
+	rotationForMouseBefore = rotationForMouse;
 
 	if (weapon) weapon->Update();
-	if (idle[curDir])	idle[curDir]->Update();
-	if (walk[curDir])	walk[curDir]->Update();
-	if (roll[curDir])	roll[curDir]->Update();
-	if (hit)	hit->Update();
-	if (die)	die->Update();
+	idle[curDir]->Update();
+	walk[curDir]->Update();
+	if (roll[curDir]) roll[curDir]->Update();
+	if (hit) hit->Update();
+	if (die) die->Update();
+	if (firePos) firePos->Update();
 }
 
 void Unit::LateUpdate()
@@ -135,11 +168,12 @@ void Unit::LateUpdate()
 void Unit::Render()
 {
 	if (weapon) weapon->Render();
-	if (idle[curDir])	idle[curDir]->Render();
-	if (walk[curDir])	walk[curDir]->Render();
-	if (roll[curDir])	roll[curDir]->Render();
-	if (hit)	hit->Render();
-	if (die)	die->Render();
+	idle[curDir]->Render();
+	walk[curDir]->Render();
+	if (roll[curDir]) roll[curDir]->Render();
+	if (hit) hit->Render();
+	if (die) die->Render();
+	if (firePos) firePos->Render();
 	Character::Render();
 }
 

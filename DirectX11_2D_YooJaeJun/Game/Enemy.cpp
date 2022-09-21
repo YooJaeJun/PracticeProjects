@@ -9,7 +9,7 @@ Enemy::Enemy()
 		elem = new EnemyBullet;
 		elem->col->scale.x = 8.0f * bulletCoef;
 		elem->col->scale.y = 8.0f * bulletCoef;
-		elem->idle = new ObImage(L"EnterTheGungeon/Enemy_0_Bullet.png");
+		elem->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Bullet_0.png");
 		elem->idle->scale.x = 8.0f * bulletCoef;
 		elem->idle->scale.y = 8.0f * bulletCoef;
 		elem->idle->SetParentRT(*elem->col);
@@ -53,10 +53,7 @@ void Enemy::Update()
 		{
 			if (elem->isFired) continue;
 
-			elem->Spawn(Vector2(
-				weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
-				weapon->idle->GetWorldPivot().y),
-				moveDir);
+			elem->Spawn(firePos->GetWorldPos(), moveDir);
 			break;
 		}
 	}
