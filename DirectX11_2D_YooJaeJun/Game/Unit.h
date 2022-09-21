@@ -1,4 +1,25 @@
 #pragma once
+enum class State
+{
+	idle,
+	walk,
+	roll,
+	die
+};
+
+// 8πÊ«‚
+enum dir
+{
+	front,
+	leftSide,
+	rightSide,
+	leftDiag,
+	rightDiag,
+	back,
+	backLeftDiag,
+	backRightDiag
+};
+
 class Unit : public Character
 {
 public:
@@ -14,19 +35,24 @@ public:
 	void Die();
 
 public:
-	ObImage*	idle;
-	ObImage*	walk;
-	ObImage*	roll;
-	ObImage*	hit;
-	ObImage*	die;
-	Weapon*		weapon;
-	Vector2		dest;
-	float		timeFire;
-	float		timeReload;
-	float		timeHit;
-	bool		isHit;
-	bool		isHitAnim;
-	float		timeHitAnim;
-	bool		godMode;
+	ObImage* idle[8];
+	ObImage* walk[8];
+	ObImage* roll[8];
+	ObImage* kick[8];
+	ObImage* hit;
+	ObImage* fall;
+	ObImage* die;
+	Weapon*	 weapon;
+	State	 state;
+	dir		 curDir;
+	dir		 beforeCurDir;
+	Vector2	 dest;
+	float	 timeFire;
+	float	 timeReload;
+	float	 timeHit;
+	bool	 isHit;
+	bool	 isHitAnim;
+	float	 timeHitAnim;
+	bool	 godMode;
 };
 

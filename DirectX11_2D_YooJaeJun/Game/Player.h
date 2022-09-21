@@ -13,6 +13,7 @@ public:
 
 public:
 	ObImage*		respawn;
+	ObImage*		obtain;
 	PlayerBullet*	bullet[playerBulletMax];
 	bool			canFire;
 	float			timeRoll;

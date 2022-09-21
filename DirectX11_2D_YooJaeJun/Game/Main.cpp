@@ -4,12 +4,15 @@ using namespace std;
 
 void Main::Init()
 {
+    int idx = 0;
+
     bg = new UI;
     bg->img = new ObImage(L"EnterTheGungeon/Background.jpg");
     bg->img->scale.x = 700.0f * 2.0f;
     bg->img->scale.y = 370.0f * 2.0f;
 
 
+    // 플레이어
     float playerScaleCoef = 3.0f;
     float playerWeaponScaleCoef = 1.5f;
 
@@ -22,32 +25,83 @@ void Main::Init()
     player->col->color = Color(1.0f, 1.0f, 1.0f);
     player->col->isFilled = false;
 
+    player->idle[front] = new ObImage(L"EnterTheGungeon/Player_0_Idle_Front.png");
+    player->idle[leftSide] = new ObImage(L"EnterTheGungeon/Player_0_Idle_Side.png");
+    player->idle[rightSide] = new ObImage(L"EnterTheGungeon/Player_0_Idle_Side.png");
+    player->idle[leftDiag] = new ObImage(L"EnterTheGungeon/Player_0_Idle_Side.png");
+    player->idle[rightDiag] = new ObImage(L"EnterTheGungeon/Player_0_Idle_Side.png");
+    player->idle[back] = new ObImage(L"EnterTheGungeon/Player_0_Idle_Back.png");
+    player->idle[backLeftDiag] = new ObImage(L"EnterTheGungeon/Player_0_Idle_BackDiag.png");
+    player->idle[backRightDiag] = new ObImage(L"EnterTheGungeon/Player_0_Idle_BackDiag.png");
 
-    player->idle = new ObImage(L"EnterTheGungeon/Player_0_Idle.png");
-    player->idle->maxFrame.x = 3;
-    player->idle->scale.x = 48.0f / 3.0f * playerScaleCoef;
-    player->idle->scale.y = 22.0f * playerScaleCoef;
-    player->idle->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
-    player->idle->SetParentRT(*player->col);
+    idx = 0;
+    for (auto& elem : player->idle)
+    {
+        if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+        {
+            elem->reverseLR = true;
+        }
+        elem->maxFrame.x = 3;
+        elem->scale.x = 48.0f / 3.0f * playerScaleCoef;
+        elem->scale.y = 22.0f * playerScaleCoef;
+        elem->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+        elem->SetParentRT(*player->col);
+        idx++;
+    }
 
-    player->walk = new ObImage(L"EnterTheGungeon/Player_0_Roll.png");
-    player->walk->maxFrame.x = 3;
-    player->walk->scale.x = 48.0f / 3.0f * playerScaleCoef;
-    player->walk->scale.y = 22.0f * playerScaleCoef;
-    player->walk->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
-    player->walk->SetParentRT(*player->col);
-    player->walk->isVisible = false;
+    player->walk[front] = new ObImage(L"EnterTheGungeon/Player_0_Walk_Front.png");
+    player->walk[leftSide] = new ObImage(L"EnterTheGungeon/Player_0_Walk_Side.png");
+    player->walk[rightSide] = new ObImage(L"EnterTheGungeon/Player_0_Walk_Side.png");
+    player->walk[leftDiag] = new ObImage(L"EnterTheGungeon/Player_0_Walk_Side.png");
+    player->walk[rightDiag] = new ObImage(L"EnterTheGungeon/Player_0_Walk_Side.png");
+    player->walk[back] = new ObImage(L"EnterTheGungeon/Player_0_Walk_Back.png");
+    player->walk[backLeftDiag] = new ObImage(L"EnterTheGungeon/Player_0_Walk_BackDiag.png");
+    player->walk[backRightDiag] = new ObImage(L"EnterTheGungeon/Player_0_Walk_BackDiag.png");
 
-    player->roll = new ObImage(L"EnterTheGungeon/Player_0_Roll.png");
-    player->roll->maxFrame.x = 9;
-    player->roll->scale.x = 168.0f / 9.0f * playerScaleCoef;
-    player->roll->scale.y = 28.0f * playerScaleCoef;
-    player->roll->uv = Vector4(0.0f, 0.0f, 1.0f / 9.0f, 1.0f);
-    player->roll->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
-    player->roll->SetParentRT(*player->col);
-    player->roll->isVisible = false;
+    idx = 0;
+    for (auto& elem : player->walk)
+    {
+        if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+        {
+            elem->reverseLR = true;
+        }
+        elem->maxFrame.x = 6;
+        elem->scale.x = 90.0f / 6.0f * playerScaleCoef;
+        elem->scale.y = 25.0f * playerScaleCoef;
+        elem->isVisible = false;
+        elem->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+        elem->SetParentRT(*player->col);
+        idx++;
+    }
 
-    player->hit = new ObImage(L"EnterTheGungeon/Player_0_Idle.png");
+    player->roll[front] = new ObImage(L"EnterTheGungeon/Player_0_Roll_Front.png");
+    player->roll[leftSide] = new ObImage(L"EnterTheGungeon/Player_0_Roll_Side.png");
+    player->roll[rightSide] = new ObImage(L"EnterTheGungeon/Player_0_Roll_Side.png");
+    player->roll[leftDiag] = new ObImage(L"EnterTheGungeon/Player_0_Roll_Side.png");
+    player->roll[rightDiag] = new ObImage(L"EnterTheGungeon/Player_0_Roll_Side.png");
+    player->roll[back] = new ObImage(L"EnterTheGungeon/Player_0_Roll_Back.png");
+    player->roll[backLeftDiag] = new ObImage(L"EnterTheGungeon/Player_0_Roll_BackDiag.png");
+    player->roll[backRightDiag] = new ObImage(L"EnterTheGungeon/Player_0_Roll_BackDiag.png");
+
+    idx = 0;
+    for (auto& elem : player->roll)
+    {
+        if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+        {
+            elem->reverseLR = true;
+        }
+        elem->maxFrame.x = 9;
+        elem->scale.x = 168.0f / 9.0f * playerScaleCoef;
+        elem->scale.y = 28.0f * playerScaleCoef;
+        elem->uv = Vector4(0.0f, 0.0f, 1.0f / 9.0f, 1.0f);
+        elem->isVisible = false;
+        elem->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
+        elem->SetParentRT(*player->col);
+        idx++;
+    }
+
+
+    player->hit = new ObImage(L"EnterTheGungeon/Player_0_Hit.png");
     player->hit->maxFrame.x = 3;
     player->hit->scale.x = 48.0f / 3.0f * playerScaleCoef;
     player->hit->scale.y = 22.0f * playerScaleCoef;
@@ -55,7 +109,7 @@ void Main::Init()
     player->hit->SetParentRT(*player->col);
     player->hit->isVisible = false;
 
-    player->die = new ObImage(L"EnterTheGungeon/Player_0_Idle.png");
+    player->die = new ObImage(L"EnterTheGungeon/Player_0_Die.png");
     player->die->maxFrame.x = 3;
     player->die->scale.x = 48.0f / 3.0f * playerScaleCoef;
     player->die->scale.y = 22.0f * playerScaleCoef;
@@ -63,7 +117,7 @@ void Main::Init()
     player->die->SetParentRT(*player->col);
     player->die->isVisible = false;
 
-    player->respawn = new ObImage(L"EnterTheGungeon/Player_0_Idle.png");
+    player->respawn = new ObImage(L"EnterTheGungeon/Player_0_Respawn.png");
     player->respawn->maxFrame.x = 3;
     player->respawn->scale.x = 48.0f / 3.0f * playerScaleCoef;
     player->respawn->scale.y = 22.0f * playerScaleCoef;
@@ -81,13 +135,14 @@ void Main::Init()
     player->weapon->col->SetParentRT(*player->col);
     player->weapon->col->SetLocalPosX(10.0f);
     player->weapon->col->SetLocalPosY(-15.0f);
-    player->weapon->idle = new ObImage(L"EnterTheGungeon/Weapon_0.png");
+    player->weapon->idle = new ObImage(L"EnterTheGungeon/Weapon_Player_0.png");
     player->weapon->idle->pivot = OFFSET_LB;
     player->weapon->idle->scale.x = 29.0f * playerWeaponScaleCoef;
     player->weapon->idle->scale.y = 21.0f * playerWeaponScaleCoef;
     player->weapon->idle->SetParentRT(*player->weapon->col);
 
 
+    // 적
     float enemyScaleCoef = 3.0f;
     float enemyWeaponScaleCoef = 1.5f;
 
@@ -102,32 +157,64 @@ void Main::Init()
         elem->col->color = Color(1.0f, 1.0f, 1.0f);
         elem->col->isFilled = false;
 
-        elem->idle = new ObImage(L"EnterTheGungeon/Enemy_0_Idle.png");
-        elem->idle->maxFrame.x = 2;
-        elem->idle->scale.x = 24.0f / 2.0f * enemyScaleCoef;
-        elem->idle->scale.y = 24.0f * enemyScaleCoef;
-        elem->idle->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
-        elem->idle->SetParentRT(*elem->col);
+        elem->idle[front] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Front.png");
+        elem->idle[leftSide] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Side.png");
+        elem->idle[rightSide] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Side.png");
+        elem->idle[leftDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Side.png");
+        elem->idle[rightDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Side.png");
+        elem->idle[back] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Back.png");
+        elem->idle[backLeftDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Back.png");
+        elem->idle[backRightDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Back.png");
 
-        elem->walk = new ObImage(L"EnterTheGungeon/Enemy_0_Idle.png");
-        elem->walk->maxFrame.x = 2;
-        elem->walk->scale.x = 24.0f / 2.0f * enemyScaleCoef;
-        elem->walk->scale.y = 24.0f * enemyScaleCoef;
-        elem->walk->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
-        elem->walk->SetParentRT(*elem->col);
-        elem->walk->isVisible = false;
+        idx = 0;
+        for (auto& elem2 : elem->idle)
+        {
+            if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+            {
+                elem2->reverseLR = true;
+            }
+            elem2->maxFrame.x = 2;
+            elem2->scale.x = 29.0f / 2.0f * enemyScaleCoef;
+            elem2->scale.y = 23.0f * enemyScaleCoef;
+            elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+            elem2->SetParentRT(*elem->col);
+            idx++;
+        }
 
-        elem->roll = nullptr;
+        elem->walk[front] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Front.png");
+        elem->walk[leftSide] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Side.png");
+        elem->walk[rightSide] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Side.png");
+        elem->walk[leftDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Side.png");
+        elem->walk[rightDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Side.png");
+        elem->walk[back] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Back.png");
+        elem->walk[backLeftDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Back.png");
+        elem->walk[backRightDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Back.png");
 
-        elem->hit = new ObImage(L"EnterTheGungeon/Enemy_0_Idle.png");
-        elem->hit->maxFrame.x = 2;
-        elem->hit->scale.x = 24.0f / 2.0f * enemyScaleCoef;
+        idx = 0;
+        for (auto& elem2 : elem->walk)
+        {
+            if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+            {
+                elem2->reverseLR = true;
+            }
+            elem2->maxFrame.x = 2;
+            elem2->scale.x = 29.0f / 2.0f * enemyScaleCoef;
+            elem2->scale.y = 23.0f * enemyScaleCoef;
+            elem2->isVisible = false;
+            elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+            elem2->SetParentRT(*elem->col);
+            idx++;
+        }
+
+        elem->hit = new ObImage(L"EnterTheGungeon/Enemy_0_Hit.png");
+        elem->hit->maxFrame.x = 13;
+        elem->hit->scale.x = 238.0f / 13.0f * enemyScaleCoef;
         elem->hit->scale.y = 24.0f * enemyScaleCoef;
-        elem->hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+        elem->hit->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
         elem->hit->SetParentRT(*elem->col);
         elem->hit->isVisible = false;
 
-        elem->die = new ObImage(L"EnterTheGungeon/Enemy_0_Idle.png");
+        elem->die = new ObImage(L"EnterTheGungeon/Enemy_0_Die.png");
         elem->die->maxFrame.x = 2;
         elem->die->scale.x = 24.0f / 2.0f * enemyScaleCoef;
         elem->die->scale.y = 24.0f * enemyScaleCoef;
@@ -145,7 +232,7 @@ void Main::Init()
         elem->weapon->col->SetParentRT(*elem->col);
         elem->weapon->col->SetLocalPosX(10.0f);
         elem->weapon->col->SetLocalPosY(-15.0f);
-        elem->weapon->idle = new ObImage(L"EnterTheGungeon/Weapon_0.png");
+        elem->weapon->idle = new ObImage(L"EnterTheGungeon/Weapon_Enemy_0.png");
         elem->weapon->idle->pivot = OFFSET_LB;
         elem->weapon->idle->scale.x = 29.0f * playerWeaponScaleCoef;
         elem->weapon->idle->scale.y = 21.0f * playerWeaponScaleCoef;
@@ -158,7 +245,7 @@ void Main::Init()
     for (auto& elem : boss)
     {
         elem = new Boss;
-        elem->curHp = elem->maxHp = 20;
+        elem->curHp = elem->maxHp = 40;
 
         elem->col = new ObCircle;
         elem->col->scale.x = 30.0f * enemyScaleCoef;
@@ -168,32 +255,64 @@ void Main::Init()
         elem->col->color = Color(1.0f, 1.0f, 1.0f);
         elem->col->isFilled = false;
 
-        elem->idle = new ObImage(L"EnterTheGungeon/Enemy_0_Idle.png");
-        elem->idle->maxFrame.x = 2;
-        elem->idle->scale.x = 40.0f / 2.0f * enemyScaleCoef;
-        elem->idle->scale.y = 40.0f * enemyScaleCoef;
-        elem->idle->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
-        elem->idle->SetParentRT(*elem->col);
+        elem->idle[front] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Front.png");
+        elem->idle[leftSide] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Side.png");
+        elem->idle[rightSide] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Side.png");
+        elem->idle[leftDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Side.png");
+        elem->idle[rightDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Side.png");
+        elem->idle[back] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Back.png");
+        elem->idle[backLeftDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Back.png");
+        elem->idle[backRightDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Idle_Back.png");
 
-        elem->walk = new ObImage(L"EnterTheGungeon/Enemy_0_Idle.png");
-        elem->walk->maxFrame.x = 2;
-        elem->walk->scale.x = 40.0f / 2.0f * enemyScaleCoef;
-        elem->walk->scale.y = 40.0f * enemyScaleCoef;
-        elem->walk->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
-        elem->walk->SetParentRT(*elem->col);
-        elem->walk->isVisible = false;
+        idx = 0;
+        for (auto& elem2 : elem->idle)
+        {
+            if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+            {
+                elem2->reverseLR = true;
+            }
+            elem2->maxFrame.x = 2;
+            elem2->scale.x = 40.0f / 2.0f * enemyScaleCoef;
+            elem2->scale.y = 40.0f * enemyScaleCoef;
+            elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+            elem2->SetParentRT(*elem->col);
+            idx++;
+        }
 
-        elem->roll = nullptr;
+        elem->walk[front] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Front.png");
+        elem->walk[leftSide] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Side.png");
+        elem->walk[rightSide] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Side.png");
+        elem->walk[leftDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Side.png");
+        elem->walk[rightDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Side.png");
+        elem->walk[back] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Back.png");
+        elem->walk[backLeftDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Back.png");
+        elem->walk[backRightDiag] = new ObImage(L"EnterTheGungeon/Enemy_0_Walk_Back.png");
 
-        elem->hit = new ObImage(L"EnterTheGungeon/Enemy_0_Idle.png");
-        elem->hit->maxFrame.x = 2;
-        elem->hit->scale.x = 40.0f / 2.0f * enemyScaleCoef;
+        idx = 0;
+        for (auto& elem2 : elem->walk)
+        {
+            if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+            {
+                elem2->reverseLR = true;
+            }
+            elem2->maxFrame.x = 2;
+            elem2->scale.x = 40.0f / 2.0f * enemyScaleCoef;
+            elem2->scale.y = 40.0f * enemyScaleCoef;
+            elem2->isVisible = false;
+            elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+            elem2->SetParentRT(*elem->col);
+            idx++;
+        }
+
+        elem->hit = new ObImage(L"EnterTheGungeon/Enemy_0_Hit.png");
+        elem->hit->maxFrame.x = 13;
+        elem->hit->scale.x = 238.0f / 13.0f * enemyScaleCoef;
         elem->hit->scale.y = 40.0f * enemyScaleCoef;
         elem->hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
         elem->hit->SetParentRT(*elem->col);
         elem->hit->isVisible = false;
 
-        elem->die = new ObImage(L"EnterTheGungeon/Enemy_0_Idle.png");
+        elem->die = new ObImage(L"EnterTheGungeon/Enemy_0_Die.png");
         elem->die->maxFrame.x = 2;
         elem->die->scale.x = 40.0f / 2.0f * enemyScaleCoef;
         elem->die->scale.y = 40.0f * enemyScaleCoef;
@@ -211,7 +330,7 @@ void Main::Init()
         elem->weapon->col->SetParentRT(*elem->col);
         elem->weapon->col->SetLocalPosX(10.0f);
         elem->weapon->col->SetLocalPosY(-15.0f);
-        elem->weapon->idle = new ObImage(L"EnterTheGungeon/Weapon_0.png");
+        elem->weapon->idle = new ObImage(L"EnterTheGungeon/Weapon_Enemy_0.png");
         elem->weapon->idle->pivot = OFFSET_LB;
         elem->weapon->idle->scale.x = 29.0f * playerWeaponScaleCoef;
         elem->weapon->idle->scale.y = 21.0f * playerWeaponScaleCoef;

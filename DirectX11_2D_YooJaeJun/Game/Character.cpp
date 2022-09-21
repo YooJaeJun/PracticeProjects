@@ -7,7 +7,6 @@ Character::Character()
 	curHp = 0;
 	maxHp = 0;
 	scalar = 0.0f;
-	state = State::idle;
 }
 
 void Character::Release() 

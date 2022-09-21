@@ -1,10 +1,4 @@
 #pragma once
-enum class State
-{
-	idle,
-	roll,
-	die
-};
 
 class Character
 {
@@ -18,7 +12,6 @@ public:
 
 public:
 	GameObject*		col;
-	State			state;
 	Vector2			moveDir;
 	float			scalar;
 	int				curHp;

@@ -55,7 +55,8 @@ public:
 	bool		colOnOff;
 
 	Matrix		RX, RY;
-	float		rotationX, rotationY;
+	float		rotationX;
+	float		rotationY;
 
 	//member function
 public:

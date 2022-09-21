@@ -3,7 +3,7 @@
 Player::Player()
 {
 	scalar = 300.0f;
-	curHp = maxHp = 6;
+	curHp = maxHp = 10000;
 
 	float bulletCoef = 3.0f;
 
@@ -38,12 +38,12 @@ void Player::Update()
 
 	dest = INPUT->GetWorldMousePos();
 
-	CAM->position.x = Utility::Saturate((dest.x + idle->GetWorldPos().x) / 2,
-		idle->GetWorldPos().x - 200.0f,
-		idle->GetWorldPos().x + 200.0f);
-	CAM->position.y = Utility::Saturate((dest.y + idle->GetWorldPos().y) / 2,
-		idle->GetWorldPos().y - 200.0f,
-		idle->GetWorldPos().y + 200.0f);
+	CAM->position.x = Utility::Saturate((dest.x + idle[curDir]->GetWorldPos().x) / 2,
+		idle[curDir]->GetWorldPos().x - 200.0f,
+		idle[curDir]->GetWorldPos().x + 200.0f);
+	CAM->position.y = Utility::Saturate((dest.y + idle[curDir]->GetWorldPos().y) / 2,
+		idle[curDir]->GetWorldPos().y - 200.0f,
+		idle[curDir]->GetWorldPos().y + 200.0f);
 
 	if (state == State::idle)
 	{
@@ -72,6 +72,10 @@ void Player::Update()
 		{
 			moveDir.y = 0.0f;
 		}
+
+		idle[curDir]->isVisible = false;
+		walk[curDir]->isVisible = true;
+		roll[curDir]->isVisible = false;
 
 		moveDir.Normalize();
 		col->MoveWorldPos(moveDir * scalar * DELTA);
@@ -103,9 +107,10 @@ void Player::Update()
 		else if (INPUT->KeyPress(VK_RBUTTON))
 		{
 			state = State::roll;
-			idle->isVisible = false;
-			roll->isVisible = true;
-			roll->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
+			idle[curDir]->isVisible = false;
+			walk[curDir]->isVisible = false;
+			roll[curDir]->isVisible = true;
+			roll[curDir]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
 			godMode = true;
 		}
 	}
@@ -115,8 +120,9 @@ void Player::Update()
 		if (TIMER->GetTick(timeRoll, 0.5f))
 		{
 			state = State::idle;
-			idle->isVisible = true;
-			roll->isVisible = false;
+			idle[curDir]->isVisible = true;
+			walk[curDir]->isVisible = false;
+			roll[curDir]->isVisible = false;
 			godMode = false;
 		}
 	}

@@ -29,8 +29,6 @@ void Boss::Update()
 {
 	Unit::Update();
 
-    idle->Update();
-
 	if (isHit)
 	{
 		if (TIMER->GetTick(timeHit, 0.01f))
@@ -44,64 +42,67 @@ void Boss::Update()
 		elem->Update();
 	}
 
-    if (pattern == bossPattern::circular)
+    if (state != State::die)
     {
-        if (TIMER->GetTick(timeFire, 5.0f))
+        if (pattern == bossPattern::circular)
         {
-            for (auto& elem : bullet)
+            if (TIMER->GetTick(timeFire, 3.0f))
             {
-                elem->Spawn(Vector2(
-                    weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
-                    weapon->idle->GetWorldPivot().y));
+                for (auto& elem : bullet)
+                {
+                    elem->Spawn(Vector2(
+                        weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
+                        weapon->idle->GetWorldPivot().y));
+                }
             }
         }
-    }
-    else if (pattern == bossPattern::string)
-    {
-        int size = stringBullet.inputString.size();
-        char* s = const_cast<char*>(stringBullet.inputString.c_str());
-
-        if (ImGui::InputText("String Danmaku", s, 26))
+        else if (pattern == bossPattern::string)
         {
-            stringBullet.inputString = s;
-            size = stringBullet.inputString.size();
-            bullet = vector<BossBullet*>(size * 25);
-            InitBullet();
-            stringBullet.SetStringBullet();
-        }
+            int size = stringBullet.inputString.size();
+            char* s = const_cast<char*>(stringBullet.inputString.c_str());
 
-        if (TIMER->GetTick(timeFire, 3.0f))
-        {
-            for (int r = 0; r < 5; r++)
+            if (ImGui::InputText("String Danmaku", s, 26))
             {
-                for (int c = 0; c < 5; c++)
+                stringBullet.inputString = s;
+                size = stringBullet.inputString.size();
+                bullet = vector<BossBullet*>(size * 25);
+                InitBullet();
+                stringBullet.SetStringBullet();
+            }
+
+            if (TIMER->GetTick(timeFire, 3.0f))
+            {
+                for (int r = 0; r < 5; r++)
                 {
-                    for (int i = 0; i < size; i++)
+                    for (int c = 0; c < 5; c++)
                     {
-                        if (stringBullet.outputAlphbets[i][r][c])
+                        for (int i = 0; i < size; i++)
                         {
-                            float angle = PI * 2 * (c + 1) / 5;
-                            float atkAngle = (angle / 60.0f) + (0.2f * i) +
-                                weapon->col->rotation - stringBullet.coefMidForTarget;
-                            int idx = i * 25 + r * 5 + c;
-                            bullet[idx]->moveDir = Vector2(cos(atkAngle), sin(atkAngle));
-                            bullet[idx]->scalar = 250.0f + (r + 10.0f) * 10.0f;
+                            if (stringBullet.outputAlphbets[i][r][c])
+                            {
+                                float angle = PI * 2 * (c + 1) / 5;
+                                float atkAngle = (angle / 60.0f) + (0.2f * i) +
+                                    weapon->col->rotation - stringBullet.coefMidForTarget;
+                                int idx = i * 25 + r * 5 + c;
+                                bullet[idx]->moveDir = Vector2(cos(atkAngle), sin(atkAngle));
+                                bullet[idx]->scalar = 250.0f + (r + 10.0f) * 10.0f;
+                            }
                         }
                     }
                 }
-            }
-            for (auto& elem : bullet)
-            {
-                elem->Spawn(Vector2(
-                    weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
-                    weapon->idle->GetWorldPivot().y));
+                for (auto& elem : bullet)
+                {
+                    elem->Spawn(Vector2(
+                        weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
+                        weapon->idle->GetWorldPivot().y));
+                }
             }
         }
-    }
 
-	hpGuage->img->scale.x = (float)curHp / maxHp * hpGuage->imgSize.x;
-	hpGuage->img->uv.z = hpGuage->img->scale.x / hpGuage->imgSize.x;
-	hpGuage->Update();
+        hpGuage->img->scale.x = (float)curHp / maxHp * hpGuage->imgSize.x;
+        hpGuage->img->uv.z = hpGuage->img->scale.x / hpGuage->imgSize.x;
+        hpGuage->Update();
+    }
 }
 
 void Boss::LateUpdate()

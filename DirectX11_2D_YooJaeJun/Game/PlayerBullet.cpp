@@ -7,7 +7,7 @@ PlayerBullet::PlayerBullet()
     col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
     col->SetWorldPos(Vector2(2000.0f, 2000.0f));
 
-    scalar = 500.0f;
+    scalar = 600.0f;
     damage = 1;
 }
 

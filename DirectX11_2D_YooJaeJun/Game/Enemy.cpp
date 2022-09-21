@@ -61,7 +61,6 @@ void Enemy::Update()
 		}
 	}
 
-	idle->Update();
 	for (auto& elem : bullet) if (elem) elem->Update();
 }
 
