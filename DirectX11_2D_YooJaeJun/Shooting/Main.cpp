@@ -67,6 +67,13 @@ void Main::Init()
 	menu->space = SPACE::SCREEN;
 	menu->pivot = OFFSET_LT;
 	menu->SetWorldPos(Vector2(-app.GetHalfWidth(), app.GetHalfHeight()));
+
+	//				파일 이름, 키값, 루프
+	SOUND->AddSound("bgm.wav", "BGM", true);
+	SOUND->Play("BGM");
+
+	SOUND->AddSound("gun.wav", "GUN", false);
+	bgmScale = 1.0f;
 }
 
 void Main::Release()
@@ -86,6 +93,42 @@ void Main::Update()
 		Release();
 		Init();
 	}
+
+	if (ImGui::SliderFloat("MasterVolume", &app.soundScale, 0.0f, 1.0f))
+	{
+		SOUND->SetMasterVolume();
+	}
+	if (ImGui::SliderFloat("BGMVolume", &bgmScale, 0.0f, 1.0f))
+	{
+		// 노멀라이즈 된 값
+		SOUND->SetVolume("BGM", bgmScale);
+	}
+	if (ImGui::Button("BGM_PLAY"))
+	{
+		SOUND->Play("BGM");
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("BGM_STOP"))
+	{
+		SOUND->Stop("BGM");
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("BGM_PAUSE"))
+	{
+		SOUND->Pause("BGM");
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("BGM_RESUME"))
+	{
+		SOUND->Resume("BGM");
+	}
+
+	if (ImGui::Button("GUN_PLAY"))
+	{
+		SOUND->Stop("GUN");
+		SOUND->Play("GUN");
+	}
+
 
 	ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
 

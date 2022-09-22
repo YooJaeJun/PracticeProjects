@@ -21,6 +21,7 @@ private:
 	UI*			fontSlash;
 	int			lastRemainBullet;
 	ObRect*		menu;
+	float		bgmScale;
 
 public:
 	virtual void Init() override;
