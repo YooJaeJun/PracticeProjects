@@ -24,6 +24,8 @@ Player::Player()
 	isHit = false;
 	isHitAnim = false;
 	timeHitAnim = 0.0f;
+	flagFireCamShake = false;
+	timeFireCamShake = 0.0f;
 }
 
 void Player::Release()
@@ -109,15 +111,19 @@ void Player::Update()
 			{
 				canFire = true;
 			}
+
+			flagFireCamShake = true;
+			originCamPos = CAM->position;
 		}
 		else if (INPUT->KeyPress(VK_RBUTTON))
 		{
 			state = State::roll;
 			for (auto& elem : idle) elem->isVisible = false;
 			for (auto& elem : walk) elem->isVisible = false;
+			col->colOnOff = false;
+			col->isVisible = false;
 			roll[curDir]->isVisible = true;
 			roll[curDir]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
-			godMode = true;
 		}
 	}
 	else if (state == State::roll)
@@ -129,7 +135,21 @@ void Player::Update()
 			idle[curDir]->isVisible = true;
 			for (auto& elem : walk) elem->isVisible = false;
 			for (auto& elem : roll) elem->isVisible = false;
-			godMode = false;
+			col->colOnOff = true;
+			col->isVisible = true;
+		}
+	}
+
+
+	if (flagFireCamShake)
+	{
+		CAM->position = Vector2(RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f), 
+			RANDOM->Float(CAM->position.y - 2.0f, CAM->position.y + 2.0f));
+
+		if (TIMER->GetTick(timeFireCamShake, 0.2f))
+		{
+			CAM->position = originCamPos;
+			flagFireCamShake = false;
 		}
 	}
 
@@ -142,6 +162,8 @@ void Player::Update()
 	}
 
 	respawn->Update();
+	kick->Update();
+	obtain->Update();
 	for (auto& elem : bullet) if (elem) elem->Update();
 }
 
@@ -155,6 +177,8 @@ void Player::LateUpdate()
 void Player::Render()
 {
 	respawn->Render();
+	kick->Render();
+	obtain->Render();
 	for (auto& elem : bullet) if (elem) elem->Render();
 	Unit::Render();
 }

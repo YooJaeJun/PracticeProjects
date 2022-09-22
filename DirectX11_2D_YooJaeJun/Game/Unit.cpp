@@ -9,7 +9,6 @@ Unit::Unit()
 	isHit = false;
 	isHitAnim = 0.0f;
 	timeHitAnim = 0.0f;
-	godMode = false;
 	rotationForMouseBefore = rotationForMouse = Vector2(0.0f, 0.0f);
 }
 
@@ -20,9 +19,11 @@ void Unit::Release()
 	for(auto& elem : walk) SafeDelete(elem);
 	if (roll[curDir]) for(auto& elem : roll) SafeDelete(elem);
 	SafeDelete(hit);
+	SafeDelete(fall);
 	SafeDelete(die);
 	SafeDelete(weapon);
 	SafeDelete(firePos);
+	SafeDelete(shadow);
 }
 
 void Unit::Update()
@@ -157,8 +158,10 @@ void Unit::Update()
 	walk[curDir]->Update();
 	if (roll[curDir]) roll[curDir]->Update();
 	if (hit) hit->Update();
+	if (fall) firePos->Update();
 	if (die) die->Update();
 	if (firePos) firePos->Update();
+	if (shadow) shadow->Update();
 }
 
 void Unit::LateUpdate()
@@ -167,11 +170,13 @@ void Unit::LateUpdate()
 
 void Unit::Render()
 {
+	if (shadow) shadow->Render();
 	if (weapon) weapon->Render();
 	idle[curDir]->Render();
 	walk[curDir]->Render();
 	if (roll[curDir]) roll[curDir]->Render();
 	if (hit) hit->Render();
+	if (fall) firePos->Render();
 	if (die) die->Render();
 	if (firePos) firePos->Render();
 	Character::Render();

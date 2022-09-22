@@ -13,9 +13,13 @@ public:
 
 public:
 	ObImage*		respawn;
+	ObImage*		kick;
 	ObImage*		obtain;
 	PlayerBullet*	bullet[playerBulletMax];
 	bool			canFire;
 	float			timeRoll;
+	bool			flagFireCamShake;
+	Vector2			originCamPos;
+	float			timeFireCamShake;
 };
 

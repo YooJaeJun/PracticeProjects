@@ -14,7 +14,6 @@ void Main::Init()
 
     // 플레이어
     float playerScaleCoef = 3.0f;
-    float playerWeaponScaleCoef = 1.5f;
 
     player = new Player;
     player->col = new ObCircle;
@@ -46,41 +45,20 @@ void Main::Init()
     }
 
     player->walk[front] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Front.png");
-    player->walk[front]->scale.x = 96.0f / 6.0f * playerScaleCoef;
-    player->walk[front]->scale.y = 24.0f * playerScaleCoef;
-
     player->walk[leftSide] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
-    player->walk[leftSide]->scale.x = 96.0f / 6.0f * playerScaleCoef;
-    player->walk[leftSide]->scale.y = 24.0f * playerScaleCoef;
-
     player->walk[rightSide] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
-    player->walk[rightSide]->scale.x = 96.0f / 6.0f * playerScaleCoef;
-    player->walk[rightSide]->scale.y = 24.0f * playerScaleCoef;
-
     player->walk[leftDiag] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
-    player->walk[leftDiag]->scale.x = 96.0f / 6.0f * playerScaleCoef;
-    player->walk[leftDiag]->scale.y = 24.0f * playerScaleCoef;
-
     player->walk[rightDiag] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
-    player->walk[rightDiag]->scale.x = 96.0f / 6.0f * playerScaleCoef;
-    player->walk[rightDiag]->scale.y = 24.0f * playerScaleCoef;
-
     player->walk[back] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Back.png");
-    player->walk[back]->scale.x = 84.0f / 6.0f * playerScaleCoef;
-    player->walk[back]->scale.y = 24.0f * playerScaleCoef;
-
     player->walk[backLeftDiag] = new ObImage(L"EnterTheGungeon/Player_0/Walk_BackDiag.png");
-    player->walk[backLeftDiag]->scale.x = 102.0f / 6.0f * playerScaleCoef;
-    player->walk[backLeftDiag]->scale.y = 28.0f * playerScaleCoef;
-
     player->walk[backRightDiag] = new ObImage(L"EnterTheGungeon/Player_0/Walk_BackDiag.png");
-    player->walk[backRightDiag]->scale.x = 102.0f / 6.0f * playerScaleCoef;
-    player->walk[backRightDiag]->scale.y = 28.0f * playerScaleCoef;
 
     idx = 0;
     for (auto& elem : player->walk)
     {
         elem->maxFrame.x = 6;
+        elem->scale.x = 102.0f / 6.0f * playerScaleCoef;
+        elem->scale.y = 24.0f * playerScaleCoef;
         elem->isVisible = false;
         elem->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         elem->SetParentRT(*player->col);
@@ -100,15 +78,14 @@ void Main::Init()
     for (auto& elem : player->roll)
     {
         elem->maxFrame.x = 9;
-        elem->scale.x = 234.0 / 9.0f * playerScaleCoef;
-        elem->scale.y = 28.0f * playerScaleCoef;
+        elem->scale.x = 180.0f / 9.0f * playerScaleCoef;
+        elem->scale.y = 24.0f * playerScaleCoef;
         elem->uv = Vector4(0.0f, 0.0f, 1.0f / 9.0f, 1.0f);
         elem->isVisible = false;
         elem->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
         elem->SetParentRT(*player->col);
         idx++;
     }
-
 
     player->hit = new ObImage(L"EnterTheGungeon/Player_0/Hit.png");
     player->hit->maxFrame.x = 3;
@@ -117,6 +94,14 @@ void Main::Init()
     player->hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
     player->hit->SetParentRT(*player->col);
     player->hit->isVisible = false;
+
+    player->fall = new ObImage(L"EnterTheGungeon/Player_0/Fall.png");
+    player->fall->maxFrame.x = 3;
+    player->fall->scale.x = 48.0f / 3.0f * playerScaleCoef;
+    player->fall->scale.y = 22.0f * playerScaleCoef;
+    player->fall->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+    player->fall->SetParentRT(*player->col);
+    player->fall->isVisible = false;
 
     player->die = new ObImage(L"EnterTheGungeon/Player_0/Die.png");
     player->die->maxFrame.x = 3;
@@ -134,13 +119,32 @@ void Main::Init()
     player->respawn->SetParentRT(*player->col);
     player->respawn->isVisible = false;
 
+    player->kick = new ObImage(L"EnterTheGungeon/Player_0/Kick.png");
+    player->kick->maxFrame.x = 3;
+    player->kick->scale.x = 48.0f / 3.0f * playerScaleCoef;
+    player->kick->scale.y = 22.0f * playerScaleCoef;
+    player->kick->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+    player->kick->SetParentRT(*player->col);
+    player->kick->isVisible = false;
+
+    player->obtain = new ObImage(L"EnterTheGungeon/Player_0/Obtatin.png");
+    player->obtain->maxFrame.x = 3;
+    player->obtain->scale.x = 48.0f / 3.0f * playerScaleCoef;
+    player->obtain->scale.y = 22.0f * playerScaleCoef;
+    player->obtain->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+    player->obtain->SetParentRT(*player->col);
+    player->obtain->isVisible = false;
+
+
+    float playerWeaponScaleCoef = 1.5f;
+
     player->weapon = new Weapon;
     player->weapon->col = new ObRect;
     player->weapon->col->isFilled = false;
     player->weapon->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
     player->weapon->col->pivot = OFFSET_LB;
-    player->weapon->col->scale.x = 29.0f * playerWeaponScaleCoef;
-    player->weapon->col->scale.y = 21.0f * playerWeaponScaleCoef;
+    player->weapon->col->scale.x = 30.0f * playerWeaponScaleCoef;
+    player->weapon->col->scale.y = 22.0f * playerWeaponScaleCoef;
     player->weapon->col->SetParentT(*player->col);
     player->weapon->col->SetLocalPosX(18.0f);
     player->weapon->col->SetLocalPosY(-15.0f);
@@ -155,10 +159,15 @@ void Main::Init()
     player->firePos->SetParentRT(*player->weapon->col);
     player->firePos->SetLocalPos(Vector2(50.0f, 0.0f));
 
+    player->shadow = new ObImage(L"EnterTheGungeon/Player_0/Shadow.png");
+    player->shadow->scale.x = 16.0f * playerScaleCoef;
+    player->shadow->scale.y = 5.0f * playerScaleCoef;
+    player->shadow->SetParentRT(*player->col);
+    player->shadow->SetWorldPosY(-28.0f);
+
 
     // 적
     float enemyScaleCoef = 3.0f;
-    float enemyWeaponScaleCoef = 1.5f;
 
     for (auto& elem : enemy)
     {
@@ -236,6 +245,8 @@ void Main::Init()
         elem->die->SetParentRT(*elem->col);
         elem->die->isVisible = false;
 
+        float enemyWeaponScaleCoef = 1.5f;
+
         elem->weapon = new Weapon;
         elem->weapon->col = new ObRect;
         elem->weapon->col->isFilled = false;
@@ -260,7 +271,6 @@ void Main::Init()
 
     // 보스
     float bossScaleCoef = 3.0f;
-    float bossWeaponScaleCoef = 2.0f;
 
     for (auto& elem : boss)
     {
@@ -339,6 +349,8 @@ void Main::Init()
         elem->die->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
         elem->die->SetParentRT(*elem->col);
         elem->die->isVisible = false;
+
+        float bossWeaponScaleCoef = 2.0f;
 
         elem->weapon = new Weapon;
         elem->weapon->col = new ObRect;
@@ -436,7 +448,7 @@ void Main::LateUpdate()
     }
 
     // 피격
-    if (false == player->godMode)
+    if (player->col->colOnOff)
     {
         for (auto& enemyElem : enemy)
         {

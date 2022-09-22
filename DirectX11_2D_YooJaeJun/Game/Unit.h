@@ -43,6 +43,7 @@ public:
 	ObImage*	fall;
 	ObImage*	die;
 	Weapon*		weapon;
+	ObImage*	shadow;
 	State		state;
 	dir			curDir;
 	dir			beforeDir;
@@ -53,7 +54,6 @@ public:
 	bool		isHit;
 	bool		isHitAnim;
 	float		timeHitAnim;
-	bool		godMode;
 	Vector2		rotationForMouse;
 	Vector2		rotationForMouseBefore;
 	GameObject*	firePos;
