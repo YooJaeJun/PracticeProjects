@@ -9,7 +9,11 @@ Unit::Unit()
 	isHit = false;
 	isHitAnim = 0.0f;
 	timeHitAnim = 0.0f;
-	rotationForMouseBefore = rotationForMouse = Vector2(0.0f, 0.0f);
+	targetDirBefore = targetDir = Vector2(0.0f, 0.0f);
+	curMove8Dir = front;
+	curMove8DirBefore = front;
+	curTarget8Dir = front;
+	curTarget8DirBefore = front;
 }
 
 void Unit::Release()
@@ -17,7 +21,7 @@ void Unit::Release()
 	Character::Release();
 	for(auto& elem : idle) SafeDelete(elem);
 	for(auto& elem : walk) SafeDelete(elem);
-	if (roll[curDir]) for(auto& elem : roll) SafeDelete(elem);
+	if (roll[curMove8Dir]) for(auto& elem : roll) SafeDelete(elem);
 	SafeDelete(hit);
 	SafeDelete(fall);
 	SafeDelete(die);
@@ -30,52 +34,93 @@ void Unit::Update()
 {
 	Character::Update();
 
-	// normalize 고려
+	// 이동방향에 따라 다른 방향 애니메이션 설정하는 코드
 	if (almost_equal_float(moveDir.x, 0.707107f) && almost_equal_float(moveDir.y, 0.707107f))
 	{
-		curDir = backRightDiag;
+		curMove8Dir = backRightDiag;
 	}
 	else if (almost_equal_float(moveDir.x, -0.707107f) && almost_equal_float(moveDir.y, 0.707107f))
 	{
-		curDir = backLeftDiag;
+		curMove8Dir = backLeftDiag;
 	}
 	else if (almost_equal_float(moveDir.x, -0.707107f) && almost_equal_float(moveDir.y, -0.707107f))
 	{
-		curDir = leftDiag;
+		curMove8Dir = leftDiag;
 	}
 	else if (almost_equal_float(moveDir.x, 0.707107f) && almost_equal_float(moveDir.y, -0.707107f))
 	{
-		curDir = rightDiag;
+		curMove8Dir = rightDiag;
 	}
 	else if (moveDir.x == 1.0f)
 	{
-		curDir = rightSide;
+		curMove8Dir = rightSide;
 	}
 	else if (moveDir.x == -1.0f)
 	{
-		curDir = leftSide;
+		curMove8Dir = leftSide;
 	}
 	else if (moveDir.y == 1.0f)
 	{
-		curDir = back;
+		curMove8Dir = back;
 	}
 	else if (moveDir.y == -1.0f)
 	{
-		curDir = front;
+		curMove8Dir = front;
 	}
 	else
 	{
-		curDir = beforeDir;
+		curMove8Dir = curMove8DirBefore;
 	}
 
+	weapon->col->rotation = Utility::DirToRadian(target - weapon->col->GetWorldPos());
 
-	weapon->col->rotation = Utility::DirToRadian(dest - weapon->col->GetWorldPos());
+	targetDir = target - col->GetWorldPos();
+	targetDir.Normalize();
 
-	rotationForMouse = dest - col->GetWorldPos();
-	
-	if (rotationForMouse.x >= 0.0f)
+	targetRotation = Utility::DirToRadian(targetDir);
+
+	// 타겟 좌표(플레이어는 마우스)에 따라 다른 방향 애니메이션 설정하는 코드
+	if (targetRotation >= 30.0f * ToRadian && targetRotation < 60.0f * ToRadian)
 	{
-		if (rotationForMouseBefore.x < 0.0f)
+		curTarget8Dir = backRightDiag;
+	}
+	else if (targetRotation >= 120.0f * ToRadian && targetRotation < 150.0f * ToRadian)
+	{
+		curTarget8Dir = backLeftDiag;
+	}
+	else if (targetRotation >= -150.0f * ToRadian && targetRotation < -120.0f * ToRadian)
+	{
+		curTarget8Dir = leftDiag;
+	}
+	else if (targetRotation >= -60.0f * ToRadian && targetRotation < -30.0f * ToRadian)
+	{
+		curTarget8Dir = rightDiag;
+	}
+	else if (targetRotation >= -30.0f * ToRadian && targetRotation < 30.0f * ToRadian)
+	{
+		curTarget8Dir = rightSide;
+	}
+	else if (targetRotation >= -180.0f * ToRadian && targetRotation < -150.0f * ToRadian &&
+		targetRotation >= 150.0f * ToRadian && targetRotation < 180.0f * ToRadian)
+	{
+		curTarget8Dir = leftSide;
+	}
+	else if (targetRotation >= 60.0f * ToRadian && targetRotation < 120.0f * ToRadian)
+	{
+		curTarget8Dir = back;
+	}
+	else if (targetRotation >= -120.0f * ToRadian && targetRotation < -60.0f * ToRadian)
+	{
+		curTarget8Dir = front;
+	}
+	else
+	{
+		curTarget8Dir = curTarget8DirBefore;
+	}
+
+	if (targetDir.x >= 0.0f)
+	{
+		if (targetDirBefore.x < 0.0f)
 		{
 			swap(weapon->idle->uv.y, weapon->idle->uv.w);
 			weapon->col->SetLocalPosX(18.0f);
@@ -85,7 +130,7 @@ void Unit::Update()
 	}
 	else
 	{
-		if (rotationForMouseBefore.x >= 0.0f)
+		if (targetDirBefore.x >= 0.0f)
 		{
 			swap(weapon->idle->uv.y, weapon->idle->uv.w);
 			weapon->col->SetLocalPosX(-18.0f);
@@ -104,59 +149,22 @@ void Unit::Update()
 		if (col) col->isVisible = false;
 		for (auto& elem : idle) elem->isVisible = false;
 		for (auto& elem : walk) elem->isVisible = false;
-		if (roll[curDir]) for (auto& elem : roll) elem->isVisible = false;
+		if (roll[curMove8Dir]) for (auto& elem : roll) elem->isVisible = false;
 		if (hit) hit->isVisible = false;
 		weapon->col->isVisible = false;
 		weapon->idle->isVisible = false;
-	}
-	else if (state == State::idle)
-	{
-		if (isHitAnim)
-		{
-			Color c = Color(0.5f, 0.5f, 0.5f, RANDOM->Float());
-			for (auto& elem : idle) elem->color = c;
-			for (auto& elem : walk) elem->color = c;
-			if (roll[curDir]) for (auto& elem : roll) elem->color = c;
-			if (hit)  hit->color = c;
-			if (die)  die->color = c;
-
-			col->SetWorldPosX(col->GetWorldPos().x + RANDOM->Float(-1.0f, 1.0f));
-			col->SetWorldPosY(col->GetWorldPos().y + RANDOM->Float(-1.0f, 1.0f));
-
-			for (auto& elem : idle) elem->isVisible = false;
-			hit->isVisible = true;
-
-			if (TIMER->GetTick(timeHitAnim, 0.4f))	// 히트 애니용
-			{
-				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
-				for (auto& elem : idle) elem->color = c;
-				for (auto& elem : walk) elem->color = c;
-				if (roll[curDir]) for (auto& elem : roll) elem->color = c;
-				if (hit)  hit->color = c;
-				if (die)  die->color = c;
-
-				hit->isVisible = false;
-				idle[curDir]->isVisible = true;
-
-				isHitAnim = false;
-			}
-		}
-		else
-		{
-			idle[curDir]->isVisible = true;
-			if (idle[curDir]->color.w == 1.0f) idle[curDir]->color.w = 1.0f;
-			if (walk[curDir]->color.w == 1.0f) walk[curDir]->color.w = 1.0f;
-			hit->isVisible = false;
-		}
+		shadow->isVisible = false;
 	}
 
-	beforeDir = curDir;
-	rotationForMouseBefore = rotationForMouse;
+	curMove8DirBefore = curMove8Dir;
+	curTarget8DirBefore = curTarget8Dir;
+
+	targetDirBefore = targetDir;
 
 	if (weapon) weapon->Update();
-	idle[curDir]->Update();
-	walk[curDir]->Update();
-	if (roll[curDir]) roll[curDir]->Update();
+	idle[curTarget8Dir]->Update();
+	walk[curTarget8Dir]->Update();
+	if (roll[curMove8Dir]) roll[curMove8Dir]->Update();
 	if (hit) hit->Update();
 	if (fall) firePos->Update();
 	if (die) die->Update();
@@ -172,9 +180,9 @@ void Unit::Render()
 {
 	if (shadow) shadow->Render();
 	if (weapon) weapon->Render();
-	idle[curDir]->Render();
-	walk[curDir]->Render();
-	if (roll[curDir]) roll[curDir]->Render();
+	idle[curTarget8Dir]->Render();
+	walk[curTarget8Dir]->Render();
+	if (roll[curMove8Dir]) roll[curMove8Dir]->Render();
 	if (hit) hit->Render();
 	if (fall) firePos->Render();
 	if (die) die->Render();
@@ -199,11 +207,9 @@ void Unit::Hit(const int damage)
 			isHit = true;
 			isHitAnim = true;
 
-			idle[curDir]->isVisible = false;
-			hit->isVisible = true;
+			idle[curTarget8Dir]->isVisible = false;
+			if (hit) hit->isVisible = true;
 			die->isVisible = false;
-
-			hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
 		}
 		if (curHp <= 0)
 		{
@@ -221,8 +227,8 @@ void Unit::Die()
 		col->scale.x = 0.0f;
 		col->scale.y = 0.0f;
 
-		idle[curDir]->isVisible = false;
-		hit->isVisible = false;
+		idle[curTarget8Dir]->isVisible = false;
+		if (hit) hit->isVisible = false;
 		die->isVisible = true;
 	}
 }

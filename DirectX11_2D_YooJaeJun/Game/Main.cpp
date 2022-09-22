@@ -36,6 +36,10 @@ void Main::Init()
     idx = 0;
     for (auto& elem : player->idle)
     {
+        if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+        {
+            elem->rotationY = PI;
+        }
         elem->maxFrame.x = 4;
         elem->scale.x = 72.0 / 4.0f * playerScaleCoef;
         elem->scale.y = 20.0f * playerScaleCoef;
@@ -56,6 +60,10 @@ void Main::Init()
     idx = 0;
     for (auto& elem : player->walk)
     {
+        if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+        {
+            elem->rotationY = PI;
+        }
         elem->maxFrame.x = 6;
         elem->scale.x = 102.0f / 6.0f * playerScaleCoef;
         elem->scale.y = 24.0f * playerScaleCoef;
@@ -77,6 +85,10 @@ void Main::Init()
     idx = 0;
     for (auto& elem : player->roll)
     {
+        if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+        {
+            elem->rotationY = PI;
+        }
         elem->maxFrame.x = 9;
         elem->scale.x = 180.0f / 9.0f * playerScaleCoef;
         elem->scale.y = 24.0f * playerScaleCoef;
@@ -87,13 +99,7 @@ void Main::Init()
         idx++;
     }
 
-    player->hit = new ObImage(L"EnterTheGungeon/Player_0/Hit.png");
-    player->hit->maxFrame.x = 3;
-    player->hit->scale.x = 48.0f / 3.0f * playerScaleCoef;
-    player->hit->scale.y = 22.0f * playerScaleCoef;
-    player->hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
-    player->hit->SetParentRT(*player->col);
-    player->hit->isVisible = false;
+    player->hit = nullptr;
 
     player->fall = new ObImage(L"EnterTheGungeon/Player_0/Fall.png");
     player->fall->maxFrame.x = 3;
@@ -165,6 +171,39 @@ void Main::Init()
     player->shadow->SetParentRT(*player->col);
     player->shadow->SetWorldPosY(-28.0f);
 
+    player->uiReload = new UI;
+    player->uiReload->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Reload.png");
+    player->uiReload->img->scale = Vector2(144.0f, 20.0f);
+    player->uiReload->img->SetParentT(*player->col);
+    player->uiReload->img->SetLocalPosX(0.0f);
+    player->uiReload->img->SetLocalPosY(60.0f);
+    player->uiReload->img->isVisible = false;
+
+    player->uiReloadBar = new UI;
+    player->uiReloadBar->img = new ObImage(L"EnterTheGungeon/Player_0/UI_ReloadBar.png");
+    player->uiReloadBar->img->scale = Vector2(4.0f, 20.0f);
+    player->uiReloadBar->img->SetParentT(*player->col);
+    player->uiReloadBar->img->SetLocalPosX(-60.0f);
+    player->uiReloadBar->img->SetLocalPosY(60.0f);
+    player->uiReloadBar->img->isVisible = false;
+
+    player->uiMagazine = new UI;
+    player->uiMagazine->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Magazine.png");
+    player->uiMagazine->img->scale = Vector2(28.0f, 99.0f);
+    player->uiMagazine->img->SetWorldPos(Vector2(app.GetHalfWidth() - 40.0f, -app.GetHalfHeight() + 80.0f));
+    player->uiMagazine->img->space = SPACE::SCREEN;
+
+    idx = 0;
+    for (auto& elem : player->uiBullet)
+    {
+        elem = new UI;
+        elem->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Bullet.png");
+        elem->img->scale = Vector2(12.0f, 4.0f);
+        elem->img->SetWorldPos(Vector2(app.GetHalfWidth() - 40.0f, -app.GetHalfHeight() + 104.0f - idx * 12.0f));
+        elem->img->space = SPACE::SCREEN;
+        idx++;
+    }
+
 
     // Àû
     float enemyScaleCoef = 3.0f;
@@ -192,13 +231,13 @@ void Main::Init()
         idx = 0;
         for (auto& elem2 : elem->idle)
         {
-            if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+            if (idx == rightSide || idx == rightDiag || idx == backRightDiag)
             {
                 elem2->rotationY = PI;
             }
             elem2->maxFrame.x = 2;
-            elem2->scale.x = 29.0f / 2.0f * enemyScaleCoef;
-            elem2->scale.y = 23.0f * enemyScaleCoef;
+            elem2->scale.x = 28.0f / 2.0f * enemyScaleCoef;
+            elem2->scale.y = 24.0f * enemyScaleCoef;
             elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
             elem2->SetParentRT(*elem->col);
             idx++;
@@ -216,13 +255,13 @@ void Main::Init()
         idx = 0;
         for (auto& elem2 : elem->walk)
         {
-            if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+            if (idx == rightSide || idx == rightDiag || idx == backRightDiag)
             {
                 elem2->rotationY = PI;
             }
-            elem2->maxFrame.x = 2;
-            elem2->scale.x = 29.0f / 2.0f * enemyScaleCoef;
-            elem2->scale.y = 23.0f * enemyScaleCoef;
+            elem2->maxFrame.x = 6;
+            elem2->scale.x = 96.0f / 6.0f * enemyScaleCoef;
+            elem2->scale.y = 24.0f * enemyScaleCoef;
             elem2->isVisible = false;
             elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
             elem2->SetParentRT(*elem->col);
@@ -230,8 +269,8 @@ void Main::Init()
         }
 
         elem->hit = new ObImage(L"EnterTheGungeon/Enemy_0/Hit.png");
-        elem->hit->maxFrame.x = 13;
-        elem->hit->scale.x = 238.0f / 13.0f * enemyScaleCoef;
+        elem->hit->maxFrame.x = 5;
+        elem->hit->scale.x = 80.0f / 5.0f * enemyScaleCoef;
         elem->hit->scale.y = 24.0f * enemyScaleCoef;
         elem->hit->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
         elem->hit->SetParentRT(*elem->col);
@@ -252,20 +291,26 @@ void Main::Init()
         elem->weapon->col->isFilled = false;
         elem->weapon->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         elem->weapon->col->pivot = OFFSET_LB;
-        elem->weapon->col->scale.x = 29.0f * playerWeaponScaleCoef;
-        elem->weapon->col->scale.y = 21.0f * playerWeaponScaleCoef;
+        elem->weapon->col->scale.x = 29.0f * enemyWeaponScaleCoef;
+        elem->weapon->col->scale.y = 21.0f * enemyWeaponScaleCoef;
         elem->weapon->col->SetParentRT(*elem->col);
         elem->weapon->col->SetLocalPosX(10.0f);
         elem->weapon->col->SetLocalPosY(-15.0f);
         elem->weapon->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Weapon_0.png");
         elem->weapon->idle->pivot = OFFSET_LB;
-        elem->weapon->idle->scale.x = 29.0f * playerWeaponScaleCoef;
-        elem->weapon->idle->scale.y = 21.0f * playerWeaponScaleCoef;
+        elem->weapon->idle->scale.x = 29.0f * enemyWeaponScaleCoef;
+        elem->weapon->idle->scale.y = 21.0f * enemyWeaponScaleCoef;
         elem->weapon->idle->SetParentRT(*elem->weapon->col);
 
         elem->firePos = new GameObject;
         elem->firePos->SetParentRT(*elem->weapon->col);
         elem->firePos->SetLocalPos(Vector2(50.0f, 0.0f));
+
+        elem->shadow = new ObImage(L"EnterTheGungeon/Enemy_0/Shadow_1.png");
+        elem->shadow->scale.x = 12.0f * enemyScaleCoef;
+        elem->shadow->scale.y = 4.0f * enemyScaleCoef;
+        elem->shadow->SetParentRT(*elem->col);
+        elem->shadow->SetWorldPosY(-35.0f);
     }
 
 
@@ -278,18 +323,18 @@ void Main::Init()
         elem->curHp = elem->maxHp = 30;
 
         elem->col = new ObCircle;
-        elem->col->scale.x = 25.0f * enemyScaleCoef;
-        elem->col->scale.y = 25.0f * enemyScaleCoef;
+        elem->col->scale.x = 25.0f * bossScaleCoef;
+        elem->col->scale.y = 25.0f * bossScaleCoef;
         elem->col->SetWorldPosX(0.0f);
         elem->col->SetWorldPosY(400.0f);
         elem->col->color = Color(1.0f, 1.0f, 1.0f);
         elem->col->isFilled = false;
 
         elem->idle[front] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
-        elem->idle[leftSide] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Side.png");
-        elem->idle[rightSide] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Side.png");
-        elem->idle[leftDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Side.png");
-        elem->idle[rightDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Side.png");
+        elem->idle[leftSide] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
+        elem->idle[rightSide] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
+        elem->idle[leftDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
+        elem->idle[rightDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
         elem->idle[back] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
         elem->idle[backLeftDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
         elem->idle[backRightDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
@@ -301,19 +346,19 @@ void Main::Init()
             {
                 elem2->rotationY = PI;
             }
-            elem2->maxFrame.x = 2;
-            elem2->scale.x = 40.0f / 2.0f * enemyScaleCoef;
-            elem2->scale.y = 40.0f * enemyScaleCoef;
+            elem2->maxFrame.x = 4;
+            elem2->scale.x = 104.0f / 4.0f * bossScaleCoef;
+            elem2->scale.y = 40.0f * bossScaleCoef;
             elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
             elem2->SetParentRT(*elem->col);
             idx++;
         }
 
         elem->walk[front] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
-        elem->walk[leftSide] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Side.png");
-        elem->walk[rightSide] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Side.png");
-        elem->walk[leftDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Side.png");
-        elem->walk[rightDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Side.png");
+        elem->walk[leftSide] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
+        elem->walk[rightSide] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
+        elem->walk[leftDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
+        elem->walk[rightDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
         elem->walk[back] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Back.png");
         elem->walk[backLeftDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Back.png");
         elem->walk[backRightDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Back.png");
@@ -326,8 +371,8 @@ void Main::Init()
                 elem2->rotationY = PI;
             }
             elem2->maxFrame.x = 2;
-            elem2->scale.x = 40.0f / 2.0f * enemyScaleCoef;
-            elem2->scale.y = 40.0f * enemyScaleCoef;
+            elem2->scale.x = 40.0f / 2.0f * bossScaleCoef;
+            elem2->scale.y = 40.0f * bossScaleCoef;
             elem2->isVisible = false;
             elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
             elem2->SetParentRT(*elem->col);
@@ -335,9 +380,9 @@ void Main::Init()
         }
 
         elem->hit = new ObImage(L"EnterTheGungeon/Boss_0/Hit.png");
-        elem->hit->maxFrame.x = 13;
-        elem->hit->scale.x = 238.0f / 13.0f * enemyScaleCoef;
-        elem->hit->scale.y = 40.0f * enemyScaleCoef;
+        elem->hit->maxFrame.x = 1;
+        elem->hit->scale.x = 32.0 * 1.0f * bossScaleCoef;
+        elem->hit->scale.y = 40.0f * bossScaleCoef;
         elem->hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
         elem->hit->SetParentRT(*elem->col);
         elem->hit->isVisible = false;
@@ -357,15 +402,15 @@ void Main::Init()
         elem->weapon->col->isFilled = false;
         elem->weapon->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         elem->weapon->col->pivot = OFFSET_LB;
-        elem->weapon->col->scale.x = 29.0f * playerWeaponScaleCoef;
-        elem->weapon->col->scale.y = 21.0f * playerWeaponScaleCoef;
+        elem->weapon->col->scale.x = 29.0f * bossWeaponScaleCoef;
+        elem->weapon->col->scale.y = 21.0f * bossWeaponScaleCoef;
         elem->weapon->col->SetParentRT(*elem->col);
         elem->weapon->col->SetLocalPosX(10.0f);
         elem->weapon->col->SetLocalPosY(-15.0f);
         elem->weapon->idle = new ObImage(L"EnterTheGungeon/Boss_0/Weapon_0.png");
         elem->weapon->idle->pivot = OFFSET_LB;
-        elem->weapon->idle->scale.x = 29.0f * playerWeaponScaleCoef;
-        elem->weapon->idle->scale.y = 21.0f * playerWeaponScaleCoef;
+        elem->weapon->idle->scale.x = 29.0f * bossWeaponScaleCoef;
+        elem->weapon->idle->scale.y = 21.0f * bossWeaponScaleCoef;
         elem->weapon->idle->SetParentRT(*elem->weapon->col);
 
         elem->hpGuage = new UI;
@@ -378,6 +423,12 @@ void Main::Init()
         elem->hpGuage->img->SetWorldPosY(app.GetHalfHeight() - elem->hpGuage->imgSize.y * 0.5f);
         elem->hpGuage->img->pivot = OFFSET_L;
         elem->hpGuage->img->space = SPACE::SCREEN;
+
+        elem->shadow = new ObImage(L"EnterTheGungeon/Boss_0/Shadow_1.png");
+        elem->shadow->scale.x = 12.0f * bossScaleCoef * 2.0f;
+        elem->shadow->scale.y = 4.0f * bossScaleCoef * 2.0f;
+        elem->shadow->SetParentRT(*elem->col);
+        elem->shadow->SetWorldPosY(-55.0f);
     }
 }
 
@@ -404,13 +455,13 @@ void Main::Update()
 
     for (auto& elem : enemy)
     {
-        elem->dest = player->col->GetWorldPos();
+        elem->target = player->col->GetWorldPos();
         elem->weapon->col->rotation = Utility::DirToRadian(player->col->GetWorldPos());
         elem->Update();
     }
     for (auto& elem : boss)
     {
-        elem->dest = player->col->GetWorldPos();
+        elem->target = player->col->GetWorldPos();
         elem->weapon->col->rotation = Utility::DirToRadian(player->col->GetWorldPos());
         elem->Update();
     }
@@ -452,50 +503,36 @@ void Main::LateUpdate()
     {
         for (auto& enemyElem : enemy)
         {
-            if (abs(enemyElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
-                abs(enemyElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
+            if (enemyElem->state != State::die &&
+                enemyElem->col->Intersect(player->col))
             {
-                if (enemyElem->col->Intersect(player->col))
-                {
-                    player->Hit(1.0f);
-                }
+                player->Hit(1.0f);
             }
 
             for (auto& bulletElem : enemyElem->bullet)
             {
-                if (abs(bulletElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
-                    abs(bulletElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
+                if (bulletElem->col->Intersect(player->col))
                 {
-                    if (bulletElem->col->Intersect(player->col))
-                    {
-                        player->Hit(1);
-                        bulletElem->Hit(1);
-                    }
+                    player->Hit(1);
+                    bulletElem->Hit(1);
                 }
             }
             enemyElem->LateUpdate();
         }
         for (auto& bossElem : boss)
         {
-            if (abs(bossElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
-                abs(bossElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
+            if (bossElem->state != State::die &&
+                bossElem->col->Intersect(player->col))
             {
-                if (bossElem->col->Intersect(player->col))
-                {
-                    player->Hit(1.0f);
-                }
+                player->Hit(1.0f);
             }
 
             for (auto& bulletElem : bossElem->bullet)
             {
-                if (abs(bulletElem->col->GetWorldPos().x - player->col->GetWorldPos().x) < 100 &&
-                    abs(bulletElem->col->GetWorldPos().y - player->col->GetWorldPos().y) < 100)
+                if (bulletElem->col->Intersect(player->col))
                 {
-                    if (bulletElem->col->Intersect(player->col))
-                    {
-                        player->Hit(1);
-                        bulletElem->Hit(1);
-                    }
+                    player->Hit(1);
+                    bulletElem->Hit(1);
                 }
             }
             bossElem->LateUpdate();

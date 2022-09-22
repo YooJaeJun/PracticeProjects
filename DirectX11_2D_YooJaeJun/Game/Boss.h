@@ -3,7 +3,7 @@ const int circularBulletMax = 200;
 
 enum class bossPattern
 {
-	circular, string
+	none, circular, string
 };
 
 class Boss : public Unit
@@ -17,11 +17,13 @@ public:
 	virtual void Render() override;
 
 	void SetPattern();
+	virtual void Hit(const int damage) override;
 
 public:
 	UI*				            hpGuage;
 	std::vector<BossBullet*>	bullet;
     bossPattern                 pattern;
 	StringBulletData            stringBullet;
+	float						timeSetDir;
 };
 

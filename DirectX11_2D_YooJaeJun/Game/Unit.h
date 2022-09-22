@@ -8,7 +8,7 @@ enum class State
 };
 
 // 8πÊ«‚
-enum dir
+enum dir8
 {
 	front,
 	leftSide,
@@ -31,7 +31,7 @@ public:
 	virtual void Render() override;
 
 	void Spawn();
-	void Hit(const int damage);
+	virtual void Hit(const int damage);
 	void Die();
 
 public:
@@ -45,17 +45,20 @@ public:
 	Weapon*		weapon;
 	ObImage*	shadow;
 	State		state;
-	dir			curDir;
-	dir			beforeDir;
-	Vector2		dest;
+	dir8		curMove8Dir;
+	dir8		curMove8DirBefore;
+	dir8		curTarget8Dir;
+	dir8		curTarget8DirBefore;
+	Vector2		target;
+	Vector2		targetDir;
+	Vector2		targetDirBefore;
+	float		targetRotation;
+	GameObject* firePos;
 	float		timeFire;
 	float		timeReload;
 	float		timeHit;
 	bool		isHit;
 	bool		isHitAnim;
 	float		timeHitAnim;
-	Vector2		rotationForMouse;
-	Vector2		rotationForMouseBefore;
-	GameObject*	firePos;
 };
 

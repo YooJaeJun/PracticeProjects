@@ -19,6 +19,9 @@ Player::Player()
 	}
 
 	canFire = true;
+	reloading = false;
+	timeReload = 0.0f;
+	curBulletIdx = 0;
 	timeFire = 0.0f;
 	timeHit = 0.0f;
 	isHit = false;
@@ -38,26 +41,26 @@ void Player::Update()
 {
 	Unit::Update();
 
-	dest = INPUT->GetWorldMousePos();
+	target = INPUT->GetWorldMousePos();
 
-	CAM->position.x = Utility::Saturate((dest.x + idle[curDir]->GetWorldPos().x) / 2,
-		idle[curDir]->GetWorldPos().x - 250.0f,
-		idle[curDir]->GetWorldPos().x + 250.0f);
-	CAM->position.y = Utility::Saturate((dest.y + idle[curDir]->GetWorldPos().y) / 2,
-		idle[curDir]->GetWorldPos().y - 250.0f,
-		idle[curDir]->GetWorldPos().y + 250.0f);
+	CAM->position.x = Utility::Saturate((target.x + idle[curTarget8Dir]->GetWorldPos().x) / 2,
+		idle[curTarget8Dir]->GetWorldPos().x - 250.0f,
+		idle[curTarget8Dir]->GetWorldPos().x + 250.0f);
+	CAM->position.y = Utility::Saturate((target.y + idle[curTarget8Dir]->GetWorldPos().y) / 2,
+		idle[curTarget8Dir]->GetWorldPos().y - 250.0f,
+		idle[curTarget8Dir]->GetWorldPos().y + 250.0f);
 
 	if (state == State::idle)
 	{
 		if (INPUT->KeyPress('A'))
 		{
 			moveDir.x = -1.0f;
-			col->rotationY = PI;
+			// col->rotationY = PI;
 		}
 		else if (INPUT->KeyPress('D'))
 		{
 			moveDir.x = 1.0f;
-			col->rotationY = 0.0f;
+			// col->rotationY = 0.0f;
 		}
 		else
 		{
@@ -77,62 +80,114 @@ void Player::Update()
 			moveDir.y = 0.0f;
 		}
 
+		moveDir.Normalize();
+		col->MoveWorldPos(moveDir * scalar * DELTA);
+
 		if (moveDir.x == 0 && moveDir.y == 0)
 		{
-			idle[curDir]->isVisible = true;
-			for(auto& elem : walk) elem->isVisible = false;
+			idle[curTarget8Dir]->isVisible = true;
+			for (auto& elem : walk) elem->isVisible = false;
 		}
 		else
 		{
 			for (auto& elem : idle) elem->isVisible = false;
-			walk[curDir]->isVisible = true;
+			walk[curTarget8Dir]->isVisible = true;
 		}
-
-		moveDir.Normalize();
-		col->MoveWorldPos(moveDir * scalar * DELTA);
 
 		if (INPUT->KeyPress(VK_LBUTTON))
 		{
-			if (canFire)
+			if (curBulletIdx >= weapon0BulletMax)
 			{
-				for (auto& elem : bullet)
-				{
-					if (elem->isFired) continue;
+				curBulletIdx = 0;
+				canFire = false;
+				reloading = true;
+				uiReload->img->isVisible = true;
+				uiReloadBar->img->isVisible = true;
+			}
+			else if (canFire)
+			{
+				uiBullet[curBulletIdx]->img->isVisible = false;
 
-					Vector2 dir = INPUT->GetWorldMousePos() - col->GetWorldPos();
-					dir.Normalize();
-					elem->Spawn(firePos->GetWorldPos(), dir);
-					break;
-				}
+				Vector2 dir = INPUT->GetWorldMousePos() - col->GetWorldPos();
+				dir.Normalize();
+				bullet[curBulletIdx++]->Spawn(firePos->GetWorldPos(), 
+					Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
+						RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
+				);
 				canFire = false;
 			}
 
-			if (TIMER->GetTick(timeFire, 0.1f))
+			if (false == reloading)
 			{
-				canFire = true;
-			}
+				flagFireCamShake = true;
 
-			flagFireCamShake = true;
+				if (TIMER->GetTick(timeFire, 0.2f))
+				{
+					canFire = true;
+				}
+			}
 			originCamPos = CAM->position;
 		}
 		else if (INPUT->KeyPress(VK_RBUTTON))
 		{
-			state = State::roll;
-			for (auto& elem : idle) elem->isVisible = false;
-			for (auto& elem : walk) elem->isVisible = false;
-			col->colOnOff = false;
-			col->isVisible = false;
-			roll[curDir]->isVisible = true;
-			roll[curDir]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
+			if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))
+			{
+				state = State::roll;
+				for (auto& elem : idle) elem->isVisible = false;
+				for (auto& elem : walk) elem->isVisible = false;
+				col->colOnOff = false;
+				col->isVisible = false;
+				roll[curMove8Dir]->isVisible = true;
+				roll[curMove8Dir]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
+			}
+		}
+
+		if (flagFireCamShake)
+		{
+			CAM->position = Vector2(RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f),
+				RANDOM->Float(CAM->position.y - 2.0f, CAM->position.y + 2.0f));
+
+			if (TIMER->GetTick(timeFireCamShake, 0.2f))
+			{
+				CAM->position = originCamPos;
+				flagFireCamShake = false;
+			}
+		}
+
+		if (isHitAnim)
+		{
+			Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
+			for (auto& elem : idle) elem->color = c;
+			for (auto& elem : walk) elem->color = c;
+			for (auto& elem : roll) elem->color = c;
+
+			col->SetWorldPosX(col->GetWorldPos().x + RANDOM->Float(-1.0f, 1.0f));
+			col->SetWorldPosY(col->GetWorldPos().y + RANDOM->Float(-1.0f, 1.0f));
+
+			if (TIMER->GetTick(timeHitAnim, 0.4f))	// 히트 애니용
+			{
+				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
+				for (auto& elem : idle) elem->color = c;
+				for (auto& elem : walk) elem->color = c;
+				for (auto& elem : roll) elem->color = c;
+
+				isHitAnim = false;
+			}
+		}
+		else
+		{
+			idle[curTarget8Dir]->color.w = 1.0f;
+			walk[curTarget8Dir]->color.w = 1.0f;
 		}
 	}
 	else if (state == State::roll)
 	{
 		col->MoveWorldPos(moveDir * (scalar + 100.0f) * DELTA);
+
 		if (TIMER->GetTick(timeRoll, 0.5f))
 		{
 			state = State::idle;
-			idle[curDir]->isVisible = true;
+			idle[curTarget8Dir]->isVisible = true;
 			for (auto& elem : walk) elem->isVisible = false;
 			for (auto& elem : roll) elem->isVisible = false;
 			col->colOnOff = true;
@@ -140,16 +195,17 @@ void Player::Update()
 		}
 	}
 
-
-	if (flagFireCamShake)
+	if (reloading)
 	{
-		CAM->position = Vector2(RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f), 
-			RANDOM->Float(CAM->position.y - 2.0f, CAM->position.y + 2.0f));
+		uiReloadBar->img->MoveLocalPos(Vector2(80.0f * DELTA, 0.0f));
 
-		if (TIMER->GetTick(timeFireCamShake, 0.2f))
+		if (TIMER->GetTick(timeReload, 1.5f))
 		{
-			CAM->position = originCamPos;
-			flagFireCamShake = false;
+			uiReload->img->isVisible = false;
+			uiReloadBar->img->isVisible = false;
+			reloading = false;
+			uiReloadBar->img->SetLocalPosX(-60.0f);
+			for(auto& elem : uiBullet) elem->img->isVisible = true;
 		}
 	}
 
@@ -164,14 +220,15 @@ void Player::Update()
 	respawn->Update();
 	kick->Update();
 	obtain->Update();
-	for (auto& elem : bullet) if (elem) elem->Update();
+	for (auto& elem : bullet) elem->Update();
+	uiMagazine->Update();
+	for(auto& elem : uiBullet) elem->Update();
+	uiReload->Update();
+	uiReloadBar->Update();
 }
 
 void Player::LateUpdate()
 {
-	Unit::LateUpdate();
-
-	for (auto& elem : bullet) if (elem) elem->LateUpdate();
 }
 
 void Player::Render()
@@ -179,6 +236,11 @@ void Player::Render()
 	respawn->Render();
 	kick->Render();
 	obtain->Render();
-	for (auto& elem : bullet) if (elem) elem->Render();
+	for (auto& elem : bullet) elem->Render();
 	Unit::Render();
+
+	uiMagazine->Render();
+	for (auto& elem : uiBullet) elem->Render();
+	uiReload->Render();
+	uiReloadBar->Render();
 }

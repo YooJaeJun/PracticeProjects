@@ -1,5 +1,5 @@
 #pragma once
-const int playerBulletMax = 20;
+const int weapon0BulletMax = 5;
 
 class Player : public Unit
 {
@@ -15,11 +15,18 @@ public:
 	ObImage*		respawn;
 	ObImage*		kick;
 	ObImage*		obtain;
-	PlayerBullet*	bullet[playerBulletMax];
+	PlayerBullet*	bullet[weapon0BulletMax];
 	bool			canFire;
+	bool			reloading;
+	float			timeReload;
+	int				curBulletIdx;
 	float			timeRoll;
 	bool			flagFireCamShake;
 	Vector2			originCamPos;
 	float			timeFireCamShake;
+	UI*				uiReload;
+	UI*				uiReloadBar;
+	UI*				uiMagazine;
+	UI*				uiBullet[weapon0BulletMax];
 };
 

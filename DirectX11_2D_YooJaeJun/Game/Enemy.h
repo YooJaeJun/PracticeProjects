@@ -11,7 +11,10 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
+	virtual void Hit(const int damage) override;
+
 public:
 	EnemyBullet*	bullet[enemyBulletMax];
+	float			timeSetDir;
 };
 

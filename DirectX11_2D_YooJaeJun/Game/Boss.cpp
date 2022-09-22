@@ -2,6 +2,12 @@
 
 Boss::Boss()
 {
+    pattern = bossPattern::string;
+    stringBullet.inputString = "abcdefghijklmnopqrstuvwxyz";
+    bullet.resize(stringBullet.inputString.size() * 25);
+    SetPattern();
+    stringBullet.SetStringBullet();
+
 	curHp = maxHp = 1;
 	scalar = 30.0f;
 	timeFire = 0.0f;
@@ -9,14 +15,7 @@ Boss::Boss()
 	isHit = false;
 	isHitAnim = false;
 	timeHitAnim = 0.0f;
-
-    pattern = bossPattern::string;
-    stringBullet.inputString = "abcdefghijklmnopqrstuvwxyz";
-    bullet.resize(stringBullet.inputString.size() * 25);
-
-    SetPattern();
-
-    stringBullet.SetStringBullet();
+    timeSetDir = 0.0f;
 }
 
 void Boss::Release()
@@ -37,13 +36,50 @@ void Boss::Update()
 		}
 	}
 
-	for (auto& elem : bullet)
-	{
-		elem->Update();
-	}
-
-    if (state != State::die)
+    if (state == State::idle)
     {
+        hpGuage->img->scale.x = (float)curHp / maxHp * hpGuage->imgSize.x;
+        hpGuage->img->uv.z = hpGuage->img->scale.x / hpGuage->imgSize.x;
+        hpGuage->Update();
+
+        if (isHitAnim)
+        {
+            Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
+            for (auto& elem : idle) elem->color = c;
+            for (auto& elem : walk) elem->color = c;
+            hit->color = c;
+
+            col->SetWorldPosX(col->GetWorldPos().x + RANDOM->Float(-1.0f, 1.0f));
+            col->SetWorldPosY(col->GetWorldPos().y + RANDOM->Float(-1.0f, 1.0f));
+
+            for (auto& elem : idle) elem->isVisible = false;
+            hit->isVisible = true;
+
+            if (TIMER->GetTick(timeHitAnim, 0.4f))	// 히트 애니용
+            {
+                Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
+                for (auto& elem : idle) elem->color = c;
+                for (auto& elem : walk) elem->color = c;
+                hit->color = c;
+                die->color = c;
+
+                hit->isVisible = false;
+                idle[curTarget8Dir]->isVisible = true;
+
+                isHitAnim = false;
+            }
+        }
+        else
+        {
+            idle[curTarget8Dir]->color.w = 1.0f;
+            walk[curTarget8Dir]->color.w = 1.0f;
+            idle[curTarget8Dir]->isVisible = true;
+            hit->isVisible = false;
+        }
+
+        if (pattern == bossPattern::none)
+        {
+        }
         if (pattern == bossPattern::circular)
         {
             if (TIMER->GetTick(timeFire, 3.0f))
@@ -92,37 +128,35 @@ void Boss::Update()
                 }
                 for (auto& elem : bullet)
                 {
+                    if (elem->moveDir.x == 0.0f && elem->moveDir.y == 0.0f) continue;
+
                     elem->Spawn(Vector2(
                         weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
                         weapon->idle->GetWorldPivot().y));
                 }
             }
         }
+    }
 
-        hpGuage->img->scale.x = (float)curHp / maxHp * hpGuage->imgSize.x;
-        hpGuage->img->uv.z = hpGuage->img->scale.x / hpGuage->imgSize.x;
-        hpGuage->Update();
+    for (auto& elem : bullet)
+    {
+        if (elem) elem->Update();
     }
 }
 
 void Boss::LateUpdate()
 {
-	Unit::LateUpdate();
-	for (auto& elem : bullet) if (elem) elem->LateUpdate();
-	hpGuage->LateUpdate();
 }
 
 void Boss::Render()
 {
-	for (auto& elem : bullet) if (elem) elem->Render();
-	Unit::Render();
+    Unit::Render();
+	for (auto& elem : bullet) elem->Render();
     hpGuage->Render();
 }
 
 void Boss::SetPattern()
 {
-    pattern = bossPattern::string;
-
     if (pattern == bossPattern::circular)
     {
         bullet.resize(circularBulletMax);
@@ -161,5 +195,14 @@ void Boss::SetPattern()
             elem->idle->SetParentRT(*elem->col);
             idx++;
         }
+    }
+}
+
+void Boss::Hit(const int damage)
+{
+    Unit::Hit(damage);
+    if (false == isHit)
+    {
+        hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
     }
 }
