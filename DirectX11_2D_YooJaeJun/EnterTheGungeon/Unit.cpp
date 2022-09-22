@@ -34,43 +34,7 @@ void Unit::Update()
 {
 	Character::Update();
 
-	// 이동방향에 따라 다른 방향 애니메이션 설정하는 코드
-	if (almost_equal_float(moveDir.x, 0.707107f) && almost_equal_float(moveDir.y, 0.707107f))
-	{
-		curMove8Dir = backRightDiag;
-	}
-	else if (almost_equal_float(moveDir.x, -0.707107f) && almost_equal_float(moveDir.y, 0.707107f))
-	{
-		curMove8Dir = backLeftDiag;
-	}
-	else if (almost_equal_float(moveDir.x, -0.707107f) && almost_equal_float(moveDir.y, -0.707107f))
-	{
-		curMove8Dir = leftDiag;
-	}
-	else if (almost_equal_float(moveDir.x, 0.707107f) && almost_equal_float(moveDir.y, -0.707107f))
-	{
-		curMove8Dir = rightDiag;
-	}
-	else if (moveDir.x == 1.0f)
-	{
-		curMove8Dir = rightSide;
-	}
-	else if (moveDir.x == -1.0f)
-	{
-		curMove8Dir = leftSide;
-	}
-	else if (moveDir.y == 1.0f)
-	{
-		curMove8Dir = back;
-	}
-	else if (moveDir.y == -1.0f)
-	{
-		curMove8Dir = front;
-	}
-	else
-	{
-		curMove8Dir = curMove8DirBefore;
-	}
+	SetMoveDir();
 
 	weapon->col->rotation = Utility::DirToRadian(target - weapon->col->GetWorldPos());
 
@@ -79,44 +43,7 @@ void Unit::Update()
 
 	targetRotation = Utility::DirToRadian(targetDir);
 
-	// 타겟 좌표(플레이어는 마우스)에 따라 다른 방향 애니메이션 설정하는 코드
-	if (targetRotation >= 30.0f * ToRadian && targetRotation < 60.0f * ToRadian)
-	{
-		curTarget8Dir = backRightDiag;
-	}
-	else if (targetRotation >= 120.0f * ToRadian && targetRotation < 150.0f * ToRadian)
-	{
-		curTarget8Dir = backLeftDiag;
-	}
-	else if (targetRotation >= -150.0f * ToRadian && targetRotation < -120.0f * ToRadian)
-	{
-		curTarget8Dir = leftDiag;
-	}
-	else if (targetRotation >= -60.0f * ToRadian && targetRotation < -30.0f * ToRadian)
-	{
-		curTarget8Dir = rightDiag;
-	}
-	else if (targetRotation >= -30.0f * ToRadian && targetRotation < 30.0f * ToRadian)
-	{
-		curTarget8Dir = rightSide;
-	}
-	else if (targetRotation >= -180.0f * ToRadian && targetRotation < -150.0f * ToRadian &&
-		targetRotation >= 150.0f * ToRadian && targetRotation < 180.0f * ToRadian)
-	{
-		curTarget8Dir = leftSide;
-	}
-	else if (targetRotation >= 60.0f * ToRadian && targetRotation < 120.0f * ToRadian)
-	{
-		curTarget8Dir = back;
-	}
-	else if (targetRotation >= -120.0f * ToRadian && targetRotation < -60.0f * ToRadian)
-	{
-		curTarget8Dir = front;
-	}
-	else
-	{
-		curTarget8Dir = curTarget8DirBefore;
-	}
+	SetTargetDir();
 
 	if (targetDir.x >= 0.0f)
 	{
@@ -230,5 +157,88 @@ void Unit::Die()
 		idle[curTarget8Dir]->isVisible = false;
 		if (hit) hit->isVisible = false;
 		die->isVisible = true;
+	}
+}
+
+void Unit::SetMoveDir()
+{
+	// 이동방향에 따라 다른 방향 애니메이션 설정하는 코드
+	if (almost_equal_float(moveDir.x, 0.707107f) && almost_equal_float(moveDir.y, 0.707107f))
+	{
+		curMove8Dir = backRightDiag;
+	}
+	else if (almost_equal_float(moveDir.x, -0.707107f) && almost_equal_float(moveDir.y, 0.707107f))
+	{
+		curMove8Dir = backLeftDiag;
+	}
+	else if (almost_equal_float(moveDir.x, -0.707107f) && almost_equal_float(moveDir.y, -0.707107f))
+	{
+		curMove8Dir = leftDiag;
+	}
+	else if (almost_equal_float(moveDir.x, 0.707107f) && almost_equal_float(moveDir.y, -0.707107f))
+	{
+		curMove8Dir = rightDiag;
+	}
+	else if (moveDir.x == 1.0f)
+	{
+		curMove8Dir = rightSide;
+	}
+	else if (moveDir.x == -1.0f)
+	{
+		curMove8Dir = leftSide;
+	}
+	else if (moveDir.y == 1.0f)
+	{
+		curMove8Dir = back;
+	}
+	else if (moveDir.y == -1.0f)
+	{
+		curMove8Dir = front;
+	}
+	else
+	{
+		curMove8Dir = curMove8DirBefore;
+	}
+}
+
+void Unit::SetTargetDir()
+{
+	// 타겟 좌표(플레이어는 마우스)에 따라 다른 방향 애니메이션 설정하는 코드
+	if (targetRotation >= 30.0f * ToRadian && targetRotation < 60.0f * ToRadian)
+	{
+		curTarget8Dir = backRightDiag;
+	}
+	else if (targetRotation >= 120.0f * ToRadian && targetRotation < 150.0f * ToRadian)
+	{
+		curTarget8Dir = backLeftDiag;
+	}
+	else if (targetRotation >= -150.0f * ToRadian && targetRotation < -120.0f * ToRadian)
+	{
+		curTarget8Dir = leftDiag;
+	}
+	else if (targetRotation >= -60.0f * ToRadian && targetRotation < -30.0f * ToRadian)
+	{
+		curTarget8Dir = rightDiag;
+	}
+	else if (targetRotation >= -30.0f * ToRadian && targetRotation < 30.0f * ToRadian)
+	{
+		curTarget8Dir = rightSide;
+	}
+	else if (targetRotation >= -180.0f * ToRadian && targetRotation < -150.0f * ToRadian &&
+		targetRotation >= 150.0f * ToRadian && targetRotation < 180.0f * ToRadian)
+	{
+		curTarget8Dir = leftSide;
+	}
+	else if (targetRotation >= 60.0f * ToRadian && targetRotation < 120.0f * ToRadian)
+	{
+		curTarget8Dir = back;
+	}
+	else if (targetRotation >= -120.0f * ToRadian && targetRotation < -60.0f * ToRadian)
+	{
+		curTarget8Dir = front;
+	}
+	else
+	{
+		curTarget8Dir = curTarget8DirBefore;
 	}
 }

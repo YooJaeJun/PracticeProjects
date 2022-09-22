@@ -18,6 +18,7 @@ Player::Player()
 		elem->idle->SetParentRT(*elem->col);
 	}
 
+
 	canFire = true;
 	reloading = false;
 	timeReload = 0.0f;
@@ -35,6 +36,14 @@ void Player::Release()
 {
 	Unit::Release();
 	for (auto& elem : bullet) elem->Release();
+	uiReload->Release();
+	uiReloadBar->Release();
+	uiMagazine->Release();
+	uiBullet[weapon0BulletMax]->Release();
+	uiWeaponFrame->Release();
+	uiWeapon->Release();
+	uiBulletCount->Release();
+	SafeDelete(weaponReloading);
 }
 
 void Player::Update()
@@ -137,6 +146,9 @@ void Player::Update()
 				for (auto& elem : walk) elem->isVisible = false;
 				col->colOnOff = false;
 				col->isVisible = false;
+
+				SetMoveDir();
+
 				roll[curMove8Dir]->isVisible = true;
 				roll[curMove8Dir]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
 			}
@@ -152,32 +164,6 @@ void Player::Update()
 				CAM->position = originCamPos;
 				flagFireCamShake = false;
 			}
-		}
-
-		if (isHitAnim)
-		{
-			Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
-			for (auto& elem : idle) elem->color = c;
-			for (auto& elem : walk) elem->color = c;
-			for (auto& elem : roll) elem->color = c;
-
-			col->SetWorldPosX(col->GetWorldPos().x + RANDOM->Float(-1.0f, 1.0f));
-			col->SetWorldPosY(col->GetWorldPos().y + RANDOM->Float(-1.0f, 1.0f));
-
-			if (TIMER->GetTick(timeHitAnim, 0.4f))	// 히트 애니용
-			{
-				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
-				for (auto& elem : idle) elem->color = c;
-				for (auto& elem : walk) elem->color = c;
-				for (auto& elem : roll) elem->color = c;
-
-				isHitAnim = false;
-			}
-		}
-		else
-		{
-			idle[curTarget8Dir]->color.w = 1.0f;
-			walk[curTarget8Dir]->color.w = 1.0f;
 		}
 	}
 	else if (state == State::roll)
@@ -198,9 +184,13 @@ void Player::Update()
 	if (reloading)
 	{
 		uiReloadBar->img->MoveLocalPos(Vector2(80.0f * DELTA, 0.0f));
+		weapon->idle->isVisible = false;
+		weaponReloading->idle->isVisible = true;
 
 		if (TIMER->GetTick(timeReload, 1.5f))
 		{
+			weapon->idle->isVisible = true;
+			weaponReloading->idle->isVisible = false;
 			uiReload->img->isVisible = false;
 			uiReloadBar->img->isVisible = false;
 			reloading = false;
@@ -217,14 +207,44 @@ void Player::Update()
 		}
 	}
 
+	if (isHitAnim)
+	{
+		Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
+		for (auto& elem : idle) elem->color = c;
+		for (auto& elem : walk) elem->color = c;
+		for (auto& elem : roll) elem->color = c;
+
+		col->SetWorldPosX(col->GetWorldPos().x + RANDOM->Float(-1.0f, 1.0f));
+		col->SetWorldPosY(col->GetWorldPos().y + RANDOM->Float(-1.0f, 1.0f));
+
+		if (TIMER->GetTick(timeHitAnim, 0.4f))	// 히트 애니용
+		{
+			Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
+			for (auto& elem : idle) elem->color = c;
+			for (auto& elem : walk) elem->color = c;
+			for (auto& elem : roll) elem->color = c;
+
+			isHitAnim = false;
+		}
+	}
+	else
+	{
+		idle[curTarget8Dir]->color.w = 1.0f;
+		walk[curTarget8Dir]->color.w = 1.0f;
+	}
+
 	respawn->Update();
 	kick->Update();
 	obtain->Update();
 	for (auto& elem : bullet) elem->Update();
-	uiMagazine->Update();
-	for(auto& elem : uiBullet) elem->Update();
 	uiReload->Update();
 	uiReloadBar->Update();
+	uiMagazine->Update();
+	for(auto& elem : uiBullet) elem->Update();
+	uiWeaponFrame->Update();
+	uiWeapon->Update();
+	uiBulletCount->Update();
+	weaponReloading->Update();
 }
 
 void Player::LateUpdate()
@@ -239,8 +259,12 @@ void Player::Render()
 	for (auto& elem : bullet) elem->Render();
 	Unit::Render();
 
-	uiMagazine->Render();
-	for (auto& elem : uiBullet) elem->Render();
 	uiReload->Render();
 	uiReloadBar->Render();
+	uiMagazine->Render();
+	for (auto& elem : uiBullet) elem->Render();
+	uiWeaponFrame->Render();
+	uiWeapon->Render();
+	uiBulletCount->Render();
+	weaponReloading->Render();
 }

@@ -20,7 +20,8 @@ public:
 	virtual void Hit(const int damage) override;
 
 public:
-	UI*				            hpGuage;
+	UI*							hpGuageBar;
+	UI*							hpGuage;
 	std::vector<BossBullet*>	bullet;
     bossPattern                 pattern;
 	StringBulletData            stringBullet;

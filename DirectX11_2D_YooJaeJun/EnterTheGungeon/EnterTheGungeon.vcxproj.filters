@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{05cf287f-5ccb-4e1c-a923-b6196b408b30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Bullet">
+      <UniqueIdentifier>{b9ca0c8b-5dfc-4456-bb4d-f78c6eb9eb14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Unit">
+      <UniqueIdentifier>{ee59fbc8-95fd-4b1a-913e-8bf037985466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\UI">
+      <UniqueIdentifier>{cb1d9972-e25e-4865-a4fd-7e542ce9fea1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Level">
+      <UniqueIdentifier>{d5c42346-46be-4eed-a185-12cbb53691c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Weapon">
+      <UniqueIdentifier>{b0d2f63b-dc57-48ea-8165-96fb680583e1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Bullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>GameObject\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Pet.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>GameObject\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="StringBulletData.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Bullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Pet.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>GameObject\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="StringBulletData.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

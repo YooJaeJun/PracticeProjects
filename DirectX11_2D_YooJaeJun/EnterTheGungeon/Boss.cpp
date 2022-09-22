@@ -21,7 +21,8 @@ Boss::Boss()
 void Boss::Release()
 {
 	Unit::Release();
-	SafeDelete(hpGuage);
+    SafeDelete(hpGuage);
+    SafeDelete(hpGuageBar);
 }
 
 void Boss::Update()
@@ -38,10 +39,6 @@ void Boss::Update()
 
     if (state == State::idle)
     {
-        hpGuage->img->scale.x = (float)curHp / maxHp * hpGuage->imgSize.x;
-        hpGuage->img->uv.z = hpGuage->img->scale.x / hpGuage->imgSize.x;
-        hpGuage->Update();
-
         if (isHitAnim)
         {
             Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
@@ -142,6 +139,16 @@ void Boss::Update()
     {
         if (elem) elem->Update();
     }
+
+    hpGuage->img->scale.x = (float)curHp / maxHp * hpGuage->imgSize.x;
+    hpGuage->img->uv.z = hpGuage->img->scale.x / hpGuage->imgSize.x;
+    if (curHp <= 0)
+    {
+        hpGuageBar->img->isVisible = false;
+        hpGuage->img->isVisible = false;
+    }
+    hpGuageBar->Update();
+    hpGuage->Update();
 }
 
 void Boss::LateUpdate()
@@ -152,6 +159,7 @@ void Boss::Render()
 {
     Unit::Render();
 	for (auto& elem : bullet) elem->Render();
+    hpGuageBar->Render();
     hpGuage->Render();
 }
 

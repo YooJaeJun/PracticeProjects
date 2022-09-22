@@ -77,7 +77,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AirHockey", "AirHockey\AirH
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Arkanoid", "Arkanoid\Arkanoid.vcxproj", "{C8395219-6E5A-405B-9916-FE5311EFA8DB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{CAE7E4E9-C028-43E7-A562-FD3AAABD6C6F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EnterTheGungeon", "EnterTheGungeon\EnterTheGungeon.vcxproj", "{CAE7E4E9-C028-43E7-A562-FD3AAABD6C6F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SlidingPuzzle", "SlidingPuzzle\SlidingPuzzle.vcxproj", "{5C490124-4FA7-414E-A2E6-7143FD840FFA}"
 EndProject

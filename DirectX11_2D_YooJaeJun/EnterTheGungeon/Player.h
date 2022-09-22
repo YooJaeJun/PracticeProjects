@@ -28,5 +28,9 @@ public:
 	UI*				uiReloadBar;
 	UI*				uiMagazine;
 	UI*				uiBullet[weapon0BulletMax];
+	UI*				uiWeaponFrame;
+	UI*				uiWeapon;
+	UI*				uiBulletCount;
+	Weapon*			weaponReloading;
 };
 

@@ -33,6 +33,8 @@ public:
 	void Spawn();
 	virtual void Hit(const int damage);
 	void Die();
+	void SetMoveDir();
+	void SetTargetDir();
 
 public:
 	ObImage*	idle[8];
