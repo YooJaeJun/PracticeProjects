@@ -5,6 +5,9 @@ ID3D11Buffer* ObStar::vertexBuffer = nullptr;
 
 void ObStar::CreateStaticMember()
 {
+    StaticVertexCount::Trianglestrip() = 15;
+    StaticVertexCount::Linestrip() = 6;
+
     VertexPC* Vertex;
 
     /*vertex[0] = Vector2(0.5f * cosf(0), 0.5f * sinf(0));
@@ -13,7 +16,7 @@ void ObStar::CreateStaticMember()
     vertex[3] = Vector2(0.5f * cosf(216 * ToRadian), 0.5f * sinf(216 * ToRadian));
     vertex[4] = Vector2(0.5f * cosf(288 * ToRadian), 0.5f * sinf(288 * ToRadian));*/
 
-    Vertex = new VertexPC[VertexCountForFill];
+    Vertex = new VertexPC[StaticVertexCount::Trianglestrip()];
 
     for (UINT i = 0; i < 5; i++)
     {
@@ -30,67 +33,12 @@ void ObStar::CreateStaticMember()
         Vertex[i * 3 + 2].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-
-    /*
-    for (int i = 0; i < VertexCountForFill; i += 3)
-    {
-        Vertex[i].position.x = 0.0f;
-        Vertex[i].position.y = 0.0f;
-        Vertex[i].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-    //
-    Vertex[1].position.x = -0.5f;
-    Vertex[1].position.y = 0.2f;
-    Vertex[1].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    Vertex[2].position.x = 0.3f;
-    Vertex[2].position.y = -0.4f;
-    Vertex[2].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    //
-    Vertex[4].position.x = -0.5f;
-    Vertex[4].position.y = 0.2f;
-    Vertex[4].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    Vertex[5].position.x = 0.5f;
-    Vertex[5].position.y = 0.2f;
-    Vertex[5].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    //
-    Vertex[7].position.x = -0.5f;
-    Vertex[7].position.y = 0.2f;
-    Vertex[7].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    Vertex[8].position.x = 0.3f;
-    Vertex[8].position.y = -0.4f;
-    Vertex[8].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    //
-    Vertex[10].position.x = 0.0f;
-    Vertex[10].position.y = 0.6f;
-    Vertex[10].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    Vertex[11].position.x = -0.3f;
-    Vertex[11].position.y = -0.4f;
-    Vertex[11].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    //
-    Vertex[13].position.x = 0.5f;
-    Vertex[13].position.y = 0.2f;
-    Vertex[13].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-
-    Vertex[14].position.x = -0.3f;
-    Vertex[14].position.y = -0.4f;
-    Vertex[14].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-    */
-
-
     //CreateVertexBuffer
     {
         D3D11_BUFFER_DESC desc;
         desc = { 0 };
         desc.Usage = D3D11_USAGE_DEFAULT;//버퍼를 읽고 쓰는 방법
-        desc.ByteWidth = sizeof(VertexPC) * VertexCountForFill; //버퍼 크기 (바이트)입니다.
+        desc.ByteWidth = sizeof(VertexPC) * StaticVertexCount::Trianglestrip(); //버퍼 크기 (바이트)입니다.
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;//버퍼가 파이프 라인에 바인딩되는 방법을 식별하십시오
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -107,7 +55,7 @@ void ObStar::CreateStaticMember()
 
     delete[] Vertex;
 
-    Vertex = new VertexPC[6];
+    Vertex = new VertexPC[StaticVertexCount::Linestrip()];
 
     Vertex[0].position.x = -0.5f;
     Vertex[0].position.y = 0.2f;
@@ -138,7 +86,7 @@ void ObStar::CreateStaticMember()
         D3D11_BUFFER_DESC desc;
         desc = { 0 };
         desc.Usage = D3D11_USAGE_DEFAULT;//버퍼를 읽고 쓰는 방법
-        desc.ByteWidth = sizeof(VertexPC) * 6; //버퍼 크기 (바이트)입니다.
+        desc.ByteWidth = sizeof(VertexPC) * StaticVertexCount::Linestrip(); //버퍼 크기 (바이트)입니다.
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;//버퍼가 파이프 라인에 바인딩되는 방법을 식별하십시오
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -182,7 +130,7 @@ void ObStar::Render()
             &stride,
             &offset);
         D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);   // 그릴 모양
-        D3D->GetDC()->Draw(VertexCountForFill, 0);
+        D3D->GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
     }
     else
     {
@@ -192,7 +140,7 @@ void ObStar::Render()
             &stride,//정점버퍼의 한 원소의 바이트단위 크기
             &offset);
         D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-        D3D->GetDC()->Draw(6, 0);
+        D3D->GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
     }
 }
 

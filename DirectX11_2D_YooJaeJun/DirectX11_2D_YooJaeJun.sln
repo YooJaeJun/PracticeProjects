@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{E3F0
 	ProjectSection(SolutionItems) = preProject
 		Shaders\1.Basic.hlsl = Shaders\1.Basic.hlsl
 		Shaders\2.Image.hlsl = Shaders\2.Image.hlsl
+		Shaders\3.TileMap.hlsl = Shaders\3.TileMap.hlsl
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{54A27132-8557-498B-9819-8A219F8DF917}"

@@ -5,11 +5,12 @@ ID3D11Buffer* ObImage::uvBuffer = nullptr;
 
 void ObImage::CreateStaticMember()
 {
+    StaticVertexCount::Trianglestrip() = 4;
+
     VertexPT* Vertex;
 
-    Vertex = new VertexPT[4];
-    //VertexCount = 4;
-    //시계방향으로 정점찍기
+    Vertex = new VertexPT[StaticVertexCount::Trianglestrip()];
+
     Vertex[0].position.x = -0.5f;
     Vertex[0].position.y = -0.5f;
     Vertex[0].uv = Vector2(0.0f, 1.0f);
@@ -31,7 +32,7 @@ void ObImage::CreateStaticMember()
         D3D11_BUFFER_DESC desc;
         desc = { 0 };
         desc.Usage = D3D11_USAGE_DEFAULT;//버퍼를 읽고 쓰는 방법
-        desc.ByteWidth = sizeof(VertexPT) * 4; //버퍼 크기 (바이트)입니다.
+        desc.ByteWidth = sizeof(VertexPT) * StaticVertexCount::Trianglestrip(); //버퍼 크기 (바이트)입니다.
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;//버퍼가 파이프 라인에 바인딩되는 방법을 식별하십시오
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -167,6 +168,8 @@ void ObImage::PlayAnim()
 
 ObImage::ObImage(wstring file)
 {
+    this->file = file;
+
     //기본 샘플러 값
     samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
     samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -229,7 +232,7 @@ void ObImage::Render()
     D3D->GetDC()->PSSetSamplers(0, 1, &sampler);
     D3D->GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
     D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-    D3D->GetDC()->Draw(4, 0);
+    D3D->GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
 }
 
 void ObImage::ChangeAnim(ANIMSTATE anim, float interval, bool xAxis)

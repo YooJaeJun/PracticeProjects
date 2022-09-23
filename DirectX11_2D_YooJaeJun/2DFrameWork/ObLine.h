@@ -1,6 +1,6 @@
 #pragma once
 // ¼±
-class ObLine : public GameObject
+class ObLine : public GameObject, public StaticVertexCount<ObLine>
 {
 private:
     static ID3D11Buffer* vertexBuffer;
@@ -29,7 +29,7 @@ public:
     bool operator ==(const ObLine & e) const;
 
 public:
-    bool almost_equal_line(const ObLine& e1, const ObLine& e2);
+    bool almostEqualLine(const ObLine& e1, const ObLine& e2);
 };
 
 

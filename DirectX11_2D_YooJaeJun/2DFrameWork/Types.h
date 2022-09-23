@@ -10,6 +10,15 @@ struct Int2
 		this->x = x;
 		this->y = y;
 	}
+
+	bool operator==(Int2 dest)
+	{
+		return (x == dest.x && y == dest.y);
+	}
+	bool operator!=(Int2 dest)
+	{
+		return (x != dest.x || y != dest.y);
+	}
 };
 
 // 추가 이유

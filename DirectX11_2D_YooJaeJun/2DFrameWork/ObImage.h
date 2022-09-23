@@ -8,8 +8,10 @@ enum class ANIMSTATE
     REVERSE_ONCE
 };
 
-class ObImage : public GameObject
+class ObImage : public GameObject, public StaticVertexCount<ObImage>
 {
+    friend class ObTileMap;
+
 private:
     static ID3D11Buffer*        vertexBuffer;
     static ID3D11Buffer*        uvBuffer;
@@ -33,6 +35,7 @@ public:
     Int2                        maxFrame;
     Int2                        frame;
     bool                        reverseLR;
+    wstring                     file;
 
 private:
     void PlayAnim();

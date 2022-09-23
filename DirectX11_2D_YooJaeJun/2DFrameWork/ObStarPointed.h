@@ -1,8 +1,7 @@
 #pragma once
-class ObStarPointed : public GameObject
+class ObStarPointed : public GameObject, public StaticVertexCount<ObStarPointed>
 {
 private:
-    static const int vertexCountForFill = 31;
     static ID3D11Buffer* fillVertexBuffer;
     static ID3D11Buffer* vertexBuffer;
 

@@ -77,6 +77,9 @@
     <ClInclude Include="Delaunay.h">
       <Filter>Algorithm</Filter>
     </ClInclude>
+    <ClInclude Include="ObTileMap.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -161,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="Delaunay.cpp">
       <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="ObTileMap.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

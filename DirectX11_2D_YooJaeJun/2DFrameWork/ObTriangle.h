@@ -1,9 +1,8 @@
 #pragma once
 // »ï°¢Çü
-class ObTriangle : public GameObject
+class ObTriangle : public GameObject, public StaticVertexCount<ObTriangle>
 {
 private:
-    static const int vertexCount = 3;
     static ID3D11Buffer* fillVertexBuffer;
     static ID3D11Buffer* vertexBuffer;
 

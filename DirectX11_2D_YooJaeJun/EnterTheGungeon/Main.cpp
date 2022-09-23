@@ -25,19 +25,19 @@ void Main::Init()
     player->col->SetWorldPosY(0.0f);
     player->col->color = Color(1.0f, 1.0f, 1.0f);
 
-    player->idle[front] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Front.png");
-    player->idle[leftSide] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
-    player->idle[rightSide] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
-    player->idle[leftDiag] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
-    player->idle[rightDiag] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
-    player->idle[back] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Back.png");
-    player->idle[backLeftDiag] = new ObImage(L"EnterTheGungeon/Player_0/Idle_BackDiag.png");
-    player->idle[backRightDiag] = new ObImage(L"EnterTheGungeon/Player_0/Idle_BackDiag.png");
+    player->idle[dirB] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Front.png");
+    player->idle[dirL] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
+    player->idle[dirR] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
+    player->idle[dirLB] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
+    player->idle[dirRB] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
+    player->idle[dirT] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Back.png");
+    player->idle[dirLT] = new ObImage(L"EnterTheGungeon/Player_0/Idle_BackDiag.png");
+    player->idle[dirRT] = new ObImage(L"EnterTheGungeon/Player_0/Idle_BackDiag.png");
 
     idx = 0;
     for (auto& elem : player->idle)
     {
-        if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+        if (idx == dirL || idx == dirLB || idx == dirLT)
         {
             elem->rotationY = PI;
         }
@@ -49,19 +49,19 @@ void Main::Init()
         idx++;
     }
 
-    player->walk[front] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Front.png");
-    player->walk[leftSide] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
-    player->walk[rightSide] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
-    player->walk[leftDiag] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
-    player->walk[rightDiag] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
-    player->walk[back] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Back.png");
-    player->walk[backLeftDiag] = new ObImage(L"EnterTheGungeon/Player_0/Walk_BackDiag.png");
-    player->walk[backRightDiag] = new ObImage(L"EnterTheGungeon/Player_0/Walk_BackDiag.png");
+    player->walk[dirB] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Front.png");
+    player->walk[dirL] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
+    player->walk[dirR] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
+    player->walk[dirLB] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
+    player->walk[dirRB] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
+    player->walk[dirT] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Back.png");
+    player->walk[dirLT] = new ObImage(L"EnterTheGungeon/Player_0/Walk_BackDiag.png");
+    player->walk[dirRT] = new ObImage(L"EnterTheGungeon/Player_0/Walk_BackDiag.png");
 
     idx = 0;
     for (auto& elem : player->walk)
     {
-        if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+        if (idx == dirL || idx == dirLB || idx == dirLT)
         {
             elem->rotationY = PI;
         }
@@ -74,19 +74,19 @@ void Main::Init()
         idx++;
     }
 
-    player->roll[front] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Front.png");
-    player->roll[leftSide] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Side.png");
-    player->roll[rightSide] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Side.png");
-    player->roll[leftDiag] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Side.png");
-    player->roll[rightDiag] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Side.png");
-    player->roll[back] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Back.png");
-    player->roll[backLeftDiag] = new ObImage(L"EnterTheGungeon/Player_0/Roll_BackDiag.png");
-    player->roll[backRightDiag] = new ObImage(L"EnterTheGungeon/Player_0/Roll_BackDiag.png");
+    player->roll[dirB] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Front.png");
+    player->roll[dirL] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Side.png");
+    player->roll[dirR] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Side.png");
+    player->roll[dirLB] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Side.png");
+    player->roll[dirRB] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Side.png");
+    player->roll[dirT] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Back.png");
+    player->roll[dirLT] = new ObImage(L"EnterTheGungeon/Player_0/Roll_BackDiag.png");
+    player->roll[dirRT] = new ObImage(L"EnterTheGungeon/Player_0/Roll_BackDiag.png");
 
     idx = 0;
     for (auto& elem : player->roll)
     {
-        if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+        if (idx == dirL || idx == dirLB || idx == dirLT)
         {
             elem->rotationY = PI;
         }
@@ -255,19 +255,19 @@ void Main::Init()
         elem->col->color = Color(1.0f, 1.0f, 1.0f);
         elem->col->isFilled = false;
 
-        elem->idle[front] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Front.png");
-        elem->idle[leftSide] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
-        elem->idle[rightSide] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
-        elem->idle[leftDiag] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
-        elem->idle[rightDiag] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
-        elem->idle[back] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Back.png");
-        elem->idle[backLeftDiag] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Back.png");
-        elem->idle[backRightDiag] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Back.png");
+        elem->idle[dirB] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Front.png");
+        elem->idle[dirL] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
+        elem->idle[dirR] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
+        elem->idle[dirLB] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
+        elem->idle[dirRB] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
+        elem->idle[dirT] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Back.png");
+        elem->idle[dirLT] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Back.png");
+        elem->idle[dirRT] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Back.png");
 
         idx = 0;
         for (auto& elem2 : elem->idle)
         {
-            if (idx == rightSide || idx == rightDiag || idx == backRightDiag)
+            if (idx == dirR || idx == dirRB || idx == dirRT)
             {
                 elem2->rotationY = PI;
             }
@@ -279,19 +279,19 @@ void Main::Init()
             idx++;
         }
 
-        elem->walk[front] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Front.png");
-        elem->walk[leftSide] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Side.png");
-        elem->walk[rightSide] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Side.png");
-        elem->walk[leftDiag] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Side.png");
-        elem->walk[rightDiag] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Side.png");
-        elem->walk[back] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Back.png");
-        elem->walk[backLeftDiag] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Back.png");
-        elem->walk[backRightDiag] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Back.png");
+        elem->walk[dirB] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Front.png");
+        elem->walk[dirL] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Side.png");
+        elem->walk[dirR] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Side.png");
+        elem->walk[dirLB] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Side.png");
+        elem->walk[dirRB] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Side.png");
+        elem->walk[dirT] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Back.png");
+        elem->walk[dirLT] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Back.png");
+        elem->walk[dirRT] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Back.png");
 
         idx = 0;
         for (auto& elem2 : elem->walk)
         {
-            if (idx == rightSide || idx == rightDiag || idx == backRightDiag)
+            if (idx == dirR || idx == dirRB || idx == dirRT)
             {
                 elem2->rotationY = PI;
             }
@@ -366,19 +366,19 @@ void Main::Init()
         elem->col->SetWorldPosY(400.0f);
         elem->col->color = Color(1.0f, 1.0f, 1.0f);
 
-        elem->idle[front] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
-        elem->idle[leftSide] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
-        elem->idle[rightSide] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
-        elem->idle[leftDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
-        elem->idle[rightDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
-        elem->idle[back] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
-        elem->idle[backLeftDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
-        elem->idle[backRightDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
+        elem->idle[dirB] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
+        elem->idle[dirL] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
+        elem->idle[dirR] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
+        elem->idle[dirLB] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
+        elem->idle[dirRB] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
+        elem->idle[dirT] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
+        elem->idle[dirLT] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
+        elem->idle[dirRT] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
 
         idx = 0;
         for (auto& elem2 : elem->idle)
         {
-            if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+            if (idx == dirL || idx == dirLB || idx == dirLT)
             {
                 elem2->rotationY = PI;
             }
@@ -390,19 +390,19 @@ void Main::Init()
             idx++;
         }
 
-        elem->walk[front] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
-        elem->walk[leftSide] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
-        elem->walk[rightSide] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
-        elem->walk[leftDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
-        elem->walk[rightDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
-        elem->walk[back] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Back.png");
-        elem->walk[backLeftDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Back.png");
-        elem->walk[backRightDiag] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Back.png");
+        elem->walk[dirB] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
+        elem->walk[dirL] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
+        elem->walk[dirR] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
+        elem->walk[dirLB] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
+        elem->walk[dirRB] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
+        elem->walk[dirT] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Back.png");
+        elem->walk[dirLT] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Back.png");
+        elem->walk[dirRT] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Back.png");
 
         idx = 0;
         for (auto& elem2 : elem->walk)
         {
-            if (idx == leftSide || idx == leftDiag || idx == backLeftDiag)
+            if (idx == dirL || idx == dirLB || idx == dirLT)
             {
                 elem2->rotationY = PI;
             }

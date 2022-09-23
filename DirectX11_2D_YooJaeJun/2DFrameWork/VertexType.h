@@ -29,3 +29,28 @@ struct VertexPT
         this->position.z = 0.0f;
     }
 };
+
+struct VertexTile
+{
+    Vector3 position;
+    Vector2 uv;
+    Color color;
+
+    float tileMapIdx;
+    float tileState;
+
+    VertexTile()
+    {
+        position = Vector3(0.0f, 0.0f, 0.0f);
+        uv = Vector2(0.0f, 0.0f);
+        tileMapIdx = 0.0f;
+        tileState = 0.0f;
+        color = Color(0.5f, 0.5f, 0.5f, 0.5f);
+    }
+
+    VertexTile(Vector3 position, Vector2 uv, Color color, float tileMapIdx, float tileState)
+        : position(position), uv(uv), color(color), tileMapIdx(tileMapIdx), tileState(tileState)
+    {
+        this->position.z = 0.0f;
+    }
+};

@@ -10,10 +10,10 @@ Unit::Unit()
 	isHitAnim = 0.0f;
 	timeHitAnim = 0.0f;
 	targetDirBefore = targetDir = Vector2(0.0f, 0.0f);
-	curMove8Dir = front;
-	curMove8DirBefore = front;
-	curTarget8Dir = front;
-	curTarget8DirBefore = front;
+	curMove8Dir = dirB;
+	curMove8DirBefore = dirB;
+	curTarget8Dir = dirB;
+	curTarget8DirBefore = dirB;
 }
 
 void Unit::Release()
@@ -165,35 +165,35 @@ void Unit::SetMoveDir()
 	// 이동방향에 따라 다른 방향 애니메이션 설정하는 코드
 	if (almostEqualFloat(moveDir.x, 0.707107f) && almostEqualFloat(moveDir.y, 0.707107f))
 	{
-		curMove8Dir = backRightDiag;
+		curMove8Dir = dirRT;
 	}
 	else if (almostEqualFloat(moveDir.x, -0.707107f) && almostEqualFloat(moveDir.y, 0.707107f))
 	{
-		curMove8Dir = backLeftDiag;
+		curMove8Dir = dirLT;
 	}
 	else if (almostEqualFloat(moveDir.x, -0.707107f) && almostEqualFloat(moveDir.y, -0.707107f))
 	{
-		curMove8Dir = leftDiag;
+		curMove8Dir = dirLB;
 	}
 	else if (almostEqualFloat(moveDir.x, 0.707107f) && almostEqualFloat(moveDir.y, -0.707107f))
 	{
-		curMove8Dir = rightDiag;
+		curMove8Dir = dirRB;
 	}
 	else if (moveDir.x == 1.0f)
 	{
-		curMove8Dir = rightSide;
+		curMove8Dir = dirR;
 	}
 	else if (moveDir.x == -1.0f)
 	{
-		curMove8Dir = leftSide;
+		curMove8Dir = dirL;
 	}
 	else if (moveDir.y == 1.0f)
 	{
-		curMove8Dir = back;
+		curMove8Dir = dirT;
 	}
 	else if (moveDir.y == -1.0f)
 	{
-		curMove8Dir = front;
+		curMove8Dir = dirB;
 	}
 	else
 	{
@@ -206,36 +206,36 @@ void Unit::SetTargetDir()
 	// 타겟 좌표(플레이어는 마우스)에 따라 다른 방향 애니메이션 설정하는 코드
 	if (targetRotation >= 30.0f * ToRadian && targetRotation < 60.0f * ToRadian)
 	{
-		curTarget8Dir = backRightDiag;
+		curTarget8Dir = dirRT;
 	}
 	else if (targetRotation >= 120.0f * ToRadian && targetRotation < 150.0f * ToRadian)
 	{
-		curTarget8Dir = backLeftDiag;
+		curTarget8Dir = dirLT;
 	}
 	else if (targetRotation >= -150.0f * ToRadian && targetRotation < -120.0f * ToRadian)
 	{
-		curTarget8Dir = leftDiag;
+		curTarget8Dir = dirLB;
 	}
 	else if (targetRotation >= -60.0f * ToRadian && targetRotation < -30.0f * ToRadian)
 	{
-		curTarget8Dir = rightDiag;
+		curTarget8Dir = dirRB;
 	}
 	else if (targetRotation >= -30.0f * ToRadian && targetRotation < 30.0f * ToRadian)
 	{
-		curTarget8Dir = rightSide;
+		curTarget8Dir = dirR;
 	}
 	else if ((targetRotation >= -180.0f * ToRadian && targetRotation < -150.0f * ToRadian) ||
 		(targetRotation >= 150.0f * ToRadian && targetRotation < 180.0f * ToRadian))
 	{
-		curTarget8Dir = leftSide;
+		curTarget8Dir = dirL;
 	}
 	else if (targetRotation >= 60.0f * ToRadian && targetRotation < 120.0f * ToRadian)
 	{
-		curTarget8Dir = back;
+		curTarget8Dir = dirT;
 	}
 	else if (targetRotation >= -120.0f * ToRadian && targetRotation < -60.0f * ToRadian)
 	{
-		curTarget8Dir = front;
+		curTarget8Dir = dirB;
 	}
 	else
 	{

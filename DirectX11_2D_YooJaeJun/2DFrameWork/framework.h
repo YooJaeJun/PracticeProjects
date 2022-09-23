@@ -114,6 +114,7 @@ extern Application app;//Extern Global
 #include "ObStarPointed.h"
 #include "ObCircle.h"
 #include "ObImage.h"
+#include "ObTileMap.h"
 
 #include "Delaunay.h"
 

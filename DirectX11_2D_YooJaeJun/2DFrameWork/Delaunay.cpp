@@ -55,7 +55,7 @@ const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<Vector2>& verti
 		{
 			for (auto e2 = e1 + 1; e2 != end(polygon); e2++)
 			{
-				if (e1->almost_equal_line(*e1, *e2))
+				if (e1->almostEqualLine(*e1, *e2))
 				{
 					e1->isBad = true;
 					e2->isBad = true;

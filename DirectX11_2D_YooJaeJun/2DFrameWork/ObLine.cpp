@@ -4,7 +4,9 @@ ID3D11Buffer* ObLine::vertexBuffer = nullptr;
 
 void ObLine::CreateStaticMember()
 {
-    VertexPC* Vertex = new VertexPC[2];
+    StaticVertexCount::Linestrip() = 2;
+
+    VertexPC* Vertex = new VertexPC[StaticVertexCount::Linestrip()];
 
     Vertex[0].position.x = -0.5f;
     Vertex[0].position.y = 0.0f;
@@ -19,7 +21,7 @@ void ObLine::CreateStaticMember()
         D3D11_BUFFER_DESC desc;
         desc = { 0 };
         desc.Usage = D3D11_USAGE_DEFAULT;//버퍼를 읽고 쓰는 방법
-        desc.ByteWidth = sizeof(VertexPC) * 2; //버퍼 크기 (바이트)입니다.
+        desc.ByteWidth = sizeof(VertexPC) * StaticVertexCount::Linestrip(); //버퍼 크기 (바이트)입니다.
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;//버퍼가 파이프 라인에 바인딩되는 방법을 식별하십시오
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -61,7 +63,7 @@ void ObLine::Render()
         &stride,//정점버퍼의 한 원소의 바이트단위 크기
         &offset);
 
-    D3D->GetDC()->Draw(2, 0);
+    D3D->GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
 }
 
 
@@ -111,7 +113,7 @@ bool ObLine::operator==(const ObLine& e) const
         ((this->v) == e.w && (this->w) == e.v);
 }
 
-bool ObLine::almost_equal_line(const ObLine& e1, const ObLine& e2)
+bool ObLine::almostEqualLine(const ObLine& e1, const ObLine& e2)
 {
     return	(almostEqualVector2(e1.v, e2.v) && almostEqualVector2(e1.w, e2.w)) ||
         (almostEqualVector2(e1.v, e2.w) && almostEqualVector2(e1.w, e2.v));

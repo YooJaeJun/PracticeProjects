@@ -5,9 +5,12 @@ ID3D11Buffer* ObRect::vertexBuffer = nullptr;
 
 void ObRect::CreateStaticMember()
 {
+    StaticVertexCount::Trianglestrip() = 4;
+    StaticVertexCount::Linestrip() = 5;
+
     VertexPC* Vertex;
 
-    Vertex = new VertexPC[4];
+    Vertex = new VertexPC[StaticVertexCount::Trianglestrip()];
     //VertexCount = 4;
     //시계방향으로 정점찍기
     Vertex[0].position.x = -0.5f;
@@ -33,7 +36,7 @@ void ObRect::CreateStaticMember()
         D3D11_BUFFER_DESC desc;
         desc = { 0 };
         desc.Usage = D3D11_USAGE_DEFAULT;//버퍼를 읽고 쓰는 방법
-        desc.ByteWidth = sizeof(VertexPC) * 4; //버퍼 크기 (바이트)입니다.
+        desc.ByteWidth = sizeof(VertexPC) * StaticVertexCount::Trianglestrip(); //버퍼 크기 (바이트)입니다.
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;//버퍼가 파이프 라인에 바인딩되는 방법을 식별하십시오
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -48,7 +51,7 @@ void ObRect::CreateStaticMember()
 
     delete[] Vertex;
 
-    Vertex = new VertexPC[5];
+    Vertex = new VertexPC[StaticVertexCount::Linestrip()];
     //VertexCount = 5;
     Vertex[0].position.x = -0.5f;
     Vertex[0].position.y = -0.5f;
@@ -75,7 +78,7 @@ void ObRect::CreateStaticMember()
         D3D11_BUFFER_DESC desc;
         desc = { 0 };
         desc.Usage = D3D11_USAGE_DEFAULT;//버퍼를 읽고 쓰는 방법
-        desc.ByteWidth = sizeof(VertexPC) * 5; //버퍼 크기 (바이트)입니다.
+        desc.ByteWidth = sizeof(VertexPC) * StaticVertexCount::Linestrip(); //버퍼 크기 (바이트)입니다.
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;//버퍼가 파이프 라인에 바인딩되는 방법을 식별하십시오
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -119,7 +122,7 @@ void ObRect::Render()
             &stride,
             &offset);
         D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);   // 그릴 모양
-        D3D->GetDC()->Draw(4, 0);
+        D3D->GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
     }
     else
     {
@@ -129,7 +132,7 @@ void ObRect::Render()
             &stride,//정점버퍼의 한 원소의 바이트단위 크기
             &offset);
         D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-        D3D->GetDC()->Draw(5, 0);
+        D3D->GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
     }
 }
 

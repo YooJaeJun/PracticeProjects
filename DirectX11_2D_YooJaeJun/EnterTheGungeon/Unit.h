@@ -8,16 +8,16 @@ enum class State
 };
 
 // 8πÊ«‚
-enum dir8
+enum dirState
 {
-	front,
-	leftSide,
-	rightSide,
-	leftDiag,
-	rightDiag,
-	back,
-	backLeftDiag,
-	backRightDiag
+	dirB,
+	dirL,
+	dirR,
+	dirLB,
+	dirRB,
+	dirT,
+	dirLT,
+	dirRT
 };
 
 class Unit : public Character
@@ -47,10 +47,10 @@ public:
 	Weapon*		weapon;
 	ObImage*	shadow;
 	State		state;
-	dir8		curMove8Dir;
-	dir8		curMove8DirBefore;
-	dir8		curTarget8Dir;
-	dir8		curTarget8DirBefore;
+	dirState		curMove8Dir;
+	dirState		curMove8DirBefore;
+	dirState		curTarget8Dir;
+	dirState		curTarget8DirBefore;
 	Vector2		target;
 	Vector2		targetDir;
 	Vector2		targetDirBefore;

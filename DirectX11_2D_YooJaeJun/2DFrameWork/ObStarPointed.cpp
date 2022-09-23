@@ -5,6 +5,9 @@ ID3D11Buffer* ObStarPointed::vertexBuffer = nullptr;
 
 void ObStarPointed::CreateStaticMember()
 {
+    StaticVertexCount::Trianglestrip() = 31;
+    StaticVertexCount::Linestrip() = 6;
+
     VertexPC* Vertex;
 
     /*vertex[0] = Vector2(0.5f * cosf(0), 0.5f * sinf(0));
@@ -13,9 +16,9 @@ void ObStarPointed::CreateStaticMember()
     vertex[3] = Vector2(0.5f * cosf(216 * ToRadian), 0.5f * sinf(216 * ToRadian));
     vertex[4] = Vector2(0.5f * cosf(288 * ToRadian), 0.5f * sinf(288 * ToRadian));*/
 
-    Vertex = new VertexPC[vertexCountForFill];
+    Vertex = new VertexPC[StaticVertexCount::Trianglestrip()];
 
-    for (int i = 0; i < vertexCountForFill; i += 3)
+    for (int i = 0; i < StaticVertexCount::Trianglestrip(); i += 3)
     {
         Vertex[i].position.x = 0.0f;
         Vertex[i].position.y = 0.0f;
@@ -93,7 +96,7 @@ void ObStarPointed::CreateStaticMember()
         D3D11_BUFFER_DESC desc;
         desc = { 0 };
         desc.Usage = D3D11_USAGE_DEFAULT;//버퍼를 읽고 쓰는 방법
-        desc.ByteWidth = sizeof(VertexPC) * vertexCountForFill; //버퍼 크기 (바이트)입니다.
+        desc.ByteWidth = sizeof(VertexPC) * StaticVertexCount::Trianglestrip(); //버퍼 크기 (바이트)입니다.
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;//버퍼가 파이프 라인에 바인딩되는 방법을 식별하십시오
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -108,7 +111,7 @@ void ObStarPointed::CreateStaticMember()
 
     delete[] Vertex;
 
-    Vertex = new VertexPC[6];
+    Vertex = new VertexPC[StaticVertexCount::Linestrip()];
 
     Vertex[0].position.x = -0.7f;
     Vertex[0].position.y = 0.4f;
@@ -139,7 +142,7 @@ void ObStarPointed::CreateStaticMember()
         D3D11_BUFFER_DESC desc;
         desc = { 0 };
         desc.Usage = D3D11_USAGE_DEFAULT;//버퍼를 읽고 쓰는 방법
-        desc.ByteWidth = sizeof(VertexPC) * 6; //버퍼 크기 (바이트)입니다.
+        desc.ByteWidth = sizeof(VertexPC) * StaticVertexCount::Linestrip(); //버퍼 크기 (바이트)입니다.
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;//버퍼가 파이프 라인에 바인딩되는 방법을 식별하십시오
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -183,7 +186,7 @@ void ObStarPointed::Render()
             &stride,
             &offset);
         D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);   // 그릴 모양
-        D3D->GetDC()->Draw(vertexCountForFill, 0);
+        D3D->GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
     }
     else
     {
@@ -193,7 +196,7 @@ void ObStarPointed::Render()
             &stride,//정점버퍼의 한 원소의 바이트단위 크기
             &offset);
         D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-        D3D->GetDC()->Draw(6, 0);
+        D3D->GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
     }
 }
 

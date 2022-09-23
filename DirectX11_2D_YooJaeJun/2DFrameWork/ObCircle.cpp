@@ -4,10 +4,15 @@ ID3D11Buffer* ObCircle::vertexBuffer = nullptr;
 
 void ObCircle::CreateStaticMember()
 {
-    VertexPC* Vertex;
-    Vertex = new VertexPC[360 * 3];
+    StaticVertexCount::Trianglestrip() = 360 * 3;
+    StaticVertexCount::Linestrip() = 361;
 
-    for (UINT i = 0; i < 360; i++)
+    VertexPC* Vertex;
+    Vertex = new VertexPC[StaticVertexCount::Trianglestrip()];
+
+    int size = StaticVertexCount::Trianglestrip() / 3;
+
+    for (UINT i = 0; i < size; i++)
     {
         Vertex[i * 3].position.x = 0.0f;
         Vertex[i * 3].position.y = 0.0f;
@@ -60,7 +65,7 @@ void ObCircle::CreateStaticMember()
         D3D11_BUFFER_DESC desc;
         desc = { 0 }; //멤버변수 전부 0으로
         desc.Usage = D3D11_USAGE_DEFAULT;//버퍼를 읽고 쓰는 방법
-        desc.ByteWidth = sizeof(VertexPC) * 360 * 3; //버퍼 크기 (바이트)입니다.
+        desc.ByteWidth = sizeof(VertexPC) * StaticVertexCount::Trianglestrip(); //버퍼 크기 (바이트)입니다.
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;//버퍼가 파이프 라인에 바인딩되는 방법을 식별하십시오
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -77,10 +82,10 @@ void ObCircle::CreateStaticMember()
 
     delete[] Vertex;
 
-    Vertex = new VertexPC[361];
+    Vertex = new VertexPC[StaticVertexCount::Linestrip()];
 
     //두가지 랜덤한 색 만들기
-    for (UINT i = 0; i < 361; i++)
+    for (UINT i = 0; i < StaticVertexCount::Linestrip(); i++)
     {
         Vertex[i].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         Vertex[i].position.x = cosf(i * ToRadian) * 0.5f;
@@ -138,7 +143,7 @@ void ObCircle::Render()
             &offset);
         D3D->GetDC()->IASetPrimitiveTopology
         (D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-        D3D->GetDC()->Draw(360 * 3, 0);
+        D3D->GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
     }
     else
     {
@@ -149,7 +154,7 @@ void ObCircle::Render()
             &offset);
         D3D->GetDC()->IASetPrimitiveTopology
         (D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-        D3D->GetDC()->Draw(361, 0);
+        D3D->GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
     }
 }
 

@@ -5,6 +5,7 @@ ID3D11Buffer* GameObject::WVPBuffer = nullptr;
 ID3D11Buffer* GameObject::colorBuffer = nullptr;
 Shader* GameObject::basicShader = nullptr;
 Shader* GameObject::imageShader = nullptr;
+Shader* GameObject::tileMapShader = nullptr;
 
 void GameObject::CreateStaticMember()
 {
@@ -40,6 +41,7 @@ void GameObject::CreateStaticMember()
 
 	basicShader = new Shader(L"1.Basic");
 	imageShader = new Shader(L"2.Image");
+	// tileMapShader = new Shader(L"3.TileMap");
 	axisObject = new ObLine();
 }
 
@@ -48,6 +50,7 @@ void GameObject::DeleteStaticMember()
 	delete axisObject;
 	delete basicShader;
 	delete imageShader;
+	delete tileMapShader;
 	WVPBuffer->Release();
 	colorBuffer->Release();
 }
@@ -55,19 +58,17 @@ void GameObject::DeleteStaticMember()
 
 GameObject::GameObject()
 {
+	isVisible = true;
+	isFilled = true;
 	position.x = 0;
 	position.y = 0;
-
 	scale.x = 1.0f;
 	scale.y = 1.0f;
-
 	rotation = 0;
 	rotationX = 0;
 	rotationY = 0;
 	rotation2 = 0;
 	color = Color(0.5, 0.5, 0.5, 0.5);
-	isVisible = true;
-	isFilled = true;
 	isAxis = false;
 	P = nullptr;
 	pivot = OFFSET_N;
@@ -80,8 +81,8 @@ void GameObject::Update()
 	Pi = Matrix::CreateTranslation(pivot.x, pivot.y, 0.0f);
 	S = Matrix::CreateScale(scale.x, scale.y, 1.0f);
 	R = Matrix::CreateRotationZ(rotation);
-	RX = Matrix::CreateRotationX(rotationX);	// 추가
-	RY = Matrix::CreateRotationY(rotationY);	// 추가
+	RX = Matrix::CreateRotationX(rotationX);
+	RY = Matrix::CreateRotationY(rotationY);
 	T = Matrix::CreateTranslation(position.x, position.y, 0.0f);
 	R2 = Matrix::CreateRotationZ(rotation2);
 

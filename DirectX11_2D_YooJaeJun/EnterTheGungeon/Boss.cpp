@@ -149,6 +149,16 @@ void Boss::Update()
     }
     hpGuageBar->Update();
     hpGuage->Update();
+
+
+    if (state == State::die)
+    {
+        for (auto& elem : bullet)
+        {
+            elem->col->isVisible = false;
+            elem->idle->isVisible = false;
+        }
+    }
 }
 
 void Boss::LateUpdate()

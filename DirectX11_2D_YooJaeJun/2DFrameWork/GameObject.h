@@ -1,4 +1,21 @@
 #pragma once
+
+// CRTP 패턴으로 각 하위 클래스 CreateStaticMember에서나 일반함수에서나 vertex 개수를 설정할 수 있게 함
+template<typename T>
+struct StaticVertexCount
+{
+	static int& Trianglestrip()
+	{
+		static int Trianglestrip_;
+		return Trianglestrip_;
+	}
+	static int& Linestrip()
+	{
+		static int Linestrip_;
+		return Linestrip_;
+	}
+};
+
 class ObLine;
 enum class SPACE
 {
@@ -20,10 +37,12 @@ class GameObject
 private:
 	static ID3D11Buffer*	WVPBuffer;
 	static ID3D11Buffer*	colorBuffer;
+	static ObLine*			axisObject;
 
 protected:
 	static Shader*			basicShader;
 	static Shader*			imageShader;
+	static Shader*			tileMapShader;
 
 	//static member function
 public:
@@ -35,28 +54,26 @@ private:
 	Matrix		S, R, T, R2, RT, Pi, WVP;
 	Matrix*		P;
 	Vector2		position;
-	static ObLine* axisObject;
 
 protected:
 	Matrix		W;
 
 public:
+	bool        isVisible;
+	bool        isFilled;
 	Vector2		pivot;
 	Vector2		scale;
 	float		rotation;
 	float		rotation2;
+	Matrix		RX;
+	Matrix		RY;
+	float		rotationX;
+	float		rotationY;
 	bool		isAxis;
-	bool        isVisible;
-	bool        isFilled;
 	Color       color;
-
 	SPACE		space;
 	COLLIDER	collider;
 	bool		colOnOff;
-
-	Matrix		RX, RY;
-	float		rotationX;
-	float		rotationY;
 
 	//member function
 public:

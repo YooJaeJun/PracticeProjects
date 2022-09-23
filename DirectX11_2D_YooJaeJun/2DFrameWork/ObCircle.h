@@ -1,5 +1,5 @@
 #pragma once
-class ObCircle : public GameObject
+class ObCircle : public GameObject, public StaticVertexCount<ObCircle>
 {
 private:
     static ID3D11Buffer* fillVertexBuffer;

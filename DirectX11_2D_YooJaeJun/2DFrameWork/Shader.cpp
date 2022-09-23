@@ -26,6 +26,8 @@ Shader::Shader(wstring file)
     0 };
     // x, y, z 좌표 12바이트만 쓸 거야 라는 뜻
 
+    UINT NumElements = 2;
+
     if (file == L"1.Basic")
     {
         LayoutDesc[1] = 
@@ -50,12 +52,23 @@ Shader::Shader(wstring file)
         D3D11_INPUT_PER_VERTEX_DATA,//넘어가기
         0 };
     }
+    
+    else if (file == L"3.TileMap")
+    {
+        D3D11_INPUT_ELEMENT_DESC LayoutDesc[5];
+        LayoutDesc[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+        LayoutDesc[1] = { "UV", 0,DXGI_FORMAT_R32G32_FLOAT, 0, 12,D3D11_INPUT_PER_VERTEX_DATA, 0 };
+        LayoutDesc[2] = { "COLOR", 0,DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 20,D3D11_INPUT_PER_VERTEX_DATA, 0 };
+        LayoutDesc[3] = { "INDICES", 0,DXGI_FORMAT_R32_FLOAT, 0, 36,D3D11_INPUT_PER_VERTEX_DATA, 0 };
+        LayoutDesc[4] = { "STATE", 0,DXGI_FORMAT_R32_FLOAT, 0, 40,D3D11_INPUT_PER_VERTEX_DATA, 0 };
+        NumElements = 5;
+    }
 
     // 받는 역할은 Input Layout인데, vertext Layout에 담아 쓰기
     D3D->GetDevice()->CreateInputLayout
     (
         LayoutDesc,//정점구조체배열
-        2,//배열원소갯수
+        NumElements,//배열원소갯수
         VsBlob->GetBufferPointer(),//정점셰이더 포인터
         VsBlob->GetBufferSize(),//셰이더크기
         &vertexLayout//입력배치를 포인터를 통해 돌려줌
@@ -82,7 +95,7 @@ Shader::~Shader()
 void Shader::Set()
 {
     //파이프라인에 바인딩
-    D3D->GetDC()->VSSetShader(vertexShader, 0,  0);
+    D3D->GetDC()->VSSetShader(vertexShader, 0, 0);
     D3D->GetDC()->PSSetShader(pixelShader, 0, 0);
     D3D->GetDC()->IASetInputLayout(vertexLayout);
 }

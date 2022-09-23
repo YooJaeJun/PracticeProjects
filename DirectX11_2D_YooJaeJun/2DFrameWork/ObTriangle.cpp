@@ -5,9 +5,12 @@ ID3D11Buffer* ObTriangle::vertexBuffer = nullptr;
 
 void ObTriangle::CreateStaticMember()
 {
+    StaticVertexCount::Trianglestrip() = 3;
+    StaticVertexCount::Linestrip() = 3;
+
     VertexPC* Vertex;
 
-    Vertex = new VertexPC[vertexCount];
+    Vertex = new VertexPC[StaticVertexCount::Trianglestrip()];
     Vertex[0].position.x = 0.0f;
     Vertex[0].position.y = 0.5f;
     Vertex[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -26,7 +29,7 @@ void ObTriangle::CreateStaticMember()
         D3D11_BUFFER_DESC desc;
         desc = { 0 };
         desc.Usage = D3D11_USAGE_DEFAULT;//버퍼를 읽고 쓰는 방법
-        desc.ByteWidth = sizeof(VertexPC) * vertexCount; //버퍼 크기 (바이트)입니다.
+        desc.ByteWidth = sizeof(VertexPC) * StaticVertexCount::Trianglestrip(); //버퍼 크기 (바이트)입니다.
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;//버퍼가 파이프 라인에 바인딩되는 방법을 식별하십시오
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -41,7 +44,7 @@ void ObTriangle::CreateStaticMember()
 
     delete[] Vertex;
 
-    Vertex = new VertexPC[vertexCount];
+    Vertex = new VertexPC[StaticVertexCount::Linestrip()];
     Vertex[0].position.x = 0.0f;
     Vertex[0].position.y = 0.5f;
     Vertex[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -59,7 +62,7 @@ void ObTriangle::CreateStaticMember()
         D3D11_BUFFER_DESC desc;
         desc = { 0 };
         desc.Usage = D3D11_USAGE_DEFAULT;//버퍼를 읽고 쓰는 방법
-        desc.ByteWidth = sizeof(VertexPC) * vertexCount; //버퍼 크기 (바이트)입니다.
+        desc.ByteWidth = sizeof(VertexPC) * StaticVertexCount::Linestrip(); //버퍼 크기 (바이트)입니다.
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;//버퍼가 파이프 라인에 바인딩되는 방법을 식별하십시오
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
@@ -103,7 +106,7 @@ void ObTriangle::Render()
             &stride,
             &offset);
         D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);   // 그릴 모양
-        D3D->GetDC()->Draw(vertexCount, 0);
+        D3D->GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
     }
     else
     {
@@ -113,7 +116,7 @@ void ObTriangle::Render()
             &stride,//정점버퍼의 한 원소의 바이트단위 크기
             &offset);
         D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-        D3D->GetDC()->Draw(vertexCount, 0);
+        D3D->GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
     }
 }
 
