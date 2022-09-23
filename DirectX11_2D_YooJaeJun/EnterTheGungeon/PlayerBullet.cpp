@@ -19,14 +19,6 @@ void PlayerBullet::Release()
 void PlayerBullet::Update()
 {
     Bullet::Update();
-
-    if (isFired)
-    {
-        if (TIMER->GetTick(timeRespawn, 3.0f))
-        {
-            Reload();
-        }
-    }
 }
 
 void PlayerBullet::LateUpdate()

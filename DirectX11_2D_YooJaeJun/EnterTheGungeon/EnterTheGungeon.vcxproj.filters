@@ -65,6 +65,9 @@
     <ClInclude Include="StringBulletData.h">
       <Filter>GameObject\Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <Filter>GameObject\Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -109,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="StringBulletData.cpp">
       <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>GameObject\Level</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

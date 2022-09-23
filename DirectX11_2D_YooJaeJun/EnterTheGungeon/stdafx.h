@@ -3,7 +3,6 @@
 #pragma comment (lib,"../Build/2DFrameWork/2DFrameWork.lib")
 
 #include "UI.h"
-#include "Map.h"
 #include "Character.h"
 #include "Bullet.h"
 #include "PlayerBullet.h"
@@ -16,4 +15,6 @@
 #include "StringBulletData.h"
 #include "Boss.h"
 #include "Pet.h"
+#include "Obstacle.h"
+#include "Map.h"
 #include "UI.h"

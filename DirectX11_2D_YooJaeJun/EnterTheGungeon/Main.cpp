@@ -6,11 +6,12 @@ void Main::Init()
 {
     int idx = 0;
 
-    bg = new UI;
-    bg->img = new ObImage(L"EnterTheGungeon/Background.jpg");
-    bg->img->scale.x = 700.0f * 2.0f;
-    bg->img->scale.y = 370.0f * 2.0f;
+    float mapScaleCoef = 4.0f;
 
+    map = new Map;
+    map->idle = new ObImage(L"EnterTheGungeon/Level/Background.png");
+    map->idle->scale.x = 706.0f * mapScaleCoef;
+    map->idle->scale.y = 498.0f * mapScaleCoef;
 
     // 플레이어
     float playerScaleCoef = 3.0f;
@@ -482,9 +483,10 @@ void Main::Init()
 
 void Main::Release()
 {
-    SafeDelete(bg);
-    SafeDelete(player);
-    for(auto& elem : enemy) SafeDelete(elem);
+    map->Release();
+    player->Release();
+    for (auto& elem : enemy) elem->Release();
+    for (auto& elem : boss) elem->Release();
 }
 
 void Main::Update()
@@ -497,7 +499,7 @@ void Main::Update()
 
     ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
 
-    bg->Update();
+    map->Update();
 
     player->Update();
 
@@ -587,12 +589,34 @@ void Main::LateUpdate()
         }
     }
 
+    /*
+    for (auto& elem : map->doorClosed)
+    {
+        if (player->col->Intersect(elem->col))
+        {
+            Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
+            dir.Normalize();
+            player->col->SetWorldPos(player->col->GetWorldPos() - dir);
+        }
+    }
+
+    for (auto& elem : map->doorOpen)
+    {
+        if (player->col->Intersect(elem->col))
+        {
+            Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
+            dir.Normalize();
+            player->col->SetWorldPos(player->col->GetWorldPos() - dir);
+        }
+    }
+    */
+
     player->LateUpdate();
 }
 
 void Main::Render()
 {
-    bg->Render();
+    map->Render();
     player->Render();
     for (auto& elem : enemy) elem->Render();
     for (auto& elem : boss) elem->Render();

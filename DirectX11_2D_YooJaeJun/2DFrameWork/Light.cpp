@@ -7,7 +7,6 @@ Light::Light()
     //조명 반지름
     light.radius = 3000.0f;
 
-    // 색감이 진하거나 얕을 때 수정!!
     //조명색
     // 
     light.lightColor = Color(0.5f, 0.5f, 0.5f, 0.5f); // 안에 섞을 색
