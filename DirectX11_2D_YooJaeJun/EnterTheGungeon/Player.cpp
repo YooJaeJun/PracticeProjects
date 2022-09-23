@@ -30,6 +30,7 @@ Player::Player()
 	timeHitAnim = 0.0f;
 	flagFireCamShake = false;
 	timeFireCamShake = 0.0f;
+	godMode = false;
 }
 
 void Player::Release()
@@ -92,7 +93,7 @@ void Player::Update()
 		moveDir.Normalize();
 		col->MoveWorldPos(moveDir * scalar * DELTA);
 
-		if (moveDir.x == 0 && moveDir.y == 0)
+		if (moveDir.x == 0.0f && moveDir.y == 0.0f)
 		{
 			idle[curTarget8Dir]->isVisible = true;
 			for (auto& elem : walk) elem->isVisible = false;
@@ -119,7 +120,7 @@ void Player::Update()
 
 				Vector2 dir = INPUT->GetWorldMousePos() - col->GetWorldPos();
 				dir.Normalize();
-				bullet[curBulletIdx++]->Spawn(firePos->GetWorldPos(), 
+				bullet[curBulletIdx++]->Spawn(firePos->GetWorldPos(),
 					Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
 						RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
 				);
@@ -144,13 +145,13 @@ void Player::Update()
 				state = State::roll;
 				for (auto& elem : idle) elem->isVisible = false;
 				for (auto& elem : walk) elem->isVisible = false;
-				col->colOnOff = false;
-				col->isVisible = false;
 
 				SetMoveDir();
 
 				roll[curMove8Dir]->isVisible = true;
 				roll[curMove8Dir]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
+				
+				godMode = true;
 			}
 		}
 
@@ -176,8 +177,8 @@ void Player::Update()
 			idle[curTarget8Dir]->isVisible = true;
 			for (auto& elem : walk) elem->isVisible = false;
 			for (auto& elem : roll) elem->isVisible = false;
-			col->colOnOff = true;
-			col->isVisible = true;
+
+			godMode = false;
 		}
 	}
 
@@ -195,7 +196,7 @@ void Player::Update()
 			uiReloadBar->img->isVisible = false;
 			reloading = false;
 			uiReloadBar->img->SetLocalPosX(-60.0f);
-			for(auto& elem : uiBullet) elem->img->isVisible = true;
+			for (auto& elem : uiBullet) elem->img->isVisible = true;
 		}
 	}
 
@@ -214,10 +215,7 @@ void Player::Update()
 		for (auto& elem : walk) elem->color = c;
 		for (auto& elem : roll) elem->color = c;
 
-		col->SetWorldPosX(col->GetWorldPos().x + RANDOM->Float(-1.0f, 1.0f));
-		col->SetWorldPosY(col->GetWorldPos().y + RANDOM->Float(-1.0f, 1.0f));
-
-		if (TIMER->GetTick(timeHitAnim, 0.4f))	// 히트 애니용
+		if (TIMER->GetTick(timeHitAnim, 1.5f))
 		{
 			Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
 			for (auto& elem : idle) elem->color = c;
@@ -240,7 +238,7 @@ void Player::Update()
 	uiReload->Update();
 	uiReloadBar->Update();
 	uiMagazine->Update();
-	for(auto& elem : uiBullet) elem->Update();
+	for (auto& elem : uiBullet) elem->Update();
 	uiWeaponFrame->Update();
 	uiWeapon->Update();
 	uiBulletCount->Update();

@@ -5,15 +5,15 @@
 	* http://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
 */
 
-const float almost_equal_float(const float x, const float y, int ulp)
+const float almostEqualFloat(const float x, const float y, int ulp)
 {
 	return fabsf(x - y) <= std::numeric_limits<float>::epsilon() * fabsf(x + y) * static_cast<float>(ulp)
 		|| fabsf(x - y) < 1.175494351e-38F; // std::numeric_limits<float>::min();
 }
 
-const float almost_equal_vector(const Vector2& v1, const Vector2& v2)
+const float almostEqualVector2(const Vector2& v1, const Vector2& v2)
 {
-	return almost_equal_float(v1.x, v2.x) && almost_equal_float(v1.y, v2.y);
+	return almostEqualFloat(v1.x, v2.x) && almostEqualFloat(v1.y, v2.y);
 }
 
 // Utility 선분 충돌에 사용

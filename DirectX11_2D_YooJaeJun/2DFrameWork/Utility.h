@@ -27,25 +27,25 @@ namespace Utility
 
 
     // 선 선
-    colPos IntersectLineLine(LINE& l1, LINE& l2);
+    COLPOS IntersectLineLine(LINE& l1, LINE& l2);
 
     // 사각형 점
-    colPos IntersectRectCoord(RECT & rc, Vector2 coord);
+    COLPOS IntersectRectCoord(RECT & rc, Vector2 coord);
     // 사각형 선
-    colPos IntersectRectLine(RECT& rc, LINE& l);
+    COLPOS IntersectRectLine(RECT& rc, LINE& l);
     // 사각형 사각형
-    colPos IntersectRectRect(RECT & rc1, RECT & rc2);
+    COLPOS IntersectRectRect(RECT & rc1, RECT & rc2);
     // 사각형 사각형 OBB 
-    colPos IntersectRectRect(GameObject * ob1, GameObject * ob2);
+    COLPOS IntersectRectRect(GameObject * ob1, GameObject * ob2);
     // 사각형 원
-    colPos IntersectRectCircle(RECT& rc, CIRCLE& cc);
+    COLPOS IntersectRectCircle(RECT& rc, CIRCLE& cc);
 
     // 원 점
-    colPos IntersectCircleCoord(CIRCLE& cc, Vector2 coord);
+    COLPOS IntersectCircleCoord(CIRCLE& cc, Vector2 coord);
     // 원 선
-    colPos IntersectCircleLine(CIRCLE& cc, LINE& l);
+    COLPOS IntersectCircleLine(CIRCLE& cc, LINE& l);
     // 원 원
-    colPos IntersectCircleCircle(CIRCLE & cc1, CIRCLE & cc2);
+    COLPOS IntersectCircleCircle(CIRCLE & cc1, CIRCLE & cc2);
 
     // bool IntersectRectCircle(GameObject* ob1, GameObject* ob2, COLDIR& result);
 

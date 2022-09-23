@@ -75,7 +75,7 @@ using namespace SimpleMath;
 #define OFFSET_RT           Vector2(-0.5f, -0.5f)
 
 // enum
-enum colPos
+enum COLPOS
 {
     none,
     inter,

@@ -1,5 +1,5 @@
 #pragma once
-const int tileMax = 50;
+const int tileMax = 200;
 const int wallFrontMax = 20;
 const int wallSideMax = 20;
 const int wallBackMax = 20;
@@ -23,7 +23,8 @@ public:
 	Obstacle*	wallFront[wallFrontMax];
 	Obstacle*	wallSide[wallSideMax];
 	Obstacle*	wallBack[wallBackMax];
-	Obstacle*	doorOpen[doorOpenMax];
+	Obstacle*	doorOpenUp[doorOpenMax];
+	Obstacle*	doorOpenDown[doorOpenMax];
 	Obstacle*	doorClosed[doorClosedMax];
 };
 

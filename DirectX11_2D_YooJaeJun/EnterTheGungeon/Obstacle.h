@@ -10,6 +10,7 @@ public:
 	void Render();
 
 public:
-	ObImage* idle;
+	ObImage*	idle;
+	bool		isOpen;
 };
 

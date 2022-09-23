@@ -140,9 +140,9 @@ void GameObject::Render()
 	}
 }
 
-colPos GameObject::Intersect(Vector2 coord)
+COLPOS GameObject::Intersect(Vector2 coord)
 {
-	if (not colOnOff) return colPos::none;
+	if (not colOnOff) return COLPOS::none;
 	
 	if (collider == COLLIDER::RECT)
 	{
@@ -168,12 +168,12 @@ colPos GameObject::Intersect(Vector2 coord)
 		Utility::CIRCLE cc(GetWorldPivot(), scale);
 		return Utility::IntersectCircleCoord(cc, coord);
 	}
-	return colPos::none;
+	return COLPOS::none;
 }
 
-colPos GameObject::Intersect(GameObject* ob)
+COLPOS GameObject::Intersect(GameObject* ob)
 {
-	if (colOnOff == false or ob->colOnOff == false) return colPos::none;
+	if (colOnOff == false or ob->colOnOff == false) return COLPOS::none;
 
 	if (collider == COLLIDER::LINE)
 	{
@@ -289,10 +289,10 @@ colPos GameObject::Intersect(GameObject* ob)
 			return Utility::IntersectCircleCircle(cc1, cc2);
 		}
 	}
-	return colPos::none;
+	return COLPOS::none;
 }
 
-colPos GameObject::IntersectScreenMouse(Vector2 coord)
+COLPOS GameObject::IntersectScreenMouse(Vector2 coord)
 {
 	coord.y = app.GetHalfHeight() - coord.y;
 	coord.x = coord.x - app.GetHalfWidth();

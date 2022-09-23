@@ -35,6 +35,6 @@ public:
     bool ContainsVertex(const Vector2& v) const;
     bool CircumCircleContains(const Vector2& v) const;
 
-    bool almost_equal_triangle(const ObTriangle& t1, const ObTriangle& t2);
+    bool almostEqualTriangle(const ObTriangle& t1, const ObTriangle& t2);
 };
 

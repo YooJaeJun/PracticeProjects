@@ -113,6 +113,6 @@ bool ObLine::operator==(const ObLine& e) const
 
 bool ObLine::almost_equal_line(const ObLine& e1, const ObLine& e2)
 {
-    return	(almost_equal_vector(e1.v, e2.v) && almost_equal_vector(e1.w, e2.w)) ||
-        (almost_equal_vector(e1.v, e2.w) && almost_equal_vector(e1.w, e2.v));
+    return	(almostEqualVector2(e1.v, e2.v) && almostEqualVector2(e1.w, e2.w)) ||
+        (almostEqualVector2(e1.v, e2.w) && almostEqualVector2(e1.w, e2.v));
 }

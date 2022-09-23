@@ -32,5 +32,6 @@ public:
 	UI*				uiWeapon;
 	UI*				uiBulletCount;
 	Weapon*			weaponReloading;
+	bool			godMode;
 };
 

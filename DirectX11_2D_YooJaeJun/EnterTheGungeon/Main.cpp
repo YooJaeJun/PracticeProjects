@@ -18,12 +18,12 @@ void Main::Init()
 
     player = new Player;
     player->col = new ObCircle;
+    player->col->isFilled = false;
     player->col->scale.x = 12.0f * playerScaleCoef;
     player->col->scale.y = 12.0f * playerScaleCoef;
     player->col->SetWorldPosX(0.0f);
     player->col->SetWorldPosY(0.0f);
     player->col->color = Color(1.0f, 1.0f, 1.0f);
-    player->col->isFilled = false;
 
     player->idle[front] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Front.png");
     player->idle[leftSide] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
@@ -65,10 +65,10 @@ void Main::Init()
         {
             elem->rotationY = PI;
         }
+        elem->isVisible = false;
         elem->maxFrame.x = 6;
         elem->scale.x = 102.0f / 6.0f * playerScaleCoef;
         elem->scale.y = 24.0f * playerScaleCoef;
-        elem->isVisible = false;
         elem->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         elem->SetParentRT(*player->col);
         idx++;
@@ -90,11 +90,11 @@ void Main::Init()
         {
             elem->rotationY = PI;
         }
+        elem->isVisible = false;
         elem->maxFrame.x = 9;
         elem->scale.x = 180.0f / 9.0f * playerScaleCoef;
         elem->scale.y = 24.0f * playerScaleCoef;
         elem->uv = Vector4(0.0f, 0.0f, 1.0f / 9.0f, 1.0f);
-        elem->isVisible = false;
         elem->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
         elem->SetParentRT(*player->col);
         idx++;
@@ -103,53 +103,53 @@ void Main::Init()
     player->hit = nullptr;
 
     player->fall = new ObImage(L"EnterTheGungeon/Player_0/Fall.png");
+    player->fall->isVisible = false;
     player->fall->maxFrame.x = 3;
     player->fall->scale.x = 48.0f / 3.0f * playerScaleCoef;
     player->fall->scale.y = 22.0f * playerScaleCoef;
     player->fall->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
     player->fall->SetParentRT(*player->col);
-    player->fall->isVisible = false;
 
     player->die = new ObImage(L"EnterTheGungeon/Player_0/Die.png");
+    player->die->isVisible = false;
     player->die->maxFrame.x = 3;
     player->die->scale.x = 48.0f / 3.0f * playerScaleCoef;
     player->die->scale.y = 22.0f * playerScaleCoef;
     player->die->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
     player->die->SetParentRT(*player->col);
-    player->die->isVisible = false;
 
     player->respawn = new ObImage(L"EnterTheGungeon/Player_0/Respawn.png");
+    player->respawn->isVisible = false;
     player->respawn->maxFrame.x = 3;
     player->respawn->scale.x = 48.0f / 3.0f * playerScaleCoef;
     player->respawn->scale.y = 22.0f * playerScaleCoef;
     player->respawn->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
     player->respawn->SetParentRT(*player->col);
-    player->respawn->isVisible = false;
 
     player->kick = new ObImage(L"EnterTheGungeon/Player_0/Kick.png");
+    player->kick->isVisible = false;
     player->kick->maxFrame.x = 3;
     player->kick->scale.x = 48.0f / 3.0f * playerScaleCoef;
     player->kick->scale.y = 22.0f * playerScaleCoef;
     player->kick->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
     player->kick->SetParentRT(*player->col);
-    player->kick->isVisible = false;
 
     player->obtain = new ObImage(L"EnterTheGungeon/Player_0/Obtatin.png");
+    player->obtain->isVisible = false;
     player->obtain->maxFrame.x = 3;
     player->obtain->scale.x = 48.0f / 3.0f * playerScaleCoef;
     player->obtain->scale.y = 22.0f * playerScaleCoef;
     player->obtain->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
     player->obtain->SetParentRT(*player->col);
-    player->obtain->isVisible = false;
 
 
     float playerWeaponScaleCoef = 1.5f;
 
     player->weapon = new Weapon;
     player->weapon->col = new ObRect;
-    player->weapon->col->pivot = Vector2(0.4f, 0.25f);
-    player->weapon->col->isFilled = false;
     player->weapon->col->isVisible = false;
+    player->weapon->col->isFilled = false;
+    player->weapon->col->pivot = Vector2(0.4f, 0.25f);
     player->weapon->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
     player->weapon->col->scale.x = 30.0f * playerWeaponScaleCoef;
     player->weapon->col->scale.y = 22.0f * playerWeaponScaleCoef;
@@ -174,19 +174,19 @@ void Main::Init()
 
     player->uiReload = new UI;
     player->uiReload->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Reload.png");
+    player->uiReload->img->isVisible = false;
     player->uiReload->img->scale = Vector2(144.0f, 20.0f);
     player->uiReload->img->SetParentT(*player->col);
     player->uiReload->img->SetLocalPosX(0.0f);
     player->uiReload->img->SetLocalPosY(60.0f);
-    player->uiReload->img->isVisible = false;
 
     player->uiReloadBar = new UI;
     player->uiReloadBar->img = new ObImage(L"EnterTheGungeon/Player_0/UI_ReloadBar.png");
+    player->uiReloadBar->img->isVisible = false;
     player->uiReloadBar->img->scale = Vector2(4.0f, 20.0f);
     player->uiReloadBar->img->SetParentT(*player->col);
     player->uiReloadBar->img->SetLocalPosX(-60.0f);
     player->uiReloadBar->img->SetLocalPosY(60.0f);
-    player->uiReloadBar->img->isVisible = false;
 
     player->uiMagazine = new UI;
     player->uiMagazine->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Magazine.png");
@@ -232,13 +232,13 @@ void Main::Init()
 
     player->weaponReloading = new Weapon;
     player->weaponReloading->idle = new ObImage(L"EnterTheGungeon/Player_0/Weapon_0_reloading.png");
+    player->weaponReloading->idle->isVisible = false;
     player->weaponReloading->idle->pivot = Vector2(0.4f, 0.25f);
     player->weaponReloading->idle->maxFrame.x = 2;
     player->weaponReloading->idle->scale.x = 42.0f / 2.0f * playerWeaponScaleCoef;
     player->weaponReloading->idle->scale.y = 22.0f * playerWeaponScaleCoef;
     player->weaponReloading->idle->SetParentRT(*player->weapon->col);
     player->weaponReloading->idle->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
-    player->weaponReloading->idle->isVisible = false;
 
 
     // 적
@@ -295,37 +295,36 @@ void Main::Init()
             {
                 elem2->rotationY = PI;
             }
+            elem2->isVisible = false;
             elem2->maxFrame.x = 6;
             elem2->scale.x = 96.0f / 6.0f * enemyScaleCoef;
             elem2->scale.y = 24.0f * enemyScaleCoef;
-            elem2->isVisible = false;
-            elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
             elem2->SetParentRT(*elem->col);
             idx++;
         }
 
         elem->hit = new ObImage(L"EnterTheGungeon/Enemy_0/Hit.png");
-        elem->hit->maxFrame.x = 5;
-        elem->hit->scale.x = 80.0f / 5.0f * enemyScaleCoef;
+        elem->hit->isVisible = false;
+        elem->hit->maxFrame.x = 1;
+        elem->hit->scale.x = 16.0f * enemyScaleCoef;
         elem->hit->scale.y = 24.0f * enemyScaleCoef;
         elem->hit->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
         elem->hit->SetParentRT(*elem->col);
-        elem->hit->isVisible = false;
 
         elem->die = new ObImage(L"EnterTheGungeon/Enemy_0/Die.png");
+        elem->die->isVisible = false;
         elem->die->maxFrame.x = 2;
         elem->die->scale.x = 24.0f / 2.0f * enemyScaleCoef;
         elem->die->scale.y = 24.0f * enemyScaleCoef;
         elem->die->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
         elem->die->SetParentRT(*elem->col);
-        elem->die->isVisible = false;
 
         float enemyWeaponScaleCoef = 1.5f;
 
         elem->weapon = new Weapon;
         elem->weapon->col = new ObRect;
-        elem->weapon->col->isFilled = false;
         elem->weapon->col->isVisible = false;
+        elem->weapon->col->isFilled = false;
         elem->weapon->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         elem->weapon->col->pivot = OFFSET_LB;
         elem->weapon->col->scale.x = 29.0f * enemyWeaponScaleCoef;
@@ -360,12 +359,12 @@ void Main::Init()
         elem->curHp = elem->maxHp = 30;
 
         elem->col = new ObCircle;
+        elem->col->isFilled = false;
         elem->col->scale.x = 25.0f * bossScaleCoef;
         elem->col->scale.y = 25.0f * bossScaleCoef;
         elem->col->SetWorldPosX(0.0f);
         elem->col->SetWorldPosY(400.0f);
         elem->col->color = Color(1.0f, 1.0f, 1.0f);
-        elem->col->isFilled = false;
 
         elem->idle[front] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
         elem->idle[leftSide] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
@@ -407,37 +406,37 @@ void Main::Init()
             {
                 elem2->rotationY = PI;
             }
+            elem2->isVisible = false;
             elem2->maxFrame.x = 2;
             elem2->scale.x = 40.0f / 2.0f * bossScaleCoef;
             elem2->scale.y = 40.0f * bossScaleCoef;
-            elem2->isVisible = false;
             elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
             elem2->SetParentRT(*elem->col);
             idx++;
         }
 
         elem->hit = new ObImage(L"EnterTheGungeon/Boss_0/Hit.png");
+        elem->hit->isVisible = false;
         elem->hit->maxFrame.x = 1;
         elem->hit->scale.x = 32.0 * 1.0f * bossScaleCoef;
         elem->hit->scale.y = 40.0f * bossScaleCoef;
         elem->hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
         elem->hit->SetParentRT(*elem->col);
-        elem->hit->isVisible = false;
 
         elem->die = new ObImage(L"EnterTheGungeon/Boss_0/Die.png");
+        elem->die->isVisible = false;
         elem->die->maxFrame.x = 2;
         elem->die->scale.x = 40.0f / 2.0f * enemyScaleCoef;
         elem->die->scale.y = 40.0f * enemyScaleCoef;
         elem->die->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
         elem->die->SetParentRT(*elem->col);
-        elem->die->isVisible = false;
 
         float bossWeaponScaleCoef = 2.0f;
 
         elem->weapon = new Weapon;
         elem->weapon->col = new ObRect;
-        elem->weapon->col->isFilled = false;
         elem->weapon->col->isVisible = false;
+        elem->weapon->col->isFilled = false;
         elem->weapon->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         elem->weapon->col->pivot = OFFSET_LB;
         elem->weapon->col->scale.x = 29.0f * bossWeaponScaleCoef;
@@ -519,7 +518,8 @@ void Main::Update()
 
 void Main::LateUpdate()
 {
-    // 타격
+    int idx = 0;
+
     for (auto& bulletElem : player->bullet)
     {
         for (auto& enemyElem : enemy)
@@ -548,10 +548,10 @@ void Main::LateUpdate()
         }
     }
 
-    // 피격
-    if (player->col->colOnOff)
+
+    for (auto& enemyElem : enemy)
     {
-        for (auto& enemyElem : enemy)
+        if (false == player->godMode)
         {
             if (enemyElem->state != State::die &&
                 enemyElem->col->Intersect(player->col))
@@ -566,10 +566,34 @@ void Main::LateUpdate()
                     player->Hit(1);
                     bulletElem->Hit(1);
                 }
+
+                for (auto& elem : map->wallFront)
+                {
+                    if (elem->col->Intersect(bulletElem->col))
+                    {
+                        bulletElem->Hit(1);
+                    }
+                }
             }
-            enemyElem->LateUpdate();
         }
-        for (auto& bossElem : boss)
+
+        for (auto& elem : map->doorClosed)
+        {
+            if (elem->col->Intersect(enemyElem->col))
+            {
+                Vector2 dir = elem->col->GetWorldPos() - enemyElem->col->GetWorldPos();
+                dir.Normalize();
+                enemyElem->col->SetWorldPos(enemyElem->col->GetWorldPos() - dir);
+            }
+        }
+
+        enemyElem->LateUpdate();
+    }
+
+
+    for (auto& bossElem : boss)
+    {
+        if (false == player->godMode)
         {
             if (bossElem->state != State::die &&
                 bossElem->col->Intersect(player->col))
@@ -585,31 +609,82 @@ void Main::LateUpdate()
                     bulletElem->Hit(1);
                 }
             }
-            bossElem->LateUpdate();
+        }
+
+        bossElem->LateUpdate();
+    }
+
+
+    for (auto& elem : map->wallFront)
+    {
+        if (elem->col->Intersect(player->col))
+        {
+            Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
+            dir.Normalize();
+            player->col->SetWorldPos(player->col->GetWorldPos() - dir);
+        }
+    }
+    for (auto& elem : map->wallSide)
+    {
+        if (elem->col->Intersect(player->col))
+        {
+            Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
+            dir.Normalize();
+            player->col->SetWorldPos(player->col->GetWorldPos() - dir);
+        }
+    }
+    for (auto& elem : map->wallBack)
+    {
+        if (elem->col->Intersect(player->col))
+        {
+            Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
+            dir.Normalize();
+            player->col->SetWorldPos(player->col->GetWorldPos() - dir);
         }
     }
 
-    /*
+
+    idx = 0;
+    for (auto& elem : map->doorOpenUp)
+    {
+        if (false == elem->isOpen)
+        {
+            if (elem->col->Intersect(player->col))
+            {
+                Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
+                if (dir.y < 0.0f)
+                {
+                    elem->idle->isVisible = false;
+                    map->doorOpenDown[idx]->idle->isVisible = true;
+                    map->doorOpenDown[idx]->idle->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
+                }
+                else
+                {
+                    elem->idle->isVisible = true;
+                    elem->idle->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
+                }
+
+                elem->col->isVisible = false;
+                elem->isOpen = true;
+                map->doorOpenDown[idx]->col->isVisible = false;
+                map->doorOpenDown[idx]->isOpen = true;
+            }
+        }
+        idx++;
+    }
+
+
     for (auto& elem : map->doorClosed)
     {
-        if (player->col->Intersect(elem->col))
+        if (elem->col->Intersect(player->col))
         {
             Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
             dir.Normalize();
             player->col->SetWorldPos(player->col->GetWorldPos() - dir);
-        }
-    }
-
-    for (auto& elem : map->doorOpen)
-    {
-        if (player->col->Intersect(elem->col))
-        {
-            Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
             dir.Normalize();
-            player->col->SetWorldPos(player->col->GetWorldPos() - dir);
         }
     }
-    */
+    
 
     player->LateUpdate();
 }

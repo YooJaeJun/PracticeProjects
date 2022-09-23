@@ -65,9 +65,9 @@ public:
 
 	virtual void Update();
 	virtual void Render();
-	colPos Intersect(Vector2 coord);
-	colPos Intersect(GameObject* ob);
-	colPos IntersectScreenMouse(Vector2 coord);
+	COLPOS Intersect(Vector2 coord);
+	COLPOS Intersect(GameObject* ob);
+	COLPOS IntersectScreenMouse(Vector2 coord);
 
 	//getter setter
 public:

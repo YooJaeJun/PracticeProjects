@@ -163,19 +163,19 @@ void Unit::Die()
 void Unit::SetMoveDir()
 {
 	// 이동방향에 따라 다른 방향 애니메이션 설정하는 코드
-	if (almost_equal_float(moveDir.x, 0.707107f) && almost_equal_float(moveDir.y, 0.707107f))
+	if (almostEqualFloat(moveDir.x, 0.707107f) && almostEqualFloat(moveDir.y, 0.707107f))
 	{
 		curMove8Dir = backRightDiag;
 	}
-	else if (almost_equal_float(moveDir.x, -0.707107f) && almost_equal_float(moveDir.y, 0.707107f))
+	else if (almostEqualFloat(moveDir.x, -0.707107f) && almostEqualFloat(moveDir.y, 0.707107f))
 	{
 		curMove8Dir = backLeftDiag;
 	}
-	else if (almost_equal_float(moveDir.x, -0.707107f) && almost_equal_float(moveDir.y, -0.707107f))
+	else if (almostEqualFloat(moveDir.x, -0.707107f) && almostEqualFloat(moveDir.y, -0.707107f))
 	{
 		curMove8Dir = leftDiag;
 	}
-	else if (almost_equal_float(moveDir.x, 0.707107f) && almost_equal_float(moveDir.y, -0.707107f))
+	else if (almostEqualFloat(moveDir.x, 0.707107f) && almostEqualFloat(moveDir.y, -0.707107f))
 	{
 		curMove8Dir = rightDiag;
 	}
@@ -224,8 +224,8 @@ void Unit::SetTargetDir()
 	{
 		curTarget8Dir = rightSide;
 	}
-	else if (targetRotation >= -180.0f * ToRadian && targetRotation < -150.0f * ToRadian &&
-		targetRotation >= 150.0f * ToRadian && targetRotation < 180.0f * ToRadian)
+	else if ((targetRotation >= -180.0f * ToRadian && targetRotation < -150.0f * ToRadian) ||
+		(targetRotation >= 150.0f * ToRadian && targetRotation < 180.0f * ToRadian))
 	{
 		curTarget8Dir = leftSide;
 	}
