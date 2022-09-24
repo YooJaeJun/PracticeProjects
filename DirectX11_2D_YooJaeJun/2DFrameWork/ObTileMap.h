@@ -67,6 +67,7 @@ public:
 
     void            RenderGui(Int2& GuiPickingIdx, int& ImgIdx);
     bool            WorldPosToTileIdx(Vector2 Wpos, Int2& TileIdx);
+    Vector2         TileIdxToWorldPos(Int2 TileIdx);
     TileState       GetTileState(Int2 TileIdx);
     Int2            GetTileSize() { return tileSize; };
 

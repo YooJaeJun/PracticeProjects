@@ -14,6 +14,11 @@ public:
 	inline void SetPos(const Vector2 pos) { col->SetWorldPos(pos); }
 	inline void SetPosX(const float x) { col->SetWorldPosX(x); }
 	inline void SetPosY(const float y) { col->SetWorldPosY(y); }
+	inline void Spawn(const Vector2 wpos) 
+	{
+		SetPosX(wpos.x);
+		SetPosY(wpos.y);
+	}
 
 public:
 	GameObject*		col;

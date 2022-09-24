@@ -10,15 +10,16 @@ ObTileMap::ObTileMap()
     tileSize.x = 20;
     tileSize.y = 20;
 
-    file = "map1.txt";
+    // file = "map1.txt";
+    file = "EnterTheGungeon.txt";
     scale = Vector2(50.0f, 50.0f);
 
     tileImages[0] = new ObImage(L"Tile.png");
     tileImages[0]->maxFrame = Int2(8, 6);
     tileImages[1] = new ObImage(L"Tile2.png");
     tileImages[1]->maxFrame = Int2(11, 7);
-    tileImages[2] = new ObImage(L"bono3.png");
-    tileImages[2]->maxFrame = Int2(1, 1);
+    tileImages[2] = new ObImage(L"EnterTheGungeon/Level/Tileset.png");
+    tileImages[2]->maxFrame = Int2(12, 12);
     tileImages[3] = nullptr;
 
     ResizeTile(tileSize);
@@ -157,6 +158,15 @@ bool ObTileMap::WorldPosToTileIdx(Vector2 Wpos, Int2& TileIdx)
     TileIdx.y = tileCoord.y;
 
     return true;
+}
+
+Vector2 ObTileMap::TileIdxToWorldPos(Int2 TileIdx)
+{
+    Vector2 Wpos;
+    Wpos.x = TileIdx.x * scale.x;
+    Wpos.y = TileIdx.y * scale.y;
+    Wpos += GetWorldPos();
+    return Wpos;
 }
 
 TileState ObTileMap::GetTileState(Int2 TileIdx)
@@ -414,6 +424,9 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
     //          주소,  예상비용
     List.push({ pTemp ,pTemp->F });
 
+    //인접 타일 비용검사
+    vector<Int2> LoopIdx;
+
     while (1)
     {
         //꺼낼 F값이 없다는 
@@ -436,9 +449,6 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
         {
             break;
         }
-
-        //인접 타일 비용검사
-        vector<Int2> LoopIdx;
 
         //왼쪽타일이 존재할때
         if (Temp.first->idx.x > 0)

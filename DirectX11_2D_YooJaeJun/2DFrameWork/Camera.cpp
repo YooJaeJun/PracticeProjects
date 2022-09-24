@@ -25,7 +25,6 @@ void Camera::ResizeScreen()
 {
     // viewport.x = 200.0f;
     // viewport.y = 200.0f;
-
     viewport.width = app.GetWidth();
     viewport.height = app.GetHeight();
     D3D->GetDC()->RSSetViewports(1, viewport.Get11());

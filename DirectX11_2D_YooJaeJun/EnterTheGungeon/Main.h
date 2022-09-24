@@ -9,7 +9,8 @@ private:
 	MapObject*	mapObj;
 	Player*		player;
 	Enemy*		enemy[enemyMax];
-	Boss*		boss[bossMax];
+	Boss*		boss;
+	std::map<Int2, vector<Character*>> grid;	// 충돌체크 최적화용
 
 public:
 	virtual void Init() override;
@@ -18,4 +19,6 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 	virtual void ResizeScreen() override;
+
+	void CheckIntersect();
 };

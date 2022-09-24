@@ -32,6 +32,8 @@ void Unit::Release()
 
 void Unit::Update()
 {
+	lastPos = Pos();
+
 	Character::Update();
 
 	curMoveDirStateBefore = curMoveDirState;
@@ -46,8 +48,6 @@ void Unit::Update()
 	if (die) die->Update();
 	if (firePos) firePos->Update();
 	if (shadow) shadow->Update();
-
-	lastPos = Pos();
 }
 
 void Unit::LateUpdate()
@@ -65,13 +65,6 @@ void Unit::Render()
 	if (die) die->Render();
 	if (firePos) firePos->Render();
 	Character::Render();
-}
-
-
-void Unit::Spawn(const Vector2 wpos)
-{
-	SetPosX(wpos.x);
-	SetPosX(wpos.y);
 }
 
 void Unit::Idle()

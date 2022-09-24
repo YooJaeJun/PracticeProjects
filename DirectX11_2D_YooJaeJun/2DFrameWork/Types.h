@@ -19,6 +19,10 @@ struct Int2
 	{
 		return (x != dest.x || y != dest.y);
 	}
+	bool operator<(const Int2& other) const
+	{
+		return x < other.x || (!(other.x < x) && y < other.y);
+	}
 };
 
 // 추가 이유

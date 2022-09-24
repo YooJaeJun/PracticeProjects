@@ -6,7 +6,6 @@ enum class State
 	die
 };
 
-// 8πÊ«‚
 enum DirState
 {
 	dirB,
@@ -29,7 +28,6 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-	void Spawn(const Vector2 wpos);
 	virtual void Idle();
 	virtual void Die();
 	virtual void Hit(const int damage);

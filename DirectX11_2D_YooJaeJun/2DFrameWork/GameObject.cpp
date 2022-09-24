@@ -81,12 +81,14 @@ void GameObject::Update()
 	Pi = Matrix::CreateTranslation(pivot.x, pivot.y, 0.0f);
 	S = Matrix::CreateScale(scale.x, scale.y, 1.0f);
 	R = Matrix::CreateRotationZ(rotation);
-	RX = Matrix::CreateRotationX(rotationX);
-	RY = Matrix::CreateRotationY(rotationY);
+	//RX = Matrix::CreateRotationX(rotationX);
+	//RY = Matrix::CreateRotationY(rotationY);
 	T = Matrix::CreateTranslation(position.x, position.y, 0.0f);
 	R2 = Matrix::CreateRotationZ(rotation2);
 
-	RT = R * RX * RY * T * R2;
+	// 최적화 이슈 때문에 빼놓고 reverseLR로 대체
+	//RT = R * RX * RY * T * R2;
+	RT = R * T * R2;
 
 	//P의 주소가 있으면
 	if (P)

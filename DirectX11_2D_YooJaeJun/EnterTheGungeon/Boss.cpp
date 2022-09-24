@@ -158,9 +158,7 @@ void Boss::Idle()
         hit->isVisible = false;
     }
 
-    if (pattern == BossPattern::none)
-    {
-    }
+
     if (pattern == BossPattern::circular)
     {
         if (TIMER->GetTick(timeFire, 3.0f))
@@ -217,10 +215,10 @@ void Boss::Idle()
             }
         }
     }
-
+    
     for (auto& elem : bullet)
     {
-        if (elem) elem->Update();
+        elem->Update();
     }
 }
 
