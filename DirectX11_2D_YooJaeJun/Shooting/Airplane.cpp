@@ -9,13 +9,13 @@ void Airplane::Init()
 {
 	Character::Init();
 
-	type = PlaneType::PLAYER;
+	type = PlaneType::player;
 	key = 0.0f;
 	moveDir = Vector2(0.0f, 0.0f);
 	speed = 400.0f;
 	hit = nullptr;
 	die = nullptr;
-	state = PlaneState::RUN;
+	state = PlaneState::run;
 	timeShoot = 0.0f;
 	isHit = false;
 	timeHit = 0.0f;
@@ -75,13 +75,13 @@ void Airplane::Hit(const float damage)
 	if (curHp <= 0)
 	{
 		curHp = 0;
-		state = PlaneState::DIE;
+		state = PlaneState::die;
 	}
 }
 
 void Airplane::Die()
 {
-	state = PlaneState::DIE;
+	state = PlaneState::die;
 	for (auto& elem : bomb)
 	{
 		elem->isVisible = true;

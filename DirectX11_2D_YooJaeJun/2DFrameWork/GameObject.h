@@ -19,19 +19,19 @@ struct StaticVertexCount
 };
 
 class ObLine;
-enum class SPACE
+enum class Space
 {
-	WORLD,
-	SCREEN, // 가운데가 0,0인
+	world,
+	screen, // 가운데가 0,0인
 };
-enum class COLLIDER
+enum class Collider
 {
-	NONE,
-	LINE,
-	TRIANGLE,
-	RECT,
-	CIRCLE, // 가운데가 0,0인
-	STAR
+	none,
+	line,
+	triangle,
+	rect,
+	circle, // 가운데가 0,0인
+	star
 };
 class GameObject
 {
@@ -73,8 +73,8 @@ public:
 	float		rotationY;
 	bool		isAxis;
 	Color       color;
-	SPACE		space;
-	COLLIDER	collider;
+	Space		space;
+	Collider	collider;
 	bool		colOnOff;
 
 	//member function
@@ -84,9 +84,9 @@ public:
 
 	virtual void Update();
 	virtual void Render();
-	COLPOS Intersect(Vector2 coord);
-	COLPOS Intersect(GameObject* ob);
-	COLPOS IntersectScreenMouse(Vector2 coord);
+	ColPos Intersect(Vector2 coord);
+	ColPos Intersect(GameObject* ob);
+	ColPos IntersectScreenMouse(Vector2 coord);
 
 	//getter setter
 public:

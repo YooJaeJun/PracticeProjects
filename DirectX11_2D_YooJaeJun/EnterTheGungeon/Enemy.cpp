@@ -64,11 +64,11 @@ void Enemy::Idle()
 {
 	Unit::Idle();
 
-	targetDir = moveDir = target - col->GetWorldPos();
+	targetDir = moveDir = targetPos - Pos();
 	targetDir.Normalize();
 	moveDir.Normalize();
 
-	col->MoveWorldPos(moveDir * scalar * DELTA);
+	// col->MoveWorldPos(moveDir * scalar * DELTA);
 
 	if (moveDir.x == 0 && moveDir.y == 0)
 	{
@@ -107,13 +107,13 @@ void Enemy::Idle()
 		for (auto& elem : walk) elem->color = c;
 		hit->color = c;
 
-		col->SetWorldPosX(col->GetWorldPos().x + RANDOM->Float(-1.0f, 1.0f));
-		col->SetWorldPosY(col->GetWorldPos().y + RANDOM->Float(-1.0f, 1.0f));
+		SetPosX(Pos().x + RANDOM->Float(-1.0f, 1.0f));
+		SetPosY(Pos().y + RANDOM->Float(-1.0f, 1.0f));
 
 		for (auto& elem : idle) elem->isVisible = false;
 		hit->isVisible = true;
 
-		if (TIMER->GetTick(timeHitAnim, 0.4f))	// 히트 애니용
+		if (TIMER->GetTick(timeHitAnim, 0.4f))
 		{
 			Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
 			for (auto& elem : idle) elem->color = c;
@@ -122,7 +122,6 @@ void Enemy::Idle()
 			die->color = c;
 
 			hit->isVisible = false;
-			// idle[curTarget8Dir]->isVisible = true;
 
 			isHitAnim = false;
 		}
@@ -131,7 +130,6 @@ void Enemy::Idle()
 	{
 		idle[curTargetDirState]->color.w = 1.0f;
 		walk[curTargetDirState]->color.w = 1.0f;
-		// idle[curTarget8Dir]->isVisible = true;
 		hit->isVisible = false;
 	}
 }
@@ -147,5 +145,42 @@ void Enemy::Hit(const int damage)
 	if (false == isHit)
 	{
 		hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	}
+}
+
+void Enemy::FindPath(ObTileMap* map)
+{
+	Int2 sour, dest;
+	bool isFind;
+
+	isFind = map->WorldPosToTileIdx(Pos(), sour);
+	isFind &= map->WorldPosToTileIdx(targetPos, dest);
+
+	if (isFind)
+	{
+		if (map->PathFinding(sour, dest, way))
+		{
+			g = 0.0f;
+			start = Pos();
+			way.pop_back();
+			end = way.back()->Pos;
+		}
+	}
+
+	if (false == way.empty())
+	{
+		SetPos(Vector2::Lerp(start, end, g));
+		g += DELTA * 2.0f;
+
+		if (g > 1.0f)
+		{
+			g = 0.0f;
+			start = end;
+			way.pop_back();
+			if (false == way.empty())
+			{
+				end = way.back()->Pos;
+			}
+		}
 	}
 }

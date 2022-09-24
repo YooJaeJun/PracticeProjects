@@ -40,7 +40,7 @@ void Bullet::Render()
 
 void Bullet::Spawn(const Vector2& coord, const Vector2& fireDir)
 {
-    col->SetWorldPos(coord);
+    SetPos(coord);
     col->rotation = Utility::DirToRadian(fireDir);
     moveDir = fireDir;
     isFired = true;
@@ -55,7 +55,7 @@ void Bullet::Reload()
 {
     col->colOnOff = true;
     col->isVisible = true;
-    col->SetWorldPos(Vector2(2000.0f, 2000.0f));
+    SetPos(Vector2(2000.0f, 2000.0f));
     idle->isVisible = true;
     isFired = false;
 }

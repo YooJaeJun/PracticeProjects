@@ -35,9 +35,9 @@ MapObject::MapObject()
         elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         elem->col->scale.x = 16.0f * wallScaleCoef;
         elem->col->scale.y = 8.0f * wallScaleCoef;
-        elem->col->SetWorldPosX(300.0f + idx * elem->col->scale.x / 2.0f);
-        elem->col->SetWorldPosY(400.0f);
-        elem->col->collider = COLLIDER::RECT;
+        elem->SetPosX(300.0f + idx * elem->col->scale.x / 2.0f);
+        elem->SetPosY(400.0f);
+        elem->col->collider = Collider::rect;
         elem->idle = new ObImage(L"EnterTheGungeon/Level/Wall_Front.png");
         elem->idle->maxFrame.x = 2;
         elem->idle->scale.x = 16.0f * wallScaleCoef;
@@ -56,9 +56,9 @@ MapObject::MapObject()
         elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         elem->col->scale.x = 16.0f * wallScaleCoef;
         elem->col->scale.y = 16.0f * wallScaleCoef;
-        elem->col->SetWorldPosX(300.0f + idx * elem->col->scale.x / 2.0f);
-        elem->col->SetWorldPosY(500.0f);
-        elem->col->collider = COLLIDER::RECT;
+        elem->SetPosX(300.0f + idx * elem->col->scale.x / 2.0f);
+        elem->SetPosY(500.0f);
+        elem->col->collider = Collider::rect;
         elem->idle = new ObImage(L"EnterTheGungeon/Level/Wall_Side.png");
         elem->idle->maxFrame.x = 2;
         elem->idle->scale.x = 16.0f * wallScaleCoef;
@@ -77,9 +77,9 @@ MapObject::MapObject()
         elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         elem->col->scale.x = 16.0f * wallScaleCoef;
         elem->col->scale.y = 16.0f * wallScaleCoef;
-        elem->col->SetWorldPosX(300.0f + idx * elem->col->scale.x / 2.0f);
-        elem->col->SetWorldPosY(600.0f);
-        elem->col->collider = COLLIDER::RECT;
+        elem->SetPosX(300.0f + idx * elem->col->scale.x / 2.0f);
+        elem->SetPosY(600.0f);
+        elem->col->collider = Collider::rect;
         elem->idle = new ObImage(L"EnterTheGungeon/Level/Wall_Back.png");
         elem->idle->maxFrame.x = 2;
         elem->idle->scale.x = 16.0f * wallScaleCoef;
@@ -100,8 +100,8 @@ MapObject::MapObject()
         elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         elem->col->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
         elem->col->scale.y = 48.0f * doorOpenScaleCoef;
-        elem->col->SetWorldPosX(200.0f + idx * elem->col->scale.x);
-        elem->col->collider = COLLIDER::RECT;
+        elem->SetPosX(200.0f + idx * elem->col->scale.x);
+        elem->col->collider = Collider::rect;
         elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Open_Up.png");
         elem->idle->maxFrame.x = 3;
         elem->idle->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
@@ -126,8 +126,8 @@ MapObject::MapObject()
         elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         elem->col->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
         elem->col->scale.y = 48.0f * doorOpenScaleCoef;
-        elem->col->SetWorldPosX(200.0f + idx * elem->col->scale.x);
-        elem->col->collider = COLLIDER::RECT;
+        elem->SetPosX(200.0f + idx * elem->col->scale.x);
+        elem->col->collider = Collider::rect;
         elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Open_Down.png");
         elem->idle->isVisible = false;  //
         elem->idle->maxFrame.x = 3;
@@ -155,9 +155,9 @@ MapObject::MapObject()
         elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         elem->col->scale.x = 68.0f / 2.0f * doorClosedScaleCoef;
         elem->col->scale.y = 41.0f * doorClosedScaleCoef;
-        elem->col->SetWorldPosX(200.0f + idx * elem->col->scale.x);
-        elem->col->SetWorldPosY(200.0f);
-        elem->col->collider = COLLIDER::RECT;
+        elem->SetPosX(200.0f + idx * elem->col->scale.x);
+        elem->SetPosY(200.0f);
+        elem->col->collider = Collider::rect;
         elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Closed.png");
         elem->idle->maxFrame.x = 2;
         elem->idle->scale.x = 68.0f / 2.0f * doorClosedScaleCoef;

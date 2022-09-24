@@ -14,7 +14,13 @@ public:
 	virtual void Idle() override;
 	virtual void Die() override;
 	virtual void Hit(const int damage) override;
+	void FindPath(ObTileMap* map);
 
+private:
+	vector<Tile*>	way;
+	Vector2			start;
+	Vector2			end;
+	float			g;	// ∫Ò¿≤
 public:
 	EnemyBullet*	bullet[enemyBulletMax];
 	float			timeSetDir;

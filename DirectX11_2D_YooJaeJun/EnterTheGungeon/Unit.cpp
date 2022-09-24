@@ -3,6 +3,7 @@
 Unit::Unit()
 {
 	state = State::idle;
+	lastPos = Vector2(0.0f, 0.0f);
 	timeFire = 0.0f;
 	timeReload = 0.0f;
 	timeHit = 0.0f;
@@ -45,6 +46,8 @@ void Unit::Update()
 	if (die) die->Update();
 	if (firePos) firePos->Update();
 	if (shadow) shadow->Update();
+
+	lastPos = Pos();
 }
 
 void Unit::LateUpdate()
@@ -65,19 +68,19 @@ void Unit::Render()
 }
 
 
-void Unit::Spawn()
+void Unit::Spawn(const Vector2 wpos)
 {
-	col->SetWorldPosX(0.0f);
-	col->SetWorldPosY(0.0f);
+	SetPosX(wpos.x);
+	SetPosX(wpos.y);
 }
 
 void Unit::Idle()
 {
 	SetMoveDir();
 
-	weapon->col->rotation = Utility::DirToRadian(target - weapon->col->GetWorldPos());
+	weapon->col->rotation = Utility::DirToRadian(targetPos - weapon->Pos());
 
-	targetDir = target - col->GetWorldPos();
+	targetDir = targetPos - Pos();
 	targetDir.Normalize();
 
 	targetRotation = Utility::DirToRadian(targetDir);
@@ -155,6 +158,11 @@ void Unit::ToDie()
 		if (hit) hit->isVisible = false;
 		die->isVisible = true;
 	}
+}
+
+void Unit::StepBack()
+{
+	SetPos(lastPos);
 }
 
 void Unit::SetMoveDir()

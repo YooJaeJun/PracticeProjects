@@ -7,7 +7,7 @@ enum class State
 };
 
 // 8πÊ«‚
-enum dirState
+enum DirState
 {
 	dirB,
 	dirL,
@@ -29,11 +29,12 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
-	void Spawn();
+	void Spawn(const Vector2 wpos);
 	virtual void Idle();
 	virtual void Die();
 	virtual void Hit(const int damage);
 	void ToDie();
+	void StepBack();
 	void SetMoveDir();
 	void SetTargetDir();
 
@@ -47,11 +48,12 @@ public:
 	Weapon*		weapon;
 	ObImage*	shadow;
 	State		state;
-	dirState	curMoveDirState;
-	dirState	curMoveDirStateBefore;
-	dirState	curTargetDirState;
-	dirState	curTargetDirStateBefore;
-	Vector2		target;
+	Vector2		lastPos;
+	DirState	curMoveDirState;
+	DirState	curMoveDirStateBefore;
+	DirState	curTargetDirState;
+	DirState	curTargetDirStateBefore;
+	Vector2		targetPos;
 	Vector2		targetDir;
 	Vector2		targetDirBefore;
 	float		targetRotation;

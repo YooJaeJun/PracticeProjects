@@ -15,7 +15,7 @@ void Main::Init()
         room->col->isFilled = false;
         // room->col->color = Color(RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f));
         room->col->color = Color(1.0f, 0.6f, 0.6f);
-        room->col->collider = COLLIDER::RECT;
+        room->col->collider = Collider::rect;
     }
 
     state = State::move;
@@ -89,7 +89,7 @@ void Main::Update()
         for (auto& elem : lines)
         {
             elem.color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-            elem.collider = COLLIDER::LINE;
+            elem.collider = Collider::line;
         }
 
         /*

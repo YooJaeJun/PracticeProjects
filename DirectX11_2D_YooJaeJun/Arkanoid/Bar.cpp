@@ -7,7 +7,7 @@ void Bar::Init()
     obj->scale = Vector2(100.0f, 15.0f);
     obj->color = Color(0.2f, 0.9f, 0.7f, 1.0f);
     obj->isVisible = true;
-    obj->collider = COLLIDER::RECT;
+    obj->collider = Collider::rect;
     dir = Vector2(0.0f, 0.0f);
     scalar = 600.0f;
 }

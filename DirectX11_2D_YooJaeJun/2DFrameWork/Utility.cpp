@@ -26,7 +26,7 @@ Utility::LINE::LINE(Vector2 begin, Vector2 end)
 
 
 
-COLPOS Utility::IntersectLineLine(LINE& l1, LINE& l2)
+ColPos Utility::IntersectLineLine(LINE& l1, LINE& l2)
 {
     //외적 양수 반시계, 외적 음수 시계, 외적 0 평행	
     //(x()1, y()1) 외적 (x()2, y()2) == (x()1*y()2) - (x()2*y()1).	
@@ -67,29 +67,29 @@ COLPOS Utility::IntersectLineLine(LINE& l1, LINE& l2)
                 l1.end.x >= l2.end.x && 
                 l1.end.y >= l2.end.y) 
             {
-                return COLPOS::contain;
+                return ColPos::contain;
             }
-            return COLPOS::inter;
+            return ColPos::inter;
         }
     }
     //중간점이 겹치는 경우
     else if (ab < 0.0f && cd < 0.0f) {
-        return COLPOS::inter;
+        return ColPos::inter;
     }
-    return COLPOS::none;
+    return ColPos::none;
 }
 
-COLPOS Utility::IntersectRectCoord(RECT & rc, Vector2 coord)
+ColPos Utility::IntersectRectCoord(RECT & rc, Vector2 coord)
 {
     if (rc.min.x <= coord.x && coord.x <= rc.max.x &&
         rc.min.y <= coord.y && coord.y <= rc.max.y)
     {
-        return COLPOS::inter;
+        return ColPos::inter;
     }
-    return COLPOS::none;
+    return ColPos::none;
 }
 
-COLPOS Utility::IntersectRectLine(RECT& rc, LINE& l)
+ColPos Utility::IntersectRectLine(RECT& rc, LINE& l)
 {
     // lt-lb  lb-rb  rb-rt  rt-lt
     LINE line1(rc.lt, rc.lb);
@@ -100,30 +100,30 @@ COLPOS Utility::IntersectRectLine(RECT& rc, LINE& l)
     if (IntersectRectCoord(rc, l.begin) &&
         IntersectRectCoord(rc, l.end))
     {
-        return COLPOS::inter;
+        return ColPos::inter;
     }
-    else if (IntersectLineLine(l, line1) == COLPOS::inter ||
-        IntersectLineLine(l, line2) == COLPOS::inter ||
-        IntersectLineLine(l, line3) == COLPOS::inter ||
-        IntersectLineLine(l, line4) == COLPOS::inter) {
-        return COLPOS::inter;
+    else if (IntersectLineLine(l, line1) == ColPos::inter ||
+        IntersectLineLine(l, line2) == ColPos::inter ||
+        IntersectLineLine(l, line3) == ColPos::inter ||
+        IntersectLineLine(l, line4) == ColPos::inter) {
+        return ColPos::inter;
     }
-    return COLPOS::none;
+    return ColPos::none;
 }
 
-COLPOS Utility::IntersectRectRect(RECT & rc1, RECT & rc2)
+ColPos Utility::IntersectRectRect(RECT & rc1, RECT & rc2)
 {
     if (rc1.min.x <= rc2.max.x &&
         rc1.max.x >= rc2.min.x &&
         rc1.min.y <= rc2.max.y &&
         rc1.max.y >= rc2.min.y)
     {
-        return COLPOS::inter;
+        return ColPos::inter;
     }
-    return COLPOS::none;
+    return ColPos::none;
 }
 
-COLPOS Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
+ColPos Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
 {
     //중심점
     Vector2 rc1Pivot = ob1->GetWorldPivot();
@@ -154,7 +154,7 @@ COLPOS Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
     //ob1에서 두벡터가 투영된 길이
     float b = ob1->scale.x * 0.5f;
 
-    if (c > a + b) return COLPOS::none;
+    if (c > a + b) return ColPos::none;
 
     //ob1의 Up축 비교
     //       절대값(내적 a . b)
@@ -166,7 +166,7 @@ COLPOS Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
     //ob1에서 두벡터가 투영된 길이
     b = ob1->scale.y * 0.5f;
 
-    if (c > a + b) return COLPOS::none;
+    if (c > a + b) return ColPos::none;
 
     //ob2의 Right축 비교
     //       절대값(내적 a . b)
@@ -178,7 +178,7 @@ COLPOS Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
     //ob2에서 두벡터가 투영된 길이
     b = ob2->scale.x * 0.5f;
 
-    if (c > a + b) return COLPOS::none;
+    if (c > a + b) return ColPos::none;
 
     //ob2의 Up축 비교
     //       절대값(내적 a . b)
@@ -190,12 +190,12 @@ COLPOS Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
     //ob2에서 두벡터가 투영된 길이
     b = ob2->scale.y * 0.5f;
 
-    if (c > a + b) return COLPOS::none;
+    if (c > a + b) return ColPos::none;
 
-    return COLPOS::inter;
+    return ColPos::inter;
 }
 
-COLPOS Utility::IntersectRectCircle(RECT & rc, CIRCLE & cc)
+ColPos Utility::IntersectRectCircle(RECT & rc, CIRCLE & cc)
 {
     Vector2 rectPivot = (rc.min + rc.max) * 0.5f;
     Vector2 RectScale = rc.max - rc.min;
@@ -204,13 +204,13 @@ COLPOS Utility::IntersectRectCircle(RECT & rc, CIRCLE & cc)
 
     if (IntersectRectCoord(Wrect, cc.pivot))
     {
-        return COLPOS::leftRight;
+        return ColPos::leftRight;
     }
 
     RECT Hrect(rectPivot, RectScale + Vector2(0.0f, cc.radius * 2.0f));
     if (IntersectRectCoord(Hrect, cc.pivot))
     {
-        return COLPOS::upDown;
+        return ColPos::upDown;
     }
 
     Vector2 edge[4];
@@ -223,11 +223,11 @@ COLPOS Utility::IntersectRectCircle(RECT & rc, CIRCLE & cc)
     {
         if (IntersectCircleCoord(cc, edge[i]))
         {
-            return COLPOS::edge;
+            return ColPos::edge;
         }
     }
 
-    return COLPOS::none;
+    return ColPos::none;
 }
 
 /*
@@ -272,17 +272,17 @@ bool Utility::IntersectRectCircle(GameObject * ob1, GameObject * ob2, COLDIR & r
 }
 */
 
-COLPOS Utility::IntersectCircleCoord(CIRCLE & cc, Vector2 coord)
+ColPos Utility::IntersectCircleCoord(CIRCLE & cc, Vector2 coord)
 {
     Vector2 Distance = cc.pivot - coord;
     if (Distance.Length() < cc.radius)
     {
-        return COLPOS::inter;
+        return ColPos::inter;
     }
-    return COLPOS::none;
+    return ColPos::none;
 }
 
-COLPOS Utility::IntersectCircleLine(CIRCLE& cc, LINE& l)
+ColPos Utility::IntersectCircleLine(CIRCLE& cc, LINE& l)
 {
     //이하 코드는 구글링 후 조건만 좀 변경함.
     const Vector2& origin_to_begin = l.begin - cc.pivot;
@@ -295,18 +295,18 @@ COLPOS Utility::IntersectCircleLine(CIRCLE& cc, LINE& l)
     //선분의 시작점도, 끝점도 구 안에 있다면 포함
     if (c_begin <= 0.0f && c_end <= 0.0f)
     {
-        return COLPOS::contain;
+        return ColPos::contain;
     }
     else if (c_begin <= 0.0f || c_end <= 0.0f)
     {
-        return COLPOS::inter;
+        return ColPos::inter;
     }
 
     Vector2 dir = l.end - l.begin;
     float length = sqrt(dir.Dot(dir));	//수정함
     if (length == 0.0f)
     {
-        return COLPOS::none;
+        return ColPos::none;
     }
     const Vector2 normalized_dir = dir / length;
     float b_prime = origin_to_begin.Dot(normalized_dir);
@@ -315,7 +315,7 @@ COLPOS Utility::IntersectCircleLine(CIRCLE& cc, LINE& l)
     //벡터가 이루는 각이 90도 미만이라면 교차하지 않음
     if (b_prime > 0.0f)
     {
-        return COLPOS::none;
+        return ColPos::none;
     }
 
     //원래는 b' * b' - a * c를 사용해야 함. 그런데 선분의 방향 벡터가 단위 벡터면,
@@ -325,24 +325,24 @@ COLPOS Utility::IntersectCircleLine(CIRCLE& cc, LINE& l)
 
     float t1 = -b_prime + square_root_of_discriminant;
     if (t1 >= 0.0f && t1 <= length) {
-        return COLPOS::inter;
+        return ColPos::inter;
     }
     float t2 = -b_prime + square_root_of_discriminant;
     if (t2 >= 0.0f && t2 <= length) {
-        return COLPOS::inter;
+        return ColPos::inter;
     }
-    return COLPOS::none;
+    return ColPos::none;
 }
 
-COLPOS Utility::IntersectCircleCircle(CIRCLE & cc1, CIRCLE & cc2)
+ColPos Utility::IntersectCircleCircle(CIRCLE & cc1, CIRCLE & cc2)
 {
     Vector2 distance = cc1.pivot - cc2.pivot;
     if (distance.Length() < cc1.radius + cc2.radius)
     {
-        return COLPOS::inter;
+        return ColPos::inter;
     }
 
-    return COLPOS::none;
+    return ColPos::none;
 }
 
 float Utility::DirToRadian(Vector2 Dir)

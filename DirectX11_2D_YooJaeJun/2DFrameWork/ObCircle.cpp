@@ -121,7 +121,7 @@ void ObCircle::DeleteStaticMember()
 
 ObCircle::ObCircle()
 {
-    collider = COLLIDER::CIRCLE;
+    collider = Collider::circle;
 }
 
 void ObCircle::Render()

@@ -19,12 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ProcedureDungeonGeneration\Grid.cpp" />
     <ClCompile Include="ProcedureDungeonGeneration\Main.cpp" />
     <ClCompile Include="ProcedureDungeonGeneration\Room.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ProcedureDungeonGeneration\Grid.h" />
     <ClInclude Include="ProcedureDungeonGeneration\Main.h" />
     <ClInclude Include="ProcedureDungeonGeneration\Room.h" />
     <ClInclude Include="ProcedureDungeonGeneration\stdafx.h" />

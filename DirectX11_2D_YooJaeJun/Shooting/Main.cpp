@@ -21,7 +21,7 @@ void Main::Init()
 
 			fontMaxBullet[i][j] = new UI;
 			fontMaxBullet[i][j]->idle = new ObImage(name);
-			fontMaxBullet[i][j]->idle->space = SPACE::SCREEN;
+			fontMaxBullet[i][j]->idle->space = Space::screen;
 			fontMaxBullet[i][j]->idle->isVisible = false;
 			fontMaxBullet[i][j]->idleImgSize = Vector2(28.0f, 38.0f);
 			fontMaxBullet[i][j]->idle->scale = fontMaxBullet[i][j]->idleImgSize;
@@ -38,7 +38,7 @@ void Main::Init()
 
 			fontCurBullet[i][j] = new UI;
 			fontCurBullet[i][j]->idle = new ObImage(name);
-			fontCurBullet[i][j]->idle->space = SPACE::SCREEN;
+			fontCurBullet[i][j]->idle->space = Space::screen;
 			fontCurBullet[i][j]->idle->isVisible = false;
 			fontCurBullet[i][j]->idleImgSize = Vector2(28.0f, 38.0f);
 			fontCurBullet[i][j]->idle->scale = fontCurBullet[i][j]->idleImgSize;
@@ -50,7 +50,7 @@ void Main::Init()
 
 	fontSlash = new UI;
 	fontSlash->idle = new ObImage(L"Cookie/Num11.png");
-	fontSlash->idle->space = SPACE::SCREEN;
+	fontSlash->idle->space = Space::screen;
 	fontSlash->idle->isVisible = true;
 	fontSlash->idleImgSize = Vector2(27.0f, 44.0f);
 	fontSlash->idle->scale = fontSlash->idleImgSize;
@@ -64,7 +64,7 @@ void Main::Init()
 
 	menu = new ObRect();
 	menu->scale = Vector2(100.0f, 50.0f);
-	menu->space = SPACE::SCREEN;
+	menu->space = Space::screen;
 	menu->pivot = OFFSET_LT;
 	menu->SetWorldPos(Vector2(-app.GetHalfWidth(), app.GetHalfHeight()));
 
@@ -194,7 +194,7 @@ void Main::LateUpdate()
 {
 	for (auto& elem : player->bullet)
 	{
-		if (boss->state != PlaneState::DIE && 
+		if (boss->state != PlaneState::die && 
 			boss->col->Intersect(elem->col))
 		{
 			elem->col->SetWorldPos(Vector2(2000.0f, 2000.0f));

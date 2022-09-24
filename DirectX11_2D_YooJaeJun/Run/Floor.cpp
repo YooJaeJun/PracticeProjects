@@ -11,7 +11,7 @@ void Floor::Init()
 
     col = new ObRect();
     col->scale = Vector2(79.0f * 2.5f, 20.0f);
-    col->collider = COLLIDER::RECT;
+    col->collider = Collider::rect;
     col->color = Color(0.5f, 0.5f, 0.5f);
     col->pivot = OFFSET_LT;
     col->isFilled = false;

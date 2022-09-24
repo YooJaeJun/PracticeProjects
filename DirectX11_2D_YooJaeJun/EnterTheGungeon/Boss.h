@@ -1,7 +1,7 @@
 #pragma once
 const int circularBulletMax = 200;
 
-enum class bossPattern
+enum class BossPattern
 {
 	none, circular, string
 };
@@ -25,7 +25,7 @@ public:
 	UI*							hpGuageBar;
 	UI*							hpGuage;
 	std::vector<BossBullet*>	bullet;
-    bossPattern                 pattern;
+    BossPattern                 pattern;
 	StringBulletData            stringBullet;
 	float						timeSetDir;
 };

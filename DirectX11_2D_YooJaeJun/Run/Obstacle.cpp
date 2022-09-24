@@ -10,7 +10,7 @@ void Obstacle::Init()
     Character::Init();
 
     col = new ObRect();
-    col->collider = COLLIDER::RECT;
+    col->collider = Collider::rect;
     col->isVisible = true;
     col->isFilled = false;
     col->color = Color(1.0f, 0.0f, 0.0f);

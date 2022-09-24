@@ -8,10 +8,10 @@ public:
 	Vector2				moveDir;
 	float				scalar;
 	Vector2				lastPos;
-	enum class eType	{ none, p1, p2, ball, post };
-	eType				type;
-	enum class eState	{ idle, hit };
-	eState				state;
+	enum class Type		{ none, p1, p2, ball, post };
+	Type				type;
+	enum class State	{ idle, hit };
+	State				state;
 	float				hitTime;
 	Color				originColor;
 
@@ -23,7 +23,7 @@ public:
 	virtual void Release();
 
 	virtual void Move();
-	void Bounce(IntersectPos interPos, Character* other, eType type = eType::none);
+	void Bounce(ColPos interPos, Character* other, Type type = Type::none);
 	void SetDir(const Vector2 otherDir);
 	void SetDirX(const float otherDirX);
 	void SetDirY(const float otherDirY);

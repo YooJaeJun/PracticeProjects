@@ -159,11 +159,11 @@ bool ObTileMap::WorldPosToTileIdx(Vector2 Wpos, Int2& TileIdx)
     return true;
 }
 
-int ObTileMap::GetTileState(Int2 TileIdx)
+TileState ObTileMap::GetTileState(Int2 TileIdx)
 {
     int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
 
-    return vertices[tileIdx * 6].tileState;
+    return static_cast<TileState>(vertices[tileIdx * 6].tileState);
 }
 
 Vector2 ObTileMap::GetTilePosition(Int2 TileIdx)
@@ -377,8 +377,8 @@ void ObTileMap::Load()
 bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
 {
     //둘중에 하나가 벽이면 갈 수 있는길이 없다.
-    if (Tiles[dest.x][dest.y].state == TILE_WALL ||
-        Tiles[sour.x][sour.y].state == TILE_WALL)
+    if (Tiles[dest.x][dest.y].state == TileState::wall ||
+        Tiles[sour.x][sour.y].state == TileState::wall)
     {
         return false;
     }
@@ -474,7 +474,7 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
             Tile* loop = &Tiles[LoopIdx[i].x][LoopIdx[i].y];
 
             //벽이 아닐때
-            if (loop->state != TILE_WALL)
+            if (loop->state != TileState::wall)
             {
                 //예상비용 만들기
                 loop->ClacH(dest);

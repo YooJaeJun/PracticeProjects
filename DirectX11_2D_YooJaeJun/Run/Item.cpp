@@ -10,7 +10,7 @@ void Item::Init()
     Character::Init();
 
     col = new ObCircle;
-    col->collider = COLLIDER::CIRCLE;
+    col->collider = Collider::circle;
     col->isVisible = false;
     col->isFilled = false;
     col->color = Color(1.0f, 0.0f, 0.0f);

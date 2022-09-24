@@ -9,7 +9,7 @@ void Enemy::Init()
 {
 	Character::Init();
 	Airplane::Init();
-	type = PlaneType::ENEMY;
+	type = PlaneType::enemy;
 	maxHp = curHp = 50;
 
 	col = new ObRect();
@@ -37,7 +37,7 @@ void Enemy::Init()
 	hpGuage->idle->SetWorldPosX(-hpGuage->idleImgSize.x * 0.5f);
 	hpGuage->idle->SetWorldPosY(app.GetHalfHeight() - hpGuage->idleImgSize.y * 0.5f);
 	hpGuage->idle->pivot = OFFSET_L;
-	hpGuage->idle->space = SPACE::SCREEN;
+	hpGuage->idle->space = Space::screen;
 
 	for (auto& elem : bomb)
 	{
@@ -67,7 +67,7 @@ void Enemy::Update()
 	hpGuage->idle->uv.z = hpGuage->idle->scale.x / hpGuage->idleImgSize.x;
 	hpGuage->Update();
 
-	if (state == PlaneState::DIE)
+	if (state == PlaneState::die)
 	{
 		isHit = false;
 		idle->color.w = 0.2f;
@@ -82,7 +82,7 @@ void Enemy::Update()
 		}
 		if (TIMER->GetTick(timeHit, 2.5f))
 		{
-			state = PlaneState::RUN;
+			state = PlaneState::run;
 			col->SetWorldPos(Vector2(2000.0f, 2000.0f));
 			for (auto& elem : bomb)
 			{

@@ -85,7 +85,7 @@ void ObTriangle::DeleteStaticMember()
 
 ObTriangle::ObTriangle()
 {
-    collider = COLLIDER::TRIANGLE;
+    collider = Collider::triangle;
 }
 
 void ObTriangle::Render()

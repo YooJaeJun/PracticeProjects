@@ -109,7 +109,7 @@ void ObStar::DeleteStaticMember()
 
 ObStar::ObStar()
 {
-    collider = COLLIDER::STAR;
+    collider = Collider::star;
 }
 
 void ObStar::Render()

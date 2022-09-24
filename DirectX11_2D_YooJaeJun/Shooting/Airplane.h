@@ -3,16 +3,16 @@ const int bombMax = 5;
 
 enum class PlaneState
 {
-	RUN,
-	BOOST,
-	DIE
+	run,
+	boost,
+	die
 };
 
 enum class PlaneType
 {
-	PLAYER,
-	ENEMY,
-	BOSS
+	player,
+	enemy,
+	boss
 };
 
 class Airplane : public Character

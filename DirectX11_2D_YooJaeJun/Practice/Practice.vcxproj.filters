@@ -3,12 +3,10 @@
   <ItemGroup>
     <ClCompile Include="ProcedureDungeonGeneration\Main.cpp" />
     <ClCompile Include="ProcedureDungeonGeneration\Room.cpp" />
-    <ClCompile Include="ProcedureDungeonGeneration\Grid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProcedureDungeonGeneration\Main.h" />
     <ClInclude Include="ProcedureDungeonGeneration\Room.h" />
     <ClInclude Include="ProcedureDungeonGeneration\stdafx.h" />
-    <ClInclude Include="ProcedureDungeonGeneration\Grid.h" />
   </ItemGroup>
 </Project>

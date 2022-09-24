@@ -1,4 +1,14 @@
 #pragma once
+enum class TileState
+{
+    none,
+    wall,
+    door,
+    trap,
+    water,
+    tileSize
+};
+
 class Tile
 {
 public:
@@ -6,7 +16,7 @@ public:
     Int2        idx;    //타일 인덱스
     Tile*       P;      //나를 갱신시킨 타일
     bool        isFind; //검사한적이 있는가?
-    int         state;
+    TileState   state;
     Vector2     Pos; //타일의 중점
 
     void ClearCost();
@@ -28,16 +38,6 @@ struct compare
     {
         return a.second > b.second;
     }
-};
-
-enum TileState
-{
-    TILE_NONE,
-    TILE_WALL,
-    TILE_DOOR,
-    TILE_TRAP,
-    TILE_WATER,
-    TILE_SIZE
 };
 
 class ObTileMap : public GameObject
@@ -63,11 +63,11 @@ public:
     void            Save();
     void            Render() override;
     void            SetTile(Int2 TileIdx, Int2 FrameIdx, int ImgIdx = 0,
-        int TileState = TILE_NONE, Color color = Color(0.5f, 0.5f, 0.5f, 0.5f));
+        int TileState = none, Color color = Color(0.5f, 0.5f, 0.5f, 0.5f));
 
     void            RenderGui(Int2& GuiPickingIdx, int& ImgIdx);
     bool            WorldPosToTileIdx(Vector2 Wpos, Int2& TileIdx);
-    int             GetTileState(Int2 TileIdx);
+    TileState       GetTileState(Int2 TileIdx);
     Int2            GetTileSize() { return tileSize; };
 
 

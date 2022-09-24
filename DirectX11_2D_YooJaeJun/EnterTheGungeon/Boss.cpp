@@ -2,7 +2,7 @@
 
 Boss::Boss()
 {
-    pattern = bossPattern::string;
+    pattern = BossPattern::string;
     stringBullet.inputString = "abcdefghijklmnopqrstuvwxyz";
     bullet.resize(stringBullet.inputString.size() * 25);
     SetPattern();
@@ -77,7 +77,7 @@ void Boss::Render()
 
 void Boss::SetPattern()
 {
-    if (pattern == bossPattern::circular)
+    if (pattern == BossPattern::circular)
     {
         bullet.resize(circularBulletMax);
 
@@ -97,7 +97,7 @@ void Boss::SetPattern()
             idx++;
         }
     }
-    else if (pattern == bossPattern::string)
+    else if (pattern == BossPattern::string)
     {
         stringBullet.coefMidForTarget = 0.0f;
         stringBullet.SetStringBullet();
@@ -130,8 +130,8 @@ void Boss::Idle()
         for (auto& elem : walk) elem->color = c;
         hit->color = c;
 
-        col->SetWorldPosX(col->GetWorldPos().x + RANDOM->Float(-1.0f, 1.0f));
-        col->SetWorldPosY(col->GetWorldPos().y + RANDOM->Float(-1.0f, 1.0f));
+        SetPosX(Pos().x + RANDOM->Float(-1.0f, 1.0f));
+        SetPosY(Pos().y + RANDOM->Float(-1.0f, 1.0f));
 
         for (auto& elem : idle) elem->isVisible = false;
         hit->isVisible = true;
@@ -158,10 +158,10 @@ void Boss::Idle()
         hit->isVisible = false;
     }
 
-    if (pattern == bossPattern::none)
+    if (pattern == BossPattern::none)
     {
     }
-    if (pattern == bossPattern::circular)
+    if (pattern == BossPattern::circular)
     {
         if (TIMER->GetTick(timeFire, 3.0f))
         {
@@ -173,7 +173,7 @@ void Boss::Idle()
             }
         }
     }
-    else if (pattern == bossPattern::string)
+    else if (pattern == BossPattern::string)
     {
         int size = stringBullet.inputString.size();
         char* s = const_cast<char*>(stringBullet.inputString.c_str());

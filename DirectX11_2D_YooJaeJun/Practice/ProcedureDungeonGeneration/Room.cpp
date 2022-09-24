@@ -14,7 +14,7 @@ void Room::Init()
     col->SetWorldPosY(RANDOM->Float(-50.0f, 50.0f));
     col->isFilled = false;
     col->color = Color(RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f));
-    col->collider = COLLIDER::RECT;
+    col->collider = Collider::rect;
 
     selected = false;
 }

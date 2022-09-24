@@ -9,7 +9,7 @@ void Player::Init()
 {
 	Character::Init();
 	Airplane::Init();
-	type = PlaneType::PLAYER;
+	type = PlaneType::player;
 	curHp = 2;
 
 	col = new ObCircle();
@@ -62,7 +62,7 @@ void Player::Init()
 	moveDir = Vector2(0.0f, 0.0f);
 	speed = 300.0f;
 
-	state = PlaneState::RUN;
+	state = PlaneState::run;
 	isBoost = false;
 
 	for (auto& elem : bullet)
@@ -86,12 +86,12 @@ void Player::Update()
 
 	ImGui::SliderInt("Level", &level, 0, 3);
 
-	if (state == PlaneState::DIE)
+	if (state == PlaneState::die)
 	{
 		isHit = false;
 		speed = 0.0f;
 	}
-	else if (state == PlaneState::RUN)
+	else if (state == PlaneState::run)
 	{
 		if (isHitAnim)
 		{
@@ -289,9 +289,9 @@ void Player::Hit(const float damage)
 
 void Player::Die()
 {
-	if (state != PlaneState::DIE)
+	if (state != PlaneState::die)
 	{
-		state = PlaneState::DIE;
+		state = PlaneState::die;
 		col->scale.x = 0.0f;
 		col->scale.y = 0.0f;
 

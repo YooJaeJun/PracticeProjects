@@ -101,7 +101,7 @@ void ObRect::DeleteStaticMember()
 
 ObRect::ObRect()
 {
-    collider = COLLIDER::RECT;
+    collider = Collider::rect;
 }
 
 void ObRect::Render()

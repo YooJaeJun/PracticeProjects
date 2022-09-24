@@ -165,7 +165,7 @@ void ObStarPointed::DeleteStaticMember()
 
 ObStarPointed::ObStarPointed()
 {
-    collider = COLLIDER::STAR;
+    collider = Collider::star;
 }
 
 void ObStarPointed::Render()

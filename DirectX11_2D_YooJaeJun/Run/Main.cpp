@@ -11,13 +11,13 @@ void Main::Init()
 	bg1 = new Background;
 	bg1->idle = new ObImage(L"Cookie/Oven1.png");
 	bg1->idleImgSize = Vector2(569.0f, 320.0f);
-	bg1->idle->space = SPACE::SCREEN;
+	bg1->idle->space = Space::screen;
 	bg1->Spawn();
 
 	bg2 = new Background;
 	bg2->idle = new ObImage(L"Cookie/Oven2.png");
 	bg2->idleImgSize = Vector2(862.0f, 320.0f);
-	bg2->idle->space = SPACE::SCREEN;
+	bg2->idle->space = Space::screen;
 	bg2->Spawn();
 
 	player = new Player();
@@ -155,7 +155,7 @@ void Main::Init()
 
 	for (auto& elem : gauge)
 	{
-		elem->idle->space = SPACE::SCREEN;
+		elem->idle->space = Space::screen;
 		elem->idle->pivot = OFFSET_LT;
 	}
 
@@ -166,7 +166,7 @@ void Main::Init()
 			fontScore[i][j] = new UI;
 			wstring name = L"Cookie/Num" + to_wstring(j) + L".png";
 			fontScore[i][j]->idle = new ObImage(name);
-			fontScore[i][j]->idle->space = SPACE::SCREEN;
+			fontScore[i][j]->idle->space = Space::screen;
 			fontScore[i][j]->idle->isVisible = false;
 			fontScore[i][j]->idleImgSize = Vector2(28.0f, 38.0f);
 			fontScore[i][j]->idle->scale = fontScore[i][j]->idleImgSize;
@@ -187,12 +187,12 @@ void Main::Init()
 		elem->scaleCoef.y = 0.7f;
 		elem->idle->scale.x = elem->idleImgSize.x * elem->scaleCoef.x;
 		elem->idle->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
-		elem->idle->space = SPACE::SCREEN;
+		elem->idle->space = Space::screen;
 		elem->anchor = Anchor::LEFTBOTTOM;
 		elem->anchor = Anchor::LEFTBOTTOM;
 		elem->Spawn(20.0f, 20.0f);
 		elem->idle->pivot = OFFSET_LB;
-		elem->idle->collider = COLLIDER::RECT;
+		elem->idle->collider = Collider::rect;
 	}
 	btnJump[1]->idle->isVisible = false;
 
@@ -207,11 +207,11 @@ void Main::Init()
 		elem->scaleCoef.y = 0.7f;
 		elem->idle->scale.x = elem->idleImgSize.x * elem->scaleCoef.x;
 		elem->idle->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
-		elem->idle->space = SPACE::SCREEN;
+		elem->idle->space = Space::screen;
 		elem->anchor = Anchor::RIGHTBOTTOM;
 		elem->Spawn(-20.0f, 20.0f);
 		elem->idle->pivot = OFFSET_RB;
-		elem->idle->collider = COLLIDER::RECT;
+		elem->idle->collider = Collider::rect;
 	}
 	btnSlide[1]->idle->isVisible = false;
 }

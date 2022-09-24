@@ -28,8 +28,7 @@ void Main::Init()
     player->col->isFilled = false;
     player->col->scale.x = 12.0f * playerScaleCoef;
     player->col->scale.y = 12.0f * playerScaleCoef;
-    player->col->SetWorldPosX(0.0f);
-    player->col->SetWorldPosY(0.0f);
+    player->Spawn(Vector2(0.0f, 0.0f));
     player->col->color = Color(1.0f, 1.0f, 1.0f);
 
     player->idle[dirB] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Front.png");
@@ -199,7 +198,7 @@ void Main::Init()
     player->uiMagazine->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Magazine.png");
     player->uiMagazine->img->scale = Vector2(28.0f, 99.0f);
     player->uiMagazine->img->SetWorldPos(Vector2(app.GetHalfWidth() - 40.0f, -app.GetHalfHeight() + 80.0f));
-    player->uiMagazine->img->space = SPACE::SCREEN;
+    player->uiMagazine->img->space = Space::screen;
 
     idx = 0;
     for (auto& elem : player->uiBullet)
@@ -208,7 +207,7 @@ void Main::Init()
         elem->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Bullet.png");
         elem->img->scale = Vector2(12.0f, 4.0f);
         elem->img->SetWorldPos(Vector2(app.GetHalfWidth() - 40.0f, -app.GetHalfHeight() + 104.0f - idx * 12.0f));
-        elem->img->space = SPACE::SCREEN;
+        elem->img->space = Space::screen;
         idx++;
     }
 
@@ -218,7 +217,7 @@ void Main::Init()
     player->uiWeaponFrame->img->scale.x = 188.0f;
     player->uiWeaponFrame->img->scale.y = 116.0f;
     player->uiWeaponFrame->img->SetWorldPos(Vector2(app.GetHalfWidth() - 240.0f, -app.GetHalfHeight() + 50.0f));
-    player->uiWeaponFrame->img->space = SPACE::SCREEN;
+    player->uiWeaponFrame->img->space = Space::screen;
 
     player->uiWeapon = new UI;
     player->uiWeapon->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Weapon.png");
@@ -226,7 +225,7 @@ void Main::Init()
     player->uiWeapon->img->scale.x = 60.0f;
     player->uiWeapon->img->scale.y = 48.0f;
     player->uiWeapon->img->SetWorldPos(Vector2(app.GetHalfWidth() - 190.0f, -app.GetHalfHeight() + 60.0f));
-    player->uiWeapon->img->space = SPACE::SCREEN;
+    player->uiWeapon->img->space = Space::screen;
 
     player->uiBulletCount = new UI;
     player->uiBulletCount->img = new ObImage(L"EnterTheGungeon/Player_0/UI_BulletCount.png");
@@ -234,7 +233,7 @@ void Main::Init()
     player->uiBulletCount->img->scale.x = 60.0f;
     player->uiBulletCount->img->scale.y = 28.0f;
     player->uiBulletCount->img->SetWorldPos(Vector2(app.GetHalfWidth() - 140.0f, -app.GetHalfHeight() + 150.0f));
-    player->uiBulletCount->img->space = SPACE::SCREEN;
+    player->uiBulletCount->img->space = Space::screen;
 
 
     player->weaponReloading = new Weapon;
@@ -257,8 +256,8 @@ void Main::Init()
         elem->col = new ObCircle;
         elem->col->scale.x = 16.0f * enemyScaleCoef;
         elem->col->scale.y = 16.0f * enemyScaleCoef;
-        elem->col->SetWorldPosX(RANDOM->Float(-400.0f, 400.0f));
-        elem->col->SetWorldPosY(RANDOM->Float(-400.0f, 400.0f));
+        elem->SetPosX(RANDOM->Float(-400.0f, 400.0f));
+        elem->SetPosY(RANDOM->Float(-400.0f, 400.0f));
         elem->col->color = Color(1.0f, 1.0f, 1.0f);
         elem->col->isFilled = false;
 
@@ -369,8 +368,8 @@ void Main::Init()
         elem->col->isFilled = false;
         elem->col->scale.x = 25.0f * bossScaleCoef;
         elem->col->scale.y = 25.0f * bossScaleCoef;
-        elem->col->SetWorldPosX(0.0f);
-        elem->col->SetWorldPosY(400.0f);
+        elem->SetPosX(0.0f);
+        elem->SetPosY(400.0f);
         elem->col->color = Color(1.0f, 1.0f, 1.0f);
 
         elem->idle[dirB] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
@@ -466,7 +465,7 @@ void Main::Init()
         elem->hpGuageBar->img->SetWorldPosX(-elem->hpGuageBar->img->scale.x / 2.0f);
         elem->hpGuageBar->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
         elem->hpGuageBar->img->pivot = OFFSET_L;
-        elem->hpGuageBar->img->space = SPACE::SCREEN;
+        elem->hpGuageBar->img->space = Space::screen;
 
         elem->hpGuage = new UI;
         elem->hpGuage->img = new ObImage(L"EnterTheGungeon/Boss_0/Hp_Guage.png");
@@ -477,7 +476,7 @@ void Main::Init()
         elem->hpGuage->img->SetWorldPosX(-elem->hpGuage->img->scale.x / 2.0f);
         elem->hpGuage->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
         elem->hpGuage->img->pivot = OFFSET_L;
-        elem->hpGuage->img->space = SPACE::SCREEN;
+        elem->hpGuage->img->space = Space::screen;
 
         elem->shadow = new ObImage(L"EnterTheGungeon/Boss_0/Shadow_1.png");
         elem->shadow->scale.x = 12.0f * bossScaleCoef * 2.0f;
@@ -514,14 +513,15 @@ void Main::Update()
 
     for (auto& elem : enemy)
     {
-        elem->target = player->col->GetWorldPos();
-        elem->weapon->col->rotation = Utility::DirToRadian(player->col->GetWorldPos());
+        elem->targetPos = player->Pos();
+        elem->weapon->col->rotation = Utility::DirToRadian(player->Pos());
+        elem->FindPath(tilemap);
         elem->Update();
     }
     for (auto& elem : boss)
     {
-        elem->target = player->col->GetWorldPos();
-        elem->weapon->col->rotation = Utility::DirToRadian(player->col->GetWorldPos());
+        elem->targetPos = player->Pos();
+        elem->weapon->col->rotation = Utility::DirToRadian(player->Pos());
         elem->Update();
     }
 }
@@ -529,6 +529,18 @@ void Main::Update()
 void Main::LateUpdate()
 {
     int idx = 0;
+
+    Int2 on;
+    if (tilemap->WorldPosToTileIdx(player->Pos(), on))
+    {
+        ImGui::Text("TileState %d", tilemap->GetTileState(on));
+
+        if (tilemap->GetTileState(on) == TileState::wall)
+        {
+            player->StepBack();
+        }
+    }
+
 
     for (auto& bulletElem : player->bullet)
     {
@@ -579,13 +591,21 @@ void Main::LateUpdate()
             }
         }
 
+        for (auto& elem : mapObj->doorOpenUp)
+        {
+            if (elem->isOpen) continue;
+
+            if (elem->col->Intersect(enemyElem->col))
+            {
+                player->StepBack();
+            }
+        }
+
         for (auto& elem : mapObj->doorClosed)
         {
             if (elem->col->Intersect(enemyElem->col))
             {
-                Vector2 dir = elem->col->GetWorldPos() - enemyElem->col->GetWorldPos();
-                dir.Normalize();
-                enemyElem->col->SetWorldPos(enemyElem->col->GetWorldPos() - dir);
+                player->StepBack();
             }
         }
 
@@ -621,27 +641,27 @@ void Main::LateUpdate()
     {
         if (elem->col->Intersect(player->col))
         {
-            Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
+            Vector2 dir = elem->Pos() - player->Pos();
             dir.Normalize();
-            player->col->SetWorldPos(player->col->GetWorldPos() - dir);
+            player->SetPos(player->Pos() - dir);
         }
     }
     for (auto& elem : mapObj->wallSide)
     {
         if (elem->col->Intersect(player->col))
         {
-            Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
+            Vector2 dir = elem->Pos() - player->Pos();
             dir.Normalize();
-            player->col->SetWorldPos(player->col->GetWorldPos() - dir);
+            player->SetPos(player->Pos() - dir);
         }
     }
     for (auto& elem : mapObj->wallBack)
     {
         if (elem->col->Intersect(player->col))
         {
-            Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
+            Vector2 dir = elem->Pos() - player->Pos();
             dir.Normalize();
-            player->col->SetWorldPos(player->col->GetWorldPos() - dir);
+            player->SetPos(player->Pos() - dir);
         }
     }
 
@@ -653,7 +673,7 @@ void Main::LateUpdate()
         {
             if (elem->col->Intersect(player->col))
             {
-                Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
+                Vector2 dir = elem->Pos() - player->Pos();
                 if (dir.y < 0.0f)
                 {
                     elem->idle->isVisible = false;
@@ -680,9 +700,9 @@ void Main::LateUpdate()
     {
         if (elem->col->Intersect(player->col))
         {
-            Vector2 dir = elem->col->GetWorldPos() - player->col->GetWorldPos();
+            Vector2 dir = elem->Pos() - player->Pos();
             dir.Normalize();
-            player->col->SetWorldPos(player->col->GetWorldPos() - dir);
+            player->SetPos(player->Pos() - dir);
             dir.Normalize();
         }
     }

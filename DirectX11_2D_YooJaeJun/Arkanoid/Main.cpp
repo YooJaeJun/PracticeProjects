@@ -36,7 +36,7 @@ void Main::Init()
     ball->obj->rotation = 90.0f * ToRadian;
     ball->obj->color = Color(0.0f, 0.9f, 0.7f);
     ball->obj->isVisible = true;
-    ball->obj->collider = COLLIDER::CIRCLE;
+    ball->obj->collider = Collider::circle;
     ball->dir = ball->obj->GetUp();
     ball->scalar = 500.0f;
 
@@ -50,7 +50,7 @@ void Main::Init()
         wall = new NonMover;
         wall->obj = new ObRect();
         wall->obj->isVisible = true;
-        wall->obj->collider = COLLIDER::RECT;
+        wall->obj->collider = Collider::rect;
         wall->obj->color = Color(0.0f, 0.0f, 0.0f);
     }
     walls[0]->obj->SetWorldPos(Vector2(0.0f, -480.0f));
@@ -72,7 +72,7 @@ void Main::Init()
             bricks[idx]->obj = new ObRect();
             bricks[idx]->obj->scale = Vector2(80.0f, 40.0f);
             bricks[idx]->obj->isVisible = true;
-            bricks[idx]->obj->collider = COLLIDER::RECT;
+            bricks[idx]->obj->collider = Collider::rect;
             bricks[idx]->obj->SetWorldPos(Vector2(
                 -200.0f + 80.0f * c,
                 300.0f - 40.0f * r));
@@ -105,7 +105,7 @@ void Main::Init()
     bulletBrick->obj->scale = Vector2(100.0f, 50.0f);
     bulletBrick->obj->color = Color(0.2f, 0.7f, 0.9f);
     bulletBrick->obj->isVisible = true;
-    bulletBrick->obj->collider = COLLIDER::RECT;
+    bulletBrick->obj->collider = Collider::rect;
     bulletBrick->trigger = false;
     bulletBrick->fireTime = 0.0f;
 
@@ -117,7 +117,7 @@ void Main::Init()
         bullet->obj->scale = Vector2(20.0f, 20.0f);
         bullet->obj->color = Color(0.2f, 0.8f, 0.8f);
         bullet->obj->isVisible = false;
-        bullet->obj->collider = COLLIDER::CIRCLE;
+        bullet->obj->collider = Collider::circle;
         bullet->dir = UP;
         bullet->scalar = 500.0f;
     }
@@ -128,7 +128,7 @@ void Main::Init()
     starStormBrick->obj->scale = Vector2(100.0f, 50.0f);
     starStormBrick->obj->color = Color(0.8f, 0.8f, 0.8f);
     starStormBrick->obj->isVisible = true;
-    starStormBrick->obj->collider = COLLIDER::RECT;
+    starStormBrick->obj->collider = Collider::rect;
     starStormBrick->trigger = false;
     starStormBrick->fireTime = 0.0f;
     starStormBrick->end = false;
@@ -141,7 +141,7 @@ void Main::Init()
         starStorm->obj->SetWorldPos(Vector2(3000.0f, 3000.0f));
         starStorm->obj->scale = Vector2(20.0f, 20.0f);
         starStorm->obj->isVisible = false;
-        starStorm->obj->collider = COLLIDER::CIRCLE;
+        starStorm->obj->collider = Collider::circle;
         starStorm->SpawnStorm();
         idx++;
     }

@@ -52,12 +52,12 @@ void Player::Update()
 {
 	Unit::Update();
 
-	target = INPUT->GetWorldMousePos();
+	targetPos = INPUT->GetWorldMousePos();
 
-	CAM->position.x = Utility::Saturate((target.x + idle[curTargetDirState]->GetWorldPos().x) / 2,
+	CAM->position.x = Utility::Saturate((targetPos.x + idle[curTargetDirState]->GetWorldPos().x) / 2,
 		idle[curTargetDirState]->GetWorldPos().x - 250.0f,
 		idle[curTargetDirState]->GetWorldPos().x + 250.0f);
-	CAM->position.y = Utility::Saturate((target.y + idle[curTargetDirState]->GetWorldPos().y) / 2,
+	CAM->position.y = Utility::Saturate((targetPos.y + idle[curTargetDirState]->GetWorldPos().y) / 2,
 		idle[curTargetDirState]->GetWorldPos().y - 250.0f,
 		idle[curTargetDirState]->GetWorldPos().y + 250.0f);
 
@@ -223,7 +223,7 @@ void Player::Idle()
 		{
 			uiBullet[curBulletIdx]->img->isVisible = false;
 
-			Vector2 dir = INPUT->GetWorldMousePos() - col->GetWorldPos();
+			Vector2 dir = INPUT->GetWorldMousePos() - Pos();
 			dir.Normalize();
 			bullet[curBulletIdx++]->Spawn(firePos->GetWorldPos(),
 				Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),

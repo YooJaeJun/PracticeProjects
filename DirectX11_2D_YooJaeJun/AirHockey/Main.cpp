@@ -9,21 +9,21 @@ void Main::Init()
         player->obj = new ObCircle;
         player->Init();
         player->scalar = 350.0f;
-        player->obj->collider = COLLIDER::CIRCLE;
+        player->obj->collider = Collider::circle;
         player->obj->scale = Vector2(50.0f, 50.0f);
         player->score = 0;
     }
-    players[0]->type = Character::eType::p1;
+    players[0]->type = Character::Type::p1;
     players[0]->obj->color = colorRed;
-    players[1]->type = Character::eType::p2;
+    players[1]->type = Character::Type::p2;
     players[1]->obj->color = colorBlue;
 
 
     ball = new Character;
     ball->obj = new ObCircle;
     ball->obj->scale = Vector2(30.0f, 30.0f);
-    ball->obj->collider = COLLIDER::CIRCLE;
-    ball->type = Character::eType::ball;
+    ball->obj->collider = Collider::circle;
+    ball->type = Character::Type::ball;
 
     Spawn();
 
@@ -32,7 +32,7 @@ void Main::Init()
     line->obj = new ObRect;
     line->obj->SetWorldPos(Vector2(0.0f, 0.0f));
     line->obj->scale = Vector2(400.0f, 1.0f);
-    line->obj->collider = COLLIDER::RECT;
+    line->obj->collider = Collider::rect;
     line->obj->color = Color(0.0f, 0.0f, 0.0f);
 
 
@@ -41,8 +41,8 @@ void Main::Init()
         goalPost = new Character;
         goalPost->obj = new ObRect;
         goalPost->obj->scale = Vector2(150.0f, 30.0f);
-        goalPost->obj->collider = COLLIDER::RECT;
-        goalPost->type = Character::eType::post;
+        goalPost->obj->collider = Collider::rect;
+        goalPost->type = Character::Type::post;
     }
     goalPosts[0]->obj->SetWorldPos(Vector2(0.0f, 385.0f));
     goalPosts[0]->obj->color = colorRed;
@@ -57,7 +57,7 @@ void Main::Init()
         wall = new Character;
         wall->obj = new ObRect;
         wall->obj->isVisible = true;
-        wall->obj->collider = COLLIDER::RECT;
+        wall->obj->collider = Collider::rect;
         wall->obj->color = Color(0.0f, 0.0f, 0.0f);
     }
     walls[0]->obj->SetWorldPos(Vector2(0.0f, -400.0f));
@@ -123,7 +123,7 @@ void Main::LateUpdate()
     intersectPos = ball->obj->Intersect(players[0]->obj);
     if (intersectPos)
     {
-        ball->Bounce(intersectPos, players[0], Character::eType::p1);
+        ball->Bounce(intersectPos, players[0], Character::Type::p1);
     }
 
     ball->Update();   // 위치 먼저 갱신
@@ -131,7 +131,7 @@ void Main::LateUpdate()
     intersectPos = ball->obj->Intersect(players[1]->obj);
     if (intersectPos)
     {
-        ball->Bounce(intersectPos, players[1], Character::eType::p2);
+        ball->Bounce(intersectPos, players[1], Character::Type::p2);
     }
 
     for (auto& player : players) player->LateUpdate();
@@ -151,13 +151,13 @@ void Main::LateUpdate()
     {
         Spawn();
         players[1]->score++;
-        goalPosts[0]->state = Character::eState::hit;
+        goalPosts[0]->state = Character::State::hit;
     }
     if (ball->obj->Intersect(goalPosts[1]->obj))
     {
         Spawn();
         players[0]->score++;
-        goalPosts[1]->state = Character::eState::hit;
+        goalPosts[1]->state = Character::State::hit;
     }
     ball->LateUpdate();
 

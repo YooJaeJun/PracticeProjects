@@ -1,4 +1,3 @@
-#include "..\Sonic\Character.h"
 #include "stdafx.h"
 
 void Character::Init(Vector2 pos)
@@ -15,28 +14,28 @@ void Character::Update()
     Move();
 
     // 볼
-    if (type == eType::ball)
+    if (type == Type::ball)
     {
         float rgb = scalar / 400.0f;
         obj->color = Color(rgb, rgb, rgb);
     }
     // 볼
-    else if (type == eType::ball)
+    else if (type == Type::ball)
     {
-        if (state == eState::hit)
+        if (state == State::hit)
         {
             scalar -= 80.0f * DELTA;
             if (scalar <= 0.0f)
             {
                 scalar = 0.0f;
-                state = eState::idle;
+                state = State::idle;
             }
         }
     }
     // 골대
-    else if (type == eType::post)
+    else if (type == Type::post)
     {
-        if (state == eState::hit)
+        if (state == State::hit)
         {
             hitTime += 100.0f * DELTA;
             float rand = RANDOM->Float(0.7f, 1.0f);
@@ -45,7 +44,7 @@ void Character::Update()
             {
                 hitTime = 0.0f;
                 obj->color = originColor;
-                state = eState::idle;
+                state = State::idle;
             }
         }
     }
@@ -58,10 +57,6 @@ void Character::LateUpdate()
 void Character::Render()
 {
 	obj->Render();
-}
-
-void Character::Init()
-{
 }
 
 void Character::Release()
@@ -77,7 +72,7 @@ void Character::Move()
 
 
     // 두 플레이어
-    if (type == eType::p1)
+    if (type == Type::p1)
     {
         if (INPUT->KeyPress(VK_UP))
         {
@@ -96,7 +91,7 @@ void Character::Move()
             velocity += RIGHT * scalar * DELTA;
         }
     }
-    else if (type == eType::p2)
+    else if (type == Type::p2)
     {
         if (INPUT->KeyPress('W'))
         {
@@ -116,7 +111,7 @@ void Character::Move()
         }
     }
     // 볼
-    else if (type == eType::ball)
+    else if (type == Type::ball)
     {
         velocity = moveDir * scalar * DELTA;
     }
@@ -124,29 +119,29 @@ void Character::Move()
     obj->MoveWorldPos(velocity);
 }
 
-void Character::Bounce(IntersectPos interPos, Character* other, eType type)
+void Character::Bounce(ColPos interPos, Character* other, Type type)
 {
-    state = eState::hit;
+    state = State::hit;
     // 플레이어와 충돌
     Vector2 direction;
-    if (type == eType::p1 or type == eType::p2)
+    if (type == Type::p1 or type == Type::p2)
     {
         scalar += 4000.0f * DELTA;
         if (scalar > 600.0f) scalar = 600.0f;
 
         direction = obj->GetWorldPos() - other->obj->GetWorldPos();
         direction.Normalize();
-        if (interPos == IntersectPos::leftRight)
+        if (interPos == ColPos::leftRight)
         {
             SetDirX(direction.x);
             obj->SetWorldPos(lastPos);
         }
-        else if (interPos == IntersectPos::topBottom)
+        else if (interPos == ColPos::upDown)
         {
             SetDirY(direction.y);
             obj->SetWorldPos(lastPos);
         }
-        else if (interPos == IntersectPos::edge)
+        else if (interPos == ColPos::edge)
         {
             SetDir(direction);
             obj->SetWorldPos(lastPos);
@@ -162,17 +157,17 @@ void Character::Bounce(IntersectPos interPos, Character* other, eType type)
         direction = obj->GetWorldPos() - lastPos;
         direction.Normalize();
 
-        if (interPos == IntersectPos::leftRight)
+        if (interPos == ColPos::leftRight)
         {
             SetDirX(-direction.x);
             obj->SetWorldPos(lastPos);
         }
-        else if (interPos == IntersectPos::topBottom)
+        else if (interPos == ColPos::upDown)
         {
             SetDirY(-direction.y);
             obj->SetWorldPos(lastPos);
         }
-        else if (interPos == IntersectPos::edge)
+        else if (interPos == ColPos::edge)
         {
             SetDir(-direction);
             obj->SetWorldPos(lastPos);
