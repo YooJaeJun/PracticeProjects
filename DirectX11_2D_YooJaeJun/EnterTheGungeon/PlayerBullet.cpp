@@ -8,7 +8,7 @@ PlayerBullet::PlayerBullet()
     col->SetWorldPos(Vector2(2000.0f, 2000.0f));
 
     scalar = 600.0f;
-    damage = 1;
+    damage = 5;
 }
 
 void PlayerBullet::Release()

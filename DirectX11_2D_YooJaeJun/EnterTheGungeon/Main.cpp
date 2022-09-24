@@ -6,12 +6,19 @@ void Main::Init()
 {
     int idx = 0;
 
+    LIGHT->light.radius = 2000.0f;
+    tilemap = new ObTileMap;
+    tilemap->file = "map1.txt";
+    tilemap->Load();
+    tilemap->CreateTileCost();
+
+
     float mapScaleCoef = 4.0f;
 
-    map = new Map;
-    map->idle = new ObImage(L"EnterTheGungeon/Level/Background.png");
-    map->idle->scale.x = 706.0f * mapScaleCoef;
-    map->idle->scale.y = 498.0f * mapScaleCoef;
+    mapObj = new MapObject;
+    mapObj->idle = new ObImage(L"EnterTheGungeon/Level/Background.png");
+    mapObj->idle->scale.x = 706.0f * mapScaleCoef;
+    mapObj->idle->scale.y = 498.0f * mapScaleCoef;
 
     // 플레이어
     float playerScaleCoef = 3.0f;
@@ -482,7 +489,8 @@ void Main::Init()
 
 void Main::Release()
 {
-    map->Release();
+    SafeDelete(tilemap);
+    mapObj->Release();
     player->Release();
     for (auto& elem : enemy) elem->Release();
     for (auto& elem : boss) elem->Release();
@@ -498,7 +506,9 @@ void Main::Update()
 
     ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
 
-    map->Update();
+    tilemap->Update();
+
+    mapObj->Update();
 
     player->Update();
 
@@ -524,26 +534,18 @@ void Main::LateUpdate()
     {
         for (auto& enemyElem : enemy)
         {
-            if (abs(bulletElem->col->GetWorldPos().x - enemyElem->col->GetWorldPos().x) < 100 &&
-                abs(bulletElem->col->GetWorldPos().y - enemyElem->col->GetWorldPos().y) < 100)
+            if (bulletElem->col->Intersect(enemyElem->col))
             {
-                if (bulletElem->col->Intersect(enemyElem->col))
-                {
-                    enemyElem->Hit(1);
-                    bulletElem->Hit(1);
-                }
+                enemyElem->Hit(bulletElem->damage);
+                bulletElem->Hit(1);
             }
         }
         for (auto& bossElem : boss)
         {
-            if (abs(bulletElem->col->GetWorldPos().x - bossElem->col->GetWorldPos().x) < 100 &&
-                abs(bulletElem->col->GetWorldPos().y - bossElem->col->GetWorldPos().y) < 100)
+            if (bulletElem->col->Intersect(bossElem->col))
             {
-                if (bulletElem->col->Intersect(bossElem->col))
-                {
-                    bossElem->Hit(1);
-                    bulletElem->Hit(1);
-                }
+                bossElem->Hit(bulletElem->damage);
+                bulletElem->Hit(1);
             }
         }
     }
@@ -563,11 +565,11 @@ void Main::LateUpdate()
             {
                 if (bulletElem->col->Intersect(player->col))
                 {
-                    player->Hit(1);
+                    player->Hit(bulletElem->damage);
                     bulletElem->Hit(1);
                 }
 
-                for (auto& elem : map->wallFront)
+                for (auto& elem : mapObj->wallFront)
                 {
                     if (elem->col->Intersect(bulletElem->col))
                     {
@@ -577,7 +579,7 @@ void Main::LateUpdate()
             }
         }
 
-        for (auto& elem : map->doorClosed)
+        for (auto& elem : mapObj->doorClosed)
         {
             if (elem->col->Intersect(enemyElem->col))
             {
@@ -598,14 +600,14 @@ void Main::LateUpdate()
             if (bossElem->state != State::die &&
                 bossElem->col->Intersect(player->col))
             {
-                player->Hit(1.0f);
+                player->Hit(1);
             }
 
             for (auto& bulletElem : bossElem->bullet)
             {
                 if (bulletElem->col->Intersect(player->col))
                 {
-                    player->Hit(1);
+                    player->Hit(bulletElem->damage);
                     bulletElem->Hit(1);
                 }
             }
@@ -615,7 +617,7 @@ void Main::LateUpdate()
     }
 
 
-    for (auto& elem : map->wallFront)
+    for (auto& elem : mapObj->wallFront)
     {
         if (elem->col->Intersect(player->col))
         {
@@ -624,7 +626,7 @@ void Main::LateUpdate()
             player->col->SetWorldPos(player->col->GetWorldPos() - dir);
         }
     }
-    for (auto& elem : map->wallSide)
+    for (auto& elem : mapObj->wallSide)
     {
         if (elem->col->Intersect(player->col))
         {
@@ -633,7 +635,7 @@ void Main::LateUpdate()
             player->col->SetWorldPos(player->col->GetWorldPos() - dir);
         }
     }
-    for (auto& elem : map->wallBack)
+    for (auto& elem : mapObj->wallBack)
     {
         if (elem->col->Intersect(player->col))
         {
@@ -645,7 +647,7 @@ void Main::LateUpdate()
 
 
     idx = 0;
-    for (auto& elem : map->doorOpenUp)
+    for (auto& elem : mapObj->doorOpenUp)
     {
         if (false == elem->isOpen)
         {
@@ -655,8 +657,8 @@ void Main::LateUpdate()
                 if (dir.y < 0.0f)
                 {
                     elem->idle->isVisible = false;
-                    map->doorOpenDown[idx]->idle->isVisible = true;
-                    map->doorOpenDown[idx]->idle->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
+                    mapObj->doorOpenDown[idx]->idle->isVisible = true;
+                    mapObj->doorOpenDown[idx]->idle->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
                 }
                 else
                 {
@@ -666,15 +668,15 @@ void Main::LateUpdate()
 
                 elem->col->isVisible = false;
                 elem->isOpen = true;
-                map->doorOpenDown[idx]->col->isVisible = false;
-                map->doorOpenDown[idx]->isOpen = true;
+                mapObj->doorOpenDown[idx]->col->isVisible = false;
+                mapObj->doorOpenDown[idx]->isOpen = true;
             }
         }
         idx++;
     }
 
 
-    for (auto& elem : map->doorClosed)
+    for (auto& elem : mapObj->doorClosed)
     {
         if (elem->col->Intersect(player->col))
         {
@@ -691,7 +693,8 @@ void Main::LateUpdate()
 
 void Main::Render()
 {
-    map->Render();
+    tilemap->Render();
+    mapObj->Render();
     player->Render();
     for (auto& elem : enemy) elem->Render();
     for (auto& elem : boss) elem->Render();

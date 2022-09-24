@@ -41,7 +41,7 @@
     <ClInclude Include="Enemy.h">
       <Filter>GameObject\Unit</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
+    <ClInclude Include="MapObject.h">
       <Filter>GameObject\Level</Filter>
     </ClInclude>
     <ClInclude Include="Character.h">
@@ -89,7 +89,7 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>GameObject\Unit</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
+    <ClCompile Include="MapObject.cpp">
       <Filter>GameObject\Level</Filter>
     </ClCompile>
     <ClCompile Include="Character.cpp">

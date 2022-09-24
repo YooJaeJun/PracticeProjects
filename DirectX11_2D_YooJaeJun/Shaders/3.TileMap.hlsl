@@ -7,15 +7,16 @@ struct VertexInput
     float tileMapIdx : INDICES0;
     float tileState : STATE0;
 };
-
+// PI
 struct PixelInput
 {
-    float4 position : POSITION0;
+    float4 position : SV_POSITION;
     float2 uv : UV0;
     float4 color : COLOR0;
     float tileMapIdx : INDICES0;
     float tileState : STATE0;
 };
+
 
 cbuffer VS_WVP : register(b0)
 {
@@ -29,7 +30,7 @@ cbuffer PS_LIGHT : register(b0)
     float Select;
     float4 LightColor;
     float4 OutColor;
-}
+};
 
 
 PixelInput VS(VertexInput input)
@@ -59,7 +60,7 @@ SamplerState Sampler3 : register(s3);
 float4 PS(PixelInput input) : SV_TARGET
 {
     float4 TextureColor;
-    
+   
     [branch]
     if (input.tileMapIdx == 0.0f)
     {
@@ -78,17 +79,19 @@ float4 PS(PixelInput input) : SV_TARGET
         TextureColor = Texture3.Sample(Sampler3, input.uv);
     }
     
+    
     [flatten]
-    if (TextureColor.r = 1.0f &&
-        TextureColor.g = 0.0f &&
-        TextureColor.b = 1.0f)
+    if (TextureColor.r == 1.0f &&
+        TextureColor.g == 0.0f &&
+        TextureColor.b == 1.0f)
     {
         discard;
     }
-
+    
     TextureColor = TextureColor + (input.color * 2.0f - 1.0f);
     
     TextureColor = saturate(TextureColor);
+
     
     
     float2 Minus = input.position.xy - ScreenPos;

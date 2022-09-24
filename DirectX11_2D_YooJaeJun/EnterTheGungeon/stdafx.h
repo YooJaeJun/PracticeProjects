@@ -16,5 +16,5 @@
 #include "Boss.h"
 #include "Pet.h"
 #include "Obstacle.h"
-#include "Map.h"
+#include "MapObject.h"
 #include "UI.h"

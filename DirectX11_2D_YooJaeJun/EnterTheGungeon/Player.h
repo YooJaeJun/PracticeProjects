@@ -10,8 +10,12 @@ public:
 	virtual void Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
+	virtual void Idle() override;
+	void Roll();
+	virtual void Die() override;
 
 public:
+	ObImage*		roll[8];
 	ObImage*		respawn;
 	ObImage*		kick;
 	ObImage*		obtain;

@@ -6,10 +6,10 @@ const int wallBackMax = 20;
 const int doorOpenMax = 40;
 const int doorClosedMax = 20;
 
-class Map
+class MapObject
 {
 public:
-	Map();
+	MapObject();
 
 	void Release();
 	void Update();

@@ -1,6 +1,8 @@
 #pragma once
 
-// CRTP 패턴으로 각 하위 클래스 CreateStaticMember에서나 일반함수에서나 vertex 개수를 설정할 수 있게 함
+// CRTP 패턴 이용. strip 타입에 따른 vertex 개수 설정할 수 있게 함
+// 1. static멤버함수나 비 static멤버함수에서나 사용.
+// 2. 각 하위 클래스가 다른 값을 가지나 호출하는 이름은 같게.
 template<typename T>
 struct StaticVertexCount
 {

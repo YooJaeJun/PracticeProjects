@@ -36,6 +36,7 @@ Player::Player()
 void Player::Release()
 {
 	Unit::Release();
+	for (auto& elem : roll) SafeDelete(elem);
 	for (auto& elem : bullet) elem->Release();
 	uiReload->Release();
 	uiReloadBar->Release();
@@ -53,133 +54,26 @@ void Player::Update()
 
 	target = INPUT->GetWorldMousePos();
 
-	CAM->position.x = Utility::Saturate((target.x + idle[curTarget8Dir]->GetWorldPos().x) / 2,
-		idle[curTarget8Dir]->GetWorldPos().x - 250.0f,
-		idle[curTarget8Dir]->GetWorldPos().x + 250.0f);
-	CAM->position.y = Utility::Saturate((target.y + idle[curTarget8Dir]->GetWorldPos().y) / 2,
-		idle[curTarget8Dir]->GetWorldPos().y - 250.0f,
-		idle[curTarget8Dir]->GetWorldPos().y + 250.0f);
+	CAM->position.x = Utility::Saturate((target.x + idle[curTargetDirState]->GetWorldPos().x) / 2,
+		idle[curTargetDirState]->GetWorldPos().x - 250.0f,
+		idle[curTargetDirState]->GetWorldPos().x + 250.0f);
+	CAM->position.y = Utility::Saturate((target.y + idle[curTargetDirState]->GetWorldPos().y) / 2,
+		idle[curTargetDirState]->GetWorldPos().y - 250.0f,
+		idle[curTargetDirState]->GetWorldPos().y + 250.0f);
 
-	if (state == State::idle)
+	switch (state)
 	{
-		if (INPUT->KeyPress('A'))
-		{
-			moveDir.x = -1.0f;
-			// col->rotationY = PI;
-		}
-		else if (INPUT->KeyPress('D'))
-		{
-			moveDir.x = 1.0f;
-			// col->rotationY = 0.0f;
-		}
-		else
-		{
-			moveDir.x = 0.0f;
-		}
-
-		if (INPUT->KeyPress('W'))
-		{
-			moveDir.y = 1.0f;
-		}
-		else if (INPUT->KeyPress('S'))
-		{
-			moveDir.y = -1.0f;
-		}
-		else
-		{
-			moveDir.y = 0.0f;
-		}
-
-		moveDir.Normalize();
-		col->MoveWorldPos(moveDir * scalar * DELTA);
-
-		if (moveDir.x == 0.0f && moveDir.y == 0.0f)
-		{
-			idle[curTarget8Dir]->isVisible = true;
-			for (auto& elem : walk) elem->isVisible = false;
-		}
-		else
-		{
-			for (auto& elem : idle) elem->isVisible = false;
-			walk[curTarget8Dir]->isVisible = true;
-		}
-
-		if (INPUT->KeyPress(VK_LBUTTON))
-		{
-			if (curBulletIdx >= weapon0BulletMax)
-			{
-				curBulletIdx = 0;
-				canFire = false;
-				reloading = true;
-				uiReload->img->isVisible = true;
-				uiReloadBar->img->isVisible = true;
-			}
-			else if (canFire)
-			{
-				uiBullet[curBulletIdx]->img->isVisible = false;
-
-				Vector2 dir = INPUT->GetWorldMousePos() - col->GetWorldPos();
-				dir.Normalize();
-				bullet[curBulletIdx++]->Spawn(firePos->GetWorldPos(),
-					Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
-						RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
-				);
-				canFire = false;
-			}
-
-			if (false == reloading)
-			{
-				flagFireCamShake = true;
-
-				if (TIMER->GetTick(timeFire, 0.2f))
-				{
-					canFire = true;
-				}
-			}
-			originCamPos = CAM->position;
-		}
-		else if (INPUT->KeyPress(VK_RBUTTON))
-		{
-			if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))
-			{
-				state = State::roll;
-				for (auto& elem : idle) elem->isVisible = false;
-				for (auto& elem : walk) elem->isVisible = false;
-
-				SetMoveDir();
-
-				roll[curMove8Dir]->isVisible = true;
-				roll[curMove8Dir]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
-				
-				godMode = true;
-			}
-		}
-
-		if (flagFireCamShake)
-		{
-			CAM->position = Vector2(RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f),
-				RANDOM->Float(CAM->position.y - 2.0f, CAM->position.y + 2.0f));
-
-			if (TIMER->GetTick(timeFireCamShake, 0.2f))
-			{
-				CAM->position = originCamPos;
-				flagFireCamShake = false;
-			}
-		}
-	}
-	else if (state == State::roll)
-	{
-		col->MoveWorldPos(moveDir * (scalar + 100.0f) * DELTA);
-
-		if (TIMER->GetTick(timeRoll, 0.5f))
-		{
-			state = State::idle;
-			idle[curTarget8Dir]->isVisible = true;
-			for (auto& elem : walk) elem->isVisible = false;
-			for (auto& elem : roll) elem->isVisible = false;
-
-			godMode = false;
-		}
+	case State::idle:
+		Idle();
+		break;
+	case State::roll:
+		Roll();
+		break;
+	case State::die:
+		Die();
+		break;
+	default:
+		break;
 	}
 
 	if (reloading)
@@ -227,10 +121,11 @@ void Player::Update()
 	}
 	else
 	{
-		idle[curTarget8Dir]->color.w = 1.0f;
-		walk[curTarget8Dir]->color.w = 1.0f;
+		idle[curTargetDirState]->color.w = 1.0f;
+		walk[curTargetDirState]->color.w = 1.0f;
 	}
 
+	for (auto& elem : roll) elem->Update();
 	respawn->Update();
 	kick->Update();
 	obtain->Update();
@@ -251,12 +146,13 @@ void Player::LateUpdate()
 
 void Player::Render()
 {
+	Unit::Render();
+
+	for (auto& elem : roll) elem->Render();
 	respawn->Render();
 	kick->Render();
 	obtain->Render();
 	for (auto& elem : bullet) elem->Render();
-	Unit::Render();
-
 	uiReload->Render();
 	uiReloadBar->Render();
 	uiMagazine->Render();
@@ -265,4 +161,135 @@ void Player::Render()
 	uiWeapon->Render();
 	uiBulletCount->Render();
 	weaponReloading->Render();
+}
+
+void Player::Idle()
+{
+	Unit::Idle();
+
+	if (INPUT->KeyPress('A'))
+	{
+		moveDir.x = -1.0f;
+		// col->rotationY = PI;
+	}
+	else if (INPUT->KeyPress('D'))
+	{
+		moveDir.x = 1.0f;
+		// col->rotationY = 0.0f;
+	}
+	else
+	{
+		moveDir.x = 0.0f;
+	}
+
+	if (INPUT->KeyPress('W'))
+	{
+		moveDir.y = 1.0f;
+	}
+	else if (INPUT->KeyPress('S'))
+	{
+		moveDir.y = -1.0f;
+	}
+	else
+	{
+		moveDir.y = 0.0f;
+	}
+
+	moveDir.Normalize();
+	col->MoveWorldPos(moveDir * scalar * DELTA);
+
+	if (moveDir.x == 0.0f && moveDir.y == 0.0f)
+	{
+		idle[curTargetDirState]->isVisible = true;
+		for (auto& elem : walk) elem->isVisible = false;
+	}
+	else
+	{
+		for (auto& elem : idle) elem->isVisible = false;
+		walk[curTargetDirState]->isVisible = true;
+	}
+
+	if (INPUT->KeyPress(VK_LBUTTON))
+	{
+		if (curBulletIdx >= weapon0BulletMax)
+		{
+			curBulletIdx = 0;
+			canFire = false;
+			reloading = true;
+			uiReload->img->isVisible = true;
+			uiReloadBar->img->isVisible = true;
+		}
+		else if (canFire)
+		{
+			uiBullet[curBulletIdx]->img->isVisible = false;
+
+			Vector2 dir = INPUT->GetWorldMousePos() - col->GetWorldPos();
+			dir.Normalize();
+			bullet[curBulletIdx++]->Spawn(firePos->GetWorldPos(),
+				Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
+					RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
+			);
+			canFire = false;
+		}
+
+		if (false == reloading)
+		{
+			flagFireCamShake = true;
+
+			if (TIMER->GetTick(timeFire, 0.2f))
+			{
+				canFire = true;
+			}
+		}
+		originCamPos = CAM->position;
+	}
+	else if (INPUT->KeyPress(VK_RBUTTON))
+	{
+		if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))
+		{
+			state = State::roll;
+			for (auto& elem : idle) elem->isVisible = false;
+			for (auto& elem : walk) elem->isVisible = false;
+
+			SetMoveDir();
+
+			roll[curMoveDirState]->isVisible = true;
+			roll[curMoveDirState]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
+
+			godMode = true;
+		}
+	}
+
+	if (flagFireCamShake)
+	{
+		CAM->position = Vector2(RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f),
+			RANDOM->Float(CAM->position.y - 2.0f, CAM->position.y + 2.0f));
+
+		if (TIMER->GetTick(timeFireCamShake, 0.2f))
+		{
+			CAM->position = originCamPos;
+			flagFireCamShake = false;
+		}
+	}
+}
+
+void Player::Roll()
+{
+	col->MoveWorldPos(moveDir * (scalar + 100.0f) * DELTA);
+
+	if (TIMER->GetTick(timeRoll, 0.5f))
+	{
+		state = State::idle;
+		idle[curTargetDirState]->isVisible = true;
+		for (auto& elem : walk) elem->isVisible = false;
+		for (auto& elem : roll) elem->isVisible = false;
+
+		godMode = false;
+	}
+}
+
+void Player::Die()
+{
+	Unit::Die();
+	for (auto& elem : roll) elem->isVisible = false;
 }

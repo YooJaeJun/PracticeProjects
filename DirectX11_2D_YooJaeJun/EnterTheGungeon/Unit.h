@@ -2,7 +2,6 @@
 enum class State
 {
 	idle,
-	walk,
 	roll,
 	die
 };
@@ -31,15 +30,16 @@ public:
 	virtual void Render() override;
 
 	void Spawn();
+	virtual void Idle();
+	virtual void Die();
 	virtual void Hit(const int damage);
-	void Die();
+	void ToDie();
 	void SetMoveDir();
 	void SetTargetDir();
 
 public:
 	ObImage*	idle[8];
 	ObImage*	walk[8];
-	ObImage*	roll[8];
 	ObImage*	kick[8];
 	ObImage*	hit;
 	ObImage*	fall;
@@ -47,10 +47,10 @@ public:
 	Weapon*		weapon;
 	ObImage*	shadow;
 	State		state;
-	dirState		curMove8Dir;
-	dirState		curMove8DirBefore;
-	dirState		curTarget8Dir;
-	dirState		curTarget8DirBefore;
+	dirState	curMoveDirState;
+	dirState	curMoveDirStateBefore;
+	dirState	curTargetDirState;
+	dirState	curTargetDirStateBefore;
 	Vector2		target;
 	Vector2		targetDir;
 	Vector2		targetDirBefore;

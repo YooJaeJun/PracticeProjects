@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-Map::Map()
+MapObject::MapObject()
 {
     int idx = 0;
 
@@ -168,7 +168,7 @@ Map::Map()
     }
 }
 
-void Map::Release()
+void MapObject::Release()
 {
     bg->Release();
     SafeDelete(idle);
@@ -181,7 +181,7 @@ void Map::Release()
     for (auto& elem : doorClosed) elem->Release();
 }
 
-void Map::Update()
+void MapObject::Update()
 {
     bg->Update();
     idle->Update();
@@ -194,11 +194,11 @@ void Map::Update()
     for (auto& elem : doorClosed) elem->Update();
 }
 
-void Map::LateUpdate()
+void MapObject::LateUpdate()
 {
 }
 
-void Map::Render()
+void MapObject::Render()
 {
     bg->Render();
     idle->Render();

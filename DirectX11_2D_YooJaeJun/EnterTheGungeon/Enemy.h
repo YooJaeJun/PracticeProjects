@@ -11,6 +11,8 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
+	virtual void Idle() override;
+	virtual void Die() override;
 	virtual void Hit(const int damage) override;
 
 public:

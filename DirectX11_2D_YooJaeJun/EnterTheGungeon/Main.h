@@ -5,7 +5,8 @@ const int bossMax = 1;
 class Main : public Scene
 {
 private:
-	Map*		map;
+	ObTileMap*  tilemap;
+	MapObject*	mapObj;
 	Player*		player;
 	Enemy*		enemy[enemyMax];
 	Boss*		boss[bossMax];

@@ -17,6 +17,8 @@ public:
 	virtual void Render() override;
 
 	void SetPattern();
+	virtual void Idle() override;
+	virtual void Die() override;
 	virtual void Hit(const int damage) override;
 
 public:

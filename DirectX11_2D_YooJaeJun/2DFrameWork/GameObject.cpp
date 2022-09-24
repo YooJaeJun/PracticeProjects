@@ -41,7 +41,7 @@ void GameObject::CreateStaticMember()
 
 	basicShader = new Shader(L"1.Basic");
 	imageShader = new Shader(L"2.Image");
-	// tileMapShader = new Shader(L"3.TileMap");
+	tileMapShader = new Shader(L"3.TileMap");
 	axisObject = new ObLine();
 }
 
@@ -94,7 +94,6 @@ void GameObject::Update()
 		RT *= *P;
 	}
 	W = Pi * S * RT;
-
 }
 
 void GameObject::Render()

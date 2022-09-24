@@ -10,10 +10,10 @@ Unit::Unit()
 	isHitAnim = 0.0f;
 	timeHitAnim = 0.0f;
 	targetDirBefore = targetDir = Vector2(0.0f, 0.0f);
-	curMove8Dir = dirB;
-	curMove8DirBefore = dirB;
-	curTarget8Dir = dirB;
-	curTarget8DirBefore = dirB;
+	curMoveDirState = dirB;
+	curMoveDirStateBefore = dirB;
+	curTargetDirState = dirB;
+	curTargetDirStateBefore = dirB;
 }
 
 void Unit::Release()
@@ -21,7 +21,6 @@ void Unit::Release()
 	Character::Release();
 	for(auto& elem : idle) SafeDelete(elem);
 	for(auto& elem : walk) SafeDelete(elem);
-	if (roll[curMove8Dir]) for(auto& elem : roll) SafeDelete(elem);
 	SafeDelete(hit);
 	SafeDelete(fall);
 	SafeDelete(die);
@@ -34,6 +33,46 @@ void Unit::Update()
 {
 	Character::Update();
 
+	curMoveDirStateBefore = curMoveDirState;
+	curTargetDirStateBefore = curTargetDirState;
+	targetDirBefore = targetDir;
+
+	if (weapon) weapon->Update();
+	for(auto& elem : idle) elem->Update();
+	for(auto& elem : walk) elem->Update();
+	if (hit) hit->Update();
+	if (fall) fall->Update();
+	if (die) die->Update();
+	if (firePos) firePos->Update();
+	if (shadow) shadow->Update();
+}
+
+void Unit::LateUpdate()
+{
+}
+
+void Unit::Render()
+{
+	if (shadow) shadow->Render();
+	if (weapon) weapon->Render();
+	idle[curTargetDirState]->Render();
+	walk[curTargetDirState]->Render();
+	if (hit) hit->Render();
+	if (fall) fall->Render();
+	if (die) die->Render();
+	if (firePos) firePos->Render();
+	Character::Render();
+}
+
+
+void Unit::Spawn()
+{
+	col->SetWorldPosX(0.0f);
+	col->SetWorldPosY(0.0f);
+}
+
+void Unit::Idle()
+{
 	SetMoveDir();
 
 	weapon->col->rotation = Utility::DirToRadian(target - weapon->col->GetWorldPos());
@@ -65,63 +104,21 @@ void Unit::Update()
 			weapon->idle->pivot = Vector2(0.4f, -0.25f);
 		}
 	}
-
-
-	if (state == State::die)
-	{
-		isHit = false;
-		scalar = 0.0f;
-		col->colOnOff = false;
-
-		if (col) col->isVisible = false;
-		for (auto& elem : idle) elem->isVisible = false;
-		for (auto& elem : walk) elem->isVisible = false;
-		if (roll[curMove8Dir]) for (auto& elem : roll) elem->isVisible = false;
-		if (hit) hit->isVisible = false;
-		weapon->col->isVisible = false;
-		weapon->idle->isVisible = false;
-		shadow->isVisible = false;
-	}
-
-	curMove8DirBefore = curMove8Dir;
-	curTarget8DirBefore = curTarget8Dir;
-
-	targetDirBefore = targetDir;
-
-	if (weapon) weapon->Update();
-	idle[curTarget8Dir]->Update();
-	walk[curTarget8Dir]->Update();
-	if (roll[curMove8Dir]) roll[curMove8Dir]->Update();
-	if (hit) hit->Update();
-	if (fall) firePos->Update();
-	if (die) die->Update();
-	if (firePos) firePos->Update();
-	if (shadow) shadow->Update();
 }
 
-void Unit::LateUpdate()
+void Unit::Die()
 {
-}
+	isHit = false;
+	scalar = 0.0f;
+	col->colOnOff = false;
 
-void Unit::Render()
-{
-	if (shadow) shadow->Render();
-	if (weapon) weapon->Render();
-	idle[curTarget8Dir]->Render();
-	walk[curTarget8Dir]->Render();
-	if (roll[curMove8Dir]) roll[curMove8Dir]->Render();
-	if (hit) hit->Render();
-	if (fall) firePos->Render();
-	if (die) die->Render();
-	if (firePos) firePos->Render();
-	Character::Render();
-}
-
-
-void Unit::Spawn()
-{
-	col->SetWorldPosX(0.0f);
-	col->SetWorldPosY(0.0f);
+	if (col) col->isVisible = false;
+	for (auto& elem : idle) elem->isVisible = false;
+	for (auto& elem : walk) elem->isVisible = false;
+	if (hit) hit->isVisible = false;
+	weapon->col->isVisible = false;
+	weapon->idle->isVisible = false;
+	shadow->isVisible = false;
 }
 
 void Unit::Hit(const int damage)
@@ -134,7 +131,7 @@ void Unit::Hit(const int damage)
 			isHit = true;
 			isHitAnim = true;
 
-			idle[curTarget8Dir]->isVisible = false;
+			idle[curTargetDirState]->isVisible = false;
 			if (hit) hit->isVisible = true;
 			die->isVisible = false;
 		}
@@ -146,7 +143,7 @@ void Unit::Hit(const int damage)
 	}
 }
 
-void Unit::Die()
+void Unit::ToDie()
 {
 	if (state != State::die)
 	{
@@ -154,7 +151,7 @@ void Unit::Die()
 		col->scale.x = 0.0f;
 		col->scale.y = 0.0f;
 
-		idle[curTarget8Dir]->isVisible = false;
+		idle[curTargetDirState]->isVisible = false;
 		if (hit) hit->isVisible = false;
 		die->isVisible = true;
 	}
@@ -165,39 +162,39 @@ void Unit::SetMoveDir()
 	// 이동방향에 따라 다른 방향 애니메이션 설정하는 코드
 	if (almostEqualFloat(moveDir.x, 0.707107f) && almostEqualFloat(moveDir.y, 0.707107f))
 	{
-		curMove8Dir = dirRT;
+		curMoveDirState = dirRT;
 	}
 	else if (almostEqualFloat(moveDir.x, -0.707107f) && almostEqualFloat(moveDir.y, 0.707107f))
 	{
-		curMove8Dir = dirLT;
+		curMoveDirState = dirLT;
 	}
 	else if (almostEqualFloat(moveDir.x, -0.707107f) && almostEqualFloat(moveDir.y, -0.707107f))
 	{
-		curMove8Dir = dirLB;
+		curMoveDirState = dirLB;
 	}
 	else if (almostEqualFloat(moveDir.x, 0.707107f) && almostEqualFloat(moveDir.y, -0.707107f))
 	{
-		curMove8Dir = dirRB;
+		curMoveDirState = dirRB;
 	}
 	else if (moveDir.x == 1.0f)
 	{
-		curMove8Dir = dirR;
+		curMoveDirState = dirR;
 	}
 	else if (moveDir.x == -1.0f)
 	{
-		curMove8Dir = dirL;
+		curMoveDirState = dirL;
 	}
 	else if (moveDir.y == 1.0f)
 	{
-		curMove8Dir = dirT;
+		curMoveDirState = dirT;
 	}
 	else if (moveDir.y == -1.0f)
 	{
-		curMove8Dir = dirB;
+		curMoveDirState = dirB;
 	}
 	else
 	{
-		curMove8Dir = curMove8DirBefore;
+		curMoveDirState = curMoveDirStateBefore;
 	}
 }
 
@@ -206,39 +203,39 @@ void Unit::SetTargetDir()
 	// 타겟 좌표(플레이어는 마우스)에 따라 다른 방향 애니메이션 설정하는 코드
 	if (targetRotation >= 30.0f * ToRadian && targetRotation < 60.0f * ToRadian)
 	{
-		curTarget8Dir = dirRT;
+		curTargetDirState = dirRT;
 	}
 	else if (targetRotation >= 120.0f * ToRadian && targetRotation < 150.0f * ToRadian)
 	{
-		curTarget8Dir = dirLT;
+		curTargetDirState = dirLT;
 	}
 	else if (targetRotation >= -150.0f * ToRadian && targetRotation < -120.0f * ToRadian)
 	{
-		curTarget8Dir = dirLB;
+		curTargetDirState = dirLB;
 	}
 	else if (targetRotation >= -60.0f * ToRadian && targetRotation < -30.0f * ToRadian)
 	{
-		curTarget8Dir = dirRB;
+		curTargetDirState = dirRB;
 	}
 	else if (targetRotation >= -30.0f * ToRadian && targetRotation < 30.0f * ToRadian)
 	{
-		curTarget8Dir = dirR;
+		curTargetDirState = dirR;
 	}
 	else if ((targetRotation >= -180.0f * ToRadian && targetRotation < -150.0f * ToRadian) ||
 		(targetRotation >= 150.0f * ToRadian && targetRotation < 180.0f * ToRadian))
 	{
-		curTarget8Dir = dirL;
+		curTargetDirState = dirL;
 	}
 	else if (targetRotation >= 60.0f * ToRadian && targetRotation < 120.0f * ToRadian)
 	{
-		curTarget8Dir = dirT;
+		curTargetDirState = dirT;
 	}
 	else if (targetRotation >= -120.0f * ToRadian && targetRotation < -60.0f * ToRadian)
 	{
-		curTarget8Dir = dirB;
+		curTargetDirState = dirB;
 	}
 	else
 	{
-		curTarget8Dir = curTarget8DirBefore;
+		curTargetDirState = curTargetDirStateBefore;
 	}
 }
