@@ -12,6 +12,7 @@ public:
 	virtual void Render() override;
 	virtual void Idle() override;
 	void Roll();
+	virtual void Killed() override;
 	virtual void Die() override;
 
 public:

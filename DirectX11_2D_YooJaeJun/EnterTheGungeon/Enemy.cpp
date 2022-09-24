@@ -47,8 +47,6 @@ void Enemy::Update()
 	default:
 		break;
 	}
-
-	for (auto& elem : bullet) elem->Update();
 }
 
 void Enemy::LateUpdate()
@@ -122,6 +120,12 @@ void Enemy::Idle()
 
 	if (isHit)
 	{
+		if (curHp <= 0.0f)
+		{
+			curHp = 0.0f;
+			Killed();
+		}
+
 		if (TIMER->GetTick(timeHit, 0.01f))
 		{
 			isHit = false;
@@ -160,11 +164,11 @@ void Enemy::Idle()
 		walk[curTargetDirState]->color.w = 1.0f;
 		hit->isVisible = false;
 	}
-}
 
-void Enemy::Die()
-{
-	Unit::Die();
+	for (auto& elem : bullet)
+	{
+		elem->Update();
+	}
 }
 
 void Enemy::Hit(const int damage)
@@ -174,6 +178,24 @@ void Enemy::Hit(const int damage)
 	{
 		hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
 	}
+}
+
+void Enemy::Killed()
+{
+	Unit::Killed();
+
+	for (auto& elem : bullet)
+	{
+		elem->col->colOnOff = false;
+		elem->col->isVisible = false;
+		elem->idle->colOnOff = false;
+		elem->idle->isVisible = false;
+	}
+}
+
+void Enemy::Die()
+{
+	Unit::Die();
 }
 
 void Enemy::FindPath(ObTileMap* map)

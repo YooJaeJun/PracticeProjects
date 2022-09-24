@@ -19,6 +19,9 @@
     <Filter Include="GameObject\Weapon">
       <UniqueIdentifier>{b0d2f63b-dc57-48ea-8165-96fb680583e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{09f919fa-161d-43a7-b8c0-e22f829de12f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -68,6 +71,9 @@
     <ClInclude Include="Obstacle.h">
       <Filter>GameObject\Level</Filter>
     </ClInclude>
+    <ClInclude Include="Scene01.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -115,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="Obstacle.cpp">
       <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene01.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

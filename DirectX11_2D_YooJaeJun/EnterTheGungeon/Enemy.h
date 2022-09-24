@@ -12,8 +12,9 @@ public:
 	virtual void Render() override;
 
 	virtual void Idle() override;
-	virtual void Die() override;
 	virtual void Hit(const int damage) override;
+	virtual void Die() override;
+	virtual void Killed() override;
 	void FindPath(ObTileMap* map);
 
 private:

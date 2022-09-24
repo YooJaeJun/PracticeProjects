@@ -29,9 +29,9 @@ public:
 	virtual void Render() override;
 
 	virtual void Idle();
-	virtual void Die();
 	virtual void Hit(const int damage);
-	void ToDie();
+	virtual void Killed();
+	virtual void Die();
 	void StepBack();
 	void SetMoveDir();
 	void SetTargetDir();
@@ -63,6 +63,7 @@ public:
 	bool			isHit;
 	bool			isHitAnim;
 	float			timeHitAnim;
+	float			timeDieAnim;
 	vector<Vector2>	foot;
 };
 

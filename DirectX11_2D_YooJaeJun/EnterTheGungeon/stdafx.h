@@ -18,3 +18,4 @@
 #include "Obstacle.h"
 #include "MapObject.h"
 #include "UI.h"
+#include "Scene01.h"

@@ -45,6 +45,12 @@ void Boss::Update()
 
 	if (isHit)
 	{
+        if (curHp <= 0.0f)
+        {
+            curHp = 0.0f;
+            Killed();
+        }
+
 		if (TIMER->GetTick(timeHit, 0.01f))
 		{
 			isHit = false;
@@ -252,9 +258,18 @@ void Boss::Idle()
     }
 }
 
-void Boss::Die()
+void Boss::Hit(const int damage)
 {
-    Unit::Die();
+    Unit::Hit(damage);
+    if (false == isHit)
+    {
+        hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+    }
+}
+
+void Boss::Killed()
+{
+    Unit::Killed();
 
     for (auto& elem : bullet)
     {
@@ -265,11 +280,15 @@ void Boss::Die()
     }
 }
 
-void Boss::Hit(const int damage)
+void Boss::Die()
 {
-    Unit::Hit(damage);
-    if (false == isHit)
+    Unit::Die();
+
+    for (auto& elem : bullet)
     {
-        hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+        elem->col->colOnOff = false;
+        elem->col->isVisible = false;
+        elem->idle->colOnOff = false;
+        elem->idle->isVisible = false;
     }
 }

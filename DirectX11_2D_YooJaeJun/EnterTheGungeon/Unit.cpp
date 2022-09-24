@@ -4,17 +4,18 @@ Unit::Unit()
 {
 	state = State::idle;
 	lastPos = Vector2(0.0f, 0.0f);
+	targetDirBefore = targetDir = Vector2(0.0f, 0.0f);
+	curMoveDirState = dirB;
+	curMoveDirStateBefore = dirB;
+	curTargetDirState = dirB;
+	curTargetDirStateBefore = dirB;
 	timeFire = 0.0f;
 	timeReload = 0.0f;
 	timeHit = 0.0f;
 	isHit = false;
 	isHitAnim = 0.0f;
 	timeHitAnim = 0.0f;
-	targetDirBefore = targetDir = Vector2(0.0f, 0.0f);
-	curMoveDirState = dirB;
-	curMoveDirStateBefore = dirB;
-	curTargetDirState = dirB;
-	curTargetDirStateBefore = dirB;
+	timeDieAnim = 0.0f;
 }
 
 void Unit::Release()
@@ -71,21 +72,6 @@ void Unit::Idle()
 {
 }
 
-void Unit::Die()
-{
-	isHit = false;
-	scalar = 0.0f;
-	col->colOnOff = false;
-
-	if (col) col->isVisible = false;
-	for (auto& elem : idle) elem->isVisible = false;
-	for (auto& elem : walk) elem->isVisible = false;
-	if (hit) hit->isVisible = false;
-	weapon->col->isVisible = false;
-	weapon->idle->isVisible = false;
-	shadow->isVisible = false;
-}
-
 void Unit::Hit(const int damage)
 {
 	if (false == isHit)
@@ -97,28 +83,56 @@ void Unit::Hit(const int damage)
 			isHitAnim = true;
 
 			idle[curTargetDirState]->isVisible = false;
-			if (hit) hit->isVisible = true;
-			die->isVisible = false;
+			walk[curTargetDirState]->isVisible = false;
 		}
 		if (curHp <= 0)
 		{
 			curHp = 0;
-			state = State::die;
+			Killed();
+		}
+		else
+		{
+			if (hit) hit->isVisible = true;
+			if (hit) hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 		}
 	}
 }
 
-void Unit::ToDie()
+void Unit::Killed()
 {
 	if (state != State::die)
 	{
 		state = State::die;
-		col->scale.x = 0.0f;
-		col->scale.y = 0.0f;
 
-		idle[curTargetDirState]->isVisible = false;
+		isHit = false;
+		scalar = 0.0f;
+		col->colOnOff = false;
+
+		col->isVisible = false;
+		for (auto& elem : idle)
+		{
+			elem->isVisible = false;
+			elem->ChangeAnim(ANIMSTATE::STOP, 0.2f);
+		}
+		for (auto& elem : walk)
+		{
+			elem->isVisible = false;
+			elem->ChangeAnim(ANIMSTATE::STOP, 0.2f);
+		}
 		if (hit) hit->isVisible = false;
+		weapon->col->isVisible = false;
+		weapon->idle->isVisible = false;
+		shadow->isVisible = false;
 		die->isVisible = true;
+		die->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	}
+}
+
+void Unit::Die()
+{
+	if (TIMER->GetTick(timeDieAnim, 3.0f))
+	{
+		die->color = Color(0.4f, 0.4f, 0.4f, 1.0f);
 	}
 }
 
