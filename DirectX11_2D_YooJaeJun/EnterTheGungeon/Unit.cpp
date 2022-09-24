@@ -69,37 +69,6 @@ void Unit::Render()
 
 void Unit::Idle()
 {
-	SetMoveDir();
-
-	weapon->col->rotation = Utility::DirToRadian(targetPos - weapon->Pos());
-
-	targetDir = targetPos - Pos();
-	targetDir.Normalize();
-
-	targetRotation = Utility::DirToRadian(targetDir);
-
-	SetTargetDir();
-
-	if (targetDir.x >= 0.0f)
-	{
-		if (targetDirBefore.x < 0.0f)
-		{
-			swap(weapon->idle->uv.y, weapon->idle->uv.w);
-			weapon->col->SetLocalPosX(18.0f);
-			weapon->col->pivot = Vector2(0.4f, 0.25f);
-			weapon->idle->pivot = Vector2(0.4f, 0.25f);
-		}
-	}
-	else
-	{
-		if (targetDirBefore.x >= 0.0f)
-		{
-			swap(weapon->idle->uv.y, weapon->idle->uv.w);
-			weapon->col->SetLocalPosX(-18.0f);
-			weapon->col->pivot = Vector2(0.4f, -0.25f);
-			weapon->idle->pivot = Vector2(0.4f, -0.25f);
-		}
-	}
 }
 
 void Unit::Die()
@@ -239,4 +208,16 @@ void Unit::SetTargetDir()
 	{
 		curTargetDirState = curTargetDirStateBefore;
 	}
+}
+
+vector<Vector2>& Unit::Foot()
+{
+	foot.resize(4);
+
+	foot[0] = Pos() + Vector2(0.0f, -col->scale.y / 2.0f) + Vector2(-10.0f, -10.0f);
+	foot[1] = Pos() + Vector2(0.0f, -col->scale.y / 2.0f) + Vector2(10.0f, -10.0f);
+	foot[2] = Pos() + Vector2(0.0f, -col->scale.y / 2.0f) + Vector2(-10.0f, 10.0f);
+	foot[3] = Pos() + Vector2(0.0f, -col->scale.y / 2.0f) + Vector2(10.0f, 10.0f);
+
+	return foot;
 }

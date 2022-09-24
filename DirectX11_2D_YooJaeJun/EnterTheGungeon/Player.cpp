@@ -167,6 +167,34 @@ void Player::Idle()
 {
 	Unit::Idle();
 
+	weapon->col->rotation = Utility::DirToRadian(targetPos - weapon->Pos());
+	targetDir = targetPos - Pos();
+	targetDir.Normalize();
+	targetRotation = Utility::DirToRadian(targetDir);
+
+	SetTargetDir();
+
+	if (targetDir.x >= 0.0f)
+	{
+		if (targetDirBefore.x < 0.0f)
+		{
+			swap(weapon->idle->uv.y, weapon->idle->uv.w);
+			weapon->col->SetLocalPosX(18.0f);
+			weapon->col->pivot = Vector2(0.4f, 0.25f);
+			weapon->idle->pivot = Vector2(0.4f, 0.25f);
+		}
+	}
+	else
+	{
+		if (targetDirBefore.x >= 0.0f)
+		{
+			swap(weapon->idle->uv.y, weapon->idle->uv.w);
+			weapon->col->SetLocalPosX(-18.0f);
+			weapon->col->pivot = Vector2(0.4f, -0.25f);
+			weapon->idle->pivot = Vector2(0.4f, -0.25f);
+		}
+	}
+
 	if (INPUT->KeyPress('A'))
 	{
 		moveDir.x = -1.0f;
@@ -197,6 +225,8 @@ void Player::Idle()
 
 	moveDir.Normalize();
 	col->MoveWorldPos(moveDir * scalar * DELTA);
+
+	SetMoveDir();
 
 	if (moveDir.x == 0.0f && moveDir.y == 0.0f)
 	{
@@ -275,7 +305,7 @@ void Player::Idle()
 
 void Player::Roll()
 {
-	col->MoveWorldPos(moveDir * (scalar + 100.0f) * DELTA);
+	col->MoveWorldPos(moveDir * (scalar + 120.0f) * DELTA);
 
 	if (TIMER->GetTick(timeRoll, 0.5f))
 	{

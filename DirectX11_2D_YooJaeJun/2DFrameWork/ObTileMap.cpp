@@ -14,12 +14,12 @@ ObTileMap::ObTileMap()
     file = "EnterTheGungeon.txt";
     scale = Vector2(50.0f, 50.0f);
 
-    tileImages[0] = new ObImage(L"Tile.png");
-    tileImages[0]->maxFrame = Int2(8, 6);
-    tileImages[1] = new ObImage(L"Tile2.png");
-    tileImages[1]->maxFrame = Int2(11, 7);
-    tileImages[2] = new ObImage(L"EnterTheGungeon/Level/Tileset.png");
-    tileImages[2]->maxFrame = Int2(12, 12);
+    tileImages[0] = new ObImage(L"EnterTheGungeon/Level/Tileset.png");
+    tileImages[0]->maxFrame = Int2(12, 12);
+    tileImages[1] = new ObImage(L"Tile.png");
+    tileImages[1]->maxFrame = Int2(8, 6);
+    tileImages[2] = new ObImage(L"Tile2.png");
+    tileImages[2]->maxFrame = Int2(11, 7);
     tileImages[3] = nullptr;
 
     ResizeTile(tileSize);
@@ -174,6 +174,13 @@ TileState ObTileMap::GetTileState(Int2 TileIdx)
     int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
 
     return static_cast<TileState>(vertices[tileIdx * 6].tileState);
+}
+
+void ObTileMap::SetTileState(Int2 TileIdx, TileState tileState)
+{
+    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
+
+    vertices[tileIdx * 6].tileState = static_cast<int>(tileState);
 }
 
 Vector2 ObTileMap::GetTilePosition(Int2 TileIdx)
@@ -388,7 +395,7 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
 {
     //둘중에 하나가 벽이면 갈 수 있는길이 없다.
     if (Tiles[dest.x][dest.y].state == TileState::wall ||
-        Tiles[sour.x][sour.y].state == TileState::wall)
+        Tiles[sour.x][sour.y].state == TileState::door)
     {
         return false;
     }
@@ -484,7 +491,8 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
             Tile* loop = &Tiles[LoopIdx[i].x][LoopIdx[i].y];
 
             //벽이 아닐때
-            if (loop->state != TileState::wall)
+            if (loop->state != TileState::wall &&
+                loop->state != TileState::door)
             {
                 //예상비용 만들기
                 loop->ClacH(dest);

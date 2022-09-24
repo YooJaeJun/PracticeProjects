@@ -4,7 +4,7 @@
 void Main::Init()
 {
 	map = new ObTileMap();
-	map->scale = Vector2(100.0f, 100.0f);
+	map->scale = Vector2(50.0f, 50.0f);
 	map->SetWorldPos(Vector2(-app.GetHalfWidth(), -app.GetHalfHeight()));
 
 	LIGHT->light.radius = 3000.0f;
@@ -75,7 +75,7 @@ void Main::Update()
 	{
 		string str = "Texture" + to_string(i);
 		if (GUI->FileImGui(str.c_str(), str.c_str(),
-			".jpg,.png,.bmp,.dds,.tga", "../Contents/Images"))
+			".jpg,.png,.bmp,.dds,.tga", "../Contents/Images/EnterTheGungeon"))
 		{
 			string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
 			SafeDelete(map->tileImages[i]);

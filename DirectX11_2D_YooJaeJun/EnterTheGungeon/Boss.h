@@ -1,5 +1,5 @@
 #pragma once
-const int circularBulletMax = 200;
+const int circularBulletMax = 60;
 
 enum class BossPattern
 {
@@ -27,6 +27,7 @@ public:
 	std::vector<BossBullet*>	bullet;
     BossPattern                 pattern;
 	StringBulletData            stringBullet;
-	float						timeSetDir;
+	float						timeSetMoveDir;
+	float						timeSetTargetDir;
 };
 

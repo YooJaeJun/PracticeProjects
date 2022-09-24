@@ -16,13 +16,14 @@ Enemy::Enemy()
 	}
 
 	curHp = maxHp = 3;
-	scalar = 60.0f;
+	scalar = 120.0f;
 	timeFire = 0.0f;
 	timeHit = 0.0f;
 	isHit = false;
 	isHitAnim = false;
 	timeHitAnim = 0.0f;
-	timeSetDir = 0.0f;
+	timeSetMoveDir = 0.0f;
+	timeSetTargetDir = 0.0f;
 }
 
 void Enemy::Release()
@@ -65,12 +66,39 @@ void Enemy::Idle()
 	Unit::Idle();
 
 	targetDir = moveDir = targetPos - Pos();
-	targetDir.Normalize();
+
 	moveDir.Normalize();
+	SetMoveDir();
+
+	weapon->col->rotation = Utility::DirToRadian(targetPos - weapon->Pos());
+	targetDir.Normalize();
+	targetRotation = Utility::DirToRadian(targetDir);
+	SetTargetDir();
+
+	if (targetDir.x >= 0.0f)
+	{
+		if (targetDirBefore.x < 0.0f)
+		{
+			swap(weapon->idle->uv.y, weapon->idle->uv.w);
+			weapon->col->SetLocalPosX(18.0f);
+			weapon->col->pivot = Vector2(0.4f, 0.25f);
+			weapon->idle->pivot = Vector2(0.4f, 0.25f);
+		}
+	}
+	else
+	{
+		if (targetDirBefore.x >= 0.0f)
+		{
+			swap(weapon->idle->uv.y, weapon->idle->uv.w);
+			weapon->col->SetLocalPosX(-18.0f);
+			weapon->col->pivot = Vector2(0.4f, -0.25f);
+			weapon->idle->pivot = Vector2(0.4f, -0.25f);
+		}
+	}
 
 	// col->MoveWorldPos(moveDir * scalar * DELTA);
 
-	if (moveDir.x == 0 && moveDir.y == 0)
+	if (moveDir.x == 0.0f && moveDir.y == 0.0f)
 	{
 		idle[curTargetDirState]->isVisible = true;
 		for (auto& elem : walk) elem->isVisible = false;
@@ -150,26 +178,32 @@ void Enemy::Hit(const int damage)
 
 void Enemy::FindPath(ObTileMap* map)
 {
-	Int2 sour, dest;
-	bool isFind;
-
-	isFind = map->WorldPosToTileIdx(Pos(), sour);
-	isFind &= map->WorldPosToTileIdx(targetPos, dest);
-
-	if (isFind)
+	if (TIMER->GetTick(timeFindPath, 2.0f))
 	{
-		if (map->PathFinding(sour, dest, way))
+		Int2 sour, dest;
+		bool isFind;
+
+		isFind = map->WorldPosToTileIdx(Pos(), sour);
+		isFind &= map->WorldPosToTileIdx(targetPos, dest);
+
+		if (isFind)
 		{
-			g = 0.0f;
-			start = Pos();
-			way.pop_back();
-			end = way.back()->Pos;
+			if (map->PathFinding(sour, dest, way))
+			{
+				g = 0.0f;
+				start = Pos();
+				way.pop_back();
+				end = way.back()->Pos;
+			}
 		}
 	}
 
 	if (false == way.empty())
 	{
-		SetPos(Vector2::Lerp(start, end, g));
+		// SetPos(Vector2::Lerp(start, end, g));
+		moveDir = way.back()->Pos - Pos();
+		col->MoveWorldPos(moveDir * DELTA);
+
 		g += DELTA * 2.0f;
 
 		if (g > 1.0f)

@@ -21,6 +21,10 @@ private:
 	Vector2			start;
 	Vector2			end;
 	float			g;	// ∫Ò¿≤
+	float			timeFindPath;
+	float			timeSetMoveDir;
+	float			timeSetTargetDir;
+
 public:
 	EnemyBullet*	bullet[enemyBulletMax];
 	float			timeSetDir;

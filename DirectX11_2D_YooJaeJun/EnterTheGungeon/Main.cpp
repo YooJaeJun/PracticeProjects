@@ -305,6 +305,7 @@ void Main::Init()
             elem2->maxFrame.x = 6;
             elem2->scale.x = 96.0f / 6.0f * enemyScaleCoef;
             elem2->scale.y = 24.0f * enemyScaleCoef;
+            elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
             elem2->SetParentRT(*elem->col);
             idx++;
         }
@@ -481,6 +482,112 @@ void Main::Init()
     boss->shadow->scale.y = 4.0f * bossScaleCoef * 2.0f;
     boss->shadow->SetParentRT(*boss->col);
     boss->shadow->SetWorldPosY(-55.0f);
+
+
+    // 맵 오브젝트
+    float doorOpenScaleCoef = 2.5f;
+
+    idx = 0;
+    for (auto& elem : mapObj->doorOpenUp)
+    {
+        elem = new Obstacle;
+        elem->col = new ObRect;
+        elem->col->isFilled = false;
+        elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+        elem->col->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
+        elem->col->scale.y = 48.0f * doorOpenScaleCoef;
+        elem->SetPosX(200.0f + idx * elem->col->scale.x);
+        elem->col->collider = Collider::rect;
+        elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Open_Up.png");
+        elem->idle->maxFrame.x = 3;
+        elem->idle->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
+        elem->idle->scale.y = 48.0f * doorOpenScaleCoef;
+        elem->idle->SetParentRT(*elem->col);
+        elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+
+        if (idx & 1)
+        {
+            elem->idle->reverseLR = true;
+        }
+
+        Int2 on;
+        if (tilemap->WorldPosToTileIdx(elem->Pos(), on))
+        {
+            tilemap->SetTileState(on, TileState::door);
+        }
+
+        idx++;
+    }
+
+    idx = 0;
+    for (auto& elem : mapObj->doorOpenDown)
+    {
+        elem = new Obstacle;
+        elem->col = new ObRect;
+        elem->col->isVisible = false;   //
+        elem->col->isFilled = false;
+        elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+        elem->col->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
+        elem->col->scale.y = 48.0f * doorOpenScaleCoef;
+        elem->SetPosX(200.0f + idx * elem->col->scale.x);
+        elem->col->collider = Collider::rect;
+        elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Open_Down.png");
+        elem->idle->isVisible = false;  //
+        elem->idle->maxFrame.x = 3;
+        elem->idle->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
+        elem->idle->scale.y = 48.0f * doorOpenScaleCoef;
+        elem->idle->SetParentRT(*elem->col);
+        elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+
+        if (idx & 1)
+        {
+            elem->idle->reverseLR = true;
+        }
+
+        Int2 on;
+        if (tilemap->WorldPosToTileIdx(elem->Pos(), on))
+        {
+            tilemap->SetTileState(on, TileState::door);
+        }
+
+        idx++;
+    }
+
+    float doorClosedScaleCoef = 2.5f;
+
+    idx = 0;
+    for (auto& elem : mapObj->doorClosed)
+    {
+        elem = new Obstacle;
+        elem->col = new ObRect;
+        elem->col->isVisible = true;
+        elem->col->isFilled = false;
+        elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+        elem->col->scale.x = 68.0f / 2.0f * doorClosedScaleCoef;
+        elem->col->scale.y = 41.0f * doorClosedScaleCoef;
+        elem->SetPosX(200.0f + idx * elem->col->scale.x);
+        elem->SetPosY(200.0f);
+        elem->col->collider = Collider::rect;
+        elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Closed.png");
+        elem->idle->maxFrame.x = 2;
+        elem->idle->scale.x = 68.0f / 2.0f * doorClosedScaleCoef;
+        elem->idle->scale.y = 41.0f * doorClosedScaleCoef;
+        elem->idle->SetParentRT(*elem->col);
+        elem->idle->ChangeAnim(ANIMSTATE::LOOP, 2.0f);
+
+        if (idx & 1)
+        {
+            elem->idle->reverseLR = true;
+        }
+
+        Int2 on;
+        if (tilemap->WorldPosToTileIdx(elem->Pos(), on))
+        {
+            tilemap->SetTileState(on, TileState::door);
+        }
+
+        idx++;
+    }
 }
 
 void Main::Release()
@@ -513,8 +620,8 @@ void Main::Update()
     {
         elem->targetPos = player->Pos();
         elem->weapon->col->rotation = Utility::DirToRadian(player->Pos());
-        // elem->FindPath(tilemap);
         elem->Update();
+        elem->FindPath(tilemap);
     }
 
     boss->targetPos = player->Pos();
@@ -524,10 +631,29 @@ void Main::Update()
 
 void Main::LateUpdate()
 {
-    CheckIntersect();
+    // CheckIntersect();
 
     int idx = 0;
 
+    // 플레이어
+    Int2 on;
+    if (tilemap->WorldPosToTileIdx(player->Pos(), on))
+    {
+        ImGui::Text("TileState %d", tilemap->GetTileState(on));
+    }
+    vector<Vector2>& foot = player->Foot();
+    for (int i = 0; i < 4; i++)
+    {
+        if (tilemap->WorldPosToTileIdx(foot[i], on))
+        {
+            if (tilemap->GetTileState(on) == TileState::wall)
+            {
+                player->StepBack();
+            }
+        }
+    }
+
+    // 플레이어 총알
     for (auto& bulletElem : player->bullet)
     {
         for (auto& enemyElem : enemy)
@@ -544,9 +670,20 @@ void Main::LateUpdate()
             boss->Hit(bulletElem->damage);
             bulletElem->Hit(1);
         }
+
+        Int2 bulletOn;
+        if (tilemap->WorldPosToTileIdx(bulletElem->Pos(), bulletOn))
+        {
+            if (tilemap->GetTileState(bulletOn) == TileState::wall ||
+                tilemap->GetTileState(bulletOn) == TileState::door)
+            {
+                bulletElem->Reload();
+            }
+        }
     }
 
 
+    // 적
     for (auto& enemyElem : enemy)
     {
         if (false == player->godMode)
@@ -554,9 +691,10 @@ void Main::LateUpdate()
             if (enemyElem->state != State::die &&
                 enemyElem->col->Intersect(player->col))
             {
-                player->Hit(1.0f);
+                player->Hit(1);
             }
 
+            // 적 총알
             for (auto& bulletElem : enemyElem->bullet)
             {
                 if (bulletElem->col->Intersect(player->col))
@@ -564,9 +702,19 @@ void Main::LateUpdate()
                     player->Hit(bulletElem->damage);
                     bulletElem->Hit(1);
                 }
+
+                Int2 bulletOn;
+                if (tilemap->WorldPosToTileIdx(bulletElem->Pos(), bulletOn))
+                {
+                    if (tilemap->GetTileState(bulletOn) == TileState::wall ||
+                        tilemap->GetTileState(bulletOn) == TileState::door)
+                    {
+                        bulletElem->Reload();
+                    }
+                }
             }
         }
-
+        /*
         for (auto& elem : mapObj->doorOpenUp)
         {
             if (elem->isOpen) continue;
@@ -584,11 +732,12 @@ void Main::LateUpdate()
                 enemyElem->StepBack();
             }
         }
-
+        */
         enemyElem->LateUpdate();
     }
 
 
+    // 보스
     if (false == player->godMode)
     {
         if (boss->state != State::die &&
@@ -597,6 +746,7 @@ void Main::LateUpdate()
             player->Hit(1);
         }
 
+        // 보스 총알
         for (auto& bulletElem : boss->bullet)
         {
             if (bulletElem->col->Intersect(player->col))
@@ -604,12 +754,23 @@ void Main::LateUpdate()
                 player->Hit(bulletElem->damage);
                 bulletElem->Hit(1);
             }
+
+            Int2 bulletOn;
+            if (tilemap->WorldPosToTileIdx(bulletElem->Pos(), bulletOn))
+            {
+                if (tilemap->GetTileState(bulletOn) == TileState::wall ||
+                    tilemap->GetTileState(bulletOn) == TileState::door)
+                {
+                    bulletElem->Reload();
+                }
+            }
         }
     }
 
     boss->LateUpdate();
 
 
+    // 맵 오브젝트
     idx = 0;
     for (auto& elem : mapObj->doorOpenUp)
     {
@@ -640,6 +801,7 @@ void Main::LateUpdate()
     }
 
 
+    /*
     for (auto& elem : mapObj->doorClosed)
     {
         if (elem->col->Intersect(player->col))
@@ -650,7 +812,7 @@ void Main::LateUpdate()
             dir.Normalize();
         }
     }
-    
+    */
 
     player->LateUpdate();
 }
@@ -691,14 +853,21 @@ void Main::CheckIntersect()
     int idx = 0;
 
     Int2 on;
+    vector<Vector2>& foot = player->Foot();
+    for (int i = 0; i < 4; i++)
+    {
+        if (tilemap->WorldPosToTileIdx(foot[i], on))
+        {
+            if (tilemap->GetTileState(on) == TileState::wall)
+            {
+                player->StepBack();
+            }
+        }
+    }
+
     if (tilemap->WorldPosToTileIdx(player->Pos(), on))
     {
         ImGui::Text("TileState %d", tilemap->GetTileState(on));
-
-        if (tilemap->GetTileState(on) == TileState::wall)
-        {
-            player->StepBack();
-        }
 
         if (grid[on].size())
         {

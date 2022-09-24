@@ -3,10 +3,13 @@
 Boss::Boss()
 {
     pattern = BossPattern::string;
-    stringBullet.inputString = "abcdefghijklmnopqrstuvwxyz";
-    bullet.resize(stringBullet.inputString.size() * 25);
+
+    if (pattern == BossPattern::string)
+    {
+        stringBullet.inputString = "abcdefghijklmnopqrstuvwxyz";
+    }
+
     SetPattern();
-    stringBullet.SetStringBullet();
 
 	curHp = maxHp = 1;
 	scalar = 30.0f;
@@ -15,7 +18,6 @@ Boss::Boss()
 	isHit = false;
 	isHitAnim = false;
 	timeHitAnim = 0.0f;
-    timeSetDir = 0.0f;
 }
 
 void Boss::Release()
@@ -93,7 +95,8 @@ void Boss::SetPattern()
             elem->idle->scale.x = 8.0f * bulletCoef;
             elem->idle->scale.y = 8.0f * bulletCoef;
             elem->idle->SetParentRT(*elem->col);
-            elem->moveDir = Vector2(cos(idx * 4.0f * ToRadian), sin(idx * 4.0f * ToRadian));
+            elem->moveDir.x = cos(idx * 360.0f / circularBulletMax * ToRadian);
+            elem->moveDir.y = sin(idx * 360.0f / circularBulletMax * ToRadian);
             idx++;
         }
     }
@@ -122,6 +125,33 @@ void Boss::SetPattern()
 void Boss::Idle()
 {
     Unit::Idle();
+
+    weapon->col->rotation = Utility::DirToRadian(targetPos - weapon->Pos());
+    targetDir = targetPos - Pos();
+    targetDir.Normalize();
+    targetRotation = Utility::DirToRadian(targetDir);
+    SetTargetDir();
+
+    if (targetDir.x >= 0.0f)
+    {
+        if (targetDirBefore.x < 0.0f)
+        {
+            swap(weapon->idle->uv.y, weapon->idle->uv.w);
+            weapon->col->SetLocalPosX(18.0f);
+            weapon->col->pivot = Vector2(0.4f, 0.25f);
+            weapon->idle->pivot = Vector2(0.4f, 0.25f);
+        }
+    }
+    else
+    {
+        if (targetDirBefore.x >= 0.0f)
+        {
+            swap(weapon->idle->uv.y, weapon->idle->uv.w);
+            weapon->col->SetLocalPosX(-18.0f);
+            weapon->col->pivot = Vector2(0.4f, -0.25f);
+            weapon->idle->pivot = Vector2(0.4f, -0.25f);
+        }
+    }
 
     if (isHitAnim)
     {

@@ -69,6 +69,7 @@ public:
     bool            WorldPosToTileIdx(Vector2 Wpos, Int2& TileIdx);
     Vector2         TileIdxToWorldPos(Int2 TileIdx);
     TileState       GetTileState(Int2 TileIdx);
+    void            SetTileState(Int2 TileIdx, TileState tileState);
     Int2            GetTileSize() { return tileSize; };
 
 
