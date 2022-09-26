@@ -4,7 +4,7 @@ using namespace std;
 
 void Main::Init()
 {
-    rooms.resize(roomMax);
+    rooms = vector<Room*>(roomMax);
     for (auto& room : rooms)
     {
         room = new Room();
@@ -17,21 +17,21 @@ void Main::Init()
         room->col->color = Color(1.0f, 0.6f, 0.6f);
         room->col->collider = Collider::rect;
     }
-
-    state = State::move;
+    state = GameState::spray;
 }
 
 void Main::Release()
 {
     for (auto& elem : rooms) SafeDelete(elem);
     nodes.clear();
-    triangulation.nodes.clear();
+    triangulation.nodesLinked.clear();
     triangulation.edges.clear();
     triangulation.triangles.clear();
-    triangulation.vertices.clear();
+    triangulation.nodesForIndex.clear();
     visited.clear();
-    lines.clear();
+    linesTriangulated.clear();
     linesMST.clear();
+    passagesLine.clear();
     passages.clear();
 }
 
@@ -41,183 +41,51 @@ void Main::Update()
     {
         Release();
         Init();
-        state = State::move;
+        state = GameState::spread;
     }
+
+    ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
     
     switch (state)
     {
-    case Main::State::move:
+    case GameState::spray:
     {
-        bool flag = false;
-        for (auto& room : rooms)
-        {
-            for (auto& room2 : rooms)
-            {
-                if (room == room2) continue;
-
-                if (room->col->Intersect(room2->col))
-                {
-                    Vector2 velocity = room->col->GetWorldPos() - room2->col->GetWorldPos();
-                    room->col->MoveWorldPos(velocity * DELTA);
-                    flag = true;
-                }
-            }
-        }
-        if (false == flag)
-        {
-            state = State::node;
-        }
+        Spray();
         break;
     }
-    case Main::State::node:
+    case GameState::spread:
     {
-        for (int i = 0; i < rooms.size(); i++)
-        {
-            if (rooms[i]->col->scale.x * rooms[i]->col->scale.y > 6000.0f)
-            {
-                rooms[i]->col->isFilled = true;
-                rooms[i]->selected = true;
-                nodes.push_back(rooms[i]->col->GetWorldPos());
-            }
-        }
-    }
-
-    case Main::State::triangulate:
-    {
-        triangulation.triangulate(nodes);
-        lines = triangulation.edges;
-        for (auto& elem : lines)
-        {
-            elem.color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-            elem.collider = Collider::line;
-        }
-
-        /*
-        int lineIdx = 0;
-        int size = rooms.size();
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = i + 1; j < size; j++)
-            {
-                if (rooms[i]->selected && rooms[j]->selected)
-                {
-                    // MST 위한 준비 
-                    Vector2 velocity = rooms[j]->col->GetWorldPos() - rooms[i]->col->GetWorldPos();
-                    float dist = velocity.x * velocity.x + velocity.y * velocity.y;
-                    Vector2 dir1 = velocity;
-                    Vector2 dir2 = -velocity;
-                    float rotation1 = Utility::DirToRadian(dir1);
-                    float rotation2 = Utility::DirToRadian(dir2);
-                    edges[i].push_back({ j, dist, rotation1 });
-                    edges[j].push_back({ i, dist, rotation2 });
-                }
-                lineIdx++;
-            }
-        }
-        */
-
-        // state = State::spanning;
+        Spread();
         break;
     }
-    case Main::State::spanning:
+    case GameState::select:
     {
-        // MST - Prim
-        edgePq.push(lines[0]);
-
-        while (false == edgePq.empty())
-        {
-            ObLine curLine = edgePq.top();
-
-            edgePq.pop();
-
-            if (visited[curLine.w]) continue;
-            visited[curLine.w] = true;
-
-            curLine.color = Color(0.5f, 1.0f, 0.5f);
-            linesMST.push_back(curLine);
-
-            int size = triangulation.nodes[Float2(curLine.v)].size();
-            for (int i = 0; i < size; i++)
-            {
-                Float2 nextNodeTemp = triangulation.nodes[Float2(curLine.v)][i];
-                Vector2 nextNode(nextNodeTemp.x, nextNodeTemp.y);
-                ObLine nextLine(curLine.v, nextNode);
-                edgePq.push(nextLine);
-            }
-        }
-
-
-        // MST - Prim
-        /*
-        for (int i = 0; i < rooms.size(); i++)
-        {
-            if (rooms[i]->selected)
-            {
-                edgePq.push({ edges[i][0].node, edges[i][0].dist, edges[i][0].dir, edges[i][0].node });
-                break;
-            }
-        }
-        while (false == edgePq.empty())
-        {
-            int curNode = edgePq.top().node;
-            float curDist = edgePq.top().dist;
-            float curDir = edgePq.top().dir;
-            int beforeNode = edgePq.top().beforeNode;
-
-            edgePq.pop();
-
-            if (visited[curNode]) continue;
-            visited[curNode] = true;
-
-            if (curNode != beforeNode)  // 첨엔 같게 세팅했기 때문
-            {
-                ObLine* line = new ObLine();
-                line->SetWorldPos(rooms[beforeNode]->col->GetWorldPos());
-                line->color = rooms[beforeNode]->col->color;
-                line->scale.x = sqrt(curDist);
-                line->rotation = curDir;
-                line->collider = COLLIDER::LINE;
-                lines.push_back(line);
-            }
-
-            for (int i = 0; i < edges[curNode].size(); i++)
-            {
-                int nextNode = edges[curNode][i].node;
-                float nextDist = edges[curNode][i].dist;
-                float nextDir = edges[curNode][i].dir;
-                edgePq.push({ nextNode, nextDist, nextDir, curNode });
-            }
-        }
-        Sleep(1000);
-        */
-        state = State::passage;
+        Select();
         break;
     }
-    case Main::State::passage:
+    case GameState::triangulate:
     {
-        /*
-        for (auto& line : lines)
-        {
-            for (auto& room : rooms)
-            {
-                if (room->selected == false &&
-                    room->col->Intersect(line))
-                {
-                    room->col->isFilled = true;
-                }
-            }
-        }
-
-        for (auto& line : lines)
-        {
-        }
-        */
-        state = State::tile;
+        Triangulate();
         break;
     }
-    case Main::State::tile:
+    case GameState::span:
     {
-        int a = 2;
+        Spanning();
+        break;
+    }
+    case GameState::loop:
+    {
+        Loop();
+        break;
+    }
+    case GameState::dig:
+    {
+        Dig();
+        break;
+    }
+    case GameState::tile:
+    {
+        Tile();
         break;
     }
     default:
@@ -226,10 +94,10 @@ void Main::Update()
     }//case
     }//switch
 
-
     for (auto& elem : rooms) elem->Update();
-    for (auto& elem : lines) elem.Update();
+    for (auto& elem : linesTriangulated) elem.Update();
     for (auto& elem : linesMST) elem.Update();
+    for (auto& elem : passagesLine) elem.Update();
     for (auto& elem : passages) elem.Update();
 }
 
@@ -240,8 +108,9 @@ void Main::LateUpdate()
 void Main::Render()
 {
     for (auto& elem : rooms) elem->Render();
-    for (auto& elem : lines) elem.Render();
+    for (auto& elem : linesTriangulated) elem.Render();
     for (auto& elem : linesMST) elem.Render();
+    for (auto& elem : passagesLine) elem.Render();
     for (auto& elem : passages) elem.Render();
 }
 
@@ -249,12 +118,172 @@ void Main::ResizeScreen()
 {
 }
 
+void Main::Spray()
+{
+    state = GameState::spread;
+}
+
+void Main::Spread()
+{
+    bool flag = false;
+    for (auto& room : rooms)
+    {
+        for (auto& room2 : rooms)
+        {
+            if (room == room2) continue;
+
+            if (room->col->Intersect(room2->col))
+            {
+                Vector2 velocity = room->col->GetWorldPos() - room2->col->GetWorldPos();
+                room->col->MoveWorldPos(velocity * DELTA);
+                flag = true;
+            }
+        }
+    }
+    if (false == flag)
+    {
+        state = GameState::select;
+    }
+}
+
+void Main::Select()
+{
+    for (int i = 0; i < rooms.size(); i++)
+    {
+        if (rooms[i]->col->scale.x * rooms[i]->col->scale.y > 7777.0f)
+        {
+            rooms[i]->col->isFilled = true;
+            rooms[i]->selected = true;
+            nodes.push_back(ObNode(i, rooms[i]->col->GetWorldPos()));
+        }
+    }
+
+    state = GameState::triangulate;
+}
+
+void Main::Triangulate()
+{
+    Sleep(1000);
+    triangulation.triangulate(nodes);
+    linesTriangulated = triangulation.edges;
+    for (auto& elem : linesTriangulated)
+    {
+        elem.color = Color(1.0f, 1.0f, 1.0f);
+        elem.collider = Collider::line;
+    }
+    
+    state = GameState::span;
+}
+
+void Main::Spanning()
+{
+    Sleep(1000);
+    // MST - Prim
+    edgePq.push(linesTriangulated[0]);
+
+    while (false == edgePq.empty())
+    {
+        ObLine curLine = edgePq.top();
+        curLine.v.index = triangulation.nodesForIndex[curLine.v];
+        curLine.w.index = triangulation.nodesForIndex[curLine.w];
+
+        edgePq.pop();
+
+        if (visited[curLine.v.index] && visited[curLine.w.index]) continue;
+        visited[curLine.v.index] = true;
+        visited[curLine.w.index] = true;
+
+        curLine.color = Color(0.5f, 1.0f, 0.5f);
+        linesMST.push_back(curLine);
+
+        auto push = [&](ObNode& node)
+        {
+            int size = triangulation.nodesLinked[node].size();
+            ObNode nextNode;
+            for (int i = 0; i < size; i++)
+            {
+                nextNode = triangulation.nodesLinked[node][i];
+                nextNode.index = triangulation.nodesForIndex[nextNode];
+                edgePq.push(ObLine(node, nextNode));
+            }
+        };
+        push(curLine.v);
+        push(curLine.w);
+    }
+    
+    state = GameState::loop;
+}
+
+void Main::Loop()
+{
+    Sleep(1000);
+    int count = 3;
+
+    while (count--)
+    {
+        float rand = RANDOM->Int(0, linesTriangulated.size() - 1);
+        bool flag = false;
+        for (auto& elem : linesMST)
+        {
+            if ((elem.v == linesTriangulated[rand].v && elem.w == linesTriangulated[rand].w) ||
+                (elem.v == linesTriangulated[rand].w && elem.w == linesTriangulated[rand].v))
+            {
+                count++;
+                flag = true;
+                break;
+            }
+        }
+        if (false == flag)
+        {
+            linesTriangulated[rand].color = Color(0.5f, 0.5f, 1.0f);
+            linesMST.push_back(linesTriangulated[rand]);
+        }
+    }
+
+    linesTriangulated.clear();
+
+    state = GameState::dig;
+}
+
+void Main::Dig()
+{
+    Sleep(1000);
+    for (auto& elem : linesMST)
+    {
+        {
+            ObLine l(ObNode(elem.v.x, elem.v.y), ObNode(elem.w.x, elem.v.y));
+            l.color = Color(1.0f, 0.0f, 1.0f);
+            passagesLine.push_back(l);
+        }
+        {
+            ObLine l(ObNode(elem.w.x, elem.w.y), ObNode(elem.w.x, elem.v.y));
+            l.color = Color(1.0f, 0.0f, 1.0f);
+            passagesLine.push_back(l);
+        }
+    }
+
+    linesMST.clear();
+
+    state = GameState::widen;
+}
+
+void Main::Widen()
+{
+    Sleep(1000);
+    state = GameState::tile;
+}
+
+void Main::Tile()
+{
+    int a = 1;
+}
+
 int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, int command)
 {
     app.SetAppName(L"유재준 Game");
     app.SetInstance(instance);
     app.background = Color(0.0f, 0.0f, 0.0f, 1.0f);
-    app.InitWidthHeight(750.0f, 1000.0f);
+    app.InitWidthHeight(1000.0f, 1000.0f);
     Main* main = new Main();
     int wParam = (int)WIN->Run(main);
     WIN->DeleteSingleton();     // 창이 없어지고 난 후 

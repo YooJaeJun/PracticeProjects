@@ -108,6 +108,7 @@ extern Application app;//Extern Global
 #include "VertexType.h"
 #include "Shader.h"
 #include "GameObject.h"
+#include "ObNode.h"
 #include "Utility.h"
 #include "ObLine.h"
 #include "ObTriangle.h"

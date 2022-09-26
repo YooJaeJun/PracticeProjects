@@ -125,6 +125,11 @@ ObTriangle::ObTriangle(const Vector2& v1, const Vector2& v2, const Vector2& v3)
     : a(v1), b(v2), c(v3), isBad(false)
 {}
 
+ObTriangle::ObTriangle(const ObNode& n1, const ObNode& n2, const ObNode& n3)
+    : a(Vector2(n1.x, n1.y)), b(Vector2(n2.x, n2.y)), c(Vector2(n3.x, n3.y)), isBad(false)
+{
+}
+
 bool ObTriangle::operator==(const ObTriangle& t) const
 {
     return	(this->a == t.a || this->a == t.b || this->a == t.c) &&
@@ -132,16 +137,21 @@ bool ObTriangle::operator==(const ObTriangle& t) const
         (this->c == t.a || this->c == t.b || this->c == t.c);
 }
 
-bool ObTriangle::ContainsVertex(const Vector2& v) const
+bool ObTriangle::ContainsVertex(const ObNode& v)
 {
-    return almostEqualVector2(a, v) || almostEqualVector2(b, v) || almostEqualVector2(c, v);
+    return a.almostEqualNode(v) ||
+        b.almostEqualNode(v) ||
+        c.almostEqualNode(v);
 }
 
-bool ObTriangle::CircumCircleContains(const Vector2& v) const
+bool ObTriangle::CircumCircleContains(const ObNode& n) const
 {
-    long double dA = a.LengthSquared();
-    long double dB = b.LengthSquared();
-    long double dC = c.LengthSquared();
+    Vector2 va = Vector2(a.x, a.y);
+    Vector2 vb = Vector2(b.x, b.y);
+    Vector2 vc = Vector2(c.x, c.y);
+    long double dA = va.LengthSquared();
+    long double dB = vb.LengthSquared();
+    long double dC = vc.LengthSquared();
 
     long double ax = a.x;
     long double ay = a.y;
@@ -154,14 +164,16 @@ bool ObTriangle::CircumCircleContains(const Vector2& v) const
     long double circum_y = (dA * (cx - bx) + dB * (ax - cx) + dC * (bx - ax)) / (ay * (cx - bx) + by * (ax - cx) + cy * (bx - ax));
 
     Vector2 circum(circum_x / 2, circum_y / 2);
-    float circum_radius = Vector2::Distance(a, circum);
+    float circum_radius = Vector2::Distance(va, circum);
+    Vector2 v = Vector2(n.x, n.y);
     float dist = Vector2::Distance(v, circum);
     return dist <= circum_radius;
 }
 
-bool ObTriangle::almostEqualTriangle(const ObTriangle& t1, const ObTriangle& t2)
+bool ObTriangle::almostEqualTriangle(const ObTriangle& other)
 {
-    return	(almostEqualVector2(t1.a, t2.a) || almostEqualVector2(t1.a, t2.b) || almostEqualVector2(t1.a, t2.c)) &&
-        (almostEqualVector2(t1.b, t2.a) || almostEqualVector2(t1.b, t2.b) || almostEqualVector2(t1.b, t2.c)) &&
-        (almostEqualVector2(t1.c, t2.a) || almostEqualVector2(t1.c, t2.b) || almostEqualVector2(t1.c, t2.c));
+    
+    return	(a.almostEqualNode(other.a) || a.almostEqualNode(other.b) || a.almostEqualNode(other.c)) &&
+        (b.almostEqualNode(other.a) || b.almostEqualNode(other.b) || b.almostEqualNode(other.c)) &&
+        (c.almostEqualNode(other.a) || c.almostEqualNode(other.b) || c.almostEqualNode(other.c));
 }

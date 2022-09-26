@@ -68,24 +68,54 @@ void ObLine::Render()
 
 
 ObLine::ObLine()
-    : v(Vector2(0.0f, 0.0f)), w(Vector2(0.0f, 0.0f))
+    : v(ObNode(0.0f, 0.0f)), w(ObNode(0.0f, 0.0f))
 {
     pivot = OFFSET_L;
 }
 
 ObLine::ObLine(const Vector2& v1, const Vector2& v2)
-    : v(v1), w(v2)
+    : index(0), v(v1), w(v2)
+{
+    Init(v1, v2);
+}
+
+ObLine::ObLine(const int index, const Vector2& v1, const Vector2& v2)
+    : index(index), v(v1), w(v2)
+{
+    Init(v1, v2);
+}
+
+ObLine::ObLine(const ObNode& v1, const ObNode& v2)
+    : index(0), v(v1), w(v2)
+{
+    Init();
+}
+
+ObLine::ObLine(const int index, const ObNode& v1, const ObNode& v2)
+    : index(index), v(v1), w(v2)
+{
+    Init();
+}
+
+void ObLine::Init()
+{
+    Vector2 vv = Vector2(v.x, v.y);
+    Vector2 vw = Vector2(w.x, w.y);
+    Init(vv, vw);
+}
+
+void ObLine::Init(const Vector2& v1, const Vector2& v2)
 {
     pivot = OFFSET_L;
-    SetWorldPos(Vector2(v));
-    rotation = Utility::DirToRadian(w - v);
-    scale.x = v.Distance(v, w);
+    SetWorldPos(v1);
+    rotation = Utility::DirToRadian(v2 - v1);
+    scale.x = v1.Distance(v1, v2);
 }
 
 bool ObLine::operator<(const ObLine& other) const
 {
-    return Float2(v) < Float2(other.v) ||
-        (!(Float2(other.v) < Float2(v)) && Float2(w) < Float2(other.w));
+    return ObNode(v) < ObNode(other.v) ||
+        (!(ObNode(other.v) < ObNode(v)) && ObNode(w) < ObNode(other.w));
     // return (v.x < other.v.x || (!(other.v.x < v.x) && v.y < other.v.y)) ||
     //     (w.x < other.w.x || (!(other.w.x < w.x) && w.y < other.w.y));
 }
@@ -95,26 +125,29 @@ bool ObLine::operator>(const ObLine& other) const
     return scale.x > other.scale.x;
 }
 
-ObLine& ObLine::operator=(const ObLine& e)
+ObLine& ObLine::operator=(const ObLine& other)
 {
-    v.x = e.v.x;
-    v.y = e.v.y;
-    w.x = e.w.x;
-    w.y = e.w.y;
-    SetWorldPos(Vector2(v));
-    rotation = Utility::DirToRadian(w - v);
-    scale.x = v.Distance(v, w);
+    index = other.index;
+    v.x = other.v.x;
+    v.y = other.v.y;
+    w.x = other.w.x;
+    w.y = other.w.y;
+    Vector2 vv = Vector2(v.x, v.y);
+    Vector2 vw = Vector2(w.x, w.y);
+    SetWorldPos(vv);
+    rotation = Utility::DirToRadian(vw - vv);
+    scale.x = vv.Distance(vv, vw);
     return *this;
 }
 
-bool ObLine::operator==(const ObLine& e) const
+bool ObLine::operator==(const ObLine& ohter) const
 {
-    return ((this->v) == e.v && (this->w) == e.w) ||
-        ((this->v) == e.w && (this->w) == e.v);
+    return (v == ohter.v && w == ohter.w) ||
+        (v == ohter.w && w == ohter.v);
 }
 
-bool ObLine::almostEqualLine(const ObLine& e1, const ObLine& e2)
+bool ObLine::almostEqualLine(const ObLine& other)
 {
-    return	(almostEqualVector2(e1.v, e2.v) && almostEqualVector2(e1.w, e2.w)) ||
-        (almostEqualVector2(e1.v, e2.w) && almostEqualVector2(e1.w, e2.v));
+    return	(v.almostEqualNode(other.v) && w.almostEqualNode(other.w)) ||
+        (v.almostEqualNode(other.w) && w.almostEqualNode(other.v));
 }

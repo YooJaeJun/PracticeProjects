@@ -2,15 +2,16 @@
 class Delaunay
 {
 public:
-	vector<ObTriangle>	triangles;
-	vector<ObLine>		edges;
-	vector<Vector2>		vertices;
-	map<Float2, vector<Float2>>	nodes;
+	vector<ObTriangle>			triangles;
+	vector<ObLine>				edges;
+	map<ObNode, int>			nodesForIndex;
+	map<ObNode, vector<ObNode>>	nodesLinked;
 
 public:
 	Delaunay() = default;
 	Delaunay(const Delaunay&) = delete;
 
-	const std::vector<ObTriangle>& triangulate(std::vector<Vector2>& vertices);
+	const std::vector<ObTriangle>& triangulate(std::vector<ObNode>& vertices);
+	bool validChecker(const ObNode& n1, const ObNode& n2);
 };
 

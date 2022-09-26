@@ -1,18 +1,17 @@
 #include "framework.h"
 
-const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<Vector2>& vertices)
+const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<ObNode>& nodes)
 {
-	// Store the vertices locally
-	this->vertices = vertices;
-
 	// Determinate the super triangle
-	float minX = vertices[0].x;
-	float minY = vertices[0].y;
+	float minX = nodes[0].x;
+	float minY = nodes[0].y;
 	float maxX = minX;
 	float maxY = minY;
 
-	for (const auto& elem : vertices)
+	for (const auto& elem : nodes)
 	{
+		nodesForIndex[elem] = elem.index;
+
 		if (elem.x < minX) minX = elem.x;
 		if (elem.y < minY) minY = elem.y;
 		if (elem.x > maxX) maxX = elem.x;
@@ -25,14 +24,14 @@ const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<Vector2>& verti
 	const float midX = (minX + maxX) / 2;
 	const float midY = (minY + maxY) / 2;
 
-	const Vector2 p1(midX - 20 * deltaMax, midY - deltaMax);
-	const Vector2 p2(midX, midY + 20 * deltaMax);
-	const Vector2 p3(midX + 20 * deltaMax, midY - deltaMax);
+	const ObNode p1(midX - 20 * deltaMax, midY - deltaMax);
+	const ObNode p2(midX, midY + 20 * deltaMax);
+	const ObNode p3(midX + 20 * deltaMax, midY - deltaMax);
 
 	// Create a list of triangles, and add the supertriangle in it
 	triangles.push_back(ObTriangle(p1, p2, p3));
 
-	for (const auto& p : vertices)
+	for (const auto& p : nodes)
 	{
 		std::vector<ObLine> polygon;
 
@@ -55,7 +54,7 @@ const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<Vector2>& verti
 		{
 			for (auto e2 = e1 + 1; e2 != end(polygon); e2++)
 			{
-				if (e1->almostEqualLine(*e1, *e2))
+				if (e1->almostEqualLine(*e2))
 				{
 					e1->isBad = true;
 					e2->isBad = true;
@@ -75,19 +74,25 @@ const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<Vector2>& verti
 		return t.ContainsVertex(p1) || t.ContainsVertex(p2) || t.ContainsVertex(p3);
 		}), end(triangles));
 
+
 	for (const auto& t : triangles)
 	{
 		edges.push_back(ObLine(t.a, t.b));
 		edges.push_back(ObLine(t.b, t.c));
 		edges.push_back(ObLine(t.c, t.a));
 
-		nodes[Float2(t.a)].push_back(Float2(t.b));
-		nodes[Float2(t.a)].push_back(Float2(t.c));
-		nodes[Float2(t.b)].push_back(Float2(t.a));
-		nodes[Float2(t.b)].push_back(Float2(t.c));
-		nodes[Float2(t.c)].push_back(Float2(t.a));
-		nodes[Float2(t.c)].push_back(Float2(t.b));
+		if (validChecker(t.a, t.b)) nodesLinked[t.a].push_back(t.b);
+		if (validChecker(t.a, t.c)) nodesLinked[t.a].push_back(t.c);
+		if (validChecker(t.b, t.a)) nodesLinked[t.b].push_back(t.a);
+		if (validChecker(t.b, t.c)) nodesLinked[t.b].push_back(t.c);
+		if (validChecker(t.c, t.a)) nodesLinked[t.c].push_back(t.a);
+		if (validChecker(t.c, t.b)) nodesLinked[t.c].push_back(t.b);
 	}
 
 	return triangles;
+}
+
+bool Delaunay::validChecker(const ObNode& n1, const ObNode& n2)
+{
+	return find(nodesLinked[n1].begin(), nodesLinked[n1].end(), n2) == nodesLinked[n1].end();
 }

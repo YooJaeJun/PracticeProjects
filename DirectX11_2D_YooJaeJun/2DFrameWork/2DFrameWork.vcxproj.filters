@@ -83,6 +83,9 @@
     <ClInclude Include="RenderOrder.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="ObNode.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -173,6 +176,9 @@
     </ClCompile>
     <ClCompile Include="RenderOrder.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="ObNode.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

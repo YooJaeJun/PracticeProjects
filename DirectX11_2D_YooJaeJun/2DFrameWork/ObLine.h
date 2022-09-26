@@ -12,8 +12,9 @@ public:
 
 
 public:
-    Vector2 v;
-    Vector2 w;
+    int    index;
+    ObNode v;
+    ObNode w;
     bool isBad = false;
 
 public:
@@ -21,15 +22,20 @@ public:
     ObLine(const ObLine& l) = default;
     ObLine(ObLine&&) = default;
     ObLine(const Vector2& v1, const Vector2& v2);
+    ObLine(const int index, const Vector2& v1, const Vector2& v2);
+    ObLine(const ObNode& v1, const ObNode& v2);
+    ObLine(const int index, const ObNode& v1, const ObNode& v2);
+    void Init();
+    void Init(const Vector2& v1, const Vector2& v2);
 
     bool operator<(const ObLine& other) const; // visited 판별용
     bool operator>(const ObLine& other) const;  // priority_queue 정렬용
-    ObLine& operator=(const ObLine& e);
+    ObLine& operator=(const ObLine& other);
     ObLine& operator=(ObLine&&) = default;
-    bool operator ==(const ObLine & e) const;
+    bool operator ==(const ObLine & other) const;
 
 public:
-    bool almostEqualLine(const ObLine& e1, const ObLine& e2);
+    bool almostEqualLine(const ObLine& other);
 };
 
 

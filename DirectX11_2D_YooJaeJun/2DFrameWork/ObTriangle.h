@@ -13,9 +13,9 @@ public:
 
 
 public:
-    Vector2 a;
-    Vector2 b;
-    Vector2 c;
+    ObNode a;
+    ObNode b;
+    ObNode c;
 
 public:
     bool isBad = false;
@@ -23,17 +23,18 @@ public:
 public:
     ObTriangle();
     ObTriangle(const ObTriangle&) = default;
-    ObTriangle(ObTriangle&&) = default;
+    ObTriangle(ObTriangle&&) noexcept = default;
     ObTriangle(const Vector2& v1, const Vector2& v2, const Vector2& v3);
+    ObTriangle(const ObNode& v1, const ObNode& v2, const ObNode& v3);
 
     ObTriangle& operator=(const ObTriangle&) = default;
     ObTriangle& operator=(ObTriangle&&) = default;
     bool operator ==(const ObTriangle& t) const;
 
 public:
-    bool ContainsVertex(const Vector2& v) const;
-    bool CircumCircleContains(const Vector2& v) const;
+    bool ContainsVertex(const ObNode& v);
+    bool CircumCircleContains(const ObNode& v) const;
 
-    bool almostEqualTriangle(const ObTriangle& t1, const ObTriangle& t2);
+    bool almostEqualTriangle(const ObTriangle& ohter);
 };
 

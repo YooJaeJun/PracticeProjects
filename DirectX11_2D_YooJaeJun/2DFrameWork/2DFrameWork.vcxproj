@@ -170,6 +170,7 @@
     <ClInclude Include="ObCircle.h" />
     <ClInclude Include="ObImage.h" />
     <ClInclude Include="ObLine.h" />
+    <ClInclude Include="ObNode.h" />
     <ClInclude Include="ObRect.h" />
     <ClInclude Include="ObStar.h" />
     <ClInclude Include="ObStarPointed.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="ObCircle.cpp" />
     <ClCompile Include="ObImage.cpp" />
     <ClCompile Include="ObLine.cpp" />
+    <ClCompile Include="ObNode.cpp" />
     <ClCompile Include="ObRect.cpp" />
     <ClCompile Include="ObStar.cpp" />
     <ClCompile Include="ObStarPointed.cpp" />
