@@ -80,6 +80,9 @@
     <ClInclude Include="ObTileMap.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="RenderOrder.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -167,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="ObTileMap.cpp">
       <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderOrder.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

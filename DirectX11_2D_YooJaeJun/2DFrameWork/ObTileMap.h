@@ -32,7 +32,7 @@ public:
 //typedef
 using PTile = pair<Tile*, int>;
 
-struct compare
+struct Compare
 {
     bool operator()(PTile& a, PTile& b)
     {

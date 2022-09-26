@@ -12,5 +12,9 @@ public:
 public:
     ObRect();
     void Render()override;
+    Vector2 lb();
+    Vector2 rb();
+    Vector2 lt();
+    Vector2 rt();
 };
 

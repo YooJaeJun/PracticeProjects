@@ -103,6 +103,7 @@ extern Application app;//Extern Global
 #include "Light.h"
 #include "SceneManager.h"
 #include "Numeric.h"
+#include "RenderOrder.h"
 
 #include "VertexType.h"
 #include "Shader.h"
@@ -132,3 +133,4 @@ extern Application app;//Extern Global
 #define SOUND		Sound::GetInstance()
 #define LIGHT		Light::GetInstance()
 #define SCENE       SceneManager::GetInstance()
+#define RENDER      RenderOrder::GetInstance()

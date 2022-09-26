@@ -1,8 +1,8 @@
 #pragma once
 
 // CRTP 패턴 이용. strip 타입에 따른 vertex 개수 설정할 수 있게 함
-// 1. static멤버함수나 비 static멤버함수에서나 사용.
-// 2. 각 하위 클래스가 다른 값을 가지나 호출하는 이름은 같게.
+// 1. 각 하위 클래스가 다른 값을 가지나 호출하는 이름은 같게.
+// 2. static멤버함수나 비 static멤버함수에서나 사용.
 template<typename T>
 struct StaticVertexCount
 {
@@ -16,6 +16,17 @@ struct StaticVertexCount
 		static int Linestrip_;
 		return Linestrip_;
 	}
+};
+
+enum class ZOrder
+{
+	none,
+	shadow,
+	weapon,
+	object,
+	bullet,
+	effect,
+	UI,
 };
 
 class ObLine;
@@ -76,6 +87,7 @@ public:
 	Space		space;
 	Collider	collider;
 	bool		colOnOff;
+	ZOrder		zOrder;
 
 	//member function
 public:

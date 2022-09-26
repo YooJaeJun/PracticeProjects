@@ -24,7 +24,7 @@ void MapObject::LateUpdate()
 
 void MapObject::Render()
 {
-    for (auto& elem : doorOpenUp) elem->Render();
+    for (auto& elem : doorOpenUp)  elem->Render();
     for (auto& elem : doorOpenDown) elem->Render();
     for (auto& elem : doorClosed) elem->Render();
 }

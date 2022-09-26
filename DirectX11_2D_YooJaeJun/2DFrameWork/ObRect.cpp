@@ -136,3 +136,25 @@ void ObRect::Render()
     }
 }
 
+Vector2 ObRect::lb()
+{
+    return Vector2(GetWorldPos().x - scale.x / 2.0f, GetWorldPos().y - scale.y / 2.0f);
+}
+
+Vector2 ObRect::rb()
+{
+    return Vector2(GetWorldPos().x + scale.x / 2.0f, GetWorldPos().y - scale.y / 2.0f);
+}
+
+Vector2 ObRect::lt()
+{
+    return Vector2(GetWorldPos().x - scale.x / 2.0f, GetWorldPos().y + scale.y / 2.0f);
+}
+
+Vector2 ObRect::rt()
+{
+    return Vector2(GetWorldPos().x + scale.x / 2.0f, GetWorldPos().y + scale.y / 2.0f);
+}
+
+
+

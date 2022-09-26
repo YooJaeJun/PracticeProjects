@@ -27,6 +27,7 @@ public:
 	virtual void Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
+	virtual void ResizeScreen() override;
 
 	virtual void Idle();
 	virtual void Hit(const int damage);
@@ -35,7 +36,7 @@ public:
 	void StepBack();
 	void SetMoveDir();
 	void SetTargetDir();
-	vector<Vector2>& Foot();
+	void CheckFootGrid(ObTileMap* tilemap);
 
 public:
 	ObImage*		idle[8];
@@ -64,6 +65,6 @@ public:
 	bool			isHitAnim;
 	float			timeHitAnim;
 	float			timeDieAnim;
-	vector<Vector2>	foot;
+	ObRect*			foot;
 };
 

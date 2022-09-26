@@ -22,6 +22,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{09f919fa-161d-43a7-b8c0-e22f829de12f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Effect">
+      <UniqueIdentifier>{c57f0926-b496-40bf-99c4-0bda6b943a0b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -74,6 +77,9 @@
     <ClInclude Include="Scene01.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>GameObject\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -124,6 +130,9 @@
     </ClCompile>
     <ClCompile Include="Scene01.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>GameObject\Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

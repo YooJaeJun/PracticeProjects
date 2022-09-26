@@ -24,5 +24,9 @@ void Character::LateUpdate()
 
 void Character::Render()
 {
-	if (col) col->Render();
+	if (col) col->Render(); // RENDER->push(col);
+}
+
+void Character::ResizeScreen()
+{
 }

@@ -4,6 +4,7 @@
 
 #include "UI.h"
 #include "Character.h"
+#include "Effect.h"
 #include "Bullet.h"
 #include "PlayerBullet.h"
 #include "EnemyBullet.h"

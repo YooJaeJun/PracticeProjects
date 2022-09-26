@@ -120,12 +120,6 @@ void Enemy::Idle()
 
 	if (isHit)
 	{
-		if (curHp <= 0.0f)
-		{
-			curHp = 0.0f;
-			Killed();
-		}
-
 		if (TIMER->GetTick(timeHit, 0.01f))
 		{
 			isHit = false;

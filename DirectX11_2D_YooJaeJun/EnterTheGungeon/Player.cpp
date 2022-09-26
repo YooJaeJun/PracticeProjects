@@ -3,12 +3,28 @@
 Player::Player()
 {
 	int idx = 0;
-	float playerScaleCoef = 3.0f;
 
+	scalar = 300.0f;
+	curHp = maxHp = 6;
+	canFire = true;
+	reloading = false;
+	timeReload = 0.0f;
+	curBulletIdx = 0;
+	timeFire = 0.0f;
+	timeHit = 0.0f;
+	isHit = false;
+	isHitAnim = false;
+	timeHitAnim = 0.0f;
+	flagFireCamShake = false;
+	timeFireCamShake = 0.0f;
+	godMode = false;
+
+	float playerScaleCoef = 3.0f;
 	col = new ObCircle;
 	col->isFilled = false;
 	col->scale.x = 12.0f * playerScaleCoef;
 	col->scale.y = 12.0f * playerScaleCoef;
+	col->zOrder = ZOrder::object;
 
 	col->color = Color(1.0f, 1.0f, 1.0f);
 
@@ -33,6 +49,7 @@ Player::Player()
 		elem->scale.y = 20.0f * playerScaleCoef;
 		elem->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 		elem->SetParentRT(*col);
+		elem->zOrder = ZOrder::object;
 		idx++;
 	}
 
@@ -58,6 +75,7 @@ Player::Player()
 		elem->scale.y = 24.0f * playerScaleCoef;
 		elem->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 		elem->SetParentRT(*col);
+		elem->zOrder = ZOrder::object;
 		idx++;
 	}
 
@@ -84,6 +102,7 @@ Player::Player()
 		elem->uv = Vector4(0.0f, 0.0f, 1.0f / 9.0f, 1.0f);
 		elem->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
 		elem->SetParentRT(*col);
+		elem->zOrder = ZOrder::object;
 		idx++;
 	}
 
@@ -96,6 +115,7 @@ Player::Player()
 	fall->scale.y = 22.0f * playerScaleCoef;
 	fall->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 	fall->SetParentRT(*col);
+	fall->zOrder = ZOrder::object;
 
 	die = new ObImage(L"EnterTheGungeon/Player_0/Die.png");
 	die->isVisible = false;
@@ -104,6 +124,7 @@ Player::Player()
 	die->scale.y = 24.0f * playerScaleCoef;
 	die->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
 	die->SetParentRT(*col);
+	die->zOrder = ZOrder::object;
 
 	respawn = new ObImage(L"EnterTheGungeon/Player_0/Respawn.png");
 	respawn->isVisible = false;
@@ -112,6 +133,7 @@ Player::Player()
 	respawn->scale.y = 22.0f * playerScaleCoef;
 	respawn->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
 	respawn->SetParentRT(*col);
+	respawn->zOrder = ZOrder::object;
 
 	kick = new ObImage(L"EnterTheGungeon/Player_0/Kick.png");
 	kick->isVisible = false;
@@ -120,6 +142,7 @@ Player::Player()
 	kick->scale.y = 22.0f * playerScaleCoef;
 	kick->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 	kick->SetParentRT(*col);
+	kick->zOrder = ZOrder::object;
 
 	obtain = new ObImage(L"EnterTheGungeon/Player_0/Obtatin.png");
 	obtain->isVisible = false;
@@ -128,10 +151,10 @@ Player::Player()
 	obtain->scale.y = 22.0f * playerScaleCoef;
 	obtain->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 	obtain->SetParentRT(*col);
+	obtain->zOrder = ZOrder::object;
 
 
 	float playerWeaponScaleCoef = 1.5f;
-
 	weapon = new Weapon;
 	weapon->col = new ObRect;
 	weapon->col->isVisible = false;
@@ -148,16 +171,32 @@ Player::Player()
 	weapon->idle->scale.x = 30.0f * playerWeaponScaleCoef;
 	weapon->idle->scale.y = 22.0f * playerWeaponScaleCoef;
 	weapon->idle->SetParentRT(*weapon->col);
+	weapon->idle->zOrder = ZOrder::weapon;
 
 	firePos = new GameObject;
 	firePos->SetParentRT(*weapon->col);
 	firePos->SetLocalPos(Vector2(50.0f, 0.0f));
+	firePos->zOrder = ZOrder::none;
 
 	shadow = new ObImage(L"EnterTheGungeon/Player_0/Shadow.png");
 	shadow->scale.x = 16.0f * playerScaleCoef;
 	shadow->scale.y = 5.0f * playerScaleCoef;
 	shadow->SetParentRT(*col);
 	shadow->SetWorldPosY(-28.0f);
+	shadow->zOrder = ZOrder::shadow;
+
+	foot = new ObRect;
+	foot->scale = Vector2(col->scale.x, col->scale.y / 2.0f);
+	foot->SetParentRT(*col);
+	foot->SetLocalPosY(col->GetWorldPos().y - col->scale.y + 10.0f);
+
+	float dustCoef = 2.0f;
+	dust = new Effect;
+	dust->idle = new ObImage(L"EnterTheGungeon/Player_0/Dust.png");
+	dust->idle->scale.x = 11.0f * dustCoef;
+	dust->idle->scale.y = 10.0f * dustCoef;
+	dust->idle->SetParentRT(*foot);
+
 
 	uiReload = new UI;
 	uiReload->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Reload.png");
@@ -166,6 +205,7 @@ Player::Player()
 	uiReload->img->SetParentT(*col);
 	uiReload->img->SetLocalPosX(0.0f);
 	uiReload->img->SetLocalPosY(60.0f);
+	uiReload->img->zOrder = ZOrder::UI;
 
 	uiReloadBar = new UI;
 	uiReloadBar->img = new ObImage(L"EnterTheGungeon/Player_0/UI_ReloadBar.png");
@@ -174,12 +214,16 @@ Player::Player()
 	uiReloadBar->img->SetParentT(*col);
 	uiReloadBar->img->SetLocalPosX(-60.0f);
 	uiReloadBar->img->SetLocalPosY(60.0f);
+	uiReloadBar->img->zOrder = ZOrder::UI;
+
 
 	uiMagazine = new UI;
 	uiMagazine->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Magazine.png");
 	uiMagazine->img->scale = Vector2(28.0f, 99.0f);
-	uiMagazine->img->SetWorldPos(Vector2(app.GetHalfWidth() - 40.0f, -app.GetHalfHeight() + 80.0f));
+	uiMagazine->anchor = Anchor::RIGHTBOTTOM;
+	uiMagazine->Spawn(-40.0f, 80.0f);
 	uiMagazine->img->space = Space::screen;
+	uiMagazine->img->zOrder = ZOrder::UI;
 
 	idx = 0;
 	for (auto& elem : uiBullet)
@@ -187,7 +231,8 @@ Player::Player()
 		elem = new UI;
 		elem->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Bullet.png");
 		elem->img->scale = Vector2(12.0f, 4.0f);
-		elem->img->SetWorldPos(Vector2(app.GetHalfWidth() - 40.0f, -app.GetHalfHeight() + 104.0f - idx * 12.0f));
+		elem->anchor = Anchor::RIGHTBOTTOM;
+		elem->Spawn(-40.0f, 104.0f - idx * 12.0f);
 		elem->img->space = Space::screen;
 		idx++;
 	}
@@ -197,24 +242,30 @@ Player::Player()
 	uiWeaponFrame->img->pivot = Vector2(0.4f, 0.25f);
 	uiWeaponFrame->img->scale.x = 188.0f;
 	uiWeaponFrame->img->scale.y = 116.0f;
-	uiWeaponFrame->img->SetWorldPos(Vector2(app.GetHalfWidth() - 240.0f, -app.GetHalfHeight() + 50.0f));
+	uiWeaponFrame->anchor = Anchor::RIGHTBOTTOM;
+	uiWeaponFrame->Spawn(-240.0f, 50.0f);
 	uiWeaponFrame->img->space = Space::screen;
+	uiWeaponFrame->img->zOrder = ZOrder::UI;
 
 	uiWeapon = new UI;
 	uiWeapon->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Weapon.png");
 	uiWeapon->img->pivot = Vector2(0.4f, 0.25f);
 	uiWeapon->img->scale.x = 60.0f;
 	uiWeapon->img->scale.y = 48.0f;
-	uiWeapon->img->SetWorldPos(Vector2(app.GetHalfWidth() - 190.0f, -app.GetHalfHeight() + 60.0f));
+	uiWeapon->anchor = Anchor::RIGHTBOTTOM;
+	uiWeapon->Spawn(-190.0f, 60.0f);
 	uiWeapon->img->space = Space::screen;
+	uiWeapon->img->zOrder = ZOrder::UI;
 
 	uiBulletCount = new UI;
 	uiBulletCount->img = new ObImage(L"EnterTheGungeon/Player_0/UI_BulletCount.png");
 	uiBulletCount->img->pivot = Vector2(0.4f, 0.25f);
 	uiBulletCount->img->scale.x = 60.0f;
 	uiBulletCount->img->scale.y = 28.0f;
-	uiBulletCount->img->SetWorldPos(Vector2(app.GetHalfWidth() - 140.0f, -app.GetHalfHeight() + 150.0f));
+	uiBulletCount->anchor = Anchor::RIGHTBOTTOM;
+	uiBulletCount->Spawn(-140.0f, 150.0f);
 	uiBulletCount->img->space = Space::screen;
+	uiBulletCount->img->zOrder = ZOrder::UI;
 
 
 	weaponReloading = new Weapon;
@@ -226,36 +277,122 @@ Player::Player()
 	weaponReloading->idle->scale.y = 22.0f * playerWeaponScaleCoef;
 	weaponReloading->idle->SetParentRT(*weapon->col);
 	weaponReloading->idle->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+	weaponReloading->idle->zOrder = ZOrder::UI;
 
 
 	float bulletCoef = 1.5f;
-
 	for (auto& elem : bullet)
 	{
 		elem = new PlayerBullet;
 		elem->col->scale.x = 19.0f * bulletCoef;
 		elem->col->scale.y = 19.0f * bulletCoef;
 		elem->idle = new ObImage(L"EnterTheGungeon/Player_0/Bullet_0.png");
-		elem->idle->scale.x = 19.0f * bulletCoef;
-		elem->idle->scale.y = 19.0f * bulletCoef;
+		elem->idle->scale = col->scale * 0.8f;
 		elem->idle->SetParentRT(*elem->col);
 	}
 
+	uiHeartNone.resize(maxHp / 2);
+	uiHeartHalf.resize(maxHp / 2);
+	uiHeartFull.resize(maxHp / 2);
+	float heartCoef = 1.0f;
+	idx = 0;
+	for (auto& elem : uiHeartNone)
+	{
+		elem = new UI;
+		elem->img = new ObImage(L"EnterTheGungeon/Player_0/HeartNone.png");
+		elem->anchor = Anchor::LEFTTOP;
+		elem->Spawn(10.0f + idx * 60.0f, -40.0f);
+		elem->img->pivot = OFFSET_L;
+		elem->img->scale.x = 52.0f * heartCoef;
+		elem->img->scale.y = 44.0f * heartCoef;
+		elem->img->space = Space::screen;
+		elem->img->zOrder = ZOrder::UI;
+		idx++;
+	}
+	idx = 0;
+	for (auto& elem : uiHeartHalf)
+	{
+		elem = new UI;
+		elem->img = new ObImage(L"EnterTheGungeon/Player_0/HeartHalf.png");
+		elem->anchor = Anchor::LEFTTOP;
+		elem->Spawn(10.0f + idx * 60.0f, -40.0f);
+		elem->img->pivot = OFFSET_L;
+		elem->img->scale.x = 52.0f * heartCoef;
+		elem->img->scale.y = 44.0f * heartCoef;
+		elem->img->space = Space::screen;
+		elem->img->zOrder = ZOrder::UI;
+		idx++;
+	}
+	idx = 0;
+	for (auto& elem : uiHeartFull)
+	{
+		elem = new UI;
+		elem->img = new ObImage(L"EnterTheGungeon/Player_0/HeartFull.png");
+		elem->anchor = Anchor::LEFTTOP;
+		elem->Spawn(10.0f + idx * 60.0f, -40.0f);
+		elem->img->pivot = OFFSET_L;
+		elem->img->scale.x = 52.0f * heartCoef;
+		elem->img->scale.y = 44.0f * heartCoef;
+		elem->img->space = Space::screen;
+		elem->img->zOrder = ZOrder::UI;
+		idx++;
+	}
 
-	scalar = 300.0f;
-	curHp = maxHp = 10000;
-	canFire = true;
-	reloading = false;
-	timeReload = 0.0f;
-	curBulletIdx = 0;
-	timeFire = 0.0f;
-	timeHit = 0.0f;
-	isHit = false;
-	isHitAnim = false;
-	timeHitAnim = 0.0f;
-	flagFireCamShake = false;
-	timeFireCamShake = 0.0f;
-	godMode = false;
+	idx = 0;
+	uiBlank.resize(2);
+	for (auto& elem : uiBlank)
+	{
+		elem = new UI;
+		elem->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Blank.png");
+		elem->anchor = Anchor::LEFTTOP;
+		elem->Spawn(10.0f + idx * 50.0f, -100.0f);
+		elem->img->pivot = OFFSET_L;
+		elem->img->scale.x = 40.0f;
+		elem->img->scale.y = 40.0f;
+		elem->img->space = Space::screen;
+		elem->img->zOrder = ZOrder::UI;
+		idx++;
+	}
+
+	uiKey = new UI;
+	uiKey->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Key.png");
+	uiKey->anchor = Anchor::LEFTTOP;
+	uiKey->Spawn(10.0f, -160.0f);
+	uiKey->img->pivot = OFFSET_L;
+	uiKey->img->scale.x = 56.0f;
+	uiKey->img->scale.y = 48.0f;
+	uiKey->img->space = Space::screen;
+	uiKey->img->zOrder = ZOrder::UI;
+
+	uiGold = new UI;
+	uiGold->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
+	uiGold->anchor = Anchor::LEFTTOP;
+	uiGold->Spawn(120.0f, -160.0f);
+	uiGold->img->pivot = OFFSET_L;
+	uiGold->img->scale.x = 40.0f;
+	uiGold->img->scale.y = 40.0f;
+	uiGold->img->space = Space::screen;
+	uiGold->img->zOrder = ZOrder::UI;
+
+	uiFireBottle = new UI;
+	uiFireBottle->img = new ObImage(L"EnterTheGungeon/Player_0/UI_FireBottle.png");
+	uiFireBottle->anchor = Anchor::LEFTBOTTOM;
+	uiFireBottle->Spawn(85.0f, 70.0f);
+	uiFireBottle->img->pivot = OFFSET_L;
+	uiFireBottle->img->scale.x = 36.0f;
+	uiFireBottle->img->scale.y = 76.0f;
+	uiFireBottle->img->space = Space::screen;
+	uiFireBottle->img->zOrder = ZOrder::UI;
+
+	uiFireBottleFrame = new UI;
+	uiFireBottleFrame->img = new ObImage(L"EnterTheGungeon/Player_0/UI_FireBottleFrame.png");
+	uiFireBottleFrame->anchor = Anchor::LEFTBOTTOM;
+	uiFireBottleFrame->Spawn(10.0f, 70.0f);
+	uiFireBottleFrame->img->pivot = OFFSET_L;
+	uiFireBottleFrame->img->scale.x = 180.0f;
+	uiFireBottleFrame->img->scale.y = 112.0f;
+	uiFireBottleFrame->img->space = Space::screen;
+	uiFireBottleFrame->img->zOrder = ZOrder::UI;
 }
 
 void Player::Release()
@@ -266,11 +403,19 @@ void Player::Release()
 	uiReload->Release();
 	uiReloadBar->Release();
 	uiMagazine->Release();
-	uiBullet[weapon0BulletMax]->Release();
+	for(auto& elem : uiBullet) elem->Release();
 	uiWeaponFrame->Release();
 	uiWeapon->Release();
 	uiBulletCount->Release();
 	SafeDelete(weaponReloading);
+	for (auto& elem : uiHeartNone) elem->Release();
+	for (auto& elem : uiHeartHalf) elem->Release();
+	for (auto& elem : uiHeartFull) elem->Release();
+	for (auto& elem : uiBlank) elem->Release();
+	uiKey->Release();
+	uiGold->Release();
+	uiFireBottle->Release();
+	uiFireBottleFrame->Release();
 }
 
 void Player::Update()
@@ -321,11 +466,7 @@ void Player::Update()
 
 	if (isHit)
 	{
-		if (curHp <= 0.0f)
-		{
-			curHp = 0.0f;
-			Killed();
-		}
+		DecreaseHeart();
 
 		if (TIMER->GetTick(timeHit, 1.5f))
 		{
@@ -369,6 +510,14 @@ void Player::Update()
 	uiWeapon->Update();
 	uiBulletCount->Update();
 	weaponReloading->Update();
+	for (auto& elem : uiHeartNone) elem->Update();
+	for (auto& elem : uiHeartHalf) elem->Update();
+	for (auto& elem : uiHeartFull) elem->Update();
+	for (auto& elem : uiBlank) elem->Update();
+	uiKey->Update();
+	uiGold->Update();
+	uiFireBottle->Update();
+	uiFireBottleFrame->Update();
 }
 
 void Player::LateUpdate()
@@ -379,10 +528,10 @@ void Player::Render()
 {
 	Unit::Render();
 
-	for (auto& elem : roll) elem->Render();
-	respawn->Render();
-	kick->Render();
-	obtain->Render();
+	for (auto& elem : roll) elem->Render(); // RENDER->push(elem);
+	respawn->Render(); //RENDER->push(respawn);
+	kick->Render(); //RENDER->push(kick);
+	obtain->Render(); //RENDER->push(obtain);
 	for (auto& elem : bullet) elem->Render();
 	uiReload->Render();
 	uiReloadBar->Render();
@@ -392,6 +541,50 @@ void Player::Render()
 	uiWeapon->Render();
 	uiBulletCount->Render();
 	weaponReloading->Render();
+	for (auto& elem : uiHeartNone) elem->Render();
+	for (auto& elem : uiHeartHalf) elem->Render();
+	for (auto& elem : uiHeartFull) elem->Render();
+	for (auto& elem : uiBlank) elem->Render();
+	uiKey->Render();
+	uiGold->Render();
+	uiFireBottle->Render();
+	uiFireBottleFrame->Render();
+}
+
+void Player::ResizeScreen()
+{
+	int idx = 0;
+
+	uiMagazine->Spawn(-40.0f, 80.0f);
+	uiWeaponFrame->Spawn(-240.0f, 50.0f);
+	uiWeapon->Spawn(-190.0f, 60.0f);
+	uiBulletCount->Spawn(-140.0f, 150.0f);
+
+	idx = 0;
+	for (auto& elem : uiBullet)
+	{
+		elem->Spawn(-40.0f, 104.0f - idx * 12.0f);
+		idx++;
+	}
+
+	idx = 0;
+	for (auto& elem : uiHeartNone)
+	{
+		elem->Spawn(10.0f + idx * 60.0f, -40.0f);
+		idx++;
+	}
+	idx = 0;
+	for (auto& elem : uiHeartHalf)
+	{
+		elem->Spawn(10.0f + idx * 60.0f, -40.0f);
+		idx++;
+	}
+	idx = 0;
+	for (auto& elem : uiHeartFull)
+	{
+		elem->Spawn(10.0f + idx * 60.0f, -40.0f);
+		idx++;
+	}
 }
 
 void Player::Idle()
@@ -425,6 +618,8 @@ void Player::Idle()
 			weapon->idle->pivot = Vector2(0.4f, -0.25f);
 		}
 	}
+
+	col->GetWorldPos();
 
 	if (INPUT->KeyPress('A'))
 	{
@@ -553,6 +748,8 @@ void Player::Killed()
 {
 	Unit::Killed();
 
+	DecreaseHeart();
+
 	for (auto& elem : roll)
 	{
 		elem->isVisible = false;
@@ -570,4 +767,16 @@ void Player::Killed()
 void Player::Die()
 {
 	Unit::Die();
+}
+
+void Player::DecreaseHeart()
+{
+	if (curHp & 1)
+	{
+		uiHeartFull[curHp / 2]->img->isVisible = false;
+	}
+	else
+	{
+		uiHeartHalf[curHp / 2]->img->isVisible = false;
+	}
 }

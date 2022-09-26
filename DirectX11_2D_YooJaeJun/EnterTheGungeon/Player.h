@@ -10,10 +10,12 @@ public:
 	virtual void Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
+	virtual void ResizeScreen() override;
 	virtual void Idle() override;
 	void Roll();
 	virtual void Killed() override;
 	virtual void Die() override;
+	void DecreaseHeart();
 
 public:
 	ObImage*		roll[8];
@@ -38,5 +40,14 @@ public:
 	UI*				uiBulletCount;
 	Weapon*			weaponReloading;
 	bool			godMode;
+	Effect*			dust;
+	vector<UI*>		uiHeartFull;
+	vector<UI*>		uiHeartHalf;
+	vector<UI*>		uiHeartNone;
+	vector<UI*>		uiBlank;
+	UI*				uiKey;
+	UI*				uiGold;
+	UI*				uiFireBottle;
+	UI*				uiFireBottleFrame;
 };
 

@@ -9,6 +9,7 @@ public:
 	virtual void Update();
 	virtual void LateUpdate();
 	virtual void Render();
+	virtual void ResizeScreen();
 
 	inline Vector2 Pos() const { return col->GetWorldPos(); }
 	inline void SetPos(const Vector2 pos) { col->SetWorldPos(pos); }

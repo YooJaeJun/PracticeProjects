@@ -34,7 +34,7 @@ void Bullet::LateUpdate()
 
 void Bullet::Render()
 {
-    if (idle) idle->Render();
+    idle->Render(); // RENDER->push(idle);
     Character::Render();
 }
 

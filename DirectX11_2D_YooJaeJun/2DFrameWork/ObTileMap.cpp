@@ -420,7 +420,7 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
 
     //우선순위 큐
     //            원소타입, 컨테이너타입, 비교함수
-    priority_queue<PTile, vector<PTile>, compare> List;
+    priority_queue<PTile, vector<PTile>, Compare> List;
 
     //리스트에 출발지를 추가
     Tile* pTemp = &Tiles[sour.x][sour.y];

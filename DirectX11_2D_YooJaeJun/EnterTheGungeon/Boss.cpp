@@ -83,6 +83,14 @@ void Boss::Render()
     hpGuage->Render();
 }
 
+void Boss::ResizeScreen()
+{
+    hpGuageBar->img->SetWorldPosX(-hpGuageBar->img->scale.x / 2.0f);
+    hpGuageBar->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
+    hpGuage->img->SetWorldPosX(-hpGuage->img->scale.x / 2.0f);
+    hpGuage->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
+}
+
 void Boss::SetPattern()
 {
     if (pattern == BossPattern::circular)

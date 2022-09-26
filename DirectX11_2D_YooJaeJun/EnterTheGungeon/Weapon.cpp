@@ -22,6 +22,6 @@ void Weapon::LateUpdate()
 
 void Weapon::Render()
 {
-	idle->Render();
+	idle->Render(); // RENDER->push(idle);
 	Character::Render();
 }

@@ -180,8 +180,7 @@ ColPos GameObject::Intersect(GameObject* ob)
 	if (collider == Collider::line)
 	{
 		Utility::LINE l(GetWorldPos(), Vector2(GetWorldPos().x + cos(rotation) * scale.x, GetWorldPos().y + sin(rotation) * scale.x));
-		cout << "begin  " << l.begin.x << ", " << l.begin.y << '\n';
-		cout << "end  " << l.end.x << ", " << l.end.y << '\n';
+		
 		// ¼± ¼±
 		if (ob->collider == Collider::line)
 		{

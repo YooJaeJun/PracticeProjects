@@ -21,7 +21,7 @@ void UI::LateUpdate()
 
 void UI::Render()
 {
-    img->Render();
+    img->Render(); // RENDER->push(img);
 }
 
 void UI::Spawn(const float coefX, const float coefY)

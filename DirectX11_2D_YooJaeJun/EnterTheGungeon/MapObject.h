@@ -13,7 +13,6 @@ public:
 	void Render();
 
 public:
-	ObImage*	idle;
 	Obstacle*	doorOpenUp[doorOpenMax];
 	Obstacle*	doorOpenDown[doorOpenMax];
 	Obstacle*	doorClosed[doorClosedMax];

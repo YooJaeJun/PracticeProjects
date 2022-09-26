@@ -24,5 +24,5 @@ void Obstacle::LateUpdate()
 void Obstacle::Render()
 {
 	Character::Render();
-	idle->Render();
+	idle->Render(); // RENDER->push(idle);
 }

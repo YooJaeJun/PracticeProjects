@@ -1,4 +1,4 @@
-#include "Framework.h"
+#include "framework.h"
 
 Application	 app;
 Scene* Window::main = nullptr;
@@ -66,6 +66,7 @@ WPARAM Window::Run(Scene* main)
 	TEXTURE->DeleteSingleton();
 	LIGHT->DeleteSingleton();
 	SCENE->DeleteSingleton();
+	RENDER->DeleteSingleton();
 	D3D->DeleteSingleton();
 	Destroy();
 

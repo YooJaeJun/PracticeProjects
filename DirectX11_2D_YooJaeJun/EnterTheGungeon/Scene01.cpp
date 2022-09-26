@@ -50,6 +50,7 @@ void Scene01::Init()
         elem->SetPosY(RANDOM->Float(-200.0f, 200.0f));
         elem->col->color = Color(1.0f, 1.0f, 1.0f);
         elem->col->isFilled = false;
+        elem->col->zOrder = ZOrder::object;
 
         elem->idle[dirB] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Front.png");
         elem->idle[dirL] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
@@ -72,6 +73,7 @@ void Scene01::Init()
             elem2->scale.y = 24.0f * enemyScaleCoef;
             elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
             elem2->SetParentRT(*elem->col);
+            elem2->zOrder = ZOrder::object;
             idx++;
         }
 
@@ -97,6 +99,7 @@ void Scene01::Init()
             elem2->scale.y = 24.0f * enemyScaleCoef;
             elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
             elem2->SetParentRT(*elem->col);
+            elem2->zOrder = ZOrder::object;
             idx++;
         }
 
@@ -107,6 +110,7 @@ void Scene01::Init()
         elem->hit->scale.y = 24.0f * enemyScaleCoef;
         elem->hit->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
         elem->hit->SetParentRT(*elem->col);
+        elem->hit->zOrder = ZOrder::object;
 
         elem->die = new ObImage(L"EnterTheGungeon/Enemy_0/Die.png");
         elem->die->isVisible = false;
@@ -114,6 +118,7 @@ void Scene01::Init()
         elem->die->scale.x = 96.0f / 4.0f * enemyScaleCoef;
         elem->die->scale.y = 24.0f * enemyScaleCoef;
         elem->die->SetParentRT(*elem->col);
+        elem->die->zOrder = ZOrder::object;
 
         float enemyWeaponScaleCoef = 1.5f;
 
@@ -133,16 +138,19 @@ void Scene01::Init()
         elem->weapon->idle->scale.x = 29.0f * enemyWeaponScaleCoef;
         elem->weapon->idle->scale.y = 21.0f * enemyWeaponScaleCoef;
         elem->weapon->idle->SetParentRT(*elem->weapon->col);
+        elem->weapon->idle->zOrder = ZOrder::weapon;
 
         elem->firePos = new GameObject;
         elem->firePos->SetParentRT(*elem->weapon->col);
         elem->firePos->SetLocalPos(Vector2(50.0f, 0.0f));
+        elem->firePos->zOrder = ZOrder::none;
 
         elem->shadow = new ObImage(L"EnterTheGungeon/Enemy_0/Shadow_1.png");
         elem->shadow->scale.x = 12.0f * enemyScaleCoef;
         elem->shadow->scale.y = 4.0f * enemyScaleCoef;
         elem->shadow->SetParentRT(*elem->col);
         elem->shadow->SetWorldPosY(-35.0f);
+        elem->shadow->zOrder = ZOrder::shadow;
     }
 
 
@@ -159,6 +167,7 @@ void Scene01::Init()
     boss->SetPosX(0.0f);
     boss->SetPosY(200.0f);
     boss->col->color = Color(1.0f, 1.0f, 1.0f);
+    boss->col->zOrder = ZOrder::object;
 
     boss->idle[dirB] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
     boss->idle[dirL] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
@@ -181,6 +190,7 @@ void Scene01::Init()
         elem->scale.y = 40.0f * bossScaleCoef;
         elem->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
         elem->SetParentRT(*boss->col);
+        elem->zOrder = ZOrder::object;
         idx++;
     }
 
@@ -206,6 +216,7 @@ void Scene01::Init()
         elem->scale.y = 40.0f * bossScaleCoef;
         elem->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
         elem->SetParentRT(*boss->col);
+        elem->zOrder = ZOrder::object;
         idx++;
     }
 
@@ -216,6 +227,7 @@ void Scene01::Init()
     boss->hit->scale.y = 40.0f * bossScaleCoef;
     boss->hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
     boss->hit->SetParentRT(*boss->col);
+    boss->hit->zOrder = ZOrder::object;
 
     boss->die = new ObImage(L"EnterTheGungeon/Boss_0/Die.png");
     boss->die->isVisible = false;
@@ -223,6 +235,7 @@ void Scene01::Init()
     boss->die->scale.x = 320.0f / 8.0f * enemyScaleCoef;
     boss->die->scale.y = 40.0f * enemyScaleCoef;
     boss->die->SetParentRT(*boss->col);
+    boss->die->zOrder = ZOrder::object;
 
     float bossWeaponScaleCoef = 2.0f;
 
@@ -242,34 +255,38 @@ void Scene01::Init()
     boss->weapon->idle->scale.x = 29.0f * bossWeaponScaleCoef;
     boss->weapon->idle->scale.y = 21.0f * bossWeaponScaleCoef;
     boss->weapon->idle->SetParentRT(*boss->weapon->col);
+    boss->weapon->idle->zOrder = ZOrder::weapon;
+
+    float hpGuageCoef = 1.5f;
 
     boss->hpGuageBar = new UI;
     boss->hpGuageBar->img = new ObImage(L"EnterTheGungeon/Boss_0/Hp_GuageBar.png");
-    boss->hpGuageBar->imgSize.x = 400.0f;
-    boss->hpGuageBar->imgSize.y = 30.0f;
-    boss->hpGuageBar->img->scale.x = boss->hpGuageBar->imgSize.x;
-    boss->hpGuageBar->img->scale.y = boss->hpGuageBar->imgSize.y;
+    boss->hpGuageBar->img->scale.x = 400.0f * hpGuageCoef;
+    boss->hpGuageBar->img->scale.y = 30.0f * hpGuageCoef;
     boss->hpGuageBar->img->SetWorldPosX(-boss->hpGuageBar->img->scale.x / 2.0f);
     boss->hpGuageBar->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
     boss->hpGuageBar->img->pivot = OFFSET_L;
     boss->hpGuageBar->img->space = Space::screen;
+    boss->hpGuageBar->img->zOrder = ZOrder::UI;
 
     boss->hpGuage = new UI;
     boss->hpGuage->img = new ObImage(L"EnterTheGungeon/Boss_0/Hp_Guage.png");
-    boss->hpGuage->imgSize.x = 330.0f;
-    boss->hpGuage->imgSize.y = 16.0f;
+    boss->hpGuage->imgSize.x = 330.0f * hpGuageCoef;
+    boss->hpGuage->imgSize.y = 16.0f * hpGuageCoef;
     boss->hpGuage->img->scale.x = boss->hpGuage->imgSize.x;
     boss->hpGuage->img->scale.y = boss->hpGuage->imgSize.y;
     boss->hpGuage->img->SetWorldPosX(-boss->hpGuage->img->scale.x / 2.0f);
     boss->hpGuage->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
     boss->hpGuage->img->pivot = OFFSET_L;
     boss->hpGuage->img->space = Space::screen;
+    boss->hpGuage->img->zOrder = ZOrder::UI;
 
     boss->shadow = new ObImage(L"EnterTheGungeon/Boss_0/Shadow_1.png");
     boss->shadow->scale.x = 12.0f * bossScaleCoef * 2.0f;
     boss->shadow->scale.y = 4.0f * bossScaleCoef * 2.0f;
     boss->shadow->SetParentRT(*boss->col);
     boss->shadow->SetWorldPosY(-55.0f);
+    boss->shadow->zOrder = ZOrder::shadow;
 
 
     // 맵 오브젝트
@@ -286,12 +303,15 @@ void Scene01::Init()
         elem->col->scale.y = 48.0f * doorOpenScaleCoef;
         elem->SetPosX(200.0f + idx * elem->col->scale.x);
         elem->col->collider = Collider::rect;
+        elem->col->zOrder = ZOrder::object;
+
         elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Open_Up.png");
         elem->idle->maxFrame.x = 3;
         elem->idle->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
         elem->idle->scale.y = 48.0f * doorOpenScaleCoef;
         elem->idle->SetParentRT(*elem->col);
         elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+        elem->idle->zOrder = ZOrder::object;
 
         if (idx & 1)
         {
@@ -320,6 +340,8 @@ void Scene01::Init()
         elem->col->scale.y = 48.0f * doorOpenScaleCoef;
         elem->SetPosX(200.0f + idx * elem->col->scale.x);
         elem->col->collider = Collider::rect;
+        elem->col->zOrder = ZOrder::object;
+
         elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Open_Down.png");
         elem->idle->isVisible = false;  //
         elem->idle->maxFrame.x = 3;
@@ -327,6 +349,7 @@ void Scene01::Init()
         elem->idle->scale.y = 48.0f * doorOpenScaleCoef;
         elem->idle->SetParentRT(*elem->col);
         elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+        elem->idle->zOrder = ZOrder::object;
 
         if (idx & 1)
         {
@@ -358,12 +381,15 @@ void Scene01::Init()
         elem->SetPosX(200.0f + idx * elem->col->scale.x);
         elem->SetPosY(200.0f);
         elem->col->collider = Collider::rect;
+        elem->col->zOrder = ZOrder::object;
+
         elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Closed.png");
         elem->idle->maxFrame.x = 2;
         elem->idle->scale.x = 68.0f / 2.0f * doorClosedScaleCoef;
         elem->idle->scale.y = 41.0f * doorClosedScaleCoef;
         elem->idle->SetParentRT(*elem->col);
         elem->idle->ChangeAnim(ANIMSTATE::LOOP, 2.0f);
+        elem->idle->zOrder = ZOrder::object;
 
         if (idx & 1)
         {
@@ -431,22 +457,7 @@ void Scene01::LateUpdate()
     int idx = 0;
 
     // 플레이어
-    Int2 on;
-    if (tilemap->WorldPosToTileIdx(player->Pos(), on))
-    {
-        ImGui::Text("TileState %d", tilemap->GetTileState(on));
-    }
-    vector<Vector2>& foot = player->Foot();
-    for (int i = 0; i < 4; i++)
-    {
-        if (tilemap->WorldPosToTileIdx(foot[i], on))
-        {
-            if (tilemap->GetTileState(on) == TileState::wall)
-            {
-                player->StepBack();
-            }
-        }
-    }
+    player->CheckFootGrid(tilemap);
 
     // 플레이어 총알
     for (auto& bulletElem : player->bullet)
@@ -456,6 +467,8 @@ void Scene01::LateUpdate()
             if (enemyElem->state != State::die &&
                 bulletElem->col->Intersect(enemyElem->col))
             {
+                Vector2 dir = enemyElem->col->GetWorldPos() - bulletElem->col->GetWorldPos();
+                enemyElem->col->MoveWorldPos(dir * 150.0f * DELTA);
                 enemyElem->Hit(bulletElem->damage);
                 bulletElem->Hit(1);
             }
@@ -597,7 +610,6 @@ void Scene01::LateUpdate()
         idx++;
     }
 
-
     /*
     for (auto& elem : mapObj->doorClosed)
     {
@@ -618,28 +630,26 @@ void Scene01::Render()
 {
     tilemap->Render();
     mapObj->Render();
-    player->Render();
     for (auto& elem : enemy) elem->Render();
+    player->Render();
     boss->Render();
+
+    // 최적화 이슈로 zorder 주석
+    /*
+    int size = RENDER->pq.size();
+    while (false == RENDER->pq.empty())
+    {
+        RENDER->pq.top()->Render();
+        RENDER->pq.pop();
+    }
+    */
 }
 
 void Scene01::ResizeScreen()
 {
-    player->uiMagazine->img->SetWorldPos(Vector2(app.GetHalfWidth() - 40.0f, -app.GetHalfHeight() + 80.0f));
-    player->uiWeaponFrame->img->SetWorldPos(Vector2(app.GetHalfWidth() - 240.0f, -app.GetHalfHeight() + 50.0f));
-    player->uiWeapon->img->SetWorldPos(Vector2(app.GetHalfWidth() - 190.0f, -app.GetHalfHeight() + 60.0f));
-    player->uiBulletCount->img->SetWorldPos(Vector2(app.GetHalfWidth() - 140.0f, -app.GetHalfHeight() + 150.0f));
-    int idx = 0;
-    for (auto& elem : player->uiBullet)
-    {
-        elem->img->SetWorldPos(Vector2(app.GetHalfWidth() - 40.0f, -app.GetHalfHeight() + 104.0f - idx * 12.0f));
-        idx++;
-    }
+    player->ResizeScreen();
 
-    boss->hpGuageBar->img->SetWorldPosX(-boss->hpGuageBar->img->scale.x / 2.0f);
-    boss->hpGuageBar->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
-    boss->hpGuage->img->SetWorldPosX(-boss->hpGuage->img->scale.x / 2.0f);
-    boss->hpGuage->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
+    boss->ResizeScreen();
 }
 
 void Scene01::CheckIntersect()

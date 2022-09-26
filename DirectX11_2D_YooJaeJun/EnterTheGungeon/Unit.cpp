@@ -35,11 +35,11 @@ void Unit::Update()
 {
 	lastPos = Pos();
 
-	Character::Update();
-
 	curMoveDirStateBefore = curMoveDirState;
 	curTargetDirStateBefore = curTargetDirState;
 	targetDirBefore = targetDir;
+
+	Character::Update();
 
 	if (weapon) weapon->Update();
 	for(auto& elem : idle) elem->Update();
@@ -49,6 +49,7 @@ void Unit::Update()
 	if (die) die->Update();
 	if (firePos) firePos->Update();
 	if (shadow) shadow->Update();
+	if (foot) foot->Update();
 }
 
 void Unit::LateUpdate()
@@ -57,15 +58,19 @@ void Unit::LateUpdate()
 
 void Unit::Render()
 {
-	if (shadow) shadow->Render();
+	if (shadow) shadow->Render(); // RENDER->push(shadow);
 	if (weapon) weapon->Render();
-	idle[curTargetDirState]->Render();
-	walk[curTargetDirState]->Render();
-	if (hit) hit->Render();
-	if (fall) fall->Render();
-	if (die) die->Render();
-	if (firePos) firePos->Render();
+	idle[curTargetDirState]->Render(); // RENDER->push(idle[curTargetDirState]);
+	walk[curTargetDirState]->Render(); // RENDER->push(walk[curTargetDirState]);
+	if (hit)  hit->Render();  // RENDER->push(hit);
+	if (fall) fall->Render(); // RENDER->push(fall);
+	if (die)  die->Render();  // RENDER->push(die);
+	if (firePos) firePos->Render(); // RENDER->push(firePos);
 	Character::Render();
+}
+
+void Unit::ResizeScreen()
+{
 }
 
 void Unit::Idle()
@@ -130,9 +135,9 @@ void Unit::Killed()
 
 void Unit::Die()
 {
-	if (TIMER->GetTick(timeDieAnim, 3.0f))
+	if (TIMER->GetTick(timeDieAnim, 0.1f))
 	{
-		die->color = Color(0.4f, 0.4f, 0.4f, 1.0f);
+		die->color = Color(0.4f, 0.4f, 0.4f, 0.4f);
 	}
 }
 
@@ -224,14 +229,40 @@ void Unit::SetTargetDir()
 	}
 }
 
-vector<Vector2>& Unit::Foot()
+void Unit::CheckFootGrid(ObTileMap* tilemap)
 {
-	foot.resize(4);
+	Int2 on;
+	if (tilemap->WorldPosToTileIdx(Pos(), on))
+	{
+		ImGui::Text("TileState %d", tilemap->GetTileState(on));
+	}
 
-	foot[0] = Pos() + Vector2(0.0f, -col->scale.y / 2.0f) + Vector2(-10.0f, -10.0f);
-	foot[1] = Pos() + Vector2(0.0f, -col->scale.y / 2.0f) + Vector2(10.0f, -10.0f);
-	foot[2] = Pos() + Vector2(0.0f, -col->scale.y / 2.0f) + Vector2(-10.0f, 10.0f);
-	foot[3] = Pos() + Vector2(0.0f, -col->scale.y / 2.0f) + Vector2(10.0f, 10.0f);
-
-	return foot;
+	if (tilemap->WorldPosToTileIdx(foot->lb(), on))
+	{
+		if (tilemap->GetTileState(on) == TileState::wall)
+		{
+			StepBack();
+		}
+	}
+	if (tilemap->WorldPosToTileIdx(foot->rb(), on))
+	{
+		if (tilemap->GetTileState(on) == TileState::wall)
+		{
+			StepBack();
+		}
+	}
+	if (tilemap->WorldPosToTileIdx(foot->lt(), on))
+	{
+		if (tilemap->GetTileState(on) == TileState::wall)
+		{
+			StepBack();
+		}
+	}
+	if (tilemap->WorldPosToTileIdx(foot->rt(), on))
+	{
+		if (tilemap->GetTileState(on) == TileState::wall)
+		{
+			StepBack();
+		}
+	}
 }
