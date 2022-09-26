@@ -57,7 +57,6 @@ public:
 	Vector2			targetDir;
 	Vector2			targetDirBefore;
 	float			targetRotation;
-	GameObject*		firePos;
 	float			timeFire;
 	float			timeReload;
 	float			timeHit;

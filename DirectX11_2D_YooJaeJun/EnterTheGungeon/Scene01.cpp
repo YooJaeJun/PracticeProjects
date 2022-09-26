@@ -140,10 +140,10 @@ void Scene01::Init()
         elem->weapon->idle->SetParentRT(*elem->weapon->col);
         elem->weapon->idle->zOrder = ZOrder::weapon;
 
-        elem->firePos = new GameObject;
-        elem->firePos->SetParentRT(*elem->weapon->col);
-        elem->firePos->SetLocalPos(Vector2(50.0f, 0.0f));
-        elem->firePos->zOrder = ZOrder::none;
+        elem->weapon->firePos = new GameObject;
+        elem->weapon->firePos->SetParentRT(*elem->weapon->col);
+        elem->weapon->firePos->SetLocalPos(Vector2(elem->weapon->col->scale.x / 2.0f, 0.0f));
+        elem->weapon->firePos->zOrder = ZOrder::none;
 
         elem->shadow = new ObImage(L"EnterTheGungeon/Enemy_0/Shadow_1.png");
         elem->shadow->scale.x = 12.0f * enemyScaleCoef;
@@ -256,6 +256,12 @@ void Scene01::Init()
     boss->weapon->idle->scale.y = 21.0f * bossWeaponScaleCoef;
     boss->weapon->idle->SetParentRT(*boss->weapon->col);
     boss->weapon->idle->zOrder = ZOrder::weapon;
+
+    boss->weapon->firePos = new GameObject;
+    boss->weapon->firePos->SetParentRT(*boss->weapon->col);
+    boss->weapon->firePos->SetLocalPos(Vector2(boss->weapon->col->scale.x / 2.0f, 0.0f));
+    boss->weapon->firePos->zOrder = ZOrder::none;
+
 
     float hpGuageCoef = 1.5f;
 

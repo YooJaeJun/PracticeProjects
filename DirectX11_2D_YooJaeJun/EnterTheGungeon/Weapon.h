@@ -12,5 +12,6 @@ public:
 
 public:
 	ObImage*	idle;
+	GameObject* firePos;
 };
 

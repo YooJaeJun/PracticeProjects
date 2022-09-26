@@ -173,10 +173,11 @@ Player::Player()
 	weapon->idle->SetParentRT(*weapon->col);
 	weapon->idle->zOrder = ZOrder::weapon;
 
-	firePos = new GameObject;
-	firePos->SetParentRT(*weapon->col);
-	firePos->SetLocalPos(Vector2(50.0f, 0.0f));
-	firePos->zOrder = ZOrder::none;
+	weapon->firePos = new GameObject;
+	weapon->firePos->SetParentRT(*weapon->col);
+	weapon->firePos->SetLocalPos(Vector2(weapon->col->scale.x / 2.0f, 0.0f));
+	weapon->firePos->zOrder = ZOrder::none;
+	weapon->firePos->scale = Vector2(20.0f, 20.0f);
 
 	shadow = new ObImage(L"EnterTheGungeon/Player_0/Shadow.png");
 	shadow->scale.x = 16.0f * playerScaleCoef;
@@ -681,7 +682,7 @@ void Player::Idle()
 
 			Vector2 dir = INPUT->GetWorldMousePos() - Pos();
 			dir.Normalize();
-			bullet[curBulletIdx++]->Spawn(firePos->GetWorldPos(),
+			bullet[curBulletIdx++]->Spawn(weapon->firePos->GetWorldPos(),
 				Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
 					RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
 			);

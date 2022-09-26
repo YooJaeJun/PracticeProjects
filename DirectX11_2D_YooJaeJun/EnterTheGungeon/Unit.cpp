@@ -27,7 +27,6 @@ void Unit::Release()
 	SafeDelete(fall);
 	SafeDelete(die);
 	SafeDelete(weapon);
-	SafeDelete(firePos);
 	SafeDelete(shadow);
 }
 
@@ -47,7 +46,6 @@ void Unit::Update()
 	if (hit) hit->Update();
 	if (fall) fall->Update();
 	if (die) die->Update();
-	if (firePos) firePos->Update();
 	if (shadow) shadow->Update();
 	if (foot) foot->Update();
 }
@@ -65,7 +63,6 @@ void Unit::Render()
 	if (hit)  hit->Render();  // RENDER->push(hit);
 	if (fall) fall->Render(); // RENDER->push(fall);
 	if (die)  die->Render();  // RENDER->push(die);
-	if (firePos) firePos->Render(); // RENDER->push(firePos);
 	Character::Render();
 }
 

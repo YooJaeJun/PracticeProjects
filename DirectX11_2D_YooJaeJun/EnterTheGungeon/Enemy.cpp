@@ -2,8 +2,17 @@
 
 Enemy::Enemy()
 {
-	float bulletCoef = 3.0f;
+	curHp = maxHp = 3;
+	scalar = 120.0f;
+	timeFire = 0.0f;
+	timeHit = 0.0f;
+	isHit = false;
+	isHitAnim = false;
+	timeHitAnim = 0.0f;
+	timeSetMoveDir = 0.0f;
+	timeSetTargetDir = 0.0f;
 
+	float bulletCoef = 3.0f;
 	for (auto& elem : bullet)
 	{
 		elem = new EnemyBullet;
@@ -14,16 +23,6 @@ Enemy::Enemy()
 		elem->idle->scale.y = 8.0f * bulletCoef;
 		elem->idle->SetParentRT(*elem->col);
 	}
-
-	curHp = maxHp = 3;
-	scalar = 120.0f;
-	timeFire = 0.0f;
-	timeHit = 0.0f;
-	isHit = false;
-	isHitAnim = false;
-	timeHitAnim = 0.0f;
-	timeSetMoveDir = 0.0f;
-	timeSetTargetDir = 0.0f;
 }
 
 void Enemy::Release()
@@ -113,7 +112,7 @@ void Enemy::Idle()
 		{
 			if (elem->isFired) continue;
 
-			elem->Spawn(firePos->GetWorldPos(), moveDir);
+			elem->Spawn(weapon->firePos->GetWorldPos(), moveDir);
 			break;
 		}
 	}

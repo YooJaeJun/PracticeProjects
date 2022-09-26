@@ -128,11 +128,11 @@
     <ClCompile Include="Obstacle.cpp">
       <Filter>GameObject\Level</Filter>
     </ClCompile>
-    <ClCompile Include="Scene01.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Effect.cpp">
       <Filter>GameObject\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene01.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
