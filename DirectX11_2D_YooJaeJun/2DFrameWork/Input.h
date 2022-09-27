@@ -11,6 +11,7 @@ private:
 
     Vector2       mouseScreenPos;
     Vector2       mouseWorldPos;
+    Vector2       mouseWorldPosForZoom;
 
     enum
     {
@@ -31,5 +32,6 @@ public:
 
     Vector2 GetScreenMousePos() { return mouseScreenPos; }
     Vector2 GetWorldMousePos() { return mouseWorldPos; }
+    Vector2 GetWorldMousePosForZoom();
 };
 

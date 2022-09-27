@@ -14,16 +14,16 @@ ObTileMap::ObTileMap()
     file = "EnterTheGungeon.txt";
     scale = Vector2(50.0f, 50.0f);
 
-    tileImages[0] = new ObImage(L"EnterTheGungeon/Level/Tileset.png");
+    tileImages[0] = new ObImage(L"Empty.png");
     tileImages[0]->maxFrame = Int2(12, 12);
-    tileImages[1] = new ObImage(L"Tile.png");
-    tileImages[1]->maxFrame = Int2(8, 6);
-    tileImages[2] = new ObImage(L"Tile2.png");
-    tileImages[2]->maxFrame = Int2(11, 7);
-    tileImages[3] = nullptr;
+    tileImages[1] = new ObImage(L"EnterTheGungeon/Level/Tileset.png");
+    tileImages[1]->maxFrame = Int2(12, 12);
+    tileImages[2] = new ObImage(L"Tile.png");
+    tileImages[2]->maxFrame = Int2(8, 6);
+    tileImages[3] = new ObImage(L"Tile2.png");
+    tileImages[3]->maxFrame = Int2(11, 7);
 
     ResizeTile(tileSize);
-
 }
 
 ObTileMap::~ObTileMap()

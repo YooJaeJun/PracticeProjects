@@ -79,3 +79,9 @@ void Input::Update()
 
     // 0x80    1000  0000
 }
+
+Vector2 Input::GetWorldMousePosForZoom() 
+{ 
+    mouseWorldPosForZoom = mouseWorldPos / CAM->coefScale;
+    return mouseWorldPosForZoom;
+}

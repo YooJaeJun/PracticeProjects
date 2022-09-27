@@ -195,6 +195,11 @@ LRESULT Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 		INPUT->mouseScreenPos.y = (float)HIWORD(lParam);
 	}
 
+	if (message == WM_MOUSEWHEEL)
+	{
+		CAM->Zoom(GET_WHEEL_DELTA_WPARAM(wParam));
+	}
+
 	if (message == WM_SIZE)
 	{
 		if (D3D->GetCreated())

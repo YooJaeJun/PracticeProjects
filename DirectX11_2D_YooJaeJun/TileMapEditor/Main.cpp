@@ -6,9 +6,7 @@ void Main::Init()
 	map = new ObTileMap();
 	map->scale = Vector2(50.0f, 50.0f);
 	map->SetWorldPos(Vector2(-app.GetHalfWidth(), -app.GetHalfHeight()));
-
 	LIGHT->light.radius = 3000.0f;
-
 	imgIdx = 0;
 	tileSize = Int2(20, 20);
 	tileColor = Color(0.5f, 0.5f, 0.5f, 0.5f);

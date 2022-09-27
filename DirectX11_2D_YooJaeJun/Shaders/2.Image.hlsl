@@ -64,7 +64,7 @@ PixelInput VS(VertexInput input)
         output.uv.y = uv.y;
     else
         output.uv.y = uv.w;
-
+    
     return output;
 }
 
@@ -93,8 +93,8 @@ float4 PS(PixelInput input) : SV_TARGET //SV_TARGET Àº Å¸°ÙÀÌµÉ »ö±ò
     TextureColor = TextureColor + (input.color * 2.0f - 1.0f);
 	TextureColor = saturate(TextureColor);
     
-	float2 minus = input.position.xy - screenPos;
-	float dis = minus.x * minus.x + minus.y * minus.y;
+	float2 minus = input.position.xyz - screenPos;
+    float dis = minus.x * minus.x + minus.y * minus.y;
 	dis = sqrt(dis);
     
 	if (select == 0.0f)
