@@ -30,6 +30,12 @@
     <ClInclude Include="EnemyBullet.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Stage02.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage01.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -60,10 +66,19 @@
     <ClCompile Include="EnemyBullet.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="Stage01.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage02.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameObject">
       <UniqueIdentifier>{e78ff6b3-d312-4079-9e70-456687f1bd9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{749c94d5-fecb-403a-9751-169372e81e2f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

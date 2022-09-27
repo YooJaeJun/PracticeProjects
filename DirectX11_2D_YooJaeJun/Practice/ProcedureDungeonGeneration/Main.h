@@ -4,12 +4,13 @@ const int roomMax = 40;
 class Main : public Scene
 {
 private:
-	vector<Room*>		rooms;
-	enum class GameState	{ spray, spread, select, triangulate, span, loop, dig, widen, tile, wall };
-	GameState				state;
+	vector<Room*>				rooms;
+	enum class GameState	{ spray, spread, select, triangulate, span, loop, dig, widen, tile, wall, set };
+	GameState					state;
+	float						roomScaleForSelect;
 	// Delaunay Triangulation
-	vector<ObNode>		nodes;
-	Delaunay			triangulation;
+	vector<ObNode>				nodes;
+	Delaunay					triangulation;
 	// MST - Prim
 	priority_queue<ObLine, vector<ObLine>, greater<ObLine>>	edgePq;
 	unordered_map<int, bool>	visited;
@@ -19,13 +20,8 @@ private:
 	vector<ObLine>				passagesLine;
 	vector<ObRect>				passages;
 	// Tile
-	ObTileMap*	map;
-	Int2		pickingIdx;
-	int			imgIdx;
-	Int2		mouseIdx;
-	Int2		tileSize;
-	Color		tileColor;
-	int			tileState;
+	vector<ObImage*>			tileImgs;
+	vector<ObImage*>			wallImgs;
 
 public:
 	virtual void Init() override;
@@ -45,4 +41,5 @@ public:
 	void Widen();
 	void Tile();
 	void Wall();
+	void Set();
 };

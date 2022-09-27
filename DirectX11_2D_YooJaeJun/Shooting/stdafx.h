@@ -11,3 +11,6 @@
 #include "EnemyBullet.h"
 #include "Player.h"
 #include "Enemy.h"
+
+#include "Stage01.h"
+#include "Stage02.h"

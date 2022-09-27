@@ -8,8 +8,8 @@ void Main::Init()
     for (auto& room : rooms)
     {
         room = new Room();
-        room->col->scale.x = RANDOM->Float(400.0f, 2000.0f);
-        room->col->scale.y = RANDOM->Float(400.0f, 2000.0f);
+        room->col->scale.x = RANDOM->Float(200.0f, 1000.0f);
+        room->col->scale.y = RANDOM->Float(200.0f, 1000.0f);
         room->col->SetWorldPosX(RANDOM->Float(-200.0f, 200.0f));
         room->col->SetWorldPosY(RANDOM->Float(-200.0f, 200.0f));
         room->col->isFilled = false;
@@ -17,17 +17,7 @@ void Main::Init()
         room->col->color = Color(1.0f, 0.6f, 0.6f);
         room->col->collider = Collider::rect;
     }
-
-    map = new ObTileMap();
-    map->scale = Vector2(50.0f, 50.0f);
-    map->SetWorldPos(Vector2(-app.GetHalfWidth(), -app.GetHalfHeight()));
-    LIGHT->light.radius = 3000.0f;
-    imgIdx = 0;
-    tileSize = Int2(250, 250);
-    map->ResizeTile(tileSize);
-    tileColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
-    tileState = 0;
-    map->SetWorldPos(Vector2(-5000.0f, -5000.0f));
+    roomScaleForSelect = 500'000.0f;
 
     state = GameState::spray;
 }
@@ -45,7 +35,8 @@ void Main::Release()
     linesMST.clear();
     passagesLine.clear();
     passages.clear();
-    SafeDelete(map);
+    for (auto& elem : tileImgs) SafeDelete(elem);
+    for (auto& elem : wallImgs) SafeDelete(elem);
 }
 
 void Main::Update()
@@ -58,6 +49,23 @@ void Main::Update()
     }
 
     ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
+
+    if (INPUT->KeyPress(VK_LEFT))
+    {
+        CAM->position.x -= 1500.0f * DELTA;
+    }
+    if (INPUT->KeyPress(VK_RIGHT))
+    {
+        CAM->position.x += 1500.0f * DELTA;
+    }
+    if (INPUT->KeyPress(VK_UP))
+    {
+        CAM->position.y += 1500.0f * DELTA;
+    }
+    if (INPUT->KeyPress(VK_DOWN))
+    {
+        CAM->position.y -= 1500.0f * DELTA;
+    }
     
     switch (state)
     {
@@ -111,6 +119,11 @@ void Main::Update()
         Wall();
         break;
     }
+    case GameState::set:
+    {
+        Set();
+        break;
+    }
     default:
     {
         break;
@@ -122,7 +135,8 @@ void Main::Update()
     for (auto& elem : linesMST) elem.Update();
     for (auto& elem : passagesLine) elem.Update();
     for (auto& elem : passages) elem.Update();
-    map->Update();
+    for (auto& elem : tileImgs) if (elem) elem->Update();
+    for (auto& elem : wallImgs) if (elem) elem->Update();
 }
 
 void Main::LateUpdate()
@@ -136,7 +150,8 @@ void Main::Render()
     for (auto& elem : linesMST) elem.Render();
     for (auto& elem : passagesLine) elem.Render();
     for (auto& elem : passages) elem.Render();
-    map->Render();
+    for (auto& elem : tileImgs) if (elem) elem->Render();
+    for (auto& elem : wallImgs) if (elem) elem->Render();
 }
 
 void Main::ResizeScreen()
@@ -175,7 +190,7 @@ void Main::Select()
 {
     for (int i = 0; i < rooms.size(); i++)
     {
-        if (rooms[i]->col->scale.x * rooms[i]->col->scale.y > 1'500'000.0f)
+        if (rooms[i]->col->scale.x * rooms[i]->col->scale.y > roomScaleForSelect)
         {
             rooms[i]->col->isFilled = true;
             rooms[i]->selected = true;
@@ -324,172 +339,126 @@ void Main::Widen()
 
 void Main::Tile()
 {
-    if (INPUT->KeyPress(VK_LEFT))
+    Sleep(1000);
+
+    tileImgs.resize(passages.size() + rooms.size());
+
+    for (auto& elem : tileImgs)
     {
-        CAM->position.x -= 300.0f * DELTA;
-    }
-    if (INPUT->KeyPress(VK_RIGHT))
-    {
-        CAM->position.x += 300.0f * DELTA;
-    }
-    if (INPUT->KeyPress(VK_UP))
-    {
-        CAM->position.y += 300.0f * DELTA;
-    }
-    if (INPUT->KeyPress(VK_DOWN))
-    {
-        CAM->position.y -= 300.0f * DELTA;
-    }
-    /*
-    //Gui
-    if (ImGui::Button("ErrorFileSystem?->Click me"))
-    {
-        ImGuiFileDialog::Instance()->Close();
+        elem = new ObImage(L"EnterTheGungeon/Level/Tile.png");
     }
 
-    //TileScale
-    ImGui::SliderFloat2("Scale", (float*)&map->scale, 0.0f, 100.0f);
+    int tileIdx = 0;
+    int wallIdx = 0;
+    int startY  = 0;
+    int endY    = 0;
+    int startX  = 0;
+    int endX    = 0;
 
-    //TileSize
-    if (ImGui::SliderInt2("TileSize", (int*)&tileSize, 1, 100))
+    float wallScale = 50.0f;
+
+    auto PushWall = [&](const float x, const float y)
     {
-        map->ResizeTile(tileSize);
-    }
+        ObImage* wallImg = new ObImage(L"EnterTheGungeon/Level/Wall.png");
+        wallImg->scale = Vector2(wallScale, wallScale);
+        wallImg->SetWorldPos(Vector2(x, y));
+        wallImg->pivot = OFFSET_LT;
+        wallImgs.push_back(wallImg);
+    };
 
-    //TilePos
-    Vector2 pos = map->GetWorldPos();
-    if (ImGui::SliderFloat2("TilePos", (float*)&pos, -5000.0f, 5000.0f))
+    for (auto& elem : passages)
     {
-        map->SetWorldPos(pos);
-    }
+        tileImgs[tileIdx]->SetWorldPos(elem.GetWorldPos());
+        tileImgs[tileIdx]->scale = elem.scale;
+        tileIdx++;
 
-    //TileState
-    ImGui::SliderInt("TileState", &tileState, int(TileState::none), int(TileState::tileSize));
-
-    //TileColor
-    ImGui::ColorEdit4("TileColor", (float*)&tileColor, ImGuiColorEditFlags_PickerHueWheel);
-
-    //Texture
-    for (int i = 0; i < 4; i++)
-    {
-        string str = "Texture" + to_string(i);
-        if (GUI->FileImGui(str.c_str(), str.c_str(),
-            ".jpg,.png,.bmp,.dds,.tga", "../Contents/Images/EnterTheGungeon"))
+        startX = elem.lt().x;
+        endX = elem.rt().x;
+        startY = elem.lt().y;
+        endY   = elem.lt().y;
+        for (int x = startX; x <= endX; x += wallScale)
         {
-            string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
-            SafeDelete(map->tileImages[i]);
-            wstring wImgFile = L"";
-            wImgFile.assign(path.begin(), path.end());
-            map->tileImages[i] = new ObImage(wImgFile);
+            PushWall(x, startY);
         }
-        if (i < 3)
+        startX = elem.lb().x;
+        endX = elem.rb().x;
+        startY = elem.lb().y;
+        endY = elem.rb().y;
+        for (int x = startX; x <= endX; x += wallScale)
         {
-            ImGui::SameLine();
+            PushWall(x, startY);
+        }
+        startX = elem.lt().x;
+        endX = elem.lt().x;
+        startY = elem.lb().y;
+        endY = elem.lt().y;
+        for (int y = startY; y <= endY; y += wallScale)
+        {
+            PushWall(startX, y);
+        }
+        startX = elem.rt().x;
+        endX = elem.rt().x;
+        startY = elem.rb().y;
+        endY = elem.rt().y;
+        for (int y = startY; y <= endY; y += wallScale)
+        {
+            PushWall(startX, y);
         }
     }
 
-    //Coord
-    map->WorldPosToTileIdx(INPUT->GetWorldMousePos(), mouseIdx);
-    ImGui::Text("mouseIdx : %d , %d", mouseIdx.x, mouseIdx.y);
-
-    //ImageButton
-    map->RenderGui(pickingIdx, imgIdx);
-    ImGui::Text("pickingIdx : %d , %d", pickingIdx.x, pickingIdx.y);
-    ImGui::Text("imgIdx : %d", imgIdx);
-
-    //maxFrame
-    ImGui::InputInt2("maxFrame", (int*)&map->tileImages[imgIdx]->maxFrame);
-
-    //SaveLoad
-    if (GUI->FileImGui("Save", "Save Map",
-        ".txt", "../Contents/TileMap"))
+    for (auto& elem : rooms)
     {
-        string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
-        map->file = path;
-        map->Save();
-    }
-    ImGui::SameLine();
-    if (GUI->FileImGui("Load", "Load Map",
-        ".txt", "../Contents/TileMap"))
-    {
-        string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
-        map->file = path;
-        map->Load();
-        tileSize = map->GetTileSize();
-    }
-
-    //Brush
-    ImVec2 min = ImGui::GetWindowPos();
-    ImVec2 max;
-    max.x = min.x + ImGui::GetWindowSize().x;
-    max.y = min.y + ImGui::GetWindowSize().y;
-
-    if (!ImGui::IsMouseHoveringRect(min, max))
-    {
-        if (INPUT->KeyPress(VK_LBUTTON))
+        if (elem->selected)
         {
-            if (map->WorldPosToTileIdx(INPUT->GetWorldMousePosForZoom(), mouseIdx))
+            tileImgs[tileIdx]->SetWorldPos(elem->col->GetWorldPos());
+            tileImgs[tileIdx]->scale = elem->col->scale;
+            tileIdx++;
+
+            startX = elem->col->lt().x;
+            endX = elem->col->rt().x;
+            startY = elem->col->lt().y;
+            endY = elem->col->lt().y;
+            for (int x = startX; x <= endX; x += wallScale)
             {
-                map->SetTile(mouseIdx, pickingIdx, imgIdx, tileState, tileColor);
+                PushWall(x, startY);
+            }
+            startX = elem->col->lb().x;
+            endX = elem->col->rb().x;
+            startY = elem->col->lb().y;
+            endY = elem->col->rb().y;
+            for (int x = startX; x <= endX; x += wallScale)
+            {
+                PushWall(x, startY);
+            }
+            startX = elem->col->lt().x;
+            endX = elem->col->lt().x;
+            startY = elem->col->lb().y;
+            endY = elem->col->lt().y;
+            for (int y = startY; y <= endY; y += wallScale)
+            {
+                PushWall(startX, y);
+            }
+            startX = elem->col->rt().x;
+            endX = elem->col->rt().x;
+            startY = elem->col->rb().y;
+            endY = elem->col->rt().y;
+            for (int y = startY; y <= endY; y += wallScale)
+            {
+                PushWall(startX, y);
             }
         }
     }
-
-    imgIdx = 1;
-
-    Int2 on;
-    static int flag = 1;
-    if (flag)
-    {
-        for (auto& elem : passages)
-        {
-            int startY = elem.lb().y;
-            int endY   = elem.lt().y;
-            int startX = elem.lt().x;
-            int endX   = elem.rt().x;
-
-            for (int y = startY; y <= endY; y++)
-            {
-                for (int x = startX; x <= endX; x++)
-                {
-                    if (map->WorldPosToTileIdx(elem.GetWorldPos(), on))
-                    {
-                        map->SetTile(on, pickingIdx, imgIdx, tileState, tileColor);
-                    }
-                }
-            }
-        }
-
-        for (auto& elem : rooms)
-        {
-            if (elem->selected)
-            {
-                int startY = elem->col->lb().y;
-                int endY   = elem->col->lt().y;
-                int startX = elem->col->lt().x;
-                int endX   = elem->col->rt().x;
-
-                for (int y = startY; y <= endY; y++)
-                {
-                    for (int x = startX; x <= endX; x++)
-                    {
-                        if (map->WorldPosToTileIdx(elem->col->GetWorldPos(), on))
-                        {
-                            map->SetTile(on, pickingIdx, imgIdx, tileState, tileColor);
-                        }
-                    }
-                }
-            }
-        }
-
-        flag = 0;
-    }
-    */
-    //state = GameState::wall;
+    
+    state = GameState::wall;
 }
 
 void Main::Wall()
 {
+}
+
+void Main::Set()
+{
+
 }
 
 int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, int command)
