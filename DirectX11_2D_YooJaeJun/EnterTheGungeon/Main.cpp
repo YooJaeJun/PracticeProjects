@@ -4,9 +4,17 @@ using namespace std;
 
 void Main::Init()
 {
+    mapGen = new ProcedureMapGeneration;
+
     {
         Scene01* tempScene = new Scene01;
+        tempScene->mapGen = mapGen;
         SCENE->AddScene("Scene01", tempScene);
+    }
+    {
+        Scene02* tempScene = new Scene02;
+        tempScene->mapGen = mapGen;
+        SCENE->AddScene("Scene02", tempScene);
     }
 
     SCENE->ChangeScene("Scene01");
@@ -14,10 +22,22 @@ void Main::Init()
 
 void Main::Release()
 {
+    mapGen->Release();
+    SCENE->Release();
 }
 
 void Main::Update()
 {
+    ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
+
+    if (INPUT->KeyDown('1'))
+    {
+        SCENE->ChangeScene("Scene01");
+    }
+    else if (INPUT->KeyDown('2'))
+    {
+        SCENE->ChangeScene("Scene02");
+    }
     SCENE->Update();
 }
 
@@ -41,6 +61,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, in
     app.SetAppName(L"Enter the Gungeon by 유재준");
     app.SetInstance(instance);
     app.InitWidthHeight(1400.0f, 740.0f);
+    app.background = Color(0.0f, 0.0f, 0.0f, 1.0f);
     Main* main = new Main();
     int wParam = (int)WIN->Run(main);
     WIN->DeleteSingleton();     // 창이 없어지고 난 후 

@@ -19,4 +19,7 @@
 #include "Obstacle.h"
 #include "MapObject.h"
 #include "UI.h"
+#include "Room.h"
+#include "ProcedureMapGeneration.h"
 #include "Scene01.h"
+#include "Scene02.h"

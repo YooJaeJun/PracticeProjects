@@ -1,11 +1,16 @@
 #pragma once
 const int roomMax = 40;
+enum class GameState { spray, spread, select, triangulate, span, loop, dig, widen, tile, wall, set };
 
-class Main : public Scene
+class ProcedureMapGeneration
 {
-private:
+public:
+	float						timer;
+	// Spread
+	bool						flagSpread;
+	// Room
 	vector<Room*>				rooms;
-	enum class GameState	{ spray, spread, select, triangulate, span, loop, dig, widen, tile, wall, set };
+	deque<bool>					selected;
 	GameState					state;
 	float						roomScaleForSelect;
 	// Delaunay Triangulation
@@ -23,13 +28,16 @@ private:
 	vector<ObImage*>			tileImgs;
 	vector<ObImage*>			wallImgs;
 
+
 public:
-	virtual void Init() override;
-	virtual void Release() override;
-	virtual void Update() override;
-	virtual void LateUpdate() override;
-	virtual void Render() override;
-	virtual void ResizeScreen() override;
+	ProcedureMapGeneration();
+
+	void Init();
+	void Release();
+	void Update();
+	void LateUpdate();
+	void Render();
+	void ResizeScreen();
 
 	void Spray();
 	void Spread();
@@ -43,3 +51,4 @@ public:
 	void Wall();
 	void Set();
 };
+

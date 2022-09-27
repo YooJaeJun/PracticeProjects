@@ -1,9 +1,16 @@
-﻿#include "stdafx.h"
-#include "Main.h"
-using namespace std;
+#include "stdafx.h"
 
-void Main::Init()
+ProcedureMapGeneration::ProcedureMapGeneration()
 {
+    Init();
+}
+
+void ProcedureMapGeneration::Init()
+{
+    flagSpread = false;
+
+    timer = 0.0f;
+
     rooms = vector<Room*>(roomMax);
     for (auto& room : rooms)
     {
@@ -13,16 +20,16 @@ void Main::Init()
         room->col->SetWorldPosX(RANDOM->Float(-200.0f, 200.0f));
         room->col->SetWorldPosY(RANDOM->Float(-200.0f, 200.0f));
         room->col->isFilled = false;
-        // room->col->color = Color(RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f));
+        // room->color = Color(RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f), RANDOM->Float(0.0f, 1.0f));
         room->col->color = Color(1.0f, 0.6f, 0.6f);
         room->col->collider = Collider::rect;
     }
-    roomScaleForSelect = 500'000.0f;
+    roomScaleForSelect = 400'000.0f;
 
     state = GameState::spray;
 }
 
-void Main::Release()
+void ProcedureMapGeneration::Release()
 {
     for (auto& elem : rooms) SafeDelete(elem);
     nodes.clear();
@@ -39,16 +46,14 @@ void Main::Release()
     for (auto& elem : wallImgs) SafeDelete(elem);
 }
 
-void Main::Update()
+void ProcedureMapGeneration::Update()
 {
-    if (INPUT->KeyDown('R'))
-    {
-        Release();
-        Init();
-        state = GameState::spread;
-    }
-
-    ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
+    //if (INPUT->KeyDown('R'))
+    //{
+    //    Release();
+    //    Init();
+    //    state = GameState::spread;
+    //}
 
     if (INPUT->KeyPress(VK_LEFT))
     {
@@ -66,62 +71,99 @@ void Main::Update()
     {
         CAM->position.y -= 1500.0f * DELTA;
     }
-    
+
     switch (state)
     {
     case GameState::spray:
     {
         Spray();
+        state = GameState::spread;
         break;
     }
     case GameState::spread:
     {
         Spread();
+        if (flagSpread) state = GameState::select;
         break;
     }
     case GameState::select:
     {
-        Select();
+        if (TIMER->GetTick(timer, 1.0f))
+        {
+            Select();
+            state = GameState::triangulate;
+        }
         break;
     }
     case GameState::triangulate:
     {
-        Triangulate();
+        if (TIMER->GetTick(timer, 1.0f))
+        {
+            Triangulate();
+            state = GameState::span;
+        }
         break;
     }
     case GameState::span:
     {
-        Spanning();
+        if (TIMER->GetTick(timer, 1.0f))
+        {
+            Spanning();
+            state = GameState::loop;
+        }
         break;
     }
     case GameState::loop:
     {
-        Loop();
+        if (TIMER->GetTick(timer, 1.0f))
+        {
+            Loop();
+            state = GameState::dig;
+        }
         break;
     }
     case GameState::dig:
     {
-        Dig();
+        if (TIMER->GetTick(timer, 1.0f))
+        {
+            Dig();
+            state = GameState::widen;
+        }
         break;
     }
     case GameState::widen:
     {
-        Widen();
+        if (TIMER->GetTick(timer, 1.0f))
+        {
+            Widen();
+            state = GameState::tile;
+        }
         break;
     }
     case GameState::tile:
     {
-        Tile();
+        if (TIMER->GetTick(timer, 1.0f))
+        {
+            Tile();
+            state = GameState::wall;
+        }
         break;
     }
     case GameState::wall:
     {
-        Wall();
+        if (TIMER->GetTick(timer, 1.0f))
+        {
+            Wall();
+            state = GameState::set;
+        }
         break;
     }
     case GameState::set:
     {
-        Set();
+        if (TIMER->GetTick(timer, 1.0f))
+        {
+            Set();
+        }
         break;
     }
     default:
@@ -139,11 +181,7 @@ void Main::Update()
     for (auto& elem : wallImgs) if (elem) elem->Update();
 }
 
-void Main::LateUpdate()
-{
-}
-
-void Main::Render()
+void ProcedureMapGeneration::LateUpdate()
 {
     for (auto& elem : rooms) elem->Render();
     for (auto& elem : linesTriangulated) elem.Render();
@@ -154,18 +192,29 @@ void Main::Render()
     for (auto& elem : wallImgs) if (elem) elem->Render();
 }
 
-void Main::ResizeScreen()
+void ProcedureMapGeneration::Render()
+{
+    for (auto& elem : rooms) elem->Render();
+    for (auto& elem : linesTriangulated) elem.Render();
+    for (auto& elem : linesMST) elem.Render();
+    for (auto& elem : passagesLine) elem.Render();
+    for (auto& elem : passages) elem.Render();
+    for (auto& elem : tileImgs) if (elem) elem->Render();
+    for (auto& elem : wallImgs) if (elem) elem->Render();
+}
+
+void ProcedureMapGeneration::ResizeScreen()
 {
 }
 
-void Main::Spray()
+void ProcedureMapGeneration::Spray()
 {
-    state = GameState::spread;
 }
 
-void Main::Spread()
+void ProcedureMapGeneration::Spread()
 {
-    bool flag = false;
+    flagSpread = true;
+
     for (auto& room : rooms)
     {
         for (auto& room2 : rooms)
@@ -176,17 +225,13 @@ void Main::Spread()
             {
                 Vector2 velocity = room->col->GetWorldPos() - room2->col->GetWorldPos();
                 room->col->MoveWorldPos(velocity * DELTA);
-                flag = true;
+                flagSpread = false;
             }
         }
     }
-    if (false == flag)
-    {
-        state = GameState::select;
-    }
 }
 
-void Main::Select()
+void ProcedureMapGeneration::Select()
 {
     for (int i = 0; i < rooms.size(); i++)
     {
@@ -197,13 +242,10 @@ void Main::Select()
             nodes.push_back(ObNode(i, rooms[i]->col->GetWorldPos()));
         }
     }
-
-    state = GameState::triangulate;
 }
 
-void Main::Triangulate()
+void ProcedureMapGeneration::Triangulate()
 {
-    Sleep(1000);
     triangulation.triangulate(nodes);
     linesTriangulated = triangulation.edges;
     for (auto& elem : linesTriangulated)
@@ -211,13 +253,10 @@ void Main::Triangulate()
         elem.color = Color(1.0f, 1.0f, 1.0f);
         elem.collider = Collider::line;
     }
-    
-    state = GameState::span;
 }
 
-void Main::Spanning()
+void ProcedureMapGeneration::Spanning()
 {
-    Sleep(1000);
     // MST - Prim
     edgePq.push(linesTriangulated[0]);
 
@@ -250,13 +289,10 @@ void Main::Spanning()
         push(curLine.v);
         push(curLine.w);
     }
-    
-    state = GameState::loop;
 }
 
-void Main::Loop()
+void ProcedureMapGeneration::Loop()
 {
-    Sleep(1000);
     int count = 3;
 
     while (count--)
@@ -281,13 +317,10 @@ void Main::Loop()
     }
 
     linesTriangulated.clear();
-
-    state = GameState::dig;
 }
 
-void Main::Dig()
+void ProcedureMapGeneration::Dig()
 {
-    Sleep(1000);
     for (auto& elem : linesMST)
     {
         {
@@ -303,14 +336,10 @@ void Main::Dig()
     }
 
     linesMST.clear();
-
-    state = GameState::widen;
 }
 
-void Main::Widen()
+void ProcedureMapGeneration::Widen()
 {
-    Sleep(1000);
-
     for (auto& elem : passagesLine)
     {
         float scale = 100.0f;
@@ -330,17 +359,13 @@ void Main::Widen()
             r.SetWorldPosY(elem.v.y);
         }
         r.color = Color(1.0f, 0.8f, 0.6f);
-        
+
         passages.push_back(r);
     }
-
-    state = GameState::tile;
 }
 
-void Main::Tile()
+void ProcedureMapGeneration::Tile()
 {
-    Sleep(1000);
-
     tileImgs.resize(passages.size() + rooms.size());
 
     for (auto& elem : tileImgs)
@@ -350,10 +375,10 @@ void Main::Tile()
 
     int tileIdx = 0;
     int wallIdx = 0;
-    int startY  = 0;
-    int endY    = 0;
-    int startX  = 0;
-    int endX    = 0;
+    int startY = 0;
+    int endY = 0;
+    int startX = 0;
+    int endX = 0;
 
     float wallScale = 50.0f;
 
@@ -375,7 +400,7 @@ void Main::Tile()
         startX = elem.lt().x;
         endX = elem.rt().x;
         startY = elem.lt().y;
-        endY   = elem.lt().y;
+        endY = elem.lt().y;
         for (int x = startX; x <= endX; x += wallScale)
         {
             PushWall(x, startY);
@@ -448,28 +473,13 @@ void Main::Tile()
             }
         }
     }
-    
-    state = GameState::wall;
 }
 
-void Main::Wall()
+void ProcedureMapGeneration::Wall()
 {
 }
 
-void Main::Set()
+void ProcedureMapGeneration::Set()
 {
 
-}
-
-int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, int command)
-{
-    app.SetAppName(L"유재준 Game");
-    app.SetInstance(instance);
-    app.background = Color(0.0f, 0.0f, 0.0f, 1.0f);
-    app.InitWidthHeight(1000.0f, 1000.0f);
-    Main* main = new Main();
-    int wParam = (int)WIN->Run(main);
-    WIN->DeleteSingleton();     // 창이 없어지고 난 후 
-    SafeDelete(main);           // 메모리 해제
-    return wParam;
 }

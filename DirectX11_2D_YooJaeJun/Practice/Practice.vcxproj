@@ -18,15 +18,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ProcedureDungeonGeneration\Main.cpp" />
-    <ClCompile Include="ProcedureDungeonGeneration\Room.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ProcedureDungeonGeneration\Main.h" />
-    <ClInclude Include="ProcedureDungeonGeneration\Room.h" />
-    <ClInclude Include="ProcedureDungeonGeneration\stdafx.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

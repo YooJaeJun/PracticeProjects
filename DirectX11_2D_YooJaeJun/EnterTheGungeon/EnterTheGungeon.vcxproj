@@ -32,7 +32,10 @@
     <ClInclude Include="Pet.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="ProcedureMapGeneration.h" />
+    <ClInclude Include="Room.h" />
     <ClInclude Include="Scene01.h" />
+    <ClInclude Include="Scene02.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Unit.h" />
@@ -45,7 +48,10 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="ProcedureMapGeneration.cpp" />
+    <ClCompile Include="Room.cpp" />
     <ClCompile Include="Scene01.cpp" />
+    <ClCompile Include="Scene02.cpp" />
     <ClCompile Include="StringBulletData.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Enemy.cpp" />
