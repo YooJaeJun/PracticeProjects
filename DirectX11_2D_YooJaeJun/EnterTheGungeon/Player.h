@@ -6,6 +6,7 @@ class Player : public Unit
 public:
 	Player();
 
+	virtual void Init() override;
 	virtual void Release() override;
 	virtual void Update() override;
 	virtual void LateUpdate() override;

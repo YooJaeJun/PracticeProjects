@@ -7,12 +7,12 @@ void Main::Init()
     mapGen = new ProcedureMapGeneration;
 
     {
-        Scene01* tempScene = new Scene01;
+        Scene01* tempScene = new Scene01();
         tempScene->mapGen = mapGen;
         SCENE->AddScene("Scene01", tempScene);
     }
     {
-        Scene02* tempScene = new Scene02;
+        Scene02* tempScene = new Scene02();
         tempScene->mapGen = mapGen;
         SCENE->AddScene("Scene02", tempScene);
     }
@@ -38,6 +38,7 @@ void Main::Update()
     {
         SCENE->ChangeScene("Scene02");
     }
+
     SCENE->Update();
 }
 

@@ -71,6 +71,7 @@ void Stage01::Init()
 
 	SOUND->AddSound("gun.wav", "GUN", false);
 	bgmScale = 1.0f;
+
 }
 
 void Stage01::Release()
@@ -95,10 +96,10 @@ void Stage01::Update()
 	ImGui::SliderFloat("Radius", &LIGHT->light.radius, 0.0f, 2000.0f);
 	ImGui::ColorEdit3("LightColor", (float*)&LIGHT->light.lightColor);
 	ImGui::ColorEdit3("OutColor", (float*)&LIGHT->light.outColor);
+	LIGHT->light.lightColor = Color(0.5f, 0.5f, 0.5f);
 
 	// LIGHT->light.screenPos.x = app.GetHalfWidth() + player->col->GetWorldPos().x - CAM->position.x;
 	// LIGHT->light.screenPos.y = app.GetHalfHeight() - player->col->GetWorldPos().y + CAM->position.y;
-
 	LIGHT->SetLightPos(player->col->GetWorldPivot());
 
 

@@ -2,6 +2,11 @@
 
 Unit::Unit()
 {
+	Init();
+}
+
+void Unit::Init()
+{
 	state = State::idle;
 	lastPos = Vector2(0.0f, 0.0f);
 	targetDirBefore = targetDir = Vector2(0.0f, 0.0f);
@@ -16,6 +21,7 @@ Unit::Unit()
 	isHitAnim = 0.0f;
 	timeHitAnim = 0.0f;
 	timeDieAnim = 0.0f;
+	timeRealDie = 0.0f;
 }
 
 void Unit::Release()
@@ -72,6 +78,32 @@ void Unit::ResizeScreen()
 
 void Unit::Idle()
 {
+	weapon->col->rotation = Utility::DirToRadian(targetPos - weapon->Pos());
+	targetDir = targetPos - Pos();
+	targetDir.Normalize();
+	targetRotation = Utility::DirToRadian(targetDir);
+	SetTargetDir();
+
+	if (targetDir.x >= 0.0f)
+	{
+		if (targetDirBefore.x < 0.0f)
+		{
+			swap(weapon->idle->uv.y, weapon->idle->uv.w);
+			weapon->col->SetLocalPosX(18.0f);
+			weapon->col->pivot = Vector2(0.4f, 0.25f);
+			weapon->idle->pivot = Vector2(0.4f, 0.25f);
+		}
+	}
+	else
+	{
+		if (targetDirBefore.x >= 0.0f)
+		{
+			swap(weapon->idle->uv.y, weapon->idle->uv.w);
+			weapon->col->SetLocalPosX(-18.0f);
+			weapon->col->pivot = Vector2(0.4f, -0.25f);
+			weapon->idle->pivot = Vector2(0.4f, -0.25f);
+		}
+	}
 }
 
 void Unit::Hit(const int damage)

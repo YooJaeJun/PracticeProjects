@@ -5,6 +5,8 @@ void Main::Init()
 {
 	player = new Player;
 
+	isChangingSceneBefore = false;
+
 	{	// 익명 스코프
 		Stage01* temp = new Stage01();
 		temp->player = player;
@@ -28,13 +30,30 @@ void Main::Release()
 
 void Main::Update()
 {
-	if (ImGui::Button("1"))
+	if (INPUT->KeyDown('1'))
 	{
-		SCENE->ChangeScene("Stage01");
+		isChangingSceneBefore = true;
+		SCENE->ChangeScene("Stage01", 2.0f);
 	}
-	else if (ImGui::Button("2"))
+	else if (INPUT->KeyDown('2'))
 	{
-		SCENE->ChangeScene("Stage02");
+		isChangingSceneBefore = true;
+		SCENE->ChangeScene("Stage02", 2.0f);
+	}
+
+	if (isChangingSceneBefore)
+	{
+		LIGHT->light.radius -= 1000.0f * DELTA;
+
+		if (TIMER->GetTick(timeLighter, 2.0f))
+		{
+			isChangingSceneBefore = false;
+		}
+	}
+	else
+	{
+		LIGHT->light.radius += 1000.0f * DELTA;
+		LIGHT->light.radius = Utility::Saturate(LIGHT->light.radius, 0.0f, 2000.0f);
 	}
 
 	SCENE->Update();

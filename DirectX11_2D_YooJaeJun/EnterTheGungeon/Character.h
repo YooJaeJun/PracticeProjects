@@ -5,6 +5,7 @@ class Character
 public:
 	Character();
 
+	virtual void Init();
 	virtual void Release();
 	virtual void Update();
 	virtual void LateUpdate();

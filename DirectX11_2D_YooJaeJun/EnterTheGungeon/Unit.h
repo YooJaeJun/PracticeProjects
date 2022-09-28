@@ -23,6 +23,7 @@ class Unit : public Character
 public:
 	Unit();
 
+	virtual void Init() override;
 	virtual void Release() override;
 	virtual void Update() override;
 	virtual void LateUpdate() override;
@@ -65,5 +66,6 @@ public:
 	float			timeHitAnim;
 	float			timeDieAnim;
 	ObRect*			foot;
+	float			timeRealDie;
 };
 

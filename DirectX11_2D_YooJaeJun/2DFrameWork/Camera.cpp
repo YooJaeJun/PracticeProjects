@@ -30,9 +30,9 @@ void Camera::Zoom(const float zDelta)
     coefScale.x += zDelta / 1200.0f;
     coefScale.y += zDelta / 1200.0f;
     coefScale.z += zDelta / 1200.0f;
-    coefScale.x = Utility::Saturate(coefScale.x, 0.05f, 1.0f);
-    coefScale.y = Utility::Saturate(coefScale.y, 0.05f, 1.0f);
-    coefScale.z = Utility::Saturate(coefScale.z, 0.05f, 1.0f);
+    coefScale.x = Utility::Saturate(coefScale.x, 0.08f, 1.0f);
+    coefScale.y = Utility::Saturate(coefScale.y, 0.08f, 1.0f);
+    coefScale.z = Utility::Saturate(coefScale.z, 0.08f, 1.0f);
 }
 
 void Camera::ResizeScreen()

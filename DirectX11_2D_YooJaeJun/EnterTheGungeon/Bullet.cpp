@@ -55,7 +55,7 @@ void Bullet::Reload()
 {
     col->colOnOff = true;
     col->isVisible = true;
-    SetPos(Vector2(2000.0f, 2000.0f));
+    SetPos(Vector2(5000.0f, 5000.0f));
     idle->isVisible = true;
     isFired = false;
 }

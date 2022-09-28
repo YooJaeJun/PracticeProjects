@@ -2,6 +2,11 @@
 
 Enemy::Enemy()
 {
+	Init();
+}
+
+void Enemy::Init()
+{
 	curHp = maxHp = 3;
 	scalar = 120.0f;
 	timeFire = 0.0f;
@@ -11,6 +16,7 @@ Enemy::Enemy()
 	timeHitAnim = 0.0f;
 	timeSetMoveDir = 0.0f;
 	timeSetTargetDir = 0.0f;
+	pushedDir = Vector2(0.0f, 0.0f);
 
 	float bulletCoef = 3.0f;
 	for (auto& elem : bullet)
@@ -62,36 +68,9 @@ void Enemy::Idle()
 {
 	Unit::Idle();
 
-	targetDir = moveDir = targetPos - Pos();
-
+	moveDir = targetDir;
 	moveDir.Normalize();
 	SetMoveDir();
-
-	weapon->col->rotation = Utility::DirToRadian(targetPos - weapon->Pos());
-	targetDir.Normalize();
-	targetRotation = Utility::DirToRadian(targetDir);
-	SetTargetDir();
-
-	if (targetDir.x >= 0.0f)
-	{
-		if (targetDirBefore.x < 0.0f)
-		{
-			swap(weapon->idle->uv.y, weapon->idle->uv.w);
-			weapon->col->SetLocalPosX(18.0f);
-			weapon->col->pivot = Vector2(0.4f, 0.25f);
-			weapon->idle->pivot = Vector2(0.4f, 0.25f);
-		}
-	}
-	else
-	{
-		if (targetDirBefore.x >= 0.0f)
-		{
-			swap(weapon->idle->uv.y, weapon->idle->uv.w);
-			weapon->col->SetLocalPosX(-18.0f);
-			weapon->col->pivot = Vector2(0.4f, -0.25f);
-			weapon->idle->pivot = Vector2(0.4f, -0.25f);
-		}
-	}
 
 	// col->MoveWorldPos(moveDir * scalar * DELTA);
 
@@ -131,12 +110,13 @@ void Enemy::Idle()
 		for (auto& elem : idle) elem->color = c;
 		for (auto& elem : walk) elem->color = c;
 		hit->color = c;
-
-		SetPosX(Pos().x + RANDOM->Float(-1.0f, 1.0f));
-		SetPosY(Pos().y + RANDOM->Float(-1.0f, 1.0f));
+		
+		col->MoveWorldPos(pushedDir * 200.0f * DELTA);
 
 		for (auto& elem : idle) elem->isVisible = false;
+		for (auto& elem : walk) elem->isVisible = false;
 		hit->isVisible = true;
+
 
 		if (TIMER->GetTick(timeHitAnim, 0.4f))
 		{
@@ -146,9 +126,12 @@ void Enemy::Idle()
 			hit->color = c;
 			die->color = c;
 
+			walk[curTargetDirState]->isVisible = true;
 			hit->isVisible = false;
 
 			isHitAnim = false;
+
+			pushedDir = Vector2(0.0f, 0.0f);
 		}
 	}
 	else
@@ -164,9 +147,12 @@ void Enemy::Idle()
 	}
 }
 
-void Enemy::Hit(const int damage)
+void Enemy::Hit(const int damage, const Vector2& dir)
 {
 	Unit::Hit(damage);
+
+	pushedDir = dir;
+
 	if (false == isHit)
 	{
 		hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
@@ -189,6 +175,13 @@ void Enemy::Killed()
 void Enemy::Die()
 {
 	Unit::Die();
+
+	col->MoveWorldPos(pushedDir * 400.0f * DELTA);
+
+	if (TIMER->GetTick(timeRealDie, 0.5f))
+	{
+		pushedDir = Vector2(0.0f, 0.0f);
+	}
 }
 
 void Enemy::FindPath(ObTileMap* map)

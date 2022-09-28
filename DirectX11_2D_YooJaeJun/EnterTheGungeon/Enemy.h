@@ -6,13 +6,14 @@ class Enemy : public Unit
 public:
 	Enemy();
 
+	virtual void Init() override;
 	virtual void Release() override;
 	virtual void Update() override;
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
 	virtual void Idle() override;
-	virtual void Hit(const int damage) override;
+	void Hit(const int damage, const Vector2& dir);
 	virtual void Die() override;
 	virtual void Killed() override;
 	void FindPath(ObTileMap* map);
@@ -25,6 +26,7 @@ private:
 	float			timeFindPath;
 	float			timeSetMoveDir;
 	float			timeSetTargetDir;
+	Vector2			pushedDir;
 
 public:
 	EnemyBullet*	bullet[enemyBulletMax];

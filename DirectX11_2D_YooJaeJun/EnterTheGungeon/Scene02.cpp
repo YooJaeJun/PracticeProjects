@@ -31,12 +31,6 @@ void Scene02::Init()
     // 플레이어
     player = new Player;
 
-    Int2 on;
-    if (tilemap->WorldPosToTileIdx(Vector2(-5.0f, 0.0f), on))
-    {
-        player->Spawn(tilemap->TileIdxToWorldPos(on));
-    }
-
     // 적
     float enemyScaleCoef = 3.0f;
 
@@ -46,8 +40,6 @@ void Scene02::Init()
         elem->col = new ObCircle;
         elem->col->scale.x = 16.0f * enemyScaleCoef;
         elem->col->scale.y = 16.0f * enemyScaleCoef;
-        elem->SetPosX(RANDOM->Float(-200.0f, 200.0f));
-        elem->SetPosY(RANDOM->Float(-200.0f, 200.0f));
         elem->col->color = Color(1.0f, 1.0f, 1.0f);
         elem->col->isFilled = false;
         elem->col->zOrder = ZOrder::object;
@@ -164,8 +156,6 @@ void Scene02::Init()
     boss->col->isFilled = false;
     boss->col->scale.x = 25.0f * bossScaleCoef;
     boss->col->scale.y = 25.0f * bossScaleCoef;
-    boss->SetPosX(0.0f);
-    boss->SetPosY(200.0f);
     boss->col->color = Color(1.0f, 1.0f, 1.0f);
     boss->col->zOrder = ZOrder::object;
 
@@ -308,6 +298,7 @@ void Scene02::Init()
         elem->col->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
         elem->col->scale.y = 48.0f * doorOpenScaleCoef;
         elem->SetPosX(200.0f + idx * elem->col->scale.x);
+        elem->SetPosY(0.0f);
         elem->col->collider = Collider::rect;
         elem->col->zOrder = ZOrder::object;
 
@@ -345,6 +336,7 @@ void Scene02::Init()
         elem->col->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
         elem->col->scale.y = 48.0f * doorOpenScaleCoef;
         elem->SetPosX(200.0f + idx * elem->col->scale.x);
+        elem->SetPosY(0.0f);
         elem->col->collider = Collider::rect;
         elem->col->zOrder = ZOrder::object;
 
@@ -411,10 +403,37 @@ void Scene02::Init()
 
         idx++;
     }
+    Spawn();
+}
+
+void Scene02::Spawn()
+{
+    if (!mapGen) return;
+
+    room0Pos = mapGen->roomsSelected[0]->col->GetWorldPos();
+
+    CAM->position = room0Pos;
+    CAM->coefScale = Vector3(1.0f, 1.0f, 1.0f);
+
+    player->SetPosX(room0Pos.x - 10.0f);
+    player->SetPosY(room0Pos.y + 0.0f);
+
+    for (auto& elem : enemy)
+    {
+        elem->SetPosX(room0Pos.x + RANDOM->Float(-200.0f, 200.0f));
+        elem->SetPosY(room0Pos.y + RANDOM->Float(-200.0f, 200.0f));
+    }
+
+    boss->SetPosX(room0Pos.x + 0.0f);
+    boss->SetPosY(room0Pos.y + 200.0f);
 }
 
 void Scene02::Release()
 {
+    mapObj->Release();
+    for (auto& elem : enemy) elem->Release();
+    player->Release();
+    boss->Release();
 }
 
 void Scene02::Update()
@@ -476,8 +495,8 @@ void Scene02::LateUpdate()
                 bulletElem->col->Intersect(enemyElem->col))
             {
                 Vector2 dir = enemyElem->col->GetWorldPos() - bulletElem->col->GetWorldPos();
-                enemyElem->col->MoveWorldPos(dir * 150.0f * DELTA);
-                enemyElem->Hit(bulletElem->damage);
+                dir.Normalize();
+                enemyElem->Hit(bulletElem->damage, dir);
                 bulletElem->Hit(1);
             }
         }
@@ -532,7 +551,7 @@ void Scene02::LateUpdate()
                 }
             }
         }
-        /*
+
         for (auto& elem : mapObj->doorOpenUp)
         {
             if (elem->isOpen) continue;
@@ -550,7 +569,7 @@ void Scene02::LateUpdate()
                 enemyElem->StepBack();
             }
         }
-        */
+
         enemyElem->LateUpdate();
     }
 
@@ -618,7 +637,6 @@ void Scene02::LateUpdate()
         idx++;
     }
 
-    /*
     for (auto& elem : mapObj->doorClosed)
     {
         if (elem->col->Intersect(player->col))
@@ -629,7 +647,6 @@ void Scene02::LateUpdate()
             dir.Normalize();
         }
     }
-    */
 
     player->LateUpdate();
 }

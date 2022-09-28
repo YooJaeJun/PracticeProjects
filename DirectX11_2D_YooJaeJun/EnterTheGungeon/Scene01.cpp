@@ -10,6 +10,8 @@ Scene01::~Scene01()
 
 void Scene01::Init()
 {
+    CAM->position = Vector2(0.0f, 0.0f);
+    CAM->coefScale = Vector3(0.08f, 0.08f, 0.08f);
 }
 
 void Scene01::Release()
@@ -23,21 +25,20 @@ void Scene01::Update()
         mapGen->Release();
         mapGen->Init();
     }
-
-	mapGen->Update();
+	if (mapGen) mapGen->Update();
 }
 
 void Scene01::LateUpdate()
 {
-	mapGen->LateUpdate();
+    if (mapGen) mapGen->LateUpdate();
 }
 
 void Scene01::Render()
 {
-	mapGen->Render();
+    if (mapGen) mapGen->Render();
 }
 
 void Scene01::ResizeScreen()
 {
-	mapGen->ResizeScreen();
+    if (mapGen) mapGen->ResizeScreen();
 }

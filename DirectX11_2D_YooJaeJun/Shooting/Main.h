@@ -3,7 +3,9 @@
 class Main : public Scene
 {
 public:
-	Player* player;
+	Player*		player;
+	bool		isChangingSceneBefore;
+	float		timeLighter;
 
 public:
 	virtual void Init() override;

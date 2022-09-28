@@ -2,6 +2,11 @@
 
 Player::Player()
 {
+	Init();
+}
+
+void Player::Init()
+{
 	int idx = 0;
 
 	scalar = 300.0f;
@@ -591,34 +596,6 @@ void Player::ResizeScreen()
 void Player::Idle()
 {
 	Unit::Idle();
-
-	weapon->col->rotation = Utility::DirToRadian(targetPos - weapon->Pos());
-	targetDir = targetPos - Pos();
-	targetDir.Normalize();
-	targetRotation = Utility::DirToRadian(targetDir);
-
-	SetTargetDir();
-
-	if (targetDir.x >= 0.0f)
-	{
-		if (targetDirBefore.x < 0.0f)
-		{
-			swap(weapon->idle->uv.y, weapon->idle->uv.w);
-			weapon->col->SetLocalPosX(18.0f);
-			weapon->col->pivot = Vector2(0.4f, 0.25f);
-			weapon->idle->pivot = Vector2(0.4f, 0.25f);
-		}
-	}
-	else
-	{
-		if (targetDirBefore.x >= 0.0f)
-		{
-			swap(weapon->idle->uv.y, weapon->idle->uv.w);
-			weapon->col->SetLocalPosX(-18.0f);
-			weapon->col->pivot = Vector2(0.4f, -0.25f);
-			weapon->idle->pivot = Vector2(0.4f, -0.25f);
-		}
-	}
 
 	col->GetWorldPos();
 

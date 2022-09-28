@@ -9,6 +9,10 @@ Character::Character()
 	scalar = 0.0f;
 }
 
+void Character::Init()
+{
+}
+
 void Character::Release() 
 {
 	SafeDelete(col);

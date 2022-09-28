@@ -5,11 +5,12 @@ const int bossMax = 1;
 class Scene02 : public Scene
 {
 private:
-	ObTileMap* tilemap;
-	MapObject* mapObj;
-	Player* player;
-	Enemy* enemy[enemyMax];
-	Boss* boss;
+	Vector2		room0Pos;
+	ObTileMap*	tilemap;
+	MapObject*	mapObj;
+	Player*		player;
+	Enemy*		enemy[enemyMax];
+	Boss*		boss;
 	std::map<Int2, vector<Character*>> grid;	// 충돌체크 최적화용
 
 public:
@@ -20,6 +21,7 @@ public:
 	~Scene02();
 
 	virtual void Init() override;
+	void Spawn();
 	virtual void Release() override;
 	virtual void Update() override;
 	virtual void LateUpdate() override;
