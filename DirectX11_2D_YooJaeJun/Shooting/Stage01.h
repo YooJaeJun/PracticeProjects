@@ -21,6 +21,8 @@ private:
 	int			lastRemainBullet;
 	ObRect* menu;
 	float		bgmScale;
+	bool		fadeOut;
+	float		timeFade;
 
 public:
 	Player* player;

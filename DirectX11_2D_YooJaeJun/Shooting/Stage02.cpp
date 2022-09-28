@@ -71,6 +71,8 @@ void Stage02::Init()
 
 	SOUND->AddSound("gun.wav", "GUN", false);
 	bgmScale = 1.0f;
+
+	timeFade = 0.0f;
 }
 
 void Stage02::Release()
@@ -95,7 +97,6 @@ void Stage02::Update()
 	ImGui::SliderFloat("Radius", &LIGHT->light.radius, 0.0f, 2000.0f);
 	ImGui::ColorEdit3("LightColor", (float*)&LIGHT->light.lightColor);
 	ImGui::ColorEdit3("OutColor", (float*)&LIGHT->light.outColor);
-	LIGHT->light.lightColor = Color(0.8f, 0.8f, 0.5f);
 
 	// LIGHT->light.screenPos.x = app.GetHalfWidth() + player->col->GetWorldPos().x - CAM->position.x;
 	// LIGHT->light.screenPos.y = app.GetHalfHeight() - player->col->GetWorldPos().y + CAM->position.y;
@@ -199,6 +200,34 @@ void Stage02::Update()
 	fontSlash->Update();
 
 	menu->Update();
+	
+
+	if (INPUT->KeyDown('1'))
+	{
+		fadeOut = true;
+		SCENE->ChangeScene("Stage01", 2.0f);
+	}
+
+	if (fadeOut)
+	{
+		LIGHT->light.radius -= 1000.0f * DELTA;
+		LIGHT->light.lightColor.x += 0.5f * DELTA;
+		LIGHT->light.lightColor.y += 0.5f * DELTA;
+		LIGHT->light.lightColor.z += 0.5f * DELTA;
+
+		if (TIMER->GetTick(timeFade, 2.0f))
+		{
+			fadeOut = false;
+		}
+	}
+	else
+	{
+		LIGHT->light.radius += 1000.0f * DELTA;
+		LIGHT->light.radius = Utility::Saturate(LIGHT->light.radius, 0.0f, 2000.0f);
+		LIGHT->light.lightColor.x = 0.5f;
+		LIGHT->light.lightColor.y = 0.5f;
+		LIGHT->light.lightColor.z = 0.5f;
+	}
 }
 
 void Stage02::LateUpdate()
