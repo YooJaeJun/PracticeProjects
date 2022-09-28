@@ -30,15 +30,6 @@ void Main::Update()
 {
     ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
 
-    if (INPUT->KeyDown('1'))
-    {
-        SCENE->ChangeScene("Scene01");
-    }
-    else if (INPUT->KeyDown('2'))
-    {
-        SCENE->ChangeScene("Scene02");
-    }
-
     SCENE->Update();
 }
 

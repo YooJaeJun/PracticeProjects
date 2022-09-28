@@ -473,6 +473,12 @@ void Scene02::Update()
         boss->weapon->col->rotation = Utility::DirToRadian(player->Pos());
     }
     boss->Update();
+
+
+    if (INPUT->KeyDown('1'))
+    {
+        SCENE->ChangeScene("Scene01");
+    }
 }
 
 void Scene02::LateUpdate()

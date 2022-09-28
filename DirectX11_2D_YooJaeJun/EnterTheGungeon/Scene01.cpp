@@ -26,6 +26,11 @@ void Scene01::Update()
         mapGen->Init();
     }
 	if (mapGen) mapGen->Update();
+
+    if (INPUT->KeyDown('2'))
+    {
+        SCENE->ChangeScene("Scene02");
+    }
 }
 
 void Scene01::LateUpdate()
