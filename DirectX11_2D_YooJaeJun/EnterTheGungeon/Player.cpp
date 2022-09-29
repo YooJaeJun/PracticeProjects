@@ -182,7 +182,7 @@ void Player::Init()
 
 	weapon->firePos = new ObRect;
 	weapon->firePos->SetParentRT(*weapon->idle);
-	weapon->firePos->SetLocalPos(Vector2(30.0f, 12.0f));
+	weapon->firePos->SetLocalPos(Vector2(40.0f, 12.0f));
 	weapon->firePos->zOrder = ZOrder::none;
 	weapon->firePos->scale = Vector2(20.0f, 20.0f);
 
@@ -669,6 +669,16 @@ void Player::Idle()
 
 	if (INPUT->KeyPress(VK_LBUTTON))
 	{
+		if (false == reloading)
+		{
+			flagFireCamShake = true;
+
+			if (TIMER->GetTick(timeFire, 0.2f) || curBulletIdx == 0)
+			{
+				canFire = true;
+			}
+		}
+
 		if (curBulletIdx >= weapon0BulletMax)
 		{
 			curBulletIdx = 0;
@@ -692,15 +702,6 @@ void Player::Idle()
 			canFire = false;
 		}
 
-		if (false == reloading)
-		{
-			flagFireCamShake = true;
-
-			if (TIMER->GetTick(timeFire, 0.2f))
-			{
-				canFire = true;
-			}
-		}
 		originCamPos = CAM->position;
 	}
 	else if (INPUT->KeyPress(VK_RBUTTON))
