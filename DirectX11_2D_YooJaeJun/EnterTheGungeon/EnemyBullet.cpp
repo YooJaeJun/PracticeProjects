@@ -1,39 +1,42 @@
 #include "stdafx.h"
 
-EnemyBullet::EnemyBullet()
+namespace Gungeon
 {
-    col = new ObCircle();
-    col->isFilled = false;
-    col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-    SetPos(Vector2(defaultSpawnPos, defaultSpawnPos));
-
-    scalar = 500.0f;
-    damage = 1;
-}
-
-void EnemyBullet::Release()
-{
-    Bullet::Release();
-}
-
-void EnemyBullet::Update()
-{
-    Bullet::Update();
-
-    if (isFired)
+    EnemyBullet::EnemyBullet()
     {
-        if (TIMER->GetTick(timeRespawn, 4.0f))
+        col = new ObCircle();
+        col->isFilled = false;
+        col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+        SetPos(Vector2(defaultSpawnPos, defaultSpawnPos));
+
+        scalar = 500.0f;
+        damage = 1;
+    }
+
+    void EnemyBullet::Release()
+    {
+        Bullet::Release();
+    }
+
+    void EnemyBullet::Update()
+    {
+        Bullet::Update();
+
+        if (isFired)
         {
-            Reload();
+            if (TIMER->GetTick(timeRespawn, 4.0f))
+            {
+                Reload();
+            }
         }
     }
-}
 
-void EnemyBullet::LateUpdate()
-{
-}
+    void EnemyBullet::LateUpdate()
+    {
+    }
 
-void EnemyBullet::Render()
-{
-    Bullet::Render();
+    void EnemyBullet::Render()
+    {
+        Bullet::Render();
+    }
 }

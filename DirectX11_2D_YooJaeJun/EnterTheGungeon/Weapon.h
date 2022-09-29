@@ -1,22 +1,24 @@
 #pragma once
 
-class Weapon : public Character
+namespace Gungeon
 {
-public:
-	Weapon();
+	class Weapon : public Character
+	{
+	public:
+		Weapon();
 
-	virtual void Release() override;
-	virtual void Update() override;
-	virtual void LateUpdate() override;
-	virtual void Render() override;
+		virtual void Release() override;
+		virtual void Update() override;
+		virtual void LateUpdate() override;
+		virtual void Render() override;
 
-	void EquipRight();
-	void EquipLeft();
+		void EquipRight();
+		void EquipLeft();
 
-public:
-	ObImage*	idle;
-	GameObject* firePos;
-	Effect*		fireEffect;
-	float		timeFireEffect;
-};
-
+	public:
+		ObImage*	idle;
+		GameObject* firePos;
+		Effect*		fireEffect;
+		float		timeFireEffect;
+	};
+}

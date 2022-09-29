@@ -1,36 +1,41 @@
 #include "stdafx.h"
 
-Character::Character()
+namespace Gungeon
 {
-	moveDir = Vector2(0.0f, 0.0f);
-	scalar = 0.0f;
-	curHp = 0;
-	maxHp = 0;
-	scalar = 0.0f;
-}
+	Character::Character()
+	{
+		col = nullptr;
+		moveDir = Vector2(0.0f, 0.0f);
+		scalar = 0.0f;
+		curHp = 0;
+		maxHp = 0;
+		scalar = 0.0f;
+		isHit = false;
+	}
 
-void Character::Init()
-{
-}
+	void Character::Init()
+	{
+	}
 
-void Character::Release() 
-{
-	SafeDelete(col);
-}
+	void Character::Release()
+	{
+		SafeDelete(col);
+	}
 
-void Character::Update()
-{
-	if (col) col->Update();
-}
+	void Character::Update()
+	{
+		if (col) col->Update();
+	}
 
-void Character::LateUpdate() 
-{}
+	void Character::LateUpdate()
+	{}
 
-void Character::Render()
-{
-	if (col) col->Render(); // RENDER->push(col);
-}
+	void Character::Render()
+	{
+		if (col) col->Render(); // RENDER->push(col);
+	}
 
-void Character::ResizeScreen()
-{
+	void Character::ResizeScreen()
+	{
+	}
 }

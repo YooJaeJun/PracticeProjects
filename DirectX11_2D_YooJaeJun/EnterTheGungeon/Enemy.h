@@ -1,35 +1,38 @@
 #pragma once
-const int enemyBulletMax = 20;
 
-class Enemy : public Unit
+namespace Gungeon
 {
-public:
-	Enemy();
+	const int enemyBulletMax = 20;
 
-	virtual void Init() override;
-	virtual void Release() override;
-	virtual void Update() override;
-	virtual void LateUpdate() override;
-	virtual void Render() override;
+	class Enemy : public Unit
+	{
+	public:
+		Enemy();
 
-	virtual void Idle() override;
-	void Hit(const int damage, const Vector2& dir);
-	virtual void Die() override;
-	virtual void Killed() override;
-	//void FindPath(ObTileMap* map);
+		virtual void Init() override;
+		virtual void Release() override;
+		virtual void Update() override;
+		virtual void LateUpdate() override;
+		virtual void Render() override;
 
-private:
-	vector<Tile*>	way;
-	Vector2			start;
-	Vector2			end;
-	float			g;	// 비율
-	float			timeFindPath;
-	float			timeSetMoveDir;
-	float			timeSetTargetDir;
-	Vector2			pushedDir;
+		virtual void Idle() override;
+		void Hit(const int damage, const Vector2& dir);
+		virtual void Die() override;
+		virtual void Killed() override;
+		//void FindPath(ObTileMap* map);
 
-public:
-	EnemyBullet*	bullet[enemyBulletMax];
-	float			timeSetDir;
-};
+	private:
+		vector<Tile*>	way;
+		Vector2			start;
+		Vector2			end;
+		float			g;	// 비율
+		float			timeFindPath;
+		float			timeSetMoveDir;
+		float			timeSetTargetDir;
+		Vector2			pushedDir;
 
+	public:
+		EnemyBullet* bullet[enemyBulletMax];
+		float			timeSetDir;
+	};
+}

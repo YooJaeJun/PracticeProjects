@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Main.h"
-using namespace std;
+using namespace Gungeon;
 
 void Main::Init()
 {

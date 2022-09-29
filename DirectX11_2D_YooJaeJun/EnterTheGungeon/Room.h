@@ -1,16 +1,19 @@
 #pragma once
-class Room
+
+namespace Gungeon
 {
-public:
-	ObRect* col;
-	bool	selected;
+	class Room
+	{
+	public:
+		ObRect* col;
+		bool	selected;
 
-public:
-	Room();
-	virtual void Init();
-	virtual void Release();
-	virtual void Update();
-	virtual void LateUpdate();
-	virtual void Render();
-};
-
+	public:
+		Room();
+		virtual void Init();
+		virtual void Release();
+		virtual void Update();
+		virtual void LateUpdate();
+		virtual void Render();
+	};
+}

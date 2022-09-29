@@ -1,21 +1,24 @@
 #include "stdafx.h"
 
-Pet::Pet()
+namespace Gungeon
 {
-}
+	Pet::Pet()
+	{
+	}
 
-void Pet::Release()
-{
-}
+	void Pet::Release()
+	{
+	}
 
-void Pet::Update()
-{
-}
+	void Pet::Update()
+	{
+	}
 
-void Pet::LateUpdate()
-{
-}
+	void Pet::LateUpdate()
+	{
+	}
 
-void Pet::Render()
-{
+	void Pet::Render()
+	{
+	}
 }

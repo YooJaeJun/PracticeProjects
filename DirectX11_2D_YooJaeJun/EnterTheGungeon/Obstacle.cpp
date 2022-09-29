@@ -1,28 +1,31 @@
 #include "stdafx.h"
 
-Obstacle::Obstacle()
+namespace Gungeon
 {
-	isOpen = false;
-}
+	Obstacle::Obstacle()
+	{
+		isOpen = false;
+	}
 
-void Obstacle::Release()
-{
-	Character::Release();
-	SafeDelete(idle);
-}
+	void Obstacle::Release()
+	{
+		Character::Release();
+		SafeDelete(idle);
+	}
 
-void Obstacle::Update()
-{
-	Character::Update();
-	idle->Update();
-}
+	void Obstacle::Update()
+	{
+		Character::Update();
+		idle->Update();
+	}
 
-void Obstacle::LateUpdate()
-{
-}
+	void Obstacle::LateUpdate()
+	{
+	}
 
-void Obstacle::Render()
-{
-	Character::Render();
-	idle->Render(); // RENDER->push(idle);
+	void Obstacle::Render()
+	{
+		Character::Render();
+		idle->Render(); // RENDER->push(idle);
+	}
 }

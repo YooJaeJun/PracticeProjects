@@ -61,6 +61,7 @@ using namespace SimpleMath;
 #define	PI					3.1415926f	//180
 #define	DIV2PI				1.5707963f	//90
 #define	DIV4PI				0.7853981f	//45
+#define	DIV8PI				0.3926991f	//22.5
 #define	UP					Vector2(0.0f,1.0f)
 #define	DOWN				Vector2(0.0f,-1.0f)
 #define	LEFT				Vector2(-1.0f,0.0f)

@@ -1,31 +1,34 @@
 #include "stdafx.h"
 
-Room::Room()
+namespace Gungeon
 {
-    Init();
-}
+    Room::Room()
+    {
+        Init();
+    }
 
-void Room::Init()
-{
-    col = new ObRect();
-    selected = false;
-}
+    void Room::Init()
+    {
+        col = new ObRect();
+        selected = false;
+    }
 
-void Room::Release()
-{
-    SafeDelete(col);
-}
+    void Room::Release()
+    {
+        SafeDelete(col);
+    }
 
-void Room::Update()
-{
-    col->Update();
-}
+    void Room::Update()
+    {
+        col->Update();
+    }
 
-void Room::LateUpdate()
-{
-}
+    void Room::LateUpdate()
+    {
+    }
 
-void Room::Render()
-{
-    col->Render();
+    void Room::Render()
+    {
+        col->Render();
+    }
 }

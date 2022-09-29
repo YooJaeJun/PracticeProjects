@@ -1,16 +1,19 @@
 #pragma once
-class Obstacle : public Character
+
+namespace Gungeon
 {
-public:
-	Obstacle();
+	class Obstacle : public Character
+	{
+	public:
+		Obstacle();
 
-	void Release();
-	void Update();
-	void LateUpdate();
-	void Render();
+		void Release();
+		void Update();
+		void LateUpdate();
+		void Render();
 
-public:
-	ObImage*	idle;
-	bool		isOpen;
-};
-
+	public:
+		ObImage* idle;
+		bool		isOpen;
+	};
+}

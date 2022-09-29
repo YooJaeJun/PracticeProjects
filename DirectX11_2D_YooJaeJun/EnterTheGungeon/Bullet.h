@@ -1,24 +1,28 @@
 #pragma once
-const float defaultSpawnPos = 3000.0f;
 
-class Bullet : public Character
+namespace Gungeon
 {
-public:
-	Bullet();
+	const float defaultSpawnPos = 3000.0f;
 
-	virtual void Release() override;
-	virtual void Update() override;
-	virtual void LateUpdate() override;
-	virtual void Render() override;
+	class Bullet : public Character
+	{
+	public:
+		Bullet();
 
-	void Spawn(const Vector2& coord, const Vector2& fireDir);
-	void Hit(const float damage);
-	virtual void Reload();
+		virtual void Release() override;
+		virtual void Update() override;
+		virtual void LateUpdate() override;
+		virtual void Render() override;
 
-public:
-	ObImage*	idle;
-	bool		isFired;
-	Vector2		moveDir;
-	int			damage;
-	float		timeRespawn;
-};
+		void Spawn(const Vector2& coord, const Vector2& fireDir);
+		void Hit(const float damage);
+		virtual void Reload();
+
+	public:
+		ObImage* idle;
+		bool		isFired;
+		Vector2		moveDir;
+		int			damage;
+		float		timeRespawn;
+	};
+}

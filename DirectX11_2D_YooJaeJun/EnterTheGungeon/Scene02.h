@@ -1,30 +1,34 @@
 #pragma once
-const int enemyMax = 3;
-const int bossMax = 1;
 
-class Scene02 : public Scene
+namespace Gungeon
 {
-private:
-	Vector2		room0Pos;
-	MapObject*	mapObj;
-	Player*		player;
-	Enemy*		enemy[enemyMax];
-	Boss*		boss;
+	const int enemyMax = 3;
+	const int bossMax = 1;
 
-public:
-	ProcedureMapGeneration* mapGen;
+	class Scene02 : public Scene
+	{
+	private:
+		Vector2		room0Pos;
+		MapObject* mapObj;
+		Player* player;
+		Enemy* enemy[enemyMax];
+		Boss* boss;
 
-public:
-	Scene02();
-	~Scene02();
+	public:
+		ProcedureMapGeneration* mapGen;
 
-	virtual void Init() override;
-	void Spawn();
-	virtual void Release() override;
-	virtual void Update() override;
-	virtual void LateUpdate() override;
-	virtual void Render() override;
-	virtual void ResizeScreen() override;
+	public:
+		Scene02();
+		~Scene02();
 
-	bool CheckGrid(Vector2 wpos);
-};
+		virtual void Init() override;
+		void Spawn();
+		virtual void Release() override;
+		virtual void Update() override;
+		virtual void LateUpdate() override;
+		virtual void Render() override;
+		virtual void ResizeScreen() override;
+
+		bool CheckGrid(Vector2 wpos);
+	};
+}

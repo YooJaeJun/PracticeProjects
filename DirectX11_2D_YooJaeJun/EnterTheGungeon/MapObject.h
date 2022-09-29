@@ -1,20 +1,24 @@
 #pragma once
-const int doorOpenMax = 10;
-const int doorClosedMax = 5;
 
-class MapObject : public Character
+namespace Gungeon
 {
-public:
-	MapObject();
+	const int doorOpenMax = 10;
+	const int doorClosedMax = 5;
 
-	void Release();
-	void Update();
-	void LateUpdate();
-	void Render();
+	class MapObject : public Character
+	{
+	public:
+		MapObject();
 
-public:
-	Obstacle*	doorOpenUp[doorOpenMax];
-	Obstacle*	doorOpenDown[doorOpenMax];
-	Obstacle*	doorClosed[doorClosedMax];
-};
+		void Release();
+		void Update();
+		void LateUpdate();
+		void Render();
+
+	public:
+		Obstacle* doorOpenUp[doorOpenMax];
+		Obstacle* doorOpenDown[doorOpenMax];
+		Obstacle* doorClosed[doorClosedMax];
+	};
+}
 

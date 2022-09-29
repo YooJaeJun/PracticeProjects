@@ -1,27 +1,30 @@
 #include "stdafx.h"
 
-Effect::Effect()
+namespace Gungeon
 {
-}
+	Effect::Effect()
+	{
+	}
 
-void Effect::Release()
-{
-	Character::Release();
-	SafeDelete(idle);
-}
+	void Effect::Release()
+	{
+		Character::Release();
+		SafeDelete(idle);
+	}
 
-void Effect::Update()
-{
-	Character::Update();
-	idle->Update();
-}
+	void Effect::Update()
+	{
+		Character::Update();
+		idle->Update();
+	}
 
-void Effect::LateUpdate()
-{
-}
+	void Effect::LateUpdate()
+	{
+	}
 
-void Effect::Render()
-{
-	idle->Render();	// RENDER->push(idle);
-	Character::Render();
+	void Effect::Render()
+	{
+		idle->Render();	// RENDER->push(idle);
+		Character::Render();
+	}
 }
