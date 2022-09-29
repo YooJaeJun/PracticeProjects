@@ -6,12 +6,10 @@ class Scene02 : public Scene
 {
 private:
 	Vector2		room0Pos;
-	ObTileMap*	tilemap;
 	MapObject*	mapObj;
 	Player*		player;
 	Enemy*		enemy[enemyMax];
 	Boss*		boss;
-	std::map<Int2, vector<Character*>> grid;	// 충돌체크 최적화용
 
 public:
 	ProcedureMapGeneration* mapGen;
@@ -28,5 +26,5 @@ public:
 	virtual void Render() override;
 	virtual void ResizeScreen() override;
 
-	void CheckIntersect();
+	bool CheckGrid(Vector2 wpos);
 };

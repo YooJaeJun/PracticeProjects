@@ -46,6 +46,8 @@ protected:
     VertexTile*             vertices;
     ID3D11Buffer*           vertexBuffer;
     Int2                    tileSize;   //10x10 , 4x4
+
+public:
     vector<vector<Tile>>    Tiles;
 
 public:

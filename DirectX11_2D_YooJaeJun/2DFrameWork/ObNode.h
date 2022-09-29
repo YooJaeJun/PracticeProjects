@@ -1,3 +1,4 @@
+#pragma once
 
 // 추가 이유 - MST 위한 노드인덱스 저장용 + operator>로 priority_queue 정렬용
 class ObNode

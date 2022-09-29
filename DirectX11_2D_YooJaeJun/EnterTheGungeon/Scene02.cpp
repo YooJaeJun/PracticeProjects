@@ -7,7 +7,6 @@ Scene02::Scene02()
 
 Scene02::~Scene02()
 {
-    SafeDelete(tilemap);
     mapObj->Release();
     player->Release();
     for (auto& elem : enemy) elem->Release();
@@ -16,14 +15,9 @@ Scene02::~Scene02()
 
 void Scene02::Init()
 {
-    int idx = 0;
-
-    // ¸Ê
     LIGHT->light.radius = 2000.0f;
-    tilemap = new ObTileMap;
-    tilemap->file = "EnterTheGungeon.txt";
-    tilemap->Load();
-    tilemap->CreateTileCost();
+
+    int idx = 0;
 
     // ¸Ê ¿ÀºêÁ§Æ®
     mapObj = new MapObject;
@@ -316,11 +310,6 @@ void Scene02::Init()
         }
 
         elem->col->Update();
-        Int2 on;
-        if (tilemap->WorldPosToTileIdx(elem->Pos(), on))
-        {
-            tilemap->SetTileState(on, TileState::door);
-        }
 
         idx++;
     }
@@ -355,11 +344,6 @@ void Scene02::Init()
         }
 
         elem->col->Update();
-        Int2 on;
-        if (tilemap->WorldPosToTileIdx(elem->Pos(), on))
-        {
-            tilemap->SetTileState(on, TileState::door);
-        }
 
         idx++;
     }
@@ -395,14 +379,10 @@ void Scene02::Init()
         }
 
         elem->col->Update();
-        Int2 on;
-        if (tilemap->WorldPosToTileIdx(elem->Pos(), on))
-        {
-            tilemap->SetTileState(on, TileState::door);
-        }
 
         idx++;
     }
+
     Spawn();
 }
 
@@ -444,9 +424,10 @@ void Scene02::Update()
         Init();
     }
 
-    mapGen->Update();
-
-    tilemap->Update();
+    if (mapGen)
+    {
+        mapGen->Update();
+    }
 
     mapObj->Update();
 
@@ -461,10 +442,10 @@ void Scene02::Update()
         }
         elem->Update();
 
-        if (elem->state == State::idle)
-        {
-            elem->FindPath(tilemap);
-        }
+        //if (elem->state == State::idle)
+        //{
+        //    elem->FindPath();
+        //}
     }
 
     if (boss->state == State::idle)
@@ -474,7 +455,6 @@ void Scene02::Update()
     }
     boss->Update();
 
-
     if (INPUT->KeyDown('1'))
     {
         SCENE->ChangeScene("Scene01");
@@ -483,14 +463,134 @@ void Scene02::Update()
 
 void Scene02::LateUpdate()
 {
-    mapGen->LateUpdate();
+    int tileIdx = 0;
+    int wallIdx = 0;
+    int startY = 0;
+    int endY = 0;
+    int startX = 0;
+    int endX = 0;
 
-    // CheckIntersect();
+    float wallScale = 50.0f;
+
+    auto PushWall = [&](const float x, const float y, const float scaleX, const float scaleY)
+    {
+        mapGen->walls[wallIdx] = new Obstacle;
+        mapGen->walls[wallIdx]->col = new ObRect;
+        mapGen->walls[wallIdx]->col->scale = Vector2(scaleX, scaleY);
+        mapGen->walls[wallIdx]->col->SetWorldPos(Vector2(x, y));
+        mapGen->walls[wallIdx]->col->isVisible = false;
+        mapGen->walls[wallIdx]->idle = new ObImage(L"EnterTheGungeon/Level/Wall.png");
+        mapGen->walls[wallIdx]->idle->SetParentRT(*mapGen->walls[wallIdx]->col);
+        mapGen->walls[wallIdx]->idle->isVisible = true;
+        mapGen->walls[wallIdx]->idle->scale = mapGen->walls[wallIdx]->col->scale;
+
+        //int coef = gridMax / 2;
+        //Vector2 start = Vector2(x + coef, y + coef);
+        //Vector2 end = Vector2(x + coef + scaleX, y + coef + scaleY);
+        //for (int i = start.y; i <= end.y; i++)
+        //{
+        //    for (int j = start.x; j <= end.x; j++)
+        //    {
+        //        grid[i][j] = false;
+        //    }
+        //}
+    };
+
+    auto SetWall = [&](ObRect& elem)
+    {
+        startX = elem.lt().x;
+        endX = elem.rt().x;
+        startY = elem.lt().y;
+        endY = elem.lt().y;
+        wallScale = abs(endX - startX);
+        PushWall(startX, startY, wallScale, 50.0f);
+        mapGen->walls[wallIdx]->col->pivot = OFFSET_LB;
+        mapGen->walls[wallIdx]->idle->pivot = OFFSET_LB;
+        wallIdx++;
+
+        startX = elem.lb().x;
+        endX = elem.rb().x;
+        startY = elem.lb().y;
+        endY = elem.rb().y;
+        wallScale = abs(endX - startX);
+        PushWall(startX, startY, wallScale, 50.0f);
+        mapGen->walls[wallIdx]->col->pivot = OFFSET_LT;
+        mapGen->walls[wallIdx]->idle->pivot = OFFSET_LT;
+        wallIdx++;
+
+        startX = elem.lt().x;
+        endX = elem.lt().x;
+        startY = elem.lb().y;
+        endY = elem.lt().y;
+        wallScale = abs(endY - startY);
+        PushWall(startX, startY, 50.0f, wallScale);
+        mapGen->walls[wallIdx]->col->pivot = OFFSET_RB;
+        mapGen->walls[wallIdx]->idle->pivot = OFFSET_RB;
+        wallIdx++;
+
+        startX = elem.rt().x;
+        endX = elem.rt().x;
+        startY = elem.rt().y;
+        endY = elem.rb().y;
+        wallScale = abs(endY - startY);
+        PushWall(startX, startY, 50.0f, wallScale);
+        mapGen->walls[wallIdx]->col->pivot = OFFSET_LT;
+        mapGen->walls[wallIdx]->idle->pivot = OFFSET_LT;
+        wallIdx++;
+    };
+
+    for (auto& elem : mapGen->roomsSelected)
+    {
+        if (CAM->position.x > elem->col->GetWorldPos().x - 1000.0f &&
+            CAM->position.x < elem->col->GetWorldPos().y + 1000.0f &&
+            CAM->position.y > elem->col->GetWorldPos().x - 1000.0f &&
+            CAM->position.y < elem->col->GetWorldPos().y + 1000.0f)
+        {
+            SetWall(*elem->col);
+        }
+    }
+
+
+    //for (auto& elem : mapGen->walls)
+    //{
+    //    if (elem &&
+    //        elem->col->GetWorldPos().x > CAM->position.x - 1000.0f &&
+    //        elem->col->GetWorldPos().x < CAM->position.x + 1000.0f &&
+    //        elem->col->GetWorldPos().y > CAM->position.y - 1000.0f &&
+    //        elem->col->GetWorldPos().y < CAM->position.y + 1000.0f)
+    //    {
+    //        if (elem->col->Intersect(player->col))
+    //        {
+    //            player->StepBack();
+    //        }
+
+    //        for (auto& enemyElem : enemy)
+    //        {
+    //            if (elem->col->Intersect(enemyElem->col))
+    //            {
+    //                enemyElem->StepBack();
+    //            }
+    //        }
+
+    //        if (elem->col->Intersect(boss->col))
+    //        {
+    //            boss->StepBack();
+    //        }
+    //    }
+    //}
+
+    if (mapGen)
+    {
+        mapGen->LateUpdate();
+    }
 
     int idx = 0;
 
     // ÇÃ·¹ÀÌ¾î
-    player->CheckFootGrid(tilemap);
+    //if (CheckGrid(player->Pos()))
+    //{
+    //    player->StepBack();
+    //}
 
     // ÇÃ·¹ÀÌ¾î ÃÑ¾Ë
     for (auto& bulletElem : player->bullet)
@@ -514,15 +614,10 @@ void Scene02::LateUpdate()
             bulletElem->Hit(1);
         }
 
-        Int2 bulletOn;
-        if (tilemap->WorldPosToTileIdx(bulletElem->Pos(), bulletOn))
-        {
-            if (tilemap->GetTileState(bulletOn) == TileState::wall ||
-                tilemap->GetTileState(bulletOn) == TileState::door)
-            {
-                bulletElem->Reload();
-            }
-        }
+        //if (CheckGrid(bulletElem->Pos()))
+        //{
+        //    bulletElem->Reload();
+        //}
     }
 
 
@@ -537,6 +632,11 @@ void Scene02::LateUpdate()
                 player->Hit(1);
             }
 
+            //if (CheckGrid(enemyElem->Pos()))
+            //{
+            //    enemyElem->StepBack();
+            //}
+
             // Àû ÃÑ¾Ë
             for (auto& bulletElem : enemyElem->bullet)
             {
@@ -546,33 +646,10 @@ void Scene02::LateUpdate()
                     bulletElem->Hit(1);
                 }
 
-                Int2 bulletOn;
-                if (tilemap->WorldPosToTileIdx(bulletElem->Pos(), bulletOn))
-                {
-                    if (tilemap->GetTileState(bulletOn) == TileState::wall ||
-                        tilemap->GetTileState(bulletOn) == TileState::door)
-                    {
-                        bulletElem->Reload();
-                    }
-                }
-            }
-        }
-
-        for (auto& elem : mapObj->doorOpenUp)
-        {
-            if (elem->isOpen) continue;
-
-            if (elem->col->Intersect(enemyElem->col))
-            {
-                enemyElem->StepBack();
-            }
-        }
-
-        for (auto& elem : mapObj->doorClosed)
-        {
-            if (elem->col->Intersect(enemyElem->col))
-            {
-                enemyElem->StepBack();
+                //if (CheckGrid(bulletElem->Pos()))
+                //{
+                //    bulletElem->Reload();
+                //}
             }
         }
 
@@ -589,6 +666,11 @@ void Scene02::LateUpdate()
             player->Hit(1);
         }
 
+        //if (CheckGrid(boss->Pos()))
+        //{
+        //    boss->StepBack();
+        //}
+
         // º¸½º ÃÑ¾Ë
         for (auto& bulletElem : boss->bullet)
         {
@@ -598,15 +680,10 @@ void Scene02::LateUpdate()
                 bulletElem->Hit(1);
             }
 
-            Int2 bulletOn;
-            if (tilemap->WorldPosToTileIdx(bulletElem->Pos(), bulletOn))
-            {
-                if (tilemap->GetTileState(bulletOn) == TileState::wall ||
-                    tilemap->GetTileState(bulletOn) == TileState::door)
-                {
-                    bulletElem->Reload();
-                }
-            }
+            //if (CheckGrid(bulletElem->Pos()))
+            //{
+            //    bulletElem->Reload();
+            //}
         }
     }
 
@@ -643,24 +720,16 @@ void Scene02::LateUpdate()
         idx++;
     }
 
-    for (auto& elem : mapObj->doorClosed)
-    {
-        if (elem->col->Intersect(player->col))
-        {
-            Vector2 dir = elem->Pos() - player->Pos();
-            dir.Normalize();
-            player->SetPos(player->Pos() - dir);
-            dir.Normalize();
-        }
-    }
-
     player->LateUpdate();
 }
 
 void Scene02::Render()
 {
-    mapGen->Render();
-    tilemap->Render();
+    if (mapGen)
+    {
+        mapGen->Render();
+    }
+
     mapObj->Render();
     for (auto& elem : enemy) elem->Render();
     player->Render();
@@ -686,48 +755,10 @@ void Scene02::ResizeScreen()
     boss->ResizeScreen();
 }
 
-void Scene02::CheckIntersect()
+bool Scene02::CheckGrid(Vector2 wpos)
 {
-    /*
-    grid.clear();
-
-    int idx = 0;
-
-    Int2 on;
-    vector<Vector2>& foot = player->Foot();
-    for (int i = 0; i < 4; i++)
-    {
-        if (tilemap->WorldPosToTileIdx(foot[i], on))
-        {
-            if (tilemap->GetTileState(on) == TileState::wall)
-            {
-                player->StepBack();
-            }
-        }
-    }
-
-    if (tilemap->WorldPosToTileIdx(player->Pos(), on))
-    {
-        ImGui::Text("TileState %d", tilemap->GetTileState(on));
-
-        if (grid[on].size())
-        {
-            for (auto& elem : grid[on])
-            {
-                if (elem->col->Intersect(player->col))
-                {
-
-                }
-            }
-        }
-        else
-        {
-            grid[on].push_back(player);
-        }
-    }
-    mapObj;
-    player;
-    enemy[enemyMax];
-    boss;
-    */
+    int coef = gridMax / 2;
+    int x = wpos.x + coef;
+    int y = wpos.y + coef;
+    return false == mapGen->grid[x][y];
 }

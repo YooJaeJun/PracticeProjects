@@ -556,7 +556,9 @@ void ObTileMap::CreateTileCost()
         for (int j = 0; j < tileSize.y; j++)
         {
             Tiles[i][j].idx = Int2(i, j);
-            Tiles[i][j].state = GetTileState(Tiles[i][j].idx);
+            // Tiles[i][j].state = GetTileState(Tiles[i][j].idx);
+            Tiles[i][j].state = TileState::none;
+            SetTileState(Int2(i, j), TileState::none);
 
             Tiles[i][j].Pos.x = i * scale.x + GetWorldPos().x + half.x;
             Tiles[i][j].Pos.y = j * scale.y + GetWorldPos().y + half.y;

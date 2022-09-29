@@ -37,7 +37,6 @@ public:
 	void StepBack();
 	void SetMoveDir();
 	void SetTargetDir();
-	void CheckFootGrid(ObTileMap* tilemap);
 
 public:
 	ObImage*		idle[8];

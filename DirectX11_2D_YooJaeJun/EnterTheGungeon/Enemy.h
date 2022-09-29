@@ -16,7 +16,7 @@ public:
 	void Hit(const int damage, const Vector2& dir);
 	virtual void Die() override;
 	virtual void Killed() override;
-	void FindPath(ObTileMap* map);
+	//void FindPath(ObTileMap* map);
 
 private:
 	vector<Tile*>	way;
