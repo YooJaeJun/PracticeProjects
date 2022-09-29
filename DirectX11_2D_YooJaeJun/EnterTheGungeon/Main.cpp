@@ -17,7 +17,7 @@ void Main::Init()
         SCENE->AddScene("Scene02", tempScene);
     }
 
-    SCENE->ChangeScene("Scene01");
+    SCENE->ChangeScene("Scene02");
 }
 
 void Main::Release()

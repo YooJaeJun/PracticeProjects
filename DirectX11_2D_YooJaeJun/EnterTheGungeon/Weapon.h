@@ -10,8 +10,13 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() override;
 
+	void EquipRight();
+	void EquipLeft();
+
 public:
 	ObImage*	idle;
 	GameObject* firePos;
+	Effect*		fireEffect;
+	float		timeFireEffect;
 };
 

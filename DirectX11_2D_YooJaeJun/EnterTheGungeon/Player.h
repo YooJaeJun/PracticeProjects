@@ -41,6 +41,8 @@ public:
 	UI*				uiBulletCount;
 	Weapon*			weaponReloading;
 	bool			godMode;
+	bool			isWalking;
+	float			timeLastPosForDust;
 	Effect*			dust;
 	vector<UI*>		uiHeartFull;
 	vector<UI*>		uiHeartHalf;

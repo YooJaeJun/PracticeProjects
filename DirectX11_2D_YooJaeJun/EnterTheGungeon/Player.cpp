@@ -23,6 +23,8 @@ void Player::Init()
 	flagFireCamShake = false;
 	timeFireCamShake = 0.0f;
 	godMode = false;
+	isWalking = false;
+
 
 	float playerScaleCoef = 3.0f;
 	col = new ObCircle;
@@ -178,11 +180,20 @@ void Player::Init()
 	weapon->idle->SetParentRT(*weapon->col);
 	weapon->idle->zOrder = ZOrder::weapon;
 
-	weapon->firePos = new GameObject;
-	weapon->firePos->SetParentRT(*weapon->col);
-	weapon->firePos->SetLocalPos(Vector2(weapon->col->scale.x / 2.0f, 0.0f));
+	weapon->firePos = new ObRect;
+	weapon->firePos->SetParentRT(*weapon->idle);
+	weapon->firePos->SetLocalPos(Vector2(30.0f, 12.0f));
 	weapon->firePos->zOrder = ZOrder::none;
 	weapon->firePos->scale = Vector2(20.0f, 20.0f);
+
+	float playerWeaponEffectScaleCoef = 3.0;
+	weapon->fireEffect = new Effect;
+	weapon->fireEffect->idle = new ObImage(L"EnterTheGungeon/Player_0/Effect_Fire_Weapon_0.png");
+	weapon->fireEffect->idle->isVisible = false;
+	weapon->fireEffect->idle->scale.x = 15.0f * playerWeaponEffectScaleCoef;
+	weapon->fireEffect->idle->scale.y = 11.0f * playerWeaponEffectScaleCoef;
+	weapon->fireEffect->idle->SetParentRT(*weapon->firePos);
+	weapon->fireEffect->idle->zOrder = ZOrder::none;
 
 	shadow = new ObImage(L"EnterTheGungeon/Player_0/Shadow.png");
 	shadow->scale.x = 16.0f * playerScaleCoef;
@@ -199,9 +210,11 @@ void Player::Init()
 	float dustCoef = 2.0f;
 	dust = new Effect;
 	dust->idle = new ObImage(L"EnterTheGungeon/Player_0/Dust.png");
-	dust->idle->scale.x = 11.0f * dustCoef;
+	dust->idle->maxFrame.x = 4;
+	dust->idle->scale.x = 44.0f / 3.0f * dustCoef;
 	dust->idle->scale.y = 10.0f * dustCoef;
-	dust->idle->SetParentRT(*foot);
+
+	timeLastPosForDust = 0.0f;
 
 
 	uiReload = new UI;
@@ -503,6 +516,13 @@ void Player::Update()
 		walk[curTargetDirState]->color.w = 1.0f;
 	}
 
+	if (TIMER->GetTick(timeLastPosForDust, 0.4f))
+	{
+		dust->idle->SetWorldPos(foot->GetWorldPos());
+		dust->idle->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+		dust->Update();
+	}
+
 	for (auto& elem : roll) elem->Update();
 	respawn->Update();
 	kick->Update();
@@ -532,6 +552,7 @@ void Player::LateUpdate()
 
 void Player::Render()
 {
+	dust->Render();
 	Unit::Render();
 
 	for (auto& elem : roll) elem->Render(); // RENDER->push(elem);
@@ -539,6 +560,7 @@ void Player::Render()
 	kick->Render(); //RENDER->push(kick);
 	obtain->Render(); //RENDER->push(obtain);
 	for (auto& elem : bullet) elem->Render();
+
 	uiReload->Render();
 	uiReloadBar->Render();
 	uiMagazine->Render();
@@ -636,11 +658,13 @@ void Player::Idle()
 	{
 		idle[curTargetDirState]->isVisible = true;
 		for (auto& elem : walk) elem->isVisible = false;
+		isWalking = false;
 	}
 	else
 	{
 		for (auto& elem : idle) elem->isVisible = false;
 		walk[curTargetDirState]->isVisible = true;
+		isWalking = true;
 	}
 
 	if (INPUT->KeyPress(VK_LBUTTON))
@@ -663,6 +687,8 @@ void Player::Idle()
 				Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
 					RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
 			);
+			weapon->fireEffect->idle->isVisible = true;
+
 			canFire = false;
 		}
 

@@ -389,8 +389,10 @@ void Scene02::Init()
 void Scene02::Spawn()
 {
     if (!mapGen) return;
-
-    room0Pos = mapGen->roomsSelected[0]->col->GetWorldPos();
+    if (mapGen->roomsSelected.empty() == false)
+    {
+        room0Pos = mapGen->roomsSelected[0]->col->GetWorldPos();
+    }
 
     CAM->position = room0Pos;
     CAM->coefScale = Vector3(1.0f, 1.0f, 1.0f);
@@ -539,14 +541,17 @@ void Scene02::LateUpdate()
         wallIdx++;
     };
 
-    for (auto& elem : mapGen->roomsSelected)
+    if (mapGen->walls.empty() == false)
     {
-        if (CAM->position.x > elem->col->GetWorldPos().x - 1000.0f &&
-            CAM->position.x < elem->col->GetWorldPos().y + 1000.0f &&
-            CAM->position.y > elem->col->GetWorldPos().x - 1000.0f &&
-            CAM->position.y < elem->col->GetWorldPos().y + 1000.0f)
+        for (auto& elem : mapGen->roomsSelected)
         {
-            SetWall(*elem->col);
+            if (CAM->position.x > elem->col->GetWorldPos().x - 1000.0f &&
+                CAM->position.x < elem->col->GetWorldPos().y + 1000.0f &&
+                CAM->position.y > elem->col->GetWorldPos().x - 1000.0f &&
+                CAM->position.y < elem->col->GetWorldPos().y + 1000.0f)
+            {
+                SetWall(*elem->col);
+            }
         }
     }
 

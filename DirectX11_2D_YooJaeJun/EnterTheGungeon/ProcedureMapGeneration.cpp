@@ -408,9 +408,18 @@ void ProcedureMapGeneration::Dig()
         //    }
         //}
 
+        //Vector2 vScale = roomsSelected[vRoomIdx]->col->scale / 2.0f;
+        //Vector2 wScale = roomsSelected[wRoomIdx]->col->scale / 2.0f;
+
         //auto checkQuadrant = [&](ObNode v, ObNode w) ->int
         //{
         //    if (almostEqualFloat(v.x, w.x) && almostEqualFloat(v.y, w.y)) return 0;
+
+        //    /*else if (v.x + vScale.x < w.x && v.y + vScale.y < w.y) return 1;
+        //    else if (v.x - vScale.x > w.x && v.y + vScale.y < w.y) return 2;
+        //    else if (v.x - vScale.x > w.x && v.y - vScale.y > w.y) return 3;
+        //    else if (v.x + vScale.x < w.x && v.y - vScale.y > w.y) return 4;*/
+
         //    else if (v.x < w.x && v.y < w.y) return 1;
         //    else if (v.x > w.x && v.y < w.y) return 2;
         //    else if (v.x > w.x && v.y > w.y) return 3;
@@ -420,8 +429,6 @@ void ProcedureMapGeneration::Dig()
         const ObNode& v = elem.v;
         const ObNode& w = elem.w;
 
-        //Vector2 vScale = roomsSelected[vRoomIdx]->col->scale / 2.0f;
-        //Vector2 wScale = roomsSelected[wRoomIdx]->col->scale / 2.0f;
         //ObLine l1(ObNode(v.x + vScale.x, v.y), ObNode(w.x, v.y));
         //ObLine l2(ObNode(w.x, v.y), ObNode(w.x, w.y - wScale.y));
         //ObLine l3(ObNode(w.x, v.y), ObNode(w.x, w.y + wScale.y));
@@ -471,7 +478,7 @@ void ProcedureMapGeneration::Widen()
 {
     for (auto& elem : passagesLine)
     {
-        float scale = 200.0f;
+        float scale = 140.0f;
         const ObNode& v = elem.v;
         const ObNode& w = elem.w;
 

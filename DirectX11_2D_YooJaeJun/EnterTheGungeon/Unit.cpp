@@ -88,20 +88,14 @@ void Unit::Idle()
 	{
 		if (targetDirBefore.x < 0.0f)
 		{
-			swap(weapon->idle->uv.y, weapon->idle->uv.w);
-			weapon->col->SetLocalPosX(18.0f);
-			weapon->col->pivot = Vector2(0.4f, 0.25f);
-			weapon->idle->pivot = Vector2(0.4f, 0.25f);
+			weapon->EquipRight();
 		}
 	}
 	else
 	{
 		if (targetDirBefore.x >= 0.0f)
 		{
-			swap(weapon->idle->uv.y, weapon->idle->uv.w);
-			weapon->col->SetLocalPosX(-18.0f);
-			weapon->col->pivot = Vector2(0.4f, -0.25f);
-			weapon->idle->pivot = Vector2(0.4f, -0.25f);
+			weapon->EquipLeft();
 		}
 	}
 }
