@@ -1,25 +1,40 @@
 #pragma once
-enum DirState
+
+namespace Dir8
 {
-	DIR_L,
-	DIR_R,
-	DIR_T,
-	DIR_B,
-	DIR_LT,
-	DIR_LB,
-	DIR_RT,
-	DIR_RB
-};
+	enum DirState
+	{
+		DIR_L,
+		DIR_R,
+		DIR_T,
+		DIR_B,
+		DIR_LT,
+		DIR_LB,
+		DIR_RT,
+		DIR_RB
+	};
 
-class Character
-{
-public:
-	ObRect* col;
+	enum class CharacterState
+	{
+		IDLE,
+		WALK,
+		ROLL
+	};
 
-	Vector2 moveDir;
-	float scalar;
+	class Character
+	{
+	public:
+		ObRect*			col;
+		Vector2			moveDir;
+		Vector2			targetDir;
+		float			scalar;
+		DirState		targetDirstate;
+		int				frameY[8];
+		CharacterState	state;
 
-	DirState dirstate;
-	int frameY[8];
-};
+	public:
+		Character();
 
+		virtual void LookTarget();
+	};
+}

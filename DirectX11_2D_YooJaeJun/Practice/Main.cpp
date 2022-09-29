@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Main.h"
 
+using namespace Dir8;
+
 void Main::Init()
 {
 	{

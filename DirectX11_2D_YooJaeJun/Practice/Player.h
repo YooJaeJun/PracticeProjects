@@ -1,27 +1,30 @@
 #pragma once
-enum class PlState
+
+namespace Dir8
 {
-	IDLE,
-	WALK
-};
+	class Player : public Character
+	{
+	public:
+		ObImage*		walk;
+		ObImage*		roll;
+		float			timeRoll;
+		DirState		moveDirState;
+		float			scalarCoef;
 
-class Player : public Character
-{
-public:
-	ObImage* walk;
-	PlState plState;
+	public:
+		Player();
+		~Player();
 
-public:
-	Player();
-	~Player();
+		void Release();
+		void Update();
+		void Render();
 
-	void Update();
-	void Render();
+		void Input();
 
-	void Input();
-	void LookTarget();
+		void Idle();
+		void Walk();
+		void Roll();
 
-	void Idle();
-	void Walk();
-};
-
+		void SetMoveDir();
+	};
+}

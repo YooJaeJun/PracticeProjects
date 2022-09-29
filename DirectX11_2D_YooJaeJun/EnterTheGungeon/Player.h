@@ -32,6 +32,7 @@ namespace Gungeon
 		float			timeReload;
 		int				curBulletIdx;
 		float			timeRoll;
+		float			scalarCoef;
 		bool			flagFireCamShake;
 		Vector2			originCamPos;
 		float			timeFireCamShake;

@@ -1,18 +1,22 @@
 #pragma once
-class Scene01 : public Scene
+
+namespace Dir8
 {
-public:
-	Player* pl;
+	class Scene01 : public Scene
+	{
+	public:
+		Player* pl;
+		Boss*	boss;
 
-public:
-	Scene01();
-	~Scene01();
+	public:
+		Scene01();
+		~Scene01();
 
-	virtual void Init() override;
-	virtual void Release() override; //해제
-	virtual void Update() override;
-	virtual void LateUpdate() override;//갱신
-	virtual void Render() override;
-	virtual void ResizeScreen() override;
-};
-
+		virtual void Init() override;
+		virtual void Release() override; //해제
+		virtual void Update() override;
+		virtual void LateUpdate() override;//갱신
+		virtual void Render() override;
+		virtual void ResizeScreen() override;
+	};
+}

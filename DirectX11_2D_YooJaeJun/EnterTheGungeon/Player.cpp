@@ -16,6 +16,8 @@ namespace Gungeon
 		canFire = true;
 		reloading = false;
 		timeReload = 0.0f;
+		timeRoll = 0.0f;
+		scalarCoef = 0.0f;
 		curBulletIdx = 0;
 		timeFire = 0.0f;
 		timeHit = 0.0f;
@@ -719,6 +721,10 @@ namespace Gungeon
 				roll[curMoveDirState]->isVisible = true;
 				roll[curMoveDirState]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
 
+				timeRoll = 0.0f;
+				scalar = 600.0f;
+				scalarCoef = 100.0f;
+
 				godMode = true;
 			}
 		}
@@ -738,7 +744,11 @@ namespace Gungeon
 
 	void Player::Roll()
 	{
-		col->MoveWorldPos(moveDir * (scalar + 120.0f) * DELTA);
+		scalarCoef += 3000.0f * DELTA;
+		scalar -= scalarCoef * DELTA;
+		if (scalar <= 0.0f) scalar = 0.0f;
+
+		col->MoveWorldPos(moveDir * scalar * DELTA);
 
 		if (TIMER->GetTick(timeRoll, 0.5f))
 		{
@@ -746,6 +756,8 @@ namespace Gungeon
 			idle[curTargetDirState]->isVisible = true;
 			for (auto& elem : walk) elem->isVisible = false;
 			for (auto& elem : roll) elem->isVisible = false;
+			
+			scalar = 300.0f;
 
 			godMode = false;
 		}
@@ -774,6 +786,8 @@ namespace Gungeon
 	void Player::Die()
 	{
 		Unit::Die();
+		dust->idle->isVisible = false;
+		weapon->idle->isVisible = false;
 	}
 
 	void Player::DecreaseHeart()

@@ -1,19 +1,29 @@
 #pragma once
-class Boss : public Character
+
+namespace Dir8
 {
-public:
-	ObImage* walk;
+	class Boss : public Character
+	{
+	public:
+		ObImage* walk;
+		ObCircle* rangeAtk;
+		ObCircle* rangeTrace;
+		ObCircle* rangeLook;
 
-public:
-	Boss();
-	~Boss();
+	public:
+		Boss();
+		~Boss();
 
-	void Update();
-	void Render();
+		void Release();
+		void Update();
+		void Render();
 
-	void LookTarget();
+		void Idle();
+		void Walk();
 
-	void Idle();
-	void Walk();
-};
+		void Atk();
+		void Trace();
+		virtual void LookTarget() override;
+	};
+}
 
