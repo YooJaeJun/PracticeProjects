@@ -5,6 +5,7 @@ namespace Gungeon
 	enum class State
 	{
 		idle,
+		walk,
 		roll,
 		die
 	};

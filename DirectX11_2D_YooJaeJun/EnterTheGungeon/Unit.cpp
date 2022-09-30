@@ -73,7 +73,7 @@ namespace Gungeon
 	{
 	}
 
-	void Unit::Idle()
+	void Unit::SetTarget()
 	{
 		weapon->col->rotation = Utility::DirToRadian(targetPos - weapon->Pos());
 		targetDir = targetPos - Pos();
@@ -107,18 +107,19 @@ namespace Gungeon
 
 			if (damage > 0)
 			{
-				idle[curTargetDirState]->isVisible = false;
-				walk[curTargetDirState]->isVisible = false;
-			}
-			if (curHp <= 0)
-			{
-				curHp = 0;
-				StartDie();
-			}
-			else
-			{
-				if (hit) hit->isVisible = true;
-				if (hit) hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+				if (hit)
+				{
+					idle[curTargetDirState]->isVisible = false;
+					walk[curTargetDirState]->isVisible = false;
+					hit->isVisible = true;
+					hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+				}
+
+				if (curHp <= 0)
+				{
+					curHp = 0;
+					StartDie();
+				}
 			}
 		}
 	}

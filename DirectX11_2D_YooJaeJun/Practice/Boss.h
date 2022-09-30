@@ -14,7 +14,7 @@ namespace Dir8
 	{
 	public:
 		BossState	state;
-		ObImage*	walk;
+		ObImage*	img;
 		ObCircle*	range[3];
 		Vector2		targetPos;
 		float		distance;

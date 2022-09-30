@@ -8,11 +8,12 @@ namespace Gungeon
 	class Scene02 : public Scene
 	{
 	private:
-		Vector2		room0Pos;
-		MapObject* mapObj;
-		Player* player;
-		Enemy* enemy[enemyMax];
-		Boss* boss;
+		Vector2				room0Pos;
+		MapObject*			mapObj;
+		Player*				player;
+		Enemy*				enemy[enemyMax];
+		Boss*				boss;
+		vector<ObImage*>	mapBasic;
 
 	public:
 		ProcedureMapGeneration* mapGen;
@@ -22,6 +23,9 @@ namespace Gungeon
 		~Scene02();
 
 		virtual void Init() override;
+		void InitEnemy();
+		void InitBoss();
+		void InitMapObject();
 		void Spawn();
 		virtual void Release() override;
 		virtual void Update() override;

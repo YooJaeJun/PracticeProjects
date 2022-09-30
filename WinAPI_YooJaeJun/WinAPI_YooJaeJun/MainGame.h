@@ -3,8 +3,8 @@
 // #define mode_shapeDrawing
 // #define mode_clock
 // #define mode_axis
-// #define mode_bulletStorm
-#define mode_arrow
+#define mode_bulletStorm
+// #define mode_arrow
 
 class Enemy;
 class Bullet;

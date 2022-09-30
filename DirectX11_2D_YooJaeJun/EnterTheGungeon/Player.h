@@ -23,13 +23,16 @@ namespace Gungeon
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
 		void SetTargetAndCamera();
-		virtual void Idle() override;
+		void Idle();
+		void Walk();
 		void Roll();
 		virtual void Die() override;
 		void Move();
-		void IdleOrWalkVisible();
+		void Action();
 		void Fire();
 		void FireCamShake();
+		void StartWalk();
+		void StartIdle();
 		void StartRoll();
 		virtual void StartDie() override;
 		void Reloading();
@@ -48,7 +51,6 @@ namespace Gungeon
 		float			timeReload;
 		int				curBulletIdx;
 		float			timeRoll;
-		float			scalarCoef;
 		bool			flagFireCamShake;
 		Vector2			originCamPos;
 		float			timeFireCamShake;

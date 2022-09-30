@@ -101,7 +101,6 @@ namespace Dir8
 	{
 		Input();
 		LookTarget(INPUT->GetWorldMousePos(), walk);
-		walk->frame.y = frameY[dirState];
 
 		//idle -> walk
 		if (moveDir != Vector2(0.0f, 0.0f))
@@ -115,7 +114,6 @@ namespace Dir8
 	{
 		Input();
 		LookTarget(INPUT->GetWorldMousePos(), walk);
-		walk->frame.y = frameY[dirState];
 
 		col->MoveWorldPos(moveDir * scalar * DELTA);
 
@@ -132,10 +130,9 @@ namespace Dir8
 			//walk -> roll
 			state = PlayerState::ROLL;
 			roll->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
-			walk->isVisible = false;
 			roll->isVisible = true;
-			roll->frame.x = 0;
-			roll->frame.y = frameY[dirState];
+			walk->isVisible = false;
+			timeRoll = 0.0f;
 		}
 	}
 
@@ -145,17 +142,15 @@ namespace Dir8
 
 		timeRoll += DELTA;
 
-		col->MoveWorldPos(moveDir * scalar * cos(timeRoll / 0.6f * DIV2PI) * DELTA);
+		col->MoveWorldPos(moveDir * (scalar + 300.0f) * cos(timeRoll / 0.6f * DIV2PI) * DELTA);
 
-		if (TIMER->GetTick(timeRoll, 0.6f))
+		if (timeRoll > 0.6f)
 		{
 			state = PlayerState::IDLE;
 			walk->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+			roll->isVisible = false;
 			walk->isVisible = true;
 			walk->frame.x = 0;
-			roll->ChangeAnim(ANIMSTATE::STOP, 0.1f);
-			roll->isVisible = false;
-			roll->frame.x = 0;
 		}
 	}
 }

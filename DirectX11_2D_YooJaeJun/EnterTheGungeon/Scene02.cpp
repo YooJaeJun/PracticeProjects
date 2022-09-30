@@ -19,15 +19,26 @@ namespace Gungeon
     {
         LIGHT->light.radius = 2000.0f;
 
-        int idx = 0;
-
         // 맵 오브젝트
         mapObj = new MapObject;
 
         // 플레이어
         player = new Player;
 
-        // 적
+        InitEnemy();
+        InitBoss();
+        InitMapObject();
+
+        mapBasic.resize(1);
+        mapBasic[0] = new ObImage(L"EnterTheGungeon/Level/Map_Basic.png");
+        mapBasic[0]->scale = Vector2(1405.0f, 1432.0f);
+
+        Spawn();
+    }
+
+    void Scene02::InitEnemy()
+    {
+        int idx = 0;
         float enemyScaleCoef = 3.0f;
 
         for (auto& elem : enemy)
@@ -151,8 +162,10 @@ namespace Gungeon
             elem->shadow->SetWorldPosY(-35.0f);
             elem->shadow->zOrder = ZOrder::shadow;
         }
+    }
 
-
+    void Scene02::InitBoss()
+    {
         // 보스
         float bossScaleCoef = 3.0f;
 
@@ -175,7 +188,7 @@ namespace Gungeon
         boss->idle[dirLT] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
         boss->idle[dirRT] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
 
-        idx = 0;
+        int idx = 0;
         for (auto& elem : boss->idle)
         {
             if (idx == dirL || idx == dirLB || idx == dirLT)
@@ -229,8 +242,8 @@ namespace Gungeon
         boss->die = new ObImage(L"EnterTheGungeon/Boss_0/Die.png");
         boss->die->isVisible = false;
         boss->die->maxFrame.x = 8;
-        boss->die->scale.x = 320.0f / 8.0f * enemyScaleCoef;
-        boss->die->scale.y = 40.0f * enemyScaleCoef;
+        boss->die->scale.x = 320.0f / 8.0f * bossScaleCoef;
+        boss->die->scale.y = 40.0f * bossScaleCoef;
         boss->die->SetParentRT(*boss->col);
         boss->die->zOrder = ZOrder::object;
 
@@ -290,12 +303,13 @@ namespace Gungeon
         boss->shadow->SetParentRT(*boss->col);
         boss->shadow->SetWorldPosY(-55.0f);
         boss->shadow->zOrder = ZOrder::shadow;
+    }
 
-
-        // 맵 오브젝트
+    void Scene02::InitMapObject()
+    {
         float doorOpenScaleCoef = 2.5f;
 
-        idx = 0;
+        int idx = 0;
         for (auto& elem : mapObj->doorOpenUp)
         {
             elem = new Obstacle;
@@ -395,8 +409,6 @@ namespace Gungeon
 
             idx++;
         }
-
-        Spawn();
     }
 
     void Scene02::Spawn()
@@ -450,11 +462,7 @@ namespace Gungeon
 
         for (auto& elem : enemy)
         {
-            if (elem->state == State::idle)
-            {
-                elem->targetPos = player->Pos();
-                elem->weapon->col->rotation = Utility::DirToRadian(player->Pos());
-            }
+            elem->targetPos = player->Pos();
             elem->Update();
 
             //if (elem->state == State::idle)
@@ -474,6 +482,8 @@ namespace Gungeon
         {
             SCENE->ChangeScene("Scene01");
         }
+
+        for(auto& elem : mapBasic) if (elem) elem->Update();
     }
 
     void Scene02::LateUpdate()
@@ -656,6 +666,8 @@ namespace Gungeon
         {
             mapGen->Render();
         }
+
+        for (auto& elem : mapBasic) if (elem) elem->Render();
 
         mapObj->Render();
         for (auto& elem : enemy) elem->Render();

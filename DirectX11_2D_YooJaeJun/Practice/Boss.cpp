@@ -5,15 +5,16 @@ namespace Dir8
 	Boss::Boss()
 	{
 		scalar = 200.0f;
+		state = BossState::IDLE;
 
 		col = new ObRect();
 		col->isFilled = false;
 		col->scale = Vector2(128.0f, 1016.0f / 8.0f) * 1.5f;
 
-		walk = new ObImage(L"boss.bmp");
-		walk->SetParentRT(*col);
-		walk->scale = Vector2(128.0f, 1016.0f / 8.0f) * 1.5f;
-		walk->maxFrame = Int2(1, 8);
+		img = new ObImage(L"boss.bmp");
+		img->SetParentRT(*col);
+		img->scale = Vector2(128.0f, 1016.0f / 8.0f) * 1.5f;
+		img->maxFrame = Int2(1, 8);
 
 		frameY[DIR_R] = 0;
 		frameY[DIR_L] = 1;
@@ -30,9 +31,12 @@ namespace Dir8
 			elem->isFilled = false;
 			elem->SetParentRT(*col);
 		}
-		range[0]->scale = Vector2((float)BossState::ATTACK, (float)BossState::ATTACK) * 2.0f;
-		range[1]->scale = Vector2((float)BossState::MOVE, (float)BossState::MOVE) * 2.0f;
-		range[2]->scale = Vector2((float)BossState::LOOK, (float)BossState::LOOK) * 2.0f;
+		float scale = (float)BossState::LOOK;
+		range[0]->scale = Vector2(scale, scale) * 2.0f;
+		scale = (float)BossState::MOVE;
+		range[1]->scale = Vector2(scale, scale) * 2.0f;
+		scale = (float)BossState::ATTACK;
+		range[2]->scale = Vector2(scale, scale) * 2.0f;
 	}
 
 	Boss::~Boss()
@@ -42,7 +46,7 @@ namespace Dir8
 	void Boss::Release()
 	{
 		SafeDelete(col);
-		SafeDelete(walk);
+		SafeDelete(img);
 
 		for (auto& elem : range)
 		{
@@ -73,7 +77,7 @@ namespace Dir8
 		}
 
 		col->Update();
-		walk->Update();
+		img->Update();
 		for (auto& elem : range)
 		{
 			elem->Update();
@@ -83,7 +87,7 @@ namespace Dir8
 	void Boss::Render()
 	{
 		col->Render();
-		walk->Render();
+		img->Render();
 		for (auto& elem : range)
 		{
 			elem->Render();
@@ -100,8 +104,7 @@ namespace Dir8
 
 	void Boss::Look()
 	{
-		LookTarget(targetPos, walk);
-		walk->frame.y = frameY[dirState];
+		LookTarget(targetPos, img);
 
 		if (distance < (float)BossState::MOVE)
 		{
@@ -116,11 +119,11 @@ namespace Dir8
 
 	void Boss::Move()
 	{
-		Look();
+		LookTarget(targetPos, img);
 
-		Vector2 dir = targetPos - col->GetWorldPos();
-		dir.Normalize();
-		col->MoveWorldPos(dir * scalar * DELTA);
+		moveDir = targetPos - col->GetWorldPos();
+		moveDir.Normalize();
+		col->MoveWorldPos(moveDir * scalar * DELTA);
 
 		if (distance < (float)BossState::ATTACK)
 		{
@@ -140,10 +143,10 @@ namespace Dir8
 		if (switching) plus = 1.0f;
 		else plus = -1.0f;
 
-		walk->scale.x += plus * scalar * DELTA;
-		walk->scale.y -= plus * scalar * DELTA;
+		img->scale.x += plus * scalar * DELTA;
+		img->scale.y -= plus * scalar * DELTA;
 
-		if (walk->scale.x < 50.0f || walk->scale.y < 50.0f)
+		if (img->scale.x < 50.0f || img->scale.y < 50.0f)
 		{
 			switching = !switching;
 		}
@@ -151,7 +154,7 @@ namespace Dir8
 		if (distance > (float)BossState::ATTACK)
 		{
 			state = BossState::MOVE;
-			walk->scale = Vector2(128.0f, 127.0f) * 1.5f;
+			img->scale = Vector2(128.0f, 127.0f) * 1.5f;
 		}
 	}
 }

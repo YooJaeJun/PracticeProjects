@@ -26,7 +26,6 @@ namespace Gungeon
 		isReloading = false;
 		timeReload = 0.0f;
 		timeRoll = 0.0f;
-		scalarCoef = 0.0f;
 		curBulletIdx = 0;
 		timeFire = 0.0f;
 		timeHit = 0.0f;
@@ -267,7 +266,7 @@ namespace Gungeon
 		dust->idle->scale.x = 44.0f / 3.0f * dustCoef;
 		dust->idle->scale.y = 10.0f * dustCoef;
 		dust->idle->isVisible = false;
-		dust->intervalDie = 1.0f;
+		dust->intervalDie = 0.3f;
 	}
 
 	void Player::InitUI()
@@ -482,19 +481,16 @@ namespace Gungeon
 		case State::idle:
 			Idle();
 			break;
+		case State::walk:
+			Walk();
+			break;
 		case State::roll:
 			Roll();
 			break;
 		case State::die:
 			Die();
 			break;
-		default:
-			break;
 		}
-
-		Reloading();
-		Hitting();
-		Dusting();
 
 		dust->Update();
 		for (auto& elem : roll) elem->Update();
@@ -604,42 +600,53 @@ namespace Gungeon
 
 	void Player::Idle()
 	{
-		Unit::Idle();
+		Unit::SetTarget();
 
 		Move();
 		SetMoveDirState();
-		IdleOrWalkVisible();
+		StartWalk();
+		Action();
 		FireCamShake();
 
-		if (INPUT->KeyPress(VK_LBUTTON))
-		{
-			Fire();
-		}
-		else if (INPUT->KeyPress(VK_RBUTTON))
-		{
-			StartRoll();
-		}
+		Reloading();
+		Hitting();
+		Dusting();
+	}
+
+	void Player::Walk()
+	{
+		Unit::SetTarget();
+
+		Move();
+		SetMoveDirState();
+		StartIdle();
+		Action();
+		FireCamShake();
+
+		Reloading();
+		Hitting();
+		Dusting();
 	}
 
 	void Player::Roll()
 	{
-		scalarCoef += 3000.0f * DELTA;
-		scalar -= scalarCoef * DELTA;
-		if (scalar <= 0.0f) scalar = 0.0f;
+		timeRoll += DELTA;
 
-		col->MoveWorldPos(moveDir * scalar * DELTA);
+		col->MoveWorldPos(moveDir * (scalar * 2.0f) * cos(timeRoll / 0.63f * DIV2PI) * DELTA);
 
-		if (TIMER->GetTick(timeRoll, 0.5f))
+		if (timeRoll > 0.63f)
 		{
+			StartIdle();
 			state = State::idle;
-			idle[curTargetDirState]->isVisible = true;
-			for (auto& elem : walk) elem->isVisible = false;
-			for (auto& elem : roll) elem->isVisible = false;
 
 			scalar = 300.0f;
 
 			godMode = false;
 		}
+
+		Reloading();
+		Hitting();
+		Dusting();
 	}
 
 	void Player::Die()
@@ -681,17 +688,15 @@ namespace Gungeon
 		col->MoveWorldPos(moveDir * scalar * DELTA);
 	}
 
-	void Player::IdleOrWalkVisible()
+	void Player::Action()
 	{
-		if (moveDir.x == 0.0f && moveDir.y == 0.0f)
+		if (INPUT->KeyPress(VK_LBUTTON))
 		{
-			idle[curTargetDirState]->isVisible = true;
-			for (auto& elem : walk) elem->isVisible = false;
+			Fire();
 		}
-		else
+		else if (INPUT->KeyPress(VK_RBUTTON))
 		{
-			for (auto& elem : idle) elem->isVisible = false;
-			walk[curTargetDirState]->isVisible = true;
+			StartRoll();
 		}
 	}
 
@@ -749,6 +754,42 @@ namespace Gungeon
 		}
 	}
 
+	void Player::StartWalk()
+	{
+		if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))
+		{
+			state = State::walk;
+
+			for (auto& elem : idle) elem->isVisible = false;
+			walk[curTargetDirState]->isVisible = true;
+			for (auto& elem : roll) elem->isVisible = false;
+		}
+		else
+		{
+			idle[curTargetDirState]->isVisible = true;
+			for (auto& elem : walk) elem->isVisible = false;
+			for (auto& elem : roll) elem->isVisible = false;
+		}
+	}
+
+	void Player::StartIdle()
+	{
+		if (moveDir.x == 0.0f && moveDir.y == 0.0f)
+		{
+			state = State::idle;
+
+			idle[curTargetDirState]->isVisible = true;
+			for (auto& elem : walk) elem->isVisible = false;
+			for (auto& elem : roll) elem->isVisible = false;
+		}
+		else
+		{
+			for (auto& elem : idle) elem->isVisible = false;
+			walk[curTargetDirState]->isVisible = true;
+			for (auto& elem : roll) elem->isVisible = false;
+		}
+	}
+
 	void Player::StartRoll()
 	{
 		if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))
@@ -760,11 +801,9 @@ namespace Gungeon
 			SetMoveDirState();
 
 			roll[curMoveDirState]->isVisible = true;
-			roll[curMoveDirState]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
+			roll[curMoveDirState]->ChangeAnim(ANIMSTATE::ONCE, 0.07f);
 
 			timeRoll = 0.0f;
-			scalar = 600.0f;
-			scalarCoef = 100.0f;
 
 			godMode = true;
 		}
@@ -849,9 +888,7 @@ namespace Gungeon
 
 	void Player::Dusting()
 	{
-		if (moveDir.x != 0.0f && 
-			moveDir.y != 0.0f &&
-			TIMER->GetTick(timeLastPosForDust, 0.4f))
+		if (TIMER->GetTick(timeLastPosForDust, 0.6f))
 		{
 			dust->Spawn(foot->GetWorldPos());
 		}

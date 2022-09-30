@@ -17,9 +17,11 @@ namespace Gungeon
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 
-		virtual void Idle() override;
+		void Idle();
+		void Walk();
 		virtual void Die() override;
-		void IdleOrWalkVisible();
+		void StartWalk();
+		void StartIdle();
 		void Fire();
 		void Hit(const int damage, const Vector2& dir);
 		void Hitting();
@@ -37,9 +39,10 @@ namespace Gungeon
 		Vector2			pushedDir;
 		float			pushedScalar;
 		float			pushedScalarCoef;
+		float			timeAiming;
 
 	public:
-		EnemyBullet* bullet[enemyBulletMax];
+		EnemyBullet*	bullet[enemyBulletMax];
 		float			timeSetDir;
 	};
 }

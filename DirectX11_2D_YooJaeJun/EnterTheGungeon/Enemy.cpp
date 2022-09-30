@@ -27,6 +27,7 @@ namespace Gungeon
 		pushedDir = Vector2(0.0f, 0.0f);
 		pushedScalar = 100.0f;
 		pushedScalarCoef = 0.0f;
+		timeAiming = 0.0f;
 	}
 
 	void Enemy::InitBullet()
@@ -58,7 +59,11 @@ namespace Gungeon
 		{
 		case State::idle:
 			Idle();
-			for (auto& elem : bullet) elem->Update();
+			for (auto& elem : bullet) elem->Update();	// 방에 충돌체 생기기 전까지 임시로 상태에 끼워넣음
+			break;
+		case State::walk:
+			Walk();
+			for (auto& elem : bullet) elem->Update();	// 방에 충돌체 생기기 전까지 임시로 상태에 끼워넣음
 			break;
 		case State::die:
 			Die();
@@ -80,7 +85,7 @@ namespace Gungeon
 
 	void Enemy::Idle()
 	{
-		Unit::Idle();
+		Unit::SetTarget();
 
 		moveDir = targetDir;
 		SetMoveDirState();
@@ -88,7 +93,22 @@ namespace Gungeon
 		Fire();
 		if (false == isHit)
 		{
-			IdleOrWalkVisible();
+			StartWalk();
+		}
+		Hitting();
+	}
+
+	void Enemy::Walk()
+	{
+		Unit::SetTarget();
+
+		moveDir = targetDir;
+		SetMoveDirState();
+
+		Fire();
+		if (false == isHit)
+		{
+			StartIdle();
 		}
 		Hitting();
 	}
@@ -109,10 +129,26 @@ namespace Gungeon
 		}
 	}
 
-	void Enemy::IdleOrWalkVisible()
+	void Enemy::StartWalk()
 	{
 		if (moveDir.x == 0.0f && moveDir.y == 0.0f)
 		{
+			idle[curTargetDirState]->isVisible = true;
+			for (auto& elem : walk) elem->isVisible = false;
+		}
+		else
+		{
+			state = State::walk;
+			for (auto& elem : idle) elem->isVisible = false;
+			walk[curTargetDirState]->isVisible = true;
+		}
+	}
+
+	void Enemy::StartIdle()
+	{
+		if (moveDir.x == 0.0f && moveDir.y == 0.0f)
+		{
+			state = State::idle;
 			idle[curTargetDirState]->isVisible = true;
 			for (auto& elem : walk) elem->isVisible = false;
 		}

@@ -24,7 +24,7 @@ namespace Dir8
 
 	void Scene01::Update()
 	{
-		boss->targetPos = pl->col->GetWorldPos();
+		boss->targetPos = pl->GetPos();
 
 		pl->Update();
 		boss->Update();

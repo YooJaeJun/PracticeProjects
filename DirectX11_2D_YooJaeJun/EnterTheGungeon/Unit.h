@@ -26,7 +26,7 @@ namespace Gungeon
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
 
-		virtual void Idle();
+		virtual void SetTarget();
 		virtual void Hit(const int damage);
 		virtual void Die();
 		virtual void StartDie();

@@ -2,11 +2,16 @@
 
 namespace Gungeon
 {
-	const int circularBulletMax = 60;
+	const int patternMax = 4;
+	const int circularMax = 60;
+	const int stormMax = 60;
 
 	enum class BossPattern
 	{
-		none, circular, string
+		none, 
+		circular, 
+		string, 
+		storm
 	};
 
 	class Boss : public Unit
@@ -17,23 +22,25 @@ namespace Gungeon
 		virtual void Init() override;
 		void InitVar();
 		void InitBullet();
+		void InitBulletOne(BossBullet* elem);
 		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
 
-		virtual void Idle() override;
+		void Idle();
 		virtual void Die() override;
 		void PatternCircular();
 		void PatternString();
+		void PatternStorm();
 		virtual void Hit(const int damage) override;
 		void Hitting();
 		virtual void StartDie() override;
 
 	public:
-		UI* hpGuageBar;
-		UI* hpGuage;
+		UI*							hpGuageBar;
+		UI*							hpGuage;
 		std::vector<BossBullet*>	bullet;
 		BossPattern                 pattern;
 		StringBulletData            stringBullet;

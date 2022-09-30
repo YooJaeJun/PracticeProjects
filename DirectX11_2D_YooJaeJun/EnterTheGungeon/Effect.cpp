@@ -57,7 +57,6 @@ namespace Gungeon
 		if (TIMER->GetTick(timeDie, intervalDie))
 		{
 			state = State::die;
-			idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 			idle->isVisible = false;
 		}
 	}
