@@ -14,13 +14,6 @@ namespace Dir8
 		DIR_RB
 	};
 
-	enum class CharacterState
-	{
-		IDLE,
-		WALK,
-		ROLL
-	};
-
 	class Character
 	{
 	public:
@@ -28,13 +21,14 @@ namespace Dir8
 		Vector2			moveDir;
 		Vector2			targetDir;
 		float			scalar;
-		DirState		targetDirstate;
 		int				frameY[8];
-		CharacterState	state;
+		DirState		dirState;
 
 	public:
-		Character();
+		Character() = default;
 
-		virtual void LookTarget();
+		void LookTarget(Vector2 target, ObImage* img);
+		
+		Vector2 GetPos() { return col->GetWorldPos(); }
 	};
 }

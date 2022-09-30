@@ -5,7 +5,6 @@ namespace Dir8
 	Player::Player()
 	{
 		scalar = 200.0f;
-		scalarCoef = 100.0f;
 
 		col = new ObRect();
 		col->isFilled = false;
@@ -50,13 +49,13 @@ namespace Dir8
 		//FSM
 		switch (state)
 		{
-		case CharacterState::IDLE:
+		case PlayerState::IDLE:
 			Idle();
 			break;
-		case CharacterState::WALK:
+		case PlayerState::WALK:
 			Walk();
 			break;
-		case CharacterState::ROLL:
+		case PlayerState::ROLL:
 			Roll();
 			break;
 		}
@@ -101,13 +100,13 @@ namespace Dir8
 	void Player::Idle()
 	{
 		Input();
-		LookTarget();
-		walk->frame.y = frameY[targetDirstate];
+		LookTarget(INPUT->GetWorldMousePos(), walk);
+		walk->frame.y = frameY[dirState];
 
 		//idle -> walk
 		if (moveDir != Vector2(0.0f, 0.0f))
 		{
-			state = CharacterState::WALK;
+			state = PlayerState::WALK;
 			walk->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 		}
 	}
@@ -115,16 +114,15 @@ namespace Dir8
 	void Player::Walk()
 	{
 		Input();
-		LookTarget();
-		SetMoveDir();
-		walk->frame.y = frameY[targetDirstate];
+		LookTarget(INPUT->GetWorldMousePos(), walk);
+		walk->frame.y = frameY[dirState];
 
 		col->MoveWorldPos(moveDir * scalar * DELTA);
 
 		//idle -> walk
 		if (moveDir == Vector2(0.0f, 0.0f))
 		{
-			state = CharacterState::IDLE;
+			state = PlayerState::IDLE;
 			walk->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 			walk->frame.x = 0;
 		}
@@ -132,72 +130,32 @@ namespace Dir8
 		if (INPUT->KeyDown(VK_SPACE))
 		{
 			//walk -> roll
-			state = CharacterState::ROLL;
-			roll->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+			state = PlayerState::ROLL;
+			roll->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
 			walk->isVisible = false;
 			roll->isVisible = true;
 			roll->frame.x = 0;
-			roll->frame.y = frameY[moveDirState];
-			scalar = 800.0f;
-			scalarCoef = 100.0f;
+			roll->frame.y = frameY[dirState];
 		}
 	}
 
 	void Player::Roll()
 	{
-		scalarCoef += 4000.0f * DELTA;
-		scalar -= scalarCoef * DELTA;
+		LookTarget(moveDir + col->GetWorldPos(), roll);
 
-		col->MoveWorldPos(moveDir * scalar * DELTA);
+		timeRoll += DELTA;
 
-		if (TIMER->GetTick(timeRoll, 0.5f))
+		col->MoveWorldPos(moveDir * scalar * cos(timeRoll / 0.6f * DIV2PI) * DELTA);
+
+		if (TIMER->GetTick(timeRoll, 0.6f))
 		{
-			state = CharacterState::IDLE;
+			state = PlayerState::IDLE;
 			walk->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 			walk->isVisible = true;
 			walk->frame.x = 0;
 			roll->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 			roll->isVisible = false;
 			roll->frame.x = 0;
-			scalar = 200.0f;
-		}
-	}
-
-	void Player::SetMoveDir()
-	{
-		float radian = Utility::DirToRadian(moveDir);
-
-		if (radian < DIV8PI && radian > -DIV8PI)
-		{
-			moveDirState = DIR_R;
-		}
-		else if (radian > DIV8PI && radian < DIV8PI + DIV4PI)
-		{
-			moveDirState = DIR_RT;
-		}
-		else if (radian > DIV8PI + DIV4PI && radian < DIV8PI + DIV4PI * 2.0f)
-		{
-			moveDirState = DIR_T;
-		}
-		else if (radian > DIV8PI + DIV4PI * 2.0f && radian < DIV4PI * 3.0f + DIV8PI)
-		{
-			moveDirState = DIR_LT;
-		}
-		else if (radian > -(DIV8PI + DIV4PI * 3.0f) && radian < -(DIV4PI * 2.0f + DIV8PI))
-		{
-			moveDirState = DIR_LB;
-		}
-		else if (radian > -(DIV8PI + DIV4PI * 2.0f) && radian < -(DIV4PI + DIV8PI))
-		{
-			moveDirState = DIR_B;
-		}
-		else if (radian > -(DIV8PI + DIV4PI) && radian < -DIV8PI)
-		{
-			moveDirState = DIR_RB;
-		}
-		else
-		{
-			moveDirState = DIR_L;
 		}
 	}
 }

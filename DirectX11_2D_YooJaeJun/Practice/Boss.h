@@ -2,13 +2,23 @@
 
 namespace Dir8
 {
+	enum class BossState
+	{
+		IDLE = 400,
+		LOOK = 300,
+		MOVE = 200,
+		ATTACK = 100
+	};
+
 	class Boss : public Character
 	{
 	public:
-		ObImage* walk;
-		ObCircle* rangeAtk;
-		ObCircle* rangeTrace;
-		ObCircle* rangeLook;
+		BossState	state;
+		ObImage*	walk;
+		ObCircle*	range[3];
+		Vector2		targetPos;
+		float		distance;
+		bool		switching;
 
 	public:
 		Boss();
@@ -19,11 +29,9 @@ namespace Dir8
 		void Render();
 
 		void Idle();
-		void Walk();
-
-		void Atk();
-		void Trace();
-		virtual void LookTarget() override;
+		void Look();
+		void Move();
+		void Attack();
 	};
 }
 

@@ -24,20 +24,15 @@ namespace Dir8
 		frameY[DIR_LB] = 6;
 		frameY[DIR_RT] = 7;
 
-		rangeAtk = new ObCircle();
-		rangeAtk->scale = Vector2(300.0f, 300.0f);
-		rangeAtk->isFilled = false;
-		rangeAtk->SetParentRT(*col);
-
-		rangeTrace = new ObCircle();
-		rangeTrace->scale = Vector2(550.0f, 550.0f);
-		rangeTrace->isFilled = false;
-		rangeTrace->SetParentRT(*col);
-
-		rangeLook = new ObCircle();
-		rangeLook->scale = Vector2(800.0f, 800.0f);
-		rangeLook->isFilled = false;
-		rangeLook->SetParentRT(*col);
+		for (auto& elem : range)
+		{
+			elem = new ObCircle();
+			elem->isFilled = false;
+			elem->SetParentRT(*col);
+		}
+		range[0]->scale = Vector2((float)BossState::ATTACK, (float)BossState::ATTACK) * 2.0f;
+		range[1]->scale = Vector2((float)BossState::MOVE, (float)BossState::MOVE) * 2.0f;
+		range[2]->scale = Vector2((float)BossState::LOOK, (float)BossState::LOOK) * 2.0f;
 	}
 
 	Boss::~Boss()
@@ -48,77 +43,115 @@ namespace Dir8
 	{
 		SafeDelete(col);
 		SafeDelete(walk);
-		SafeDelete(rangeAtk);
-		SafeDelete(rangeTrace);
-		SafeDelete(rangeLook);
+
+		for (auto& elem : range)
+		{
+			SafeDelete(elem);
+		}
 	}
 
 	void Boss::Update()
 	{
+		Vector2 dist = targetPos - GetPos();
+		distance = dist.Length();
+
 		//FSM
 		switch (state)
 		{
-		case CharacterState::IDLE:
+		case BossState::IDLE:
 			Idle();
 			break;
-		case CharacterState::WALK:
-			Walk();
+		case BossState::LOOK:
+			Look();
+			break;
+		case BossState::MOVE:
+			Move();
+			break;
+		case BossState::ATTACK:
+			Attack();
 			break;
 		}
 
 		col->Update();
 		walk->Update();
-		rangeAtk->Update();
-		rangeTrace->Update();
-		rangeLook->Update();
+		for (auto& elem : range)
+		{
+			elem->Update();
+		}
 	}
 
 	void Boss::Render()
 	{
 		col->Render();
 		walk->Render();
-		rangeAtk->Render();
-		rangeTrace->Render();
-		rangeLook->Render();
+		for (auto& elem : range)
+		{
+			elem->Render();
+		}
 	}
 
 	void Boss::Idle()
 	{
-		//idle -> walk
-		if (moveDir != Vector2(0.0f, 0.0f))
+		if (distance < (float)BossState::LOOK)
 		{
-			state = CharacterState::WALK;
-			walk->ChangeAnim(ANIMSTATE::LOOP, 0.1f, false);
+			state = BossState::LOOK;
 		}
 	}
 
-	void Boss::Walk()
+	void Boss::Look()
 	{
-		col->MoveWorldPos(moveDir * 200.0f * DELTA);
+		LookTarget(targetPos, walk);
+		walk->frame.y = frameY[dirState];
 
-		//idle -> walk
-		if (moveDir == Vector2(0.0f, 0.0f))
+		if (distance < (float)BossState::MOVE)
 		{
-			state = CharacterState::IDLE;
-			walk->ChangeAnim(ANIMSTATE::STOP, 0.1f, false);
+			state = BossState::MOVE;
+		}
+
+		if (distance > (float)BossState::LOOK)
+		{
+			state = BossState::IDLE;
 		}
 	}
 
-	void Boss::Atk()
+	void Boss::Move()
 	{
-		walk->scale.x = RANDOM->Float(col->scale.x - 10.0f, col->scale.x + 10.0f);
-		walk->scale.y = RANDOM->Float(col->scale.y - 10.0f, col->scale.y + 10.0f);
+		Look();
+
+		Vector2 dir = targetPos - col->GetWorldPos();
+		dir.Normalize();
+		col->MoveWorldPos(dir * scalar * DELTA);
+
+		if (distance < (float)BossState::ATTACK)
+		{
+			state = BossState::ATTACK;
+		}
+
+		if (distance > (float)BossState::MOVE)
+		{
+			state = BossState::LOOK;
+		}
 	}
 
-	void Boss::Trace()
+	void Boss::Attack()
 	{
-		Boss::LookTarget();
-		col->MoveWorldPos(targetDir * scalar * DELTA);
-	}
+		float plus;
 
-	void Boss::LookTarget()
-	{
-		Character::LookTarget();
-		walk->frame.y = frameY[targetDirstate];
+		if (switching) plus = 1.0f;
+		else plus = -1.0f;
+
+		walk->scale.x += plus * scalar * DELTA;
+		walk->scale.y -= plus * scalar * DELTA;
+
+		if (walk->scale.x < 50.0f || walk->scale.y < 50.0f)
+		{
+			switching = !switching;
+		}
+
+		if (distance > (float)BossState::ATTACK)
+		{
+			state = BossState::MOVE;
+			walk->scale = Vector2(128.0f, 127.0f) * 1.5f;
+		}
 	}
 }

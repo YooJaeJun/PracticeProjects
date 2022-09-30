@@ -2,14 +2,20 @@
 
 namespace Dir8
 {
+	enum class PlayerState
+	{
+		IDLE,
+		WALK,
+		ROLL,
+	};
+
 	class Player : public Character
 	{
 	public:
+		PlayerState		state;
 		ObImage*		walk;
 		ObImage*		roll;
 		float			timeRoll;
-		DirState		moveDirState;
-		float			scalarCoef;
 
 	public:
 		Player();
@@ -24,7 +30,5 @@ namespace Dir8
 		void Idle();
 		void Walk();
 		void Roll();
-
-		void SetMoveDir();
 	};
 }
