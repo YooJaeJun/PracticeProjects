@@ -10,7 +10,14 @@ namespace Gungeon
         SetPos(Vector2(defaultSpawnPos, defaultSpawnPos));
 
         scalar = 600.0f;
-        damage = 2;
+        damage = 10;
+
+        float hitBombScaleCoef = 1.5f;
+        hitBomb = new Effect;
+        hitBomb->idle = new ObImage(L"EnterTheGungeon/Player_0/HitBomb.png");
+        hitBomb->idle->maxFrame.x = 4;
+        hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * hitBombScaleCoef;
+        hitBomb->idle->isVisible = false;
     }
 
     void PlayerBullet::Release()
@@ -25,7 +32,6 @@ namespace Gungeon
 
     void PlayerBullet::LateUpdate()
     {
-        Bullet::LateUpdate();
     }
 
     void PlayerBullet::Render()

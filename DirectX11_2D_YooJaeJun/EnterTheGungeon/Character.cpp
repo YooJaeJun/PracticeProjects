@@ -11,6 +11,7 @@ namespace Gungeon
 		maxHp = 0;
 		scalar = 0.0f;
 		isHit = false;
+		state = State::idle;
 	}
 
 	void Character::Init()
@@ -37,5 +38,11 @@ namespace Gungeon
 
 	void Character::ResizeScreen()
 	{
+	}
+
+	void Character::Spawn(const Vector2 wpos)
+	{
+		SetPosX(wpos.x);
+		SetPosY(wpos.y);
 	}
 }

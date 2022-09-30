@@ -287,12 +287,16 @@ namespace Gungeon
     {
         Unit::StartDie();
 
+        hpGuageBar->img->isVisible = false;
+        hpGuage->img->isVisible = false;
+
         for (auto& elem : bullet)
         {
             elem->col->colOnOff = false;
             elem->col->isVisible = false;
             elem->idle->colOnOff = false;
             elem->idle->isVisible = false;
+            elem->hitBomb->idle->isVisible = false;
         }
     }
 }

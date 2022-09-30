@@ -14,6 +14,7 @@ namespace Gungeon
     {
         Character::Release();
         SafeDelete(idle);
+        hitBomb->Release();
     }
 
     void Bullet::Update()
@@ -27,7 +28,8 @@ namespace Gungeon
             col->MoveWorldPos(velocity);
         }
 
-        if (idle) idle->Update();
+        idle->Update();
+        hitBomb->Update();
     }
 
     void Bullet::LateUpdate()
@@ -38,6 +40,7 @@ namespace Gungeon
     {
         idle->Render(); // RENDER->push(idle);
         Character::Render();
+        hitBomb->Render();
     }
 
     void Bullet::Spawn(const Vector2& coord, const Vector2& fireDir)
@@ -51,6 +54,7 @@ namespace Gungeon
     void Bullet::Hit(const float damage)
     {
         Reload();
+        hitBomb->Spawn(idle->GetWorldPos());
     }
 
     void Bullet::Reload()

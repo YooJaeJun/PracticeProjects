@@ -25,7 +25,7 @@
     <Filter Include="GameObject\Effect">
       <UniqueIdentifier>{c57f0926-b496-40bf-99c4-0bda6b943a0b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObject\ProcedureMapGeneration">
+    <Filter Include="ProcedureMapGeneration">
       <UniqueIdentifier>{43d31f4c-4da4-483c-8477-5db7e2296b91}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -84,13 +84,13 @@
       <Filter>GameObject\Effect</Filter>
     </ClInclude>
     <ClInclude Include="ProcedureMapGeneration.h">
-      <Filter>GameObject\ProcedureMapGeneration</Filter>
+      <Filter>ProcedureMapGeneration</Filter>
     </ClInclude>
     <ClInclude Include="Scene02.h">
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Room.h">
-      <Filter>GameObject\ProcedureMapGeneration</Filter>
+      <Filter>GameObject\Level</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -147,13 +147,13 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="ProcedureMapGeneration.cpp">
-      <Filter>GameObject\ProcedureMapGeneration</Filter>
+      <Filter>ProcedureMapGeneration</Filter>
     </ClCompile>
     <ClCompile Include="Scene02.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Room.cpp">
-      <Filter>GameObject\ProcedureMapGeneration</Filter>
+      <Filter>GameObject\Level</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

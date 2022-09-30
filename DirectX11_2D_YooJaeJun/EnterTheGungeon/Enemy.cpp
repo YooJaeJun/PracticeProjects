@@ -83,8 +83,7 @@ namespace Gungeon
 		Unit::Idle();
 
 		moveDir = targetDir;
-		moveDir.Normalize();
-		SetMoveDir();
+		SetMoveDirState();
 
 		Fire();
 		if (false == isHit)
@@ -133,6 +132,8 @@ namespace Gungeon
 				if (elem->isFired) continue;
 
 				elem->Spawn(weapon->firePos->GetWorldPos(), moveDir);
+				weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
+
 				break;
 			}
 		}
@@ -140,13 +141,19 @@ namespace Gungeon
 
 	void Enemy::Hit(const int damage, const Vector2& dir)
 	{
-		Unit::Hit(damage);
-
 		pushedDir = dir;
 
-		if (false == isHit)
+		Unit::Hit(damage);
+
+		hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+
+		if (pushedDir.x < 0.0f)
 		{
-			hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+			hit->reverseLR = true;
+		}
+		else
+		{
+			hit->reverseLR = false;
 		}
 	}
 
@@ -206,6 +213,15 @@ namespace Gungeon
 	{
 		Unit::StartDie();
 
+		if (pushedDir.x < 0.0f)
+		{
+			die->reverseLR = true;
+		}
+		else
+		{
+			die->reverseLR = false;
+		}
+
 		pushedScalar = 400.0f;
 		pushedScalarCoef = 0.0f;
 
@@ -215,6 +231,7 @@ namespace Gungeon
 			elem->col->isVisible = false;
 			elem->idle->colOnOff = false;
 			elem->idle->isVisible = false;
+			elem->hitBomb->idle->isVisible = false;
 		}
 	}
 

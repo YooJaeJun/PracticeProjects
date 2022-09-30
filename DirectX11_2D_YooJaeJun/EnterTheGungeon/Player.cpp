@@ -213,14 +213,15 @@ namespace Gungeon
 		weapon->firePos->zOrder = ZOrder::none;
 		weapon->firePos->scale = Vector2(20.0f, 20.0f);
 
-		float playerWeaponEffectScaleCoef = 3.0;
+		float playerWeaponEffectScaleCoef = 3.0f;
 		weapon->fireEffect = new Effect;
 		weapon->fireEffect->idle = new ObImage(L"EnterTheGungeon/Player_0/Effect_Fire_Weapon_0.png");
 		weapon->fireEffect->idle->isVisible = false;
-		weapon->fireEffect->idle->scale.x = 15.0f * playerWeaponEffectScaleCoef;
-		weapon->fireEffect->idle->scale.y = 11.0f * playerWeaponEffectScaleCoef;
+		weapon->fireEffect->idle->maxFrame.x = 3;
+		weapon->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * playerWeaponEffectScaleCoef;
 		weapon->fireEffect->idle->SetParentRT(*weapon->firePos);
 		weapon->fireEffect->idle->zOrder = ZOrder::none;
+		weapon->fireEffect->intervalDie = 0.2f;
 
 		weaponReloading = new Weapon;
 		weaponReloading->idle = new ObImage(L"EnterTheGungeon/Player_0/Weapon_0_reloading.png");
@@ -265,6 +266,8 @@ namespace Gungeon
 		dust->idle->maxFrame.x = 4;
 		dust->idle->scale.x = 44.0f / 3.0f * dustCoef;
 		dust->idle->scale.y = 10.0f * dustCoef;
+		dust->idle->isVisible = false;
+		dust->intervalDie = 1.0f;
 	}
 
 	void Player::InitUI()
@@ -493,6 +496,7 @@ namespace Gungeon
 		Hitting();
 		Dusting();
 
+		dust->Update();
 		for (auto& elem : roll) elem->Update();
 		respawn->Update();
 		kick->Update();
@@ -523,6 +527,7 @@ namespace Gungeon
 	void Player::Render()
 	{
 		dust->Render();
+		weaponReloading->Render();
 
 		Unit::Render();
 
@@ -539,7 +544,6 @@ namespace Gungeon
 		uiWeaponFrame->Render();
 		uiWeapon->Render();
 		uiBulletCount->Render();
-		weaponReloading->Render();
 		for (auto& elem : uiHeartNone) elem->Render();
 		for (auto& elem : uiHeartHalf) elem->Render();
 		for (auto& elem : uiHeartFull) elem->Render();
@@ -603,8 +607,9 @@ namespace Gungeon
 		Unit::Idle();
 
 		Move();
-		SetMoveDir();
+		SetMoveDirState();
 		IdleOrWalkVisible();
+		FireCamShake();
 
 		if (INPUT->KeyPress(VK_LBUTTON))
 		{
@@ -720,7 +725,8 @@ namespace Gungeon
 				Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
 					RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
 			);
-			weapon->fireEffect->idle->isVisible = true;
+
+			weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
 
 			canFire = false;
 		}
@@ -751,7 +757,7 @@ namespace Gungeon
 			for (auto& elem : idle) elem->isVisible = false;
 			for (auto& elem : walk) elem->isVisible = false;
 
-			SetMoveDir();
+			SetMoveDirState();
 
 			roll[curMoveDirState]->isVisible = true;
 			roll[curMoveDirState]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
@@ -843,11 +849,11 @@ namespace Gungeon
 
 	void Player::Dusting()
 	{
-		if (TIMER->GetTick(timeLastPosForDust, 0.4f))
+		if (moveDir.x != 0.0f && 
+			moveDir.y != 0.0f &&
+			TIMER->GetTick(timeLastPosForDust, 0.4f))
 		{
-			dust->idle->SetWorldPos(foot->GetWorldPos());
-			dust->idle->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
-			dust->Update();
+			dust->Spawn(foot->GetWorldPos());
 		}
 	}
 

@@ -102,9 +102,9 @@ namespace Gungeon
 
             elem->die = new ObImage(L"EnterTheGungeon/Enemy_0/Die.png");
             elem->die->isVisible = false;
-            elem->die->maxFrame.x = 4;
-            elem->die->scale.x = 96.0f / 4.0f * enemyScaleCoef;
-            elem->die->scale.y = 24.0f * enemyScaleCoef;
+            elem->die->maxFrame.x = 5;
+            elem->die->scale.x = 110.0f / 5.0f * enemyScaleCoef;
+            elem->die->scale.y = 22.0f * enemyScaleCoef;
             elem->die->SetParentRT(*elem->col);
             elem->die->zOrder = ZOrder::object;
 
@@ -121,6 +121,7 @@ namespace Gungeon
             elem->weapon->col->SetParentRT(*elem->col);
             elem->weapon->col->SetLocalPosX(10.0f);
             elem->weapon->col->SetLocalPosY(-15.0f);
+
             elem->weapon->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Weapon_0.png");
             elem->weapon->idle->pivot = OFFSET_LB;
             elem->weapon->idle->scale.x = 29.0f * enemyWeaponScaleCoef;
@@ -132,6 +133,16 @@ namespace Gungeon
             elem->weapon->firePos->SetParentRT(*elem->weapon->col);
             elem->weapon->firePos->SetLocalPos(Vector2(elem->weapon->col->scale.x / 2.0f, 0.0f));
             elem->weapon->firePos->zOrder = ZOrder::none;
+
+            float enemyWeaponEffectScaleCoef = 3.0f;
+            elem->weapon->fireEffect = new Effect;
+            elem->weapon->fireEffect->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Effect_Fire_Weapon_0.png");
+            elem->weapon->fireEffect->idle->isVisible = false;
+            elem->weapon->fireEffect->idle->maxFrame.x = 3;
+            elem->weapon->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * enemyWeaponEffectScaleCoef;
+            elem->weapon->fireEffect->idle->SetParentRT(*elem->weapon->firePos);
+            elem->weapon->fireEffect->idle->zOrder = ZOrder::none;
+            elem->weapon->fireEffect->intervalDie = 0.2f;
 
             elem->shadow = new ObImage(L"EnterTheGungeon/Enemy_0/Shadow_1.png");
             elem->shadow->scale.x = 12.0f * enemyScaleCoef;
@@ -291,17 +302,17 @@ namespace Gungeon
             elem->col = new ObRect;
             elem->col->isFilled = false;
             elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-            elem->col->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
-            elem->col->scale.y = 48.0f * doorOpenScaleCoef;
+            elem->col->scale.x = 88.0f / 4.0f * doorOpenScaleCoef;
+            elem->col->scale.y = 50.0f * doorOpenScaleCoef;
             elem->SetPosX(200.0f + idx * elem->col->scale.x);
             elem->SetPosY(0.0f);
             elem->col->collider = Collider::rect;
             elem->col->zOrder = ZOrder::object;
 
             elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Open_Up.png");
-            elem->idle->maxFrame.x = 3;
-            elem->idle->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
-            elem->idle->scale.y = 48.0f * doorOpenScaleCoef;
+            elem->idle->maxFrame.x = 4;
+            elem->idle->scale.x = 88.0f / 4.0f * doorOpenScaleCoef;
+            elem->idle->scale.y = 50.0f * doorOpenScaleCoef;
             elem->idle->SetParentRT(*elem->col);
             elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
             elem->idle->zOrder = ZOrder::object;
@@ -324,8 +335,8 @@ namespace Gungeon
             elem->col->isVisible = false;   //
             elem->col->isFilled = false;
             elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-            elem->col->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
-            elem->col->scale.y = 48.0f * doorOpenScaleCoef;
+            elem->col->scale.x = 88.0f / 4.0f * doorOpenScaleCoef;
+            elem->col->scale.y = 50.0f * doorOpenScaleCoef;
             elem->SetPosX(200.0f + idx * elem->col->scale.x);
             elem->SetPosY(0.0f);
             elem->col->collider = Collider::rect;
@@ -333,9 +344,9 @@ namespace Gungeon
 
             elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Open_Down.png");
             elem->idle->isVisible = false;  //
-            elem->idle->maxFrame.x = 3;
-            elem->idle->scale.x = 66.0f / 3.0f * doorOpenScaleCoef;
-            elem->idle->scale.y = 48.0f * doorOpenScaleCoef;
+            elem->idle->maxFrame.x = 4;
+            elem->idle->scale.x = 88.0f / 4.0f * doorOpenScaleCoef;
+            elem->idle->scale.y = 50.0f * doorOpenScaleCoef;
             elem->idle->SetParentRT(*elem->col);
             elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
             elem->idle->zOrder = ZOrder::object;

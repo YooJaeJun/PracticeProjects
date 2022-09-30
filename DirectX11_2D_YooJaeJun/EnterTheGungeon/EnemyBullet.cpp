@@ -11,6 +11,13 @@ namespace Gungeon
 
         scalar = 500.0f;
         damage = 1;
+
+        float hitBombScaleCoef = 1.5f;
+        hitBomb = new Effect;
+        hitBomb->idle = new ObImage(L"EnterTheGungeon/Enemy_0/HitBomb.png");
+        hitBomb->idle->maxFrame.x = 4;
+        hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * hitBombScaleCoef;
+        hitBomb->idle->isVisible = false;
     }
 
     void EnemyBullet::Release()

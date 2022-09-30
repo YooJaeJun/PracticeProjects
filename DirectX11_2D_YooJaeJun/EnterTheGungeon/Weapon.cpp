@@ -21,8 +21,7 @@ namespace Gungeon
 
 		idle->Update();
 		if (firePos) firePos->Update();
-
-		FireEffect();
+		if (fireEffect) fireEffect->Update();
 	}
 
 	void Weapon::LateUpdate()
@@ -35,18 +34,6 @@ namespace Gungeon
 		Character::Render();
 		// if (firePos) firePos->Render();
 		if (fireEffect) fireEffect->Render();
-	}
-
-	void Weapon::FireEffect()
-	{
-		if (fireEffect && fireEffect->idle->isVisible)
-		{
-			if (TIMER->GetTick(timeFireEffect, 0.2f))
-			{
-				fireEffect->idle->isVisible = false;
-			}
-			fireEffect->Update();
-		}
 	}
 
 	void Weapon::EquipRight()

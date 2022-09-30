@@ -24,5 +24,6 @@ namespace Gungeon
 		Vector2		moveDir;
 		int			damage;
 		float		timeRespawn;
+		Effect*		hitBomb;
 	};
 }

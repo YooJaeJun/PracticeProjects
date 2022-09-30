@@ -2,19 +2,19 @@
 
 // CRTP 패턴 이용. strip 타입에 따른 vertex 개수 설정할 수 있게 함
 // 1. 각 하위 클래스가 다른 값을 가지나 호출하는 이름은 같게.
-// 2. static멤버함수나 비 static멤버함수에서나 사용.
+// 2. static멤버함수, 비 static멤버함수에서 모두 사용 가능하게.
 template<typename T>
 struct StaticVertexCount
 {
 	static int& Trianglestrip()
 	{
-		static int Trianglestrip_;
-		return Trianglestrip_;
+		static int vertexCount;
+		return vertexCount;
 	}
 	static int& Linestrip()
 	{
-		static int Linestrip_;
-		return Linestrip_;
+		static int vertexCount;
+		return vertexCount;
 	}
 };
 

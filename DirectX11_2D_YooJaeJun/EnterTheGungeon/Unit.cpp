@@ -9,7 +9,6 @@ namespace Gungeon
 
 	void Unit::Init()
 	{
-		state = State::idle;
 		lastPos = Vector2(0.0f, 0.0f);
 		targetDirBefore = targetDir = Vector2(0.0f, 0.0f);
 		curMoveDirState = dirB;
@@ -78,9 +77,9 @@ namespace Gungeon
 	{
 		weapon->col->rotation = Utility::DirToRadian(targetPos - weapon->Pos());
 		targetDir = targetPos - Pos();
-		targetDir.Normalize();
+		targetDir.Normalize();	// targetDir도 써서 정규화
 		targetRotation = Utility::DirToRadian(targetDir);
-		SetTargetDir();
+		SetTargetDirState();
 
 		if (targetDir.x >= 0.0f)
 		{
@@ -151,6 +150,7 @@ namespace Gungeon
 			weapon->idle->isVisible = false;
 			shadow->isVisible = false;
 			die->isVisible = true;
+
 			die->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
 		}
 	}
@@ -176,7 +176,7 @@ namespace Gungeon
 		SetPos(lastPos);
 	}
 
-	void Unit::SetMoveDir()
+	void Unit::SetMoveDirState()
 	{
 		// 이동방향에 따라 다른 방향 애니메이션 설정하는 코드
 		if (almostEqualFloat(moveDir.x, 0.707107f) && almostEqualFloat(moveDir.y, 0.707107f))
@@ -217,7 +217,7 @@ namespace Gungeon
 		}
 	}
 
-	void Unit::SetTargetDir()
+	void Unit::SetTargetDirState()
 	{
 		// 타겟 좌표(플레이어는 마우스)에 따라 다른 방향 애니메이션 설정하는 코드
 		if (targetRotation >= 30.0f * ToRadian && targetRotation < 60.0f * ToRadian)

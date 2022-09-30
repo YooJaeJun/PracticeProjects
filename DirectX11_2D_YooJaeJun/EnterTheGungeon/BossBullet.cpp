@@ -11,6 +11,13 @@ namespace Gungeon
 
         scalar = 400.0f;
         damage = 1;
+
+        float hitBombScaleCoef = 2.5f;
+        hitBomb = new Effect;
+        hitBomb->idle = new ObImage(L"EnterTheGungeon/Boss_0/HitBomb.png");
+        hitBomb->idle->maxFrame.x = 4;
+        hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * hitBombScaleCoef;
+        hitBomb->idle->isVisible = false;
     }
 
     void BossBullet::Release()

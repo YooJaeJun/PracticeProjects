@@ -2,13 +2,6 @@
 
 namespace Gungeon
 {
-	enum class State
-	{
-		idle,
-		roll,
-		die
-	};
-
 	enum DirState
 	{
 		dirB,
@@ -39,8 +32,8 @@ namespace Gungeon
 		virtual void StartDie();
 		void SetLastPosAndDir();
 		void StepBack();
-		void SetMoveDir();
-		void SetTargetDir();
+		void SetMoveDirState();
+		void SetTargetDirState();
 
 	public:
 		ObImage*		idle[8];
@@ -51,7 +44,6 @@ namespace Gungeon
 		ObImage*		die;
 		Weapon*			weapon;
 		ObImage*		shadow;
-		State			state;
 		Vector2			lastPos;
 		DirState		curMoveDirState;
 		DirState		curMoveDirStateBefore;
