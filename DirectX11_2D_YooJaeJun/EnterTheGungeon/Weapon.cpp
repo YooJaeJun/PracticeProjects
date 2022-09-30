@@ -22,14 +22,7 @@ namespace Gungeon
 		idle->Update();
 		if (firePos) firePos->Update();
 
-		if (fireEffect && fireEffect->idle->isVisible)
-		{
-			if (TIMER->GetTick(timeFireEffect, 0.2f))
-			{
-				fireEffect->idle->isVisible = false;
-			}
-			fireEffect->Update();
-		}
+		FireEffect();
 	}
 
 	void Weapon::LateUpdate()
@@ -44,14 +37,25 @@ namespace Gungeon
 		if (fireEffect) fireEffect->Render();
 	}
 
+	void Weapon::FireEffect()
+	{
+		if (fireEffect && fireEffect->idle->isVisible)
+		{
+			if (TIMER->GetTick(timeFireEffect, 0.2f))
+			{
+				fireEffect->idle->isVisible = false;
+			}
+			fireEffect->Update();
+		}
+	}
+
 	void Weapon::EquipRight()
 	{
 		swap(idle->uv.y, idle->uv.w);
 		col->SetLocalPosX(18.0f);
 		col->pivot = Vector2(0.4f, 0.25f);
 		idle->pivot = Vector2(0.4f, 0.25f);
-		firePos->SetLocalPosX(40.0f);
-		firePos->SetLocalPosY(12.0f);
+		firePos->SetLocalPos(Vector2(40.0f, 12.0f));
 		firePos->pivot = Vector2(0.4f, 0.25f);
 		if (fireEffect)
 		{
@@ -65,8 +69,7 @@ namespace Gungeon
 		col->SetLocalPosX(-18.0f);
 		col->pivot = Vector2(0.4f, -0.25f);
 		idle->pivot = Vector2(0.4f, -0.25f);
-		firePos->SetLocalPosX(40.0f);
-		firePos->SetLocalPosY(-6.0f);
+		firePos->SetLocalPos(Vector2(40.0f, -6.0f));
 		firePos->pivot = Vector2(0.4f, -0.25f);
 		if (fireEffect)
 		{

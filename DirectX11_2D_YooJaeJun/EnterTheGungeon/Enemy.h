@@ -10,15 +10,20 @@ namespace Gungeon
 		Enemy();
 
 		virtual void Init() override;
+		void InitVar();
+		void InitBullet();
 		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 
 		virtual void Idle() override;
-		void Hit(const int damage, const Vector2& dir);
 		virtual void Die() override;
-		virtual void Killed() override;
+		void IdleOrWalkVisible();
+		void Fire();
+		void Hit(const int damage, const Vector2& dir);
+		void Hitting();
+		virtual void StartDie() override;
 		//void FindPath(ObTileMap* map);
 
 	private:
@@ -30,6 +35,8 @@ namespace Gungeon
 		float			timeSetMoveDir;
 		float			timeSetTargetDir;
 		Vector2			pushedDir;
+		float			pushedScalar;
+		float			pushedScalarCoef;
 
 	public:
 		EnemyBullet* bullet[enemyBulletMax];

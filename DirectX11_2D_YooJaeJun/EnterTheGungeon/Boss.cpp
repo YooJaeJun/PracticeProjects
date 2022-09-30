@@ -9,96 +9,28 @@ namespace Gungeon
 
     void Boss::Init()
     {
-        pattern = BossPattern::string;
+        InitVar();
+        InitBullet();
+    }
 
-        if (pattern == BossPattern::string)
-        {
-            stringBullet.inputString = "abcdefghijklmnopqrstuvwxyz";
-        }
-
-        SetPattern();
-
+    void Boss::InitVar()
+    {
         curHp = maxHp = 1;
         scalar = 30.0f;
         timeFire = 0.0f;
         timeHit = 0.0f;
         isHit = false;
         isHitAnim = false;
-        timeHitAnim = 0.0f;
-    }
-
-    void Boss::Release()
-    {
-        Unit::Release();
-        SafeDelete(hpGuage);
-        SafeDelete(hpGuageBar);
-    }
-
-    void Boss::Update()
-    {
-        Unit::Update();
-
-        switch (state)
+        timeHitAnim = 0.0f;        
+        
+        pattern = BossPattern::string;
+        if (pattern == BossPattern::string)
         {
-        case State::idle:
-            Idle();
-            break;
-        case State::die:
-            Die();
-            break;
-        default:
-            break;
+            stringBullet.inputString = "abcdefghijklmnopqrstuvwxyz";
         }
-
-        if (isHit)
-        {
-            if (curHp <= 0.0f)
-            {
-                curHp = 0.0f;
-                Killed();
-            }
-
-            if (TIMER->GetTick(timeHit, 0.01f))
-            {
-                isHit = false;
-            }
-        }
-
-        if (curHp <= 0)
-        {
-            hpGuageBar->img->isVisible = false;
-            hpGuage->img->isVisible = false;
-        }
-        else
-        {
-            hpGuage->img->scale.x = (float)curHp / maxHp * hpGuage->imgSize.x;
-            hpGuage->img->uv.z = hpGuage->img->scale.x / hpGuage->imgSize.x;
-        }
-        hpGuageBar->Update();
-        hpGuage->Update();
     }
 
-    void Boss::LateUpdate()
-    {
-    }
-
-    void Boss::Render()
-    {
-        Unit::Render();
-        for (auto& elem : bullet) elem->Render();
-        hpGuageBar->Render();
-        hpGuage->Render();
-    }
-
-    void Boss::ResizeScreen()
-    {
-        hpGuageBar->img->SetWorldPosX(-hpGuageBar->img->scale.x / 2.0f);
-        hpGuageBar->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
-        hpGuage->img->SetWorldPosX(-hpGuage->img->scale.x / 2.0f);
-        hpGuage->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
-    }
-
-    void Boss::SetPattern()
+    void Boss::InitBullet()
     {
         if (pattern == BossPattern::circular)
         {
@@ -143,9 +75,104 @@ namespace Gungeon
         }
     }
 
+    void Boss::Release()
+    {
+        Unit::Release();
+        SafeDelete(hpGuage);
+        SafeDelete(hpGuageBar);
+    }
+
+    void Boss::Update()
+    {
+        Unit::Update();
+
+        switch (state)
+        {
+        case State::idle:
+            Idle();
+            for (auto& elem : bullet) elem->Update();
+            break;
+        case State::die:
+            Die();
+            break;
+        default:
+            break;
+        }
+
+        hpGuageBar->Update();
+        hpGuage->Update();
+    }
+
+    void Boss::LateUpdate()
+    {
+    }
+
+    void Boss::Render()
+    {
+        Unit::Render();
+        for (auto& elem : bullet) elem->Render();
+        hpGuageBar->Render();
+        hpGuage->Render();
+    }
+
+    void Boss::ResizeScreen()
+    {
+        hpGuageBar->img->SetWorldPosX(-hpGuageBar->img->scale.x / 2.0f);
+        hpGuageBar->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
+        hpGuage->img->SetWorldPosX(-hpGuage->img->scale.x / 2.0f);
+        hpGuage->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
+    }
+
     void Boss::Idle()
     {
         Unit::Idle();
+
+        switch (pattern)
+        {
+        case Gungeon::BossPattern::none:
+            break;
+        case Gungeon::BossPattern::circular:
+            PatternCircular();
+            break;
+        case Gungeon::BossPattern::string:
+            PatternString();
+            break;
+        }
+
+        Hitting();
+    }
+
+    void Boss::Hit(const int damage)
+    {
+        Unit::Hit(damage);
+        if (false == isHit)
+        {
+            hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+        }
+    }
+
+    void Boss::Hitting()
+    {
+        if (isHit)
+        {
+            if (curHp <= 0.0f)
+            {
+                curHp = 0.0f;
+                hpGuageBar->img->isVisible = false;
+                hpGuage->img->isVisible = false;
+                StartDie();
+            }
+            else
+            {
+                hpGuage->img->scale.x = (float)curHp / maxHp * hpGuage->imgSize.x;
+                hpGuage->img->uv.z = hpGuage->img->scale.x / hpGuage->imgSize.x;
+            }
+
+            if (TIMER->GetTick(timeHit, 0.01f))
+            {
+                isHit = false;
+            }
+        }
 
         if (isHitAnim)
         {
@@ -169,8 +196,10 @@ namespace Gungeon
                 die->color = c;
 
                 hit->isVisible = false;
-                idle[curTargetDirState]->isVisible = true;
-
+                if (state != State::die)
+                {
+                    idle[curTargetDirState]->isVisible = true;
+                }
                 isHitAnim = false;
             }
         }
@@ -181,83 +210,11 @@ namespace Gungeon
             idle[curTargetDirState]->isVisible = true;
             hit->isVisible = false;
         }
-
-
-        if (pattern == BossPattern::circular)
-        {
-            if (TIMER->GetTick(timeFire, 3.0f))
-            {
-                for (auto& elem : bullet)
-                {
-                    elem->Spawn(Vector2(
-                        weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
-                        weapon->idle->GetWorldPivot().y));
-                }
-            }
-        }
-        else if (pattern == BossPattern::string)
-        {
-            int size = stringBullet.inputString.size();
-            char* s = const_cast<char*>(stringBullet.inputString.c_str());
-
-            if (ImGui::InputText("String Danmaku", s, 26))
-            {
-                stringBullet.inputString = s;
-                size = stringBullet.inputString.size();
-                bullet = vector<BossBullet*>(size * 25);
-                SetPattern();
-                stringBullet.SetStringBullet();
-            }
-
-            if (TIMER->GetTick(timeFire, 3.0f))
-            {
-                for (int r = 0; r < 5; r++)
-                {
-                    for (int c = 0; c < 5; c++)
-                    {
-                        for (int i = 0; i < size; i++)
-                        {
-                            if (stringBullet.outputAlphbets[i][r][c])
-                            {
-                                float angle = PI * 2 * (c + 1) / 5;
-                                float atkAngle = (angle / 60.0f) + (0.2f * i) +
-                                    weapon->col->rotation - stringBullet.coefMidForTarget;
-                                int idx = i * 25 + r * 5 + c;
-                                bullet[idx]->moveDir = Vector2(cos(atkAngle), sin(atkAngle));
-                                bullet[idx]->scalar = 250.0f + (r + 10.0f) * 10.0f;
-                            }
-                        }
-                    }
-                }
-                for (auto& elem : bullet)
-                {
-                    if (elem->moveDir.x == 0.0f && elem->moveDir.y == 0.0f) continue;
-
-                    elem->Spawn(Vector2(
-                        weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
-                        weapon->idle->GetWorldPivot().y));
-                }
-            }
-        }
-
-        for (auto& elem : bullet)
-        {
-            elem->Update();
-        }
     }
 
-    void Boss::Hit(const int damage)
+    void Boss::Die()
     {
-        Unit::Hit(damage);
-        if (false == isHit)
-        {
-            hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
-        }
-    }
-
-    void Boss::Killed()
-    {
-        Unit::Killed();
+        Unit::Die();
 
         for (auto& elem : bullet)
         {
@@ -268,9 +225,67 @@ namespace Gungeon
         }
     }
 
-    void Boss::Die()
+    void Boss::PatternCircular()
     {
-        Unit::Die();
+        if (TIMER->GetTick(timeFire, 3.0f))
+        {
+            for (auto& elem : bullet)
+            {
+                elem->Spawn(Vector2(
+                    weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
+                    weapon->idle->GetWorldPivot().y));
+            }
+        }
+    }
+
+    void Boss::PatternString()
+    {
+        int size = stringBullet.inputString.size();
+        char* s = const_cast<char*>(stringBullet.inputString.c_str());
+
+        if (ImGui::InputText("String Danmaku", s, 26))
+        {
+            stringBullet.inputString = s;
+            size = stringBullet.inputString.size();
+            bullet = vector<BossBullet*>(size * 25);
+            InitBullet();
+            stringBullet.SetStringBullet();
+        }
+
+        if (TIMER->GetTick(timeFire, 3.0f))
+        {
+            for (int r = 0; r < 5; r++)
+            {
+                for (int c = 0; c < 5; c++)
+                {
+                    for (int i = 0; i < size; i++)
+                    {
+                        if (stringBullet.outputAlphbets[i][r][c])
+                        {
+                            float angle = PI * 2 * (c + 1) / 5;
+                            float atkAngle = (angle / 60.0f) + (0.2f * i) +
+                                weapon->col->rotation - stringBullet.coefMidForTarget;
+                            int idx = i * 25 + r * 5 + c;
+                            bullet[idx]->moveDir = Vector2(cos(atkAngle), sin(atkAngle));
+                            bullet[idx]->scalar = 250.0f + (r + 10.0f) * 10.0f;
+                        }
+                    }
+                }
+            }
+            for (auto& elem : bullet)
+            {
+                if (elem->moveDir.x == 0.0f && elem->moveDir.y == 0.0f) continue;
+
+                elem->Spawn(Vector2(
+                    weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
+                    weapon->idle->GetWorldPivot().y));
+            }
+        }
+    }
+
+    void Boss::StartDie()
+    {
+        Unit::StartDie();
 
         for (auto& elem : bullet)
         {

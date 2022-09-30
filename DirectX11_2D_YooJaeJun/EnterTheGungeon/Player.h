@@ -10,15 +10,31 @@ namespace Gungeon
 		Player();
 
 		virtual void Init() override;
+		void InitVar();
+		void InitCol();
+		void InitAnim();
+		void InitWeapon();
+		void InitBullet();
+		void InitEffect();
+		void InitUI();
 		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
+		void SetTargetAndCamera();
 		virtual void Idle() override;
 		void Roll();
-		virtual void Killed() override;
 		virtual void Die() override;
+		void Move();
+		void IdleOrWalkVisible();
+		void Fire();
+		void FireCamShake();
+		void StartRoll();
+		virtual void StartDie() override;
+		void Reloading();
+		void Hitting();
+		void Dusting();
 		void DecreaseHeart();
 
 	public:
@@ -28,7 +44,7 @@ namespace Gungeon
 		ObImage*		obtain;
 		PlayerBullet*	bullet[weapon0BulletMax];
 		bool			canFire;
-		bool			reloading;
+		bool			isReloading;
 		float			timeReload;
 		int				curBulletIdx;
 		float			timeRoll;
@@ -45,7 +61,6 @@ namespace Gungeon
 		UI*				uiBulletCount;
 		Weapon*			weaponReloading;
 		bool			godMode;
-		bool			isWalking;
 		float			timeLastPosForDust;
 		Effect*			dust;
 		vector<UI*>		uiHeartFull;

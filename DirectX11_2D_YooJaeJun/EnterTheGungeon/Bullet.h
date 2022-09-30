@@ -19,7 +19,7 @@ namespace Gungeon
 		virtual void Reload();
 
 	public:
-		ObImage* idle;
+		ObImage*	idle;
 		bool		isFired;
 		Vector2		moveDir;
 		int			damage;

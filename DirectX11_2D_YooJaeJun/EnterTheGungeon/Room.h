@@ -2,18 +2,17 @@
 
 namespace Gungeon
 {
-	class Room
+	class Room : public Character
 	{
 	public:
-		ObRect* col;
 		bool	selected;
 
 	public:
 		Room();
-		virtual void Init();
-		virtual void Release();
-		virtual void Update();
-		virtual void LateUpdate();
-		virtual void Render();
+		virtual void Init() override;
+		virtual void Release() override;
+		virtual void Update() override;
+		virtual void LateUpdate() override;
+		virtual void Render() override;
 	};
 }

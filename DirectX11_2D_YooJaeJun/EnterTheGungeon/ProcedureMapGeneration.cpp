@@ -40,9 +40,9 @@ namespace Gungeon
 
     void ProcedureMapGeneration::Release()
     {
-        for (auto& elem : rooms) SafeDelete(elem);
-        for (auto& elem : roomsSelected) SafeDelete(elem);
+        for (auto& elem : rooms) elem->Release();
         rooms.clear();
+        for (auto& elem : roomsSelected) elem->Release();
         roomsSelected.clear();
         nodes.clear();
         triangulation.nodesLinked.clear();
@@ -55,8 +55,11 @@ namespace Gungeon
         passagesLine.clear();
         passages.clear();
         grid.clear();
-        for (auto& elem : tiles) SafeDelete(elem);
-        for (auto& elem : walls) SafeDelete(elem);
+        if (state >= GameState::tile)
+        {
+            for (auto& elem : tiles) SafeDelete(elem);
+            for (auto& elem : walls) SafeDelete(elem);
+        }
     }
 
     void ProcedureMapGeneration::Update()
@@ -259,6 +262,7 @@ namespace Gungeon
 
     void ProcedureMapGeneration::Spray()
     {
+        // Init이 대체하고, 지연시간만 대기
     }
 
     void ProcedureMapGeneration::Spread()
@@ -555,42 +559,42 @@ namespace Gungeon
             //}
         };
 
-        auto SetWall = [&](ObRect& elem)
+        auto SetWall = [&](ObRect* elem)
         {
-            startX = elem.lt().x;
-            endX = elem.rt().x;
-            startY = elem.lt().y;
-            endY = elem.lt().y;
+            startX = elem->lt().x;
+            endX = elem->rt().x;
+            startY = elem->lt().y;
+            endY = elem->lt().y;
             wallScale = abs(endX - startX);
             PushWall(startX, startY, wallScale, 50.0f);
             walls[wallIdx]->col->pivot = OFFSET_LB;
             walls[wallIdx]->idle->pivot = OFFSET_LB;
             wallIdx++;
 
-            startX = elem.lb().x;
-            endX = elem.rb().x;
-            startY = elem.lb().y;
-            endY = elem.rb().y;
+            startX = elem->lb().x;
+            endX = elem->rb().x;
+            startY = elem->lb().y;
+            endY = elem->rb().y;
             wallScale = abs(endX - startX);
             PushWall(startX, startY, wallScale, 50.0f);
             walls[wallIdx]->col->pivot = OFFSET_LT;
             walls[wallIdx]->idle->pivot = OFFSET_LT;
             wallIdx++;
 
-            startX = elem.lt().x;
-            endX = elem.lt().x;
-            startY = elem.lb().y;
-            endY = elem.lt().y;
+            startX = elem->lt().x;
+            endX = elem->lt().x;
+            startY = elem->lb().y;
+            endY = elem->lt().y;
             wallScale = abs(endY - startY);
             PushWall(startX, startY, 50.0f, wallScale);
             walls[wallIdx]->col->pivot = OFFSET_RB;
             walls[wallIdx]->idle->pivot = OFFSET_RB;
             wallIdx++;
 
-            startX = elem.rt().x;
-            endX = elem.rt().x;
-            startY = elem.rt().y;
-            endY = elem.rb().y;
+            startX = elem->rt().x;
+            endX = elem->rt().x;
+            startY = elem->rt().y;
+            endY = elem->rb().y;
             wallScale = abs(endY - startY);
             PushWall(startX, startY, 50.0f, wallScale);
             walls[wallIdx]->col->pivot = OFFSET_LT;
@@ -619,12 +623,12 @@ namespace Gungeon
         // 복도 벽
         for (auto& elem : passages)
         {
-            SetWall(elem);
+            SetWall(dynamic_cast<ObRect*>(&elem));
         }
         // 방 벽
         for (auto& elem : roomsSelected)
         {
-            SetWall(*elem->col);
+            SetWall(dynamic_cast<ObRect*>(elem->col));
         }
 
         // 복도 타일

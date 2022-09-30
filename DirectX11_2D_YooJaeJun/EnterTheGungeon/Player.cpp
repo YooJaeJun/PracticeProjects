@@ -9,12 +9,21 @@ namespace Gungeon
 
 	void Player::Init()
 	{
-		int idx = 0;
+		InitVar();
+		InitCol();
+		InitAnim();
+		InitWeapon();
+		InitBullet();
+		InitEffect();
+		InitUI();
+	}
 
+	void Player::InitVar()
+	{
 		scalar = 300.0f;
 		curHp = maxHp = 6;
 		canFire = true;
-		reloading = false;
+		isReloading = false;
 		timeReload = 0.0f;
 		timeRoll = 0.0f;
 		scalarCoef = 0.0f;
@@ -27,17 +36,29 @@ namespace Gungeon
 		flagFireCamShake = false;
 		timeFireCamShake = 0.0f;
 		godMode = false;
-		isWalking = false;
+		timeLastPosForDust = 0.0f;
+	}
 
-
+	void Player::InitCol()
+	{
 		float playerScaleCoef = 3.0f;
 		col = new ObCircle;
 		col->isFilled = false;
 		col->scale.x = 12.0f * playerScaleCoef;
 		col->scale.y = 12.0f * playerScaleCoef;
 		col->zOrder = ZOrder::object;
-
 		col->color = Color(1.0f, 1.0f, 1.0f);
+
+		foot = new ObRect;
+		foot->scale = Vector2(col->scale.x, col->scale.y / 2.0f);
+		foot->SetParentRT(*col);
+		foot->SetLocalPosY(col->GetWorldPos().y - col->scale.y + 10.0f);
+	}
+
+	void Player::InitAnim()
+	{
+		int idx = 0;
+		float playerScaleCoef = 3.0f;
 
 		idle[dirB] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Front.png");
 		idle[dirL] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
@@ -163,8 +184,10 @@ namespace Gungeon
 		obtain->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 		obtain->SetParentRT(*col);
 		obtain->zOrder = ZOrder::object;
+	}
 
-
+	void Player::InitWeapon()
+	{
 		float playerWeaponScaleCoef = 1.5f;
 		weapon = new Weapon;
 		weapon->col = new ObRect;
@@ -175,8 +198,8 @@ namespace Gungeon
 		weapon->col->scale.x = 30.0f * playerWeaponScaleCoef;
 		weapon->col->scale.y = 22.0f * playerWeaponScaleCoef;
 		weapon->col->SetParentT(*col);
-		weapon->col->SetLocalPosX(18.0f);
-		weapon->col->SetLocalPosY(-15.0f);
+		weapon->col->SetLocalPos(Vector2(18.0f, -15.0f));
+
 		weapon->idle = new ObImage(L"EnterTheGungeon/Player_0/Weapon_0.png");
 		weapon->idle->pivot = Vector2(0.4f, 0.25f);
 		weapon->idle->scale.x = 30.0f * playerWeaponScaleCoef;
@@ -199,6 +222,36 @@ namespace Gungeon
 		weapon->fireEffect->idle->SetParentRT(*weapon->firePos);
 		weapon->fireEffect->idle->zOrder = ZOrder::none;
 
+		weaponReloading = new Weapon;
+		weaponReloading->idle = new ObImage(L"EnterTheGungeon/Player_0/Weapon_0_reloading.png");
+		weaponReloading->idle->isVisible = false;
+		weaponReloading->idle->pivot = Vector2(0.4f, 0.25f);
+		weaponReloading->idle->maxFrame.x = 2;
+		weaponReloading->idle->scale.x = 42.0f / 2.0f * playerWeaponScaleCoef;
+		weaponReloading->idle->scale.y = 22.0f * playerWeaponScaleCoef;
+		weaponReloading->idle->SetParentRT(*weapon->col);
+		weaponReloading->idle->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+		weaponReloading->idle->zOrder = ZOrder::UI;
+	}
+
+	void Player::InitBullet()
+	{
+		float bulletCoef = 1.5f;
+
+		for (auto& elem : bullet)
+		{
+			elem = new PlayerBullet;
+			elem->col->scale.x = 19.0f * bulletCoef;
+			elem->col->scale.y = 19.0f * bulletCoef;
+			elem->idle = new ObImage(L"EnterTheGungeon/Player_0/Bullet_0.png");
+			elem->idle->scale = col->scale * 0.8f;
+			elem->idle->SetParentRT(*elem->col);
+		}
+	}
+
+	void Player::InitEffect()
+	{
+		float playerScaleCoef = 3.0f;
 		shadow = new ObImage(L"EnterTheGungeon/Player_0/Shadow.png");
 		shadow->scale.x = 16.0f * playerScaleCoef;
 		shadow->scale.y = 5.0f * playerScaleCoef;
@@ -206,20 +259,17 @@ namespace Gungeon
 		shadow->SetWorldPosY(-28.0f);
 		shadow->zOrder = ZOrder::shadow;
 
-		foot = new ObRect;
-		foot->scale = Vector2(col->scale.x, col->scale.y / 2.0f);
-		foot->SetParentRT(*col);
-		foot->SetLocalPosY(col->GetWorldPos().y - col->scale.y + 10.0f);
-
 		float dustCoef = 2.0f;
 		dust = new Effect;
 		dust->idle = new ObImage(L"EnterTheGungeon/Player_0/Dust.png");
 		dust->idle->maxFrame.x = 4;
 		dust->idle->scale.x = 44.0f / 3.0f * dustCoef;
 		dust->idle->scale.y = 10.0f * dustCoef;
+	}
 
-		timeLastPosForDust = 0.0f;
-
+	void Player::InitUI()
+	{
+		int idx = 0;
 
 		uiReload = new UI;
 		uiReload->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Reload.png");
@@ -290,33 +340,10 @@ namespace Gungeon
 		uiBulletCount->img->space = Space::screen;
 		uiBulletCount->img->zOrder = ZOrder::UI;
 
-
-		weaponReloading = new Weapon;
-		weaponReloading->idle = new ObImage(L"EnterTheGungeon/Player_0/Weapon_0_reloading.png");
-		weaponReloading->idle->isVisible = false;
-		weaponReloading->idle->pivot = Vector2(0.4f, 0.25f);
-		weaponReloading->idle->maxFrame.x = 2;
-		weaponReloading->idle->scale.x = 42.0f / 2.0f * playerWeaponScaleCoef;
-		weaponReloading->idle->scale.y = 22.0f * playerWeaponScaleCoef;
-		weaponReloading->idle->SetParentRT(*weapon->col);
-		weaponReloading->idle->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
-		weaponReloading->idle->zOrder = ZOrder::UI;
-
-
-		float bulletCoef = 1.5f;
-		for (auto& elem : bullet)
-		{
-			elem = new PlayerBullet;
-			elem->col->scale.x = 19.0f * bulletCoef;
-			elem->col->scale.y = 19.0f * bulletCoef;
-			elem->idle = new ObImage(L"EnterTheGungeon/Player_0/Bullet_0.png");
-			elem->idle->scale = col->scale * 0.8f;
-			elem->idle->SetParentRT(*elem->col);
-		}
-
 		uiHeartNone.resize(maxHp / 2);
 		uiHeartHalf.resize(maxHp / 2);
 		uiHeartFull.resize(maxHp / 2);
+
 		float heartCoef = 1.0f;
 		idx = 0;
 		for (auto& elem : uiHeartNone)
@@ -445,14 +472,7 @@ namespace Gungeon
 	{
 		Unit::Update();
 
-		targetPos = INPUT->GetWorldMousePos();
-
-		CAM->position.x = Utility::Saturate((targetPos.x + idle[curTargetDirState]->GetWorldPos().x) / 2,
-			idle[curTargetDirState]->GetWorldPos().x - 250.0f,
-			idle[curTargetDirState]->GetWorldPos().x + 250.0f);
-		CAM->position.y = Utility::Saturate((targetPos.y + idle[curTargetDirState]->GetWorldPos().y) / 2,
-			idle[curTargetDirState]->GetWorldPos().y - 250.0f,
-			idle[curTargetDirState]->GetWorldPos().y + 250.0f);
+		SetTargetAndCamera();
 
 		switch (state)
 		{
@@ -469,63 +489,9 @@ namespace Gungeon
 			break;
 		}
 
-		if (reloading)
-		{
-			uiReloadBar->img->MoveLocalPos(Vector2(80.0f * DELTA, 0.0f));
-			weapon->idle->isVisible = false;
-			weaponReloading->idle->isVisible = true;
-
-			if (TIMER->GetTick(timeReload, 1.5f))
-			{
-				weapon->idle->isVisible = true;
-				weaponReloading->idle->isVisible = false;
-				uiReload->img->isVisible = false;
-				uiReloadBar->img->isVisible = false;
-				reloading = false;
-				uiReloadBar->img->SetLocalPosX(-60.0f);
-				for (auto& elem : uiBullet) elem->img->isVisible = true;
-			}
-		}
-
-		if (isHit)
-		{
-			DecreaseHeart();
-
-			if (TIMER->GetTick(timeHit, 1.5f))
-			{
-				isHit = false;
-			}
-		}
-
-		if (isHitAnim)
-		{
-			Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
-			for (auto& elem : idle) elem->color = c;
-			for (auto& elem : walk) elem->color = c;
-			for (auto& elem : roll) elem->color = c;
-
-			if (TIMER->GetTick(timeHitAnim, 1.5f))
-			{
-				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
-				for (auto& elem : idle) elem->color = c;
-				for (auto& elem : walk) elem->color = c;
-				for (auto& elem : roll) elem->color = c;
-
-				isHitAnim = false;
-			}
-		}
-		else
-		{
-			idle[curTargetDirState]->color.w = 1.0f;
-			walk[curTargetDirState]->color.w = 1.0f;
-		}
-
-		if (TIMER->GetTick(timeLastPosForDust, 0.4f))
-		{
-			dust->idle->SetWorldPos(foot->GetWorldPos());
-			dust->idle->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
-			dust->Update();
-		}
+		Reloading();
+		Hitting();
+		Dusting();
 
 		for (auto& elem : roll) elem->Update();
 		respawn->Update();
@@ -557,6 +523,7 @@ namespace Gungeon
 	void Player::Render()
 	{
 		dust->Render();
+
 		Unit::Render();
 
 		for (auto& elem : roll) elem->Render(); // RENDER->push(elem);
@@ -619,21 +586,73 @@ namespace Gungeon
 		}
 	}
 
+	void Player::SetTargetAndCamera()
+	{
+		targetPos = INPUT->GetWorldMousePos();
+
+		CAM->position.x = Utility::Saturate((targetPos.x + idle[curTargetDirState]->GetWorldPos().x) / 2,
+			idle[curTargetDirState]->GetWorldPos().x - 250.0f,
+			idle[curTargetDirState]->GetWorldPos().x + 250.0f);
+		CAM->position.y = Utility::Saturate((targetPos.y + idle[curTargetDirState]->GetWorldPos().y) / 2,
+			idle[curTargetDirState]->GetWorldPos().y - 250.0f,
+			idle[curTargetDirState]->GetWorldPos().y + 250.0f);
+	}
+
 	void Player::Idle()
 	{
 		Unit::Idle();
 
-		col->GetWorldPos();
+		Move();
+		SetMoveDir();
+		IdleOrWalkVisible();
 
+		if (INPUT->KeyPress(VK_LBUTTON))
+		{
+			Fire();
+		}
+		else if (INPUT->KeyPress(VK_RBUTTON))
+		{
+			StartRoll();
+		}
+	}
+
+	void Player::Roll()
+	{
+		scalarCoef += 3000.0f * DELTA;
+		scalar -= scalarCoef * DELTA;
+		if (scalar <= 0.0f) scalar = 0.0f;
+
+		col->MoveWorldPos(moveDir * scalar * DELTA);
+
+		if (TIMER->GetTick(timeRoll, 0.5f))
+		{
+			state = State::idle;
+			idle[curTargetDirState]->isVisible = true;
+			for (auto& elem : walk) elem->isVisible = false;
+			for (auto& elem : roll) elem->isVisible = false;
+
+			scalar = 300.0f;
+
+			godMode = false;
+		}
+	}
+
+	void Player::Die()
+	{
+		Unit::Die();
+		dust->idle->isVisible = false;
+		weapon->idle->isVisible = false;
+	}
+
+	void Player::Move()
+	{
 		if (INPUT->KeyPress('A'))
 		{
 			moveDir.x = -1.0f;
-			// col->rotationY = PI;
 		}
 		else if (INPUT->KeyPress('D'))
 		{
 			moveDir.x = 1.0f;
-			// col->rotationY = 0.0f;
 		}
 		else
 		{
@@ -655,80 +674,62 @@ namespace Gungeon
 
 		moveDir.Normalize();
 		col->MoveWorldPos(moveDir * scalar * DELTA);
+	}
 
-		SetMoveDir();
-
+	void Player::IdleOrWalkVisible()
+	{
 		if (moveDir.x == 0.0f && moveDir.y == 0.0f)
 		{
 			idle[curTargetDirState]->isVisible = true;
 			for (auto& elem : walk) elem->isVisible = false;
-			isWalking = false;
 		}
 		else
 		{
 			for (auto& elem : idle) elem->isVisible = false;
 			walk[curTargetDirState]->isVisible = true;
-			isWalking = true;
 		}
+	}
 
-		if (INPUT->KeyPress(VK_LBUTTON))
+	void Player::Fire()
+	{
+		if (false == isReloading)
 		{
-			if (false == reloading)
+			flagFireCamShake = true;
+
+			if (TIMER->GetTick(timeFire, 0.2f) || curBulletIdx == 0)
 			{
-				flagFireCamShake = true;
-
-				if (TIMER->GetTick(timeFire, 0.2f) || curBulletIdx == 0)
-				{
-					canFire = true;
-				}
+				canFire = true;
 			}
-
-			if (curBulletIdx >= weapon0BulletMax)
-			{
-				curBulletIdx = 0;
-				canFire = false;
-				reloading = true;
-				uiReload->img->isVisible = true;
-				uiReloadBar->img->isVisible = true;
-			}
-			else if (canFire)
-			{
-				uiBullet[curBulletIdx]->img->isVisible = false;
-
-				Vector2 dir = INPUT->GetWorldMousePos() - Pos();
-				dir.Normalize();
-				bullet[curBulletIdx++]->Spawn(weapon->firePos->GetWorldPos(),
-					Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
-						RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
-				);
-				weapon->fireEffect->idle->isVisible = true;
-
-				canFire = false;
-			}
-
-			originCamPos = CAM->position;
 		}
-		else if (INPUT->KeyPress(VK_RBUTTON))
+
+		if (curBulletIdx >= weapon0BulletMax)
 		{
-			if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))
-			{
-				state = State::roll;
-				for (auto& elem : idle) elem->isVisible = false;
-				for (auto& elem : walk) elem->isVisible = false;
+			curBulletIdx = 0;
+			canFire = false;
+			isReloading = true;
+			uiReload->img->isVisible = true;
+			uiReloadBar->img->isVisible = true;
+		}
+		else if (canFire)
+		{
+			uiBullet[curBulletIdx]->img->isVisible = false;
 
-				SetMoveDir();
+			Vector2 dir = INPUT->GetWorldMousePos() - Pos();
+			dir.Normalize();
+			bullet[curBulletIdx++]->Spawn(weapon->firePos->GetWorldPos(),
+				Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
+					RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
+			);
+			weapon->fireEffect->idle->isVisible = true;
 
-				roll[curMoveDirState]->isVisible = true;
-				roll[curMoveDirState]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
-
-				timeRoll = 0.0f;
-				scalar = 600.0f;
-				scalarCoef = 100.0f;
-
-				godMode = true;
-			}
+			canFire = false;
 		}
 
+		originCamPos = CAM->position;
+	}
+
+	void Player::FireCamShake()
+	{
 		if (flagFireCamShake)
 		{
 			CAM->position = Vector2(RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f),
@@ -742,30 +743,30 @@ namespace Gungeon
 		}
 	}
 
-	void Player::Roll()
+	void Player::StartRoll()
 	{
-		scalarCoef += 3000.0f * DELTA;
-		scalar -= scalarCoef * DELTA;
-		if (scalar <= 0.0f) scalar = 0.0f;
-
-		col->MoveWorldPos(moveDir * scalar * DELTA);
-
-		if (TIMER->GetTick(timeRoll, 0.5f))
+		if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))
 		{
-			state = State::idle;
-			idle[curTargetDirState]->isVisible = true;
+			state = State::roll;
+			for (auto& elem : idle) elem->isVisible = false;
 			for (auto& elem : walk) elem->isVisible = false;
-			for (auto& elem : roll) elem->isVisible = false;
-			
-			scalar = 300.0f;
 
-			godMode = false;
+			SetMoveDir();
+
+			roll[curMoveDirState]->isVisible = true;
+			roll[curMoveDirState]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
+
+			timeRoll = 0.0f;
+			scalar = 600.0f;
+			scalarCoef = 100.0f;
+
+			godMode = true;
 		}
 	}
 
-	void Player::Killed()
+	void Player::StartDie()
 	{
-		Unit::Killed();
+		Unit::StartDie();
 
 		DecreaseHeart();
 
@@ -783,11 +784,71 @@ namespace Gungeon
 		}
 	}
 
-	void Player::Die()
+	void Player::Reloading()
 	{
-		Unit::Die();
-		dust->idle->isVisible = false;
-		weapon->idle->isVisible = false;
+		if (isReloading)
+		{
+			uiReloadBar->img->MoveLocalPos(Vector2(80.0f * DELTA, 0.0f));
+			weapon->idle->isVisible = false;
+			weaponReloading->idle->isVisible = true;
+
+			if (TIMER->GetTick(timeReload, 1.5f))
+			{
+				weapon->idle->isVisible = true;
+				weaponReloading->idle->isVisible = false;
+				uiReload->img->isVisible = false;
+				uiReloadBar->img->isVisible = false;
+				isReloading = false;
+				uiReloadBar->img->SetLocalPosX(-60.0f);
+				for (auto& elem : uiBullet) elem->img->isVisible = true;
+			}
+		}
+	}
+
+	void Player::Hitting()
+	{
+		if (isHit)
+		{
+			DecreaseHeart();
+
+			if (TIMER->GetTick(timeHit, 1.5f))
+			{
+				isHit = false;
+			}
+		}
+
+		if (isHitAnim)
+		{
+			Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
+			for (auto& elem : idle) elem->color = c;
+			for (auto& elem : walk) elem->color = c;
+			for (auto& elem : roll) elem->color = c;
+
+			if (TIMER->GetTick(timeHitAnim, 1.5f))
+			{
+				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
+				for (auto& elem : idle) elem->color = c;
+				for (auto& elem : walk) elem->color = c;
+				for (auto& elem : roll) elem->color = c;
+
+				isHitAnim = false;
+			}
+		}
+		else
+		{
+			idle[curTargetDirState]->color.w = 1.0f;
+			walk[curTargetDirState]->color.w = 1.0f;
+		}
+	}
+
+	void Player::Dusting()
+	{
+		if (TIMER->GetTick(timeLastPosForDust, 0.4f))
+		{
+			dust->idle->SetWorldPos(foot->GetWorldPos());
+			dust->idle->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+			dust->Update();
+		}
 	}
 
 	void Player::DecreaseHeart()

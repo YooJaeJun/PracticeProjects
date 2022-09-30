@@ -12,6 +12,7 @@ namespace Gungeon
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 
+		void FireEffect();
 		void EquipRight();
 		void EquipLeft();
 

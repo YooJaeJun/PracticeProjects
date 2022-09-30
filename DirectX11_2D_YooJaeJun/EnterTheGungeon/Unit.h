@@ -35,8 +35,9 @@ namespace Gungeon
 
 		virtual void Idle();
 		virtual void Hit(const int damage);
-		virtual void Killed();
 		virtual void Die();
+		virtual void StartDie();
+		void SetLastPosAndDir();
 		void StepBack();
 		void SetMoveDir();
 		void SetTargetDir();

@@ -9,6 +9,12 @@ namespace Gungeon
 
 	void Enemy::Init()
 	{
+		InitVar();
+		InitBullet();
+	}
+
+	void Enemy::InitVar()
+	{
 		curHp = maxHp = 3;
 		scalar = 120.0f;
 		timeFire = 0.0f;
@@ -19,7 +25,12 @@ namespace Gungeon
 		timeSetMoveDir = 0.0f;
 		timeSetTargetDir = 0.0f;
 		pushedDir = Vector2(0.0f, 0.0f);
+		pushedScalar = 100.0f;
+		pushedScalarCoef = 0.0f;
+	}
 
+	void Enemy::InitBullet()
+	{
 		float bulletCoef = 3.0f;
 		for (auto& elem : bullet)
 		{
@@ -47,6 +58,7 @@ namespace Gungeon
 		{
 		case State::idle:
 			Idle();
+			for (auto& elem : bullet) elem->Update();
 			break;
 		case State::die:
 			Die();
@@ -74,8 +86,32 @@ namespace Gungeon
 		moveDir.Normalize();
 		SetMoveDir();
 
-		// col->MoveWorldPos(moveDir * scalar * DELTA);
+		Fire();
+		if (false == isHit)
+		{
+			IdleOrWalkVisible();
+		}
+		Hitting();
+	}
 
+	void Enemy::Die()
+	{
+		Unit::Die();
+
+		pushedScalar -= pushedScalarCoef * DELTA;
+		pushedScalarCoef += 800.0f * DELTA;
+		col->MoveWorldPos(pushedDir * pushedScalar * DELTA);
+
+		if (TIMER->GetTick(timeRealDie, 0.5f))
+		{
+			pushedDir = Vector2(0.0f, 0.0f);
+			pushedScalar = 100.0f;
+			pushedScalarCoef = 0.0f;
+		}
+	}
+
+	void Enemy::IdleOrWalkVisible()
+	{
 		if (moveDir.x == 0.0f && moveDir.y == 0.0f)
 		{
 			idle[curTargetDirState]->isVisible = true;
@@ -86,7 +122,10 @@ namespace Gungeon
 			for (auto& elem : idle) elem->isVisible = false;
 			walk[curTargetDirState]->isVisible = true;
 		}
+	}
 
+	void Enemy::Fire()
+	{
 		if (TIMER->GetTick(timeFire, 1.0f))
 		{
 			for (auto& elem : bullet)
@@ -96,56 +135,6 @@ namespace Gungeon
 				elem->Spawn(weapon->firePos->GetWorldPos(), moveDir);
 				break;
 			}
-		}
-
-		if (isHit)
-		{
-			if (TIMER->GetTick(timeHit, 0.01f))
-			{
-				isHit = false;
-			}
-		}
-
-		if (isHitAnim)
-		{
-			Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
-			for (auto& elem : idle) elem->color = c;
-			for (auto& elem : walk) elem->color = c;
-			hit->color = c;
-
-			col->MoveWorldPos(pushedDir * 200.0f * DELTA);
-
-			for (auto& elem : idle) elem->isVisible = false;
-			for (auto& elem : walk) elem->isVisible = false;
-			hit->isVisible = true;
-
-
-			if (TIMER->GetTick(timeHitAnim, 0.4f))
-			{
-				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
-				for (auto& elem : idle) elem->color = c;
-				for (auto& elem : walk) elem->color = c;
-				hit->color = c;
-				die->color = c;
-
-				walk[curTargetDirState]->isVisible = true;
-				hit->isVisible = false;
-
-				isHitAnim = false;
-
-				pushedDir = Vector2(0.0f, 0.0f);
-			}
-		}
-		else
-		{
-			idle[curTargetDirState]->color.w = 1.0f;
-			walk[curTargetDirState]->color.w = 1.0f;
-			hit->isVisible = false;
-		}
-
-		for (auto& elem : bullet)
-		{
-			elem->Update();
 		}
 	}
 
@@ -161,9 +150,64 @@ namespace Gungeon
 		}
 	}
 
-	void Enemy::Killed()
+	void Enemy::Hitting()
 	{
-		Unit::Killed();
+		if (isHit)
+		{
+			if (TIMER->GetTick(timeHit, 0.01f))
+			{
+				isHit = false;
+			}
+		}
+
+		if (isHitAnim)
+		{
+			Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
+			for (auto& elem : idle) elem->color = c;
+			for (auto& elem : walk) elem->color = c;
+			hit->color = c;
+
+			pushedScalar -= pushedScalarCoef * DELTA;
+			pushedScalarCoef += 200.0f * DELTA;
+			col->MoveWorldPos(pushedDir * pushedScalar * DELTA);
+
+			for (auto& elem : idle) elem->isVisible = false;
+			for (auto& elem : walk) elem->isVisible = false;
+			hit->isVisible = true;
+
+
+			if (TIMER->GetTick(timeHitAnim, 0.5f))
+			{
+				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
+				for (auto& elem : idle) elem->color = c;
+				for (auto& elem : walk) elem->color = c;
+				hit->color = c;
+				die->color = c;
+
+				walk[curTargetDirState]->isVisible = true;
+				hit->isVisible = false;
+
+				isHitAnim = false;
+
+				pushedDir = Vector2(0.0f, 0.0f);
+				pushedScalar = 100.0f;
+				pushedScalarCoef = 0.0f;
+			}
+		}
+		else
+		{
+			idle[curTargetDirState]->color.w = 1.0f;
+			walk[curTargetDirState]->color.w = 1.0f;
+			hit->isVisible = false;
+		}
+	}
+
+	void Enemy::StartDie()
+	{
+		Unit::StartDie();
+
+		pushedScalar = 400.0f;
+		pushedScalarCoef = 0.0f;
 
 		for (auto& elem : bullet)
 		{
@@ -171,18 +215,6 @@ namespace Gungeon
 			elem->col->isVisible = false;
 			elem->idle->colOnOff = false;
 			elem->idle->isVisible = false;
-		}
-	}
-
-	void Enemy::Die()
-	{
-		Unit::Die();
-
-		col->MoveWorldPos(pushedDir * 400.0f * DELTA);
-
-		if (TIMER->GetTick(timeRealDie, 0.5f))
-		{
-			pushedDir = Vector2(0.0f, 0.0f);
 		}
 	}
 

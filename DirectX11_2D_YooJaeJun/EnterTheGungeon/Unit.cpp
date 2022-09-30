@@ -40,11 +40,7 @@ namespace Gungeon
 
 	void Unit::Update()
 	{
-		lastPos = Pos();
-
-		curMoveDirStateBefore = curMoveDirState;
-		curTargetDirStateBefore = curTargetDirState;
-		targetDirBefore = targetDir;
+		SetLastPosAndDir();
 
 		Character::Update();
 
@@ -107,18 +103,18 @@ namespace Gungeon
 		if (false == isHit)
 		{
 			curHp -= damage;
+			isHit = true;
+			isHitAnim = true;
+
 			if (damage > 0)
 			{
-				isHit = true;
-				isHitAnim = true;
-
 				idle[curTargetDirState]->isVisible = false;
 				walk[curTargetDirState]->isVisible = false;
 			}
 			if (curHp <= 0)
 			{
 				curHp = 0;
-				Killed();
+				StartDie();
 			}
 			else
 			{
@@ -128,7 +124,7 @@ namespace Gungeon
 		}
 	}
 
-	void Unit::Killed()
+	void Unit::StartDie()
 	{
 		if (state != State::die)
 		{
@@ -149,6 +145,7 @@ namespace Gungeon
 				elem->isVisible = false;
 				elem->ChangeAnim(ANIMSTATE::STOP, 0.2f);
 			}
+
 			if (hit) hit->isVisible = false;
 			weapon->col->isVisible = false;
 			weapon->idle->isVisible = false;
@@ -156,6 +153,14 @@ namespace Gungeon
 			die->isVisible = true;
 			die->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
 		}
+	}
+
+	void Unit::SetLastPosAndDir()
+	{
+		lastPos = Pos();
+		curMoveDirStateBefore = curMoveDirState;
+		curTargetDirStateBefore = curTargetDirState;
+		targetDirBefore = targetDir;
 	}
 
 	void Unit::Die()
