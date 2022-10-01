@@ -52,7 +52,7 @@ float4 PS(PixelInput input) : SV_TARGET //SV_TARGET Àº Å¸°ÙÀÌµÉ »ö±ò
 	float4 outputColor;
 	outputColor = saturate(input.color);
     
-	float2 minus = input.position.xyz - screenPos;
+	float2 minus = input.position.xy - screenPos;
 	float dis = minus.x * minus.x + minus.y * minus.y;
 	dis = sqrt(dis);
     

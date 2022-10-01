@@ -66,7 +66,7 @@ void Stage01::Init()
 	menu->SetWorldPos(Vector2(-app.GetHalfWidth(), app.GetHalfHeight()));
 
 	//				파일 이름, 키값, 루프
-	SOUND->AddSound("bgm.wav", "BGM", true);
+	SOUND->AddSound("Vaquero Perdido - The Mini Vandals.mp3", "BGM", true);
 	SOUND->Play("BGM");
 
 	SOUND->AddSound("gun.wav", "GUN", false);

@@ -59,7 +59,7 @@ namespace Gungeon
 
 	void Unit::Render()
 	{
-		if (shadow) shadow->Render(); // RENDER->push(shadow);
+		// if (shadow) shadow->Render(); // RENDER->push(shadow);
 		if (weapon) weapon->Render();
 		idle[curTargetDirState]->Render(); // RENDER->push(idle[curTargetDirState]);
 		walk[curTargetDirState]->Render(); // RENDER->push(walk[curTargetDirState]);

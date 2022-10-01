@@ -734,6 +734,9 @@ namespace Gungeon
 			weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
 
 			canFire = false;
+
+			SOUND->Stop("GUN");
+			SOUND->Play("GUN");
 		}
 
 		originCamPos = CAM->position;

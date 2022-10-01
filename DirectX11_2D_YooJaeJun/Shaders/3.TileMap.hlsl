@@ -94,7 +94,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
     
     
-    float2 minus = input.position.xyz - ScreenPos;
+    float2 minus = input.position.xy - ScreenPos;
     float dis = minus.x * minus.x + minus.y * minus.y;
     dis = sqrt(dis);
     if (Select == 0.0f)

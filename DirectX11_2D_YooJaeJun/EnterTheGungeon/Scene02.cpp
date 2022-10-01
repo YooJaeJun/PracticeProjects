@@ -19,6 +19,10 @@ namespace Gungeon
     {
         LIGHT->light.radius = 2000.0f;
 
+        SOUND->Stop("SCENE01");
+        SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
+        SOUND->Play("SCENE02");
+
         // ¸Ê ¿ÀºêÁ§Æ®
         mapObj = new MapObject;
 
@@ -665,8 +669,11 @@ namespace Gungeon
         {
             mapGen->Render();
         }
-
         for (auto& elem : mapBasic) if (elem) elem->Render();
+
+        player->shadow->Render();
+        for (auto& elem : enemy) elem->shadow->Render();
+        boss->shadow->Render();
 
         mapObj->Render();
         for (auto& elem : enemy) elem->Render();
