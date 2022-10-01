@@ -221,8 +221,8 @@ namespace Gungeon
                 elem->reverseLR = true;
             }
             elem->isVisible = false;
-            elem->maxFrame.x = 2;
-            elem->scale.x = 40.0f / 2.0f * bossScaleCoef;
+            elem->maxFrame.x = 6;
+            elem->scale.x = 180.0f / 6.0f * bossScaleCoef;
             elem->scale.y = 40.0f * bossScaleCoef;
             elem->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
             elem->SetParentRT(*boss->col);
@@ -462,16 +462,15 @@ namespace Gungeon
 
         for (auto& elem : enemy)
         {
-            elem->targetPos = player->Pos();
+            if (elem->state != State::die)
+            {
+                elem->targetPos = player->Pos();
+                // elem->FindPath();
+            }
             elem->Update();
-
-            //if (elem->state == State::idle)
-            //{
-            //    elem->FindPath();
-            //}
         }
 
-        if (boss->state == State::idle)
+        if (boss->state != State::die)
         {
             boss->targetPos = player->Pos();
             boss->weapon->col->rotation = Utility::DirToRadian(player->Pos());

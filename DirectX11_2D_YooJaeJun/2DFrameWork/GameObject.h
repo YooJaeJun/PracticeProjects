@@ -124,5 +124,6 @@ public:
 	//부모행렬 만들기
 	void	SetParentRT(GameObject& src)	{ P = &src.RT; }
 	void	SetParentT(GameObject& src)	{ P = &src.T; }
+	Matrix*	GetParent() { return P; }
 };
 

@@ -2,8 +2,6 @@
 
 namespace Gungeon
 {
-	const float defaultSpawnPos = 3000.0f;
-
 	class Bullet : public Character
 	{
 	public:

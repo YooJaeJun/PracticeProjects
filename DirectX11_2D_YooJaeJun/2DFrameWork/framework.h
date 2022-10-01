@@ -75,6 +75,7 @@ using namespace SimpleMath;
 #define OFFSET_RB           Vector2(-0.5f, 0.5f)
 #define OFFSET_LT           Vector2(0.5f, -0.5f)
 #define OFFSET_RT           Vector2(-0.5f, -0.5f)
+#define DEFAULTSPAWN        Vector2(5000.0f, 5000.0f)
 
 // enum
 enum ColPos

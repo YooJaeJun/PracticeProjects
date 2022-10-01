@@ -17,11 +17,6 @@ namespace Gungeon
     {
         pattern = BossPattern::string;
 
-        if (pattern == BossPattern::string)
-        {
-            stringBullet.inputString = "abcdefghijklmnopqrstuvwxyz";
-        }
-
         curHp = maxHp = 1;
         scalar = 30.0f;
         timeFire = 0.0f;
@@ -29,6 +24,10 @@ namespace Gungeon
         isHit = false;
         isHitAnim = false;
         timeHitAnim = 0.0f;
+        timeTornado = 0.0f;
+        timeTornadoOne = 0.0f;
+        flagTornadoRespawn = false;
+        timeRand = 0.0f;
     }
 
     void Boss::InitBullet()
@@ -36,65 +35,21 @@ namespace Gungeon
         switch (pattern)
         {
         case Gungeon::BossPattern::circular:
-        {
-            bullet.resize(circularMax);
-
-            int idx = 0;
-            for (auto& elem : bullet)
-            {
-                elem = new BossBullet;
-                elem->col = new ObCircle;
-                InitBulletOne(elem);
-                elem->moveDir.x = cos(idx * 360.0f / circularMax * ToRadian);
-                elem->moveDir.y = sin(idx * 360.0f / circularMax * ToRadian);
-                idx++;
-            }
+            InitCircular();
             break;
-        }
         case Gungeon::BossPattern::string:
-        {
-            stringBullet.coefMidForTarget = 0.0f;
-            stringBullet.SetStringBullet();
-            bullet.resize(stringBullet.inputString.size() * 25);
-
-            for (auto& elem : bullet)
-            {
-                elem = new BossBullet;
-                elem->col = new ObCircle;
-                InitBulletOne(elem);
-            }
+            InitString();
             break;
-        }
         case Gungeon::BossPattern::storm:
-        {
-            bullet.resize(stormMax);
-            scalar = 1.0f;
-
-            int idx = 0;
-            for (auto& elem : bullet)
-            {
-                elem = new BossBullet;
-                elem->col = new ObCircle;
-                elem->col->SetParentRT(*col);
-                InitBulletOne(elem);
-                elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
-                elem->scalar = (idx + 1) * 3.0f;
-                idx++;
-            }
+            InitStorm();
             break;
-        }//case
+        case Gungeon::BossPattern::tornado:
+            InitTornado();
+            break;
+        case Gungeon::BossPattern::rand:
+            InitRand();
+            break;
         }//switch
-    }
-
-    void Boss::InitBulletOne(BossBullet* elem)
-    {
-        float bulletCoef = 4.0f;
-        elem->col->scale = Vector2(8.0f * bulletCoef, 8.0f * bulletCoef);
-        elem->col->isFilled = false;
-        elem->col->SetWorldPos(Vector2(5000.0f, 5000.0f));
-        elem->idle = new ObImage(L"EnterTheGungeon/Boss_0/Bullet_0.png");
-        elem->idle->scale = elem->col->scale;
-        elem->idle->SetParentRT(*elem->col);
     }
 
     void Boss::Release()
@@ -121,10 +76,12 @@ namespace Gungeon
             Idle();
             for (auto& elem : bullet) elem->Update();
             break;
+        case State::walk:
+            Walk();
+            for (auto& elem : bullet) elem->Update();
+            break;
         case State::die:
             Die();
-            break;
-        default:
             break;
         }
 
@@ -156,20 +113,26 @@ namespace Gungeon
     {
         Unit::SetTarget();
 
-        switch (pattern)
+        if (false == isHit)
         {
-        case Gungeon::BossPattern::circular:
-            PatternCircular();
-            break;
-        case Gungeon::BossPattern::string:
-            PatternString();
-            break;
-        case Gungeon::BossPattern::storm:
-            PatternStorm();
-            break;
+            StartWalk();
         }
 
         Hitting();
+        UpdateBullet();
+    }
+
+    void Boss::Walk()
+    {
+        Unit::SetTarget();
+
+        if (false == isHit)
+        {
+            StartIdle();
+        }
+
+        Hitting();
+        UpdateBullet();
     }
 
     void Boss::Die()
@@ -185,73 +148,33 @@ namespace Gungeon
         }
     }
 
-    void Boss::PatternCircular()
+    void Boss::StartWalk()
     {
-        if (TIMER->GetTick(timeFire, 3.0f))
+        if (moveDir.x == 0.0f && moveDir.y == 0.0f)
         {
-            for (auto& elem : bullet)
-            {
-                elem->Spawn(Vector2(
-                    weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
-                    weapon->idle->GetWorldPivot().y));
-            }
+            idle[curTargetDirState]->isVisible = true;
+            for (auto& elem : walk) elem->isVisible = false;
+        }
+        else
+        {
+            state = State::walk;
+            for (auto& elem : idle) elem->isVisible = false;
+            walk[curTargetDirState]->isVisible = true;
         }
     }
 
-    void Boss::PatternString()
+    void Boss::StartIdle()
     {
-        int size = stringBullet.inputString.size();
-        char* s = const_cast<char*>(stringBullet.inputString.c_str());
-
-        if (ImGui::InputText("String Danmaku", s, 26))
+        if (moveDir.x == 0.0f && moveDir.y == 0.0f)
         {
-            stringBullet.inputString = s;
-            size = stringBullet.inputString.size();
-            bullet = vector<BossBullet*>(size * 25);
-            InitBullet();
-            stringBullet.SetStringBullet();
+            state = State::idle;
+            idle[curTargetDirState]->isVisible = true;
+            for (auto& elem : walk) elem->isVisible = false;
         }
-
-        if (TIMER->GetTick(timeFire, 3.0f))
+        else
         {
-            for (int r = 0; r < 5; r++)
-            {
-                for (int c = 0; c < 5; c++)
-                {
-                    for (int i = 0; i < size; i++)
-                    {
-                        if (stringBullet.outputAlphbets[i][r][c])
-                        {
-                            float angle = PI * 2 * (c + 1) / 5;
-                            float atkAngle = (angle / 60.0f) + (0.2f * i) +
-                                weapon->col->rotation - stringBullet.coefMidForTarget;
-                            int idx = i * 25 + r * 5 + c;
-                            bullet[idx]->moveDir = Vector2(cos(atkAngle), sin(atkAngle));
-                            bullet[idx]->scalar = 250.0f + (r + 10.0f) * 10.0f;
-                        }
-                    }
-                }
-            }
-
-            for (auto& elem : bullet)
-            {
-                if (elem->moveDir.x == 0.0f && elem->moveDir.y == 0.0f) continue;
-
-                elem->Spawn(Vector2(
-                    weapon->idle->GetWorldPivot().x + weapon->idle->scale.x / 2.0f,
-                    weapon->idle->GetWorldPivot().y));
-            }
-        }
-    }
-
-    void Boss::PatternStorm()
-    {
-        int idx = 0;
-        for (auto& elem : bullet)
-        {
-            elem->col->rotation += 3.0f * idx * ToRadian * DELTA;
-            elem->col->rotation2 += 3.0f * idx * ToRadian * DELTA;
-            idx++;
+            for (auto& elem : idle) elem->isVisible = false;
+            walk[curTargetDirState]->isVisible = true;
         }
     }
 
@@ -298,6 +221,7 @@ namespace Gungeon
             SetPosY(Pos().y + RANDOM->Float(-1.0f, 1.0f));
 
             for (auto& elem : idle) elem->isVisible = false;
+            for (auto& elem : walk) elem->isVisible = false;
             hit->isVisible = true;
 
             if (TIMER->GetTick(timeHitAnim, 0.4f))
@@ -308,11 +232,9 @@ namespace Gungeon
                 hit->color = c;
                 die->color = c;
 
+                walk[curTargetDirState]->isVisible = true;
                 hit->isVisible = false;
-                if (state != State::die)
-                {
-                    idle[curTargetDirState]->isVisible = true;
-                }
+
                 isHitAnim = false;
             }
         }
@@ -320,7 +242,6 @@ namespace Gungeon
         {
             idle[curTargetDirState]->color.w = 1.0f;
             walk[curTargetDirState]->color.w = 1.0f;
-            idle[curTargetDirState]->isVisible = true;
             hit->isVisible = false;
         }
     }
@@ -339,6 +260,260 @@ namespace Gungeon
             elem->idle->colOnOff = false;
             elem->idle->isVisible = false;
             elem->hitBomb->idle->isVisible = false;
+        }
+    }
+
+
+    /// <summary>
+    /// Pattern
+    /// </summary>
+
+    void Boss::InitCircular()
+    {
+        moveDir = Vector2(0.0f, 0.0f);
+
+        bullet.resize(circularMax);
+
+        int idx = 0;
+        for (auto& elem : bullet)
+        {
+            elem = new BossBullet;
+            elem->col = new ObCircle;
+            InitBulletOne(elem);
+            elem->moveDir.x = cos(idx * 360.0f / circularMax * ToRadian);
+            elem->moveDir.y = sin(idx * 360.0f / circularMax * ToRadian);
+            idx++;
+        }
+    }
+
+    void Boss::InitString()
+    {
+        moveDir = Vector2(0.0f, 0.0f);
+
+        if (stringBullet.inputString == "")
+        {
+            stringBullet.inputString = "abcdefghijklmnopqrstuvwxyz";
+        }
+        stringBullet.coefMidForTarget = 0.0f;
+        stringBullet.SetStringBullet();
+        bullet.resize(stringBullet.inputString.size() * 25);
+
+        for (auto& elem : bullet)
+        {
+            elem = new BossBullet;
+            elem->col = new ObCircle;
+            InitBulletOne(elem);
+        }
+    }
+
+    void Boss::InitStorm()
+    {
+        bullet.resize(stormMax);
+        scalar = 100.0f;
+
+        int idx = 0;
+        for (auto& elem : bullet)
+        {
+            elem = new BossBullet;
+            elem->col = new ObCircle;
+            InitBulletOne(elem);
+            elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
+            elem->scalar = (idx + 1) * 3.0f;
+            idx++;
+        }
+    }
+
+    void Boss::InitTornado()
+    {
+        moveDir = Vector2(0.0f, 0.0f);
+
+        bullet.resize(tornadoMax);
+        scalar = 300.0f;
+
+        int idx = 0;
+        for (auto& elem : bullet)
+        {
+            elem = new BossBullet;
+            elem->col = new ObCircle;
+            InitBulletOne(elem);
+            elem->scalar = 100.0f + (idx + 10.0f) * 5.0f;
+            elem->moveDir = Vector2(cos(idx * 6.0f * ToRadian), sin(idx * 6.0f * ToRadian));
+            idx++;
+        }
+    }
+
+    void Boss::InitRand()
+    {
+        moveDir = Vector2(0.0f, 0.0f);
+
+        bullet.resize(randMax);
+        scalar = 300.0f;
+
+        int idx = 0;
+        for (auto& elem : bullet)
+        {
+            elem = new BossBullet;
+            elem->col = new ObCircle;
+            InitBulletOne(elem);
+            elem->scalar = 200.0f;
+            idx++;
+        }
+    }
+
+    void Boss::InitBulletOne(BossBullet* elem)
+    {
+        float bulletCoef = 4.0f;
+        elem->col->scale = Vector2(8.0f * bulletCoef, 8.0f * bulletCoef);
+        elem->col->isFilled = false;
+        elem->col->SetWorldPos(DEFAULTSPAWN);
+        elem->idle = new ObImage(L"EnterTheGungeon/Boss_0/Bullet_0.png");
+        elem->idle->scale = elem->col->scale;
+        elem->idle->SetParentRT(*elem->col);
+    }
+
+
+    void Boss::UpdateBullet()
+    {
+        switch (pattern)
+        {
+        case Gungeon::BossPattern::circular:
+            UpdateCircular();
+            break;
+        case Gungeon::BossPattern::string:
+            UpdateString();
+            break;
+        case Gungeon::BossPattern::storm:
+            UpdateStorm();
+            break;
+        case Gungeon::BossPattern::tornado:
+            UpdateTornado();
+            break;
+        case Gungeon::BossPattern::rand:
+            UpdateRand();
+            break;
+        }
+    }
+
+    void Boss::UpdateCircular()
+    {
+        if (TIMER->GetTick(timeFire, 3.0f))
+        {
+            for (auto& elem : bullet)
+            {
+                elem->Spawn(weapon->firePos->GetWorldPos());
+            }
+        }
+    }
+
+    void Boss::UpdateString()
+    {
+        int size = stringBullet.inputString.size();
+        char* s = const_cast<char*>(stringBullet.inputString.c_str());
+
+        if (ImGui::InputText("String Danmaku", s, 26))
+        {
+            stringBullet.inputString = s;
+            size = stringBullet.inputString.size();
+            bullet = vector<BossBullet*>(size * 25);
+            InitBullet();
+            stringBullet.SetStringBullet();
+        }
+
+        if (TIMER->GetTick(timeFire, 1.5f))
+        {
+            for (int r = 0; r < 5; r++)
+            {
+                for (int c = 0; c < 5; c++)
+                {
+                    for (int i = 0; i < size; i++)
+                    {
+                        if (stringBullet.outputAlphbets[i][r][c])
+                        {
+                            float angle = PI * 2 * (c + 1) / 5;
+                            float atkAngle = (angle / 60.0f) + (0.2f * i) +
+                                weapon->col->rotation - stringBullet.coefMidForTarget;
+                            int idx = i * 25 + r * 5 + c;
+                            bullet[idx]->moveDir = Vector2(cos(atkAngle), sin(atkAngle));
+                            bullet[idx]->scalar = 250.0f + (r + 10.0f) * 10.0f;
+                        }
+                    }
+                }
+            }
+
+            for (auto& elem : bullet)
+            {
+                if (elem->moveDir.x == 0.0f && elem->moveDir.y == 0.0f) continue;
+
+                elem->Spawn(weapon->firePos->GetWorldPos());
+            }
+        }
+    }
+
+    void Boss::UpdateStorm()
+    {
+        moveDir = targetDir;
+        SetMoveDirState();
+        col->MoveWorldPos(moveDir * scalar * DELTA);
+
+        int idx = 0;
+        for (auto& elem : bullet)
+        {
+            if (col && nullptr == elem->col->GetParent())
+            {
+                elem->col->SetParentRT(*col);
+            }
+            elem->col->rotation += 3.0f * idx * ToRadian * DELTA;
+            elem->col->rotation2 += 3.0f * idx * ToRadian * DELTA;
+            idx++;
+        }
+    }
+
+    void Boss::UpdateTornado()
+    {
+        if (TIMER->GetTick(timeTornadoOne, 0.05f))
+        {
+            flagTornadoRespawn = true;
+            int idx = 0;
+            for (auto& elem : bullet)
+            {
+                if (false == elem->isFired)
+                {
+                    elem->Spawn(weapon->firePos->GetWorldPos());
+                    flagTornadoRespawn = false;
+                    break;
+                }
+                idx++;
+            }
+
+            if (flagTornadoRespawn)
+            {
+                if (TIMER->GetTick(timeTornado, 0.1f))
+                {
+                    for (auto& elem : bullet)
+                    {
+                        elem->isFired = false;
+                        elem->SetPos(DEFAULTSPAWN);
+                    }
+                }
+            }
+        }
+    }
+
+    void Boss::UpdateRand()
+    {
+        if (TIMER->GetTick(timeRand, 2.0f))
+        {
+            for (auto& elem : bullet)
+            {
+                elem->moveDir.x = min(targetDir.x + RANDOM->Float(0.0f, 0.1f), 1.0f);
+                elem->moveDir.y = min(targetDir.y + RANDOM->Float(0.0f, 0.1f), 1.0f);
+                elem->Spawn(weapon->firePos->GetWorldPos());
+            }
+        }
+
+        for (auto& elem : bullet)
+        {
+            elem->scalar = RANDOM->Float(200.0f, 700.0f);
         }
     }
 }

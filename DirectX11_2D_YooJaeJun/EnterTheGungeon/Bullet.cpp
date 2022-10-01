@@ -61,7 +61,7 @@ namespace Gungeon
     {
         col->colOnOff = true;
         col->isVisible = true;
-        SetPos(Vector2(defaultSpawnPos, defaultSpawnPos));
+        SetPos(DEFAULTSPAWN);
         idle->isVisible = true;
         isFired = false;
     }

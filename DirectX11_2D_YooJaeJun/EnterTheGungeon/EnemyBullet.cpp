@@ -7,7 +7,7 @@ namespace Gungeon
         col = new ObCircle();
         col->isFilled = false;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-        SetPos(Vector2(defaultSpawnPos, defaultSpawnPos));
+        SetPos(DEFAULTSPAWN);
 
         scalar = 500.0f;
         damage = 1;
