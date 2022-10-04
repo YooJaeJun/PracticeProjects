@@ -17,6 +17,8 @@ namespace Gungeon
 
     void Scene02::Init()
     {
+        if (mapGen) mapGen->useGui = false;
+
         LIGHT->light.radius = 2000.0f;
 
         SOUND->Stop("SCENE01");
@@ -308,10 +310,10 @@ namespace Gungeon
             elem->imgReloading->zOrder = ZOrder::UI;
 
             elem->pivotDefault = Vector2(0.6f, 0.25f);
-            elem->localPosDefault = Vector2(18.0f, -15.0f);
+            elem->localPosDefault = Vector2(10.0f, -15.0f);
             elem->localFirePosDefault = Vector2(70.0f, 12.0f);
             elem->Equip();
-
+            elem->state = State::die;
 
             elem->uiBulletFrame = new UI;
             elem->uiBulletFrame->img = new ObImage(L"EnterTheGungeon/Boss_0/UI_Magazine.png");
@@ -338,13 +340,14 @@ namespace Gungeon
                 uiBulletIdx++;
             }
 
+            float uiWeaponScaleCoef = 2.5f;
             elem->uiWeapon = new UI;
             elem->uiWeapon->img = new ObImage(L"EnterTheGungeon/Boss_0/UI_Weapon.png");
             elem->uiWeapon->img->pivot = Vector2(0.4f, 0.25f);
-            elem->uiWeapon->img->scale.x = 60.0f;
-            elem->uiWeapon->img->scale.y = 48.0f;
+            elem->uiWeapon->img->scale.x = 45.0f * uiWeaponScaleCoef;
+            elem->uiWeapon->img->scale.y = 13.0f * uiWeaponScaleCoef;
             elem->uiWeapon->anchor = Anchor::rightBottom;
-            elem->uiWeapon->Spawn(-190.0f, 60.0f);
+            elem->uiWeapon->Spawn(-210.0f, 70.0f);
             elem->uiWeapon->img->space = Space::screen;
             elem->uiWeapon->img->zOrder = ZOrder::UI;
             elem->uiWeapon->img->isVisible = false;
@@ -554,7 +557,7 @@ namespace Gungeon
             if (elem->state != State::die)
             {
                 elem->targetPos = player->Pos();
-                // elem->FindPath();
+                elem->FindPath(mapGen->tilemap);
             }
             elem->Update();
         }
@@ -576,34 +579,6 @@ namespace Gungeon
 
     void Scene02::LateUpdate()
     {
-        //for (auto& elem : mapGen->walls)
-        //{
-        //    if (elem &&
-        //        elem->col->GetWorldPos().x > CAM->position.x - 1000.0f &&
-        //        elem->col->GetWorldPos().x < CAM->position.x + 1000.0f &&
-        //        elem->col->GetWorldPos().y > CAM->position.y - 1000.0f &&
-        //        elem->col->GetWorldPos().y < CAM->position.y + 1000.0f)
-        //    {
-        //        if (elem->col->Intersect(player->col))
-        //        {
-        //            player->StepBack();
-        //        }
-
-        //        for (auto& enemyElem : enemy)
-        //        {
-        //            if (elem->col->Intersect(enemyElem->col))
-        //            {
-        //                enemyElem->StepBack();
-        //            }
-        //        }
-
-        //        if (elem->col->Intersect(boss->col))
-        //        {
-        //            boss->StepBack();
-        //        }
-        //    }
-        //}
-
         if (mapGen)
         {
             mapGen->LateUpdate();
@@ -612,10 +587,10 @@ namespace Gungeon
         int idx = 0;
 
         // 플레이어
-        //if (CheckGrid(player->Pos()))
-        //{
-        //    player->StepBack();
-        //}
+        if (mapGen->IntersectTile(player->Pos()))
+        {
+            player->StepBack();
+        }
 
         // 플레이어 총알
         for (auto& bulletElem : player->bullet)
@@ -639,46 +614,47 @@ namespace Gungeon
                 bulletElem->Hit(1);
             }
 
-            //if (CheckGrid(bulletElem->Pos()))
-            //{
-            //    bulletElem->Reload();
-            //}
+            if (mapGen->IntersectTile(bulletElem->Pos()))
+            {
+                bulletElem->Hit(1);
+            }
         }
 
 
         // 적
         for (auto& enemyElem : enemy)
         {
-            if (false == player->godMode)
+            if (false == player->godMode &&
+                enemyElem->state != State::die &&
+                enemyElem->col->Intersect(player->col))
             {
-                if (enemyElem->state != State::die &&
-                    enemyElem->col->Intersect(player->col))
+                player->Hit(1);
+            }
+
+            if (mapGen->IntersectTile(enemyElem->Pos()))
+            {
+                enemyElem->StepBack();
+            }
+
+            // 적 총알
+            for (auto& bulletElem : enemyElem->bullet)
+            {
+                if (false == player->godMode &&
+                    enemyElem->state != State::die &&
+                    bulletElem->col->Intersect(player->col))
                 {
-                    player->Hit(1);
+                    player->Hit(bulletElem->damage);
+                    bulletElem->Hit(1);
                 }
 
-                //if (CheckGrid(enemyElem->Pos()))
-                //{
-                //    enemyElem->StepBack();
-                //}
-
-                // 적 총알
-                for (auto& bulletElem : enemyElem->bullet)
+                if (mapGen->IntersectTile(bulletElem->Pos()))
                 {
-                    if (bulletElem->col->Intersect(player->col))
-                    {
-                        player->Hit(bulletElem->damage);
-                        bulletElem->Hit(1);
-                    }
-
-                    //if (CheckGrid(bulletElem->Pos()))
-                    //{
-                    //    bulletElem->Reload();
-                    //}
+                    bulletElem->Hit(1);
                 }
             }
 
-            if (enemyElem->dropItem->col->Intersect(player->col))
+            if (enemyElem->dropItem->state == State::idle &&
+                enemyElem->dropItem->col->Intersect(player->col))
             {
                 enemyElem->dropItem->Hit();
                 player->PlusMoney(1);
@@ -689,43 +665,44 @@ namespace Gungeon
 
 
         // 보스
-        if (false == player->godMode)
+        if (false == player->godMode &&
+            boss->state != State::die &&
+            boss->col->Intersect(player->col))
         {
-            if (boss->state != State::die &&
-                boss->col->Intersect(player->col))
+            player->Hit(1);
+        }
+
+        if (mapGen->IntersectTile(boss->Pos()))
+        {
+            boss->StepBack();
+        }
+
+        // 보스 총알
+        for (auto& bulletElem : boss->bullet)
+        {
+            if (false == player->godMode &&
+                boss->state != State::die &&
+                bulletElem->col->Intersect(player->col))
             {
-                player->Hit(1);
+                player->Hit(bulletElem->damage);
+                bulletElem->Hit(1);
             }
 
-            //if (CheckGrid(boss->Pos()))
-            //{
-            //    boss->StepBack();
-            //}
-
-            // 보스 총알
-            for (auto& bulletElem : boss->bullet)
+            if (mapGen->IntersectTile(bulletElem->Pos()))
             {
-                if (bulletElem->col->Intersect(player->col))
-                {
-                    player->Hit(bulletElem->damage);
-                    bulletElem->Hit(1);
-                }
-
-                //if (CheckGrid(bulletElem->Pos()))
-                //{
-                //    bulletElem->Reload();
-                //}
+                bulletElem->Hit(1);
             }
         }
 
-        if (boss->dropItem->col->Intersect(player->col))
+        if (boss->dropItem->state == State::idle &&
+            boss->dropItem->col->Intersect(player->col))
         {
             boss->dropItem->Hit();
             player->PlusMoney(1);
         }
 
         Weapon* bossWeapon = boss->weapon[boss->curWeaponIdx];
-        if (bossWeapon->state != State::die &&
+        if (bossWeapon->state == State::idle &&
             bossWeapon->col->Intersect(player->col))
         {
             bossWeapon->Hit();
@@ -804,12 +781,4 @@ namespace Gungeon
 
         boss->ResizeScreen();
     }
-
-    //bool Scene02::CheckGrid(Vector2 wpos)
-    //{
-    //    int coef = gridMax / 2;
-    //    int x = wpos.x + coef;
-    //    int y = wpos.y + coef;
-    //    return false == mapGen->grid[x][y];
-    //}
 }

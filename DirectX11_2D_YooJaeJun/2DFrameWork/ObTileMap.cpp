@@ -15,9 +15,9 @@ ObTileMap::ObTileMap()
     scale = Vector2(50.0f, 50.0f);
 
     tileImages[0] = new ObImage(L"Empty.png");
-    tileImages[0]->maxFrame = Int2(12, 12);
+    tileImages[0]->maxFrame = Int2(10, 10);
     tileImages[1] = new ObImage(L"EnterTheGungeon/Level/Tileset.png");
-    tileImages[1]->maxFrame = Int2(12, 12);
+    tileImages[1]->maxFrame = Int2(10, 10);
     tileImages[2] = new ObImage(L"Tile.png");
     tileImages[2]->maxFrame = Int2(8, 6);
     tileImages[3] = new ObImage(L"Tile2.png");
@@ -87,6 +87,7 @@ void ObTileMap::SetTile(Int2 TileIdx, Int2 FrameIdx, int ImgIdx, int TileState, 
         vertices[tileIdx * 6 + i].tileState = TileState;
     }
 
+    // SubResource - CPU와 GPU의 중간다리 역할
     D3D->GetDC()->UpdateSubresource(vertexBuffer, 0, NULL, vertices, 0, 0);
 }
 

@@ -5,8 +5,17 @@ namespace Dir8
 	class Scene01 : public Scene
 	{
 	public:
-		Player* pl;
-		Boss*	boss;
+		// Tilemap
+		ObTileMap* tilemap;
+		int			imgIdx;
+		Int2		tileSize;
+		Color		tileColor;
+		int			tileState;
+		Int2		mouseIdx;
+		Int2		pickingIdx;
+		// game
+		Player*		pl;
+		Boss*		boss;
 
 	public:
 		Scene01();

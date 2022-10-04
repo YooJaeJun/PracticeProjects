@@ -66,7 +66,7 @@ namespace Gungeon
 		idx = 0;
 		for (auto& elem : uiBullet)
 		{
-			elem->Spawn(-40.0f, 104.0f - idx * 12.0f);
+			elem->Spawn(-40.0f, 56.0f + idx * 12.0f);
 			idx++;
 		}
 	}

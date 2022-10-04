@@ -2,6 +2,7 @@
 
 namespace Gungeon
 {
+	const float timeDefault = 0.0f;
 	const int roomMax = 40;
 	const int gridMax = 7000;
 	enum class GameState { spray, spread, select, triangulate, span, loop, clean, dig, widen, tile, set };
@@ -27,11 +28,7 @@ namespace Gungeon
 		vector<ObLine>				linesMST;
 		// Passage
 		vector<ObLine>				passagesLine;
-		vector<ObRect>				passages;
-		// Tile
-		deque<deque<bool>>			grid;
-		vector<Obstacle*>			tiles;
-		vector<Obstacle*>			walls;
+		vector<Room*>				passages;
 		// Tilemap
 		ObTileMap*					tilemap;
 		int							imgIdx;
@@ -40,6 +37,7 @@ namespace Gungeon
 		int							tileState;
 		Int2						mouseIdx;
 		Int2						pickingIdx;
+		bool						useGui;
 
 
 	public:
@@ -65,5 +63,6 @@ namespace Gungeon
 		void Set();
 
 		void SetTilemapGUI();
+		bool IntersectTile(Vector2 wpos);
 	};
 }

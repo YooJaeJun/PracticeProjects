@@ -12,6 +12,8 @@ namespace Gungeon
 
     void Scene01::Init()
     {
+        if (mapGen) mapGen->useGui = true;
+
         CAM->position = Vector2(0.0f, 0.0f);
         CAM->coefScale = Vector3(0.08f, 0.08f, 0.08f);
 

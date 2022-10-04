@@ -921,16 +921,29 @@ namespace Gungeon
 		beforeWeapon->imgReloading->isVisible = false;
 		for (auto& elem : beforeWeapon->uiBullet)
 		{
-			elem->img->isVisible = false;
+			if (elem)
+			{
+				elem->img->isVisible = false;
+			}
 		}
-		beforeWeapon->uiBulletFrame->img->isVisible = false;
+		if (beforeWeapon->uiWeapon)
+		{
+			beforeWeapon->uiWeapon->img->isVisible = false;
+		}
+		if (beforeWeapon->uiBulletFrame)
+		{
+			beforeWeapon->uiBulletFrame->img->isVisible = false;
+		}
+
 
 		curWeaponIdx++;
+
 
 		// »õ ¹«±â
 		Weapon*& afterWeapon = weapon[curWeaponIdx];
 		afterWeapon = other;
 		afterWeapon->col->SetParentT(*col);
+		afterWeapon->idle->isVisible = true;
 		if (targetDir.x < 0.0f)
 		{
 			afterWeapon->EquipLeft();
@@ -938,12 +951,6 @@ namespace Gungeon
 		else
 		{
 			afterWeapon->EquipRight();
-		}
-		afterWeapon->idle->isVisible = true;
-
-		for (auto& elem : afterWeapon->uiBullet)
-		{
-			elem->img->isVisible = true;
 		}
 
 		// bullet
@@ -975,7 +982,11 @@ namespace Gungeon
 			elem->img->isVisible = true;
 			uiBulletIdx++;
 		}
-
+		
+		if (afterWeapon->uiWeapon)
+		{
+			afterWeapon->uiWeapon->img->isVisible = true;
+		}
 		if (afterWeapon->uiBulletFrame)
 		{
 			afterWeapon->uiBulletFrame->img->isVisible = true;

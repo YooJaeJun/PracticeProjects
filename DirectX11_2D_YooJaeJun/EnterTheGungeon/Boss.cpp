@@ -283,10 +283,12 @@ namespace Gungeon
         dropItem->Spawn(Vector2(Pos().x - 10.0f, Pos().y - 10.0f));
         dropItem->col->isVisible = true;
         dropItem->idle->isVisible = true;
+        dropItem->state = State::idle;
 
         weapon[curWeaponIdx]->Spawn(Pos());
         weapon[curWeaponIdx]->col->isVisible = true;
         weapon[curWeaponIdx]->idle->isVisible = true;
+        weapon[curWeaponIdx]->state = State::idle;
     }
 
 

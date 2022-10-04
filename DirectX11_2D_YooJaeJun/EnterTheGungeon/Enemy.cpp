@@ -59,6 +59,7 @@ namespace Gungeon
 		dropItem->idle->scale = Vector2(40.0f, 40.0f) * itemCoef;
 		dropItem->idle->SetParentRT(*dropItem->col);
 		dropItem->idle->isVisible = false;
+		dropItem->state = State::die;
 	}
 
 	void Enemy::Release()
@@ -293,48 +294,49 @@ namespace Gungeon
 		dropItem->Spawn(Pos());
 		dropItem->col->isVisible = true;
 		dropItem->idle->isVisible = true;
+		dropItem->state = State::idle;
 	}
 
-	//void Enemy::FindPath(ObTileMap* map)
-	//{
-	//	if (TIMER->GetTick(timeFindPath, 2.0f))
-	//	{
-	//		Int2 sour, dest;
-	//		bool isFind;
-	//
-	//		isFind = map->WorldPosToTileIdx(Pos(), sour);
-	//		isFind &= map->WorldPosToTileIdx(targetPos, dest);
-	//
-	//		if (isFind)
-	//		{
-	//			if (map->PathFinding(sour, dest, way))
-	//			{
-	//				g = 0.0f;
-	//				start = Pos();
-	//				way.pop_back();
-	//				end = way.back()->Pos;
-	//			}
-	//		}
-	//	}
-	//
-	//	if (false == way.empty())
-	//	{
-	//		// SetPos(Vector2::Lerp(start, end, g));
-	//		moveDir = way.back()->Pos - Pos();
-	//		col->MoveWorldPos(moveDir * DELTA);
-	//
-	//		g += DELTA * 2.0f;
-	//
-	//		if (g > 1.0f)
-	//		{
-	//			g = 0.0f;
-	//			start = end;
-	//			way.pop_back();
-	//			if (false == way.empty())
-	//			{
-	//				end = way.back()->Pos;
-	//			}
-	//		}
-	//	}
-	//}
+	void Enemy::FindPath(ObTileMap* map)
+	{
+		if (TIMER->GetTick(timeFindPath, 2.0f))
+		{
+			Int2 sour, dest;
+			bool isFind;
+	
+			isFind = map->WorldPosToTileIdx(Pos(), sour);
+			isFind &= map->WorldPosToTileIdx(targetPos, dest);
+	
+			if (isFind)
+			{
+				if (map->PathFinding(sour, dest, way))
+				{
+					g = 0.0f;
+					start = Pos();
+					way.pop_back();
+					end = way.back()->Pos;
+				}
+			}
+		}
+	
+		if (false == way.empty())
+		{
+			// SetPos(Vector2::Lerp(start, end, g));
+			moveDir = way.back()->Pos - Pos();
+			col->MoveWorldPos(moveDir * DELTA);
+	
+			g += DELTA * 2.0f;
+	
+			if (g > 1.0f)
+			{
+				g = 0.0f;
+				start = end;
+				way.pop_back();
+				if (false == way.empty())
+				{
+					end = way.back()->Pos;
+				}
+			}
+		}
+	}
 }

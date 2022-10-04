@@ -19,19 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Boss.h" />
-    <ClInclude Include="Character.h" />
-    <ClInclude Include="Main.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Scene01.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Dir8\Boss.h" />
+    <ClInclude Include="Dir8\Character.h" />
+    <ClInclude Include="Dir8\Main.h" />
+    <ClInclude Include="Dir8\Player.h" />
+    <ClInclude Include="Dir8\Scene01.h" />
+    <ClInclude Include="Dir8\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Boss.cpp" />
-    <ClCompile Include="Character.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Scene01.cpp" />
+    <ClCompile Include="Dir8\Boss.cpp" />
+    <ClCompile Include="Dir8\Character.cpp" />
+    <ClCompile Include="Dir8\Main.cpp" />
+    <ClCompile Include="Dir8\Player.cpp" />
+    <ClCompile Include="Dir8\Scene01.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

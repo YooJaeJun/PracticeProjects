@@ -24,7 +24,7 @@ namespace Gungeon
 		void Hit(const int damage, const Vector2& dir);
 		void Hitting();
 		virtual void StartDie() override;
-		//void FindPath(ObTileMap* map);
+		void FindPath(ObTileMap* map);
 
 	private:
 		vector<Tile*>			way;

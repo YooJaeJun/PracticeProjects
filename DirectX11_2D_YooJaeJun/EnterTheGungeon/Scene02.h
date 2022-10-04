@@ -32,7 +32,5 @@ namespace Gungeon
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
-
-		bool CheckGrid(Vector2 wpos);
 	};
 }
