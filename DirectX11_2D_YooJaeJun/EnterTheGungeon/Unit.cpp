@@ -23,6 +23,10 @@ namespace Gungeon
 		timeHitAnim = 0.0f;
 		timeDieAnim = 0.0f;
 		timeRealDie = 0.0f;
+
+		curWeaponMax = 1;
+		curWeaponIdx = 0;
+		weapon.resize(1);
 	}
 
 	void Unit::Release()
@@ -33,7 +37,7 @@ namespace Gungeon
 		SafeDelete(hit);
 		SafeDelete(fall);
 		SafeDelete(die);
-		SafeDelete(weapon);
+		for (auto& elem : weapon) if (elem) elem->Release();
 		SafeDelete(shadow);
 	}
 
@@ -43,7 +47,7 @@ namespace Gungeon
 
 		Character::Update();
 
-		if (weapon) weapon->Update();
+		for (auto& elem : weapon) if(elem) elem->Update();
 		for (auto& elem : idle) elem->Update();
 		for (auto& elem : walk) elem->Update();
 		if (hit) hit->Update();
@@ -60,7 +64,7 @@ namespace Gungeon
 	void Unit::Render()
 	{
 		// if (shadow) shadow->Render(); // RENDER->push(shadow);
-		if (weapon) weapon->Render();
+		for (auto& elem : weapon) if (elem) elem->Render();
 		idle[curTargetDirState]->Render(); // RENDER->push(idle[curTargetDirState]);
 		walk[curTargetDirState]->Render(); // RENDER->push(walk[curTargetDirState]);
 		if (hit)  hit->Render();  // RENDER->push(hit);
@@ -75,24 +79,28 @@ namespace Gungeon
 
 	void Unit::SetTarget()
 	{
-		weapon->col->rotation = Utility::DirToRadian(targetPos - weapon->Pos());
 		targetDir = targetPos - Pos();
 		targetDir.Normalize();	// targetDir도 써서 정규화
 		targetRotation = Utility::DirToRadian(targetDir);
 		SetTargetDirState();
 
-		if (targetDir.x >= 0.0f)
+		if (weapon[curWeaponIdx])
 		{
-			if (targetDirBefore.x < 0.0f)
+			weapon[curWeaponIdx]->col->rotation = Utility::DirToRadian(targetPos - weapon[curWeaponIdx]->Pos());
+
+			if (targetDir.x >= 0.0f)
 			{
-				weapon->EquipRight();
+				if (targetDirBefore.x < 0.0f)
+				{
+					weapon[curWeaponIdx]->EquipRight();
+				}
 			}
-		}
-		else
-		{
-			if (targetDirBefore.x >= 0.0f)
+			else
 			{
-				weapon->EquipLeft();
+				if (targetDirBefore.x >= 0.0f)
+				{
+					weapon[curWeaponIdx]->EquipLeft();
+				}
 			}
 		}
 	}
@@ -147,8 +155,8 @@ namespace Gungeon
 			}
 
 			if (hit) hit->isVisible = false;
-			weapon->col->isVisible = false;
-			weapon->idle->isVisible = false;
+			weapon[curWeaponIdx]->col->isVisible = false;
+			weapon[curWeaponIdx]->idle->isVisible = false;
 			shadow->isVisible = false;
 			die->isVisible = true;
 

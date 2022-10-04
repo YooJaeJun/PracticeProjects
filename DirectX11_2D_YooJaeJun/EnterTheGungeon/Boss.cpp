@@ -11,6 +11,7 @@ namespace Gungeon
     {
         InitVar();
         InitBullet();
+        InitItem();
     }
 
     void Boss::InitVar()
@@ -52,6 +53,21 @@ namespace Gungeon
         }//switch
     }
 
+    void Boss::InitItem()
+    {
+        float itemCoef = 0.5f;
+        dropItem = new Item;
+        dropItem->col = new ObCircle;
+        dropItem->col->scale = Vector2(40.0f, 40.0f) * itemCoef;
+        dropItem->col->isVisible = false;
+        dropItem->col->isFilled = false;
+        dropItem->col->SetWorldPos(DEFAULTSPAWN);
+        dropItem->idle = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
+        dropItem->idle->scale = Vector2(40.0f, 40.0f) * itemCoef;
+        dropItem->idle->SetParentRT(*dropItem->col);
+        dropItem->idle->isVisible = false;
+    }
+
     void Boss::Release()
     {
         Unit::Release();
@@ -87,6 +103,7 @@ namespace Gungeon
 
         hpGuageBar->Update();
         hpGuage->Update();
+        dropItem->Update();
     }
 
     void Boss::LateUpdate()
@@ -99,6 +116,7 @@ namespace Gungeon
         for (auto& elem : bullet) elem->Render();
         hpGuageBar->Render();
         hpGuage->Render();
+        dropItem->Render();
     }
 
     void Boss::ResizeScreen()
@@ -261,6 +279,14 @@ namespace Gungeon
             elem->idle->isVisible = false;
             elem->hitBomb->idle->isVisible = false;
         }
+
+        dropItem->Spawn(Vector2(Pos().x - 10.0f, Pos().y - 10.0f));
+        dropItem->col->isVisible = true;
+        dropItem->idle->isVisible = true;
+
+        weapon[curWeaponIdx]->Spawn(Pos());
+        weapon[curWeaponIdx]->col->isVisible = true;
+        weapon[curWeaponIdx]->idle->isVisible = true;
     }
 
 
@@ -400,7 +426,7 @@ namespace Gungeon
         {
             for (auto& elem : bullet)
             {
-                elem->Spawn(weapon->firePos->GetWorldPos());
+                elem->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos());
             }
         }
     }
@@ -431,7 +457,7 @@ namespace Gungeon
                         {
                             float angle = PI * 2 * (c + 1) / 5;
                             float atkAngle = (angle / 60.0f) + (0.2f * i) +
-                                weapon->col->rotation - stringBullet.coefMidForTarget;
+                                weapon[curWeaponIdx]->col->rotation - stringBullet.coefMidForTarget;
                             int idx = i * 25 + r * 5 + c;
                             bullet[idx]->moveDir = Vector2(cos(atkAngle), sin(atkAngle));
                             bullet[idx]->scalar = 250.0f + (r + 10.0f) * 10.0f;
@@ -444,7 +470,7 @@ namespace Gungeon
             {
                 if (elem->moveDir.x == 0.0f && elem->moveDir.y == 0.0f) continue;
 
-                elem->Spawn(weapon->firePos->GetWorldPos());
+                elem->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos());
             }
         }
     }
@@ -478,7 +504,7 @@ namespace Gungeon
             {
                 if (false == elem->isFired)
                 {
-                    elem->Spawn(weapon->firePos->GetWorldPos());
+                    elem->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos());
                     flagTornadoRespawn = false;
                     break;
                 }
@@ -507,7 +533,7 @@ namespace Gungeon
             {
                 elem->moveDir.x = min(targetDir.x + RANDOM->Float(0.0f, 0.1f), 1.0f);
                 elem->moveDir.y = min(targetDir.y + RANDOM->Float(0.0f, 0.1f), 1.0f);
-                elem->Spawn(weapon->firePos->GetWorldPos());
+                elem->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos());
             }
         }
 

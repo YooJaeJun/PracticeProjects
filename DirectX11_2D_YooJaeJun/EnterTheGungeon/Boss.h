@@ -12,6 +12,7 @@ namespace Gungeon
 		rand,
 		max
 	};
+
 	const int patternMax = static_cast<int>(BossPattern::max) - 1;
 	const int circularMax = 60;
 	const int stormMax = 60;
@@ -22,10 +23,10 @@ namespace Gungeon
 	{
 	public:
 		Boss();
-
 		virtual void Init() override;
 		void InitVar();
 		void InitBullet();
+		void InitItem();
 		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
@@ -55,16 +56,16 @@ namespace Gungeon
 		void UpdateRand();
 
 	public:
-		UI*							hpGuageBar;
-		UI*							hpGuage;
-		std::vector<BossBullet*>	bullet;
-		BossPattern                 pattern;
-		StringBulletData            stringBullet;
-		float						timeSetMoveDir;
-		float						timeSetTargetDir;
-		float						timeTornado;
-		float						timeTornadoOne;
-		bool						flagTornadoRespawn;
-		float						timeRand;
+		UI*						hpGuageBar;
+		UI*						hpGuage;
+		vector<BossBullet*>		bullet;
+		BossPattern             pattern;
+		StringBulletData        stringBullet;
+		float					timeSetMoveDir;
+		float					timeSetTargetDir;
+		float					timeTornado;
+		float					timeTornadoOne;
+		bool					flagTornadoRespawn;
+		float					timeRand;
 	};
 }

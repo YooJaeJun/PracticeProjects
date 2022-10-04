@@ -9,6 +9,7 @@
 #include "PlayerBullet.h"
 #include "EnemyBullet.h"
 #include "BossBullet.h"
+#include "Item.h"
 #include "Weapon.h"
 #include "Unit.h"
 #include "Player.h"

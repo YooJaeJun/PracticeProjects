@@ -32,6 +32,14 @@ namespace Gungeon
 		deque<deque<bool>>			grid;
 		vector<Obstacle*>			tiles;
 		vector<Obstacle*>			walls;
+		// Tilemap
+		ObTileMap*					tilemap;
+		int							imgIdx;
+		Int2						tileSize;
+		Color						tileColor;
+		int							tileState;
+		Int2						mouseIdx;
+		Int2						pickingIdx;
 
 
 	public:
@@ -55,5 +63,7 @@ namespace Gungeon
 		void Clean();
 		void Tile();
 		void Set();
+
+		void SetTilemapGUI();
 	};
 }

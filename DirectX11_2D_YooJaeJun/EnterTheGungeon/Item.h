@@ -2,17 +2,25 @@
 
 namespace Gungeon
 {
-	class Obstacle : public Character
+	enum class ItemType
+	{
+		none,
+		money,
+		weapon,
+	};
+
+	class Item : public Character
 	{
 	public:
-		Obstacle();
+		Item();
 		void Release();
 		void Update();
 		void LateUpdate();
 		void Render();
 
+		void Hit();
+
 	public:
 		ObImage*	idle;
-		bool		isOpen;
 	};
 }

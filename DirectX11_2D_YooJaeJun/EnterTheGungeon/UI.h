@@ -4,18 +4,18 @@ namespace Gungeon
 {
 	enum class UIType
 	{
-		NONE,
-		PROP,
-		GAUGE,
-		FONT
+		none,
+		prop,
+		gauge,
+		font
 	};
 
 	enum class Anchor
 	{
-		NONE,
-		LEFTTOP,
-		LEFTBOTTOM,
-		RIGHTBOTTOM
+		none,
+		leftTop,
+		leftBottom,
+		rightBottom
 	};
 
 	class UI
@@ -32,7 +32,7 @@ namespace Gungeon
 		bool DownGauge();
 
 	public:
-		ObImage* img;
+		ObImage*	img;
 		Anchor		anchor;
 		Vector2		imgSize;
 	};

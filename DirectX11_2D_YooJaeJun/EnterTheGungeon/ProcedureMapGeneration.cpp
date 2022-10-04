@@ -36,6 +36,16 @@ namespace Gungeon
         //{
         //    grid[i].resize(gridMax);
         //}
+
+        // tilemap
+        tilemap = new ObTileMap;
+        tilemap->scale = Vector2(50.0f, 50.0f);
+        tilemap->SetWorldPos(Vector2(-app.GetHalfWidth() - 4000.0f, -app.GetHalfHeight() - 4000.0f));
+        imgIdx = 0;
+        tileSize = Int2(350, 350);
+        tilemap->ResizeTile(tileSize);
+        tileColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
+        tileState = 0;
     }
 
     void ProcedureMapGeneration::Release()
@@ -60,6 +70,7 @@ namespace Gungeon
             for (auto& elem : tiles) SafeDelete(elem);
             for (auto& elem : walls) SafeDelete(elem);
         }
+        SafeDelete(tilemap);
     }
 
     void ProcedureMapGeneration::Update()
@@ -187,6 +198,8 @@ namespace Gungeon
         }//case
         }//switch
 
+        SetTilemapGUI();
+
         for (auto& elem : rooms) if (elem) elem->Update();
         for (auto& elem : roomsSelected) if (elem) elem->Update();
         for (auto& elem : linesTriangulated) elem.Update();
@@ -216,6 +229,8 @@ namespace Gungeon
                 elem->Update();
             }
         }
+
+        tilemap->Update();
     }
 
     void ProcedureMapGeneration::LateUpdate()
@@ -254,6 +269,7 @@ namespace Gungeon
             }
         }
 
+        tilemap->Render();
     }
 
     void ProcedureMapGeneration::ResizeScreen()
@@ -513,60 +529,63 @@ namespace Gungeon
 
     void ProcedureMapGeneration::Tile()
     {
+        /*
         tiles.resize(passages.size() + roomsSelected.size());
         walls.resize(tiles.size() * 4);
+
+        float wallScale = 50.0f;
 
         for (auto& elem : tiles)
         {
             elem = new Obstacle;
             elem->col = new ObRect;
             elem->col->isVisible = false;
+            elem->col->scale = Vector2(wallScale, wallScale);
             elem->idle = new ObImage(L"EnterTheGungeon/Level/Tile.png");
+            elem->idle->SetParentRT(*elem->col);
+            elem->idle->isVisible = true;
+        }
+
+        for (auto& elem : walls)
+        {
+            elem = new Obstacle;
+            elem->col = new ObRect;
+            elem->col->isVisible = false;
+            elem->col->scale = Vector2(wallScale, wallScale);
+            elem->idle = new ObImage(L"EnterTheGungeon/Level/Wall.png");
             elem->idle->SetParentRT(*elem->col);
             elem->idle->isVisible = true;
         }
 
         int tileIdx = 0;
         int wallIdx = 0;
+
         int startY = 0;
         int endY = 0;
         int startX = 0;
         int endX = 0;
 
-        float wallScale = 50.0f;
-
-        auto PushWall = [&](const float x, const float y, const float scaleX, const float scaleY)
+        auto PushWall = [&](const float x, const float y)
         {
-            walls[wallIdx] = new Obstacle;
-            walls[wallIdx]->col = new ObRect;
-            walls[wallIdx]->col->scale = Vector2(scaleX, scaleY);
             walls[wallIdx]->col->SetWorldPos(Vector2(x, y));
-            walls[wallIdx]->col->isVisible = false;
-            walls[wallIdx]->idle = new ObImage(L"EnterTheGungeon/Level/Wall.png");
-            walls[wallIdx]->idle->SetParentRT(*walls[wallIdx]->col);
-            walls[wallIdx]->idle->isVisible = true;
-            walls[wallIdx]->idle->scale = walls[wallIdx]->col->scale;
 
-            //int coef = gridMax / 2;
-            //Vector2 start = Vector2(x + coef, y + coef);
-            //Vector2 end = Vector2(x + coef + scaleX, y + coef + scaleY);
-            //for (int i = start.y; i <= end.y; i++)
-            //{
-            //    for (int j = start.x; j <= end.x; j++)
-            //    {
-            //        grid[i][j] = false;
-            //    }
-            //}
+            Int2 pos;
+            if (tilemap->WorldPosToTileIdx(walls[wallIdx]->col->GetWorldPos(), pos))
+            {
+                tilemap->SetTile(pos, pickingIdx, 1, (int)TileState::wall, walls[wallIdx]->idle->color);
+            }
         };
 
-        auto SetWall = [&](ObRect* elem)
+        auto SetWallTile = [&](ObRect* elem)
         {
             startX = elem->lt().x;
             endX = elem->rt().x;
             startY = elem->lt().y;
             endY = elem->lt().y;
-            wallScale = abs(endX - startX);
-            PushWall(startX, startY, wallScale, 50.0f);
+            for (int x = startX; x <= endX; x += wallScale)
+            {
+                PushWall(x, startY);
+            }
             walls[wallIdx]->col->pivot = OFFSET_LB;
             walls[wallIdx]->idle->pivot = OFFSET_LB;
             wallIdx++;
@@ -575,8 +594,10 @@ namespace Gungeon
             endX = elem->rb().x;
             startY = elem->lb().y;
             endY = elem->rb().y;
-            wallScale = abs(endX - startX);
-            PushWall(startX, startY, wallScale, 50.0f);
+            for (int x = startX; x <= endX; x += wallScale)
+            {
+                PushWall(x, startY);
+            }
             walls[wallIdx]->col->pivot = OFFSET_LT;
             walls[wallIdx]->idle->pivot = OFFSET_LT;
             wallIdx++;
@@ -585,50 +606,36 @@ namespace Gungeon
             endX = elem->lt().x;
             startY = elem->lb().y;
             endY = elem->lt().y;
-            wallScale = abs(endY - startY);
-            PushWall(startX, startY, 50.0f, wallScale);
+            for (int y = startY; y <= endY; y += wallScale)
+            {
+                PushWall(startX, y);
+            }
             walls[wallIdx]->col->pivot = OFFSET_RB;
             walls[wallIdx]->idle->pivot = OFFSET_RB;
             wallIdx++;
 
             startX = elem->rt().x;
             endX = elem->rt().x;
-            startY = elem->rt().y;
-            endY = elem->rb().y;
-            wallScale = abs(endY - startY);
-            PushWall(startX, startY, 50.0f, wallScale);
+            startY = elem->rb().y;
+            endY = elem->rt().y;
+            for (int y = startY; y <= endY; y += wallScale)
+            {
+                PushWall(startX, y);
+            }
             walls[wallIdx]->col->pivot = OFFSET_LT;
             walls[wallIdx]->idle->pivot = OFFSET_LT;
             wallIdx++;
         };
 
-        auto SetTile = [&](Vector2 pos, Vector2 scale)
-        {
-            int coef = gridMax / 2;
-            Vector2 start = pos - scale / 2.0f;
-            Vector2 end = pos + scale / 2.0f;
-            start.x += coef;
-            start.y += coef;
-            end.x += coef;
-            end.y += coef;
-            for (int i = start.y; i <= end.y; i++)
-            {
-                for (int j = start.x; j <= end.x; j++)
-                {
-                    grid[i][j] = true;
-                }
-            }
-        };
-
         // 복도 벽
         for (auto& elem : passages)
         {
-            SetWall(dynamic_cast<ObRect*>(&elem));
+            SetWallTile(dynamic_cast<ObRect*>(&elem));
         }
         // 방 벽
         for (auto& elem : roomsSelected)
         {
-            SetWall(dynamic_cast<ObRect*>(elem->col));
+            SetWallTile(dynamic_cast<ObRect*>(elem->col));
         }
 
         // 복도 타일
@@ -638,7 +645,11 @@ namespace Gungeon
             tiles[tileIdx]->col->scale = elem.scale;
             tiles[tileIdx]->idle->scale = elem.scale;
 
-            //SetTile(elem.GetWorldPos(), elem.scale);
+            Int2 pos;
+            if (tilemap->WorldPosToTileIdx(elem.GetWorldPos(), pos))
+            {
+                tilemap->SetTile(pos, pickingIdx, imgIdx, (int)TileState::wall, elem.color);
+            }
 
             tileIdx++;
         }
@@ -649,14 +660,115 @@ namespace Gungeon
             tiles[tileIdx]->col->scale = elem->col->scale;
             tiles[tileIdx]->idle->scale = elem->col->scale;
 
-            //SetTile(elem->col->GetWorldPos(), elem->col->scale);
+            Int2 pos;
+            if (tilemap->WorldPosToTileIdx(elem->col->GetWorldPos(), pos))
+            {
+                tilemap->SetTile(pos, pickingIdx, imgIdx, (int)TileState::wall, elem->col->color);
+            }
 
             tileIdx++;
         }
+        */
     }
 
     void ProcedureMapGeneration::Set()
     {
 
+    }
+    void ProcedureMapGeneration::SetTilemapGUI()
+    {
+        // Gui
+        if (ImGui::Button("ErrorFileSystem?->Click me"))
+        {
+            ImGuiFileDialog::Instance()->Close();
+        }
+
+        // TileScale
+        ImGui::SliderFloat2("Scale", (float*)&tilemap->scale, 0.0f, 100.0f);
+
+        //TileSize
+        if (ImGui::SliderInt2("TileSize", (int*)&tileSize, 1, 400))
+        {
+            tilemap->ResizeTile(tileSize);
+        }
+
+        //TilePos
+        Vector2 pos = tilemap->GetWorldPos();
+        if (ImGui::SliderFloat2("TilePos", (float*)&pos, -4000.0f, 4000.0f))
+        {
+            tilemap->SetWorldPos(pos);
+        }
+
+        //TileState
+        ImGui::SliderInt("TileState", &tileState, int(TileState::none), int(TileState::tileSize));
+
+        //TileColor
+        ImGui::ColorEdit4("TileColor", (float*)&tileColor, ImGuiColorEditFlags_PickerHueWheel);
+
+        //Texture
+        for (int i = 0; i < 4; i++)
+        {
+            string str = "Texture" + to_string(i);
+            if (GUI->FileImGui(str.c_str(), str.c_str(),
+                ".jpg,.png,.bmp,.dds,.tga", "../Contents/Images/EnterTheGungeon"))
+            {
+                string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
+                SafeDelete(tilemap->tileImages[i]);
+                wstring wImgFile = L"";
+                wImgFile.assign(path.begin(), path.end());
+                tilemap->tileImages[i] = new ObImage(wImgFile);
+            }
+            if (i < 3)
+            {
+                ImGui::SameLine();
+            }
+        }
+
+        //Coord
+        tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), mouseIdx);
+        ImGui::Text("mouseIdx : %d , %d", mouseIdx.x, mouseIdx.y);
+
+        //ImageButton
+        tilemap->RenderGui(pickingIdx, imgIdx);
+        ImGui::Text("pickingIdx : %d , %d", pickingIdx.x, pickingIdx.y);
+        ImGui::Text("imgIdx : %d", imgIdx);
+
+        //maxFrame
+        ImGui::InputInt2("maxFrame", (int*)&tilemap->tileImages[imgIdx]->maxFrame);
+
+        //SaveLoad
+        if (GUI->FileImGui("Save", "Save Map",
+            ".txt", "../Contents/TileMap"))
+        {
+            string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
+            tilemap->file = path;
+            tilemap->Save();
+        }
+        ImGui::SameLine();
+        if (GUI->FileImGui("Load", "Load Map",
+            ".txt", "../Contents/TileMap"))
+        {
+            string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
+            tilemap->file = path;
+            tilemap->Load();
+            tileSize = tilemap->GetTileSize();
+        }
+
+        //Brush
+        ImVec2 min = ImGui::GetWindowPos();
+        ImVec2 max;
+        max.x = min.x + ImGui::GetWindowSize().x;
+        max.y = min.y + ImGui::GetWindowSize().y;
+
+        if (!ImGui::IsMouseHoveringRect(min, max))
+        {
+            if (INPUT->KeyPress(VK_LBUTTON))
+            {
+                if (tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePosForZoom(), mouseIdx))
+                {
+                    tilemap->SetTile(mouseIdx, pickingIdx, imgIdx, tileState, tileColor);
+                }
+            }
+        }
     }
 }

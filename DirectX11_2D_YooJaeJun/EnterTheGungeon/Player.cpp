@@ -22,11 +22,11 @@ namespace Gungeon
 	{
 		scalar = 300.0f;
 		curHp = maxHp = 6;
-		canFire = true;
+		canFireBetween = true;
 		isReloading = false;
 		timeReload = 0.0f;
 		timeRoll = 0.0f;
-		curBulletIdx = 0;
+		curBulletIdx = 4;
 		timeFire = 0.0f;
 		timeHit = 0.0f;
 		isHit = false;
@@ -36,6 +36,7 @@ namespace Gungeon
 		timeFireCamShake = 0.0f;
 		godMode = false;
 		timeLastPosForDust = 0.0f;
+		money = 0;
 	}
 
 	void Player::InitCol()
@@ -187,56 +188,127 @@ namespace Gungeon
 
 	void Player::InitWeapon()
 	{
-		float playerWeaponScaleCoef = 1.5f;
-		weapon = new Weapon;
-		weapon->col = new ObRect;
-		weapon->col->isVisible = false;
-		weapon->col->isFilled = false;
-		weapon->col->pivot = Vector2(0.4f, 0.25f);
-		weapon->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-		weapon->col->scale.x = 30.0f * playerWeaponScaleCoef;
-		weapon->col->scale.y = 22.0f * playerWeaponScaleCoef;
-		weapon->col->SetParentT(*col);
-		weapon->col->SetLocalPos(Vector2(18.0f, -15.0f));
+		weapon.resize(3);
+		curWeaponIdx = 0;
 
-		weapon->idle = new ObImage(L"EnterTheGungeon/Player_0/Weapon_0.png");
-		weapon->idle->pivot = Vector2(0.4f, 0.25f);
-		weapon->idle->scale.x = 30.0f * playerWeaponScaleCoef;
-		weapon->idle->scale.y = 22.0f * playerWeaponScaleCoef;
-		weapon->idle->SetParentRT(*weapon->col);
-		weapon->idle->zOrder = ZOrder::weapon;
+		int idx = 0;
+		for (auto& elem : weapon)
+		{
+			float playerWeaponScaleCoef = 1.5f;
+			elem = new Weapon;
+			elem->col = new ObRect;
+			elem->col->isVisible = false;
+			elem->col->isFilled = false;
+			elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+			elem->col->scale.x = 30.0f * playerWeaponScaleCoef;
+			elem->col->scale.y = 22.0f * playerWeaponScaleCoef;
+			elem->col->SetParentT(*col);
 
-		weapon->firePos = new ObRect;
-		weapon->firePos->SetParentRT(*weapon->idle);
-		weapon->firePos->SetLocalPos(Vector2(40.0f, 12.0f));
-		weapon->firePos->zOrder = ZOrder::none;
-		weapon->firePos->scale = Vector2(20.0f, 20.0f);
+			elem->idle = new ObImage(L"EnterTheGungeon/Player_0/Weapon_0.png");
+			if (idx != 0) elem->idle->isVisible = false;
+			elem->idle->scale.x = 30.0f * playerWeaponScaleCoef;
+			elem->idle->scale.y = 22.0f * playerWeaponScaleCoef;
+			elem->idle->SetParentRT(*elem->col);
+			elem->idle->zOrder = ZOrder::weapon;
 
-		float playerWeaponEffectScaleCoef = 3.0f;
-		weapon->fireEffect = new Effect;
-		weapon->fireEffect->idle = new ObImage(L"EnterTheGungeon/Player_0/Effect_Fire_Weapon_0.png");
-		weapon->fireEffect->idle->isVisible = false;
-		weapon->fireEffect->idle->maxFrame.x = 3;
-		weapon->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * playerWeaponEffectScaleCoef;
-		weapon->fireEffect->idle->SetParentRT(*weapon->firePos);
-		weapon->fireEffect->idle->zOrder = ZOrder::none;
-		weapon->fireEffect->intervalDie = 0.2f;
+			elem->firePos = new ObRect;
+			elem->firePos->SetParentRT(*elem->idle);
+			elem->firePos->scale = Vector2(10.0f, 10.0f);
+			elem->firePos->zOrder = ZOrder::none;
 
-		weaponReloading = new Weapon;
-		weaponReloading->idle = new ObImage(L"EnterTheGungeon/Player_0/Weapon_0_reloading.png");
-		weaponReloading->idle->isVisible = false;
-		weaponReloading->idle->pivot = Vector2(0.4f, 0.25f);
-		weaponReloading->idle->maxFrame.x = 2;
-		weaponReloading->idle->scale.x = 42.0f / 2.0f * playerWeaponScaleCoef;
-		weaponReloading->idle->scale.y = 22.0f * playerWeaponScaleCoef;
-		weaponReloading->idle->SetParentRT(*weapon->col);
-		weaponReloading->idle->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
-		weaponReloading->idle->zOrder = ZOrder::UI;
+			float playerWeaponEffectScaleCoef = 3.0f;
+			elem->fireEffect = new Effect;
+			elem->fireEffect->idle = new ObImage(L"EnterTheGungeon/Player_0/Effect_Fire_Weapon_0.png");
+			elem->fireEffect->idle->isVisible = false;
+			elem->fireEffect->idle->maxFrame.x = 3;
+			elem->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * playerWeaponEffectScaleCoef;
+			elem->fireEffect->idle->SetParentRT(*elem->firePos);
+			elem->fireEffect->idle->zOrder = ZOrder::none;
+			elem->fireEffect->intervalDie = 0.2f;
+
+			elem->imgReloading = new ObImage(L"EnterTheGungeon/Player_0/Weapon_0_reloading.png");
+			elem->imgReloading->isVisible = false;
+			elem->imgReloading->pivot = Vector2(0.4f, 0.25f);
+			elem->imgReloading->maxFrame.x = 2;
+			elem->imgReloading->scale.x = 42.0f / 2.0f * playerWeaponScaleCoef;
+			elem->imgReloading->scale.y = 22.0f * playerWeaponScaleCoef;
+			elem->imgReloading->SetParentRT(*elem->col);
+			elem->imgReloading->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+			elem->imgReloading->zOrder = ZOrder::UI;
+
+			elem->pivotDefault = Vector2(0.4f, 0.25f);
+			elem->localPosDefault = Vector2(18.0f, -15.0f);
+			elem->localFirePosDefault = Vector2(40.0f, 12.0f);
+			weapon[curWeaponIdx]->Equip();
+
+
+			elem->uiWeaponFrame = new UI;
+			elem->uiWeaponFrame->img = new ObImage(L"EnterTheGungeon/Player_0/UI_GunFrame.png");
+			elem->uiWeaponFrame->img->pivot = Vector2(0.4f, 0.25f);
+			elem->uiWeaponFrame->img->scale.x = 188.0f;
+			elem->uiWeaponFrame->img->scale.y = 116.0f;
+			elem->uiWeaponFrame->anchor = Anchor::rightBottom;
+			elem->uiWeaponFrame->Spawn(-240.0f, 50.0f);
+			elem->uiWeaponFrame->img->space = Space::screen;
+			elem->uiWeaponFrame->img->zOrder = ZOrder::UI;
+
+			elem->uiBulletFrame = new UI;
+			elem->uiBulletFrame->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Magazine.png");
+			elem->uiBulletFrame->img->scale = Vector2(28.0f, 99.0f);
+			elem->uiBulletFrame->anchor = Anchor::rightBottom;
+			elem->uiBulletFrame->Spawn(-40.0f, 80.0f);
+			elem->uiBulletFrame->img->space = Space::screen;
+			elem->uiBulletFrame->img->zOrder = ZOrder::UI;
+
+			elem->bulletCount = 5;
+			elem->uiBullet.resize(elem->bulletCount);
+
+			int uiBulletIdx = 0;
+			for (auto& elem : elem->uiBullet)
+			{
+				elem = new UI;
+				elem->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Bullet.png");
+				elem->img->scale = Vector2(12.0f, 4.0f);
+				elem->anchor = Anchor::rightBottom;
+				elem->Spawn(-40.0f, 56.0f + uiBulletIdx * 12.0f);
+				elem->img->space = Space::screen;
+				elem->img->isVisible = false;
+				uiBulletIdx++;
+			}
+
+			elem->uiWeapon = new UI;
+			elem->uiWeapon->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Weapon.png");
+			elem->uiWeapon->img->pivot = Vector2(0.4f, 0.25f);
+			elem->uiWeapon->img->scale.x = 60.0f;
+			elem->uiWeapon->img->scale.y = 48.0f;
+			elem->uiWeapon->anchor = Anchor::rightBottom;
+			elem->uiWeapon->Spawn(-190.0f, 60.0f);
+			elem->uiWeapon->img->space = Space::screen;
+			elem->uiWeapon->img->zOrder = ZOrder::UI;
+
+			elem->uiBulletCount = new UI;
+			elem->uiBulletCount->img = new ObImage(L"EnterTheGungeon/Player_0/UI_BulletCount.png");
+			elem->uiBulletCount->img->pivot = Vector2(0.4f, 0.25f);
+			elem->uiBulletCount->img->scale.x = 60.0f;
+			elem->uiBulletCount->img->scale.y = 28.0f;
+			elem->uiBulletCount->anchor = Anchor::rightBottom;
+			elem->uiBulletCount->Spawn(-140.0f, 150.0f);
+			elem->uiBulletCount->img->space = Space::screen;
+			elem->uiBulletCount->img->zOrder = ZOrder::UI;
+
+			idx++;
+		}
+
+		for (auto& elem : weapon[curWeaponIdx]->uiBullet)
+		{
+			elem->img->isVisible = true;
+		}
 	}
 
 	void Player::InitBullet()
 	{
 		float bulletCoef = 1.5f;
+		bullet.resize(5);
 
 		for (auto& elem : bullet)
 		{
@@ -291,57 +363,6 @@ namespace Gungeon
 		uiReloadBar->img->SetLocalPosY(60.0f);
 		uiReloadBar->img->zOrder = ZOrder::UI;
 
-
-		uiMagazine = new UI;
-		uiMagazine->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Magazine.png");
-		uiMagazine->img->scale = Vector2(28.0f, 99.0f);
-		uiMagazine->anchor = Anchor::RIGHTBOTTOM;
-		uiMagazine->Spawn(-40.0f, 80.0f);
-		uiMagazine->img->space = Space::screen;
-		uiMagazine->img->zOrder = ZOrder::UI;
-
-		idx = 0;
-		for (auto& elem : uiBullet)
-		{
-			elem = new UI;
-			elem->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Bullet.png");
-			elem->img->scale = Vector2(12.0f, 4.0f);
-			elem->anchor = Anchor::RIGHTBOTTOM;
-			elem->Spawn(-40.0f, 104.0f - idx * 12.0f);
-			elem->img->space = Space::screen;
-			idx++;
-		}
-
-		uiWeaponFrame = new UI;
-		uiWeaponFrame->img = new ObImage(L"EnterTheGungeon/Player_0/UI_GunFrame.png");
-		uiWeaponFrame->img->pivot = Vector2(0.4f, 0.25f);
-		uiWeaponFrame->img->scale.x = 188.0f;
-		uiWeaponFrame->img->scale.y = 116.0f;
-		uiWeaponFrame->anchor = Anchor::RIGHTBOTTOM;
-		uiWeaponFrame->Spawn(-240.0f, 50.0f);
-		uiWeaponFrame->img->space = Space::screen;
-		uiWeaponFrame->img->zOrder = ZOrder::UI;
-
-		uiWeapon = new UI;
-		uiWeapon->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Weapon.png");
-		uiWeapon->img->pivot = Vector2(0.4f, 0.25f);
-		uiWeapon->img->scale.x = 60.0f;
-		uiWeapon->img->scale.y = 48.0f;
-		uiWeapon->anchor = Anchor::RIGHTBOTTOM;
-		uiWeapon->Spawn(-190.0f, 60.0f);
-		uiWeapon->img->space = Space::screen;
-		uiWeapon->img->zOrder = ZOrder::UI;
-
-		uiBulletCount = new UI;
-		uiBulletCount->img = new ObImage(L"EnterTheGungeon/Player_0/UI_BulletCount.png");
-		uiBulletCount->img->pivot = Vector2(0.4f, 0.25f);
-		uiBulletCount->img->scale.x = 60.0f;
-		uiBulletCount->img->scale.y = 28.0f;
-		uiBulletCount->anchor = Anchor::RIGHTBOTTOM;
-		uiBulletCount->Spawn(-140.0f, 150.0f);
-		uiBulletCount->img->space = Space::screen;
-		uiBulletCount->img->zOrder = ZOrder::UI;
-
 		uiHeartNone.resize(maxHp / 2);
 		uiHeartHalf.resize(maxHp / 2);
 		uiHeartFull.resize(maxHp / 2);
@@ -352,7 +373,7 @@ namespace Gungeon
 		{
 			elem = new UI;
 			elem->img = new ObImage(L"EnterTheGungeon/Player_0/HeartNone.png");
-			elem->anchor = Anchor::LEFTTOP;
+			elem->anchor = Anchor::leftTop;
 			elem->Spawn(10.0f + idx * 60.0f, -40.0f);
 			elem->img->pivot = OFFSET_L;
 			elem->img->scale.x = 52.0f * heartCoef;
@@ -366,7 +387,7 @@ namespace Gungeon
 		{
 			elem = new UI;
 			elem->img = new ObImage(L"EnterTheGungeon/Player_0/HeartHalf.png");
-			elem->anchor = Anchor::LEFTTOP;
+			elem->anchor = Anchor::leftTop;
 			elem->Spawn(10.0f + idx * 60.0f, -40.0f);
 			elem->img->pivot = OFFSET_L;
 			elem->img->scale.x = 52.0f * heartCoef;
@@ -380,7 +401,7 @@ namespace Gungeon
 		{
 			elem = new UI;
 			elem->img = new ObImage(L"EnterTheGungeon/Player_0/HeartFull.png");
-			elem->anchor = Anchor::LEFTTOP;
+			elem->anchor = Anchor::leftTop;
 			elem->Spawn(10.0f + idx * 60.0f, -40.0f);
 			elem->img->pivot = OFFSET_L;
 			elem->img->scale.x = 52.0f * heartCoef;
@@ -396,7 +417,7 @@ namespace Gungeon
 		{
 			elem = new UI;
 			elem->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Blank.png");
-			elem->anchor = Anchor::LEFTTOP;
+			elem->anchor = Anchor::leftTop;
 			elem->Spawn(10.0f + idx * 50.0f, -100.0f);
 			elem->img->pivot = OFFSET_L;
 			elem->img->scale.x = 40.0f;
@@ -408,7 +429,7 @@ namespace Gungeon
 
 		uiKey = new UI;
 		uiKey->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Key.png");
-		uiKey->anchor = Anchor::LEFTTOP;
+		uiKey->anchor = Anchor::leftTop;
 		uiKey->Spawn(10.0f, -160.0f);
 		uiKey->img->pivot = OFFSET_L;
 		uiKey->img->scale.x = 56.0f;
@@ -418,7 +439,7 @@ namespace Gungeon
 
 		uiGold = new UI;
 		uiGold->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
-		uiGold->anchor = Anchor::LEFTTOP;
+		uiGold->anchor = Anchor::leftTop;
 		uiGold->Spawn(120.0f, -160.0f);
 		uiGold->img->pivot = OFFSET_L;
 		uiGold->img->scale.x = 40.0f;
@@ -428,7 +449,7 @@ namespace Gungeon
 
 		uiFireBottle = new UI;
 		uiFireBottle->img = new ObImage(L"EnterTheGungeon/Player_0/UI_FireBottle.png");
-		uiFireBottle->anchor = Anchor::LEFTBOTTOM;
+		uiFireBottle->anchor = Anchor::leftBottom;
 		uiFireBottle->Spawn(85.0f, 70.0f);
 		uiFireBottle->img->pivot = OFFSET_L;
 		uiFireBottle->img->scale.x = 36.0f;
@@ -438,7 +459,7 @@ namespace Gungeon
 
 		uiFireBottleFrame = new UI;
 		uiFireBottleFrame->img = new ObImage(L"EnterTheGungeon/Player_0/UI_FireBottleFrame.png");
-		uiFireBottleFrame->anchor = Anchor::LEFTBOTTOM;
+		uiFireBottleFrame->anchor = Anchor::leftBottom;
 		uiFireBottleFrame->Spawn(10.0f, 70.0f);
 		uiFireBottleFrame->img->pivot = OFFSET_L;
 		uiFireBottleFrame->img->scale.x = 180.0f;
@@ -454,12 +475,6 @@ namespace Gungeon
 		for (auto& elem : bullet) elem->Release();
 		uiReload->Release();
 		uiReloadBar->Release();
-		uiMagazine->Release();
-		for (auto& elem : uiBullet) elem->Release();
-		uiWeaponFrame->Release();
-		uiWeapon->Release();
-		uiBulletCount->Release();
-		SafeDelete(weaponReloading);
 		for (auto& elem : uiHeartNone) elem->Release();
 		for (auto& elem : uiHeartHalf) elem->Release();
 		for (auto& elem : uiHeartFull) elem->Release();
@@ -500,12 +515,6 @@ namespace Gungeon
 		for (auto& elem : bullet) elem->Update();
 		uiReload->Update();
 		uiReloadBar->Update();
-		uiMagazine->Update();
-		for (auto& elem : uiBullet) elem->Update();
-		uiWeaponFrame->Update();
-		uiWeapon->Update();
-		uiBulletCount->Update();
-		weaponReloading->Update();
 		for (auto& elem : uiHeartNone) elem->Update();
 		for (auto& elem : uiHeartHalf) elem->Update();
 		for (auto& elem : uiHeartFull) elem->Update();
@@ -523,7 +532,6 @@ namespace Gungeon
 	void Player::Render()
 	{
 		dust->Render();
-		weaponReloading->Render();
 
 		Unit::Render();
 
@@ -535,11 +543,6 @@ namespace Gungeon
 
 		uiReload->Render();
 		uiReloadBar->Render();
-		uiMagazine->Render();
-		for (auto& elem : uiBullet) elem->Render();
-		uiWeaponFrame->Render();
-		uiWeapon->Render();
-		uiBulletCount->Render();
 		for (auto& elem : uiHeartNone) elem->Render();
 		for (auto& elem : uiHeartHalf) elem->Render();
 		for (auto& elem : uiHeartFull) elem->Render();
@@ -554,17 +557,7 @@ namespace Gungeon
 	{
 		int idx = 0;
 
-		uiMagazine->Spawn(-40.0f, 80.0f);
-		uiWeaponFrame->Spawn(-240.0f, 50.0f);
-		uiWeapon->Spawn(-190.0f, 60.0f);
-		uiBulletCount->Spawn(-140.0f, 150.0f);
-
-		idx = 0;
-		for (auto& elem : uiBullet)
-		{
-			elem->Spawn(-40.0f, 104.0f - idx * 12.0f);
-			idx++;
-		}
+		weapon[curWeaponIdx]->ResizeScreen();
 
 		idx = 0;
 		for (auto& elem : uiHeartNone)
@@ -653,7 +646,11 @@ namespace Gungeon
 	{
 		Unit::Die();
 		dust->idle->isVisible = false;
-		weapon->idle->isVisible = false;
+
+		for (auto& elem : weapon)
+		{
+			elem->idle->isVisible = false;
+		}
 	}
 
 	void Player::Move()
@@ -706,34 +703,36 @@ namespace Gungeon
 		{
 			flagFireCamShake = true;
 
-			if (TIMER->GetTick(timeFire, 0.2f) || curBulletIdx == 0)
+			if (TIMER->GetTick(timeFire, 0.2f) || 
+				curBulletIdx == weapon[curWeaponIdx]->bulletCount - 1)	// 처음
 			{
-				canFire = true;
+				canFireBetween = true;
 			}
 		}
 
-		if (curBulletIdx >= weapon0BulletMax)
+		if (curBulletIdx < 0)
 		{
-			curBulletIdx = 0;
-			canFire = false;
+			curBulletIdx = weapon[curWeaponIdx]->bulletCount - 1;
+			canFireBetween = false;
 			isReloading = true;
 			uiReload->img->isVisible = true;
 			uiReloadBar->img->isVisible = true;
 		}
-		else if (canFire)
+		else if (canFireBetween)
 		{
-			uiBullet[curBulletIdx]->img->isVisible = false;
+			weapon[curWeaponIdx]->fireEffect->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos());
+			weapon[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
 
 			Vector2 dir = INPUT->GetWorldMousePos() - Pos();
 			dir.Normalize();
-			bullet[curBulletIdx++]->Spawn(weapon->firePos->GetWorldPos(),
+			bullet[curBulletIdx]->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos(),
 				Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
 					RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
 			);
 
-			weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
+			curBulletIdx--;
 
-			canFire = false;
+			canFireBetween = false;
 
 			SOUND->Stop("GUN");
 			SOUND->Play("GUN");
@@ -837,18 +836,18 @@ namespace Gungeon
 		if (isReloading)
 		{
 			uiReloadBar->img->MoveLocalPos(Vector2(80.0f * DELTA, 0.0f));
-			weapon->idle->isVisible = false;
-			weaponReloading->idle->isVisible = true;
+			weapon[curWeaponIdx]->idle->isVisible = false;
+			weapon[curWeaponIdx]->imgReloading->isVisible = true;
 
 			if (TIMER->GetTick(timeReload, 1.5f))
 			{
-				weapon->idle->isVisible = true;
-				weaponReloading->idle->isVisible = false;
+				weapon[curWeaponIdx]->idle->isVisible = true;
+				weapon[curWeaponIdx]->imgReloading->isVisible = false;
 				uiReload->img->isVisible = false;
 				uiReloadBar->img->isVisible = false;
 				isReloading = false;
 				uiReloadBar->img->SetLocalPosX(-60.0f);
-				for (auto& elem : uiBullet) elem->img->isVisible = true;
+				for (auto& elem : weapon[curWeaponIdx]->uiBullet) elem->img->isVisible = true;
 			}
 		}
 	}
@@ -906,6 +905,80 @@ namespace Gungeon
 		else
 		{
 			uiHeartHalf[curHp / 2]->img->isVisible = false;
+		}
+	}
+
+	void Player::PlusMoney(const int n)
+	{
+		money += n;
+	}
+
+	void Player::EquipWeapon(Weapon* other)
+	{
+		// 이전 무기 끄기
+		Weapon*& beforeWeapon = weapon[curWeaponIdx];
+		beforeWeapon->idle->isVisible = false;
+		beforeWeapon->imgReloading->isVisible = false;
+		for (auto& elem : beforeWeapon->uiBullet)
+		{
+			elem->img->isVisible = false;
+		}
+		beforeWeapon->uiBulletFrame->img->isVisible = false;
+
+		curWeaponIdx++;
+
+		// 새 무기
+		Weapon*& afterWeapon = weapon[curWeaponIdx];
+		afterWeapon = other;
+		afterWeapon->col->SetParentT(*col);
+		if (targetDir.x < 0.0f)
+		{
+			afterWeapon->EquipLeft();
+		}
+		else
+		{
+			afterWeapon->EquipRight();
+		}
+		afterWeapon->idle->isVisible = true;
+
+		for (auto& elem : afterWeapon->uiBullet)
+		{
+			elem->img->isVisible = true;
+		}
+
+		// bullet
+		curBulletIdx = afterWeapon->bulletCount - 1;
+		bullet.resize(afterWeapon->bulletCount);
+		float bulletCoef = 1.5f;
+		for (auto& elem : bullet)
+		{
+			if (elem) continue;
+			elem = new PlayerBullet;
+			elem->col->scale.x = 19.0f * bulletCoef;
+			elem->col->scale.y = 19.0f * bulletCoef;
+			elem->idle = new ObImage(L"EnterTheGungeon/Player_0/Bullet_0.png");
+			elem->idle->scale = col->scale * 0.8f;
+			elem->idle->SetParentRT(*elem->col);
+		}
+
+		// UI Bullet
+		afterWeapon->uiBullet.resize(afterWeapon->bulletCount);
+		int uiBulletIdx = 0;
+		for (auto& elem : afterWeapon->uiBullet)
+		{
+			elem = new UI;
+			elem->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Bullet.png");
+			elem->img->scale = Vector2(12.0f, 4.0f);
+			elem->anchor = Anchor::rightBottom;
+			elem->Spawn(-40.0f, 56.0f + uiBulletIdx * 12.0f);
+			elem->img->space = Space::screen;
+			elem->img->isVisible = true;
+			uiBulletIdx++;
+		}
+
+		if (afterWeapon->uiBulletFrame)
+		{
+			afterWeapon->uiBulletFrame->img->isVisible = true;
 		}
 	}
 }

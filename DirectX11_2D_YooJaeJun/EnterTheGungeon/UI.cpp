@@ -4,7 +4,7 @@ namespace Gungeon
 {
     UI::UI()
     {
-        anchor = Anchor::NONE;
+        anchor = Anchor::none;
     }
 
     void UI::Release()
@@ -30,13 +30,13 @@ namespace Gungeon
     {
         switch (anchor)
         {
-        case Anchor::LEFTTOP:
+        case Anchor::leftTop:
             img->SetWorldPos(Vector2(-app.GetHalfWidth() + coefX, app.GetHalfHeight() + coefY));
             break;
-        case Anchor::LEFTBOTTOM:
+        case Anchor::leftBottom:
             img->SetWorldPos(Vector2(-app.GetHalfWidth() + coefX, -app.GetHalfHeight() + coefY));
             break;
-        case Anchor::RIGHTBOTTOM:
+        case Anchor::rightBottom:
             img->SetWorldPos(Vector2(app.GetHalfWidth() + coefX, -app.GetHalfHeight() + coefY));
             break;
         }

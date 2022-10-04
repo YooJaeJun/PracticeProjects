@@ -20,7 +20,7 @@ namespace Gungeon
         LIGHT->light.radius = 2000.0f;
 
         SOUND->Stop("SCENE01");
-        SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
+        //SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
         SOUND->Play("SCENE02");
 
         // ¸Ê ¿ÀºêÁ§Æ®
@@ -123,41 +123,49 @@ namespace Gungeon
             elem->die->SetParentRT(*elem->col);
             elem->die->zOrder = ZOrder::object;
 
+
             float enemyWeaponScaleCoef = 1.5f;
+            elem->weapon.resize(1);
+            for (auto& weaponElem : elem->weapon)
+            {
+                weaponElem = new Weapon;
+                weaponElem->col = new ObRect;
+                weaponElem->col->isVisible = false;
+                weaponElem->col->isFilled = false;
+                weaponElem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+                weaponElem->col->pivot = OFFSET_LB;
+                weaponElem->col->scale.x = 29.0f * enemyWeaponScaleCoef;
+                weaponElem->col->scale.y = 21.0f * enemyWeaponScaleCoef;
+                weaponElem->col->SetParentRT(*elem->col);
+                weaponElem->col->SetLocalPos(Vector2(10.0f, -15.0f));
 
-            elem->weapon = new Weapon;
-            elem->weapon->col = new ObRect;
-            elem->weapon->col->isVisible = false;
-            elem->weapon->col->isFilled = false;
-            elem->weapon->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-            elem->weapon->col->pivot = OFFSET_LB;
-            elem->weapon->col->scale.x = 29.0f * enemyWeaponScaleCoef;
-            elem->weapon->col->scale.y = 21.0f * enemyWeaponScaleCoef;
-            elem->weapon->col->SetParentRT(*elem->col);
-            elem->weapon->col->SetLocalPosX(10.0f);
-            elem->weapon->col->SetLocalPosY(-15.0f);
+                weaponElem->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Weapon_0.png");
+                weaponElem->idle->pivot = OFFSET_LB;
+                weaponElem->idle->scale.x = 29.0f * enemyWeaponScaleCoef;
+                weaponElem->idle->scale.y = 21.0f * enemyWeaponScaleCoef;
+                weaponElem->idle->SetParentRT(*weaponElem->col);
+                weaponElem->idle->zOrder = ZOrder::weapon;
 
-            elem->weapon->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Weapon_0.png");
-            elem->weapon->idle->pivot = OFFSET_LB;
-            elem->weapon->idle->scale.x = 29.0f * enemyWeaponScaleCoef;
-            elem->weapon->idle->scale.y = 21.0f * enemyWeaponScaleCoef;
-            elem->weapon->idle->SetParentRT(*elem->weapon->col);
-            elem->weapon->idle->zOrder = ZOrder::weapon;
+                weaponElem->firePos = new GameObject;
+                weaponElem->firePos->SetParentRT(*weaponElem->col);
+                weaponElem->firePos->SetLocalPos(Vector2(weaponElem->col->scale.x / 2.0f, 0.0f));
+                weaponElem->firePos->zOrder = ZOrder::none;
 
-            elem->weapon->firePos = new GameObject;
-            elem->weapon->firePos->SetParentRT(*elem->weapon->col);
-            elem->weapon->firePos->SetLocalPos(Vector2(elem->weapon->col->scale.x / 2.0f, 0.0f));
-            elem->weapon->firePos->zOrder = ZOrder::none;
+                float enemyWeaponEffectScaleCoef = 3.0f;
+                weaponElem->fireEffect = new Effect;
+                weaponElem->fireEffect->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Effect_Fire_Weapon_0.png");
+                weaponElem->fireEffect->idle->isVisible = false;
+                weaponElem->fireEffect->idle->maxFrame.x = 3;
+                weaponElem->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * enemyWeaponEffectScaleCoef;
+                weaponElem->fireEffect->idle->SetParentRT(*weaponElem->firePos);
+                weaponElem->fireEffect->idle->zOrder = ZOrder::none;
+                weaponElem->fireEffect->intervalDie = 0.2f;
 
-            float enemyWeaponEffectScaleCoef = 3.0f;
-            elem->weapon->fireEffect = new Effect;
-            elem->weapon->fireEffect->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Effect_Fire_Weapon_0.png");
-            elem->weapon->fireEffect->idle->isVisible = false;
-            elem->weapon->fireEffect->idle->maxFrame.x = 3;
-            elem->weapon->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * enemyWeaponEffectScaleCoef;
-            elem->weapon->fireEffect->idle->SetParentRT(*elem->weapon->firePos);
-            elem->weapon->fireEffect->idle->zOrder = ZOrder::none;
-            elem->weapon->fireEffect->intervalDie = 0.2f;
+                weaponElem->pivotDefault = Vector2(0.4f, 0.25f);
+                weaponElem->localPosDefault = Vector2(18.0f, -15.0f);
+                weaponElem->localFirePosDefault = Vector2(40.0f, 12.0f);
+                weaponElem->Equip();
+            }
 
             elem->shadow = new ObImage(L"EnterTheGungeon/Enemy_0/Shadow_1.png");
             elem->shadow->scale.x = 12.0f * enemyScaleCoef;
@@ -252,29 +260,106 @@ namespace Gungeon
         boss->die->zOrder = ZOrder::object;
 
         float bossWeaponScaleCoef = 2.0f;
+        boss->weapon.resize(1);
 
-        boss->weapon = new Weapon;
-        boss->weapon->col = new ObRect;
-        boss->weapon->col->isVisible = false;
-        boss->weapon->col->isFilled = false;
-        boss->weapon->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-        boss->weapon->col->pivot = OFFSET_LB;
-        boss->weapon->col->scale.x = 29.0f * bossWeaponScaleCoef;
-        boss->weapon->col->scale.y = 21.0f * bossWeaponScaleCoef;
-        boss->weapon->col->SetParentRT(*boss->col);
-        boss->weapon->col->SetLocalPosX(10.0f);
-        boss->weapon->col->SetLocalPosY(-15.0f);
-        boss->weapon->idle = new ObImage(L"EnterTheGungeon/Boss_0/Weapon_0.png");
-        boss->weapon->idle->pivot = OFFSET_LB;
-        boss->weapon->idle->scale.x = 29.0f * bossWeaponScaleCoef;
-        boss->weapon->idle->scale.y = 21.0f * bossWeaponScaleCoef;
-        boss->weapon->idle->SetParentRT(*boss->weapon->col);
-        boss->weapon->idle->zOrder = ZOrder::weapon;
+        for (auto& elem : boss->weapon)
+        {
+            elem = new Weapon;
+            elem->col = new ObRect;
+            elem->col->isVisible = false;
+            elem->col->isFilled = false;
+            elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+            elem->col->pivot = OFFSET_LB;
+            elem->col->scale.x = 29.0f * bossWeaponScaleCoef;
+            elem->col->scale.y = 21.0f * bossWeaponScaleCoef;
+            elem->col->SetParentRT(*boss->col);
+            elem->col->SetLocalPos(Vector2(10.0f, -15.0f));
 
-        boss->weapon->firePos = new GameObject;
-        boss->weapon->firePos->SetParentRT(*boss->weapon->col);
-        boss->weapon->firePos->SetLocalPos(Vector2(boss->weapon->col->scale.x / 2.0f, 0.0f));
-        boss->weapon->firePos->zOrder = ZOrder::none;
+            elem->idle = new ObImage(L"EnterTheGungeon/Boss_0/Weapon_0.png");
+            elem->idle->pivot = OFFSET_LB;
+            elem->idle->scale.x = 43.0f * bossWeaponScaleCoef;
+            elem->idle->scale.y = 11.0f * bossWeaponScaleCoef;
+            elem->idle->SetParentRT(*elem->col);
+            elem->idle->zOrder = ZOrder::weapon;
+
+            elem->firePos = new GameObject;
+            elem->firePos->SetParentRT(*elem->col);
+            elem->firePos->SetLocalPos(Vector2(elem->col->scale.x / 2.0f, 0.0f));
+            elem->firePos->zOrder = ZOrder::none;
+
+            float bossWeaponEffectScaleCoef = 2.0f;
+            elem->fireEffect = new Effect;
+            elem->fireEffect->idle = new ObImage(L"EnterTheGungeon/Boss_0/Effect_Fire_Weapon_0.png");
+            elem->fireEffect->idle->isVisible = false;
+            elem->fireEffect->idle->maxFrame.x = 3;
+            elem->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * bossWeaponEffectScaleCoef;
+            elem->fireEffect->idle->SetParentRT(*elem->firePos);
+            elem->fireEffect->idle->zOrder = ZOrder::none;
+            elem->fireEffect->intervalDie = 0.2f;
+
+            elem->imgReloading = new ObImage(L"EnterTheGungeon/Boss_0/Weapon_0_reloading.png");
+            elem->imgReloading->isVisible = false;
+            elem->imgReloading->pivot = Vector2(0.4f, 0.25f);
+            elem->imgReloading->maxFrame.x = 2;
+            elem->imgReloading->scale.x = 42.0f / 2.0f * bossWeaponScaleCoef;
+            elem->imgReloading->scale.y = 22.0f * bossWeaponScaleCoef;
+            elem->imgReloading->SetParentRT(*elem->col);
+            elem->imgReloading->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+            elem->imgReloading->zOrder = ZOrder::UI;
+
+            elem->pivotDefault = Vector2(0.6f, 0.25f);
+            elem->localPosDefault = Vector2(18.0f, -15.0f);
+            elem->localFirePosDefault = Vector2(70.0f, 12.0f);
+            elem->Equip();
+
+
+            elem->uiBulletFrame = new UI;
+            elem->uiBulletFrame->img = new ObImage(L"EnterTheGungeon/Boss_0/UI_Magazine.png");
+            elem->uiBulletFrame->img->scale = Vector2(28.0f, 99.0f);
+            elem->uiBulletFrame->anchor = Anchor::rightBottom;
+            elem->uiBulletFrame->Spawn(-40.0f, 80.0f);
+            elem->uiBulletFrame->img->space = Space::screen;
+            elem->uiBulletFrame->img->zOrder = ZOrder::UI;
+            elem->uiBulletFrame->img->isVisible = false;
+
+            elem->bulletCount = 10;
+            elem->uiBullet.resize(elem->bulletCount);
+
+            int uiBulletIdx = 0;
+            for (auto& elem : elem->uiBullet)
+            {
+                elem = new UI;
+                elem->img = new ObImage(L"EnterTheGungeon/Boss_0/UI_Bullet.png");
+                elem->img->scale = Vector2(12.0f, 4.0f);
+                elem->anchor = Anchor::rightBottom;
+                elem->Spawn(-40.0f, 104.0f - uiBulletIdx * 12.0f);
+                elem->img->space = Space::screen;
+                elem->img->isVisible = false;
+                uiBulletIdx++;
+            }
+
+            elem->uiWeapon = new UI;
+            elem->uiWeapon->img = new ObImage(L"EnterTheGungeon/Boss_0/UI_Weapon.png");
+            elem->uiWeapon->img->pivot = Vector2(0.4f, 0.25f);
+            elem->uiWeapon->img->scale.x = 60.0f;
+            elem->uiWeapon->img->scale.y = 48.0f;
+            elem->uiWeapon->anchor = Anchor::rightBottom;
+            elem->uiWeapon->Spawn(-190.0f, 60.0f);
+            elem->uiWeapon->img->space = Space::screen;
+            elem->uiWeapon->img->zOrder = ZOrder::UI;
+            elem->uiWeapon->img->isVisible = false;
+
+            elem->uiBulletCount = new UI;
+            elem->uiBulletCount->img = new ObImage(L"EnterTheGungeon/Boss_0/UI_BulletCount.png");
+            elem->uiBulletCount->img->pivot = Vector2(0.4f, 0.25f);
+            elem->uiBulletCount->img->scale.x = 60.0f;
+            elem->uiBulletCount->img->scale.y = 28.0f;
+            elem->uiBulletCount->anchor = Anchor::rightBottom;
+            elem->uiBulletCount->Spawn(-140.0f, 150.0f);
+            elem->uiBulletCount->img->space = Space::screen;
+            elem->uiBulletCount->img->zOrder = ZOrder::UI;
+            elem->uiBulletCount->img->isVisible = false;
+        }
 
 
         float hpGuageCoef = 1.5f;
@@ -477,7 +562,7 @@ namespace Gungeon
         if (boss->state != State::die)
         {
             boss->targetPos = player->Pos();
-            boss->weapon->col->rotation = Utility::DirToRadian(player->Pos());
+            boss->weapon[boss->curWeaponIdx]->col->rotation = Utility::DirToRadian(player->Pos());
         }
         boss->Update();
 
@@ -593,6 +678,12 @@ namespace Gungeon
                 }
             }
 
+            if (enemyElem->dropItem->col->Intersect(player->col))
+            {
+                enemyElem->dropItem->Hit();
+                player->PlusMoney(1);
+            }
+
             enemyElem->LateUpdate();
         }
 
@@ -625,6 +716,20 @@ namespace Gungeon
                 //    bulletElem->Reload();
                 //}
             }
+        }
+
+        if (boss->dropItem->col->Intersect(player->col))
+        {
+            boss->dropItem->Hit();
+            player->PlusMoney(1);
+        }
+
+        Weapon* bossWeapon = boss->weapon[boss->curWeaponIdx];
+        if (bossWeapon->state != State::die &&
+            bossWeapon->col->Intersect(player->col))
+        {
+            bossWeapon->Hit();
+            player->EquipWeapon(bossWeapon);
         }
 
         boss->LateUpdate();
@@ -700,11 +805,11 @@ namespace Gungeon
         boss->ResizeScreen();
     }
 
-    bool Scene02::CheckGrid(Vector2 wpos)
-    {
-        int coef = gridMax / 2;
-        int x = wpos.x + coef;
-        int y = wpos.y + coef;
-        return false == mapGen->grid[x][y];
-    }
+    //bool Scene02::CheckGrid(Vector2 wpos)
+    //{
+    //    int coef = gridMax / 2;
+    //    int x = wpos.x + coef;
+    //    int y = wpos.y + coef;
+    //    return false == mapGen->grid[x][y];
+    //}
 }

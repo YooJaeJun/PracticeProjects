@@ -11,6 +11,7 @@ namespace Gungeon
 	{
 		InitVar();
 		InitBullet();
+		InitItem();
 	}
 
 	void Enemy::InitVar()
@@ -33,16 +34,31 @@ namespace Gungeon
 	void Enemy::InitBullet()
 	{
 		float bulletCoef = 3.0f;
+		bullet.resize(10);
+
 		for (auto& elem : bullet)
 		{
 			elem = new EnemyBullet;
-			elem->col->scale.x = 8.0f * bulletCoef;
-			elem->col->scale.y = 8.0f * bulletCoef;
+			elem->col->scale = Vector2(8.0f, 8.0f) * bulletCoef;
 			elem->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Bullet_0.png");
-			elem->idle->scale.x = 8.0f * bulletCoef;
-			elem->idle->scale.y = 8.0f * bulletCoef;
+			elem->idle->scale = Vector2(8.0f, 8.0f) * bulletCoef;
 			elem->idle->SetParentRT(*elem->col);
 		}
+	}
+
+	void Enemy::InitItem()
+	{
+		float itemCoef = 0.5f;
+		dropItem = new Item;
+		dropItem->col = new ObCircle;
+		dropItem->col->scale = Vector2(40.0f, 40.0f) * itemCoef;
+		dropItem->col->isVisible = false;
+		dropItem->col->isFilled = false;
+		dropItem->col->SetWorldPos(DEFAULTSPAWN);
+		dropItem->idle = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
+		dropItem->idle->scale = Vector2(40.0f, 40.0f) * itemCoef;
+		dropItem->idle->SetParentRT(*dropItem->col);
+		dropItem->idle->isVisible = false;
 	}
 
 	void Enemy::Release()
@@ -71,6 +87,8 @@ namespace Gungeon
 		default:
 			break;
 		}
+
+		dropItem->Update();
 	}
 
 	void Enemy::LateUpdate()
@@ -81,6 +99,8 @@ namespace Gungeon
 	{
 		for (auto& elem : bullet) elem->Render();
 		Unit::Render();
+
+		dropItem->Render();
 	}
 
 	void Enemy::Idle()
@@ -167,8 +187,8 @@ namespace Gungeon
 			{
 				if (elem->isFired) continue;
 
-				elem->Spawn(weapon->firePos->GetWorldPos(), moveDir);
-				weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
+				elem->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos(), moveDir);
+				weapon[curWeaponIdx]->fireEffect->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos());
 
 				break;
 			}
@@ -269,6 +289,10 @@ namespace Gungeon
 			elem->idle->isVisible = false;
 			elem->hitBomb->idle->isVisible = false;
 		}
+
+		dropItem->Spawn(Pos());
+		dropItem->col->isVisible = true;
+		dropItem->idle->isVisible = true;
 	}
 
 	//void Enemy::FindPath(ObTileMap* map)

@@ -6,7 +6,6 @@ namespace Gungeon
 	{
 	public:
 		Bullet();
-
 		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;

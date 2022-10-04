@@ -6,7 +6,6 @@ namespace Gungeon
 	{
 	public:
 		BossBullet();
-
 		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;

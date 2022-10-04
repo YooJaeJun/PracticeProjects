@@ -16,9 +16,6 @@
     <Filter Include="GameObject\Level">
       <UniqueIdentifier>{d5c42346-46be-4eed-a185-12cbb53691c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObject\Weapon">
-      <UniqueIdentifier>{b0d2f63b-dc57-48ea-8165-96fb680583e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{09f919fa-161d-43a7-b8c0-e22f829de12f}</UniqueIdentifier>
     </Filter>
@@ -27,6 +24,9 @@
     </Filter>
     <Filter Include="ProcedureMapGeneration">
       <UniqueIdentifier>{43d31f4c-4da4-483c-8477-5db7e2296b91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Item">
+      <UniqueIdentifier>{427abf59-565d-49b7-9691-f7ccaf27032c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -59,9 +59,6 @@
     <ClInclude Include="Pet.h">
       <Filter>GameObject\Unit</Filter>
     </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>GameObject\Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="Unit.h">
       <Filter>GameObject\Unit</Filter>
     </ClInclude>
@@ -91,6 +88,12 @@
     </ClInclude>
     <ClInclude Include="Room.h">
       <Filter>GameObject\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>GameObject\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -122,9 +125,6 @@
     <ClCompile Include="Pet.cpp">
       <Filter>GameObject\Unit</Filter>
     </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>GameObject\Weapon</Filter>
-    </ClCompile>
     <ClCompile Include="Unit.cpp">
       <Filter>GameObject\Unit</Filter>
     </ClCompile>
@@ -154,6 +154,12 @@
     </ClCompile>
     <ClCompile Include="Room.cpp">
       <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>GameObject\Item</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

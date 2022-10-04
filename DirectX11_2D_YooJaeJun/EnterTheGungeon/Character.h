@@ -14,7 +14,6 @@ namespace Gungeon
 	{
 	public:
 		Character();
-
 		virtual void Init();
 		virtual void Release();
 		virtual void Update();

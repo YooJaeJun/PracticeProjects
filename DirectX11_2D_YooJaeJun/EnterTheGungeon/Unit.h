@@ -18,7 +18,6 @@ namespace Gungeon
 	{
 	public:
 		Unit();
-
 		virtual void Init() override;
 		virtual void Release() override;
 		virtual void Update() override;
@@ -42,8 +41,11 @@ namespace Gungeon
 		ObImage*		hit;
 		ObImage*		fall;
 		ObImage*		die;
-		Weapon*			weapon;
 		ObImage*		shadow;
+		Item*			dropItem;
+		vector<Weapon*>	weapon;
+		int				curWeaponMax;
+		int				curWeaponIdx;
 		Vector2			lastPos;
 		DirState		curMoveDirState;
 		DirState		curMoveDirStateBefore;
@@ -60,7 +62,7 @@ namespace Gungeon
 		bool			isHitAnim;
 		float			timeHitAnim;
 		float			timeDieAnim;
-		ObRect*			foot;
 		float			timeRealDie;
+		ObRect*			foot;
 	};
 }

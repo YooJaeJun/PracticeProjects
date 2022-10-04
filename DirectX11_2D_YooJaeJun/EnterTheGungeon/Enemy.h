@@ -2,16 +2,14 @@
 
 namespace Gungeon
 {
-	const int enemyBulletMax = 20;
-
 	class Enemy : public Unit
 	{
 	public:
 		Enemy();
-
 		virtual void Init() override;
 		void InitVar();
 		void InitBullet();
+		void InitItem();
 		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
@@ -29,20 +27,20 @@ namespace Gungeon
 		//void FindPath(ObTileMap* map);
 
 	private:
-		vector<Tile*>	way;
-		Vector2			start;
-		Vector2			end;
-		float			g;	// 비율
-		float			timeFindPath;
-		float			timeSetMoveDir;
-		float			timeSetTargetDir;
-		Vector2			pushedDir;
-		float			pushedScalar;
-		float			pushedScalarCoef;
-		float			timeAiming;
+		vector<Tile*>			way;
+		Vector2					start;
+		Vector2					end;
+		float					g;	// 비율
+		float					timeFindPath;
+		float					timeSetMoveDir;
+		float					timeSetTargetDir;
+		Vector2					pushedDir;
+		float					pushedScalar;
+		float					pushedScalarCoef;
+		float					timeAiming;
 
 	public:
-		EnemyBullet*	bullet[enemyBulletMax];
-		float			timeSetDir;
+		vector<EnemyBullet*>	bullet;
+		float					timeSetDir;
 	};
 }

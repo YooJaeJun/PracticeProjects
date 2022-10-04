@@ -26,6 +26,7 @@
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyBullet.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="Obstacle.h" />
@@ -47,6 +48,7 @@
     <ClCompile Include="BossBullet.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ProcedureMapGeneration.cpp" />
     <ClCompile Include="Room.cpp" />
