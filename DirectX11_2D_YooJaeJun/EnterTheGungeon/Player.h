@@ -67,5 +67,6 @@ namespace Gungeon
 		UI*						uiFireBottle;
 		UI*						uiFireBottleFrame;
 		int						money;
+		int						key;
 	};
 }

@@ -35,5 +35,6 @@ namespace Gungeon
 		int				curHp;
 		int				maxHp;
 		bool			isHit;
+		ObRect*			foot;	// 타일 충돌 체크용
 	};
 }

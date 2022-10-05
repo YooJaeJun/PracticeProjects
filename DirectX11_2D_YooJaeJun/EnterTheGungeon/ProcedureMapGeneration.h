@@ -63,6 +63,7 @@ namespace Gungeon
 		void Set();
 
 		void SetTilemapGUI();
-		bool IntersectTile(Vector2 wpos);
+		bool IntersectTileUnit(Character* elem);
+		bool IntersectTilePos(Vector2 wpos);
 	};
 }

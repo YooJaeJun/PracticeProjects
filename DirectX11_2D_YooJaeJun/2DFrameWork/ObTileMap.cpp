@@ -430,7 +430,7 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
     pTemp->ClacF(); //총예상비용 만들기
 
     //          주소,  예상비용
-    List.push({ pTemp ,pTemp->F });
+    List.push({ pTemp, pTemp->F });
 
     //인접 타일 비용검사
     vector<Int2> LoopIdx;
@@ -557,9 +557,9 @@ void ObTileMap::CreateTileCost()
         for (int j = 0; j < tileSize.y; j++)
         {
             Tiles[i][j].idx = Int2(i, j);
-            // Tiles[i][j].state = GetTileState(Tiles[i][j].idx);
-            Tiles[i][j].state = TileState::none;
-            SetTileState(Int2(i, j), TileState::none);
+            Tiles[i][j].state = GetTileState(Tiles[i][j].idx);
+            // Tiles[i][j].state = TileState::wall;
+            // SetTileState(Int2(i, j), TileState::wall);
 
             Tiles[i][j].Pos.x = i * scale.x + GetWorldPos().x + half.x;
             Tiles[i][j].Pos.y = j * scale.y + GetWorldPos().y + half.y;

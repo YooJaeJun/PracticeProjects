@@ -37,6 +37,7 @@ namespace Gungeon
 		godMode = false;
 		timeLastPosForDust = 0.0f;
 		money = 0;
+		key = 0;
 	}
 
 	void Player::InitCol()
@@ -52,7 +53,9 @@ namespace Gungeon
 		foot = new ObRect;
 		foot->scale = Vector2(col->scale.x, col->scale.y / 2.0f);
 		foot->SetParentRT(*col);
-		foot->SetLocalPosY(col->GetWorldPos().y - col->scale.y + 10.0f);
+		foot->SetLocalPosY(col->GetWorldPos().y - col->scale.y / 2.0f);
+		foot->isFilled = false;
+		foot->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	void Player::InitAnim()
@@ -323,7 +326,7 @@ namespace Gungeon
 
 	void Player::InitEffect()
 	{
-		float playerScaleCoef = 3.0f;
+		float playerScaleCoef = 2.0f;
 		shadow = new ObImage(L"EnterTheGungeon/Player_0/Shadow.png");
 		shadow->scale.x = 16.0f * playerScaleCoef;
 		shadow->scale.y = 5.0f * playerScaleCoef;
@@ -551,6 +554,16 @@ namespace Gungeon
 		uiGold->Render();
 		uiFireBottle->Render();
 		uiFireBottleFrame->Render();
+
+		DWRITE->RenderText(to_wstring(money),
+			RECT{ 170, 140, (long)app.GetWidth(), (long)app.GetHeight() },
+			40.0f,
+			L"Alagard");
+
+		DWRITE->RenderText(to_wstring(key),
+			RECT{ 80, 140, (long)app.GetWidth(), (long)app.GetHeight() },
+			40.0f,
+			L"Alagard");
 	}
 
 	void Player::ResizeScreen()
@@ -632,6 +645,7 @@ namespace Gungeon
 			StartIdle();
 			state = State::idle;
 
+			weapon[curWeaponIdx]->idle->isVisible = true;
 			scalar = 300.0f;
 
 			godMode = false;
@@ -799,6 +813,7 @@ namespace Gungeon
 			state = State::roll;
 			for (auto& elem : idle) elem->isVisible = false;
 			for (auto& elem : walk) elem->isVisible = false;
+			weapon[curWeaponIdx]->idle->isVisible = false;
 
 			SetMoveDirState();
 

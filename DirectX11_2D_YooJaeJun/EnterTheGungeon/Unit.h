@@ -63,6 +63,5 @@ namespace Gungeon
 		float			timeHitAnim;
 		float			timeDieAnim;
 		float			timeRealDie;
-		ObRect*			foot;
 	};
 }

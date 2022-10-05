@@ -46,8 +46,8 @@ namespace Gungeon
 
 	void Effect::Spawn(const Vector2 wpos)
 	{
-		idle->SetWorldPos(wpos);
 		state = State::idle;
+		idle->SetWorldPos(wpos);
 		idle->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
 		idle->isVisible = true;
 	}

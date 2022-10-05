@@ -54,7 +54,6 @@ namespace Gungeon
 		if (fall) fall->Update();
 		if (die) die->Update();
 		if (shadow) shadow->Update();
-		if (foot) foot->Update();
 	}
 
 	void Unit::LateUpdate()
@@ -178,6 +177,8 @@ namespace Gungeon
 		{
 			die->color = Color(0.4f, 0.4f, 0.4f, 0.4f);
 		}
+
+		if (foot) foot->isVisible = false;
 	}
 
 	void Unit::StepBack()

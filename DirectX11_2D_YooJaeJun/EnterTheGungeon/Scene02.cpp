@@ -35,10 +35,6 @@ namespace Gungeon
         InitBoss();
         InitMapObject();
 
-        mapBasic.resize(1);
-        mapBasic[0] = new ObImage(L"EnterTheGungeon/Level/Map_Basic.png");
-        mapBasic[0]->scale = Vector2(1405.0f, 1432.0f);
-
         Spawn();
     }
 
@@ -124,6 +120,13 @@ namespace Gungeon
             elem->die->scale.y = 22.0f * enemyScaleCoef;
             elem->die->SetParentRT(*elem->col);
             elem->die->zOrder = ZOrder::object;
+
+            elem->foot = new ObRect;
+            elem->foot->scale = Vector2(elem->col->scale.x, elem->col->scale.y / 2.0f);
+            elem->foot->SetParentRT(*elem->col);
+            elem->foot->SetLocalPosY(elem->col->GetWorldPos().y - elem->col->scale.y / 2.0f);
+            elem->foot->isFilled = false;
+            elem->foot->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
 
             float enemyWeaponScaleCoef = 1.5f;
@@ -260,6 +263,13 @@ namespace Gungeon
         boss->die->scale.y = 40.0f * bossScaleCoef;
         boss->die->SetParentRT(*boss->col);
         boss->die->zOrder = ZOrder::object;
+
+        boss->foot = new ObRect;
+        boss->foot->scale = Vector2(boss->col->scale.x, boss->col->scale.y / 2.0f);
+        boss->foot->SetParentRT(*boss->col);
+        boss->foot->SetLocalPosY(boss->col->GetWorldPos().y - boss->col->scale.y / 2.0f);
+        boss->foot->isFilled = false;
+        boss->foot->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
         float bossWeaponScaleCoef = 2.0f;
         boss->weapon.resize(1);
@@ -573,8 +583,6 @@ namespace Gungeon
         {
             SCENE->ChangeScene("Scene01");
         }
-
-        for(auto& elem : mapBasic) if (elem) elem->Update();
     }
 
     void Scene02::LateUpdate()
@@ -587,7 +595,7 @@ namespace Gungeon
         int idx = 0;
 
         // 플레이어
-        if (mapGen->IntersectTile(player->Pos()))
+        if (mapGen->IntersectTileUnit(player))
         {
             player->StepBack();
         }
@@ -614,7 +622,7 @@ namespace Gungeon
                 bulletElem->Hit(1);
             }
 
-            if (mapGen->IntersectTile(bulletElem->Pos()))
+            if (mapGen->IntersectTilePos(bulletElem->Pos()))
             {
                 bulletElem->Hit(1);
             }
@@ -631,7 +639,7 @@ namespace Gungeon
                 player->Hit(1);
             }
 
-            if (mapGen->IntersectTile(enemyElem->Pos()))
+            if (mapGen->IntersectTileUnit(enemyElem))
             {
                 enemyElem->StepBack();
             }
@@ -647,7 +655,7 @@ namespace Gungeon
                     bulletElem->Hit(1);
                 }
 
-                if (mapGen->IntersectTile(bulletElem->Pos()))
+                if (mapGen->IntersectTilePos(bulletElem->Pos()))
                 {
                     bulletElem->Hit(1);
                 }
@@ -672,7 +680,7 @@ namespace Gungeon
             player->Hit(1);
         }
 
-        if (mapGen->IntersectTile(boss->Pos()))
+        if (mapGen->IntersectTileUnit(boss))
         {
             boss->StepBack();
         }
@@ -688,7 +696,7 @@ namespace Gungeon
                 bulletElem->Hit(1);
             }
 
-            if (mapGen->IntersectTile(bulletElem->Pos()))
+            if (mapGen->IntersectTilePos(bulletElem->Pos()))
             {
                 bulletElem->Hit(1);
             }
@@ -751,7 +759,6 @@ namespace Gungeon
         {
             mapGen->Render();
         }
-        for (auto& elem : mapBasic) if (elem) elem->Render();
 
         player->shadow->Render();
         for (auto& elem : enemy) elem->shadow->Render();

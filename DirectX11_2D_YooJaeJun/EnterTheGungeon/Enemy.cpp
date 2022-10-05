@@ -323,7 +323,8 @@ namespace Gungeon
 		{
 			// SetPos(Vector2::Lerp(start, end, g));
 			moveDir = way.back()->Pos - Pos();
-			col->MoveWorldPos(moveDir * DELTA);
+			moveDir.Normalize();
+			col->MoveWorldPos(moveDir * scalar * DELTA);
 	
 			g += DELTA * 2.0f;
 	

@@ -40,10 +40,12 @@ WPARAM Window::Run(Scene* main)
 			LIGHT->Set();
 			D3D->SetRenderTarget();
 			D3D->Clear(app.background);
+			DWRITE->GetDC()->BeginDraw();
 			{
 				main->Render();
 				GUI->Render();
 			}
+			DWRITE->GetDC()->EndDraw();
 			D3D->Present();
 		}
 	}

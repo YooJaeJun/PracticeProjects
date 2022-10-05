@@ -13,7 +13,6 @@ namespace Gungeon
 		Player*				player;
 		Enemy*				enemy[enemyMax];
 		Boss*				boss;
-		vector<ObImage*>	mapBasic;
 
 	public:
 		ProcedureMapGeneration* mapGen;

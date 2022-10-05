@@ -53,8 +53,8 @@ namespace Gungeon
 
     void Bullet::Hit(const float damage)
     {
-        Reload();
         hitBomb->Spawn(idle->GetWorldPos());
+        Reload();
     }
 
     void Bullet::Reload()
