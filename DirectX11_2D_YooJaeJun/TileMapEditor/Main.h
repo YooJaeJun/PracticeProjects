@@ -1,17 +1,13 @@
 #pragma once
-
 class Main : public Scene
 {
-private:
+public:
 	ObTileMap* map;
 
 	Int2		pickingIdx;
 	int			imgIdx;
-	Int2		mouseIdx;
 
-	Int2		tileSize;
-	Color		tileColor;
-	int			tileState;
+	Int2		mouseIdx;
 
 public:
 	virtual void Init() override;
@@ -21,3 +17,4 @@ public:
 	virtual void Render() override;
 	virtual void ResizeScreen() override;
 };
+
