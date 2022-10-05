@@ -114,6 +114,8 @@ namespace Gungeon
 
 			if (damage > 0)
 			{
+				originCamPos = CAM->position;
+
 				if (hit)
 				{
 					idle[curTargetDirState]->isVisible = false;

@@ -280,6 +280,7 @@ namespace Gungeon
             elem->hitBomb->idle->isVisible = false;
         }
 
+        // drop
         dropItem->Spawn(Vector2(Pos().x - 10.0f, Pos().y - 10.0f));
         dropItem->col->isVisible = true;
         dropItem->idle->isVisible = true;

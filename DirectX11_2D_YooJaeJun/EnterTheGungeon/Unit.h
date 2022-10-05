@@ -54,6 +54,7 @@ namespace Gungeon
 		Vector2			targetPos;
 		Vector2			targetDir;
 		Vector2			targetDirBefore;
+		Vector2			originCamPos;
 		float			targetRotation;
 		float			timeFire;
 		float			timeReload;

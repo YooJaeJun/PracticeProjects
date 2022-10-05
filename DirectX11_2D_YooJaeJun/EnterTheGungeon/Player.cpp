@@ -612,7 +612,11 @@ namespace Gungeon
 		SetMoveDirState();
 		StartWalk();
 		Action();
-		FireCamShake();
+
+		if (flagFireCamShake)
+		{
+			ShakeCam(timeFireCamShake);
+		}
 
 		Reloading();
 		Hitting();
@@ -627,7 +631,11 @@ namespace Gungeon
 		SetMoveDirState();
 		StartIdle();
 		Action();
-		FireCamShake();
+
+		if (flagFireCamShake)
+		{
+			ShakeCam(timeFireCamShake);
+		}
 
 		Reloading();
 		Hitting();
@@ -754,19 +762,17 @@ namespace Gungeon
 
 		originCamPos = CAM->position;
 	}
-
-	void Player::FireCamShake()
+	
+	// 피격 시, 발사 시
+	void Player::ShakeCam(float& time)
 	{
-		if (flagFireCamShake)
-		{
-			CAM->position = Vector2(RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f),
-				RANDOM->Float(CAM->position.y - 2.0f, CAM->position.y + 2.0f));
+		CAM->position = Vector2(RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f),
+			RANDOM->Float(CAM->position.y - 2.0f, CAM->position.y + 2.0f));
 
-			if (TIMER->GetTick(timeFireCamShake, 0.2f))
-			{
-				CAM->position = originCamPos;
-				flagFireCamShake = false;
-			}
+		if (TIMER->GetTick(time, 0.2f))
+		{
+			CAM->position = originCamPos;
+			flagFireCamShake = false;
 		}
 	}
 
@@ -873,7 +879,7 @@ namespace Gungeon
 		{
 			DecreaseHeart();
 
-			if (TIMER->GetTick(timeHit, 1.5f))
+			if (TIMER->GetTick(timeHit, 1.0f))
 			{
 				isHit = false;
 			}
@@ -886,12 +892,19 @@ namespace Gungeon
 			for (auto& elem : walk) elem->color = c;
 			for (auto& elem : roll) elem->color = c;
 
-			if (TIMER->GetTick(timeHitAnim, 1.5f))
+			CAM->position = Vector2(RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f),
+				RANDOM->Float(CAM->position.y - 2.0f, CAM->position.y + 2.0f));
+
+
+			if (TIMER->GetTick(timeHitAnim, 1.0f))
 			{
 				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
 				for (auto& elem : idle) elem->color = c;
 				for (auto& elem : walk) elem->color = c;
 				for (auto& elem : roll) elem->color = c;
+
+				CAM->position = originCamPos;
+				flagFireCamShake = false;
 
 				isHitAnim = false;
 			}

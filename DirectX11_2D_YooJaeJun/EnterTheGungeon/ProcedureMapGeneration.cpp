@@ -254,10 +254,10 @@ namespace Gungeon
                     if (dir.y >= 0.0f) y = tilemap->scale.y / 2.0f;
                     else y = tilemap->scale.y * -1.0f / 2.0f;
                     room->SetPos(Vector2(room->Pos().x + x, room->Pos().y + y));
-
                     flagSpread = false;
                 }
             }
+            room->Update();
         }
     }
 
@@ -504,7 +504,11 @@ namespace Gungeon
             Int2 pos;
             if (tilemap->WorldPosToTileIdx(coord, pos))
             {
-                tilemap->SetTile(pos, Int2(RANDOM->Int(1, 4), RANDOM->Int(1, 3)), imgIdx, (int)TileState::none);
+                tilemap->SetTile(pos, 
+                    Int2(RANDOM->Int(1, 4), 
+                        RANDOM->Int(1, 3)), 
+                    imgIdx, 
+                    (int)TileState::none);
             }
         };
 
@@ -577,7 +581,7 @@ namespace Gungeon
         ImGui::ColorEdit4("TileColor", (float*)&tileColor, ImGuiColorEditFlags_PickerHueWheel);
 
         //Texture
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < imageCount; i++)
         {
             string str = "Texture" + to_string(i);
             if (GUI->FileImGui(str.c_str(), str.c_str(),

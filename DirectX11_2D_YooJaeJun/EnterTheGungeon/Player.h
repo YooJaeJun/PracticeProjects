@@ -27,7 +27,7 @@ namespace Gungeon
 		void Move();
 		void Action();
 		void Fire();
-		void FireCamShake();
+		void ShakeCam(float& time);
 		void StartWalk();
 		void StartIdle();
 		void StartRoll();
@@ -51,7 +51,6 @@ namespace Gungeon
 		int						curBulletIdx;
 		float					timeRoll;
 		bool					flagFireCamShake;
-		Vector2					originCamPos;
 		float					timeFireCamShake;
 		UI*						uiReload;
 		UI*						uiReloadBar;
