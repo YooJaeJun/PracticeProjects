@@ -48,8 +48,7 @@ namespace Gungeon
 		Weapon*					w;		// data index 실수 막기 위함
 		int						curWeaponMax;
 		int						curWeaponIdx;
-		bool					canFireOncePistol;
-		bool					canFireOnceShotgun;
+		bool					canFireOnce[weaponTypeMax];
 		bool					isReloading;
 		float					timeReload;
 		int						curBulletIdx;

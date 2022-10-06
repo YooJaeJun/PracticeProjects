@@ -2,10 +2,10 @@
 
 namespace Gungeon
 {
-	const float timeDefault = 0.0f;
+	const float timeDefault = 1.0f;
 	const int roomMax = 40;
 	const int gridMax = 7000;
-	enum class GameState { spray, spread, select, triangulate, span, loop, clean, dig, widen, tile, set };
+	enum class GameState { spray, spread, select, triangulate, span, loop, clean, hallway, widen, tile, door };
 
 	class ProcedureMapGeneration
 	{
@@ -55,11 +55,11 @@ namespace Gungeon
 		void Triangulate();
 		void Spanning();
 		void Loop();
-		void Dig();
+		void Hallway();
 		void Widen();
 		void Clean();
 		void Tile();
-		void Set();
+		void Door();
 
 		void SetTilemapGUI();
 		bool IntersectTileUnit(Character* elem);

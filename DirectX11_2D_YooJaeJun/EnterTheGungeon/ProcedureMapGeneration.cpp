@@ -9,13 +9,13 @@ namespace Gungeon
 
     void ProcedureMapGeneration::Init()
     {
+        timer = 0.0f;
+
         state = GameState::spray;
 
         LIGHT->light.radius = 3000.0f;
 
         flagSpread = false;
-
-        timer = 0.0f;
 
         // tilemap
         tilemap = new ObTileMap;
@@ -153,15 +153,15 @@ namespace Gungeon
             if (TIMER->GetTick(timer, timeDefault))
             {
                 Clean();
-                state = GameState::dig;
+                state = GameState::hallway;
             }
             break;
         }
-        case GameState::dig:
+        case GameState::hallway:
         {
             if (TIMER->GetTick(timer, timeDefault))
             {
-                Dig();
+                Hallway();
                 state = GameState::widen;
             }
             break;
@@ -180,15 +180,15 @@ namespace Gungeon
             if (TIMER->GetTick(timer, timeDefault))
             {
                 Tile();
-                state = GameState::set;
+                state = GameState::door;
             }
             break;
         }
-        case GameState::set:
+        case GameState::door:
         {
             if (TIMER->GetTick(timer, timeDefault))
             {
-                Set();
+                Door();
             }
             break;
         }
@@ -375,7 +375,7 @@ namespace Gungeon
         rooms.clear();
     }
 
-    void ProcedureMapGeneration::Dig()
+    void ProcedureMapGeneration::Hallway()
     {
         for (auto& elem : linesMST)
         {
@@ -543,7 +543,7 @@ namespace Gungeon
         tilemap->CreateTileCost();
     }
 
-    void ProcedureMapGeneration::Set()
+    void ProcedureMapGeneration::Door()
     {
 
     }

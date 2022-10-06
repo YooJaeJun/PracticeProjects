@@ -2,12 +2,14 @@
 
 namespace Gungeon
 {
+	const int weaponTypeMax = 2;
+
 	class WeaponData
 	{
 	public:
 		WeaponData();
 
 	public:
-		Weapon*		data[2];
+		Weapon*		data[weaponTypeMax];
 	};
 }

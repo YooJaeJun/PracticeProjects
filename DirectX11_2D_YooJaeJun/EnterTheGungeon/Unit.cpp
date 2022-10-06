@@ -43,8 +43,8 @@ namespace Gungeon
 
 		Character::Update();
 
-		idle[curTargetDirState]->Update();
-		walk[curTargetDirState]->Update();
+		for (auto& elem : idle) elem->Update();
+		for (auto& elem : walk) elem->Update();
 		if (hit) hit->Update();
 		if (fall) fall->Update();
 		if (die) die->Update();

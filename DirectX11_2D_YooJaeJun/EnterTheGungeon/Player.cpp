@@ -22,8 +22,7 @@ namespace Gungeon
 	{
 		scalar = 300.0f;
 		curHp = maxHp = 6;
-		canFireOncePistol = true;
-		canFireOnceShotgun = true;
+		for (auto& elem : canFireOnce) elem = true;
 		isReloading = false;
 		timeReload = 0.0f;
 		timeRoll = 0.0f;
@@ -653,27 +652,40 @@ namespace Gungeon
 	{
 		if (false == isReloading)
 		{
-			flagFireCamShake = true;
-
-			if (TIMER->GetTick(timeFire, 0.2f) || 
-				curBulletIdx == w->bulletCount - 1)	// 贸澜
+			switch (w->type)
 			{
-				canFireOncePistol = true;
-			}
+			case WeaponType::pistol:
 
-			if (TIMER->GetTick(timeFire, 0.7f) ||
-				curBulletIdx == w->bulletCount - 1)	// 贸澜
-			{
-				canFireOnceShotgun = true;
+				if (TIMER->GetTick(timeFire, 0.2f) ||
+					curBulletIdx == w->bulletCount - 1)	// 贸澜
+				{
+					canFireOnce[(int)WeaponType::pistol] = true;
+					flagFireCamShake = true;
+				}
+
+				break;
+
+			case WeaponType::shotgun:
+
+				if (TIMER->GetTick(timeFire, 0.7f) ||
+					curBulletIdx == w->bulletCount - 1)	// 贸澜
+				{
+					canFireOnce[(int)WeaponType::shotgun] = true;
+					flagFireCamShake = true;
+				}
+
+				break;
 			}
 		}
 
 		if (curBulletIdx < 0)
 		{
 			curBulletIdx = w->bulletCount - 1;
-			canFireOncePistol = false;
-			canFireOnceShotgun = false;
+
+			for (auto& elem : canFireOnce) elem = false;
+
 			isReloading = true;
+			
 			uiReload->img->isVisible = true;
 			uiReloadBar->img->isVisible = true;
 		}
@@ -682,43 +694,60 @@ namespace Gungeon
 			Vector2 dir = INPUT->GetWorldMousePos() - Pos();
 			dir.Normalize();
 
-			if (canFireOncePistol)
+			switch (w->type)
 			{
-				w->fireEffect->Spawn(w->firePos->GetWorldPos());
-				w->uiBullet[curBulletIdx]->img->isVisible = false;
+			case WeaponType::pistol:
 
-				bullet[curBulletIdx]->Spawn(
-					w->firePos->GetWorldPos(),
-					Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
-						RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
-				);
-
-				SOUND->Stop("GUN");
-				SOUND->Play("GUN");
-
-				canFireOncePistol = false;
-			}
-			else if (canFireOnceShotgun)
-			{
-				for (int bulletOnce = 6; bulletOnce >= 0; bulletOnce--)
+				if (canFireOnce[(int)WeaponType::pistol])
 				{
-					bullet[bulletOnce]->scalar = RANDOM->Float(800.0f, 1000.0f);
+					w->fireEffect->Spawn(w->firePos->GetWorldPos());
+					w->uiBullet[curBulletIdx]->img->isVisible = false;
 
-					bullet[bulletOnce]->Spawn(
+					bullet[curBulletIdx]->Spawn(
 						w->firePos->GetWorldPos(),
-						Vector2(RANDOM->Float(dir.x - 0.2f, dir.x + 0.2f),
-							RANDOM->Float(dir.y - 0.2f, dir.y + 0.2f))
+						Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
+							RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
 					);
+
+					SOUND->Stop("GUN");
+					SOUND->Play("GUN");
+
+					canFireOnce[(int)WeaponType::pistol] = false;
+
+					curBulletIdx--;
 				}
 
-				SOUND->Stop("GUN");
-				SOUND->Play("GUN");
+				break;
 
-				canFireOnceShotgun = false;
+			case WeaponType::shotgun:
+
+				if (canFireOnce[(int)WeaponType::shotgun])
+				{
+					w->fireEffect->Spawn(w->firePos->GetWorldPos());
+					w->uiBullet[curBulletIdx]->img->isVisible = false;
+
+					for (int bulletOnce = 6; bulletOnce >= 0; bulletOnce--)
+					{
+						bullet[bulletOnce]->scalar = RANDOM->Float(800.0f, 1000.0f);
+
+						bullet[bulletOnce]->Spawn(
+							w->firePos->GetWorldPos(),
+							Vector2(RANDOM->Float(dir.x - 0.2f, dir.x + 0.2f),
+								RANDOM->Float(dir.y - 0.2f, dir.y + 0.2f))
+						);
+					}
+
+					SOUND->Stop("GUN");
+					SOUND->Play("GUN");
+
+					canFireOnce[(int)WeaponType::shotgun] = false;
+
+					curBulletIdx--;
+				}
+
+				break;
 			}
 		}
-
-		curBulletIdx--;
 
 		originCamPos = CAM->position;
 	}
@@ -777,6 +806,7 @@ namespace Gungeon
 		if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))
 		{
 			state = State::roll;
+
 			for (auto& elem : idle) elem->isVisible = false;
 			for (auto& elem : walk) elem->isVisible = false;
 			w->idle->isVisible = false;
