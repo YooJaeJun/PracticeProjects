@@ -2,6 +2,12 @@
 
 namespace Gungeon
 {
+	enum class WeaponType
+	{
+		pistol,
+		shotgun
+	};
+
 	class Weapon : public Item
 	{
 	public:
@@ -33,5 +39,6 @@ namespace Gungeon
 		vector<UI*>	uiBullet;
 		UI*			uiBulletCount;
 		int			bulletCount;
+		WeaponType	type;
 	};
 }

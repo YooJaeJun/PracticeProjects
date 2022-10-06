@@ -39,7 +39,6 @@ namespace Gungeon
 		Int2						pickingIdx;
 		bool						useGui;
 
-
 	public:
 		ProcedureMapGeneration();
 

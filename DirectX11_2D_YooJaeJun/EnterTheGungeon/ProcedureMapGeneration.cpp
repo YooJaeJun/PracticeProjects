@@ -547,6 +547,7 @@ namespace Gungeon
     {
 
     }
+
     void ProcedureMapGeneration::SetTilemapGUI()
     {
         if (false == useGui) return;

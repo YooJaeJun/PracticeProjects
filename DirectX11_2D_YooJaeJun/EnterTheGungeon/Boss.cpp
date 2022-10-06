@@ -267,15 +267,12 @@ namespace Gungeon
         switch (state)
         {
         case State::idle:
-            Idle();
             for (auto& elem : bullet) elem->Render();
             break;
         case State::walk:
-            Walk();
             for (auto& elem : bullet) elem->Render();
             break;
         case State::die:
-            Die();
             break;
         }
 

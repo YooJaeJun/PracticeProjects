@@ -22,7 +22,8 @@ namespace Gungeon
 	{
 		scalar = 300.0f;
 		curHp = maxHp = 6;
-		canFireBetween = true;
+		canFireOncePistol = true;
+		canFireOnceShotgun = true;
 		isReloading = false;
 		timeReload = 0.0f;
 		timeRoll = 0.0f;
@@ -215,7 +216,7 @@ namespace Gungeon
 		{
 			elem->img->isVisible = true;
 		}
-		w->uiWeaponFrame->img->isVisible = true;
+
 		w->uiBulletFrame->img->isVisible = true;
 		w->uiWeapon->img->isVisible = true;
 		w->uiBulletCount->img->isVisible = true;
@@ -271,6 +272,23 @@ namespace Gungeon
 		uiReloadBar->img->SetLocalPosX(-60.0f);
 		uiReloadBar->img->SetLocalPosY(60.0f);
 		uiReloadBar->img->zOrder = ZOrder::UI;
+
+		uiWeaponFrame = new UI;
+		uiWeaponFrame->img = new ObImage(L"EnterTheGungeon/Weapon/UI_WeaponFrame.png");
+		uiWeaponFrame->img->scale.x = 188.0f;
+		uiWeaponFrame->img->scale.y = 116.0f;
+		uiWeaponFrame->img->pivot = OFFSET_RB;
+		uiWeaponFrame->anchor = Anchor::rightBottom;
+		uiWeaponFrame->Spawn(-70.0f, 30.0f);
+		uiWeaponFrame->img->space = Space::screen;
+		uiWeaponFrame->img->zOrder = ZOrder::UI;
+		uiWeaponFrame->img->isVisible = true;
+
+		for (auto& elem : w->uiBullet)
+		{
+			elem->img->isVisible = true;
+		}
+
 
 		uiHeartNone.resize(maxHp / 2);
 		uiHeartHalf.resize(maxHp / 2);
@@ -385,6 +403,7 @@ namespace Gungeon
 		w->Release();
 		uiReload->Release();
 		uiReloadBar->Release();
+		SafeRelease(uiWeaponFrame);
 		for (auto& elem : uiHeartNone) elem->Release();
 		for (auto& elem : uiHeartHalf) elem->Release();
 		for (auto& elem : uiHeartFull) elem->Release();
@@ -427,6 +446,7 @@ namespace Gungeon
 		for (auto& elem : bullet) elem->Update();
 		uiReload->Update();
 		uiReloadBar->Update();
+		if (uiWeaponFrame) uiWeaponFrame->Update();
 		for (auto& elem : uiHeartNone) elem->Update();
 		for (auto& elem : uiHeartHalf) elem->Update();
 		for (auto& elem : uiHeartFull) elem->Update();
@@ -456,6 +476,7 @@ namespace Gungeon
 		w->Render();
 		uiReload->Render();
 		uiReloadBar->Render();
+		if (uiWeaponFrame) uiWeaponFrame->Render();
 		for (auto& elem : uiHeartNone) elem->Render();
 		for (auto& elem : uiHeartHalf) elem->Render();
 		for (auto& elem : uiHeartFull) elem->Render();
@@ -564,6 +585,8 @@ namespace Gungeon
 			state = State::idle;
 
 			w->idle->isVisible = true;
+			w->firePos->isVisible = true;
+
 			scalar = 300.0f;
 
 			godMode = false;
@@ -635,37 +658,67 @@ namespace Gungeon
 			if (TIMER->GetTick(timeFire, 0.2f) || 
 				curBulletIdx == w->bulletCount - 1)	// 처음
 			{
-				canFireBetween = true;
+				canFireOncePistol = true;
+			}
+
+			if (TIMER->GetTick(timeFire, 0.7f) ||
+				curBulletIdx == w->bulletCount - 1)	// 처음
+			{
+				canFireOnceShotgun = true;
 			}
 		}
 
 		if (curBulletIdx < 0)
 		{
 			curBulletIdx = w->bulletCount - 1;
-			canFireBetween = false;
+			canFireOncePistol = false;
+			canFireOnceShotgun = false;
 			isReloading = true;
 			uiReload->img->isVisible = true;
 			uiReloadBar->img->isVisible = true;
 		}
-		else if (canFireBetween)
+		else
 		{
-			w->fireEffect->Spawn(w->firePos->GetWorldPos());
-			w->uiBullet[curBulletIdx]->img->isVisible = false;
-
 			Vector2 dir = INPUT->GetWorldMousePos() - Pos();
 			dir.Normalize();
-			bullet[curBulletIdx]->Spawn(w->firePos->GetWorldPos(),
-				Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
-					RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
-			);
 
-			curBulletIdx--;
+			if (canFireOncePistol)
+			{
+				w->fireEffect->Spawn(w->firePos->GetWorldPos());
+				w->uiBullet[curBulletIdx]->img->isVisible = false;
 
-			canFireBetween = false;
+				bullet[curBulletIdx]->Spawn(
+					w->firePos->GetWorldPos(),
+					Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
+						RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
+				);
 
-			SOUND->Stop("GUN");
-			SOUND->Play("GUN");
+				SOUND->Stop("GUN");
+				SOUND->Play("GUN");
+
+				canFireOncePistol = false;
+			}
+			else if (canFireOnceShotgun)
+			{
+				for (int bulletOnce = 6; bulletOnce >= 0; bulletOnce--)
+				{
+					bullet[bulletOnce]->scalar = RANDOM->Float(800.0f, 1000.0f);
+
+					bullet[bulletOnce]->Spawn(
+						w->firePos->GetWorldPos(),
+						Vector2(RANDOM->Float(dir.x - 0.2f, dir.x + 0.2f),
+							RANDOM->Float(dir.y - 0.2f, dir.y + 0.2f))
+					);
+				}
+
+				SOUND->Stop("GUN");
+				SOUND->Play("GUN");
+
+				canFireOnceShotgun = false;
+			}
 		}
+
+		curBulletIdx--;
 
 		originCamPos = CAM->position;
 	}
@@ -727,6 +780,8 @@ namespace Gungeon
 			for (auto& elem : idle) elem->isVisible = false;
 			for (auto& elem : walk) elem->isVisible = false;
 			w->idle->isVisible = false;
+			w->imgReloading->isVisible = false;
+			w->firePos->isVisible = false;
 
 			SetMoveDirState();
 

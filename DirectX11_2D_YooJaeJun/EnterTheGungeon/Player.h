@@ -48,7 +48,8 @@ namespace Gungeon
 		Weapon*					w;		// data index 실수 막기 위함
 		int						curWeaponMax;
 		int						curWeaponIdx;
-		bool					canFireBetween;
+		bool					canFireOncePistol;
+		bool					canFireOnceShotgun;
 		bool					isReloading;
 		float					timeReload;
 		int						curBulletIdx;
@@ -60,6 +61,7 @@ namespace Gungeon
 		bool					godMode;
 		float					timeLastPosForDust;
 		Effect*					dust;
+		UI*						uiWeaponFrame;
 		vector<UI*>				uiHeartFull;
 		vector<UI*>				uiHeartHalf;
 		vector<UI*>				uiHeartNone;

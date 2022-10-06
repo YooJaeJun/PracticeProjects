@@ -14,7 +14,6 @@ namespace Gungeon
 		SafeDelete(fireEffect);
 		SafeDelete(imgReloading);
 
-		SafeRelease(uiWeaponFrame);
 		SafeRelease(uiBulletFrame);
 		SafeRelease(uiWeapon);
 		SafeRelease(uiBulletCount);
@@ -29,7 +28,6 @@ namespace Gungeon
 		if (firePos) firePos->Update();
 		if (fireEffect) fireEffect->Update();
 		if (imgReloading) imgReloading->Update();
-		if (uiWeaponFrame) uiWeaponFrame->Update();
 		if (uiBulletFrame) uiBulletFrame->Update();
 		for (auto& elem : uiBullet) if (elem) elem->Update();
 		if (uiWeapon) uiWeapon->Update();
@@ -47,7 +45,6 @@ namespace Gungeon
 		if (firePos) firePos->Render();
 		if (fireEffect) fireEffect->Render();
 		if (imgReloading) imgReloading->Render();
-		if (uiWeaponFrame) uiWeaponFrame->Render();
 		if (uiBulletFrame) uiBulletFrame->Render();
 		for (auto& elem : uiBullet) if (elem) elem->Render();
 		if (uiWeapon) uiWeapon->Render();

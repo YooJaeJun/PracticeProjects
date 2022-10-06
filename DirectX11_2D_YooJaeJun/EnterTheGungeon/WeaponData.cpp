@@ -30,15 +30,28 @@ namespace Gungeon
 			elem->firePos->zOrder = ZOrder::none;
 
 			elem->fireEffect = new Effect;
-			elem->uiWeaponFrame = new UI;
+
 			elem->uiBulletFrame = new UI;
+
 			elem->uiWeapon = new UI;
+
 			elem->uiBulletCount = new UI;
+			elem->uiBulletCount->img = new ObImage(L"EnterTheGungeon/Weapon/UI_BulletCount_Infinity.png");
+			elem->uiBulletCount->img->scale.x = 60.0f;
+			elem->uiBulletCount->img->scale.y = 28.0f;
+			elem->uiBulletCount->anchor = Anchor::rightBottom;
+			elem->uiBulletCount->img->pivot = OFFSET_RB;
+			elem->uiBulletCount->Spawn(-70.0f, 155.0f);
+			elem->uiBulletCount->img->space = Space::screen;
+			elem->uiBulletCount->img->zOrder = ZOrder::UI;
+			elem->uiBulletCount->img->isVisible = false;
 		}
 
 
 		// ±ÇÃÑ
 		scaleCoef = 1.5f;
+
+		data[0]->type = WeaponType::pistol;
 
 		data[0]->col->scale.x = 30.0f * scaleCoef;
 		data[0]->col->scale.y = 22.0f * scaleCoef;
@@ -73,21 +86,12 @@ namespace Gungeon
 		data[0]->localFirePosDefault = Vector2(40.0f, 12.0f);
 
 
-		data[0]->uiWeaponFrame->img = new ObImage(L"EnterTheGungeon/Weapon/UI_WeaponFrame.png");
-		data[0]->uiWeaponFrame->img->scale.x = 188.0f;
-		data[0]->uiWeaponFrame->img->scale.y = 116.0f;
-		data[0]->uiWeaponFrame->anchor = Anchor::rightBottom;
-		data[0]->uiWeaponFrame->Spawn(-240.0f, 50.0f);
-		data[0]->uiWeaponFrame->img->space = Space::screen;
-		data[0]->uiWeaponFrame->img->zOrder = ZOrder::UI;
-		data[0]->uiWeaponFrame->img->isVisible = false;
-
 		data[0]->uiBulletFrame->img = new ObImage(L"EnterTheGungeon/Weapon/0/UI_Magazine.png");
 		data[0]->uiBulletFrame->img->scale = Vector2(28.0f, 99.0f);
+		data[0]->uiBulletFrame->img->pivot = OFFSET_RB;
 		data[0]->uiBulletFrame->anchor = Anchor::rightBottom;
-		data[0]->uiBulletFrame->Spawn(-40.0f, 80.0f);
+		data[0]->uiBulletFrame->Spawn(-26.0f, 30.0f);
 		data[0]->uiBulletFrame->img->space = Space::screen;
-		data[0]->uiBulletFrame->img->pivot = OFFSET_B;
 		data[0]->uiBulletFrame->img->zOrder = ZOrder::UI;
 		data[0]->uiBulletFrame->img->isVisible = false;
 
@@ -110,31 +114,20 @@ namespace Gungeon
 		data[0]->uiWeapon->img = new ObImage(L"EnterTheGungeon/Weapon/0/UI_Weapon.png");
 		data[0]->uiWeapon->img->scale.x = 60.0f;
 		data[0]->uiWeapon->img->scale.y = 48.0f;
+		data[0]->uiWeapon->img->pivot = OFFSET_RB;
 		data[0]->uiWeapon->anchor = Anchor::rightBottom;
-		data[0]->uiWeapon->Spawn(-190.0f, 60.0f);
+		data[0]->uiWeapon->Spawn(-120.0f, 60.0f);
 		data[0]->uiWeapon->img->space = Space::screen;
 		data[0]->uiWeapon->img->zOrder = ZOrder::UI;
 		data[0]->uiWeapon->img->isVisible = false;
-
-		data[0]->uiBulletCount->img = new ObImage(L"EnterTheGungeon/Weapon/UI_BulletCount_Infinity.png");
-		data[0]->uiBulletCount->img->scale.x = 60.0f;
-		data[0]->uiBulletCount->img->scale.y = 28.0f;
-		data[0]->uiBulletCount->anchor = Anchor::rightBottom;
-		data[0]->uiBulletCount->Spawn(-140.0f, 150.0f);
-		data[0]->uiBulletCount->img->space = Space::screen;
-		data[0]->uiBulletCount->img->zOrder = ZOrder::UI;
-		data[0]->uiBulletCount->img->isVisible = false;
-
-		for (auto& elem : data[0]->uiBullet)
-		{
-			elem->img->isVisible = true;
-		}
 
 
 
 
 		// ¼¦°Ç
 		scaleCoef = 2.0f;
+
+		data[1]->type = WeaponType::shotgun;
 
 		data[1]->col->scale.x = 29.0f * scaleCoef;
 		data[1]->col->scale.y = 21.0f * scaleCoef;
@@ -170,26 +163,16 @@ namespace Gungeon
 		data[1]->localFirePosDefault = Vector2(70.0f, 12.0f);
 		data[1]->state = State::die;
 
-
-		data[1]->uiWeaponFrame->img = new ObImage(L"EnterTheGungeon/Weapon/UI_WeaponFrame.png");
-		data[1]->uiWeaponFrame->img->scale.x = 188.0f;
-		data[1]->uiWeaponFrame->img->scale.y = 116.0f;
-		data[1]->uiWeaponFrame->anchor = Anchor::rightBottom;
-		data[1]->uiWeaponFrame->Spawn(-240.0f, 50.0f);
-		data[1]->uiWeaponFrame->img->space = Space::screen;
-		data[1]->uiWeaponFrame->img->zOrder = ZOrder::UI;
-		data[1]->uiWeaponFrame->img->isVisible = false;
-
 		data[1]->uiBulletFrame->img = new ObImage(L"EnterTheGungeon/Weapon/1/UI_Magazine.png");
 		data[1]->uiBulletFrame->img->scale = Vector2(28.0f, 124.0f);
+		data[1]->uiBulletFrame->img->pivot = OFFSET_RB;
 		data[1]->uiBulletFrame->anchor = Anchor::rightBottom;
-		data[1]->uiBulletFrame->Spawn(-40.0f, 80.0f);
+		data[1]->uiBulletFrame->Spawn(-26.0f, 30.0f);
 		data[1]->uiBulletFrame->img->space = Space::screen;
-		data[1]->uiBulletFrame->img->pivot = OFFSET_B;
 		data[1]->uiBulletFrame->img->zOrder = ZOrder::UI;
 		data[1]->uiBulletFrame->img->isVisible = false;
 
-		data[1]->bulletCount = 10;
+		data[1]->bulletCount = 7;
 		data[1]->uiBullet.resize(data[1]->bulletCount);
 
 		uiBulletIdx = 0;
@@ -209,19 +192,11 @@ namespace Gungeon
 		data[1]->uiWeapon->img = new ObImage(L"EnterTheGungeon/Weapon/1/UI_Weapon.png");
 		data[1]->uiWeapon->img->scale.x = 45.0f * uiWeaponScaleCoef;
 		data[1]->uiWeapon->img->scale.y = 13.0f * uiWeaponScaleCoef;
+		data[1]->uiWeapon->img->pivot = OFFSET_RB;
 		data[1]->uiWeapon->anchor = Anchor::rightBottom;
-		data[1]->uiWeapon->Spawn(-210.0f, 70.0f);
+		data[1]->uiWeapon->Spawn(-120.0f, 70.0f);
 		data[1]->uiWeapon->img->space = Space::screen;
 		data[1]->uiWeapon->img->zOrder = ZOrder::UI;
 		data[1]->uiWeapon->img->isVisible = false;
-
-		data[1]->uiBulletCount->img = new ObImage(L"EnterTheGungeon/Weapon/UI_BulletCount_Infinity.png");
-		data[1]->uiBulletCount->img->scale.x = 60.0f;
-		data[1]->uiBulletCount->img->scale.y = 28.0f;
-		data[1]->uiBulletCount->anchor = Anchor::rightBottom;
-		data[1]->uiBulletCount->Spawn(-140.0f, 150.0f);
-		data[1]->uiBulletCount->img->space = Space::screen;
-		data[1]->uiBulletCount->img->zOrder = ZOrder::UI;
-		data[1]->uiBulletCount->img->isVisible = false;
 	}
 }
