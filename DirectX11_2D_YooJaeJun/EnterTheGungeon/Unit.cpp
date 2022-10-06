@@ -48,8 +48,8 @@ namespace Gungeon
 		Character::Update();
 
 		for (auto& elem : weapon) if(elem) elem->Update();
-		for (auto& elem : idle) elem->Update();
-		for (auto& elem : walk) elem->Update();
+		idle[curTargetDirState]->Update();
+		walk[curTargetDirState]->Update();
 		if (hit) hit->Update();
 		if (fall) fall->Update();
 		if (die) die->Update();
@@ -114,8 +114,6 @@ namespace Gungeon
 
 			if (damage > 0)
 			{
-				originCamPos = CAM->position;
-
 				if (hit)
 				{
 					idle[curTargetDirState]->isVisible = false;
@@ -180,7 +178,7 @@ namespace Gungeon
 			die->color = Color(0.4f, 0.4f, 0.4f, 0.4f);
 		}
 
-		if (foot) foot->isVisible = false;
+		if (colTile) colTile->isVisible = false;
 	}
 
 	void Unit::StepBack()
@@ -268,6 +266,47 @@ namespace Gungeon
 		else
 		{
 			curTargetDirState = curTargetDirStateBefore;
+		}
+	}
+
+	void Unit::FindPath(ObTileMap* map)
+	{
+		if (TIMER->GetTick(timeFindPath, 2.0f))
+		{
+			Int2 sour, dest;
+			bool isFind;
+
+			isFind = map->WorldPosToTileIdx(Pos(), sour);
+			isFind &= map->WorldPosToTileIdx(targetPos, dest);
+
+			if (isFind)
+			{
+				if (map->PathFinding(sour, dest, way))
+				{
+					g = 0.0f;
+					start = Pos();
+					way.pop_back();
+					end = way.back()->Pos;
+				}
+			}
+		}
+
+		if (false == way.empty())
+		{
+			SetPos(Vector2::Lerp(start, end, g));
+
+			g += DELTA * scalar / 100.0f;
+
+			if (g > 1.0f)
+			{
+				g = 0.0f;
+				start = end;
+				way.pop_back();
+				if (false == way.empty())
+				{
+					end = way.back()->Pos;
+				}
+			}
 		}
 	}
 }

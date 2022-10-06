@@ -8,5 +8,7 @@ public:
     ~Texture();
     ID3D11ShaderResourceView* LoadTexture(wstring file);
     bool DeleteTexture(wstring file);
+
+    ScratchImage* GetTexture(wstring file);
 };
 

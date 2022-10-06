@@ -4,13 +4,20 @@ namespace Gungeon
 {
     BossBullet::BossBullet()
     {
-        col = new ObCircle();
-        col->isFilled = false;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
 
         scalar = 400.0f;
         damage = 1;
+
+        float bulletCoef = 4.0f;
+        col = new ObCircle;
+        col->scale = Vector2(8.0f, 8.0f) * bulletCoef;
+        col->isFilled = false;
+        col->SetWorldPos(DEFAULTSPAWN);
+        idle = new ObImage(L"EnterTheGungeon/Boss_0/Bullet_0.png");
+        idle->scale = col->scale;
+        idle->SetParentRT(*col);
 
         float hitBombScaleCoef = 2.5f;
         hitBomb = new Effect;

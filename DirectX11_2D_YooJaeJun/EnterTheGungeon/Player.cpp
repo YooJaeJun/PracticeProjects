@@ -50,12 +50,12 @@ namespace Gungeon
 		col->zOrder = ZOrder::object;
 		col->color = Color(1.0f, 1.0f, 1.0f);
 
-		foot = new ObRect;
-		foot->scale = Vector2(col->scale.x, col->scale.y / 2.0f);
-		foot->SetParentRT(*col);
-		foot->SetLocalPosY(col->GetWorldPos().y - col->scale.y / 2.0f);
-		foot->isFilled = false;
-		foot->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+		colTile = new ObRect;
+		colTile->scale = Vector2(col->scale.x, col->scale.y / 2.0f);
+		colTile->SetParentRT(*col);
+		colTile->SetLocalPosY(col->GetWorldPos().y - col->scale.y / 2.0f);
+		colTile->isFilled = false;
+		colTile->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	void Player::InitAnim()
@@ -310,17 +310,10 @@ namespace Gungeon
 
 	void Player::InitBullet()
 	{
-		float bulletCoef = 1.5f;
 		bullet.resize(5);
-
 		for (auto& elem : bullet)
 		{
 			elem = new PlayerBullet;
-			elem->col->scale.x = 19.0f * bulletCoef;
-			elem->col->scale.y = 19.0f * bulletCoef;
-			elem->idle = new ObImage(L"EnterTheGungeon/Player_0/Bullet_0.png");
-			elem->idle->scale = col->scale * 0.8f;
-			elem->idle->SetParentRT(*elem->col);
 		}
 	}
 
@@ -763,7 +756,7 @@ namespace Gungeon
 		originCamPos = CAM->position;
 	}
 	
-	// 피격 시, 발사 시
+	// 발사 시
 	void Player::ShakeCam(float& time)
 	{
 		CAM->position = Vector2(RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f),
@@ -892,19 +885,12 @@ namespace Gungeon
 			for (auto& elem : walk) elem->color = c;
 			for (auto& elem : roll) elem->color = c;
 
-			CAM->position = Vector2(RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f),
-				RANDOM->Float(CAM->position.y - 2.0f, CAM->position.y + 2.0f));
-
-
 			if (TIMER->GetTick(timeHitAnim, 1.0f))
 			{
 				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
 				for (auto& elem : idle) elem->color = c;
 				for (auto& elem : walk) elem->color = c;
 				for (auto& elem : roll) elem->color = c;
-
-				CAM->position = originCamPos;
-				flagFireCamShake = false;
 
 				isHitAnim = false;
 			}
@@ -920,7 +906,7 @@ namespace Gungeon
 	{
 		if (TIMER->GetTick(timeLastPosForDust, 0.6f))
 		{
-			dust->Spawn(foot->GetWorldPos());
+			dust->Spawn(colTile->GetWorldPos());
 		}
 	}
 

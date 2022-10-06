@@ -664,13 +664,13 @@ namespace Gungeon
         Vector2 pos;
         bool flag = false;
 
-        pos = elem->foot->lt();
+        pos = elem->colTile->lt();
         flag |= GetTileState(pos);
-        pos = elem->foot->lb();
+        pos = elem->colTile->lb();
         flag |= GetTileState(pos);
-        pos = elem->foot->rt();
+        pos = elem->colTile->rt();
         flag |= GetTileState(pos);
-        pos = elem->foot->rb();
+        pos = elem->colTile->rb();
         flag |= GetTileState(pos);
 
         return flag;

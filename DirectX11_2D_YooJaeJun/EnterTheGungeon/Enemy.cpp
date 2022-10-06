@@ -10,14 +10,18 @@ namespace Gungeon
 	void Enemy::Init()
 	{
 		InitVar();
+		InitSelf();
+		InitWeapon();
 		InitBullet();
 		InitItem();
 	}
 
 	void Enemy::InitVar()
 	{
+		col = new ObCircle;
+
 		curHp = maxHp = 3;
-		scalar = 120.0f;
+		scalar = 80.0f;
 		timeFire = 0.0f;
 		timeHit = 0.0f;
 		isHit = false;
@@ -31,18 +35,153 @@ namespace Gungeon
 		timeAiming = 0.0f;
 	}
 
+	void Enemy::InitSelf()
+	{
+		int idx = 0;
+		float enemyScaleCoef = 3.0f;
+
+		col = new ObCircle;
+		col->scale.x = 16.0f * enemyScaleCoef;
+		col->scale.y = 16.0f * enemyScaleCoef;
+		col->color = Color(1.0f, 1.0f, 1.0f);
+		col->isFilled = false;
+		col->zOrder = ZOrder::object;
+
+		idle[dirB] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Front.png");
+		idle[dirL] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
+		idle[dirR] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
+		idle[dirLB] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
+		idle[dirRB] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
+		idle[dirT] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Back.png");
+		idle[dirLT] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Back.png");
+		idle[dirRT] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Back.png");
+
+		idx = 0;
+		for (auto& elem2 : idle)
+		{
+			if (idx == dirR || idx == dirRB || idx == dirRT)
+			{
+				elem2->reverseLR = true;
+			}
+			elem2->maxFrame.x = 2;
+			elem2->scale.x = 28.0f / 2.0f * enemyScaleCoef;
+			elem2->scale.y = 24.0f * enemyScaleCoef;
+			elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+			elem2->SetParentRT(*col);
+			elem2->zOrder = ZOrder::object;
+			idx++;
+		}
+
+		walk[dirB] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Front.png");
+		walk[dirL] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Side.png");
+		walk[dirR] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Side.png");
+		walk[dirLB] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Side.png");
+		walk[dirRB] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Side.png");
+		walk[dirT] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Back.png");
+		walk[dirLT] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Back.png");
+		walk[dirRT] = new ObImage(L"EnterTheGungeon/Enemy_0/Walk_Back.png");
+
+		idx = 0;
+		for (auto& elem2 : walk)
+		{
+			if (idx == dirR || idx == dirRB || idx == dirRT)
+			{
+				elem2->reverseLR = true;
+			}
+			elem2->isVisible = false;
+			elem2->maxFrame.x = 6;
+			elem2->scale.x = 96.0f / 6.0f * enemyScaleCoef;
+			elem2->scale.y = 24.0f * enemyScaleCoef;
+			elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+			elem2->SetParentRT(*col);
+			elem2->zOrder = ZOrder::object;
+			idx++;
+		}
+
+		hit = new ObImage(L"EnterTheGungeon/Enemy_0/Hit.png");
+		hit->isVisible = false;
+		hit->maxFrame.x = 1;
+		hit->scale.x = 16.0f * enemyScaleCoef;
+		hit->scale.y = 24.0f * enemyScaleCoef;
+		hit->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
+		hit->SetParentRT(*col);
+		hit->zOrder = ZOrder::object;
+
+		die = new ObImage(L"EnterTheGungeon/Enemy_0/Die.png");
+		die->isVisible = false;
+		die->maxFrame.x = 5;
+		die->scale.x = 110.0f / 5.0f * enemyScaleCoef;
+		die->scale.y = 22.0f * enemyScaleCoef;
+		die->SetParentRT(*col);
+		die->zOrder = ZOrder::object;
+
+		colTile = new ObRect;
+		colTile->scale = Vector2(col->scale.x, col->scale.y / 2.0f);
+		colTile->SetParentRT(*col);
+		colTile->SetLocalPosY(col->GetWorldPos().y - col->scale.y / 2.0f);
+		colTile->isFilled = false;
+		colTile->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+		shadow = new ObImage(L"EnterTheGungeon/Enemy_0/Shadow_1.png");
+		shadow->scale.x = 12.0f * enemyScaleCoef;
+		shadow->scale.y = 4.0f * enemyScaleCoef;
+		shadow->SetParentRT(*col);
+		shadow->SetWorldPosY(-35.0f);
+		shadow->zOrder = ZOrder::shadow;
+	}
+
+	void Enemy::InitWeapon()
+	{
+		float enemyWeaponScaleCoef = 1.5f;
+		weapon.resize(1);
+		for (auto& elem : weapon)
+		{
+			elem = new Weapon;
+			elem->col = new ObRect;
+			elem->col->isVisible = false;
+			elem->col->isFilled = false;
+			elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+			elem->col->pivot = OFFSET_LB;
+			elem->col->scale.x = 29.0f * enemyWeaponScaleCoef;
+			elem->col->scale.y = 21.0f * enemyWeaponScaleCoef;
+			elem->col->SetParentRT(*col);
+			elem->col->SetLocalPos(Vector2(10.0f, -15.0f));
+
+			elem->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Weapon_0.png");
+			elem->idle->pivot = OFFSET_LB;
+			elem->idle->scale.x = 29.0f * enemyWeaponScaleCoef;
+			elem->idle->scale.y = 21.0f * enemyWeaponScaleCoef;
+			elem->idle->SetParentRT(*elem->col);
+			elem->idle->zOrder = ZOrder::weapon;
+
+			elem->firePos = new GameObject;
+			elem->firePos->SetParentRT(*elem->col);
+			elem->firePos->SetLocalPos(Vector2(elem->col->scale.x / 2.0f, 0.0f));
+			elem->firePos->zOrder = ZOrder::none;
+
+			float enemyWeaponEffectScaleCoef = 3.0f;
+			elem->fireEffect = new Effect;
+			elem->fireEffect->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Effect_Fire_Weapon_0.png");
+			elem->fireEffect->idle->isVisible = false;
+			elem->fireEffect->idle->maxFrame.x = 3;
+			elem->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * enemyWeaponEffectScaleCoef;
+			elem->fireEffect->idle->SetParentRT(*elem->firePos);
+			elem->fireEffect->idle->zOrder = ZOrder::none;
+			elem->fireEffect->intervalDie = 0.2f;
+
+			elem->pivotDefault = Vector2(0.4f, 0.25f);
+			elem->localPosDefault = Vector2(18.0f, -15.0f);
+			elem->localFirePosDefault = Vector2(40.0f, 12.0f);
+			elem->Equip();
+		}
+	}
+
 	void Enemy::InitBullet()
 	{
-		float bulletCoef = 3.0f;
 		bullet.resize(10);
-
 		for (auto& elem : bullet)
 		{
 			elem = new EnemyBullet;
-			elem->col->scale = Vector2(8.0f, 8.0f) * bulletCoef;
-			elem->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Bullet_0.png");
-			elem->idle->scale = Vector2(8.0f, 8.0f) * bulletCoef;
-			elem->idle->SetParentRT(*elem->col);
 		}
 	}
 
@@ -295,49 +434,5 @@ namespace Gungeon
 		dropItem->col->isVisible = true;
 		dropItem->idle->isVisible = true;
 		dropItem->state = State::idle;
-	}
-
-	void Enemy::FindPath(ObTileMap* map)
-	{
-		if (TIMER->GetTick(timeFindPath, 2.0f))
-		{
-			Int2 sour, dest;
-			bool isFind;
-	
-			isFind = map->WorldPosToTileIdx(Pos(), sour);
-			isFind &= map->WorldPosToTileIdx(targetPos, dest);
-	
-			if (isFind)
-			{
-				if (map->PathFinding(sour, dest, way))
-				{
-					g = 0.0f;
-					start = Pos();
-					way.pop_back();
-					end = way.back()->Pos;
-				}
-			}
-		}
-	
-		if (false == way.empty())
-		{
-			// SetPos(Vector2::Lerp(start, end, g));
-			moveDir = way.back()->Pos - Pos();
-			moveDir.Normalize();
-			col->MoveWorldPos(moveDir * scalar * DELTA);
-	
-			g += DELTA * 2.0f;
-	
-			if (g > 1.0f)
-			{
-				g = 0.0f;
-				start = end;
-				way.pop_back();
-				if (false == way.empty())
-				{
-					end = way.back()->Pos;
-				}
-			}
-		}
 	}
 }

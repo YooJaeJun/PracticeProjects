@@ -8,6 +8,8 @@ namespace Gungeon
 		Enemy();
 		virtual void Init() override;
 		void InitVar();
+		void InitSelf();
+		void InitWeapon();
 		void InitBullet();
 		void InitItem();
 		virtual void Release() override;
@@ -24,14 +26,8 @@ namespace Gungeon
 		void Hit(const int damage, const Vector2& dir);
 		void Hitting();
 		virtual void StartDie() override;
-		void FindPath(ObTileMap* map);
 
 	private:
-		vector<Tile*>			way;
-		Vector2					start;
-		Vector2					end;
-		float					g;	// ∫Ò¿≤
-		float					timeFindPath;
 		float					timeSetMoveDir;
 		float					timeSetTargetDir;
 		Vector2					pushedDir;

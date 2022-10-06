@@ -4,13 +4,19 @@ namespace Gungeon
 {
     EnemyBullet::EnemyBullet()
     {
-        col = new ObCircle();
-        col->isFilled = false;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
 
         scalar = 500.0f;
         damage = 1;
+
+        float bulletCoef = 3.0f;
+        col->scale = Vector2(8.0f, 8.0f) * bulletCoef;
+        col->isFilled = false;
+        col->SetWorldPos(DEFAULTSPAWN);
+        idle = new ObImage(L"EnterTheGungeon/Enemy_0/Bullet_0.png");
+        idle->scale = col->scale;
+        idle->SetParentRT(*col);
 
         float hitBombScaleCoef = 1.5f;
         hitBomb = new Effect;

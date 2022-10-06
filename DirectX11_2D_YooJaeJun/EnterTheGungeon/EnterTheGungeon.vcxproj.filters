@@ -59,9 +59,6 @@
     <ClInclude Include="Pet.h">
       <Filter>GameObject\Unit</Filter>
     </ClInclude>
-    <ClInclude Include="Unit.h">
-      <Filter>GameObject\Unit</Filter>
-    </ClInclude>
     <ClInclude Include="Boss.h">
       <Filter>GameObject\Unit</Filter>
     </ClInclude>
@@ -94,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="Weapon.h">
       <Filter>GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>GameObject\Unit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

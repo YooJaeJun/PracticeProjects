@@ -21,13 +21,13 @@ namespace Gungeon
 	void Character::Release()
 	{
 		SafeDelete(col);
-		SafeDelete(foot);
+		SafeDelete(colTile);
 	}
 
 	void Character::Update()
 	{
 		if (col) col->Update();
-		if (foot) foot->Update();
+		if (colTile) colTile->Update();
 	}
 
 	void Character::LateUpdate()
@@ -36,7 +36,7 @@ namespace Gungeon
 	void Character::Render()
 	{
 		if (col) col->Render(); // RENDER->push(col);
-		if (foot) foot->Render();	// RENDER->push(foot);
+		if (colTile) colTile->Render();	// RENDER->push(colTile);
 	}
 
 	void Character::ResizeScreen()

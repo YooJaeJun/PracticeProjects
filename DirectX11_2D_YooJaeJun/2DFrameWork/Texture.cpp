@@ -30,6 +30,17 @@ ID3D11ShaderResourceView* Texture::LoadTexture(wstring file)
         HRESULT hr = CreateShaderResourceView(D3D->GetDevice(), image.GetImages(), image.GetImageCount(),
             image.GetMetadata(), &temp);
 
+
+        // 텍스쳐에서 좌표값
+        // 130, 79
+        // cout << (int)image.GetPixels()[4 * (79 * 10 + 130)] << endl;
+        // cout << (int)image.GetPixels()[4 * (79 * 10 + 130) + 1] << endl;
+        // cout << (int)image.GetPixels()[4 * (79 * 10 + 130) + 2] << endl;
+
+        cout << "width: " << image.GetMetadata().width << ", ";
+        cout << "height: " << image.GetMetadata().height << endl;
+        
+
         Check(hr);
         textureList[file] = temp;
         return temp;
@@ -54,4 +65,15 @@ bool Texture::DeleteTexture(wstring file)
     textureList.erase(iter);
 
     return true;
+}
+
+ScratchImage* Texture::GetTexture(wstring file)
+{
+    ID3D11ShaderResourceView* temp;
+    wstring path = L"../Contents/Images/" + file;
+
+    ScratchImage* image = new ScratchImage();
+    LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, nullptr, *image);
+
+    return image;
 }

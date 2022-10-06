@@ -4,13 +4,18 @@ namespace Gungeon
 {
     PlayerBullet::PlayerBullet()
     {
-        col = new ObCircle();
-        col->isFilled = false;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
 
         scalar = 600.0f;
         damage = 10;
+
+        float bulletCoef = 1.5f;
+        col->scale.x = 19.0f * bulletCoef;
+        col->scale.y = 19.0f * bulletCoef;
+        idle = new ObImage(L"EnterTheGungeon/Player_0/Bullet_0.png");
+        idle->scale = col->scale * 0.8f;
+        idle->SetParentRT(*col);
 
         float hitBombScaleCoef = 1.5f;
         hitBomb = new Effect;

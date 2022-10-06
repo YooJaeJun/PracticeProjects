@@ -4,6 +4,9 @@ namespace Gungeon
 {
     Bullet::Bullet()
     {
+        col = new ObCircle();
+        col->isFilled = false;
+
         isFired = false;
         damage = 1;
         moveDir = Vector2(0.0f, 0.0f);

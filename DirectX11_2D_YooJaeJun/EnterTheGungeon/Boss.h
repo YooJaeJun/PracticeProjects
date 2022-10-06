@@ -7,17 +7,19 @@ namespace Gungeon
 		none,
 		circular,
 		string,
-		storm,
-		tornado,
-		rand,
+		shield,
+		spiral,
+		cluster,
+		wave,
 		max
 	};
 
 	const int patternMax = static_cast<int>(BossPattern::max) - 1;
 	const int circularMax = 60;
-	const int stormMax = 60;
-	const int tornadoMax = 60;
-	const int randMax = 10;
+	const int shieldMax = 60;
+	const int spiralMax = 60;
+	const int clusterMax = 10;
+	const int waveMax = 100;
 
 	class Boss : public Unit
 	{
@@ -25,6 +27,8 @@ namespace Gungeon
 		Boss();
 		virtual void Init() override;
 		void InitVar();
+		void InitSelf();
+		void InitWeapon();
 		void InitBullet();
 		void InitItem();
 		virtual void Release() override;
@@ -42,18 +46,20 @@ namespace Gungeon
 		void Hitting();
 		virtual void StartDie() override;
 
+		void ChangePattern(const int curPattern);
 		void InitCircular();
 		void InitString();
-		void InitStorm();
-		void InitTornado();
-		void InitRand();
-		void InitBulletOne(BossBullet* elem);
+		void InitShield();
+		void InitSpiral();
+		void InitCluster();
+		void InitWave();
 		void UpdateBullet();
 		void UpdateCircular();
 		void UpdateString();
-		void UpdateStorm();
-		void UpdateTornado();
-		void UpdateRand();
+		void UpdateShield();
+		void UpdateSpiral();
+		void UpdateCluster();
+		void UpdateWave();
 
 	public:
 		UI*						hpGuageBar;
@@ -63,9 +69,10 @@ namespace Gungeon
 		StringBulletData        stringBullet;
 		float					timeSetMoveDir;
 		float					timeSetTargetDir;
-		float					timeTornado;
-		float					timeTornadoOne;
-		bool					flagTornadoRespawn;
-		float					timeRand;
+		float					timeSpiral;
+		float					timeSpiralOne;
+		bool					flagSpiralRespawn;
+		float					timeCluster;
+		float					timeWave;
 	};
 }

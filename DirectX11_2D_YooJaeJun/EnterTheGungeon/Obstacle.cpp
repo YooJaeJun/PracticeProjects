@@ -5,6 +5,9 @@ namespace Gungeon
 	Obstacle::Obstacle()
 	{
 		isOpen = false;
+
+		col = new ObRect;
+		col->isFilled = false;
 	}
 
 	void Obstacle::Release()

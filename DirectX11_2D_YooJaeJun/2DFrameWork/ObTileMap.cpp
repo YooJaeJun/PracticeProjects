@@ -522,7 +522,39 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
                 Temp.first->idx.y + 1));
         }
 
-        //상하좌우타일 비용검사
+        //LB
+        if (Temp.first->idx.x > 0 &&
+            Temp.first->idx.y < tileSize.y - 1)
+        {
+            LoopIdx.push_back(Int2(Temp.first->idx.x - 1,
+                Temp.first->idx.y + 1));
+        }
+
+        //LT
+        if (Temp.first->idx.x > 0 &&
+            Temp.first->idx.y > 0)
+        {
+            LoopIdx.push_back(Int2(Temp.first->idx.x - 1,
+                Temp.first->idx.y - 1));
+        }
+
+        //RB
+        if (Temp.first->idx.x < tileSize.x - 1 &&
+            Temp.first->idx.y < tileSize.y - 1)
+        {
+            LoopIdx.push_back(Int2(Temp.first->idx.x + 1,
+                Temp.first->idx.y + 1));
+        }
+
+        //RT
+        if (Temp.first->idx.x < tileSize.x - 1 &&
+            Temp.first->idx.y > 0)
+        {
+            LoopIdx.push_back(Int2(Temp.first->idx.x + 1,
+                Temp.first->idx.y - 1));
+        }
+
+        //상하좌우대각선타일 비용검사
         for (int i = 0; i < LoopIdx.size(); i++)
         {
             Tile* loop = &Tiles[LoopIdx[i].x][LoopIdx[i].y];

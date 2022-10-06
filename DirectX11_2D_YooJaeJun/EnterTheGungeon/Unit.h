@@ -33,6 +33,7 @@ namespace Gungeon
 		void StepBack();
 		void SetMoveDirState();
 		void SetTargetDirState();
+		void FindPath(ObTileMap* map);
 
 	public:
 		ObImage*		idle[8];
@@ -64,5 +65,10 @@ namespace Gungeon
 		float			timeHitAnim;
 		float			timeDieAnim;
 		float			timeRealDie;
+		vector<Tile*>	way;
+		Vector2			start;
+		Vector2			end;
+		float			g;	// ∫Ò¿≤
+		float			timeFindPath;
 	};
 }
