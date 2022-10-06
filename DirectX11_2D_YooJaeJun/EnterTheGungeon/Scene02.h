@@ -31,5 +31,6 @@ namespace Gungeon
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
+		void ColOnOff();
 	};
 }

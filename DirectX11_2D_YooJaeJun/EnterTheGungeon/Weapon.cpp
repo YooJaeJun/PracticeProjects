@@ -4,7 +4,6 @@ namespace Gungeon
 {
 	Weapon::Weapon()
 	{
-		timeFireEffect = 0.0f;
 	}
 
 	void Weapon::Release()
@@ -13,12 +12,13 @@ namespace Gungeon
 		SafeDelete(idle);
 		SafeDelete(firePos);
 		SafeDelete(fireEffect);
-		if (imgReloading) SafeDelete(imgReloading);
-		if (uiWeaponFrame) uiWeaponFrame->Release();
-		if (uiBulletFrame) uiBulletFrame->Release();
-		for (auto& elem : uiBullet) if (elem) elem->Release();
-		if (uiWeapon) uiWeapon->Release();
-		if (uiBulletCount) uiBulletCount->Release();
+		SafeDelete(imgReloading);
+
+		SafeRelease(uiWeaponFrame);
+		SafeRelease(uiBulletFrame);
+		SafeRelease(uiWeapon);
+		SafeRelease(uiBulletCount);
+		for (auto& elem : uiBullet) SafeRelease(elem);
 	}
 
 	void Weapon::Update()
@@ -44,7 +44,7 @@ namespace Gungeon
 	{
 		idle->Render(); // RENDER->push(idle);
 		Character::Render();
-		// if (firePos) firePos->Render();
+		if (firePos) firePos->Render();
 		if (fireEffect) fireEffect->Render();
 		if (imgReloading) imgReloading->Render();
 		if (uiWeaponFrame) uiWeaponFrame->Render();

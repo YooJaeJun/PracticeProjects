@@ -42,7 +42,7 @@ namespace Gungeon
 		virtual void Die() override;
 		void StartWalk();
 		void StartIdle();
-		virtual void Hit(const int damage) override;
+		void Hit(const int damage, const Vector2& dir);
 		void Hitting();
 		virtual void StartDie() override;
 
@@ -62,15 +62,19 @@ namespace Gungeon
 		void UpdateWave();
 
 	public:
+		WeaponData*				weapon;
+		Weapon*					w;		// data index 실수 막기 위함
 		UI*						hpGuageBar;
 		UI*						hpGuage;
-		vector<BossBullet*>		bullet;
+		vector<Bullet*>			bullet;
 		BossPattern             pattern;
 		StringBulletData        stringBullet;
+		Vector2					bulletSpawnPos;
+		Vector2					bulletSpawnDir;
 		float					timeSetMoveDir;
 		float					timeSetTargetDir;
 		float					timeSpiral;
-		float					timeSpiralOne;
+		float					curSpiralIdx;
 		bool					flagSpiralRespawn;
 		float					timeCluster;
 		float					timeWave;

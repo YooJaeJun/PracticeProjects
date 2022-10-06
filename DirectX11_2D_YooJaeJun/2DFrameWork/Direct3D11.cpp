@@ -262,12 +262,14 @@ void Direct3D11::ResizeScreen(float width, float height)
 	app.width = width;
 	app.height = height;
 
+	DWRITE->DeleteBackBuffer();
 	DeleteBackBuffer();
 	{
 		HRESULT hr = swapChain->ResizeBuffers(0, (UINT)width, (UINT)height, DXGI_FORMAT_UNKNOWN, 0);
 		assert(SUCCEEDED(hr));
 	}
 	CreateBackBuffer(width, height);
+	DWRITE->CreateBackBuffer(width, height);
 }
 
 void Direct3D11::CreateBackBuffer(float width, float height)

@@ -11,6 +11,7 @@
 #include "BossBullet.h"
 #include "Item.h"
 #include "Weapon.h"
+#include "WeaponData.h"
 #include "Unit.h"
 #include "Player.h"
 #include "Enemy.h"

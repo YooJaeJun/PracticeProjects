@@ -95,6 +95,9 @@
     <ClInclude Include="Unit.h">
       <Filter>GameObject\Unit</Filter>
     </ClInclude>
+    <ClInclude Include="WeaponData.h">
+      <Filter>GameObject\Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -159,6 +162,9 @@
       <Filter>GameObject\Item</Filter>
     </ClCompile>
     <ClCompile Include="Weapon.cpp">
+      <Filter>GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponData.cpp">
       <Filter>GameObject\Item</Filter>
     </ClCompile>
   </ItemGroup>

@@ -44,7 +44,10 @@ namespace Gungeon
 		ObImage*				respawn;
 		ObImage*				kick;
 		ObImage*				obtain;
-		vector<PlayerBullet*>	bullet;
+		vector<WeaponData*>		weapon;
+		Weapon*					w;		// data index 실수 막기 위함
+		int						curWeaponMax;
+		int						curWeaponIdx;
 		bool					canFireBetween;
 		bool					isReloading;
 		float					timeReload;

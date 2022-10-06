@@ -14,7 +14,7 @@ namespace Gungeon
         col->scale.x = 19.0f * bulletCoef;
         col->scale.y = 19.0f * bulletCoef;
         idle = new ObImage(L"EnterTheGungeon/Player_0/Bullet_0.png");
-        idle->scale = col->scale * 0.8f;
+        idle->scale = col->scale;
         idle->SetParentRT(*col);
 
         float hitBombScaleCoef = 1.5f;

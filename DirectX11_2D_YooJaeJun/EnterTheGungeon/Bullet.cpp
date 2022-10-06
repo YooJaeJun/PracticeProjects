@@ -46,12 +46,17 @@ namespace Gungeon
         hitBomb->Render();
     }
 
-    void Bullet::Spawn(const Vector2& coord, const Vector2& fireDir)
+    void Bullet::Spawn(const Vector2& coord)
     {
         SetPos(coord);
+        isFired = true;
+    }
+
+    void Bullet::Spawn(const Vector2& coord, const Vector2& fireDir)
+    {
+        Spawn(coord);
         col->rotation = Utility::DirToRadian(fireDir);
         moveDir = fireDir;
-        isFired = true;
     }
 
     void Bullet::Hit(const float damage)

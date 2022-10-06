@@ -17,16 +17,13 @@ namespace Gungeon
 		curTargetDirStateBefore = dirB;
 		timeFire = 0.0f;
 		timeReload = 0.0f;
+		pushedDir = Vector2(0.0f, 0.0f);
 		timeHit = 0.0f;
 		isHit = false;
 		isHitAnim = 0.0f;
 		timeHitAnim = 0.0f;
 		timeDieAnim = 0.0f;
 		timeRealDie = 0.0f;
-
-		curWeaponMax = 1;
-		curWeaponIdx = 0;
-		weapon.resize(1);
 	}
 
 	void Unit::Release()
@@ -37,7 +34,6 @@ namespace Gungeon
 		SafeDelete(hit);
 		SafeDelete(fall);
 		SafeDelete(die);
-		for (auto& elem : weapon) if (elem) elem->Release();
 		SafeDelete(shadow);
 	}
 
@@ -47,7 +43,6 @@ namespace Gungeon
 
 		Character::Update();
 
-		for (auto& elem : weapon) if(elem) elem->Update();
 		idle[curTargetDirState]->Update();
 		walk[curTargetDirState]->Update();
 		if (hit) hit->Update();
@@ -62,8 +57,6 @@ namespace Gungeon
 
 	void Unit::Render()
 	{
-		// if (shadow) shadow->Render(); // RENDER->push(shadow);
-		for (auto& elem : weapon) if (elem) elem->Render();
 		idle[curTargetDirState]->Render(); // RENDER->push(idle[curTargetDirState]);
 		walk[curTargetDirState]->Render(); // RENDER->push(walk[curTargetDirState]);
 		if (hit)  hit->Render();  // RENDER->push(hit);
@@ -76,29 +69,29 @@ namespace Gungeon
 	{
 	}
 
-	void Unit::SetTarget()
+	void Unit::SetTarget(Weapon*& weapon)
 	{
 		targetDir = targetPos - Pos();
 		targetDir.Normalize();	// targetDir도 써서 정규화
 		targetRotation = Utility::DirToRadian(targetDir);
 		SetTargetDirState();
 
-		if (weapon[curWeaponIdx])
+		if (weapon)
 		{
-			weapon[curWeaponIdx]->col->rotation = Utility::DirToRadian(targetPos - weapon[curWeaponIdx]->Pos());
+			weapon->col->rotation = Utility::DirToRadian(targetPos - weapon->Pos());
 
 			if (targetDir.x >= 0.0f)
 			{
 				if (targetDirBefore.x < 0.0f)
 				{
-					weapon[curWeaponIdx]->EquipRight();
+					weapon->EquipRight();
 				}
 			}
 			else
 			{
 				if (targetDirBefore.x >= 0.0f)
 				{
-					weapon[curWeaponIdx]->EquipLeft();
+					weapon->EquipLeft();
 				}
 			}
 		}
@@ -154,8 +147,6 @@ namespace Gungeon
 			}
 
 			if (hit) hit->isVisible = false;
-			weapon[curWeaponIdx]->col->isVisible = false;
-			weapon[curWeaponIdx]->idle->isVisible = false;
 			shadow->isVisible = false;
 			die->isVisible = true;
 

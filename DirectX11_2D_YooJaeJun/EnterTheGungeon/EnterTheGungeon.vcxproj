@@ -42,6 +42,7 @@
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="StringBulletData.h" />
+    <ClInclude Include="WeaponData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Boss.cpp" />
@@ -66,6 +67,7 @@
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="WeaponData.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

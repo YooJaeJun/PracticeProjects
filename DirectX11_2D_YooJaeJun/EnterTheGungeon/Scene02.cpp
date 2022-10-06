@@ -22,11 +22,8 @@ namespace Gungeon
         LIGHT->light.radius = 2000.0f;
 
         SOUND->Stop("SCENE01");
-        //SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
+        // SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
         SOUND->Play("SCENE02");
-
-        // 맵 오브젝트
-        mapObj = new MapObject;
 
         // 플레이어
         player = new Player;
@@ -53,102 +50,8 @@ namespace Gungeon
 
     void Scene02::InitMapObject()
     {
-        float doorOpenScaleCoef = 2.5f;
-
-        int idx = 0;
-        for (auto& elem : mapObj->doorOpenUp)
-        {
-            elem = new Obstacle;
-            elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-            elem->col->scale.x = 88.0f / 4.0f * doorOpenScaleCoef;
-            elem->col->scale.y = 50.0f * doorOpenScaleCoef;
-            elem->SetPosX(200.0f + idx * elem->col->scale.x);
-            elem->SetPosY(0.0f);
-            elem->col->collider = Collider::rect;
-            elem->col->zOrder = ZOrder::object;
-
-            elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Open_Up.png");
-            elem->idle->maxFrame.x = 4;
-            elem->idle->scale.x = 88.0f / 4.0f * doorOpenScaleCoef;
-            elem->idle->scale.y = 50.0f * doorOpenScaleCoef;
-            elem->idle->SetParentRT(*elem->col);
-            elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
-            elem->idle->zOrder = ZOrder::object;
-
-            if (idx & 1)
-            {
-                elem->idle->reverseLR = true;
-            }
-
-            elem->col->Update();
-
-            idx++;
-        }
-
-        idx = 0;
-        for (auto& elem : mapObj->doorOpenDown)
-        {
-            elem = new Obstacle;
-            elem->col->isVisible = false;   //
-            elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-            elem->col->scale.x = 88.0f / 4.0f * doorOpenScaleCoef;
-            elem->col->scale.y = 50.0f * doorOpenScaleCoef;
-            elem->SetPosX(200.0f + idx * elem->col->scale.x);
-            elem->SetPosY(0.0f);
-            elem->col->collider = Collider::rect;
-            elem->col->zOrder = ZOrder::object;
-
-            elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Open_Down.png");
-            elem->idle->maxFrame.x = 4;
-            elem->idle->scale.x = 88.0f / 4.0f * doorOpenScaleCoef;
-            elem->idle->scale.y = 50.0f * doorOpenScaleCoef;
-            elem->idle->SetParentRT(*elem->col);
-            elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
-            elem->idle->zOrder = ZOrder::object;
-
-            if (idx & 1)
-            {
-                elem->idle->reverseLR = true;
-            }
-
-            elem->col->Update();
-
-            idx++;
-        }
-
-        float doorClosedScaleCoef = 2.5f;
-
-        idx = 0;
-        for (auto& elem : mapObj->doorClosed)
-        {
-            elem = new Obstacle;
-            elem->col->isVisible = true;
-            elem->col->isFilled = false;
-            elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-            elem->col->scale.x = 68.0f / 2.0f * doorClosedScaleCoef;
-            elem->col->scale.y = 41.0f * doorClosedScaleCoef;
-            elem->SetPosX(200.0f + idx * elem->col->scale.x);
-            elem->SetPosY(200.0f);
-            elem->col->collider = Collider::rect;
-            elem->col->zOrder = ZOrder::object;
-
-            elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Closed.png");
-            elem->idle->maxFrame.x = 2;
-            elem->idle->scale.x = 68.0f / 2.0f * doorClosedScaleCoef;
-            elem->idle->scale.y = 41.0f * doorClosedScaleCoef;
-            elem->idle->SetParentRT(*elem->col);
-            elem->idle->ChangeAnim(ANIMSTATE::LOOP, 2.0f);
-            elem->idle->zOrder = ZOrder::object;
-
-            if (idx & 1)
-            {
-                elem->idle->reverseLR = true;
-            }
-
-            elem->col->Update();
-
-            idx++;
-        }
+        mapObj = new MapObject;
+        mapObj->Init();
     }
 
     void Scene02::Spawn()
@@ -191,6 +94,11 @@ namespace Gungeon
             Init();
         }
 
+        if (INPUT->KeyDown('H'))
+        {
+            ColOnOff();
+        }
+
         if (mapGen)
         {
             mapGen->Update();
@@ -213,7 +121,7 @@ namespace Gungeon
         if (boss->state != State::die)
         {
             boss->targetPos = player->Pos();
-            boss->weapon[boss->curWeaponIdx]->col->rotation = Utility::DirToRadian(player->Pos());
+            boss->w->col->rotation = Utility::DirToRadian(player->Pos());
 
             if (boss->pattern == BossPattern::shield)
             {
@@ -261,7 +169,9 @@ namespace Gungeon
             if (boss->state != State::die &&
                 bulletElem->col->Intersect(boss->col))
             {
-                boss->Hit(bulletElem->damage);
+                Vector2 dir = boss->col->GetWorldPos() - bulletElem->col->GetWorldPos();
+                dir.Normalize();
+                boss->Hit(bulletElem->damage, dir);
                 bulletElem->Hit(1);
             }
 
@@ -352,7 +262,7 @@ namespace Gungeon
             player->PlusMoney(1);
         }
 
-        Weapon* bossWeapon = boss->weapon[boss->curWeaponIdx];
+        Weapon* bossWeapon = boss->w;
         if (bossWeapon->state == State::idle &&
             bossWeapon->col->Intersect(player->col))
         {
@@ -430,5 +340,51 @@ namespace Gungeon
         player->ResizeScreen();
 
         boss->ResizeScreen();
+    }
+
+    void Scene02::ColOnOff()
+    {
+        player->col->isVisible = !player->col->isVisible;
+        player->colTile->isVisible = !player->colTile->isVisible;
+        player->w->firePos->isVisible = !player->w->firePos->isVisible;
+
+        for (auto& bulletElem : player->bullet)
+        {
+            bulletElem->col->isVisible = !bulletElem->col->isVisible;
+        }
+        
+        for (auto& elem : enemy)
+        {
+            elem->col->isVisible = !elem->col->isVisible;
+            elem->colTile->isVisible = !elem->colTile->isVisible;
+            elem->w->firePos->isVisible = !elem->w->firePos->isVisible;
+
+            for (auto& bulletElem : elem->bullet)
+            {
+                bulletElem->col->isVisible = !bulletElem->col->isVisible;
+            }
+        }
+
+        boss->col->isVisible = !boss->col->isVisible;
+        boss->colTile->isVisible = !boss->colTile->isVisible;
+        boss->w->firePos->isVisible = !boss->w->firePos->isVisible;
+
+        for (auto& bulletElem : boss->bullet)
+        {
+            bulletElem->col->isVisible = !bulletElem->col->isVisible;
+        }
+
+        for (auto& elem : mapObj->doorClosed)
+        {
+            elem->col->isVisible = !elem->col->isVisible;
+        }
+        for (auto& elem : mapObj->doorOpenDown)
+        {
+            elem->col->isVisible = !elem->col->isVisible;
+        }
+        for (auto& elem : mapObj->doorOpenUp)
+        {
+            elem->col->isVisible = !elem->col->isVisible;
+        }
     }
 }

@@ -28,15 +28,15 @@ namespace Gungeon
 		virtual void StartDie() override;
 
 	private:
-		float					timeSetMoveDir;
-		float					timeSetTargetDir;
-		Vector2					pushedDir;
-		float					pushedScalar;
-		float					pushedScalarCoef;
-		float					timeAiming;
+		WeaponData*		weapon;
+		float			timeSetMoveDir;
+		float			timeSetTargetDir;
+		float			pushedScalar;
+		float			pushedScalarCoef;
+		float			timeAiming;
 
 	public:
-		vector<EnemyBullet*>	bullet;
-		float					timeSetDir;
+		Weapon*			w;		// data index 실수 막기 위함
+		float			timeSetDir;
 	};
 }

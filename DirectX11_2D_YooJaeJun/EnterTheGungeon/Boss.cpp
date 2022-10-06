@@ -31,7 +31,6 @@ namespace Gungeon
         isHitAnim = false;
         timeHitAnim = 0.0f;
         timeSpiral = 0.0f;
-        timeSpiralOne = 0.0f;
         flagSpiralRespawn = false;
         timeCluster = 0.0f;
         timeWave = 0.0f;
@@ -157,108 +156,21 @@ namespace Gungeon
 
     void Boss::InitWeapon()
     {
-        float bossWeaponScaleCoef = 2.0f;
+        weapon = new WeaponData;
+        w = weapon->data[1];
 
-        weapon.resize(1);
-        for (auto& elem : weapon)
-        {
-            elem = new Weapon;
-            elem->col = new ObRect;
-            elem->col->isVisible = false;
-            elem->col->isFilled = false;
-            elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-            elem->col->pivot = OFFSET_LB;
-            elem->col->scale.x = 29.0f * bossWeaponScaleCoef;
-            elem->col->scale.y = 21.0f * bossWeaponScaleCoef;
-            elem->col->SetParentRT(*col);
-            elem->col->SetLocalPos(Vector2(10.0f, -15.0f));
+        w->col->SetParentRT(*col);
+        w->col->SetLocalPos(Vector2(10.0f, -15.0f));
 
-            elem->idle = new ObImage(L"EnterTheGungeon/Boss_0/Weapon_0.png");
-            elem->idle->pivot = OFFSET_LB;
-            elem->idle->scale.x = 43.0f * bossWeaponScaleCoef;
-            elem->idle->scale.y = 11.0f * bossWeaponScaleCoef;
-            elem->idle->SetParentRT(*elem->col);
-            elem->idle->zOrder = ZOrder::weapon;
+        w->idle->SetParentRT(*w->col);
 
-            elem->firePos = new GameObject;
-            elem->firePos->SetParentRT(*elem->col);
-            elem->firePos->SetLocalPos(Vector2(elem->col->scale.x / 2.0f, 0.0f));
-            elem->firePos->zOrder = ZOrder::none;
+        w->firePos->SetLocalPos(Vector2(w->col->scale.x / 2.0f, 0.0f));
 
-            float bossWeaponEffectScaleCoef = 2.0f;
-            elem->fireEffect = new Effect;
-            elem->fireEffect->idle = new ObImage(L"EnterTheGungeon/Boss_0/Effect_Fire_Weapon_0.png");
-            elem->fireEffect->idle->isVisible = false;
-            elem->fireEffect->idle->maxFrame.x = 3;
-            elem->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * bossWeaponEffectScaleCoef;
-            elem->fireEffect->idle->SetParentRT(*elem->firePos);
-            elem->fireEffect->idle->zOrder = ZOrder::none;
-            elem->fireEffect->intervalDie = 0.2f;
+        w->fireEffect->idle->SetParentRT(*w->firePos);
 
-            elem->imgReloading = new ObImage(L"EnterTheGungeon/Boss_0/Weapon_0_reloading.png");
-            elem->imgReloading->isVisible = false;
-            elem->imgReloading->pivot = Vector2(0.4f, 0.25f);
-            elem->imgReloading->maxFrame.x = 2;
-            elem->imgReloading->scale.x = 42.0f / 2.0f * bossWeaponScaleCoef;
-            elem->imgReloading->scale.y = 22.0f * bossWeaponScaleCoef;
-            elem->imgReloading->SetParentRT(*elem->col);
-            elem->imgReloading->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
-            elem->imgReloading->zOrder = ZOrder::UI;
+        w->imgReloading->SetParentRT(*w->col);
 
-            elem->pivotDefault = Vector2(0.6f, 0.25f);
-            elem->localPosDefault = Vector2(10.0f, -15.0f);
-            elem->localFirePosDefault = Vector2(70.0f, 12.0f);
-            elem->Equip();
-            elem->state = State::die;
-
-            elem->uiBulletFrame = new UI;
-            elem->uiBulletFrame->img = new ObImage(L"EnterTheGungeon/Boss_0/UI_Magazine.png");
-            elem->uiBulletFrame->img->scale = Vector2(28.0f, 99.0f);
-            elem->uiBulletFrame->anchor = Anchor::rightBottom;
-            elem->uiBulletFrame->Spawn(-40.0f, 80.0f);
-            elem->uiBulletFrame->img->space = Space::screen;
-            elem->uiBulletFrame->img->zOrder = ZOrder::UI;
-            elem->uiBulletFrame->img->isVisible = false;
-
-            elem->bulletCount = 10;
-            elem->uiBullet.resize(elem->bulletCount);
-
-            int uiBulletIdx = 0;
-            for (auto& elem : elem->uiBullet)
-            {
-                elem = new UI;
-                elem->img = new ObImage(L"EnterTheGungeon/Boss_0/UI_Bullet.png");
-                elem->img->scale = Vector2(12.0f, 4.0f);
-                elem->anchor = Anchor::rightBottom;
-                elem->Spawn(-40.0f, 104.0f - uiBulletIdx * 12.0f);
-                elem->img->space = Space::screen;
-                elem->img->isVisible = false;
-                uiBulletIdx++;
-            }
-
-            float uiWeaponScaleCoef = 2.5f;
-            elem->uiWeapon = new UI;
-            elem->uiWeapon->img = new ObImage(L"EnterTheGungeon/Boss_0/UI_Weapon.png");
-            elem->uiWeapon->img->pivot = Vector2(0.4f, 0.25f);
-            elem->uiWeapon->img->scale.x = 45.0f * uiWeaponScaleCoef;
-            elem->uiWeapon->img->scale.y = 13.0f * uiWeaponScaleCoef;
-            elem->uiWeapon->anchor = Anchor::rightBottom;
-            elem->uiWeapon->Spawn(-210.0f, 70.0f);
-            elem->uiWeapon->img->space = Space::screen;
-            elem->uiWeapon->img->zOrder = ZOrder::UI;
-            elem->uiWeapon->img->isVisible = false;
-
-            elem->uiBulletCount = new UI;
-            elem->uiBulletCount->img = new ObImage(L"EnterTheGungeon/Boss_0/UI_BulletCount.png");
-            elem->uiBulletCount->img->pivot = Vector2(0.4f, 0.25f);
-            elem->uiBulletCount->img->scale.x = 60.0f;
-            elem->uiBulletCount->img->scale.y = 28.0f;
-            elem->uiBulletCount->anchor = Anchor::rightBottom;
-            elem->uiBulletCount->Spawn(-140.0f, 150.0f);
-            elem->uiBulletCount->img->space = Space::screen;
-            elem->uiBulletCount->img->zOrder = ZOrder::UI;
-            elem->uiBulletCount->img->isVisible = false;
-        }
+        w->Equip();
     }
 
     void Boss::InitBullet()
@@ -304,6 +216,7 @@ namespace Gungeon
     void Boss::Release()
     {
         Unit::Release();
+        w->Release();
         SafeDelete(hpGuage);
         SafeDelete(hpGuageBar);
     }
@@ -318,6 +231,10 @@ namespace Gungeon
             ChangePattern(curPattern);
             InitBullet();
         }
+        
+        Weapon* w = weapon->data[1];
+        bulletSpawnPos = w->firePos->GetWorldPos();
+        bulletSpawnDir = w->moveDir;
 
         switch (state)
         {
@@ -334,6 +251,7 @@ namespace Gungeon
             break;
         }
 
+        w->Update();
         hpGuageBar->Update();
         hpGuage->Update();
         dropItem->Update();
@@ -346,7 +264,22 @@ namespace Gungeon
     void Boss::Render()
     {
         Unit::Render();
-        for (auto& elem : bullet) elem->Render();
+        switch (state)
+        {
+        case State::idle:
+            Idle();
+            for (auto& elem : bullet) elem->Render();
+            break;
+        case State::walk:
+            Walk();
+            for (auto& elem : bullet) elem->Render();
+            break;
+        case State::die:
+            Die();
+            break;
+        }
+
+        w->Render();
         hpGuageBar->Render();
         hpGuage->Render();
         dropItem->Render();
@@ -362,7 +295,7 @@ namespace Gungeon
 
     void Boss::Idle()
     {
-        Unit::SetTarget();
+        Unit::SetTarget(w);
 
         if (false == isHit)
         {
@@ -375,7 +308,7 @@ namespace Gungeon
 
     void Boss::Walk()
     {
-        Unit::SetTarget();
+        Unit::SetTarget(w);
 
         if (false == isHit)
         {
@@ -429,12 +362,21 @@ namespace Gungeon
         }
     }
 
-    void Boss::Hit(const int damage)
+    void Boss::Hit(const int damage, const Vector2& dir)
     {
+        pushedDir = dir;
+
         Unit::Hit(damage);
-        if (false == isHit)
+
+        hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+
+        if (pushedDir.x < 0.0f)
         {
-            hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+            hit->reverseLR = true;
+        }
+        else
+        {
+            hit->reverseLR = false;
         }
     }
 
@@ -487,6 +429,8 @@ namespace Gungeon
                 hit->isVisible = false;
 
                 isHitAnim = false;
+
+                pushedDir = Vector2(0.0f, 0.0f);
             }
         }
         else
@@ -501,16 +445,18 @@ namespace Gungeon
     {
         Unit::StartDie();
 
+        w->col->isVisible = false;
+        w->idle->isVisible = false;
+        w->firePos->isVisible = false;
+
         hpGuageBar->img->isVisible = false;
         hpGuage->img->isVisible = false;
 
         for (auto& elem : bullet)
         {
             elem->col->colOnOff = false;
-            elem->col->isVisible = false;
             elem->idle->colOnOff = false;
-            elem->idle->isVisible = false;
-            elem->hitBomb->idle->isVisible = false;
+            elem->hitBomb->idle->colOnOff = false;
         }
 
         // drop
@@ -519,10 +465,10 @@ namespace Gungeon
         dropItem->idle->isVisible = true;
         dropItem->state = State::idle;
 
-        weapon[curWeaponIdx]->Spawn(Pos());
-        weapon[curWeaponIdx]->col->isVisible = true;
-        weapon[curWeaponIdx]->idle->isVisible = true;
-        weapon[curWeaponIdx]->state = State::idle;
+        w->Spawn(Pos());
+        w->col->isVisible = true;
+        w->idle->isVisible = true;
+        w->state = State::idle;
     }
 
 
@@ -569,9 +515,25 @@ namespace Gungeon
         stringBullet.SetStringBullet();
         bullet.resize(stringBullet.inputString.size() * 25);
 
-        for (auto& elem : bullet)
+        int size = stringBullet.inputString.size();
+        float coefAngle = w->col->rotation - stringBullet.coefMidForTarget;
+
+        for (int r = 0; r < 5; r++)
         {
-            if (nullptr == elem) elem = new BossBullet;
+            for (int c = 0; c < 5; c++)
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    int idx = i * 25 + r * 5 + c;
+                    if (nullptr == bullet[idx]) bullet[idx] = new BossBullet;
+
+                    if (stringBullet.outputAlphbets[i][r][c])
+                    {
+                        bullet[idx]->scalar = 200.0f + (r + 10.0f) * 15.0f;
+                        bullet[idx]->angle = PI * 2 * (c + 1) / 5;
+                    }
+                }
+            }
         }
     }
 
@@ -592,6 +554,7 @@ namespace Gungeon
 
     void Boss::InitSpiral()
     {
+        curSpiralIdx = 0;
         bullet.resize(spiralMax);
 
         int idx = 0;
@@ -664,7 +627,7 @@ namespace Gungeon
         {
             for (auto& elem : bullet)
             {
-                elem->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos());
+                elem->Spawn(bulletSpawnPos);
             }
         }
     }
@@ -672,43 +635,41 @@ namespace Gungeon
     void Boss::UpdateString()
     {
         int size = stringBullet.inputString.size();
-        float coefAngle = weapon[curWeaponIdx]->col->rotation - stringBullet.coefMidForTarget;
         char* s = const_cast<char*>(stringBullet.inputString.c_str());
 
         if (ImGui::InputText("String Danmaku", s, 26))
         {
             stringBullet.inputString = s;
             size = stringBullet.inputString.size();
-            bullet = vector<BossBullet*>(size * 25);
+            bullet = vector<Bullet*>(size * 25);
             InitBullet();
             stringBullet.SetStringBullet();
         }
 
-        if (TIMER->GetTick(timeFire, 1.5f))
+        float coefAngle = w->col->rotation - stringBullet.coefMidForTarget;
+        for (int r = 0; r < 5; r++)
         {
-            for (int r = 0; r < 5; r++)
+            for (int c = 0; c < 5; c++)
             {
-                for (int c = 0; c < 5; c++)
+                for (int i = 0; i < size; i++)
                 {
-                    for (int i = 0; i < size; i++)
+                    if (stringBullet.outputAlphbets[i][r][c])
                     {
-                        if (stringBullet.outputAlphbets[i][r][c])
-                        {
-                            float angle = PI * 2 * (c + 1) / 5;
-                            float atkAngle = (angle / 60.0f) + (0.2f * i) + coefAngle;
-                            int idx = i * 25 + r * 5 + c;
-                            bullet[idx]->moveDir = Vector2(cos(atkAngle), sin(atkAngle));
-                            bullet[idx]->scalar = 250.0f + (r + 10.0f) * 10.0f;
-                        }
+                        int idx = i * 25 + r * 5 + c;
+                        bullet[idx]->atkAngle = (bullet[idx]->angle / 60.0f) + (0.2f * i) + coefAngle;
+                        bullet[idx]->moveDir = Vector2(cos(bullet[idx]->atkAngle), sin(bullet[idx]->atkAngle));
                     }
                 }
             }
+        }
 
+        if (TIMER->GetTick(timeFire, 1.5f))
+        {
             for (auto& elem : bullet)
             {
                 if (elem->moveDir.x == 0.0f && elem->moveDir.y == 0.0f) continue;
 
-                elem->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos());
+                elem->Spawn(bulletSpawnPos);
             }
         }
     }
@@ -733,19 +694,15 @@ namespace Gungeon
     void Boss::UpdateSpiral()
     {
         int idx = 0;
-        for (auto& elem : bullet)
-        {
-            if (false == elem->isFired)
-            {
-                elem->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos());
-                break;
-            }
-            idx++;
-        }
+        bullet[curSpiralIdx]->Spawn(bulletSpawnPos);
 
         if (TIMER->GetTick(timeSpiral, 0.05f))
         {
-
+            curSpiralIdx++;
+            if (curSpiralIdx >= spiralMax)
+            {
+                curSpiralIdx = 0;
+            }
         }
     }
 
@@ -757,7 +714,7 @@ namespace Gungeon
             {
                 elem->moveDir.x = min(targetDir.x + RANDOM->Float(0.0f, 0.1f), 1.0f);
                 elem->moveDir.y = min(targetDir.y + RANDOM->Float(0.0f, 0.1f), 1.0f);
-                elem->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos());
+                elem->Spawn(bulletSpawnPos);
             }
         }
 
@@ -773,7 +730,7 @@ namespace Gungeon
             int idx = 0;
             for (auto& elem : bullet)
             {
-                elem->Spawn(weapon[curWeaponIdx]->firePos->GetWorldPos());
+                elem->Spawn(bulletSpawnPos);
                 idx++;
             }
         }

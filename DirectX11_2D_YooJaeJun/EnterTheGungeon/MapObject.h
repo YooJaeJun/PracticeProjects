@@ -9,6 +9,7 @@ namespace Gungeon
 	{
 	public:
 		MapObject();
+		void Init();
 		void Release();
 		void Update();
 		void LateUpdate();

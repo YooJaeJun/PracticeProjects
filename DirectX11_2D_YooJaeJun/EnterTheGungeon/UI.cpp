@@ -9,12 +9,12 @@ namespace Gungeon
 
     void UI::Release()
     {
-        if (img) SafeDelete(img);
+        SafeDelete(img);
     }
 
     void UI::Update()
     {
-        img->Update();
+        if (img) img->Update();
     }
 
     void UI::LateUpdate()
@@ -23,7 +23,7 @@ namespace Gungeon
 
     void UI::Render()
     {
-        img->Render(); // RENDER->push(img);
+        if (img) img->Render(); // RENDER->push(img);
     }
 
     void UI::Spawn(const float coefX, const float coefY)

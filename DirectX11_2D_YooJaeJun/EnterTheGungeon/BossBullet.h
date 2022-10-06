@@ -11,7 +11,6 @@ namespace Gungeon
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 
-		void Spawn(const Vector2& coord);
 		virtual void Reload() override;
 	};
 }

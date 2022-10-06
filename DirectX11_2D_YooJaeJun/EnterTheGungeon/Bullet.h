@@ -11,6 +11,7 @@ namespace Gungeon
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 
+		void Spawn(const Vector2& coord);
 		void Spawn(const Vector2& coord, const Vector2& fireDir);
 		void Hit(const float damage);
 		virtual void Reload();
@@ -22,5 +23,9 @@ namespace Gungeon
 		int			damage;
 		float		timeRespawn;
 		Effect*		hitBomb;
+
+	public:
+		float angle;
+		float atkAngle;
 	};
 }
