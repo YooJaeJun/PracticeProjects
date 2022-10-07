@@ -51,7 +51,7 @@ namespace Gungeon
             room->col->color = Color(1.0f, 0.6f, 0.6f);
             room->col->collider = Collider::rect;
         }
-        roomScaleForSelect = 300'000.0f;
+        roomScaleForSelect = 350'000.0f;
     }
 
     void ProcedureMapGeneration::Release()
@@ -483,60 +483,108 @@ namespace Gungeon
                 }
             }
         }
-
+        
         for (auto& elem : linesMST)
         {
+            // 복도 x, y 축 확인
             const ObNode& v = elem.v;
             const ObNode& w = elem.w;
 
-            ObNode mid = w - v;
+            ObNode mid = ObNode((w.x + v.x) / 2.0f, (w.y + v.y) / 2.0f);
 
-            Vector2 vScale = roomsSelected[nodesForRoomIndex[v]]->col->scale;
-            Vector2 wScale = roomsSelected[nodesForRoomIndex[w]]->col->scale;
+            Vector2 vScaleHalf = roomsSelected[nodesForRoomIndex[v]]->col->scale / 2.0f;
+            Vector2 wScaleHalf = roomsSelected[nodesForRoomIndex[w]]->col->scale / 2.0f;
 
             ObLine l1, l2;
             l1.color = l2.color = Color(1.0f, 0.8f, 0.6f);
 
             Vector2	start, end;
 
-            if (mid.x > v.x)
-            {
-                start = Vector2(v.x + vScale.x / 2.0f, v.y);
-                end = Vector2(w.x - vScale.x / 2.0f, w.y);
-            }
-            else
-            {
-                start = Vector2(v.x - vScale.x / 2.0f, v.y);
-                end = Vector2(w.x + vScale.x / 2.0f, w.y);
-            }
+            //if (w.x > v.x)
+            //{
+            //    if (w.x - wScaleHalf.x < v.x + vScaleHalf.x)
+            //    {
+            //        if (w.y > v.y)
+            //        {
 
-            Int2 sour, dest;
-            tilemap->WorldPosToTileIdx(start, sour);
-            tilemap->WorldPosToTileIdx(end, dest);
+            //        }
+            //        else
+            //        {
 
-            if (tilemap->PathFinding(sour, dest, way, false))
+            //        }
+
+
+            //        start = Vector2(mid.x, v.y + vScaleHalf.y);
+            //        end = Vector2(mid.x, w.y - wScaleHalf.y);
+            //    }
+            //    else
+            //    {
+            //        start = Vector2(v.x + vScaleHalf.x, v.y);
+            //        end = Vector2(w.x - vScaleHalf.x, w.y);
+            //    }
+            //}
+            //else
+            //{
+            //    if (v.x - vScaleHalf.x < w.x + wScaleHalf.x)
+            //    {
+            //        start = Vector2(mid.x, v.y + vScaleHalf.y);
+            //        end = Vector2(mid.x, w.y - wScaleHalf.y);
+            //    }
+            //    else
+            //    {
+            //        start = Vector2(v.x - vScaleHalf.x, v.y);
+            //        end = Vector2(w.x + vScaleHalf.x, w.y);
+            //    }
+            //}
+
+
+            // A*
+            auto AStar = [&](Vector2 start, Vector2 end)
             {
-                Int2 door1, door2;
+                Int2 sour, dest;
+                tilemap->WorldPosToTileIdx(start, sour);
+                tilemap->WorldPosToTileIdx(end, dest);
 
-                if (false == way.empty())
+                if (tilemap->PathFinding(sour, dest, way, false))
                 {
-                    door1 = way.front()->idx;
-                    door2 = way.back()->idx;
-                }
+                    Int2 door;
 
-                while (false == way.empty())
-                {
-                    tilemap->SetTile(way.back()->idx, Int2(1, 1), imgIdx, (int)TileState::floor);
-                    way.pop_back();
-                }
+                    bool flag = false;
 
-                tilemap->SetTile(door1, Int2(6, 3), imgIdx, (int)TileState::door);
-                tilemap->SetTile(door2, Int2(6, 3), imgIdx, (int)TileState::door);
-            }
-            else
-            {
-                break;
-            }
+                    while (false == way.empty())
+                    {
+                        tilemap->SetTile(way.back()->idx, Int2(RANDOM->Float(1, 4), 1), imgIdx, (int)TileState::floor);
+                        Tile* temp = way.back();
+                        way.pop_back();
+
+                        if (way.size() > 0)
+                        {
+                            if (tilemap->GetTileState(way.back()->idx) == TileState::none)
+                            {
+                                flag = true;
+                            }
+
+                            if (flag &&
+                                tilemap->GetTileState(way.back()->idx) == TileState::floor)
+                            {
+                                door = temp->idx;
+                                way.clear();
+                                break;
+                            }
+                        }
+                    }
+
+                    tilemap->SetTile(door, Int2(6, 3), imgIdx, (int)TileState::door);
+                }
+            };
+            
+            start = Vector2(mid.x, mid.y);
+            Vector2 end1 = Vector2(v.x, v.y);
+            Vector2 end2 = Vector2(w.x, w.y);
+
+            AStar(start, end1);
+            AStar(start, end2);
+
         }
 
         linesMST.clear();
@@ -577,6 +625,7 @@ namespace Gungeon
                 }
             }
         }
+
         tilemap->CreateTileCost();
     }
 
