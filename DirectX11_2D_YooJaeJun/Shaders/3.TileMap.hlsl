@@ -116,10 +116,10 @@ float4 PS(PixelInput input) : SV_TARGET
     }
     TextureColor = saturate(TextureColor);
     
-    if (input.tileState == 1.0f)
-    {
-        return TextureColor + float4(0.3, 0, 0, 0);
-    }
+    //if (input.tileState == 1.0f)
+    //{
+    //    return TextureColor + float4(0.3, 0, 0, 0);
+    //}
     
     return TextureColor;
 }

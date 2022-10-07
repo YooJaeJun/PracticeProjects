@@ -5,7 +5,23 @@ namespace Gungeon
 	const float timeDefault = 1.0f;
 	const int roomMax = 40;
 	const int gridMax = 7000;
-	enum class GameState { spray, spread, select, triangulate, span, loop, clean, hallway, widen, tile, door };
+
+	enum class GameState 
+	{ 
+		spray, 
+		spread, 
+		select, 
+		tileRoomIndex, 
+		triangulate, 
+		span, 
+		loop, 
+		clean, 
+		floor, 
+		passage, 
+		tilePassageIndex, 
+		wall, 
+		prop 
+	};
 
 	class ProcedureMapGeneration
 	{
@@ -27,8 +43,8 @@ namespace Gungeon
 		vector<ObLine>				linesTriangulated;
 		vector<ObLine>				linesMST;
 		// Passage
-		vector<ObLine>				passagesLine;
-		vector<Room*>				passages;
+		map<ObNode, int>			nodesForRoomIndex;
+		vector<Tile*>				way;
 		// Tilemap
 		ObTileMap*					tilemap;
 		int							imgIdx;
@@ -52,14 +68,16 @@ namespace Gungeon
 		void Spray();
 		void Spread();
 		void Select();
+		void TileRoomIndex();
 		void Triangulate();
 		void Spanning();
 		void Loop();
-		void Hallway();
-		void Widen();
 		void Clean();
-		void Tile();
-		void Door();
+		void Floor();
+		void Wall();
+		void Passage();
+		void TilePassageIndex();
+		void Prop();
 
 		void SetTilemapGUI();
 		bool IntersectTileUnit(Character* elem);

@@ -58,8 +58,7 @@ void ObTileMap::CreateTileCost()
         {
             Tiles[i][j].idx = Int2(i, j);
             Tiles[i][j].state = GetTileState(Tiles[i][j].idx);
-            // Tiles[i][j].state = TileState::wall;
-            // SetTileState(Int2(i, j), TileState::wall);
+            Tiles[i][j].roomIndex = GetTileRoomIndex(Tiles[i][j].idx);
 
             Tiles[i][j].Pos.x = i * scale.x + GetWorldPos().x + half.x;
             Tiles[i][j].Pos.y = j * scale.y + GetWorldPos().y + half.y;
@@ -299,7 +298,22 @@ void ObTileMap::SetTileState(Int2 TileIdx, TileState tileState)
 Vector2 ObTileMap::GetTilePosition(Int2 TileIdx)
 {
     int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
+
     return Vector2(vertices[tileIdx * 6].position.x, vertices[tileIdx * 6].position.y);
+}
+
+int ObTileMap::GetTileRoomIndex(Int2 TileIdx)
+{
+    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
+
+    return vertices[tileIdx * 6].tileRoomIndex;
+}
+
+void ObTileMap::SetTileRoomIndex(Int2 TileIdx, const int tileRoomIndex)
+{
+    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
+
+    vertices[tileIdx * 6].tileRoomIndex = tileRoomIndex;
 }
 
 void ObTileMap::Save()
@@ -428,14 +442,14 @@ void ObTileMap::Load()
     fin.close();
 }
 
-bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
+bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool checkDiagnoal)
 {
     //둘중에 하나가 벽이면 갈 수 있는길이 없다.
-    if (Tiles[dest.x][dest.y].state == TileState::wall ||
-        Tiles[sour.x][sour.y].state == TileState::door)
-    {
-        return false;
-    }
+    //if (Tiles[dest.x][dest.y].state == TileState::wall ||
+    //    Tiles[sour.x][sour.y].state == TileState::door)
+    //{
+    //    return false;
+    //}
 
     //기존에 있던 길은 전부 비운다.
     way.clear();
@@ -522,46 +536,48 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
                 Temp.first->idx.y + 1));
         }
 
-        //LB
-        if (Temp.first->idx.x > 0 &&
-            Temp.first->idx.y < tileSize.y - 1)
+        if (checkDiagnoal)
         {
-            LoopIdx.push_back(Int2(Temp.first->idx.x - 1,
-                Temp.first->idx.y + 1));
+            //LB
+            if (Temp.first->idx.x > 0 &&
+                Temp.first->idx.y < tileSize.y - 1)
+            {
+                LoopIdx.push_back(Int2(Temp.first->idx.x - 1,
+                    Temp.first->idx.y + 1));
+            }
+
+            //LT
+            if (Temp.first->idx.x > 0 &&
+                Temp.first->idx.y > 0)
+            {
+                LoopIdx.push_back(Int2(Temp.first->idx.x - 1,
+                    Temp.first->idx.y - 1));
+            }
+
+            //RB
+            if (Temp.first->idx.x < tileSize.x - 1 &&
+                Temp.first->idx.y < tileSize.y - 1)
+            {
+                LoopIdx.push_back(Int2(Temp.first->idx.x + 1,
+                    Temp.first->idx.y + 1));
+            }
+
+            //RT
+            if (Temp.first->idx.x < tileSize.x - 1 &&
+                Temp.first->idx.y > 0)
+            {
+                LoopIdx.push_back(Int2(Temp.first->idx.x + 1,
+                    Temp.first->idx.y - 1));
+            }
         }
 
-        //LT
-        if (Temp.first->idx.x > 0 &&
-            Temp.first->idx.y > 0)
-        {
-            LoopIdx.push_back(Int2(Temp.first->idx.x - 1,
-                Temp.first->idx.y - 1));
-        }
-
-        //RB
-        if (Temp.first->idx.x < tileSize.x - 1 &&
-            Temp.first->idx.y < tileSize.y - 1)
-        {
-            LoopIdx.push_back(Int2(Temp.first->idx.x + 1,
-                Temp.first->idx.y + 1));
-        }
-
-        //RT
-        if (Temp.first->idx.x < tileSize.x - 1 &&
-            Temp.first->idx.y > 0)
-        {
-            LoopIdx.push_back(Int2(Temp.first->idx.x + 1,
-                Temp.first->idx.y - 1));
-        }
-
-        //상하좌우대각선타일 비용검사
+        //상하좌우(대각선)타일 비용검사
         for (int i = 0; i < LoopIdx.size(); i++)
         {
             Tile* loop = &Tiles[LoopIdx[i].x][LoopIdx[i].y];
 
             //벽이 아닐때
-            if (loop->state != TileState::wall &&
-                loop->state != TileState::door)
+            if (loop->state != TileState::wall)
             {
                 //예상비용 만들기
                 loop->ClacH(dest);

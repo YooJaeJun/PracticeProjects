@@ -506,7 +506,7 @@ namespace Gungeon
     {
         if (stringBullet.inputString == "")
         {
-            stringBullet.inputString = "abcdefghijklmnopqrstuvwxyz";
+            stringBullet.inputString = "Yoo Jae Jun";
         }
         stringBullet.coefMidForTarget = 0.0f;
         stringBullet.SetStringBullet();

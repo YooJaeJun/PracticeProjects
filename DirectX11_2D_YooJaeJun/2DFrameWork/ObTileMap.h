@@ -2,10 +2,9 @@
 enum class TileState
 {
     none,
+    floor,
     wall,
     door,
-    trap,
-    water,
     tileSize
 };
 
@@ -19,6 +18,7 @@ public:
     Tile*       P;      //나를 갱신시킨 타일
     bool        isFind; //검사한적이 있는가?
     TileState   state;
+    int         roomIndex;
     Vector2     Pos; //타일의 중점
 
     void ClearCost();
@@ -59,8 +59,10 @@ public:
     void            SetTileState(Int2 TileIdx, TileState tileState);
     Int2            GetTileSize() { return tileSize; };
     Vector2         GetTilePosition(Int2 TileIdx);
+    int             GetTileRoomIndex(Int2 TileIdx);
+    void            SetTileRoomIndex(Int2 TileIdx, const int tileRoomIndex);
 
-    bool            PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way);
+    bool            PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool checkDiagnoal = true);
 
 protected:
     VertexTile*             vertices;

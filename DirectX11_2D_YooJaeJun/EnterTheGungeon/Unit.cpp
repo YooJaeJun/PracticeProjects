@@ -277,6 +277,7 @@ namespace Gungeon
 					g = 0.0f;
 					start = Pos();
 					way.pop_back();
+					map->Update();
 					end = way.back()->Pos;
 				}
 			}
