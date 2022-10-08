@@ -2,7 +2,7 @@
 
 namespace Gungeon
 {
-	const float timeDefault = 1.0f;
+	const float timeDefault = 0.0f;
 	const int roomMax = 30;
 	const int gridMax = 7000;
 

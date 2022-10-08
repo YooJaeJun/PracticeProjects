@@ -473,8 +473,8 @@ namespace Gungeon
             }
         }
 
-        // 8방향 체크해 문의 방향을 정하고, 모서리에 위치할 시 예외처리
-        auto SetDoor = [&](Int2 on)
+        // 1. 8방향 체크해 문의 방향을 정하고, 2. 좌우문 뒤집을지, 3. 모서리에 위치할 시 예외처리
+        auto SetDoor = [&](Int2 on, Int2 dest)
         {
             deque<bool> dirWall(8);
 
@@ -489,54 +489,61 @@ namespace Gungeon
                 }
             }
 
-            Int2 doorFrameIdx;
+            Int2 doorFrameIdx = Int2(9, 0);
             Int2 doorTileIdx = on;
             Int2 floorTileIdx;
 
             // 가로, 세로
             if (dirWall[DirState::dirB] && dirWall[DirState::dirT])
             {
-                doorFrameIdx = Int2(6, 0);
+                if (dest.x < on.x)
+                {
+                    doorFrameIdx = Int2(7, 0);
+                }
+                else
+                {
+                    doorFrameIdx = Int2(6, 0);
+                }
             }
             else if (dirWall[DirState::dirL] && dirWall[DirState::dirR])
             {
-                doorFrameIdx = Int2(7, 0);
+                doorFrameIdx = Int2(8, 0);
             }
             // 모서리에 위치 시 대각선. 그리고 이동 가능하게 옆에 평면타일로 예외처리
             else
             {
                 if ((dirWall[DirState::dirL] && dirWall[DirState::dirB]))
                 {
-                    doorFrameIdx = Int2(8, 0);
                     floorTileIdx.x = on.x;
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirL];
                     doorTileIdx.y = on.y + dy[DirState::dirL];
+                    doorFrameIdx = Int2(9, 0);
                 }
                 else if ((dirWall[DirState::dirB] && dirWall[DirState::dirR]))
                 {
-                    doorFrameIdx = Int2(9, 0);
-                    floorTileIdx.x = on.x;
-                    floorTileIdx.y = on.y;
-                    doorTileIdx.x = on.x + dx[DirState::dirB];
-                    doorTileIdx.y = on.y + dy[DirState::dirB];
-                }
-
-                else if ((dirWall[DirState::dirR] && dirWall[DirState::dirT]))
-                {
-                    doorFrameIdx = Int2(8, 0);
                     floorTileIdx.x = on.x;
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirR];
                     doorTileIdx.y = on.y + dy[DirState::dirR];
+                    doorFrameIdx = Int2(9, 0);
+                }
+
+                else if ((dirWall[DirState::dirR] && dirWall[DirState::dirT]))
+                {
+                    floorTileIdx.x = on.x;
+                    floorTileIdx.y = on.y;
+                    doorTileIdx.x = on.x + dx[DirState::dirR];
+                    doorTileIdx.y = on.y + dy[DirState::dirR];
+                    doorFrameIdx = Int2(9, 0);
                 }
                 else if (dirWall[DirState::dirT] && dirWall[DirState::dirL])
                 {
-                    doorFrameIdx = Int2(9, 0);
                     floorTileIdx.x = on.x;
                     floorTileIdx.y = on.y;
-                    doorTileIdx.x = on.x + dx[DirState::dirT];
-                    doorTileIdx.y = on.y + dy[DirState::dirT];
+                    doorTileIdx.x = on.x + dx[DirState::dirL];
+                    doorTileIdx.y = on.y + dy[DirState::dirL];
+                    doorFrameIdx = Int2(9, 0);
                 }
 
                 tilemap->SetTile(floorTileIdx,
@@ -571,20 +578,20 @@ namespace Gungeon
                 {
                     TileState res = tilemap->GetTileState(way.back()->idx);
 
-                    if (res == TileState::wall)
-                    {
-                        SetDoor(way.back()->idx);
-
-                        way.clear();
-                        break;
-                    }
-                    else if (res == TileState::none)
+                    if (res == TileState::none)
                     {
                         tilemap->SetTile(way.back()->idx,
                             Int2(RANDOM->Int(1, 4),
                                 RANDOM->Int(1, 3)),
                             imgIdx,
                             (int)TileState::floor);
+                    }
+                    else if (res == TileState::wall)
+                    {
+                        SetDoor(way.back()->idx, dest);
+
+                        way.clear();
+                        break;
                     }
 
                     way.pop_back();
