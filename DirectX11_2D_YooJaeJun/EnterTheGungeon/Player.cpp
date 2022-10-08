@@ -638,11 +638,32 @@ namespace Gungeon
 
 	void Player::Action()
 	{
-		if (INPUT->KeyPress(VK_LBUTTON))
+		float fireInterval;
+		switch (w->type)
 		{
-			Fire();
+		case WeaponType::pistol:
+			fireInterval = 0.2f;
+			break;
+		case WeaponType::shotgun:
+			fireInterval = 0.7f;
+			break;
+		default:
+			fireInterval = 0.1f;
+			break;
 		}
-		else if (INPUT->KeyPress(VK_RBUTTON))
+
+		int firstFire = w->bulletCount - 1;
+
+		if (curBulletIdx == firstFire ||
+			TIMER->GetTick(timeFire, fireInterval))
+		{
+			if (INPUT->KeyPress(VK_LBUTTON))
+			{
+				Fire();
+			}
+		}
+
+		if (INPUT->KeyPress(VK_RBUTTON))
 		{
 			StartRoll();
 		}
@@ -652,30 +673,8 @@ namespace Gungeon
 	{
 		if (false == isReloading)
 		{
-			switch (w->type)
-			{
-			case WeaponType::pistol:
-
-				if (TIMER->GetTick(timeFire, 0.2f) ||
-					curBulletIdx == w->bulletCount - 1)	// 처음
-				{
-					canFireOnce[(int)WeaponType::pistol] = true;
-					flagFireCamShake = true;
-				}
-
-				break;
-
-			case WeaponType::shotgun:
-
-				if (TIMER->GetTick(timeFire, 0.7f) ||
-					curBulletIdx == w->bulletCount - 1)	// 처음
-				{
-					canFireOnce[(int)WeaponType::shotgun] = true;
-					flagFireCamShake = true;
-				}
-
-				break;
-			}
+			canFireOnce[(int)w->type] = true;
+			flagFireCamShake = true;
 		}
 
 		if (curBulletIdx < 0)

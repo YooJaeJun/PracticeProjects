@@ -2,18 +2,6 @@
 
 namespace Gungeon
 {
-	enum DirState
-	{
-		dirB,
-		dirL,
-		dirR,
-		dirLB,
-		dirRB,
-		dirT,
-		dirLT,
-		dirRT
-	};
-
 	class Unit : public Character
 	{
 	public:

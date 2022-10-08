@@ -6,20 +6,21 @@ namespace Gungeon
 	const int roomMax = 30;
 	const int gridMax = 7000;
 
+	const Int2 wallImgDir[8] = { {1, 5}, {0, 1}, {5, 1}, {0, 4}, {5, 4}, {1, 0}, {0, 0}, {5, 0} };
+
+
 	enum class GameState 
 	{ 
 		spray, 
 		spread, 
 		select, 
-		tileRoomIndex, 
 		triangulate, 
 		span, 
 		loop, 
 		clean, 
-		floor, 
-		passage, 
-		tilePassageIndex, 
-		wall, 
+		roomTile, 
+		passageTile, 
+		passageWallTile, 
 		prop 
 	};
 
@@ -35,7 +36,7 @@ namespace Gungeon
 		GameState					state;
 		float						roomScaleForSelect;
 		// Delaunay Triangulation
-		vector<ObNode>				nodes;
+		vector<ObNode>				roomNode;
 		Delaunay					triangulation;
 		// MST - Prim
 		priority_queue<ObLine, vector<ObLine>, greater<ObLine>>	edgePq;
@@ -68,15 +69,13 @@ namespace Gungeon
 		void Spray();
 		void Spread();
 		void Select();
-		void TileRoomIndex();
 		void Triangulate();
 		void Spanning();
 		void Loop();
 		void Clean();
-		void Floor();
-		void Wall();
-		void Passage();
-		void TilePassageIndex();
+		void RoomTile();
+		void PassageTile();
+		void PassageWallTile();
 		void Prop();
 
 		void SetTilemapGUI();

@@ -39,7 +39,7 @@ ID3D11ShaderResourceView* Texture::LoadTexture(wstring file)
 
         cout << "width: " << image.GetMetadata().width << ", ";
         cout << "height: " << image.GetMetadata().height << endl;
-        
+
 
         Check(hr);
         textureList[file] = temp;

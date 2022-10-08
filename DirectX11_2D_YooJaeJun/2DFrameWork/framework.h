@@ -96,6 +96,20 @@ enum ColPos
     contain
 };
 
+// B, L, R, LB, RB, T, LT, RT
+enum DirState
+{
+    dirB,
+    dirL,
+    dirR,
+    dirLB,
+    dirRB,
+    dirT,
+    dirLT,
+    dirRT
+};
+const int dx[8] = { 0,-1,1,-1,1,0,-1,1 };
+const int dy[8] = { -1,0,0,-1,-1,1,1,1 };
 
 
 //2DFramework Header
