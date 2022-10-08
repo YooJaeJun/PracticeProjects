@@ -18,7 +18,7 @@ public:
     Tile*       P;      //나를 갱신시킨 타일
     bool        isFind; //검사한적이 있는가?
     TileState   state;
-    int         roomIndex;
+    int         roomIdx;
     Vector2     Pos; //타일의 중점
 
     void ClearCost();

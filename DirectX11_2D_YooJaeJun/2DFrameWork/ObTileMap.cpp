@@ -58,7 +58,7 @@ void ObTileMap::CreateTileCost()
         {
             Tiles[i][j].idx = Int2(i, j);
             Tiles[i][j].state = GetTileState(Tiles[i][j].idx);
-            Tiles[i][j].roomIndex = GetTileRoomIndex(Tiles[i][j].idx);
+            Tiles[i][j].roomIdx = GetTileRoomIndex(Tiles[i][j].idx);
 
             Tiles[i][j].Pos.x = i * scale.x + GetWorldPos().x + half.x;
             Tiles[i][j].Pos.y = j * scale.y + GetWorldPos().y + half.y;
@@ -446,8 +446,7 @@ void ObTileMap::Load()
 bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool checkDiagnoal)
 {
     //둘중에 하나가 벽이면 갈 수 있는길이 없다.
-    //if (Tiles[dest.x][dest.y].state == TileState::wall ||
-    //    Tiles[sour.x][sour.y].state == TileState::door)
+    //if (Tiles[dest.x][dest.y].state == TileState::wall)
     //{
     //    return false;
     //}

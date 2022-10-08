@@ -34,6 +34,7 @@ namespace Gungeon
 		timeHitAnim = 0.0f;
 		flagFireCamShake = false;
 		timeFireCamShake = 0.0f;
+		timeHitCamShake = 0.0f;
 		godMode = false;
 		timeLastPosForDust = 0.0f;
 		money = 0;
@@ -748,10 +749,10 @@ namespace Gungeon
 			}
 		}
 
-		originCamPos = CAM->position;
+		// originCamPos = CAM->position;
 	}
 	
-	// 발사 시
+	// 발사 시, 피격 시
 	void Player::ShakeCam(float& time)
 	{
 		CAM->position = Vector2(RANDOM->Float(CAM->position.x - 2.0f, CAM->position.x + 2.0f),
@@ -759,7 +760,7 @@ namespace Gungeon
 
 		if (TIMER->GetTick(time, 0.2f))
 		{
-			CAM->position = originCamPos;
+			// CAM->position = originCamPos;
 			flagFireCamShake = false;
 		}
 	}
@@ -886,6 +887,8 @@ namespace Gungeon
 			for (auto& elem : idle) elem->color = c;
 			for (auto& elem : walk) elem->color = c;
 			for (auto& elem : roll) elem->color = c;
+
+			ShakeCam(timeHitCamShake);
 
 			if (TIMER->GetTick(timeHitAnim, 1.0f))
 			{

@@ -55,6 +55,7 @@ namespace Gungeon
 		float					timeRoll;
 		bool					flagFireCamShake;
 		float					timeFireCamShake;
+		float					timeHitCamShake;
 		UI*						uiReload;
 		UI*						uiReloadBar;
 		bool					godMode;
