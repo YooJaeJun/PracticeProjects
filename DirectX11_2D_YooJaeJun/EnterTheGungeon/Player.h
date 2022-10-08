@@ -41,7 +41,6 @@ namespace Gungeon
 
 	public:
 		ObImage*				roll[8];
-		ObImage*				respawn;
 		ObImage*				kick;
 		ObImage*				obtain;
 		vector<WeaponData*>		weapon;

@@ -8,7 +8,7 @@ namespace Gungeon
 	class Scene02 : public Scene
 	{
 	private:
-		Vector2				room0Pos;
+		int					curRoomIdx;
 		MapObject*			mapObj;
 		Player*				player;
 		Enemy*				enemy[enemyMax];

@@ -24,6 +24,7 @@ namespace Gungeon
 		void FindPath(ObTileMap* map);
 
 	public:
+		ObImage*			spawn;
 		ObImage*			idle[8];
 		ObImage*			walk[8];
 		ObImage*			kick[8];

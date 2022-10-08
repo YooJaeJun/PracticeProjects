@@ -91,7 +91,7 @@ namespace Gungeon
             elem->maxFrame.x = 6;
             elem->scale.x = 180.0f / 6.0f * scaleFactor;
             elem->scale.y = 40.0f * scaleFactor;
-            elem->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+            elem->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
             elem->SetParentRT(*col);
             elem->zOrder = ZOrder::object;
             idx++;

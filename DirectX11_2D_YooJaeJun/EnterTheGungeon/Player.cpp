@@ -64,6 +64,15 @@ namespace Gungeon
 		int idx = 0;
 		float scaleFactor = 3.0f;
 
+		spawn = new ObImage(L"EnterTheGungeon/Player_0/Spawn.png");
+		spawn->isVisible = false;
+		spawn->maxFrame.x = 3;
+		spawn->scale.x = 48.0f / 3.0f * scaleFactor;
+		spawn->scale.y = 22.0f * scaleFactor;
+		spawn->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
+		spawn->SetParentRT(*col);
+		spawn->zOrder = ZOrder::object;
+
 		idle[dirB] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Front.png");
 		idle[dirL] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
 		idle[dirR] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
@@ -161,15 +170,6 @@ namespace Gungeon
 		die->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
 		die->SetParentRT(*col);
 		die->zOrder = ZOrder::object;
-
-		respawn = new ObImage(L"EnterTheGungeon/Player_0/Respawn.png");
-		respawn->isVisible = false;
-		respawn->maxFrame.x = 3;
-		respawn->scale.x = 48.0f / 3.0f * scaleFactor;
-		respawn->scale.y = 22.0f * scaleFactor;
-		respawn->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
-		respawn->SetParentRT(*col);
-		respawn->zOrder = ZOrder::object;
 
 		kick = new ObImage(L"EnterTheGungeon/Player_0/Kick.png");
 		kick->isVisible = false;
@@ -438,7 +438,7 @@ namespace Gungeon
 
 		dust->Update();
 		for (auto& elem : roll) elem->Update();
-		respawn->Update();
+		spawn->Update();
 		kick->Update();
 		obtain->Update();
 
@@ -468,7 +468,7 @@ namespace Gungeon
 		Unit::Render();
 
 		for (auto& elem : roll) elem->Render(); // RENDER->push(elem);
-		respawn->Render(); //RENDER->push(respawn);
+		spawn->Render(); //RENDER->push(respawn);
 		kick->Render(); //RENDER->push(kick);
 		obtain->Render(); //RENDER->push(obtain);
 		for (auto& elem : bullet) elem->Render();

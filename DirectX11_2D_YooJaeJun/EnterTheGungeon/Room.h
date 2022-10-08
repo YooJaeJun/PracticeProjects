@@ -13,6 +13,7 @@ namespace Gungeon
 		virtual void Render() override;
 
 	public:
-		bool	selected;
+		bool		selected;
+		Effect*		spawnEffect[4];
 	};
 }

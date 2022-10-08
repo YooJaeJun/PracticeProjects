@@ -9,8 +9,9 @@ namespace Gungeon
 
     void Room::Init()
     {
-        col = new ObRect();
         selected = false;
+        
+        col = new ObRect();
     }
 
     void Room::Release()

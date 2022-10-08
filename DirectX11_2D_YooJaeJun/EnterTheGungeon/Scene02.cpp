@@ -21,10 +21,6 @@ namespace Gungeon
 
         LIGHT->light.radius = 2000.0f;
 
-        SOUND->Stop("SCENE01");
-        // SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
-        SOUND->Play("SCENE02");
-
         // 플레이어
         player = new Player;
 
@@ -33,6 +29,10 @@ namespace Gungeon
         InitMapObject();
 
         Spawn();
+
+        SOUND->Stop("SCENE01");
+        // SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
+        SOUND->Play("SCENE02");
     }
 
     void Scene02::InitEnemy()
@@ -57,25 +57,65 @@ namespace Gungeon
     void Scene02::Spawn()
     {
         if (!mapGen) return;
-        if (mapGen->roomsSelected.empty() == false)
+
+        Vector2 curRoomPos = Vector2(0.0f, 0.0f);
+        curRoomIdx = 0;
+        Room* room = nullptr;
+        if (false == mapGen->roomsSelected.empty())
         {
-            room0Pos = mapGen->roomsSelected[0]->col->GetWorldPos();
+            room = mapGen->roomsSelected[curRoomIdx];
         }
 
-        CAM->position = room0Pos;
+        if (room)
+        {
+            room = mapGen->roomsSelected[curRoomIdx];
+
+            curRoomPos = room->col->GetWorldPos();
+
+            for (auto& elem : room->spawnEffect)
+            {
+                elem = new Effect;
+                elem->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Spawn.png");
+                elem->idle->maxFrame.x = 18;
+                elem->idle->scale = Vector2(663.0f / 18.0f, 39.0f) * 2.0f;
+                elem->idle->isVisible = false;
+                elem->intervalDie = 1.8f;
+            }
+        }
+
+        CAM->position = curRoomPos;
         CAM->zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
 
-        player->SetPosX(room0Pos.x - 10.0f);
-        player->SetPosY(room0Pos.y + 0.0f);
+        player->SetPosX(curRoomPos.x - 10.0f);
+        player->SetPosY(curRoomPos.y + 0.0f);
+
+        int curSpawnEffect = 0;
 
         for (auto& elem : enemy)
         {
-            elem->SetPosX(room0Pos.x + RANDOM->Float(-200.0f, 200.0f));
-            elem->SetPosY(room0Pos.y + RANDOM->Float(-200.0f, 200.0f));
+            float r = RANDOM->Float(-200.0f, 200.0f);
+            elem->SetPosX(curRoomPos.x + r);
+            r = RANDOM->Float(-200.0f, 200.0f);
+            elem->SetPosY(curRoomPos.y + r);
+            elem->Update();
+
+            if (room)
+            {
+                room->spawnEffect[curSpawnEffect]->Spawn(elem->Pos());
+            }
+
+            curSpawnEffect++;
         }
 
-        boss->SetPosX(room0Pos.x + 0.0f);
-        boss->SetPosY(room0Pos.y + 200.0f);
+        boss->SetPosX(curRoomPos.x + 0.0f);
+        boss->SetPosY(curRoomPos.y + 200.0f);
+        boss->Update();
+
+        if (room)
+        {
+            room->spawnEffect[curSpawnEffect]->idle->scale *= 2.0f;
+            room->spawnEffect[curSpawnEffect]->Spawn(boss->Pos());
+        }
     }
 
     void Scene02::Release()
@@ -102,6 +142,14 @@ namespace Gungeon
         if (mapGen)
         {
             mapGen->Update();
+
+            if (false == mapGen->roomsSelected.empty())
+            {
+                for (auto& elem : mapGen->roomsSelected[curRoomIdx]->spawnEffect)
+                {
+                    elem->Update();
+                }
+            }
         }
 
         mapObj->Update();
@@ -123,12 +171,16 @@ namespace Gungeon
             boss->targetPos = player->Pos();
             boss->w->col->rotation = Utility::DirToRadian(player->Pos());
 
-            if (boss->pattern == BossPattern::shield)
+            switch (boss->pattern)
             {
+            case BossPattern::shield:
+            case BossPattern::cluster:
                 boss->FindPath(mapGen->tilemap);
+                break;
             }
         }
         boss->Update();
+
 
         if (INPUT->KeyDown('1'))
         {
@@ -321,6 +373,14 @@ namespace Gungeon
         for (auto& elem : enemy) elem->Render();
         player->Render();
         boss->Render();
+
+        if (false == mapGen->roomsSelected.empty())
+        {
+            for (auto& elem : mapGen->roomsSelected[curRoomIdx]->spawnEffect)
+            {
+                elem->Render();
+            }
+        }
 
         // 최적화 이슈로 zorder 주석
         /*
