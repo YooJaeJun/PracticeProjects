@@ -42,11 +42,11 @@ namespace Gungeon
 
 	void Player::InitCol()
 	{
-		float playerScaleCoef = 3.0f;
+		float scaleFactor = 3.0f;
 		col = new ObCircle;
 		col->isFilled = false;
-		col->scale.x = 12.0f * playerScaleCoef;
-		col->scale.y = 12.0f * playerScaleCoef;
+		col->scale.x = 12.0f * scaleFactor;
+		col->scale.y = 12.0f * scaleFactor;
 		col->zOrder = ZOrder::object;
 		col->color = Color(1.0f, 1.0f, 1.0f);
 
@@ -61,7 +61,7 @@ namespace Gungeon
 	void Player::InitAnim()
 	{
 		int idx = 0;
-		float playerScaleCoef = 3.0f;
+		float scaleFactor = 3.0f;
 
 		idle[dirB] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Front.png");
 		idle[dirL] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
@@ -80,8 +80,8 @@ namespace Gungeon
 				elem->reverseLR = true;
 			}
 			elem->maxFrame.x = 4;
-			elem->scale.x = 72.0 / 4.0f * playerScaleCoef;
-			elem->scale.y = 20.0f * playerScaleCoef;
+			elem->scale.x = 72.0 / 4.0f * scaleFactor;
+			elem->scale.y = 20.0f * scaleFactor;
 			elem->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 			elem->SetParentRT(*col);
 			elem->zOrder = ZOrder::object;
@@ -106,8 +106,8 @@ namespace Gungeon
 			}
 			elem->isVisible = false;
 			elem->maxFrame.x = 6;
-			elem->scale.x = 102.0f / 6.0f * playerScaleCoef;
-			elem->scale.y = 24.0f * playerScaleCoef;
+			elem->scale.x = 102.0f / 6.0f * scaleFactor;
+			elem->scale.y = 24.0f * scaleFactor;
 			elem->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 			elem->SetParentRT(*col);
 			elem->zOrder = ZOrder::object;
@@ -132,8 +132,8 @@ namespace Gungeon
 			}
 			elem->isVisible = false;
 			elem->maxFrame.x = 9;
-			elem->scale.x = 180.0f / 9.0f * playerScaleCoef;
-			elem->scale.y = 24.0f * playerScaleCoef;
+			elem->scale.x = 180.0f / 9.0f * scaleFactor;
+			elem->scale.y = 24.0f * scaleFactor;
 			elem->uv = Vector4(0.0f, 0.0f, 1.0f / 9.0f, 1.0f);
 			elem->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
 			elem->SetParentRT(*col);
@@ -146,8 +146,8 @@ namespace Gungeon
 		fall = new ObImage(L"EnterTheGungeon/Player_0/Fall.png");
 		fall->isVisible = false;
 		fall->maxFrame.x = 3;
-		fall->scale.x = 48.0f / 3.0f * playerScaleCoef;
-		fall->scale.y = 22.0f * playerScaleCoef;
+		fall->scale.x = 48.0f / 3.0f * scaleFactor;
+		fall->scale.y = 22.0f * scaleFactor;
 		fall->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 		fall->SetParentRT(*col);
 		fall->zOrder = ZOrder::object;
@@ -155,8 +155,8 @@ namespace Gungeon
 		die = new ObImage(L"EnterTheGungeon/Player_0/Die.png");
 		die->isVisible = false;
 		die->maxFrame.x = 8;
-		die->scale.x = 160.0f / 8.0f * playerScaleCoef;
-		die->scale.y = 24.0f * playerScaleCoef;
+		die->scale.x = 160.0f / 8.0f * scaleFactor;
+		die->scale.y = 24.0f * scaleFactor;
 		die->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
 		die->SetParentRT(*col);
 		die->zOrder = ZOrder::object;
@@ -164,8 +164,8 @@ namespace Gungeon
 		respawn = new ObImage(L"EnterTheGungeon/Player_0/Respawn.png");
 		respawn->isVisible = false;
 		respawn->maxFrame.x = 3;
-		respawn->scale.x = 48.0f / 3.0f * playerScaleCoef;
-		respawn->scale.y = 22.0f * playerScaleCoef;
+		respawn->scale.x = 48.0f / 3.0f * scaleFactor;
+		respawn->scale.y = 22.0f * scaleFactor;
 		respawn->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
 		respawn->SetParentRT(*col);
 		respawn->zOrder = ZOrder::object;
@@ -173,8 +173,8 @@ namespace Gungeon
 		kick = new ObImage(L"EnterTheGungeon/Player_0/Kick.png");
 		kick->isVisible = false;
 		kick->maxFrame.x = 3;
-		kick->scale.x = 48.0f / 3.0f * playerScaleCoef;
-		kick->scale.y = 22.0f * playerScaleCoef;
+		kick->scale.x = 48.0f / 3.0f * scaleFactor;
+		kick->scale.y = 22.0f * scaleFactor;
 		kick->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 		kick->SetParentRT(*col);
 		kick->zOrder = ZOrder::object;
@@ -182,8 +182,8 @@ namespace Gungeon
 		obtain = new ObImage(L"EnterTheGungeon/Player_0/Obtain.png");
 		obtain->isVisible = false;
 		obtain->maxFrame.x = 3;
-		obtain->scale.x = 48.0f / 3.0f * playerScaleCoef;
-		obtain->scale.y = 22.0f * playerScaleCoef;
+		obtain->scale.x = 48.0f / 3.0f * scaleFactor;
+		obtain->scale.y = 22.0f * scaleFactor;
 		obtain->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 		obtain->SetParentRT(*col);
 		obtain->zOrder = ZOrder::object;
@@ -232,20 +232,20 @@ namespace Gungeon
 
 	void Player::InitEffect()
 	{
-		float playerScaleCoef = 2.0f;
+		float scaleFactor = 2.0f;
 		shadow = new ObImage(L"EnterTheGungeon/Player_0/Shadow.png");
-		shadow->scale.x = 16.0f * playerScaleCoef;
-		shadow->scale.y = 5.0f * playerScaleCoef;
+		shadow->scale.x = 16.0f * scaleFactor;
+		shadow->scale.y = 5.0f * scaleFactor;
 		shadow->SetParentRT(*col);
 		shadow->SetWorldPosY(-30.0f);
 		shadow->zOrder = ZOrder::shadow;
 
-		float dustCoef = 2.0f;
+		float dustScaleFactor = 2.0f;
 		dust = new Effect;
 		dust->idle = new ObImage(L"EnterTheGungeon/Player_0/Dust.png");
 		dust->idle->maxFrame.x = 4;
-		dust->idle->scale.x = 44.0f / 3.0f * dustCoef;
-		dust->idle->scale.y = 10.0f * dustCoef;
+		dust->idle->scale.x = 44.0f / 3.0f * dustScaleFactor;
+		dust->idle->scale.y = 10.0f * dustScaleFactor;
 		dust->idle->isVisible = false;
 		dust->intervalDie = 0.3f;
 	}
@@ -293,7 +293,7 @@ namespace Gungeon
 		uiHeartHalf.resize(maxHp / 2);
 		uiHeartFull.resize(maxHp / 2);
 
-		float heartCoef = 1.0f;
+		float heartScaleFactor = 1.0f;
 		idx = 0;
 		for (auto& elem : uiHeartNone)
 		{
@@ -302,8 +302,8 @@ namespace Gungeon
 			elem->anchor = Anchor::leftTop;
 			elem->Spawn(10.0f + idx * 60.0f, -40.0f);
 			elem->img->pivot = OFFSET_L;
-			elem->img->scale.x = 52.0f * heartCoef;
-			elem->img->scale.y = 44.0f * heartCoef;
+			elem->img->scale.x = 52.0f * heartScaleFactor;
+			elem->img->scale.y = 44.0f * heartScaleFactor;
 			elem->img->space = Space::screen;
 			elem->img->zOrder = ZOrder::UI;
 			idx++;
@@ -316,8 +316,8 @@ namespace Gungeon
 			elem->anchor = Anchor::leftTop;
 			elem->Spawn(10.0f + idx * 60.0f, -40.0f);
 			elem->img->pivot = OFFSET_L;
-			elem->img->scale.x = 52.0f * heartCoef;
-			elem->img->scale.y = 44.0f * heartCoef;
+			elem->img->scale.x = 52.0f * heartScaleFactor;
+			elem->img->scale.y = 44.0f * heartScaleFactor;
 			elem->img->space = Space::screen;
 			elem->img->zOrder = ZOrder::UI;
 			idx++;
@@ -330,8 +330,8 @@ namespace Gungeon
 			elem->anchor = Anchor::leftTop;
 			elem->Spawn(10.0f + idx * 60.0f, -40.0f);
 			elem->img->pivot = OFFSET_L;
-			elem->img->scale.x = 52.0f * heartCoef;
-			elem->img->scale.y = 44.0f * heartCoef;
+			elem->img->scale.x = 52.0f * heartScaleFactor;
+			elem->img->scale.y = 44.0f * heartScaleFactor;
 			elem->img->space = Space::screen;
 			elem->img->zOrder = ZOrder::UI;
 			idx++;

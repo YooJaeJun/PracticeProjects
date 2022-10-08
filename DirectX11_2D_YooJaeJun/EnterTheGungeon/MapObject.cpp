@@ -8,14 +8,14 @@ namespace Gungeon
 
     void MapObject::Init()
     {
-        float doorOpenScaleCoef = 2.5f;
+        float doorOpenScaleFactor = 2.5f;
 
         int idx = 0;
         for (auto& elem : doorOpenUp)
         {
             elem = new Obstacle;
-            elem->col->scale.x = 88.0f / 4.0f * doorOpenScaleCoef;
-            elem->col->scale.y = 50.0f * doorOpenScaleCoef;
+            elem->col->scale.x = 88.0f / 4.0f * doorOpenScaleFactor;
+            elem->col->scale.y = 50.0f * doorOpenScaleFactor;
             elem->SetPosX(200.0f + idx * elem->col->scale.x);
             elem->SetPosY(0.0f);
             elem->col->collider = Collider::rect;
@@ -23,8 +23,8 @@ namespace Gungeon
 
             elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Open_Up.png");
             elem->idle->maxFrame.x = 4;
-            elem->idle->scale.x = 88.0f / 4.0f * doorOpenScaleCoef;
-            elem->idle->scale.y = 50.0f * doorOpenScaleCoef;
+            elem->idle->scale.x = 88.0f / 4.0f * doorOpenScaleFactor;
+            elem->idle->scale.y = 50.0f * doorOpenScaleFactor;
             elem->idle->SetParentRT(*elem->col);
             elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
             elem->idle->zOrder = ZOrder::object;
@@ -45,8 +45,8 @@ namespace Gungeon
             elem = new Obstacle;
             elem->col->isVisible = false;   //
             elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-            elem->col->scale.x = 88.0f / 4.0f * doorOpenScaleCoef;
-            elem->col->scale.y = 50.0f * doorOpenScaleCoef;
+            elem->col->scale.x = 88.0f / 4.0f * doorOpenScaleFactor;
+            elem->col->scale.y = 50.0f * doorOpenScaleFactor;
             elem->SetPosX(200.0f + idx * elem->col->scale.x);
             elem->SetPosY(0.0f);
             elem->col->collider = Collider::rect;
@@ -54,8 +54,8 @@ namespace Gungeon
 
             elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Open_Down.png");
             elem->idle->maxFrame.x = 4;
-            elem->idle->scale.x = 88.0f / 4.0f * doorOpenScaleCoef;
-            elem->idle->scale.y = 50.0f * doorOpenScaleCoef;
+            elem->idle->scale.x = 88.0f / 4.0f * doorOpenScaleFactor;
+            elem->idle->scale.y = 50.0f * doorOpenScaleFactor;
             elem->idle->SetParentRT(*elem->col);
             elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
             elem->idle->zOrder = ZOrder::object;
@@ -70,7 +70,7 @@ namespace Gungeon
             idx++;
         }
 
-        float doorClosedScaleCoef = 2.5f;
+        float doorClosedScaleFactor = 2.5f;
 
         idx = 0;
         for (auto& elem : doorClosed)
@@ -79,8 +79,8 @@ namespace Gungeon
             elem->col->isVisible = true;
             elem->col->isFilled = false;
             elem->col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-            elem->col->scale.x = 68.0f / 2.0f * doorClosedScaleCoef;
-            elem->col->scale.y = 41.0f * doorClosedScaleCoef;
+            elem->col->scale.x = 68.0f / 2.0f * doorClosedScaleFactor;
+            elem->col->scale.y = 41.0f * doorClosedScaleFactor;
             elem->SetPosX(200.0f + idx * elem->col->scale.x);
             elem->SetPosY(200.0f);
             elem->col->collider = Collider::rect;
@@ -88,8 +88,8 @@ namespace Gungeon
 
             elem->idle = new ObImage(L"EnterTheGungeon/Level/Door_Closed.png");
             elem->idle->maxFrame.x = 2;
-            elem->idle->scale.x = 68.0f / 2.0f * doorClosedScaleCoef;
-            elem->idle->scale.y = 41.0f * doorClosedScaleCoef;
+            elem->idle->scale.x = 68.0f / 2.0f * doorClosedScaleFactor;
+            elem->idle->scale.y = 41.0f * doorClosedScaleFactor;
             elem->idle->SetParentRT(*elem->col);
             elem->idle->ChangeAnim(ANIMSTATE::LOOP, 2.0f);
             elem->idle->zOrder = ZOrder::object;

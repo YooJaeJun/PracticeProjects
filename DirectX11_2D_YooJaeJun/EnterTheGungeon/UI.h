@@ -28,7 +28,7 @@ namespace Gungeon
 		void LateUpdate();
 		void Render();
 
-		void Spawn(const float coefX, const float coefY);
+		void Spawn(const float xFactor, const float yFactor);
 		bool DownGauge();
 
 	public:

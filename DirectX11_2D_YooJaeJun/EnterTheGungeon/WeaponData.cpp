@@ -5,9 +5,9 @@ namespace Gungeon
 	WeaponData::WeaponData()
 	{
 		// °øÅë
-		float scaleCoef = 1.0f;
-		float effectScaleCoef = 1.0f;
-		float uiWeaponScaleCoef = 1.0f;
+		float scaleFactor = 1.0f;
+		float effectScaleFactor = 1.0f;
+		float uiWeaponScaleFactor = 1.0f;
 		int uiBulletIdx = 0;
 
 		for (auto& elem : data)
@@ -49,24 +49,24 @@ namespace Gungeon
 
 
 		// ±ÇÃÑ
-		scaleCoef = 1.5f;
+		scaleFactor = 1.5f;
 
 		data[0]->type = WeaponType::pistol;
 
-		data[0]->col->scale.x = 30.0f * scaleCoef;
-		data[0]->col->scale.y = 22.0f * scaleCoef;
+		data[0]->col->scale.x = 30.0f * scaleFactor;
+		data[0]->col->scale.y = 22.0f * scaleFactor;
 
 		data[0]->idle = new ObImage(L"EnterTheGungeon/Weapon/0/Weapon.png");
 		data[0]->idle->isVisible = true;
-		data[0]->idle->scale.x = 30.0f * scaleCoef;
-		data[0]->idle->scale.y = 22.0f * scaleCoef;
+		data[0]->idle->scale.x = 30.0f * scaleFactor;
+		data[0]->idle->scale.y = 22.0f * scaleFactor;
 		data[0]->idle->zOrder = ZOrder::weapon;
 
-		effectScaleCoef = 3.0f;
+		effectScaleFactor = 3.0f;
 		data[0]->fireEffect->idle = new ObImage(L"EnterTheGungeon/Weapon/0/Effect_Fire.png");
 		data[0]->fireEffect->idle->isVisible = false;
 		data[0]->fireEffect->idle->maxFrame.x = 3;
-		data[0]->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * effectScaleCoef;
+		data[0]->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * effectScaleFactor;
 		data[0]->fireEffect->idle->SetParentRT(*data[0]->firePos);
 		data[0]->fireEffect->idle->zOrder = ZOrder::none;
 		data[0]->fireEffect->intervalDie = 0.2f;
@@ -75,8 +75,8 @@ namespace Gungeon
 		data[0]->imgReloading->isVisible = false;
 		data[0]->imgReloading->pivot = Vector2(0.4f, 0.25f);
 		data[0]->imgReloading->maxFrame.x = 2;
-		data[0]->imgReloading->scale.x = 42.0f / 2.0f * scaleCoef;
-		data[0]->imgReloading->scale.y = 22.0f * scaleCoef;
+		data[0]->imgReloading->scale.x = 42.0f / 2.0f * scaleFactor;
+		data[0]->imgReloading->scale.y = 22.0f * scaleFactor;
 		data[0]->imgReloading->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 		data[0]->imgReloading->zOrder = ZOrder::UI;
 		data[0]->imgReloading->isVisible = false;
@@ -125,25 +125,25 @@ namespace Gungeon
 
 
 		// ¼¦°Ç
-		scaleCoef = 2.0f;
+		scaleFactor = 2.0f;
 
 		data[1]->type = WeaponType::shotgun;
 
-		data[1]->col->scale.x = 29.0f * scaleCoef;
-		data[1]->col->scale.y = 21.0f * scaleCoef;
+		data[1]->col->scale.x = 29.0f * scaleFactor;
+		data[1]->col->scale.y = 21.0f * scaleFactor;
 
 		data[1]->idle = new ObImage(L"EnterTheGungeon/Weapon/1/Weapon.png");
 		data[1]->idle->pivot = OFFSET_LB;
 		data[1]->idle->isVisible = true;
-		data[1]->idle->scale.x = 43.0f * scaleCoef;
-		data[1]->idle->scale.y = 11.0f * scaleCoef;
+		data[1]->idle->scale.x = 43.0f * scaleFactor;
+		data[1]->idle->scale.y = 11.0f * scaleFactor;
 		data[1]->idle->zOrder = ZOrder::weapon;
 
-		effectScaleCoef = 2.0f;
+		effectScaleFactor = 2.0f;
 		data[1]->fireEffect->idle = new ObImage(L"EnterTheGungeon/Weapon/1/Effect_Fire.png");
 		data[1]->fireEffect->idle->isVisible = false;
 		data[1]->fireEffect->idle->maxFrame.x = 3;
-		data[1]->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * effectScaleCoef;
+		data[1]->fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * effectScaleFactor;
 		data[1]->fireEffect->idle->SetParentRT(*data[0]->firePos);
 		data[1]->fireEffect->idle->zOrder = ZOrder::none;
 		data[1]->fireEffect->intervalDie = 0.2f;
@@ -152,8 +152,8 @@ namespace Gungeon
 		data[1]->imgReloading->isVisible = false;
 		data[1]->imgReloading->pivot = Vector2(0.4f, 0.25f);
 		data[1]->imgReloading->maxFrame.x = 2;
-		data[1]->imgReloading->scale.x = 42.0f / 2.0f * scaleCoef;
-		data[1]->imgReloading->scale.y = 22.0f * scaleCoef;
+		data[1]->imgReloading->scale.x = 42.0f / 2.0f * scaleFactor;
+		data[1]->imgReloading->scale.y = 22.0f * scaleFactor;
 		data[1]->imgReloading->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 		data[1]->imgReloading->zOrder = ZOrder::UI;
 		data[1]->imgReloading->isVisible = false;
@@ -188,10 +188,10 @@ namespace Gungeon
 			uiBulletIdx++;
 		}
 
-		uiWeaponScaleCoef = 2.5f;
+		uiWeaponScaleFactor = 2.5f;
 		data[1]->uiWeapon->img = new ObImage(L"EnterTheGungeon/Weapon/1/UI_Weapon.png");
-		data[1]->uiWeapon->img->scale.x = 45.0f * uiWeaponScaleCoef;
-		data[1]->uiWeapon->img->scale.y = 13.0f * uiWeaponScaleCoef;
+		data[1]->uiWeapon->img->scale.x = 45.0f * uiWeaponScaleFactor;
+		data[1]->uiWeapon->img->scale.y = 13.0f * uiWeaponScaleFactor;
 		data[1]->uiWeapon->img->pivot = OFFSET_RB;
 		data[1]->uiWeapon->anchor = Anchor::rightBottom;
 		data[1]->uiWeapon->Spawn(-120.0f, 70.0f);

@@ -38,11 +38,11 @@ namespace Gungeon
 
     void Boss::InitSelf()
     {
-        float bossScaleCoef = 3.0f;
+        float scaleFactor = 3.0f;
 
         col->isFilled = false;
-        col->scale.x = 25.0f * bossScaleCoef;
-        col->scale.y = 25.0f * bossScaleCoef;
+        col->scale.x = 25.0f * scaleFactor;
+        col->scale.y = 25.0f * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f);
         col->zOrder = ZOrder::object;
 
@@ -63,8 +63,8 @@ namespace Gungeon
                 elem->reverseLR = true;
             }
             elem->maxFrame.x = 4;
-            elem->scale.x = 104.0f / 4.0f * bossScaleCoef;
-            elem->scale.y = 40.0f * bossScaleCoef;
+            elem->scale.x = 104.0f / 4.0f * scaleFactor;
+            elem->scale.y = 40.0f * scaleFactor;
             elem->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
             elem->SetParentRT(*col);
             elem->zOrder = ZOrder::object;
@@ -89,8 +89,8 @@ namespace Gungeon
             }
             elem->isVisible = false;
             elem->maxFrame.x = 6;
-            elem->scale.x = 180.0f / 6.0f * bossScaleCoef;
-            elem->scale.y = 40.0f * bossScaleCoef;
+            elem->scale.x = 180.0f / 6.0f * scaleFactor;
+            elem->scale.y = 40.0f * scaleFactor;
             elem->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
             elem->SetParentRT(*col);
             elem->zOrder = ZOrder::object;
@@ -100,8 +100,8 @@ namespace Gungeon
         hit = new ObImage(L"EnterTheGungeon/Boss_0/Hit.png");
         hit->isVisible = false;
         hit->maxFrame.x = 1;
-        hit->scale.x = 32.0 * 1.0f * bossScaleCoef;
-        hit->scale.y = 40.0f * bossScaleCoef;
+        hit->scale.x = 32.0 * 1.0f * scaleFactor;
+        hit->scale.y = 40.0f * scaleFactor;
         hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
         hit->SetParentRT(*col);
         hit->zOrder = ZOrder::object;
@@ -109,8 +109,8 @@ namespace Gungeon
         die = new ObImage(L"EnterTheGungeon/Boss_0/Die.png");
         die->isVisible = false;
         die->maxFrame.x = 8;
-        die->scale.x = 320.0f / 8.0f * bossScaleCoef;
-        die->scale.y = 40.0f * bossScaleCoef;
+        die->scale.x = 320.0f / 8.0f * scaleFactor;
+        die->scale.y = 40.0f * scaleFactor;
         die->SetParentRT(*col);
         die->zOrder = ZOrder::object;
 
@@ -122,12 +122,12 @@ namespace Gungeon
         colTile->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
 
-        float hpGuageCoef = 1.5f;
+        float hpGuageFactor = 1.5f;
 
         hpGuageBar = new UI;
         hpGuageBar->img = new ObImage(L"EnterTheGungeon/Boss_0/Hp_GuageBar.png");
-        hpGuageBar->img->scale.x = 400.0f * hpGuageCoef;
-        hpGuageBar->img->scale.y = 30.0f * hpGuageCoef;
+        hpGuageBar->img->scale.x = 400.0f * hpGuageFactor;
+        hpGuageBar->img->scale.y = 30.0f * hpGuageFactor;
         hpGuageBar->img->SetWorldPosX(-hpGuageBar->img->scale.x / 2.0f);
         hpGuageBar->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
         hpGuageBar->img->pivot = OFFSET_L;
@@ -136,8 +136,8 @@ namespace Gungeon
 
         hpGuage = new UI;
         hpGuage->img = new ObImage(L"EnterTheGungeon/Boss_0/Hp_Guage.png");
-        hpGuage->imgSize.x = 330.0f * hpGuageCoef;
-        hpGuage->imgSize.y = 16.0f * hpGuageCoef;
+        hpGuage->imgSize.x = 330.0f * hpGuageFactor;
+        hpGuage->imgSize.y = 16.0f * hpGuageFactor;
         hpGuage->img->scale.x = hpGuage->imgSize.x;
         hpGuage->img->scale.y = hpGuage->imgSize.y;
         hpGuage->img->SetWorldPosX(-hpGuage->img->scale.x / 2.0f);
@@ -147,8 +147,8 @@ namespace Gungeon
         hpGuage->img->zOrder = ZOrder::UI;
 
         shadow = new ObImage(L"EnterTheGungeon/Boss_0/Shadow_1.png");
-        shadow->scale.x = 12.0f * bossScaleCoef * 2.0f;
-        shadow->scale.y = 4.0f * bossScaleCoef * 2.0f;
+        shadow->scale.x = 12.0f * scaleFactor * 2.0f;
+        shadow->scale.y = 4.0f * scaleFactor * 2.0f;
         shadow->SetParentRT(*col);
         shadow->SetWorldPosY(-55.0f);
         shadow->zOrder = ZOrder::shadow;
@@ -200,15 +200,15 @@ namespace Gungeon
 
     void Boss::InitItem()
     {
-        float itemCoef = 0.5f;
+        float scaleFactor = 0.5f;
         dropItem = new Item;
         dropItem->col = new ObCircle;
-        dropItem->col->scale = Vector2(40.0f, 40.0f) * itemCoef;
+        dropItem->col->scale = Vector2(40.0f, 40.0f) * scaleFactor;
         dropItem->col->isVisible = false;
         dropItem->col->isFilled = false;
         dropItem->col->SetWorldPos(DEFAULTSPAWN);
         dropItem->idle = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
-        dropItem->idle->scale = Vector2(40.0f, 40.0f) * itemCoef;
+        dropItem->idle->scale = Vector2(40.0f, 40.0f) * scaleFactor;
         dropItem->idle->SetParentRT(*dropItem->col);
         dropItem->idle->isVisible = false;
     }
@@ -508,12 +508,12 @@ namespace Gungeon
         {
             stringBullet.inputString = "Yoo Jae Jun";
         }
-        stringBullet.coefMidForTarget = 0.0f;
+        stringBullet.midForTargetFactor = 0.0f;
         stringBullet.SetStringBullet();
         bullet.resize(stringBullet.inputString.size() * 25);
 
         int size = stringBullet.inputString.size();
-        float coefAngle = w->col->rotation - stringBullet.coefMidForTarget;
+        float angleFactor = w->col->rotation - stringBullet.midForTargetFactor;
 
         for (int r = 0; r < 5; r++)
         {
@@ -643,7 +643,7 @@ namespace Gungeon
             stringBullet.SetStringBullet();
         }
 
-        float coefAngle = w->col->rotation - stringBullet.coefMidForTarget;
+        float angleFactor = w->col->rotation - stringBullet.midForTargetFactor;
         for (int r = 0; r < 5; r++)
         {
             for (int c = 0; c < 5; c++)
@@ -653,7 +653,7 @@ namespace Gungeon
                     if (stringBullet.outputAlphbets[i][r][c])
                     {
                         int idx = i * 25 + r * 5 + c;
-                        bullet[idx]->atkAngle = (bullet[idx]->angle / 60.0f) + (0.2f * i) + coefAngle;
+                        bullet[idx]->atkAngle = (bullet[idx]->angle / 60.0f) + (0.2f * i) + angleFactor;
                         bullet[idx]->moveDir = Vector2(cos(bullet[idx]->atkAngle), sin(bullet[idx]->atkAngle));
                     }
                 }

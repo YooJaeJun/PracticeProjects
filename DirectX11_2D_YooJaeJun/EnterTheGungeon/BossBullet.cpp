@@ -9,9 +9,9 @@ namespace Gungeon
         angle = 0.0f;
         atkAngle = 0.0f;
 
-        float bulletCoef = 4.0f;
+        float scaleFactor = 4.0f;
         col = new ObCircle;
-        col->scale = Vector2(8.0f, 8.0f) * bulletCoef;
+        col->scale = Vector2(8.0f, 8.0f) * scaleFactor;
         col->isFilled = false;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
@@ -19,11 +19,11 @@ namespace Gungeon
         idle->scale = col->scale;
         idle->SetParentRT(*col);
 
-        float hitBombScaleCoef = 2.5f;
+        float bombScaleFactor = 2.5f;
         hitBomb = new Effect;
         hitBomb->idle = new ObImage(L"EnterTheGungeon/Boss_0/HitBomb.png");
         hitBomb->idle->maxFrame.x = 4;
-        hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * hitBombScaleCoef;
+        hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * bombScaleFactor;
         hitBomb->idle->isVisible = false;
     }
 

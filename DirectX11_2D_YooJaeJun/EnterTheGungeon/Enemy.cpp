@@ -30,18 +30,18 @@ namespace Gungeon
 		timeSetMoveDir = 0.0f;
 		timeSetTargetDir = 0.0f;
 		pushedScalar = 100.0f;
-		pushedScalarCoef = 0.0f;
+		pushedScalarFactor = 0.0f;
 		timeAiming = 0.0f;
 	}
 
 	void Enemy::InitSelf()
 	{
 		int idx = 0;
-		float enemyScaleCoef = 3.0f;
+		float scaleFactor = 3.0f;
 
 		col = new ObCircle;
-		col->scale.x = 16.0f * enemyScaleCoef;
-		col->scale.y = 16.0f * enemyScaleCoef;
+		col->scale.x = 16.0f * scaleFactor;
+		col->scale.y = 16.0f * scaleFactor;
 		col->color = Color(1.0f, 1.0f, 1.0f);
 		col->isFilled = false;
 		col->zOrder = ZOrder::object;
@@ -63,8 +63,8 @@ namespace Gungeon
 				elem2->reverseLR = true;
 			}
 			elem2->maxFrame.x = 2;
-			elem2->scale.x = 28.0f / 2.0f * enemyScaleCoef;
-			elem2->scale.y = 24.0f * enemyScaleCoef;
+			elem2->scale.x = 28.0f / 2.0f * scaleFactor;
+			elem2->scale.y = 24.0f * scaleFactor;
 			elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 			elem2->SetParentRT(*col);
 			elem2->zOrder = ZOrder::object;
@@ -89,8 +89,8 @@ namespace Gungeon
 			}
 			elem2->isVisible = false;
 			elem2->maxFrame.x = 6;
-			elem2->scale.x = 96.0f / 6.0f * enemyScaleCoef;
-			elem2->scale.y = 24.0f * enemyScaleCoef;
+			elem2->scale.x = 96.0f / 6.0f * scaleFactor;
+			elem2->scale.y = 24.0f * scaleFactor;
 			elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 			elem2->SetParentRT(*col);
 			elem2->zOrder = ZOrder::object;
@@ -100,8 +100,8 @@ namespace Gungeon
 		hit = new ObImage(L"EnterTheGungeon/Enemy_0/Hit.png");
 		hit->isVisible = false;
 		hit->maxFrame.x = 1;
-		hit->scale.x = 16.0f * enemyScaleCoef;
-		hit->scale.y = 24.0f * enemyScaleCoef;
+		hit->scale.x = 16.0f * scaleFactor;
+		hit->scale.y = 24.0f * scaleFactor;
 		hit->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
 		hit->SetParentRT(*col);
 		hit->zOrder = ZOrder::object;
@@ -109,8 +109,8 @@ namespace Gungeon
 		die = new ObImage(L"EnterTheGungeon/Enemy_0/Die.png");
 		die->isVisible = false;
 		die->maxFrame.x = 5;
-		die->scale.x = 110.0f / 5.0f * enemyScaleCoef;
-		die->scale.y = 22.0f * enemyScaleCoef;
+		die->scale.x = 110.0f / 5.0f * scaleFactor;
+		die->scale.y = 22.0f * scaleFactor;
 		die->SetParentRT(*col);
 		die->zOrder = ZOrder::object;
 
@@ -122,8 +122,8 @@ namespace Gungeon
 		colTile->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
 		shadow = new ObImage(L"EnterTheGungeon/Enemy_0/Shadow_1.png");
-		shadow->scale.x = 12.0f * enemyScaleCoef;
-		shadow->scale.y = 4.0f * enemyScaleCoef;
+		shadow->scale.x = 12.0f * scaleFactor;
+		shadow->scale.y = 4.0f * scaleFactor;
 		shadow->SetParentRT(*col);
 		shadow->SetWorldPosY(-35.0f);
 		shadow->zOrder = ZOrder::shadow;
@@ -159,15 +159,15 @@ namespace Gungeon
 
 	void Enemy::InitItem()
 	{
-		float itemCoef = 0.5f;
+		float scaleFactor = 0.5f;
 		dropItem = new Item;
 		dropItem->col = new ObCircle;
-		dropItem->col->scale = Vector2(40.0f, 40.0f) * itemCoef;
+		dropItem->col->scale = Vector2(40.0f, 40.0f) * scaleFactor;
 		dropItem->col->isVisible = false;
 		dropItem->col->isFilled = false;
 		dropItem->col->SetWorldPos(DEFAULTSPAWN);
 		dropItem->idle = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
-		dropItem->idle->scale = Vector2(40.0f, 40.0f) * itemCoef;
+		dropItem->idle->scale = Vector2(40.0f, 40.0f) * scaleFactor;
 		dropItem->idle->SetParentRT(*dropItem->col);
 		dropItem->idle->isVisible = false;
 		dropItem->state = State::die;
@@ -252,15 +252,15 @@ namespace Gungeon
 	{
 		Unit::Die();
 
-		pushedScalar -= pushedScalarCoef * DELTA;
-		pushedScalarCoef += 800.0f * DELTA;
+		pushedScalar -= pushedScalarFactor * DELTA;
+		pushedScalarFactor += 800.0f * DELTA;
 		col->MoveWorldPos(pushedDir * pushedScalar * DELTA);
 
 		if (TIMER->GetTick(timeRealDie, 0.5f))
 		{
 			pushedDir = Vector2(0.0f, 0.0f);
 			pushedScalar = 100.0f;
-			pushedScalarCoef = 0.0f;
+			pushedScalarFactor = 0.0f;
 		}
 	}
 
@@ -345,8 +345,8 @@ namespace Gungeon
 			for (auto& elem : walk) elem->color = c;
 			hit->color = c;
 
-			pushedScalar -= pushedScalarCoef * DELTA;
-			pushedScalarCoef += 200.0f * DELTA;
+			pushedScalar -= pushedScalarFactor * DELTA;
+			pushedScalarFactor += 200.0f * DELTA;
 			col->MoveWorldPos(pushedDir * pushedScalar * DELTA);
 
 			for (auto& elem : idle) elem->isVisible = false;
@@ -369,7 +369,7 @@ namespace Gungeon
 
 				pushedDir = Vector2(0.0f, 0.0f);
 				pushedScalar = 100.0f;
-				pushedScalarCoef = 0.0f;
+				pushedScalarFactor = 0.0f;
 			}
 		}
 		else
@@ -398,7 +398,7 @@ namespace Gungeon
 		}
 
 		pushedScalar = 400.0f;
-		pushedScalarCoef = 0.0f;
+		pushedScalarFactor = 0.0f;
 
 		for (auto& elem : bullet)
 		{

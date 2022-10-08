@@ -32,7 +32,7 @@ namespace Gungeon
 		float			timeSetMoveDir;
 		float			timeSetTargetDir;
 		float			pushedScalar;
-		float			pushedScalarCoef;
+		float			pushedScalarFactor;
 		float			timeAiming;
 
 	public:

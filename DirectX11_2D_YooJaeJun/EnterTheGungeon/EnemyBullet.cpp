@@ -10,19 +10,19 @@ namespace Gungeon
         scalar = 500.0f;
         damage = 1;
 
-        float bulletCoef = 3.0f;
-        col->scale = Vector2(8.0f, 8.0f) * bulletCoef;
+        float scaleFactor = 3.0f;
+        col->scale = Vector2(8.0f, 8.0f) * scaleFactor;
         col->isFilled = false;
         col->SetWorldPos(DEFAULTSPAWN);
         idle = new ObImage(L"EnterTheGungeon/Enemy_0/Bullet_0.png");
         idle->scale = col->scale;
         idle->SetParentRT(*col);
 
-        float hitBombScaleCoef = 1.5f;
+        float bombScaleFactor = 1.5f;
         hitBomb = new Effect;
         hitBomb->idle = new ObImage(L"EnterTheGungeon/Enemy_0/HitBomb.png");
         hitBomb->idle->maxFrame.x = 4;
-        hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * hitBombScaleCoef;
+        hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * bombScaleFactor;
         hitBomb->idle->isVisible = false;
     }
 

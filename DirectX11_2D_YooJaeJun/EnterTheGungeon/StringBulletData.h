@@ -11,7 +11,7 @@ namespace Gungeon
         //¹®ÀÚ¿­ ÃÑ¾Ë
         string  inputString;
         int     outputAlphbets[40][5][5];
-        float   coefMidForTarget;
+        float   midForTargetFactor;
 
         int A[5][5] = { { 0, 0, 1, 0, 0 }, { 0, 1, 0, 1, 0 }, { 1, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 1 } };
         int B[5][5] = { { 1, 1, 1, 1, 0 }, { 1, 0, 0, 0, 1 }, { 1, 1, 1, 1, 0 }, { 1, 0, 0, 0, 1 }, { 1, 1, 1, 1, 0 } };

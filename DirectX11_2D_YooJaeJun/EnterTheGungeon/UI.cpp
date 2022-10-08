@@ -26,18 +26,18 @@ namespace Gungeon
         if (img) img->Render(); // RENDER->push(img);
     }
 
-    void UI::Spawn(const float coefX, const float coefY)
+    void UI::Spawn(const float xFactor, const float yFactor)
     {
         switch (anchor)
         {
         case Anchor::leftTop:
-            img->SetWorldPos(Vector2(-app.GetHalfWidth() + coefX, app.GetHalfHeight() + coefY));
+            img->SetWorldPos(Vector2(-app.GetHalfWidth() + xFactor, app.GetHalfHeight() + yFactor));
             break;
         case Anchor::leftBottom:
-            img->SetWorldPos(Vector2(-app.GetHalfWidth() + coefX, -app.GetHalfHeight() + coefY));
+            img->SetWorldPos(Vector2(-app.GetHalfWidth() + xFactor, -app.GetHalfHeight() + yFactor));
             break;
         case Anchor::rightBottom:
-            img->SetWorldPos(Vector2(app.GetHalfWidth() + coefX, -app.GetHalfHeight() + coefY));
+            img->SetWorldPos(Vector2(app.GetHalfWidth() + xFactor, -app.GetHalfHeight() + yFactor));
             break;
         }
     }
