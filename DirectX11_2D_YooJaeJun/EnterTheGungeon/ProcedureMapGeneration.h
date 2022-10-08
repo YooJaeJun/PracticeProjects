@@ -3,7 +3,7 @@
 namespace Gungeon
 {
 	const float timeDefault = 1.0f;
-	const int roomMax = 40;
+	const int roomMax = 30;
 	const int gridMax = 7000;
 
 	enum class GameState 

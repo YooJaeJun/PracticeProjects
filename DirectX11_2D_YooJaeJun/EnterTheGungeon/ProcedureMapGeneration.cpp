@@ -33,8 +33,8 @@ namespace Gungeon
         for (auto& room : rooms)
         {
             room = new Room();
-            room->col->scale.x = 100.0f * RANDOM->Int(2, 10);
-            room->col->scale.y = 100.0f * RANDOM->Int(2, 10);
+            room->col->scale.x = 100.0f * RANDOM->Int(4, 12);
+            room->col->scale.y = 100.0f * RANDOM->Int(4, 12);
 
             map<Int2, bool> dic;
             int xRand = 0, yRand = 0;
@@ -51,7 +51,7 @@ namespace Gungeon
             room->col->color = Color(1.0f, 0.6f, 0.6f);
             room->col->collider = Collider::rect;
         }
-        roomScaleForSelect = 350'000.0f;
+        roomScaleForSelect = 450'000.0f;
     }
 
     void ProcedureMapGeneration::Release()
@@ -282,8 +282,8 @@ namespace Gungeon
         {
             if (elem->col->scale.x * elem->col->scale.y > roomScaleForSelect)
             {
-                elem->col->scale.x -= 100.0f;
-                elem->col->scale.y -= 100.0f;
+                elem->col->scale.x -= 200.0f;
+                elem->col->scale.y -= 200.0f;
                 Int2 on;
                 if (tilemap->WorldPosToTileIdx(elem->Pos(), on))
                 {
@@ -303,24 +303,6 @@ namespace Gungeon
         {
             // 들로네 삼각분할 위한 노드
             nodes.push_back(ObNode(idx, elem->Pos()));
-
-            // 방 index를 타일에 저장
-            int startX = elem->Pos().x - elem->col->scale.x / 2.0f;
-            int endX = elem->Pos().x + elem->col->scale.x / 2.0f;
-            int startY = elem->Pos().y - elem->col->scale.y / 2.0f;
-            int endY = elem->Pos().y + elem->col->scale.y / 2.0f;
-
-            for (int y = startY; y <= endY; y++)
-            {
-                for (int x = startX; x <= endX; x++)
-                {
-                    Int2 on;
-                    if (tilemap->WorldPosToTileIdx(Vector2(x, y), on))
-                    {
-                        tilemap->SetTileRoomIndex(on, idx);
-                    }
-                }
-            }
             idx++;
         }
     }
@@ -345,6 +327,7 @@ namespace Gungeon
         while (false == edgePq.empty())
         {
             ObLine curLine = edgePq.top();
+            // 노드의 인덱스를 검사
             curLine.v.index = triangulation.nodesForIndex[curLine.v];
             curLine.w.index = triangulation.nodesForIndex[curLine.w];
 
@@ -375,7 +358,7 @@ namespace Gungeon
 
     void ProcedureMapGeneration::Loop()
     {
-        int count = linesTriangulated.size() / 15;
+        int count = linesTriangulated.size() / 20;
 
         while (count--)
         {
@@ -421,7 +404,7 @@ namespace Gungeon
         int startX = 0;
         int endX = 0;
 
-        auto SetTile2 = [&](Vector2 coord)
+        auto SetTile2 = [&](Vector2 coord, int idx)
         {
             Int2 on;
             if (tilemap->WorldPosToTileIdx(coord, on))
@@ -430,11 +413,13 @@ namespace Gungeon
                     Int2(RANDOM->Int(1, 4),
                         RANDOM->Int(1, 3)),
                     imgIdx,
-                    (int)TileState::floor);
+                    (int)TileState::floor,
+                    Color(0.5f, 0.5f, 0.5f, 1.0f),
+                    idx);
             }
         };
 
-        auto SetTile1 = [&](Room* elem)
+        auto SetTile1 = [&](Room* elem, int idx)
         {
             ObRect* r = dynamic_cast<ObRect*>(elem->col);
 
@@ -446,20 +431,17 @@ namespace Gungeon
             {
                 for (int x = startX; x <= endX; x += tilemap->scale.x)
                 {
-                    SetTile2(Vector2(x, y));
+                    SetTile2(Vector2(x, y), idx);
                 }
             }
         };
 
-        // 복도 타일
-        //for (auto& elem : passages)
-        //{
-        //    SetTile1(elem);
-        //}
         // 방 타일
+        int idx = 0;
         for (auto& elem : roomsSelected)
         {
-            SetTile1(elem);
+            SetTile1(elem, idx);
+            idx++;
         }
     }
 
@@ -486,58 +468,6 @@ namespace Gungeon
         
         for (auto& elem : linesMST)
         {
-            // 복도 x, y 축 확인
-            const ObNode& v = elem.v;
-            const ObNode& w = elem.w;
-
-            ObNode mid = ObNode((w.x + v.x) / 2.0f, (w.y + v.y) / 2.0f);
-
-            Vector2 vScaleHalf = roomsSelected[nodesForRoomIndex[v]]->col->scale / 2.0f;
-            Vector2 wScaleHalf = roomsSelected[nodesForRoomIndex[w]]->col->scale / 2.0f;
-
-            ObLine l1, l2;
-            l1.color = l2.color = Color(1.0f, 0.8f, 0.6f);
-
-            Vector2	start, end;
-
-            //if (w.x > v.x)
-            //{
-            //    if (w.x - wScaleHalf.x < v.x + vScaleHalf.x)
-            //    {
-            //        if (w.y > v.y)
-            //        {
-
-            //        }
-            //        else
-            //        {
-
-            //        }
-
-
-            //        start = Vector2(mid.x, v.y + vScaleHalf.y);
-            //        end = Vector2(mid.x, w.y - wScaleHalf.y);
-            //    }
-            //    else
-            //    {
-            //        start = Vector2(v.x + vScaleHalf.x, v.y);
-            //        end = Vector2(w.x - vScaleHalf.x, w.y);
-            //    }
-            //}
-            //else
-            //{
-            //    if (v.x - vScaleHalf.x < w.x + wScaleHalf.x)
-            //    {
-            //        start = Vector2(mid.x, v.y + vScaleHalf.y);
-            //        end = Vector2(mid.x, w.y - wScaleHalf.y);
-            //    }
-            //    else
-            //    {
-            //        start = Vector2(v.x - vScaleHalf.x, v.y);
-            //        end = Vector2(w.x + vScaleHalf.x, w.y);
-            //    }
-            //}
-
-
             // A*
             auto AStar = [&](Vector2 start, Vector2 end)
             {
@@ -574,9 +504,20 @@ namespace Gungeon
                         }
                     }
 
-                    tilemap->SetTile(door, Int2(6, 3), imgIdx, (int)TileState::door);
+                    if (door != Int2(0, 0)) tilemap->SetTile(door, Int2(6, 3), imgIdx, (int)TileState::door);
                 }
             };
+
+
+            const ObNode& v = elem.v;
+            const ObNode& w = elem.w;
+
+            ObNode mid = ObNode((w.x + v.x) / 2.0f, (w.y + v.y) / 2.0f);
+
+            Vector2 vScaleHalf = roomsSelected[nodesForRoomIndex[v]]->col->scale / 2.0f;
+            Vector2 wScaleHalf = roomsSelected[nodesForRoomIndex[w]]->col->scale / 2.0f;
+
+            Vector2	start, end;
             
             start = Vector2(mid.x, mid.y);
             Vector2 end1 = Vector2(v.x, v.y);
@@ -584,7 +525,6 @@ namespace Gungeon
 
             AStar(start, end1);
             AStar(start, end2);
-
         }
 
         linesMST.clear();
@@ -687,7 +627,11 @@ namespace Gungeon
         }
 
         //Coord
-        tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePosForZoom(), mouseIdx);
+        ImGui::Text("cam pos : %f , %f", CAM->position.x, CAM->position.y);
+
+        ImGui::Text("mouse pos : %f , %f", INPUT->GetWorldMousePos().x, INPUT->GetWorldMousePos().y);
+
+        tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), mouseIdx);
         ImGui::Text("mouseIdx : %d , %d", mouseIdx.x, mouseIdx.y);
 
         ImGui::Text("mouseOverTileState : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].state);
@@ -730,8 +674,8 @@ namespace Gungeon
         {
             if (INPUT->KeyPress(VK_LBUTTON))
             {
-                Vector2 a = INPUT->GetWorldMousePosForZoom();
-                if (tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePosForZoom(), mouseIdx))
+                Vector2 a = INPUT->GetWorldMousePos();
+                if (tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), mouseIdx))
                 {
                     tilemap->SetTile(mouseIdx, pickingIdx, imgIdx, tileState, tileColor);
                 }

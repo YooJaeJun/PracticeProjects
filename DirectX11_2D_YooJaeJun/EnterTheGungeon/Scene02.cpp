@@ -63,7 +63,7 @@ namespace Gungeon
         }
 
         CAM->position = room0Pos;
-        CAM->coefScale = Vector3(1.0f, 1.0f, 1.0f);
+        CAM->zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
 
         player->SetPosX(room0Pos.x - 10.0f);
         player->SetPosY(room0Pos.y + 0.0f);

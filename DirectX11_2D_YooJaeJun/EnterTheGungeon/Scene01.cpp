@@ -15,7 +15,7 @@ namespace Gungeon
         if (mapGen) mapGen->useGui = true;
 
         CAM->position = Vector2(0.0f, 0.0f);
-        CAM->coefScale = Vector3(0.08f, 0.08f, 0.08f);
+        CAM->zoomFactor = Vector3(0.08f, 0.08f, 0.08f);
 
         SOUND->Stop("SCENE02");
         //SOUND->AddSound("Vaquero Perdido - The Mini Vandals.mp3", "SCENE01", true);

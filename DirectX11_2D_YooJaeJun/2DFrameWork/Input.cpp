@@ -31,11 +31,13 @@ void Input::Update()
 {
     // Screen To World
     // mouseWorldPos.x = mouseScreenPos.x - app.GetHalfWidth();
-    mouseWorldPos.x = -app.GetHalfWidth() + mouseScreenPos.x + CAM->position.x;
-
+    mouseWorldPos.x = -app.GetHalfWidth() + mouseScreenPos.x;
     // mouseWorldPos.y = app.GetHeight() - mouseScreenPos.y - app.GetHalfHeight();
     // mouseWorldPos.y = app.GetHeight() - app.GetHalfHeight() - mouseScreenPos.y ;
-    mouseWorldPos.y = app.GetHalfHeight() - mouseScreenPos.y + CAM->position.y;
+    mouseWorldPos.y = app.GetHalfHeight() - mouseScreenPos.y;
+
+    mouseWorldPos = mouseWorldPos / CAM->zoomFactor;
+    mouseWorldPos += CAM->position;
 
 
     //메모리복사 keyOldState = keyState 
@@ -78,10 +80,4 @@ void Input::Update()
     //&
 
     // 0x80    1000  0000
-}
-
-Vector2 Input::GetWorldMousePosForZoom() 
-{ 
-    mouseWorldPosForZoom = mouseWorldPos / CAM->coefScale;
-    return mouseWorldPosForZoom;
 }

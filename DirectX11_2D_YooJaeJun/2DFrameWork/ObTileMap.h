@@ -48,7 +48,7 @@ public:
     void            RenderGui(Int2& GuiPickingIdx, int& ImgIdx);
     void            Render() override;
     void            SetTile(Int2 TileIdx, Int2 FrameIdx, int ImgIdx = 0,
-        int TileState = none, Color color = Color(0.5f, 0.5f, 0.5f, 0.5f));
+        int TileState = none, Color color = Color(0.5f, 0.5f, 0.5f, 0.5f), int roomIndex = -1);
 
     void            Save();
     virtual void    Load();
