@@ -5,12 +5,14 @@ namespace Dir8
 	Scene01::Scene01()
 	{
 		// tilemap
-		tilemap = new ObTileMap;
+		tilemap = new ObTileMap();
+		tilemap->file = "map2.txt";
+		tilemap->Load();
 		tilemap->scale = Vector2(50.0f, 50.0f);
 		tilemap->SetWorldPos(Vector2(-app.GetHalfWidth(), -app.GetHalfHeight()));
+		LIGHT->light.radius = 3000.0f;
 		imgIdx = 0;
-		tileSize = Int2(350, 350);
-		tilemap->ResizeTile(tileSize);
+		tileSize = Int2(20, 20);
 		tileColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
 		tileState = 0;
 		tilemap->CreateTileCost();
@@ -37,6 +39,25 @@ namespace Dir8
 
 	void Scene01::Update()
 	{
+		pl->lastPos = pl->GetPos();
+
+		if (INPUT->KeyPress(VK_LEFT))
+		{
+			CAM->position.x -= 300.0f * DELTA;
+		}
+		if (INPUT->KeyPress(VK_RIGHT))
+		{
+			CAM->position.x += 300.0f * DELTA;
+		}
+		if (INPUT->KeyPress(VK_UP))
+		{
+			CAM->position.y += 300.0f * DELTA;
+		}
+		if (INPUT->KeyPress(VK_DOWN))
+		{
+			CAM->position.y -= 300.0f * DELTA;
+		}
+
 		//FPS
 		ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
 
@@ -87,9 +108,17 @@ namespace Dir8
 			}
 		}
 
-		//Coord
-		tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePosForZoom(), mouseIdx);
-		ImGui::Text("mouseIdx : %d , %d", mouseIdx.x, mouseIdx.y);
+		if (tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), mouseIdx))
+		{
+			//Coord
+			ImGui::Text("mouseIdx : %d , %d", mouseIdx.x, mouseIdx.y);
+			//TileStateMouseOver
+			if (tilemap->Tiles.size() > mouseIdx.x && tilemap->Tiles.size() > mouseIdx.y)
+			{
+				ImGui::Text("mouseOverTileState : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].state);
+			}
+		}
+
 
 		//ImageButton
 		tilemap->RenderGui(pickingIdx, imgIdx);
@@ -127,7 +156,7 @@ namespace Dir8
 		{
 			if (INPUT->KeyPress(VK_LBUTTON))
 			{
-				if (tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePosForZoom(), mouseIdx))
+				if (tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), mouseIdx))
 				{
 					tilemap->SetTile(mouseIdx, pickingIdx, imgIdx, tileState, tileColor);
 				}
@@ -146,6 +175,10 @@ namespace Dir8
 
 	void Scene01::LateUpdate()
 	{
+		if (pl->IntersectTile(tilemap))
+		{
+			pl->StepBack();
+		}
 	}
 
 	void Scene01::Render()

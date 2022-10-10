@@ -45,7 +45,13 @@ namespace Gungeon
 
 	void Character::Spawn(const Vector2 wpos)
 	{
-		SetPosX(wpos.x);
-		SetPosY(wpos.y);
+		SetPos(wpos);
+		col->Update();
+
+		state = State::idle;
+		isHit = false;
+
+		col->colOnOff = true;
+		col->isVisible = true;
 	}
 }

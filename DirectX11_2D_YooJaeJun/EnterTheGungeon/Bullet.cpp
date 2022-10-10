@@ -50,6 +50,8 @@ namespace Gungeon
     {
         SetPos(coord);
         isFired = true;
+        col->isVisible = true;
+        idle->isVisible = true;
     }
 
     void Bullet::Spawn(const Vector2& coord, const Vector2& fireDir)

@@ -4,11 +4,13 @@
 void Main::Init()
 {
 	map = new ObTileMap();
+	map->file = "map2.txt";
+	map->Load();
 	map->scale = Vector2(50.0f, 50.0f);
 	map->SetWorldPos(Vector2(-app.GetHalfWidth(), -app.GetHalfHeight()));
 	LIGHT->light.radius = 3000.0f;
 	imgIdx = 0;
-	tileSize = Int2(20, 20);
+	tileSize = Int2(50, 50);
 	tileColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
 	tileState = 0;
 }
@@ -21,19 +23,19 @@ void Main::Release()
 
 void Main::Update()
 {
-	if (INPUT->KeyPress(VK_LEFT))
+	if (INPUT->KeyPress(VK_LEFT) || INPUT->KeyPress('A'))
 	{
 		CAM->position.x -= 300.0f * DELTA;
 	}
-	if (INPUT->KeyPress(VK_RIGHT))
+	if (INPUT->KeyPress(VK_RIGHT) || INPUT->KeyPress('D'))
 	{
 		CAM->position.x += 300.0f * DELTA;
 	}
-	if (INPUT->KeyPress(VK_UP))
+	if (INPUT->KeyPress(VK_UP) || INPUT->KeyPress('W'))
 	{
 		CAM->position.y += 300.0f * DELTA;
 	}
-	if (INPUT->KeyPress(VK_DOWN))
+	if (INPUT->KeyPress(VK_DOWN) || INPUT->KeyPress('S'))
 	{
 		CAM->position.y -= 300.0f * DELTA;
 	}

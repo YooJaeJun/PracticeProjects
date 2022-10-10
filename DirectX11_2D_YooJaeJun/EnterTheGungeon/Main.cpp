@@ -4,6 +4,8 @@ using namespace Gungeon;
 
 void Main::Init()
 {
+    LIGHT->light.radius = 2000.0f;
+
     mapGen = new ProcedureMapGeneration;
 
     {

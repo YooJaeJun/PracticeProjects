@@ -1,35 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="MapGenerator\Application\Application.cpp" />
-    <ClCompile Include="MapGenerator\Application\Tilemap.cpp" />
-    <ClCompile Include="MapGenerator\Application\WindowsHelper.cpp" />
-    <ClCompile Include="MapGenerator\Generator\Cave.cpp" />
-    <ClCompile Include="MapGenerator\Generator\Dungeon.cpp" />
-    <ClCompile Include="MapGenerator\Generator\Forest.cpp" />
-    <ClCompile Include="MapGenerator\Generator\Generator.cpp" />
-    <ClCompile Include="MapGenerator\Generator\Room.cpp" />
-    <ClCompile Include="MapGenerator\Generator\Spaceship.cpp" />
-    <ClCompile Include="MapGenerator\Map\Map.cpp" />
-    <ClCompile Include="MapGenerator\Utility\Direction.cpp" />
-    <ClCompile Include="MapGenerator\Utility\Rng.cpp" />
-    <ClCompile Include="MapGenerator\Utility\Utility.cpp" />
-    <ClCompile Include="MapGenerator\Main.cpp" />
+    <ClCompile Include="Dir8\Boss.cpp" />
+    <ClCompile Include="Dir8\Character.cpp" />
+    <ClCompile Include="Dir8\Main.cpp" />
+    <ClCompile Include="Dir8\Player.cpp" />
+    <ClCompile Include="Dir8\Scene01.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MapGenerator\Application\Application.hpp" />
-    <ClInclude Include="MapGenerator\Application\Tilemap.hpp" />
-    <ClInclude Include="MapGenerator\Application\WindowsHelper.hpp" />
-    <ClInclude Include="MapGenerator\Generator\Cave.hpp" />
-    <ClInclude Include="MapGenerator\Generator\Dungeon.hpp" />
-    <ClInclude Include="MapGenerator\Generator\Forest.hpp" />
-    <ClInclude Include="MapGenerator\Generator\Generator.hpp" />
-    <ClInclude Include="MapGenerator\Generator\Room.hpp" />
-    <ClInclude Include="MapGenerator\Generator\Spaceship.hpp" />
-    <ClInclude Include="MapGenerator\Map\Map.hpp" />
-    <ClInclude Include="MapGenerator\Map\Tile.hpp" />
-    <ClInclude Include="MapGenerator\Utility\Direction.hpp" />
-    <ClInclude Include="MapGenerator\Utility\Rng.hpp" />
-    <ClInclude Include="MapGenerator\Utility\Utility.hpp" />
+    <ClInclude Include="Dir8\Boss.h" />
+    <ClInclude Include="Dir8\Character.h" />
+    <ClInclude Include="Dir8\Main.h" />
+    <ClInclude Include="Dir8\Player.h" />
+    <ClInclude Include="Dir8\Scene01.h" />
+    <ClInclude Include="Dir8\stdafx.h" />
   </ItemGroup>
 </Project>

@@ -5,11 +5,21 @@ namespace Dir8
 	Player::Player()
 	{
 		scalar = 200.0f;
+		lastPos = Vector2(0.0f, 0.0f);
 
 		col = new ObRect();
 		col->isFilled = false;
 		col->scale = Vector2(16.0f, 16.0f) * 6.0f;
 		col->SetWorldPos(Vector2(-350.0f, -300.0f));
+		col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+		colTile = new ObRect;
+		colTile->scale = Vector2(col->scale.x / 3.0f, col->scale.y / 4.0f);
+		colTile->SetParentRT(*col);
+		colTile->SetLocalPosY(col->GetWorldPos().y - 35.0f);
+		colTile->isFilled = false;
+		colTile->isVisible = true;
+		colTile->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
 		walk = new ObImage(L"Walk.png");
 		walk->SetParentRT(*col);
@@ -61,15 +71,17 @@ namespace Dir8
 		}
 
 		col->Update();
+		colTile->Update();
 		walk->Update();
 		roll->Update();
 	}
 
 	void Player::Render()
 	{
-		col->Render();
 		walk->Render();
 		roll->Render();
+		col->Render();
+		colTile->Render();
 	}
 
 	void Player::Input()
@@ -84,6 +96,10 @@ namespace Dir8
 		{
 			moveDir.x = 1.0f;
 		}
+		else
+		{
+			moveDir.x = 0.0f;
+		}
 
 		if (INPUT->KeyPress('S'))
 		{
@@ -92,6 +108,10 @@ namespace Dir8
 		else if (INPUT->KeyPress('W'))
 		{
 			moveDir.y = 1.0f;
+		}
+		else
+		{
+			moveDir.y = 0.0f;
 		}
 
 		moveDir.Normalize();
@@ -152,5 +172,38 @@ namespace Dir8
 			walk->isVisible = true;
 			walk->frame.x = 0;
 		}
+	}
+	bool Player::IntersectTile(ObTileMap* tilemap)
+	{
+		auto GetTileState = [&](Vector2 wpos) ->bool
+		{
+			Int2 on;
+			if (tilemap->WorldPosToTileIdx(wpos, on))
+			{
+				return tilemap->GetTileState(on) == TileState::wall;
+			}
+			return false;
+		};
+
+		Vector2 pos;
+		bool flag = false;
+
+		pos = colTile->lt();
+		flag |= GetTileState(pos);
+		pos = colTile->lb();
+		flag |= GetTileState(pos);
+		pos = colTile->rt();
+		flag |= GetTileState(pos);
+		pos = colTile->rb();
+		flag |= GetTileState(pos);
+
+		return flag;
+	}
+
+	void Player::StepBack()
+	{
+		col->SetWorldPos(lastPos);
+		col->Update();
+		colTile->Update();
 	}
 }

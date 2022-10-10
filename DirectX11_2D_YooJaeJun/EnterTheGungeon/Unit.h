@@ -17,6 +17,7 @@ namespace Gungeon
 		virtual void Hit(const int damage);
 		virtual void Die();
 		virtual void StartDie();
+		virtual void Spawn(const Vector2 wpos) override;
 		void SetLastPosAndDir();
 		void StepBack();
 		void SetMoveDirState();

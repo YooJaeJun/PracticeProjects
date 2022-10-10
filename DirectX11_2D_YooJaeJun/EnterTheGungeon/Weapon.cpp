@@ -56,7 +56,7 @@ namespace Gungeon
 		int idx = 0;
 
 		uiBulletFrame->Spawn(-40.0f, 80.0f);
-		uiWeaponFrame->Spawn(-240.0f, 50.0f);
+		if (uiWeaponFrame) uiWeaponFrame->Spawn(-240.0f, 50.0f);
 		uiWeapon->Spawn(-190.0f, 60.0f);
 		uiBulletCount->Spawn(-140.0f, 150.0f);
 

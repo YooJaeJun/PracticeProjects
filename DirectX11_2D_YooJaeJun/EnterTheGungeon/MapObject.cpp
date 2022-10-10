@@ -4,6 +4,7 @@ namespace Gungeon
 {
     MapObject::MapObject()
     {
+        Init();
     }
 
     void MapObject::Init()

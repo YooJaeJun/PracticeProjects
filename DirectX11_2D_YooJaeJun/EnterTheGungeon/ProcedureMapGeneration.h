@@ -3,13 +3,13 @@
 namespace Gungeon
 {
 	const float timeDefault = 1.0f;
-	const int roomMax = 20;
+	const int roomMax = 25;
 	const int gridMax = 7000;
 
 	const Int2 wallImgDir[8] = { {1, 5}, {0, 1}, {5, 1}, {0, 4}, {5, 4}, {1, 0}, {0, 0}, {5, 0} };
 
 
-	enum class GameState 
+	enum class MapGenState 
 	{ 
 		spray, 
 		spread, 
@@ -32,8 +32,8 @@ namespace Gungeon
 		bool						flagSpread;
 		// Room
 		vector<Room*>				rooms;
-		vector<Room*>				roomsSelected;
-		GameState					state;
+		vector<Room*>				selectedRooms;
+		MapGenState					state;
 		float						roomScaleForSelect;
 		// Delaunay Triangulation
 		vector<ObNode>				roomNode;

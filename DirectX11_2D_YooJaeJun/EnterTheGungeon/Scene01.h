@@ -6,6 +6,8 @@ namespace Gungeon
 	{
 	public:
 		ProcedureMapGeneration* mapGen;
+		bool					fadeOut;
+		float					timeFade;
 
 	public:
 		Scene01();
@@ -17,5 +19,7 @@ namespace Gungeon
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
+
+		void ChangeUpdateScene();
 	};
 }

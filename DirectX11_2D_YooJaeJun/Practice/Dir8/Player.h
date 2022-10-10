@@ -16,6 +16,8 @@ namespace Dir8
 		ObImage*		walk;
 		ObImage*		roll;
 		float			timeRoll;
+		ObRect*			colTile;
+		Vector2			lastPos;
 
 	public:
 		Player();
@@ -30,5 +32,8 @@ namespace Dir8
 		void Idle();
 		void Walk();
 		void Roll();
+
+		bool IntersectTile(ObTileMap* tilemap);
+		void StepBack();
 	};
 }

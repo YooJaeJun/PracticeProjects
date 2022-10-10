@@ -10,6 +10,7 @@ namespace Gungeon
     void Room::Init()
     {
         selected = false;
+        cleared = false;
         
         col = new ObRect();
     }

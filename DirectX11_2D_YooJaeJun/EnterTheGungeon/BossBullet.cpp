@@ -11,11 +11,14 @@ namespace Gungeon
 
         float scaleFactor = 4.0f;
         col = new ObCircle;
-        col->scale = Vector2(8.0f, 8.0f) * scaleFactor;
+        col->isVisible = true;
         col->isFilled = false;
+        col->scale = Vector2(8.0f, 8.0f) * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
+
         idle = new ObImage(L"EnterTheGungeon/Boss_0/Bullet_0.png");
+        idle->isVisible = true;
         idle->scale = col->scale;
         idle->SetParentRT(*col);
 

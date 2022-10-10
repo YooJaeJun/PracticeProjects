@@ -26,6 +26,7 @@ namespace Gungeon
 		void Hit(const int damage, const Vector2& dir);
 		void Hitting();
 		virtual void StartDie() override;
+		virtual void Spawn(const Vector2 wpos) override;
 
 	private:
 		WeaponData*		weapon;
@@ -36,7 +37,7 @@ namespace Gungeon
 		float			timeAiming;
 
 	public:
-		Weapon*			w;		// data index 실수 막기 위함
+		Weapon*			curWeapon;		// data index 실수 막기 위함
 		float			timeSetDir;
 	};
 }

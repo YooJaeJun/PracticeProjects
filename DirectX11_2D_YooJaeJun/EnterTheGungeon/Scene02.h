@@ -5,32 +5,63 @@ namespace Gungeon
 	const int enemyMax = 3;
 	const int bossMax = 1;
 
+	enum class GameState
+	{
+		// 맵 생성 기다리는 상태
+		start,
+		waitingRoom,
+		enteringFirstRoom,
+		// 이하 반복되는 상태
+		waitingSpawn,
+		fight,
+		cleared
+	};
+
 	class Scene02 : public Scene
 	{
 	private:
-		int					curRoomIdx;
-		MapObject*			mapObj;
-		Player*				player;
-		Enemy*				enemy[enemyMax];
-		Boss*				boss;
+		GameState		gameState;
+		MapObject*		mapObj;
+		Player*			player;
+		Enemy*			enemy[enemyMax];
+		Boss*			boss;
 
 	public:
 		ProcedureMapGeneration* mapGen;
+		Room*					curRoom;
+		int						curRoomIdx;
+		Effect*					spawnEffect[4];
+		bool					fadeOut;
+		float					timeFade;
 
 	public:
 		Scene02();
 		~Scene02();
 
 		virtual void Init() override;
-		void InitEnemy();
-		void InitBoss();
-		void InitMapObject();
-		void Spawn();
 		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
+
+		void Start();
+		void WaitingRoom();
+		void EnteringFirstRoom();
+		void WaitingSpawn();
+		void Fight();
+		void Cleared();
+
+		void SpawnPlayer();
+		void SpawnEffect();
+		void SpawnEnemy();
 		void ColOnOff();
+
+		void IntersectPlayer();
+		void IntersectEnemy();
+		void IntersectBoss();
+		void IntersectMapObj();
+
+		void ChangeUpdateScene();
 	};
 }

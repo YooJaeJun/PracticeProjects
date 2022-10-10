@@ -418,6 +418,8 @@ namespace Gungeon
 	{
 		Unit::Update();
 
+		LIGHT->SetLightPos(col->GetWorldPivot());
+
 		SetTargetAndCamera();
 
 		switch (state)

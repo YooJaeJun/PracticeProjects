@@ -72,7 +72,7 @@ namespace Gungeon
 	void Unit::SetTarget(Weapon*& weapon)
 	{
 		targetDir = targetPos - Pos();
-		targetDir.Normalize();	// targetDir도 써서 정규화
+		targetDir.Normalize();	// targetDir도 사용하므로 미리 정규화
 		targetRotation = Utility::DirToRadian(targetDir);
 		SetTargetDirState();
 
@@ -143,7 +143,7 @@ namespace Gungeon
 			for (auto& elem : walk)
 			{
 				elem->isVisible = false;
-				elem->ChangeAnim(ANIMSTATE::STOP, 0.2f);
+				elem->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 			}
 
 			if (hit) hit->isVisible = false;
@@ -262,7 +262,7 @@ namespace Gungeon
 
 	void Unit::FindPath(ObTileMap* map)
 	{
-		if (TIMER->GetTick(timeFindPath, 2.0f))
+		if (TIMER->GetTick(timeFindPath, 1.0f))
 		{
 			Int2 sour, dest;
 			bool isFind;
@@ -300,5 +300,20 @@ namespace Gungeon
 				}
 			}
 		}
+	}
+	
+	void Unit::Spawn(const Vector2 wpos)
+	{
+		Character::Spawn(wpos);
+
+		die->isVisible = false;
+		idle[curTargetDirState]->isVisible = true;
+		shadow->isVisible = true;
+
+		Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
+		for (auto& elem : idle) elem->color = c;
+		for (auto& elem : walk) elem->color = c;
+		if (hit) hit->color = c;
+		if (die) die->color = c;
 	}
 }

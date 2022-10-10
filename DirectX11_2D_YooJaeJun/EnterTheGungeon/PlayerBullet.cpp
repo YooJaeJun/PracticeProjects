@@ -8,7 +8,7 @@ namespace Gungeon
         SetPos(DEFAULTSPAWN);
 
         scalar = 600.0f;
-        damage = 10;
+        damage = 2;
 
         float scaleFactor = 1.5f;
         col->scale.x = 19.0f * scaleFactor;

@@ -18,8 +18,6 @@ namespace Gungeon
 
 	void Enemy::InitVar()
 	{
-		col = new ObCircle;
-
 		curHp = maxHp = 3;
 		scalar = 80.0f;
 		timeFire = 0.0f;
@@ -29,7 +27,7 @@ namespace Gungeon
 		timeHitAnim = 0.0f;
 		timeSetMoveDir = 0.0f;
 		timeSetTargetDir = 0.0f;
-		pushedScalar = 100.0f;
+		pushedScalar = 400.0f;
 		pushedScalarFactor = 0.0f;
 		timeAiming = 0.0f;
 	}
@@ -37,14 +35,18 @@ namespace Gungeon
 	void Enemy::InitSelf()
 	{
 		int idx = 0;
-		float scaleFactor = 3.0f;
 
+		state = State::die;
+
+		float scaleFactor = 3.0f;
 		col = new ObCircle;
+		col->isVisible = false;
 		col->scale.x = 16.0f * scaleFactor;
 		col->scale.y = 16.0f * scaleFactor;
 		col->color = Color(1.0f, 1.0f, 1.0f);
 		col->isFilled = false;
 		col->zOrder = ZOrder::object;
+		SetPos(DEFAULTSPAWN);
 
 		idle[dirB] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Front.png");
 		idle[dirL] = new ObImage(L"EnterTheGungeon/Enemy_0/Idle_Side.png");
@@ -62,6 +64,7 @@ namespace Gungeon
 			{
 				elem2->reverseLR = true;
 			}
+			elem2->isVisible = false;
 			elem2->maxFrame.x = 2;
 			elem2->scale.x = 28.0f / 2.0f * scaleFactor;
 			elem2->scale.y = 24.0f * scaleFactor;
@@ -132,20 +135,20 @@ namespace Gungeon
 	void Enemy::InitWeapon()
 	{
 		weapon = new WeaponData;
-		w = weapon->data[0];
+		curWeapon = weapon->data[0];
 
-		w->col->SetParentRT(*col);
-		w->col->SetLocalPos(Vector2(10.0f, -15.0f));
+		curWeapon->col->SetParentRT(*col);
+		curWeapon->col->SetLocalPos(Vector2(10.0f, -15.0f));
 
-		w->idle->SetParentRT(*w->col);
+		curWeapon->idle->SetParentRT(*curWeapon->col);
 
-		w->firePos->SetLocalPos(Vector2(w->col->scale.x / 2.0f, 0.0f));
+		curWeapon->firePos->SetLocalPos(Vector2(curWeapon->col->scale.x / 2.0f, 0.0f));
 
-		w->fireEffect->idle->SetParentRT(*w->firePos);
+		curWeapon->fireEffect->idle->SetParentRT(*curWeapon->firePos);
 
-		w->imgReloading->SetParentRT(*w->col);
+		curWeapon->imgReloading->SetParentRT(*curWeapon->col);
 
-		w->Equip();
+		curWeapon->Equip();
 	}
 
 	void Enemy::InitBullet()
@@ -176,7 +179,7 @@ namespace Gungeon
 	void Enemy::Release()
 	{
 		Unit::Release();
-		w->Release();
+		curWeapon->Release();
 		for (auto& elem : bullet) elem->Release();
 	}
 
@@ -201,7 +204,7 @@ namespace Gungeon
 			break;
 		}
 
-		w->Update();
+		curWeapon->Update();
 		dropItem->Update();
 	}
 
@@ -214,13 +217,13 @@ namespace Gungeon
 		for (auto& elem : bullet) elem->Render();
 		Unit::Render();
 
-		w->Render();
+		curWeapon->Render();
 		dropItem->Render();
 	}
 
 	void Enemy::Idle()
 	{
-		Unit::SetTarget(w);
+		Unit::SetTarget(curWeapon);
 
 		moveDir = targetDir;
 		SetMoveDirState();
@@ -235,7 +238,7 @@ namespace Gungeon
 
 	void Enemy::Walk()
 	{
-		Unit::SetTarget(w);
+		Unit::SetTarget(curWeapon);
 
 		moveDir = targetDir;
 		SetMoveDirState();
@@ -259,7 +262,7 @@ namespace Gungeon
 		if (TIMER->GetTick(timeRealDie, 0.5f))
 		{
 			pushedDir = Vector2(0.0f, 0.0f);
-			pushedScalar = 100.0f;
+			pushedScalar = 400.0f;
 			pushedScalarFactor = 0.0f;
 		}
 	}
@@ -275,6 +278,7 @@ namespace Gungeon
 		{
 			state = State::walk;
 			for (auto& elem : idle) elem->isVisible = false;
+			walk[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 			walk[curTargetDirState]->isVisible = true;
 		}
 	}
@@ -284,8 +288,9 @@ namespace Gungeon
 		if (moveDir.x == 0.0f && moveDir.y == 0.0f)
 		{
 			state = State::idle;
-			idle[curTargetDirState]->isVisible = true;
 			for (auto& elem : walk) elem->isVisible = false;
+			idle[curTargetDirState]->isVisible = true;
+			idle[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 		}
 		else
 		{
@@ -302,8 +307,8 @@ namespace Gungeon
 			{
 				if (elem->isFired) continue;
 
-				elem->Spawn(w->firePos->GetWorldPos(), moveDir);
-				w->fireEffect->Spawn(w->firePos->GetWorldPos());
+				elem->Spawn(curWeapon->firePos->GetWorldPos(), moveDir);
+				curWeapon->fireEffect->Spawn(curWeapon->firePos->GetWorldPos());
 
 				break;
 			}
@@ -368,7 +373,7 @@ namespace Gungeon
 				isHitAnim = false;
 
 				pushedDir = Vector2(0.0f, 0.0f);
-				pushedScalar = 100.0f;
+				pushedScalar = 400.0f;
 				pushedScalarFactor = 0.0f;
 			}
 		}
@@ -384,9 +389,9 @@ namespace Gungeon
 	{
 		Unit::StartDie();
 
-		w->col->isVisible = false;
-		w->idle->isVisible = false;
-		w->firePos->isVisible = false;
+		curWeapon->col->isVisible = false;
+		curWeapon->idle->isVisible = false;
+		curWeapon->firePos->isVisible = false;
 
 		if (pushedDir.x < 0.0f)
 		{
@@ -413,5 +418,38 @@ namespace Gungeon
 		dropItem->col->isVisible = true;
 		dropItem->idle->isVisible = true;
 		dropItem->state = State::idle;
+	}
+
+	void Enemy::Spawn(const Vector2 wpos)
+	{
+		Unit::Spawn(wpos);
+
+		InitVar();
+
+		curWeapon->col->isVisible = true;
+		curWeapon->idle->isVisible = true;
+		curWeapon->firePos->isVisible = true;
+
+		if (pushedDir.x < 0.0f)
+		{
+			die->reverseLR = true;
+		}
+		else
+		{
+			die->reverseLR = false;
+		}
+
+		pushedScalar = 400.0f;
+		pushedScalarFactor = 0.0f;
+
+		for (auto& elem : bullet)
+		{
+			elem->col->colOnOff = true;
+			elem->idle->colOnOff = true;
+		}
+
+		dropItem->col->isVisible = false;
+		dropItem->idle->isVisible = false;
+		dropItem->state = State::die;
 	}
 }

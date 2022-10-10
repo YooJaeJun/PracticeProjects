@@ -14,6 +14,7 @@ namespace Gungeon
 
 	public:
 		bool		selected;
-		Effect*		spawnEffect[4];
+		Vector2		enemySpawnPos[4];
+		bool		cleared;
 	};
 }

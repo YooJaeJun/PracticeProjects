@@ -20,8 +20,6 @@ namespace Gungeon
     {
         pattern = BossPattern::string;
 
-        col = new ObCircle;
-
         curHp = maxHp = 30;
         moveDir = Vector2(0.0f, 0.0f);
         scalar = 120.0f;
@@ -38,13 +36,17 @@ namespace Gungeon
 
     void Boss::InitSelf()
     {
-        float scaleFactor = 3.0f;
+        state = State::die;
 
+        float scaleFactor = 3.0f;
+        col = new ObCircle;
+        col->isVisible = false;
         col->isFilled = false;
         col->scale.x = 25.0f * scaleFactor;
         col->scale.y = 25.0f * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f);
         col->zOrder = ZOrder::object;
+        SetPos(DEFAULTSPAWN);
 
         idle[dirB] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
         idle[dirL] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
@@ -62,6 +64,7 @@ namespace Gungeon
             {
                 elem->reverseLR = true;
             }
+            elem->isVisible = false;
             elem->maxFrame.x = 4;
             elem->scale.x = 104.0f / 4.0f * scaleFactor;
             elem->scale.y = 40.0f * scaleFactor;
@@ -157,20 +160,20 @@ namespace Gungeon
     void Boss::InitWeapon()
     {
         weapon = new WeaponData;
-        w = weapon->data[1];
+        curWeapon = weapon->data[1];
 
-        w->col->SetParentRT(*col);
-        w->col->SetLocalPos(Vector2(10.0f, -15.0f));
+        curWeapon->col->SetParentRT(*col);
+        curWeapon->col->SetLocalPos(Vector2(10.0f, -15.0f));
 
-        w->idle->SetParentRT(*w->col);
+        curWeapon->idle->SetParentRT(*curWeapon->col);
 
-        w->firePos->SetLocalPos(Vector2(w->col->scale.x / 2.0f, 0.0f));
+        curWeapon->firePos->SetLocalPos(Vector2(curWeapon->col->scale.x / 2.0f, 0.0f));
 
-        w->fireEffect->idle->SetParentRT(*w->firePos);
+        curWeapon->fireEffect->idle->SetParentRT(*curWeapon->firePos);
 
-        w->imgReloading->SetParentRT(*w->col);
+        curWeapon->imgReloading->SetParentRT(*curWeapon->col);
 
-        w->Equip();
+        curWeapon->Equip();
     }
 
     void Boss::InitBullet()
@@ -216,7 +219,7 @@ namespace Gungeon
     void Boss::Release()
     {
         Unit::Release();
-        w->Release();
+        curWeapon->Release();
         SafeDelete(hpGuage);
         SafeDelete(hpGuageBar);
     }
@@ -264,6 +267,7 @@ namespace Gungeon
     void Boss::Render()
     {
         Unit::Render();
+
         switch (state)
         {
         case State::idle:
@@ -276,7 +280,7 @@ namespace Gungeon
             break;
         }
 
-        w->Render();
+        curWeapon->Render();
         hpGuageBar->Render();
         hpGuage->Render();
         dropItem->Render();
@@ -292,7 +296,7 @@ namespace Gungeon
 
     void Boss::Idle()
     {
-        Unit::SetTarget(w);
+        Unit::SetTarget(curWeapon);
 
         if (false == isHit)
         {
@@ -305,7 +309,7 @@ namespace Gungeon
 
     void Boss::Walk()
     {
-        Unit::SetTarget(w);
+        Unit::SetTarget(curWeapon);
 
         if (false == isHit)
         {
@@ -341,6 +345,7 @@ namespace Gungeon
             state = State::walk;
             for (auto& elem : idle) elem->isVisible = false;
             walk[curTargetDirState]->isVisible = true;
+            walk[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
         }
     }
 
@@ -349,8 +354,9 @@ namespace Gungeon
         if (almostEqualVector2(lastPos, col->GetWorldPos()))
         {
             state = State::idle;
-            idle[curTargetDirState]->isVisible = true;
             for (auto& elem : walk) elem->isVisible = false;
+            idle[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+            idle[curTargetDirState]->isVisible = true;
         }
         else
         {
@@ -442,9 +448,9 @@ namespace Gungeon
     {
         Unit::StartDie();
 
-        w->col->isVisible = false;
-        w->idle->isVisible = false;
-        w->firePos->isVisible = false;
+        curWeapon->col->isVisible = false;
+        curWeapon->idle->isVisible = false;
+        curWeapon->firePos->isVisible = false;
 
         hpGuageBar->img->isVisible = false;
         hpGuage->img->isVisible = false;
@@ -462,10 +468,40 @@ namespace Gungeon
         dropItem->idle->isVisible = true;
         dropItem->state = State::idle;
 
-        w->Spawn(Pos());
-        w->col->isVisible = true;
-        w->idle->isVisible = true;
-        w->state = State::idle;
+        curWeapon->Spawn(Pos());
+        curWeapon->col->isVisible = true;
+        curWeapon->idle->isVisible = true;
+        curWeapon->state = State::idle;
+    }
+
+    void Boss::Spawn(const Vector2 wpos)
+    {
+        Unit::Spawn(wpos);
+
+        InitVar();
+
+        curWeapon->col->isVisible = true;
+        curWeapon->idle->isVisible = true;
+        curWeapon->firePos->isVisible = true;
+
+        if (pushedDir.x < 0.0f)
+        {
+            die->reverseLR = true;
+        }
+        else
+        {
+            die->reverseLR = false;
+        }
+
+        for (auto& elem : bullet)
+        {
+            elem->col->colOnOff = true;
+            elem->idle->colOnOff = true;
+        }
+
+        dropItem->col->isVisible = false;
+        dropItem->idle->isVisible = false;
+        dropItem->state = State::die;
     }
 
 
@@ -513,7 +549,7 @@ namespace Gungeon
         bullet.resize(stringBullet.inputString.size() * 25);
 
         int size = stringBullet.inputString.size();
-        float angleFactor = w->col->rotation - stringBullet.midForTargetFactor;
+        float angleFactor = curWeapon->col->rotation - stringBullet.midForTargetFactor;
 
         for (int r = 0; r < 5; r++)
         {
@@ -643,7 +679,7 @@ namespace Gungeon
             stringBullet.SetStringBullet();
         }
 
-        float angleFactor = w->col->rotation - stringBullet.midForTargetFactor;
+        float angleFactor = curWeapon->col->rotation - stringBullet.midForTargetFactor;
         for (int r = 0; r < 5; r++)
         {
             for (int c = 0; c < 5; c++)
@@ -660,7 +696,7 @@ namespace Gungeon
             }
         }
 
-        if (TIMER->GetTick(timeFire, 1.5f))
+        if (TIMER->GetTick(timeFire, 2.0f))
         {
             for (auto& elem : bullet)
             {
@@ -720,6 +756,7 @@ namespace Gungeon
             elem->scalar = RANDOM->Float(200.0f, 700.0f);
         }
     }
+
     void Boss::UpdateWave()
     {
         if (TIMER->GetTick(timeWave, 2.0f))

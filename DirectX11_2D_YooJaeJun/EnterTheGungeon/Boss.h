@@ -45,6 +45,7 @@ namespace Gungeon
 		void Hit(const int damage, const Vector2& dir);
 		void Hitting();
 		virtual void StartDie() override;
+		virtual void Spawn(const Vector2 wpos) override;
 
 		void ChangePattern(const int curPattern);
 		void InitCircular();
@@ -63,7 +64,7 @@ namespace Gungeon
 
 	public:
 		WeaponData*				weapon;
-		Weapon*					w;		// data index 실수 막기 위함
+		Weapon*					curWeapon;		// data index 실수 막기 위함
 		UI*						hpGuageBar;
 		UI*						hpGuage;
 		vector<Bullet*>			bullet;

@@ -11,7 +11,7 @@ namespace Gungeon
     {
         timer = 0.0f;
 
-        state = GameState::spray;
+        state = MapGenState::spray;
 
         LIGHT->light.radius = 5000.0f;
 
@@ -33,8 +33,8 @@ namespace Gungeon
         for (auto& room : rooms)
         {
             room = new Room();
-            room->col->scale.x = 100.0f * RANDOM->Int(6, 15);
-            room->col->scale.y = 100.0f * RANDOM->Int(6, 15);
+            room->col->scale.x = 100.0f * RANDOM->Int(5, 14);
+            room->col->scale.y = 100.0f * RANDOM->Int(5, 14);
 
             map<Int2, bool> dic;
             int xRand = 0, yRand = 0;
@@ -51,15 +51,15 @@ namespace Gungeon
             room->col->color = Color(1.0f, 0.6f, 0.6f);
             room->col->collider = Collider::rect;
         }
-        roomScaleForSelect = 900'000.0f;
+        roomScaleForSelect = 800.0f;
     }
 
     void ProcedureMapGeneration::Release()
     {
         for (auto& elem : rooms) elem->Release();
         rooms.clear();
-        for (auto& elem : roomsSelected) elem->Release();
-        roomsSelected.clear();
+        for (auto& elem : selectedRooms) elem->Release();
+        selectedRooms.clear();
         roomNode.clear();
         triangulation.nodesLinked.clear();
         triangulation.edges.clear();
@@ -93,97 +93,97 @@ namespace Gungeon
 
         switch (state)
         {
-        case GameState::spray:
+        case MapGenState::spray:
         {
             Spray();
             if (TIMER->GetTick(timer, timeDefault))
             {
-                state = GameState::spread;
+                state = MapGenState::spread;
             }
             break;
         }
-        case GameState::spread:
+        case MapGenState::spread:
         {
             Spread();
             if (flagSpread)
             {
-                state = GameState::select;
+                state = MapGenState::select;
             }
             break;
         }
-        case GameState::select:
+        case MapGenState::select:
         {
             if (TIMER->GetTick(timer, timeDefault))
             {
                 Select();
-                state = GameState::triangulate;
+                state = MapGenState::triangulate;
             }
             break;
         }
-        case GameState::triangulate:
+        case MapGenState::triangulate:
         {
             if (TIMER->GetTick(timer, timeDefault))
             {
                 Triangulate();
-                state = GameState::span;
+                state = MapGenState::span;
             }
             break;
         }
-        case GameState::span:
+        case MapGenState::span:
         {
             if (TIMER->GetTick(timer, timeDefault))
             {
                 Spanning();
-                state = GameState::loop;
+                state = MapGenState::loop;
             }
             break;
         }
-        case GameState::loop:
+        case MapGenState::loop:
         {
             if (TIMER->GetTick(timer, timeDefault))
             {
                 Loop();
-                state = GameState::clean;
+                state = MapGenState::clean;
             }
             break;
         }
-        case GameState::clean:
+        case MapGenState::clean:
         {
             if (TIMER->GetTick(timer, timeDefault))
             {
                 Clean();
-                state = GameState::roomTile;
+                state = MapGenState::roomTile;
             }
             break;
         }
-        case GameState::roomTile:
+        case MapGenState::roomTile:
         {
             if (TIMER->GetTick(timer, timeDefault))
             {
                 RoomTile();
-                state = GameState::passageTile;
+                state = MapGenState::passageTile;
             }
             break;
         }
-        case GameState::passageTile:
+        case MapGenState::passageTile:
         {
             if (TIMER->GetTick(timer, timeDefault))
             {
                 PassageTile();
-                state = GameState::passageWallTile;
+                state = MapGenState::passageWallTile;
             }
             break;
         }
-        case GameState::passageWallTile:
+        case MapGenState::passageWallTile:
         {
             if (TIMER->GetTick(timer, timeDefault))
             {
                 PassageWallTile();
-                state = GameState::prop;
+                state = MapGenState::prop;
             }
             break;
         }
-        case GameState::prop:
+        case MapGenState::prop:
         {
             if (TIMER->GetTick(timer, timeDefault))
             {
@@ -200,7 +200,7 @@ namespace Gungeon
         SetTilemapGUI();
 
         for (auto& elem : rooms) if (elem) elem->Update();
-        for (auto& elem : roomsSelected) if (elem) elem->Update();
+        for (auto& elem : selectedRooms) if (elem) elem->Update();
         for (auto& elem : linesTriangulated) elem.Update();
         for (auto& elem : linesMST) elem.Update();
 
@@ -214,7 +214,7 @@ namespace Gungeon
     void ProcedureMapGeneration::Render()
     {
         for (auto& elem : rooms) if (elem) elem->Render();
-        for (auto& elem : roomsSelected) if (elem) elem->Render();
+        for (auto& elem : selectedRooms) if (elem) elem->Render();
         for (auto& elem : linesTriangulated) elem.Render();
         for (auto& elem : linesMST) elem.Render();
 
@@ -262,7 +262,8 @@ namespace Gungeon
     {
         for (auto& elem : rooms)
         {
-            if (elem->col->scale.x * elem->col->scale.y > roomScaleForSelect)
+            if (elem->col->scale.x > roomScaleForSelect &&
+                elem->col->scale.y > roomScaleForSelect)
             {
                 elem->col->scale.x -= 200.0f;
                 elem->col->scale.y -= 200.0f;
@@ -273,7 +274,16 @@ namespace Gungeon
                 }
                 elem->col->isFilled = true;
                 elem->selected = true;
-                roomsSelected.push_back(elem);
+
+                for (auto& spawnPosElem : elem->enemySpawnPos)
+                {
+                    float xPos, yPos;
+                    xPos = elem->Pos().x + RANDOM->Float(-elem->col->scale.x * 0.4f, elem->col->scale.x * 0.4f);
+                    yPos = elem->Pos().y + RANDOM->Float(-elem->col->scale.y * 0.4f, elem->col->scale.y * 0.4f);
+                    spawnPosElem = Vector2(xPos, yPos);
+                }
+
+                selectedRooms.push_back(elem);
             }
         }
     }
@@ -281,7 +291,7 @@ namespace Gungeon
     void ProcedureMapGeneration::Triangulate()
     {
         int idx = 0;
-        for (auto& elem : roomsSelected)
+        for (auto& elem : selectedRooms)
         {
             // 들로네 삼각분할 위한 노드
             roomNode.push_back(ObNode(idx, elem->Pos()));
@@ -447,7 +457,7 @@ namespace Gungeon
         };
 
         int idx = 0;
-        for (auto& elem : roomsSelected)
+        for (auto& elem : selectedRooms)
         {
             SetTile1(elem, idx);
             idx++;
@@ -459,16 +469,16 @@ namespace Gungeon
         // room index와 node index 연결정보
         for (auto& elem : linesMST)
         {
-            for (int roomIndex = 0; roomIndex < roomsSelected.size(); roomIndex++)
+            for (int roomIndex = 0; roomIndex < selectedRooms.size(); roomIndex++)
             {
                 Vector2 v = Vector2(elem.v.x, elem.v.y);
-                if (almostEqualVector2(v, roomsSelected[roomIndex]->Pos()))
+                if (almostEqualVector2(v, selectedRooms[roomIndex]->Pos()))
                 {
                     nodesForRoomIndex[v] = roomIndex;
                 }
 
                 Vector2 w = Vector2(elem.w.x, elem.w.y);
-                if (almostEqualVector2(w, roomsSelected[roomIndex]->Pos()))
+                if (almostEqualVector2(w, selectedRooms[roomIndex]->Pos()))
                 {
                     nodesForRoomIndex[w] = roomIndex;
                 }
@@ -485,7 +495,7 @@ namespace Gungeon
                 int nx = on.x + dx[i];
                 int ny = on.y + dy[i];
 
-                if (tilemap->GetTileState(Int2(nx, ny)) == TileState::wall || 
+                if (tilemap->GetTileState(Int2(nx, ny)) == TileState::wall ||
                     tilemap->GetTileState(Int2(nx, ny)) == TileState::door)
                 {
                     dirWall[i] = true;
@@ -635,8 +645,8 @@ namespace Gungeon
 
             ObNode mid = ObNode((w.x + v.x) / 2.0f, (w.y + v.y) / 2.0f);
 
-            Vector2 vScaleHalf = roomsSelected[nodesForRoomIndex[v]]->col->scale / 2.0f;
-            Vector2 wScaleHalf = roomsSelected[nodesForRoomIndex[w]]->col->scale / 2.0f;
+            Vector2 vScaleHalf = selectedRooms[nodesForRoomIndex[v]]->col->scale / 2.0f;
+            Vector2 wScaleHalf = selectedRooms[nodesForRoomIndex[w]]->col->scale / 2.0f;
 
             Vector2	start = Vector2(v.x, v.y);
             Vector2 end = Vector2(w.x, w.y);
