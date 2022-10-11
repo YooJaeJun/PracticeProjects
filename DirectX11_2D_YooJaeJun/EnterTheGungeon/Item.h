@@ -22,5 +22,7 @@ namespace Gungeon
 
 	public:
 		ObImage*	idle;
+		bool		flagAbsorbed;
+		Vector2		targetPos;
 	};
 }

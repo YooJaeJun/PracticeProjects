@@ -14,8 +14,12 @@ namespace Gungeon
 		virtual void ResizeScreen() override;
 
 		virtual void SetTarget(Weapon*& weapon);
+		virtual void Idle();
+		virtual void Walk();
 		virtual void Hit(const int damage);
 		virtual void Die();
+		void StartWalk();
+		void StartIdle();
 		virtual void StartDie();
 		virtual void Spawn(const Vector2 wpos) override;
 		void SetLastPosAndDir();
@@ -23,6 +27,7 @@ namespace Gungeon
 		void SetMoveDirState();
 		void SetTargetDirState();
 		void FindPath(ObTileMap* map);
+		void DontFindPath();
 
 	public:
 		ObImage*			spawn;
@@ -36,6 +41,7 @@ namespace Gungeon
 		Item*				dropItem;
 		vector<Bullet*>		bullet;
 		Vector2				lastPos;
+		Weapon*				curWeapon;		// data index 실수 막기 위함
 		DirState			curMoveDirState;
 		DirState			curMoveDirStateBefore;
 		DirState			curTargetDirState;

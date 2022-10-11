@@ -160,7 +160,7 @@ namespace Gungeon
 
 		data[1]->pivotDefault = Vector2(0.6f, 0.25f);
 		data[1]->localPosDefault = Vector2(10.0f, -15.0f);
-		data[1]->localFirePosDefault = Vector2(70.0f, 12.0f);
+		data[1]->localFirePosDefault = Vector2(80.0f, 6.0f);
 		data[1]->state = State::die;
 
 		data[1]->uiBulletFrame->img = new ObImage(L"EnterTheGungeon/Weapon/1/UI_Magazine.png");

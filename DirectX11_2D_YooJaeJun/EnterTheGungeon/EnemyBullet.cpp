@@ -12,8 +12,7 @@ namespace Gungeon
 
         float scaleFactor = 3.0f;
         col->scale = Vector2(8.0f, 8.0f) * scaleFactor;
-        col->isFilled = false;
-        col->SetWorldPos(DEFAULTSPAWN);
+        SetPos(DEFAULTSPAWN);
         idle = new ObImage(L"EnterTheGungeon/Enemy_0/Bullet_0.png");
         idle->scale = col->scale;
         idle->SetParentRT(*col);

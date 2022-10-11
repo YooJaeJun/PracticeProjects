@@ -4,6 +4,9 @@ namespace Gungeon
 {
 	Item::Item()
 	{
+		flagAbsorbed = false;
+		targetPos = Vector2(0.0f, 0.0f);
+		scalar = 600.0f;
 	}
 
 	void Item::Release()
@@ -14,6 +17,13 @@ namespace Gungeon
 
 	void Item::Update()
 	{
+		if (flagAbsorbed)
+		{
+			Vector2 dir = targetPos - Pos();
+			dir.Normalize();
+			col->MoveWorldPos(dir * scalar * DELTA);
+		}
+
 		Character::Update();
 		idle->Update();
 	}
@@ -33,7 +43,7 @@ namespace Gungeon
 		SetPos(DEFAULTSPAWN);
 		col->isVisible = false;
 		idle->isVisible = false;
-
+		flagAbsorbed = false;
 		state = State::die;
 	}
 }

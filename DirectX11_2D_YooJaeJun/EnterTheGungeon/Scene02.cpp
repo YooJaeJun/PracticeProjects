@@ -14,9 +14,13 @@ namespace Gungeon
 
     void Scene02::Init()
     {
-        if (mapGen) mapGen->useGui = false;
+        fadeOut = false;
+        timeFade = 0.0f;
 
+        if (mapGen) mapGen->useGui = false;
         curRoom = nullptr;
+        curRoomIdx = 0;
+        afterRoomIdx = -2;
 
         if (!player) player = new Player();
 
@@ -57,9 +61,6 @@ namespace Gungeon
 
         if (!mapObj) mapObj = new MapObject();
 
-        fadeOut = false;
-        timeFade = 0.0f;
-
         SOUND->Stop("SCENE01");
         // SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
         SOUND->Play("SCENE02");
@@ -67,6 +68,7 @@ namespace Gungeon
 
     void Scene02::Release()
     {
+        for (auto& elem : mapGen->selectedRooms) elem->cleared = false;
         SafeRelease(mapObj);
         for (auto& elem : enemy) SafeRelease(elem);
         SafeRelease(player);
@@ -95,17 +97,14 @@ namespace Gungeon
         case Gungeon::GameState::waitingRoom:
             WaitingRoom();
             break;
-        case Gungeon::GameState::enteringFirstRoom:
-            EnteringFirstRoom();
+        case Gungeon::GameState::enteringRoom:
+            EnteringRoom();
             break;
         case Gungeon::GameState::waitingSpawn:
             WaitingSpawn();
             break;
         case Gungeon::GameState::fight:
             Fight();
-            break;
-        case Gungeon::GameState::cleared:
-            Cleared();
             break;
         }
 
@@ -140,10 +139,9 @@ namespace Gungeon
         case Gungeon::GameState::start:
         case Gungeon::GameState::waitingRoom:
             break;
-        case Gungeon::GameState::enteringFirstRoom:
+        case Gungeon::GameState::enteringRoom:
         case Gungeon::GameState::waitingSpawn:
         case Gungeon::GameState::fight:
-        case Gungeon::GameState::cleared:
             IntersectPlayer();
             IntersectEnemy();
             IntersectBoss();
@@ -208,21 +206,44 @@ namespace Gungeon
         curRoom = mapGen->selectedRooms[curRoomIdx];
         SpawnPlayer();
 
-        gameState = GameState::enteringFirstRoom;
+        gameState = GameState::enteringRoom;
     }
 
-    void Scene02::EnteringFirstRoom()
+    void Scene02::EnteringRoom()
     {
+        // 골드 흡수
+        for (auto& elem : enemy)
+        {
+            if (elem->dropItem->flagAbsorbed)
+            {
+                elem->dropItem->targetPos = player->Pos();
+            }
+        }
+        if (boss->dropItem->flagAbsorbed)
+        {
+            boss->dropItem->targetPos = player->Pos();
+        }
+
+        // 다음 방 입장 판단
         Int2 playerOn;
         if (mapGen->tilemap->WorldPosToTileIdx(player->Pos(), playerOn))
         {
-            curRoomIdx = mapGen->tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
-            if (curRoomIdx > 0)
-            {
-                curRoom = mapGen->selectedRooms[curRoomIdx];
-                SpawnEffect();
+            afterRoomIdx = mapGen->tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
 
-                gameState = GameState::waitingSpawn;
+            if (afterRoomIdx > 0 &&
+                false == mapGen->selectedRooms[afterRoomIdx]->cleared)
+            {
+                if (curRoomIdx != afterRoomIdx)
+                {
+                    curRoomIdx = afterRoomIdx;
+                    if (curRoomIdx > 0)
+                    {
+                        curRoom = mapGen->selectedRooms[curRoomIdx];
+                        SpawnEffect();
+
+                        gameState = GameState::waitingSpawn;
+                    }
+                }
             }
         }
     }
@@ -274,37 +295,26 @@ namespace Gungeon
             case BossPattern::cluster:
                 boss->FindPath(mapGen->tilemap);
                 break;
+            default:
+                boss->DontFindPath();
+                break;
             }
         }
 
+        // 골드 흡수 플래그
         if (flagCleared)
         {
             curRoom->cleared = true;
+            for (auto& elem : enemy)
+            {
+                elem->dropItem->flagAbsorbed = true;
+            }
+            boss->dropItem->flagAbsorbed = true;
         }
 
         if (curRoom->cleared)
         {
-            gameState = GameState::cleared;
-        }
-    }
-
-    void Scene02::Cleared()
-    {
-        Int2 playerOn;
-        if (mapGen->tilemap->WorldPosToTileIdx(player->Pos(), playerOn))
-        {
-            int afterRoomIdx = mapGen->tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
-            // 복도가 아니고 다음방 입장
-            if (afterRoomIdx > 0 &&
-                curRoomIdx != afterRoomIdx)
-            {
-                curRoomIdx = afterRoomIdx;
-                curRoom = mapGen->selectedRooms[curRoomIdx];
-
-                SpawnEffect();
-
-                gameState = GameState::waitingSpawn;
-            }
+            gameState = GameState::enteringRoom;
         }
     }
 
@@ -517,7 +527,7 @@ namespace Gungeon
     {
         player->col->isVisible = !player->col->isVisible;
         player->colTile->isVisible = !player->colTile->isVisible;
-        player->w->firePos->isVisible = !player->w->firePos->isVisible;
+        player->curWeapon->firePos->isVisible = !player->curWeapon->firePos->isVisible;
 
         for (auto& bulletElem : player->bullet)
         {

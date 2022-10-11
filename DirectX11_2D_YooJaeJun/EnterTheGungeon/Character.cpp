@@ -58,7 +58,6 @@ namespace Gungeon
 		state = State::idle;
 		isHit = false;
 
-		col->colOnOff = true;
 		col->isVisible = true;
 	}
 }

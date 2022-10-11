@@ -44,7 +44,6 @@ namespace Gungeon
 		ObImage*				kick;
 		ObImage*				obtain;
 		vector<WeaponData*>		weapon;
-		Weapon*					w;		// data index 실수 막기 위함
 		int						curWeaponMax;
 		int						curWeaponIdx;
 		bool					canFireOnce[weaponTypeMax];

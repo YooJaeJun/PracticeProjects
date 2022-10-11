@@ -10,9 +10,6 @@ namespace Gungeon
         atkAngle = 0.0f;
 
         float scaleFactor = 4.0f;
-        col = new ObCircle;
-        col->isVisible = true;
-        col->isFilled = false;
         col->scale = Vector2(8.0f, 8.0f) * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);

@@ -41,6 +41,26 @@ namespace Gungeon
 	{
 		SetLastPosAndDir();
 
+		switch (state)
+		{
+		case Gungeon::State::idle:
+			if (moveDir.x != 0.0f || moveDir.y != 0.0f)
+			{
+				StartWalk();
+			}
+			break;
+		case Gungeon::State::walk:
+			if (moveDir.x == 0.0f && moveDir.y == 0.0f)
+			{
+				StartIdle();
+			}
+			break;
+		case Gungeon::State::die:
+			break;
+		default:
+			break;
+		}
+
 		Character::Update();
 
 		for (auto& elem : idle) elem->Update();
@@ -97,6 +117,22 @@ namespace Gungeon
 		}
 	}
 
+	void Unit::Idle()
+	{
+		Unit::SetTarget(curWeapon);
+		SetMoveDirState();
+		for (auto& elem : walk) elem->isVisible = false;
+		idle[curTargetDirState]->isVisible = true;
+	}
+
+	void Unit::Walk()
+	{
+		Unit::SetTarget(curWeapon);
+		SetMoveDirState();
+		for (auto& elem : idle) elem->isVisible = false;
+		walk[curTargetDirState]->isVisible = true;
+	}
+
 	void Unit::Hit(const int damage)
 	{
 		if (false == isHit)
@@ -132,7 +168,6 @@ namespace Gungeon
 
 			isHit = false;
 			scalar = 0.0f;
-			col->colOnOff = false;
 
 			col->isVisible = false;
 			for (auto& elem : idle)
@@ -170,6 +205,22 @@ namespace Gungeon
 		}
 
 		if (colTile) colTile->isVisible = false;
+	}
+
+	void Unit::StartWalk()
+	{
+		state = State::walk;
+		for (auto& elem : idle) elem->isVisible = false;
+		walk[curTargetDirState]->isVisible = true;
+		walk[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+	}
+
+	void Unit::StartIdle()
+	{
+		state = State::idle;
+		for (auto& elem : walk) elem->isVisible = false;
+		idle[curTargetDirState]->isVisible = true;
+		idle[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
 	}
 
 	void Unit::StepBack()
@@ -286,6 +337,8 @@ namespace Gungeon
 		if (false == way.empty())
 		{
 			SetPos(Vector2::Lerp(start, end, g));
+			moveDir = end - start;
+			moveDir.Normalize();
 
 			g += DELTA * scalar / 100.0f;
 
@@ -300,6 +353,11 @@ namespace Gungeon
 				}
 			}
 		}
+	}
+
+	void Unit::DontFindPath()
+	{
+		moveDir = Vector2(0.0f, 0.0f);
 	}
 	
 	void Unit::Spawn(const Vector2 wpos)

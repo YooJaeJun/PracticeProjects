@@ -161,18 +161,12 @@ namespace Gungeon
     {
         weapon = new WeaponData;
         curWeapon = weapon->data[1];
-
         curWeapon->col->SetParentRT(*col);
         curWeapon->col->SetLocalPos(Vector2(10.0f, -15.0f));
-
         curWeapon->idle->SetParentRT(*curWeapon->col);
-
         curWeapon->firePos->SetLocalPos(Vector2(curWeapon->col->scale.x / 2.0f, 0.0f));
-
         curWeapon->fireEffect->idle->SetParentRT(*curWeapon->firePos);
-
         curWeapon->imgReloading->SetParentRT(*curWeapon->col);
-
         curWeapon->Equip();
     }
 
@@ -180,6 +174,8 @@ namespace Gungeon
     {
         switch (pattern)
         {
+        case Gungeon::BossPattern::none:
+            break;
         case Gungeon::BossPattern::circular:
             InitCircular();
             break;
@@ -318,12 +314,7 @@ namespace Gungeon
 
     void Boss::Idle()
     {
-        Unit::SetTarget(curWeapon);
-
-        if (false == isHit)
-        {
-            StartWalk();
-        }
+        Unit::Idle();
 
         Hitting();
         UpdateBullet();
@@ -331,12 +322,8 @@ namespace Gungeon
 
     void Boss::Walk()
     {
-        Unit::SetTarget(curWeapon);
-
-        if (false == isHit)
-        {
-            StartIdle();
-        }
+        moveDir = targetDir;
+        Unit::Walk();
 
         Hitting();
         UpdateBullet();
@@ -348,42 +335,8 @@ namespace Gungeon
 
         for (auto& elem : bullet)
         {
-            elem->col->colOnOff = false;
             elem->col->isVisible = false;
-            elem->idle->colOnOff = false;
             elem->idle->isVisible = false;
-        }
-    }
-
-    void Boss::StartWalk()
-    {
-        if (almostEqualVector2(lastPos, col->GetWorldPos()))
-        {
-            idle[curTargetDirState]->isVisible = true;
-            for (auto& elem : walk) elem->isVisible = false;
-        }
-        else
-        {
-            state = State::walk;
-            for (auto& elem : idle) elem->isVisible = false;
-            walk[curTargetDirState]->isVisible = true;
-            walk[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
-        }
-    }
-
-    void Boss::StartIdle()
-    {
-        if (almostEqualVector2(lastPos, col->GetWorldPos()))
-        {
-            state = State::idle;
-            for (auto& elem : walk) elem->isVisible = false;
-            idle[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
-            idle[curTargetDirState]->isVisible = true;
-        }
-        else
-        {
-            for (auto& elem : idle) elem->isVisible = false;
-            walk[curTargetDirState]->isVisible = true;
         }
     }
 
@@ -506,12 +459,6 @@ namespace Gungeon
         else
         {
             die->reverseLR = false;
-        }
-
-        for (auto& elem : bullet)
-        {
-            elem->col->colOnOff = true;
-            elem->idle->colOnOff = true;
         }
 
         dropItem->col->isVisible = false;
@@ -705,7 +652,8 @@ namespace Gungeon
         int size = stringBullet.inputString.size();
         char* s = const_cast<char*>(stringBullet.inputString.c_str());
 
-        if (ImGui::InputText("String Danmaku", s, 26) || bullet.size() < size * 25)
+        if (ImGui::InputText("String Danmaku", s, 26) || 
+            bullet.size() != size * 25)
         {
             stringBullet.inputString = s;
             size = stringBullet.inputString.size();

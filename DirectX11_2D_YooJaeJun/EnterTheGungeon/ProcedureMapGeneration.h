@@ -3,7 +3,7 @@
 namespace Gungeon
 {
 	const float timeDefault = 1.0f;
-	const int roomMax = 25;
+	const int roomMax = 20;
 	const int gridMax = 7000;
 
 	const Int2 wallImgDir[8] = { {1, 5}, {0, 1}, {5, 1}, {0, 4}, {5, 4}, {1, 0}, {0, 0}, {5, 0} };
@@ -21,7 +21,8 @@ namespace Gungeon
 		roomTile, 
 		passageTile, 
 		passageWallTile, 
-		prop 
+		prop,
+		finish
 	};
 
 	class ProcedureMapGeneration
@@ -77,6 +78,7 @@ namespace Gungeon
 		void PassageTile();
 		void PassageWallTile();
 		void Prop();
+		void Finish();
 
 		void SetTilemapGUI();
 		bool IntersectTileUnit(Character* elem);

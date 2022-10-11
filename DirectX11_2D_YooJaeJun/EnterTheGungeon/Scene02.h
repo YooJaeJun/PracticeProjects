@@ -10,11 +10,10 @@ namespace Gungeon
 		// 맵 생성 기다리는 상태
 		start,
 		waitingRoom,
-		enteringFirstRoom,
+		enteringRoom,
 		// 이하 반복되는 상태
 		waitingSpawn,
-		fight,
-		cleared
+		fight
 	};
 
 	class Scene02 : public Scene
@@ -33,6 +32,7 @@ namespace Gungeon
 		vector<Effect*>			spawnEffect;
 		bool					fadeOut;
 		float					timeFade;
+		int						afterRoomIdx;
 
 	public:
 		Scene02();
@@ -47,10 +47,9 @@ namespace Gungeon
 
 		void Start();
 		void WaitingRoom();
-		void EnteringFirstRoom();
+		void EnteringRoom();
 		void WaitingSpawn();
 		void Fight();
-		void Cleared();
 
 		void SpawnPlayer();
 		void SpawnEffect();

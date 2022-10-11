@@ -4,15 +4,15 @@ namespace Gungeon
 {
     PlayerBullet::PlayerBullet()
     {
-        col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-        SetPos(DEFAULTSPAWN);
-
         scalar = 600.0f;
         damage = 2;
 
         float scaleFactor = 1.5f;
         col->scale.x = 19.0f * scaleFactor;
         col->scale.y = 19.0f * scaleFactor;
+        col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+        SetPos(DEFAULTSPAWN);
+
         idle = new ObImage(L"EnterTheGungeon/Player_0/Bullet_0.png");
         idle->scale = col->scale;
         idle->SetParentRT(*col);

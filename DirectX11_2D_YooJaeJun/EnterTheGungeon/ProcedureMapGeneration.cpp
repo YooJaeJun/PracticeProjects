@@ -13,7 +13,7 @@ namespace Gungeon
 
         state = MapGenState::spray;
 
-        LIGHT->light.radius = 5000.0f;
+        LIGHT->light.radius = 4000.0f;
 
         flagSpread = false;
 
@@ -192,6 +192,15 @@ namespace Gungeon
             if (TIMER->GetTick(timer, timeDefault))
             {
                 Prop();
+                state = MapGenState::finish;
+            }
+            break;
+        }
+        case MapGenState::finish:
+        {
+            if (TIMER->GetTick(timer, timeDefault))
+            {
+                Finish();
             }
             break;
         }
@@ -282,8 +291,8 @@ namespace Gungeon
                 for (auto& spawnPosElem : elem->enemySpawnPos)
                 {
                     float xPos, yPos;
-                    xPos = elem->Pos().x + RANDOM->Float(-elem->col->scale.x * 0.4f, elem->col->scale.x * 0.4f);
-                    yPos = elem->Pos().y + RANDOM->Float(-elem->col->scale.y * 0.4f, elem->col->scale.y * 0.4f);
+                    xPos = elem->Pos().x + RANDOM->Float(-elem->col->scale.x * 0.35f, elem->col->scale.x * 0.35f);
+                    yPos = elem->Pos().y + RANDOM->Float(-elem->col->scale.y * 0.35f, elem->col->scale.y * 0.35f);
                     spawnPosElem = Vector2(xPos, yPos);
                 }
 
@@ -697,6 +706,22 @@ namespace Gungeon
     }
 
     void ProcedureMapGeneration::Prop()
+    {
+        int t = 20;
+        while (t--)
+        {
+            int rx = RANDOM->Int(0, tilemap->GetTileSize().x - 1);
+            int ry = RANDOM->Int(0, tilemap->GetTileSize().y - 1);
+            if (tilemap->Tiles[rx][ry].state == TileState::none)
+            {
+                tilemap->SetTile(Int2(rx, ry),
+                    Int2(7, 7),
+                    imgIdx);
+            }
+        }
+    }
+
+    void ProcedureMapGeneration::Finish()
     {
 
     }

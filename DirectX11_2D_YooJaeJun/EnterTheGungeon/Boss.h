@@ -42,8 +42,6 @@ namespace Gungeon
 		void Idle();
 		void Walk();
 		virtual void Die() override;
-		void StartWalk();
-		void StartIdle();
 		void Hit(const int damage, const Vector2& dir);
 		void Hitting();
 		virtual void StartDie() override;
@@ -68,7 +66,6 @@ namespace Gungeon
 
 	public:
 		WeaponData*				weapon;
-		Weapon*					curWeapon;		// data index 실수 막기 위함
 		UI*						hpGuageBar;
 		UI*						hpGuage;
 		vector<Bullet*>			bullet;

@@ -136,18 +136,12 @@ namespace Gungeon
 	{
 		weapon = new WeaponData;
 		curWeapon = weapon->data[0];
-
 		curWeapon->col->SetParentRT(*col);
 		curWeapon->col->SetLocalPos(Vector2(10.0f, -15.0f));
-
 		curWeapon->idle->SetParentRT(*curWeapon->col);
-
 		curWeapon->firePos->SetLocalPos(Vector2(curWeapon->col->scale.x / 2.0f, 0.0f));
-
 		curWeapon->fireEffect->idle->SetParentRT(*curWeapon->firePos);
-
 		curWeapon->imgReloading->SetParentRT(*curWeapon->col);
-
 		curWeapon->Equip();
 	}
 
@@ -222,31 +216,18 @@ namespace Gungeon
 
 	void Enemy::Idle()
 	{
-		Unit::SetTarget(curWeapon);
-
-		moveDir = targetDir;
-		SetMoveDirState();
+		Unit::Idle();
 
 		Fire();
-		if (false == isHit)
-		{
-			StartWalk();
-		}
 		Hitting();
 	}
 
 	void Enemy::Walk()
 	{
-		Unit::SetTarget(curWeapon);
-
 		moveDir = targetDir;
-		SetMoveDirState();
+		Unit::Walk();
 
 		Fire();
-		if (false == isHit)
-		{
-			StartIdle();
-		}
 		Hitting();
 	}
 
@@ -263,38 +244,6 @@ namespace Gungeon
 			pushedDir = Vector2(0.0f, 0.0f);
 			pushedScalar = 400.0f;
 			pushedScalarFactor = 0.0f;
-		}
-	}
-
-	void Enemy::StartWalk()
-	{
-		if (moveDir.x == 0.0f && moveDir.y == 0.0f)
-		{
-			idle[curTargetDirState]->isVisible = true;
-			for (auto& elem : walk) elem->isVisible = false;
-		}
-		else
-		{
-			state = State::walk;
-			for (auto& elem : idle) elem->isVisible = false;
-			walk[curTargetDirState]->isVisible = true;
-			walk[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
-		}
-	}
-
-	void Enemy::StartIdle()
-	{
-		if (moveDir.x == 0.0f && moveDir.y == 0.0f)
-		{
-			state = State::idle;
-			for (auto& elem : walk) elem->isVisible = false;
-			idle[curTargetDirState]->isVisible = true;
-			idle[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
-		}
-		else
-		{
-			for (auto& elem : idle) elem->isVisible = false;
-			walk[curTargetDirState]->isVisible = true;
 		}
 	}
 
@@ -406,9 +355,7 @@ namespace Gungeon
 
 		for (auto& elem : bullet)
 		{
-			elem->col->colOnOff = false;
 			elem->col->isVisible = false;
-			elem->idle->colOnOff = false;
 			elem->idle->isVisible = false;
 			elem->hitBomb->idle->isVisible = false;
 		}
@@ -424,6 +371,9 @@ namespace Gungeon
 		Unit::Spawn(wpos);
 
 		InitVar();
+
+		walk[curTargetDirState]->isVisible = true;
+		walk[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 
 		curWeapon->col->isVisible = true;
 		curWeapon->idle->isVisible = true;
