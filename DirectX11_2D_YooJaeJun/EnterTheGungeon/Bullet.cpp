@@ -22,10 +22,25 @@ namespace Gungeon
 
     void Bullet::Update()
     {
-        Character::Update();
-
         if (isFired)
         {
+            Character::Update();
+
+            moveDir.Normalize();
+            Vector2 velocity = moveDir * scalar * DELTA;
+            col->MoveWorldPos(velocity);
+        }
+
+        idle->Update();
+        hitBomb->Update();
+    }
+
+    void Bullet::Update(const bool notRotation)
+    {
+        if (isFired)
+        {
+            Character::Update(notRotation);
+
             moveDir.Normalize();
             Vector2 velocity = moveDir * scalar * DELTA;
             col->MoveWorldPos(velocity);
@@ -69,10 +84,9 @@ namespace Gungeon
 
     void Bullet::Reload()
     {
-        col->colOnOff = true;
-        col->isVisible = true;
         SetPos(DEFAULTSPAWN);
-        idle->isVisible = true;
+        col->isVisible = false;
+        idle->isVisible = false;
         isFired = false;
     }
 }

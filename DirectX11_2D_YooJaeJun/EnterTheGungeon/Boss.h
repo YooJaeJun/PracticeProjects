@@ -10,7 +10,8 @@ namespace Gungeon
 		shield,
 		spiral,
 		cluster,
-		wave,
+		brute,
+		rand,
 		max
 	};
 
@@ -19,7 +20,8 @@ namespace Gungeon
 	const int shieldMax = 60;
 	const int spiralMax = 60;
 	const int clusterMax = 10;
-	const int waveMax = 100;
+	const int bruteMax = 720;
+	const int randMax = 400;
 
 	class Boss : public Unit
 	{
@@ -53,14 +55,16 @@ namespace Gungeon
 		void InitShield();
 		void InitSpiral();
 		void InitCluster();
-		void InitWave();
+		void InitBrute();
+		void InitRand();
 		void UpdateBullet();
 		void UpdateCircular();
 		void UpdateString();
 		void UpdateShield();
 		void UpdateSpiral();
 		void UpdateCluster();
-		void UpdateWave();
+		void UpdateBrute();
+		void UpdateRand();
 
 	public:
 		WeaponData*				weapon;
@@ -78,6 +82,8 @@ namespace Gungeon
 		float					curSpiralIdx;
 		bool					flagSpiralRespawn;
 		float					timeCluster;
-		float					timeWave;
+		float					timeBrute;
+		float					timeRand;
+		int						curRandIdx;
 	};
 }

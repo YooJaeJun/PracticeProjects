@@ -17,6 +17,7 @@ namespace Gungeon
 		virtual void Init();
 		virtual void Release();
 		virtual void Update();
+		virtual void Update(const bool notRotation);
 		virtual void LateUpdate();
 		virtual void Render();
 		virtual void ResizeScreen();

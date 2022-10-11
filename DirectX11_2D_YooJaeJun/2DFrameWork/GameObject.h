@@ -95,6 +95,7 @@ public:
 	virtual ~GameObject() {};
 
 	virtual void Update();
+	virtual void Update(const bool notRotation);
 	virtual void Render();
 	ColPos Intersect(Vector2 coord);
 	ColPos Intersect(GameObject* ob);

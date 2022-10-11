@@ -30,11 +30,22 @@ namespace Gungeon
 
         // room
         rooms = vector<Room*>(roomMax);
+        int idx = 0;
         for (auto& room : rooms)
         {
             room = new Room();
-            room->col->scale.x = 100.0f * RANDOM->Int(5, 14);
-            room->col->scale.y = 100.0f * RANDOM->Int(5, 14);
+
+            // 일부 방 선택할 만한 크기 보장
+            if (idx < 5)
+            {
+                room->col->scale.x = 100.0f * RANDOM->Int(10, 14);
+                room->col->scale.y = 100.0f * RANDOM->Int(10, 14);
+            }
+            else
+            {
+                room->col->scale.x = 100.0f * RANDOM->Int(5, 12);
+                room->col->scale.y = 100.0f * RANDOM->Int(5, 12);
+            }
 
             map<Int2, bool> dic;
             int xRand = 0, yRand = 0;
@@ -45,11 +56,13 @@ namespace Gungeon
 
             dic[Int2(xRand, yRand)]++;
 
-            room->col->SetWorldPosX(100.0f * xRand);
-            room->col->SetWorldPosY(100.0f * yRand);
+            room->SetPosX(100.0f * xRand);
+            room->SetPosY(100.0f * yRand);
             room->col->isFilled = false;
             room->col->color = Color(1.0f, 0.6f, 0.6f);
             room->col->collider = Collider::rect;
+
+            idx++;
         }
         roomScaleForSelect = 800.0f;
     }
@@ -158,29 +171,20 @@ namespace Gungeon
         }
         case MapGenState::roomTile:
         {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                RoomTile();
-                state = MapGenState::passageTile;
-            }
+            RoomTile();
+            state = MapGenState::passageTile;
             break;
         }
         case MapGenState::passageTile:
         {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                PassageTile();
-                state = MapGenState::passageWallTile;
-            }
+            PassageTile();
+            state = MapGenState::passageWallTile;
             break;
         }
         case MapGenState::passageWallTile:
         {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                PassageWallTile();
-                state = MapGenState::prop;
-            }
+            PassageWallTile();
+            state = MapGenState::prop;
             break;
         }
         case MapGenState::prop:
@@ -304,7 +308,6 @@ namespace Gungeon
         for (auto& elem : linesTriangulated)
         {
             elem.color = Color(1.0f, 1.0f, 1.0f);
-            elem.collider = Collider::line;
         }
     }
 
@@ -365,6 +368,10 @@ namespace Gungeon
             }
             if (false == flag)
             {
+                // 노드의 인덱스를 검사
+                linesTriangulated[rand].v.index = triangulation.nodesForIndex[linesTriangulated[rand].v];
+                linesTriangulated[rand].w.index = triangulation.nodesForIndex[linesTriangulated[rand].w];
+
                 linesTriangulated[rand].color = Color(0.5f, 0.5f, 1.0f);
                 linesMST.push_back(linesTriangulated[rand]);
             }
@@ -486,7 +493,7 @@ namespace Gungeon
         }
 
         // 1. 8방향 체크해 문의 방향을 정하고, 2. 좌우문 뒤집을지, 3. 모서리에 위치할 시 예외처리
-        auto SetDoor = [&](Int2 on, bool right)
+        auto SetDoor = [&](Int2 on, bool right, const int roomIdx)
         {
             deque<bool> dirWall(8);
 
@@ -564,13 +571,17 @@ namespace Gungeon
                     Int2(RANDOM->Int(1, 4),
                         RANDOM->Int(1, 3)),
                     imgIdx,
-                    (int)TileState::floor);
+                    (int)TileState::floor, 
+                    Color(0.5f, 0.5f, 0.5f, 0.5f),
+                    roomIdx);
             }
 
             tilemap->SetTile(doorTileIdx,
                 doorFrameIdx,
                 imgIdx,
-                (int)TileState::door);
+                (int)TileState::door,
+                Color(0.5f, 0.5f, 0.5f, 0.5f),
+                roomIdx);
         };
 
 
@@ -612,11 +623,11 @@ namespace Gungeon
 
                         if (first)
                         {
-                            SetDoor(beforeOn, !doorRight);
+                            SetDoor(beforeOn, !doorRight, onRoomIdx);
                         }
                         else
                         {
-                            SetDoor(on, doorRight);
+                            SetDoor(on, doorRight, onRoomIdx);
                         }
 
                         way.clear();
@@ -632,16 +643,10 @@ namespace Gungeon
         };
 
         // 시작
-        map<ObNode, bool> visited;
-
         for (auto& elem : linesMST)
         {
             const ObNode& v = elem.v;
             const ObNode& w = elem.w;
-
-            if (visited[v] && visited[w]) continue;
-            visited[v] = true;
-            visited[w] = true;
 
             ObNode mid = ObNode((w.x + v.x) / 2.0f, (w.y + v.y) / 2.0f);
 

@@ -81,13 +81,13 @@ void GameObject::Update()
 	Pi = Matrix::CreateTranslation(pivot.x, pivot.y, 0.0f);
 	S = Matrix::CreateScale(scale.x, scale.y, 1.0f);
 	R = Matrix::CreateRotationZ(rotation);
-	//RX = Matrix::CreateRotationX(rotationX);
-	//RY = Matrix::CreateRotationY(rotationY);
+	// RX = Matrix::CreateRotationX(rotationX);
+	// RY = Matrix::CreateRotationY(rotationY);
 	T = Matrix::CreateTranslation(position.x, position.y, 0.0f);
 	R2 = Matrix::CreateRotationZ(rotation2);
 
 	// 최적화 이슈 때문에 빼놓고 reverseLR로 대체
-	//RT = R * RX * RY * T * R2;
+	// RT = R * RX * RY * T * R2;
 	RT = R * T * R2;
 
 	//P의 주소가 있으면
@@ -95,6 +95,17 @@ void GameObject::Update()
 	{
 		RT *= *P;
 	}
+	W = Pi * S * RT;
+}
+
+void GameObject::Update(const bool notRotation)
+{
+	Pi = Matrix::CreateTranslation(pivot.x, pivot.y, 0.0f);
+	S = Matrix::CreateScale(scale.x, scale.y, 1.0f);
+	T = Matrix::CreateTranslation(position.x, position.y, 0.0f);
+
+	RT = T;
+
 	W = Pi * S * RT;
 }
 
@@ -116,6 +127,7 @@ void GameObject::Render()
 		axisObject->Update();
 		axisObject->Render();
 	}
+
 	switch (space)
 	{
 	case Space::world:

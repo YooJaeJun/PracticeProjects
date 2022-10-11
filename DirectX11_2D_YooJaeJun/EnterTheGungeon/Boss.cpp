@@ -31,7 +31,7 @@ namespace Gungeon
         timeSpiral = 0.0f;
         flagSpiralRespawn = false;
         timeCluster = 0.0f;
-        timeWave = 0.0f;
+        timeBrute = 0.0f;
     }
 
     void Boss::InitSelf()
@@ -195,8 +195,11 @@ namespace Gungeon
         case Gungeon::BossPattern::cluster:
             InitCluster();
             break;
-        case Gungeon::BossPattern::wave:
-            InitWave();
+        case Gungeon::BossPattern::brute:
+            InitBrute();
+            break;
+        case Gungeon::BossPattern::rand:
+            InitRand();
             break;
         }//switch
     }
@@ -209,7 +212,7 @@ namespace Gungeon
         dropItem->col->scale = Vector2(40.0f, 40.0f) * scaleFactor;
         dropItem->col->isVisible = false;
         dropItem->col->isFilled = false;
-        dropItem->col->SetWorldPos(DEFAULTSPAWN);
+        dropItem->SetPos(DEFAULTSPAWN);
         dropItem->idle = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
         dropItem->idle->scale = Vector2(40.0f, 40.0f) * scaleFactor;
         dropItem->idle->SetParentRT(*dropItem->col);
@@ -235,26 +238,45 @@ namespace Gungeon
             InitBullet();
         }
         
-        Weapon* w = weapon->data[1];
-        bulletSpawnPos = w->firePos->GetWorldPos();
-        bulletSpawnDir = w->moveDir;
+        bulletSpawnPos = curWeapon->firePos->GetWorldPos();
+        bulletSpawnDir = curWeapon->moveDir;
 
         switch (state)
         {
         case State::idle:
             Idle();
-            for (auto& elem : bullet) elem->Update();
             break;
         case State::walk:
             Walk();
-            for (auto& elem : bullet) elem->Update();
             break;
         case State::die:
             Die();
             break;
         }
 
-        w->Update();
+        switch (pattern)
+        {
+        case Gungeon::BossPattern::none:
+        case Gungeon::BossPattern::circular:
+        case Gungeon::BossPattern::string:
+        case Gungeon::BossPattern::shield:
+        case Gungeon::BossPattern::spiral:
+        case Gungeon::BossPattern::cluster:
+        case Gungeon::BossPattern::rand:
+            for (auto& elem : bullet)
+            {
+                elem->Update();
+            }
+            break;
+        case Gungeon::BossPattern::brute:
+            for (auto& elem : bullet)
+            {
+                elem->Update(false);
+            }
+            break;
+        }
+
+        curWeapon->Update();
         hpGuageBar->Update();
         hpGuage->Update();
         dropItem->Update();
@@ -455,13 +477,6 @@ namespace Gungeon
         hpGuageBar->img->isVisible = false;
         hpGuage->img->isVisible = false;
 
-        for (auto& elem : bullet)
-        {
-            elem->col->colOnOff = false;
-            elem->idle->colOnOff = false;
-            elem->hitBomb->idle->colOnOff = false;
-        }
-
         // drop
         dropItem->Spawn(Vector2(Pos().x - 10.0f, Pos().y - 10.0f));
         dropItem->col->isVisible = true;
@@ -518,7 +533,7 @@ namespace Gungeon
             elem->scalar = 120.0f;
             elem->col->rotation = 0.0f;
             elem->col->rotation2 = 0.0f;
-            elem->col->SetWorldPos(DEFAULTSPAWN);
+            elem->SetPos(DEFAULTSPAWN);
             elem->idle->color = Color(0.5f, 0.5f, 0.5f);
         }
     }
@@ -578,8 +593,11 @@ namespace Gungeon
         for (auto& elem : bullet)
         {
             if (nullptr == elem) elem = new BossBullet;
+            elem->col->isVisible = true;
+            elem->col->SetParentRT(*col);
             elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
             elem->scalar = (idx + 1) * 3.0f;
+            elem->idle->isVisible = true;
             elem->idle->color = Color(1.0f, 0.7f, 0.0f);
             idx++;
         }
@@ -613,9 +631,9 @@ namespace Gungeon
         }
     }
 
-    void Boss::InitWave()
+    void Boss::InitBrute()
     {
-        bullet.resize(waveMax);
+        bullet.resize(bruteMax);
 
         int idx = 0;
         for (auto& elem : bullet)
@@ -624,6 +642,20 @@ namespace Gungeon
             elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
             elem->scalar = (idx + 1) * 3.0f;
             elem->moveDir = Vector2(cos(idx * 6.0f * ToRadian), sin(idx * 6.0f * ToRadian));
+            idx++;
+        }
+    }
+
+    void Boss::InitRand()
+    {
+        bullet.resize(bruteMax);
+
+        int idx = 0;
+        for (auto& elem : bullet)
+        {
+            if (nullptr == elem) elem = new BossBullet;
+            elem->scalar = RANDOM->Float(400.0f, 800.0f);
+            elem->moveDir = Vector2(RANDOM->Float(-DIV2PI, DIV2PI), RANDOM->Float(-DIV2PI, DIV2PI));
             idx++;
         }
     }
@@ -648,8 +680,11 @@ namespace Gungeon
         case Gungeon::BossPattern::cluster:
             UpdateCluster();
             break;
-        case Gungeon::BossPattern::wave:
-            UpdateWave();
+        case Gungeon::BossPattern::brute:
+            UpdateBrute();
+            break;
+        case Gungeon::BossPattern::rand:
+            UpdateRand();
             break;
         }
     }
@@ -670,7 +705,7 @@ namespace Gungeon
         int size = stringBullet.inputString.size();
         char* s = const_cast<char*>(stringBullet.inputString.c_str());
 
-        if (ImGui::InputText("String Danmaku", s, 26))
+        if (ImGui::InputText("String Danmaku", s, 26) || bullet.size() < size * 25)
         {
             stringBullet.inputString = s;
             size = stringBullet.inputString.size();
@@ -712,14 +747,14 @@ namespace Gungeon
         int idx = 0;
         for (auto& elem : bullet)
         {
-            // 테스트 때문에 임시로 Update에 넣음. 최초 패턴 설정 시 init 시기에 col이 없어서.
-            if (col && nullptr == elem->col->GetParent())
-            {
-                elem->col->SetParentRT(*col);
-            }
+            elem->isFired = true;
+            elem->col->isVisible = true;
+            elem->idle->isVisible = true;
+
             elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
             elem->col->rotation += 3.0f * idx * ToRadian * DELTA;
             elem->col->rotation2 += 3.0f * idx * ToRadian * DELTA;
+
             idx++;
         }
     }
@@ -757,9 +792,9 @@ namespace Gungeon
         }
     }
 
-    void Boss::UpdateWave()
+    void Boss::UpdateBrute()
     {
-        if (TIMER->GetTick(timeWave, 2.0f))
+        if (TIMER->GetTick(timeBrute, 3.0f))
         {
             int idx = 0;
             for (auto& elem : bullet)
@@ -768,5 +803,10 @@ namespace Gungeon
                 idx++;
             }
         }
+    }
+    void Boss::UpdateRand()
+    {
+        bullet[curRandIdx++]->Spawn(bulletSpawnPos);
+        if (curRandIdx >= randMax) curRandIdx = 0;
     }
 }

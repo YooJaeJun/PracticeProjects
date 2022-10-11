@@ -30,8 +30,15 @@ namespace Gungeon
 		if (colTile) colTile->Update();
 	}
 
+	void Character::Update(const bool notRotation)
+	{
+		if (col) col->Update(notRotation);
+		if (colTile) colTile->Update(notRotation);
+	}
+
 	void Character::LateUpdate()
-	{}
+	{
+	}
 
 	void Character::Render()
 	{

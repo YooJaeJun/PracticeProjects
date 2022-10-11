@@ -33,7 +33,7 @@ namespace Gungeon
 
     void Scene01::Update()
     {
-        if (INPUT->KeyDown('R') || INPUT->KeyDown('1'))
+        if (INPUT->KeyDown('1'))
         {
             mapGen->Release();
             mapGen->Init();
@@ -43,7 +43,7 @@ namespace Gungeon
         if (INPUT->KeyDown('2'))
         {
             fadeOut = true;
-            SCENE->ChangeScene("Scene02", 2.0f);
+            SCENE->ChangeScene("Scene02", 1.0f);
         }
 
         ChangeUpdateScene();
@@ -68,17 +68,23 @@ namespace Gungeon
     {
         if (fadeOut)
         {
-            LIGHT->light.radius -= 1000.0f * DELTA;
+            LIGHT->light.radius -= 2000.0f * DELTA;
+            LIGHT->light.lightColor.x += 0.5f * DELTA;
+            LIGHT->light.lightColor.y += 0.5f * DELTA;
+            LIGHT->light.lightColor.z += 0.5f * DELTA;
 
-            if (TIMER->GetTick(timeFade, 2.0f))
+            if (TIMER->GetTick(timeFade, 1.0f))
             {
                 fadeOut = false;
             }
         }
         else
         {
-            LIGHT->light.radius += 1000.0f * DELTA;
+            LIGHT->light.radius += 2000.0f * DELTA;
             LIGHT->light.radius = Utility::Saturate(LIGHT->light.radius, 0.0f, 2000.0f);
+            LIGHT->light.lightColor.x = 0.5f;
+            LIGHT->light.lightColor.y = 0.5f;
+            LIGHT->light.lightColor.z = 0.5f;
         }
     }
 }

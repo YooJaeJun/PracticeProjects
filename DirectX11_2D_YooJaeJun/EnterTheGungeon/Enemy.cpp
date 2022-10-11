@@ -168,7 +168,7 @@ namespace Gungeon
 		dropItem->col->scale = Vector2(40.0f, 40.0f) * scaleFactor;
 		dropItem->col->isVisible = false;
 		dropItem->col->isFilled = false;
-		dropItem->col->SetWorldPos(DEFAULTSPAWN);
+		dropItem->SetPos(DEFAULTSPAWN);
 		dropItem->idle = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
 		dropItem->idle->scale = Vector2(40.0f, 40.0f) * scaleFactor;
 		dropItem->idle->SetParentRT(*dropItem->col);
@@ -191,11 +191,9 @@ namespace Gungeon
 		{
 		case State::idle:
 			Idle();
-			for (auto& elem : bullet) elem->Update();	// 방에 충돌체 생기기 전까지 임시로 상태에 끼워넣음
 			break;
 		case State::walk:
 			Walk();
-			for (auto& elem : bullet) elem->Update();	// 방에 충돌체 생기기 전까지 임시로 상태에 끼워넣음
 			break;
 		case State::die:
 			Die();
@@ -205,6 +203,7 @@ namespace Gungeon
 		}
 
 		curWeapon->Update();
+		for (auto& elem : bullet) elem->Update();
 		dropItem->Update();
 	}
 
@@ -278,8 +277,8 @@ namespace Gungeon
 		{
 			state = State::walk;
 			for (auto& elem : idle) elem->isVisible = false;
-			walk[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 			walk[curTargetDirState]->isVisible = true;
+			walk[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 		}
 	}
 
@@ -441,12 +440,6 @@ namespace Gungeon
 
 		pushedScalar = 400.0f;
 		pushedScalarFactor = 0.0f;
-
-		for (auto& elem : bullet)
-		{
-			elem->col->colOnOff = true;
-			elem->idle->colOnOff = true;
-		}
 
 		dropItem->col->isVisible = false;
 		dropItem->idle->isVisible = false;

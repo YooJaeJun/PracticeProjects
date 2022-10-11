@@ -30,7 +30,7 @@ namespace Gungeon
 		ProcedureMapGeneration* mapGen;
 		Room*					curRoom;
 		int						curRoomIdx;
-		Effect*					spawnEffect[4];
+		vector<Effect*>			spawnEffect;
 		bool					fadeOut;
 		float					timeFade;
 

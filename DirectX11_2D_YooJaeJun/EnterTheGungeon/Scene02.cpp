@@ -20,6 +20,8 @@ namespace Gungeon
 
         if (!player) player = new Player();
 
+        spawnEffect.resize(enemyMax + bossMax);
+        int idx = 0;
         for (auto& elem : spawnEffect)
         {
             if (!elem)
@@ -31,7 +33,13 @@ namespace Gungeon
                 elem->idle->scale = Vector2(663.0f / 18.0f, 39.0f) * 2.0f;
                 elem->idle->isVisible = false;
                 elem->intervalDie = 1.8f;
+
+                if (idx == spawnEffect.size() - 1)
+                {
+                    spawnEffect[spawnEffect.size() - 1]->idle->scale *= 2.5f;
+                }
             }
+            idx++;
         }
 
         for (auto& elem : enemy)
@@ -67,11 +75,11 @@ namespace Gungeon
 
     void Scene02::Update()
     {
-        if (INPUT->KeyDown('R') || INPUT->KeyDown('2'))
+        if (INPUT->KeyDown('2'))
         {
+            gameState = GameState::start;
             Release();
             Init();
-            gameState = GameState::start;
         }
 
         if (INPUT->KeyDown('H'))
@@ -114,7 +122,7 @@ namespace Gungeon
         {
             gameState = GameState::start;
             fadeOut = true;
-            SCENE->ChangeScene("Scene01", 2.0f);
+            SCENE->ChangeScene("Scene01", 1.0f);
         }
 
         ChangeUpdateScene();
@@ -555,17 +563,23 @@ namespace Gungeon
     {
         if (fadeOut)
         {
-            LIGHT->light.radius -= 1000.0f * DELTA;
+            LIGHT->light.radius -= 2000.0f * DELTA;
+            LIGHT->light.lightColor.x += 0.5f * DELTA;
+            LIGHT->light.lightColor.y += 0.5f * DELTA;
+            LIGHT->light.lightColor.z += 0.5f * DELTA;
 
-            if (TIMER->GetTick(timeFade, 2.0f))
+            if (TIMER->GetTick(timeFade, 1.0f))
             {
                 fadeOut = false;
             }
         }
         else
         {
-            LIGHT->light.radius += 1000.0f * DELTA;
+            LIGHT->light.radius += 2000.0f * DELTA;
             LIGHT->light.radius = Utility::Saturate(LIGHT->light.radius, 0.0f, 2000.0f);
+            LIGHT->light.lightColor.x = 0.5f;
+            LIGHT->light.lightColor.y = 0.5f;
+            LIGHT->light.lightColor.z = 0.5f;
         }
     }
 }

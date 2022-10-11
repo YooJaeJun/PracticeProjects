@@ -40,6 +40,11 @@ namespace Gungeon
         Bullet::Update();
     }
 
+    void BossBullet::Update(const bool notRotation)
+    {
+        Bullet::Update(notRotation);
+    }
+
     void BossBullet::LateUpdate()
     {
     }
