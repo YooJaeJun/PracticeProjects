@@ -62,6 +62,8 @@ public:
     int             GetTileRoomIndex(Int2 TileIdx);
     void            SetTileRoomIndex(Int2 TileIdx, const int tileRoomIndex);
 
+    bool            IntersectTilePos(Vector2 wpos);
+    bool            IntersectTileUnit(ObRect* colTile);
     bool            PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool checkDiagnoal = true);
 
 protected:

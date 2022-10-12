@@ -19,12 +19,9 @@ namespace Gungeon
 
         fadeOut = false;
         timeFade = 0.0f;
-
         SOUND->Stop("SCENE02");
         //SOUND->AddSound("Vaquero Perdido - The Mini Vandals.mp3", "SCENE01", true);
         SOUND->Play("SCENE01");
-
-        SOUND->AddSound("gun.wav", "GUN", false);
     }
 
     void Scene01::Release()
@@ -38,13 +35,18 @@ namespace Gungeon
             mapGen->Release();
             mapGen->Init();
         }
-        if (mapGen) mapGen->Update();
-
-        if (INPUT->KeyDown('2'))
+        else if (INPUT->KeyDown('2'))
         {
             fadeOut = true;
             SCENE->ChangeScene("Scene02", 1.0f);
         }
+        else if (INPUT->KeyDown('3'))
+        {
+            fadeOut = true;
+            SCENE->ChangeScene("Scene03", 1.0f);
+        }
+
+        if (mapGen) mapGen->Update();
 
         ChangeUpdateScene();
     }

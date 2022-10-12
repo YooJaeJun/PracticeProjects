@@ -6,6 +6,7 @@ namespace Gungeon
 	{
 	private:
 		ProcedureMapGeneration* mapGen;
+		Player*					player;
 
 	public:
 		virtual void Init() override;

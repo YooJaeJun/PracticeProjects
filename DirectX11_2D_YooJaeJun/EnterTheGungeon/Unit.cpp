@@ -224,6 +224,7 @@ namespace Gungeon
 	void Unit::StepBack()
 	{
 		SetPos(lastPos);
+		Update();
 	}
 
 	void Unit::SetMoveDirState()

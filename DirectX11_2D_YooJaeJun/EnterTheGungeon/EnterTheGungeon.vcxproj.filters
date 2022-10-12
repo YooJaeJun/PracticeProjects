@@ -50,9 +50,6 @@
     <ClInclude Include="Enemy.h">
       <Filter>GameObject\Unit</Filter>
     </ClInclude>
-    <ClInclude Include="MapObject.h">
-      <Filter>GameObject\Level</Filter>
-    </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>GameObject</Filter>
     </ClInclude>
@@ -107,6 +104,9 @@
     <ClInclude Include="Weapon2.h">
       <Filter>GameObject\Item</Filter>
     </ClInclude>
+    <ClInclude Include="Scene03.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -127,9 +127,6 @@
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>GameObject\Unit</Filter>
-    </ClCompile>
-    <ClCompile Include="MapObject.cpp">
-      <Filter>GameObject\Level</Filter>
     </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>GameObject</Filter>
@@ -184,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="Weapon2.cpp">
       <Filter>GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene03.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

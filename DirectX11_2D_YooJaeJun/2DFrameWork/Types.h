@@ -11,14 +11,49 @@ struct Int2
 		this->y = y;
 	}
 
-	bool operator==(Int2 dest)
+	Int2 operator+(const Int2 dest)
+	{
+		return Int2(x + dest.x, y + dest.y);
+	}
+	Int2 operator-(const Int2 dest)
+	{
+		return Int2(x - dest.x, y - dest.y);
+	}
+	Int2 operator*(const Int2 dest)
+	{
+		return Int2(x * dest.x, y * dest.y);
+	}
+	Int2 operator/(const Int2 dest)
+	{
+		return Int2(x / dest.x, y / dest.y);
+	}
+
+	Int2 operator+(const int value)
+	{
+		return Int2(x + value, y + value);
+	}
+	Int2 operator-(const int value)
+	{
+		return Int2(x - value, y - value);
+	}
+	Int2 operator*(const int value)
+	{
+		return Int2(x * value, y * value);
+	}
+	Int2 operator/(const int value)
+	{
+		return Int2(x / value, y / value);
+	}
+
+	bool operator==(const Int2 dest)
 	{
 		return (x == dest.x && y == dest.y);
 	}
-	bool operator!=(Int2 dest)
+	bool operator!=(const Int2 dest)
 	{
 		return (x != dest.x || y != dest.y);
 	}
+
 	bool operator<(const Int2& other) const
 	{
 		return x < other.x || (!(other.x < x) && y < other.y);

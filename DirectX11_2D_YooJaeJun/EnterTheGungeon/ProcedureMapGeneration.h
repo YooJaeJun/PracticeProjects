@@ -22,12 +22,14 @@ namespace Gungeon
 		passageTile, 
 		passageWallTile, 
 		prop,
+		spawner,
 		finish
 	};
 
 	class ProcedureMapGeneration
 	{
 	public:
+		bool						useGui;
 		float						timer;
 		// Spread
 		bool						flagSpread;
@@ -55,7 +57,6 @@ namespace Gungeon
 		int							tileState;
 		Int2						mouseIdx;
 		Int2						pickingIdx;
-		bool						useGui;
 
 	public:
 		ProcedureMapGeneration();
@@ -78,10 +79,9 @@ namespace Gungeon
 		void PassageTile();
 		void PassageWallTile();
 		void Prop();
+		void Spawner();
 		void Finish();
 
 		void SetTilemapGUI();
-		bool IntersectTileUnit(Character* elem);
-		bool IntersectTilePos(Vector2 wpos);
 	};
 }

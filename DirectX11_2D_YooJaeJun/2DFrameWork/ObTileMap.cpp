@@ -443,6 +443,33 @@ void ObTileMap::Load()
     fin.close();
 }
 
+bool ObTileMap::IntersectTilePos(Vector2 wpos)
+{
+    Int2 on;
+    if (WorldPosToTileIdx(wpos, on))
+    {
+        return GetTileState(on) == TileState::wall;
+    }
+    return false;
+}
+
+bool ObTileMap::IntersectTileUnit(ObRect* colTile)
+{
+    Vector2 pos;
+    bool flag = false;
+
+    pos = colTile->lt();
+    flag |= IntersectTilePos(pos);
+    pos = colTile->lb();
+    flag |= IntersectTilePos(pos);
+    pos = colTile->rt();
+    flag |= IntersectTilePos(pos);
+    pos = colTile->rb();
+    flag |= IntersectTilePos(pos);
+
+    return flag;
+}
+
 bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool checkDiagnoal)
 {
     //둘중에 하나가 벽이면 갈 수 있는길이 없다.

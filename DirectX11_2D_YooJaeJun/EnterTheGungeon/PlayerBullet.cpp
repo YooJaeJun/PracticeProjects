@@ -5,7 +5,7 @@ namespace Gungeon
     PlayerBullet::PlayerBullet()
     {
         scalar = 600.0f;
-        damage = 2;
+        damage = 50;
 
         float scaleFactor = 1.5f;
         col->scale.x = 19.0f * scaleFactor;

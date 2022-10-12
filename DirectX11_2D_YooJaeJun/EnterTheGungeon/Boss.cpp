@@ -322,6 +322,7 @@ namespace Gungeon
 
     void Boss::Walk()
     {
+        Unit::SetTarget(weapon);
         moveDir = targetDir;
         Unit::Walk();
 

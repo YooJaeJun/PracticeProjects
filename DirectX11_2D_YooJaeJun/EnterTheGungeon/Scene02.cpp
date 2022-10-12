@@ -14,9 +14,6 @@ namespace Gungeon
 
     void Scene02::Init()
     {
-        fadeOut = false;
-        timeFade = 0.0f;
-
         if (mapGen) mapGen->useGui = false;
         curRoom = nullptr;
         curRoomIdx = 0;
@@ -54,35 +51,42 @@ namespace Gungeon
             }
         }
 
-        if (!boss)
-        {
-            boss = new Boss();
-        }
 
-        if (!mapObj) mapObj = new MapObject();
-
+        fadeOut = false;
+        timeFade = 0.0f;
         SOUND->Stop("SCENE01");
         // SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
         SOUND->Play("SCENE02");
+        SOUND->AddSound("gun.wav", "GUN", false);
     }
 
     void Scene02::Release()
     {
         for (auto& elem : mapGen->selectedRooms) elem->cleared = false;
-        SafeRelease(mapObj);
         for (auto& elem : enemy) SafeRelease(elem);
-        SafeRelease(player);
-        SafeRelease(boss);
     }
 
     void Scene02::Update()
     {
-        if (INPUT->KeyDown('2'))
+        if (INPUT->KeyDown('1'))
+        {
+            gameState = GameState::start;
+            fadeOut = true;
+            SCENE->ChangeScene("Scene01", 1.0f);
+        }
+        else if (INPUT->KeyDown('2'))
         {
             gameState = GameState::start;
             Release();
             Init();
         }
+        else if (INPUT->KeyDown('3'))
+        {
+            fadeOut = true;
+            SCENE->ChangeScene("Scene03", 1.0f);
+        }
+
+        ChangeUpdateScene();
 
         if (INPUT->KeyDown('H'))
         {
@@ -113,18 +117,6 @@ namespace Gungeon
         if (player) player->Update();
         for (auto& elem : spawnEffect) if (elem) elem->Update();
         for (auto& elem : enemy) if (elem) elem->Update();
-        if (boss) boss->Update();
-        if (mapObj) mapObj->Update();
-
-
-        if (INPUT->KeyDown('1'))
-        {
-            gameState = GameState::start;
-            fadeOut = true;
-            SCENE->ChangeScene("Scene01", 1.0f);
-        }
-
-        ChangeUpdateScene();
     }
 
     void Scene02::LateUpdate()
@@ -144,8 +136,6 @@ namespace Gungeon
         case Gungeon::GameState::fight:
             IntersectPlayer();
             IntersectEnemy();
-            IntersectBoss();
-            IntersectMapObj();
             break;
         }
     }
@@ -161,12 +151,9 @@ namespace Gungeon
 
         if (player) player->shadow->Render();
         for (auto& elem : enemy) if (elem) elem->shadow->Render();
-        if (boss) boss->shadow->Render();
 
-        if (mapObj) mapObj->Render();
         for (auto& elem : enemy) if (elem) elem->Render();
         if (player) player->Render();
-        if (boss) boss->Render();
 
         // 최적화 이슈로 zorder 주석
         /*
@@ -184,8 +171,6 @@ namespace Gungeon
         mapGen->ResizeScreen();
 
         player->ResizeScreen();
-
-        boss->ResizeScreen();
     }
 
     void Scene02::Start()
@@ -218,10 +203,6 @@ namespace Gungeon
             {
                 elem->dropItem->targetPos = player->Pos();
             }
-        }
-        if (boss->dropItem->flagAbsorbed)
-        {
-            boss->dropItem->targetPos = player->Pos();
         }
 
         // 다음 방 입장 판단
@@ -282,25 +263,6 @@ namespace Gungeon
             }
         }
 
-        if (boss->state != State::die)
-        {
-            flagCleared = false;
-
-            boss->targetPos = player->Pos();
-            boss->weapon->col->rotation = Utility::DirToRadian(player->Pos());
-
-            switch (boss->pattern)
-            {
-            case BossPattern::shield:
-            case BossPattern::cluster:
-                boss->FindPath(mapGen->tilemap);
-                break;
-            default:
-                boss->DontFindPath();
-                break;
-            }
-        }
-
         // 골드 흡수 플래그
         if (flagCleared)
         {
@@ -309,7 +271,6 @@ namespace Gungeon
             {
                 elem->dropItem->flagAbsorbed = true;
             }
-            boss->dropItem->flagAbsorbed = true;
         }
 
         if (curRoom->cleared)
@@ -345,15 +306,11 @@ namespace Gungeon
             elem->Spawn(curRoom->enemySpawnPos[idx]);
             idx++;
         }
-
-        boss->Spawn(curRoom->enemySpawnPos[idx]);
     }
 
     void Scene02::IntersectPlayer()
     {
-        int idx = 0;
-
-        if (mapGen->IntersectTileUnit(player))
+        if (mapGen->tilemap->IntersectTileUnit(player->colTile))
         {
             player->StepBack();
         }
@@ -375,16 +332,7 @@ namespace Gungeon
                     }
                 }
 
-                if (boss->state != State::die &&
-                    bulletElem->col->Intersect(boss->col))
-                {
-                    Vector2 dir = boss->col->GetWorldPos() - bulletElem->col->GetWorldPos();
-                    dir.Normalize();
-                    boss->Hit(bulletElem->damage, dir);
-                    bulletElem->Hit(1);
-                }
-
-                if (mapGen->IntersectTilePos(bulletElem->Pos()))
+                if (mapGen->tilemap->IntersectTilePos(bulletElem->Pos()))
                 {
                     bulletElem->Hit(1);
                 }
@@ -403,7 +351,7 @@ namespace Gungeon
                 player->Hit(1);
             }
 
-            if (mapGen->IntersectTileUnit(enemyElem))
+            if (mapGen->tilemap->IntersectTileUnit(enemyElem->colTile))
             {
                 enemyElem->StepBack();
             }
@@ -421,7 +369,7 @@ namespace Gungeon
                         bulletElem->Hit(1);
                     }
 
-                    if (mapGen->IntersectTilePos(bulletElem->Pos()))
+                    if (mapGen->tilemap->IntersectTilePos(bulletElem->Pos()))
                     {
                         bulletElem->Hit(1);
                     }
@@ -436,90 +384,6 @@ namespace Gungeon
             }
 
             enemyElem->LateUpdate();
-        }
-    }
-
-    void Scene02::IntersectBoss()
-    {
-        if (false == player->godMode &&
-            boss->state != State::die &&
-            boss->col->Intersect(player->col))
-        {
-            player->Hit(1);
-        }
-
-        if (mapGen->IntersectTileUnit(boss))
-        {
-            boss->StepBack();
-        }
-
-        // 보스 총알
-        for (auto& bulletElem : boss->bullet)
-        {
-            if (bulletElem->isFired)
-            {
-                if (false == player->godMode &&
-                    boss->state != State::die &&
-                    bulletElem->col->Intersect(player->col))
-                {
-                    player->Hit(bulletElem->damage);
-                    bulletElem->Hit(1);
-                }
-
-                if (mapGen->IntersectTilePos(bulletElem->Pos()))
-                {
-                    bulletElem->Hit(1);
-                }
-            }
-        }
-
-        if (boss->dropItem->state == State::idle &&
-            boss->dropItem->col->Intersect(player->col))
-        {
-            boss->dropItem->Hit();
-            player->PlusMoney(1);
-        }
-
-        Weapon* bossWeapon = boss->weapon;
-        if (bossWeapon->state == State::idle &&
-            bossWeapon->col->Intersect(player->col))
-        {
-            bossWeapon->Hit();
-            player->EquipWeapon(bossWeapon);
-        }
-
-        boss->LateUpdate();
-    }
-
-    void Scene02::IntersectMapObj()
-    {
-        int idx = 0;
-        for (auto& elem : mapObj->doorOpenUp)
-        {
-            if (false == elem->isOpen)
-            {
-                if (elem->col->Intersect(player->col))
-                {
-                    Vector2 dir = elem->Pos() - player->Pos();
-                    if (dir.y < 0.0f)
-                    {
-                        elem->idle->isVisible = false;
-                        mapObj->doorOpenDown[idx]->idle->isVisible = true;
-                        mapObj->doorOpenDown[idx]->idle->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
-                    }
-                    else
-                    {
-                        elem->idle->isVisible = true;
-                        elem->idle->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
-                    }
-
-                    elem->col->isVisible = false;
-                    elem->isOpen = true;
-                    mapObj->doorOpenDown[idx]->col->isVisible = false;
-                    mapObj->doorOpenDown[idx]->isOpen = true;
-                }
-            }
-            idx++;
         }
     }
 
@@ -569,28 +433,6 @@ namespace Gungeon
             {
                 bulletElem->col->isVisible = !bulletElem->col->isVisible;
             }
-        }
-
-        boss->col->isVisible = !boss->col->isVisible;
-        boss->colTile->isVisible = !boss->colTile->isVisible;
-        boss->weapon->firePos->isVisible = !boss->weapon->firePos->isVisible;
-
-        for (auto& bulletElem : boss->bullet)
-        {
-            bulletElem->col->isVisible = !bulletElem->col->isVisible;
-        }
-
-        for (auto& elem : mapObj->doorClosed)
-        {
-            elem->col->isVisible = !elem->col->isVisible;
-        }
-        for (auto& elem : mapObj->doorOpenDown)
-        {
-            elem->col->isVisible = !elem->col->isVisible;
-        }
-        for (auto& elem : mapObj->doorOpenUp)
-        {
-            elem->col->isVisible = !elem->col->isVisible;
         }
     }
 }

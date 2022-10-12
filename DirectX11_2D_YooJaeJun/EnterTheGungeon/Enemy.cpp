@@ -124,6 +124,7 @@ namespace Gungeon
 
 	void Enemy::Walk()
 	{
+		Unit::SetTarget(weapon);
 		moveDir = targetDir;
 		Unit::Walk();
 

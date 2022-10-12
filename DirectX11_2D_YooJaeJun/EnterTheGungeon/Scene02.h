@@ -20,10 +20,7 @@ namespace Gungeon
 	{
 	private:
 		GameState				gameState;
-		MapObject*				mapObj;
-		Player*					player;
 		Enemy*					enemy[enemyMax];
-		Boss*					boss;
 
 	public:
 		ProcedureMapGeneration* mapGen;
@@ -33,6 +30,7 @@ namespace Gungeon
 		bool					fadeOut;
 		float					timeFade;
 		int						afterRoomIdx;
+		Player*					player;
 
 	public:
 		Scene02();
@@ -57,8 +55,6 @@ namespace Gungeon
 
 		void IntersectPlayer();
 		void IntersectEnemy();
-		void IntersectBoss();
-		void IntersectMapObj();
 
 		void ChangeUpdateScene();
 
