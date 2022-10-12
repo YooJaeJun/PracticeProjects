@@ -25,6 +25,8 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Enemy1.h" />
+    <ClInclude Include="Enemy2.h" />
     <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Main.h" />
@@ -42,13 +44,16 @@
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="StringBulletData.h" />
-    <ClInclude Include="WeaponData.h" />
+    <ClInclude Include="Weapon1.h" />
+    <ClInclude Include="Weapon2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BossBullet.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Enemy1.cpp" />
+    <ClCompile Include="Enemy2.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ProcedureMapGeneration.cpp" />
@@ -67,7 +72,8 @@
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Weapon.cpp" />
-    <ClCompile Include="WeaponData.cpp" />
+    <ClCompile Include="Weapon1.cpp" />
+    <ClCompile Include="Weapon2.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

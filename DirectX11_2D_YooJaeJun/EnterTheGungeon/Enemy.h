@@ -9,8 +9,6 @@ namespace Gungeon
 		virtual void Init() override;
 		void InitVar();
 		void InitSelf();
-		void InitWeapon();
-		void InitBullet();
 		void InitItem();
 		virtual void Release() override;
 		virtual void Update() override;
@@ -27,14 +25,16 @@ namespace Gungeon
 		virtual void Spawn(const Vector2 wpos) override;
 
 	private:
-		WeaponData*		weapon;
-		float			timeSetMoveDir;
-		float			timeSetTargetDir;
-		float			pushedScalar;
-		float			pushedScalarFactor;
-		float			timeAiming;
+		float		timeSetMoveDir;
+		float		timeSetTargetDir;
+		float		pushedScalar;
+		float		pushedScalarFactor;
+		float		timeAiming;
+
+	protected:
 
 	public:
-		float			timeSetDir;
+		float		timeSetDir;
+		Weapon*		weapon;
 	};
 }

@@ -119,7 +119,6 @@ namespace Gungeon
 
 	void Unit::Idle()
 	{
-		Unit::SetTarget(curWeapon);
 		SetMoveDirState();
 		for (auto& elem : walk) elem->isVisible = false;
 		idle[curTargetDirState]->isVisible = true;
@@ -127,7 +126,6 @@ namespace Gungeon
 
 	void Unit::Walk()
 	{
-		Unit::SetTarget(curWeapon);
 		SetMoveDirState();
 		for (auto& elem : idle) elem->isVisible = false;
 		walk[curTargetDirState]->isVisible = true;

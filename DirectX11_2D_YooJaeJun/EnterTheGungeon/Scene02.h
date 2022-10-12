@@ -19,11 +19,11 @@ namespace Gungeon
 	class Scene02 : public Scene
 	{
 	private:
-		GameState		gameState;
-		MapObject*		mapObj;
-		Player*			player;
-		Enemy*			enemy[enemyMax];
-		Boss*			boss;
+		GameState				gameState;
+		MapObject*				mapObj;
+		Player*					player;
+		Enemy*					enemy[enemyMax];
+		Boss*					boss;
 
 	public:
 		ProcedureMapGeneration* mapGen;
@@ -54,7 +54,6 @@ namespace Gungeon
 		void SpawnPlayer();
 		void SpawnEffect();
 		void SpawnEnemy();
-		void ColOnOff();
 
 		void IntersectPlayer();
 		void IntersectEnemy();
@@ -62,5 +61,7 @@ namespace Gungeon
 		void IntersectMapObj();
 
 		void ChangeUpdateScene();
+
+		void ColOnOff();
 	};
 }

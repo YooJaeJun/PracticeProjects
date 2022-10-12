@@ -65,22 +65,22 @@ namespace Gungeon
 		void UpdateRand();
 
 	public:
-		WeaponData*				weapon;
-		UI*						hpGuageBar;
-		UI*						hpGuage;
-		vector<Bullet*>			bullet;
-		BossPattern             pattern;
-		StringBulletData        stringBullet;
-		Vector2					bulletSpawnPos;
-		Vector2					bulletSpawnDir;
-		float					timeSetMoveDir;
-		float					timeSetTargetDir;
-		float					timeSpiral;
-		float					curSpiralIdx;
-		bool					flagSpiralRespawn;
-		float					timeCluster;
-		float					timeBrute;
-		float					timeRand;
-		int						curRandIdx;
+		Weapon*				weapon;
+		UI*					hpGuageBar;
+		UI*					hpGuage;
+		vector<Bullet*>		bullet;
+		BossPattern         pattern;
+		StringBulletData    stringBullet;
+		Vector2				bulletSpawnPos;
+		Vector2				bulletSpawnDir;
+		float				timeSetMoveDir;
+		float				timeSetTargetDir;
+		float				timeSpiral;
+		float				curSpiralIdx;
+		bool				flagSpiralRespawn;
+		float				timeCluster;
+		float				timeBrute;
+		float				timeRand;
+		int					curRandIdx;
 	};
 }

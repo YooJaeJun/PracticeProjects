@@ -19,14 +19,14 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{09f919fa-161d-43a7-b8c0-e22f829de12f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObject\Effect">
-      <UniqueIdentifier>{c57f0926-b496-40bf-99c4-0bda6b943a0b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ProcedureMapGeneration">
       <UniqueIdentifier>{43d31f4c-4da4-483c-8477-5db7e2296b91}</UniqueIdentifier>
     </Filter>
     <Filter Include="GameObject\Item">
       <UniqueIdentifier>{427abf59-565d-49b7-9691-f7ccaf27032c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Effect">
+      <UniqueIdentifier>{c57f0926-b496-40bf-99c4-0bda6b943a0b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -95,7 +95,16 @@
     <ClInclude Include="Unit.h">
       <Filter>GameObject\Unit</Filter>
     </ClInclude>
-    <ClInclude Include="WeaponData.h">
+    <ClInclude Include="Enemy2.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy1.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon1.h">
+      <Filter>GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon2.h">
       <Filter>GameObject\Item</Filter>
     </ClInclude>
   </ItemGroup>
@@ -164,7 +173,16 @@
     <ClCompile Include="Weapon.cpp">
       <Filter>GameObject\Item</Filter>
     </ClCompile>
-    <ClCompile Include="WeaponData.cpp">
+    <ClCompile Include="Enemy2.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy1.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon1.cpp">
+      <Filter>GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon2.cpp">
       <Filter>GameObject\Item</Filter>
     </ClCompile>
   </ItemGroup>

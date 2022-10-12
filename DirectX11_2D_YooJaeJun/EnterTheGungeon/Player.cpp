@@ -192,28 +192,25 @@ namespace Gungeon
 
 	void Player::InitWeapon()
 	{
-		curWeaponMax = 3;
 		curWeaponIdx = 0;
-		weapon.resize(curWeaponMax);
-		weapon[curWeaponIdx] = new WeaponData;
-		curWeapon = weapon[curWeaponIdx]->data[0];
-		curWeapon->col->SetParentRT(*col);
-		curWeapon->col->SetLocalPos(Vector2(10.0f, -15.0f));
-		curWeapon->idle->SetParentRT(*curWeapon->col);
-		curWeapon->idle->isVisible = true;
-		curWeapon->firePos->SetLocalPos(Vector2(curWeapon->col->scale.x / 2.0f, 0.0f));
-		curWeapon->fireEffect->idle->SetParentRT(*curWeapon->firePos);
-		curWeapon->imgReloading->SetParentRT(*curWeapon->col);
-		curWeapon->Equip();
+		weapons[curWeaponIdx] = new Weapon1;
+		weapons[curWeaponIdx]->col->SetParentRT(*col);
+		weapons[curWeaponIdx]->col->SetLocalPos(Vector2(10.0f, -15.0f));
+		weapons[curWeaponIdx]->idle->SetParentRT(*weapons[curWeaponIdx]->col);
+		weapons[curWeaponIdx]->idle->isVisible = true;
+		weapons[curWeaponIdx]->firePos->SetLocalPos(Vector2(weapons[curWeaponIdx]->col->scale.x / 2.0f, 0.0f));
+		weapons[curWeaponIdx]->fireEffect->idle->SetParentRT(*weapons[curWeaponIdx]->firePos);
+		weapons[curWeaponIdx]->imgReloading->SetParentRT(*weapons[curWeaponIdx]->col);
+		weapons[curWeaponIdx]->Equip();
 
-		for (auto& elem : curWeapon->uiBullet)
+		for (auto& elem : weapons[curWeaponIdx]->uiBullet)
 		{
 			elem->img->isVisible = true;
 		}
 
-		curWeapon->uiBulletFrame->img->isVisible = true;
-		curWeapon->uiWeapon->img->isVisible = true;
-		curWeapon->uiBulletCount->img->isVisible = true;
+		weapons[curWeaponIdx]->uiBulletFrame->img->isVisible = true;
+		weapons[curWeaponIdx]->uiWeapon->img->isVisible = true;
+		weapons[curWeaponIdx]->uiBulletCount->img->isVisible = true;
 	}
 
 	void Player::InitBullet()
@@ -278,7 +275,7 @@ namespace Gungeon
 		uiWeaponFrame->img->zOrder = ZOrder::UI;
 		uiWeaponFrame->img->isVisible = true;
 
-		for (auto& elem : curWeapon->uiBullet)
+		for (auto& elem : weapons[curWeaponIdx]->uiBullet)
 		{
 			elem->img->isVisible = true;
 		}
@@ -394,7 +391,7 @@ namespace Gungeon
 		Unit::Release();
 		for (auto& elem : roll) SafeDelete(elem);
 		for (auto& elem : bullet) elem->Release();
-		curWeapon->Release();
+		weapons[curWeaponIdx]->Release();
 		uiReload->Release();
 		uiReloadBar->Release();
 		SafeRelease(uiWeaponFrame);
@@ -438,7 +435,7 @@ namespace Gungeon
 		kick->Update();
 		obtain->Update();
 
-		curWeapon->Update();
+		weapons[curWeaponIdx]->Update();
 		for (auto& elem : bullet) elem->Update();
 		uiReload->Update();
 		uiReloadBar->Update();
@@ -469,7 +466,7 @@ namespace Gungeon
 		obtain->Render(); //RENDER->push(obtain);
 		for (auto& elem : bullet) elem->Render();
 
-		curWeapon->Render();
+		weapons[curWeaponIdx]->Render();
 		uiReload->Render();
 		uiReloadBar->Render();
 		if (uiWeaponFrame) uiWeaponFrame->Render();
@@ -497,7 +494,7 @@ namespace Gungeon
 	{
 		int idx = 0;
 
-		curWeapon->ResizeScreen();
+		weapons[curWeaponIdx]->ResizeScreen();
 
 		idx = 0;
 		for (auto& elem : uiHeartNone)
@@ -533,6 +530,7 @@ namespace Gungeon
 
 	void Player::Idle()
 	{
+		Unit::SetTarget(weapons[curWeaponIdx]);
 		Unit::Idle();
 		Move();
 
@@ -550,6 +548,7 @@ namespace Gungeon
 
 	void Player::Walk()
 	{
+		Unit::SetTarget(weapons[curWeaponIdx]);
 		Unit::Walk();
 		Move();
 
@@ -576,8 +575,8 @@ namespace Gungeon
 			StartIdle();
 			state = State::idle;
 
-			curWeapon->idle->isVisible = true;
-			curWeapon->firePos->isVisible = true;
+			weapons[curWeaponIdx]->idle->isVisible = true;
+			weapons[curWeaponIdx]->firePos->isVisible = true;
 
 			scalar = 300.0f;
 
@@ -594,7 +593,7 @@ namespace Gungeon
 		Unit::Die();
 		dust->idle->isVisible = false;
 
-		curWeapon->idle->isVisible = false;
+		weapons[curWeaponIdx]->idle->isVisible = false;
 	}
 
 	void Player::Move()
@@ -635,7 +634,7 @@ namespace Gungeon
 	void Player::Action()
 	{
 		float fireInterval;
-		switch (curWeapon->type)
+		switch (weapons[curWeaponIdx]->type)
 		{
 		case WeaponType::pistol:
 			fireInterval = 0.2f;
@@ -648,7 +647,7 @@ namespace Gungeon
 			break;
 		}
 
-		int firstFire = curWeapon->bulletCount - 1;
+		int firstFire = weapons[curWeaponIdx]->bulletCount - 1;
 
 		if (curBulletIdx == firstFire ||
 			TIMER->GetTick(timeFire, fireInterval))
@@ -657,7 +656,7 @@ namespace Gungeon
 			{
 				isReloading = true;
 
-				curBulletIdx = curWeapon->bulletCount - 1;
+				curBulletIdx = weapons[curWeaponIdx]->bulletCount - 1;
 
 				for (auto& elem : canFireOnce) elem = false;
 
@@ -681,24 +680,24 @@ namespace Gungeon
 	{
 		if (false == isReloading)
 		{
-			canFireOnce[(int)curWeapon->type] = true;
+			canFireOnce[(int)weapons[curWeaponIdx]->type] = true;
 			flagFireCamShake = true;
 		}
 
 		Vector2 dir = INPUT->GetWorldMousePos() - Pos();
 		dir.Normalize();
 
-		switch (curWeapon->type)
+		switch (weapons[curWeaponIdx]->type)
 		{
 		case WeaponType::pistol:
 
 			if (canFireOnce[(int)WeaponType::pistol])
 			{
-				curWeapon->fireEffect->Spawn(curWeapon->firePos->GetWorldPos());
-				curWeapon->uiBullet[curBulletIdx]->img->isVisible = false;
+				weapons[curWeaponIdx]->fireEffect->Spawn(weapons[curWeaponIdx]->firePos->GetWorldPos());
+				weapons[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
 
 				bullet[curBulletIdx]->Spawn(
-					curWeapon->firePos->GetWorldPos(),
+					weapons[curWeaponIdx]->firePos->GetWorldPos(),
 					Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
 						RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
 				);
@@ -717,15 +716,15 @@ namespace Gungeon
 
 			if (canFireOnce[(int)WeaponType::shotgun])
 			{
-				curWeapon->fireEffect->Spawn(curWeapon->firePos->GetWorldPos());
-				curWeapon->uiBullet[curBulletIdx]->img->isVisible = false;
+				weapons[curWeaponIdx]->fireEffect->Spawn(weapons[curWeaponIdx]->firePos->GetWorldPos());
+				weapons[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
 
 				for (int bulletOnce = 6; bulletOnce >= 0; bulletOnce--)
 				{
 					bullet[bulletOnce]->scalar = RANDOM->Float(800.0f, 1000.0f);
 
 					bullet[bulletOnce]->Spawn(
-						curWeapon->firePos->GetWorldPos(),
+						weapons[curWeaponIdx]->firePos->GetWorldPos(),
 						Vector2(RANDOM->Float(dir.x - 0.2f, dir.x + 0.2f),
 							RANDOM->Float(dir.y - 0.2f, dir.y + 0.2f))
 					);
@@ -778,9 +777,9 @@ namespace Gungeon
 
 			for (auto& elem : idle) elem->isVisible = false;
 			for (auto& elem : walk) elem->isVisible = false;
-			curWeapon->idle->isVisible = false;
-			curWeapon->imgReloading->isVisible = false;
-			curWeapon->firePos->isVisible = false;
+			weapons[curWeaponIdx]->idle->isVisible = false;
+			weapons[curWeaponIdx]->imgReloading->isVisible = false;
+			weapons[curWeaponIdx]->firePos->isVisible = false;
 
 			SetMoveDirState();
 
@@ -797,9 +796,9 @@ namespace Gungeon
 	{
 		Unit::StartDie();
 
-		curWeapon->col->isVisible = false;
-		curWeapon->idle->isVisible = false;
-		curWeapon->firePos->isVisible = false;
+		weapons[curWeaponIdx]->col->isVisible = false;
+		weapons[curWeaponIdx]->idle->isVisible = false;
+		weapons[curWeaponIdx]->firePos->isVisible = false;
 
 		DecreaseHeart();
 
@@ -820,18 +819,18 @@ namespace Gungeon
 		if (isReloading)
 		{
 			uiReloadBar->img->MoveLocalPos(Vector2(80.0f * DELTA, 0.0f));
-			curWeapon->idle->isVisible = false;
-			curWeapon->imgReloading->isVisible = true;
+			weapons[curWeaponIdx]->idle->isVisible = false;
+			weapons[curWeaponIdx]->imgReloading->isVisible = true;
 
 			if (TIMER->GetTick(timeReload, 1.5f))
 			{
-				curWeapon->idle->isVisible = true;
-				curWeapon->imgReloading->isVisible = false;
+				weapons[curWeaponIdx]->idle->isVisible = true;
+				weapons[curWeaponIdx]->imgReloading->isVisible = false;
 				uiReload->img->isVisible = false;
 				uiReloadBar->img->isVisible = false;
 				isReloading = false;
 				uiReloadBar->img->SetLocalPosX(-60.0f);
-				for (auto& elem : curWeapon->uiBullet) elem->img->isVisible = true;
+				for (auto& elem : weapons[curWeaponIdx]->uiBullet) elem->img->isVisible = true;
 			}
 		}
 	}
@@ -902,7 +901,7 @@ namespace Gungeon
 	void Player::EquipWeapon(Weapon* other)
 	{
 		// 이전 무기 끄기
-		Weapon*& beforeWeapon = curWeapon;
+		Weapon*& beforeWeapon = weapons[curWeaponIdx];
 		beforeWeapon->idle->isVisible = false;
 		beforeWeapon->firePos->isVisible = false;
 		beforeWeapon->imgReloading->isVisible = false;
@@ -923,7 +922,7 @@ namespace Gungeon
 
 
 		// 새 무기
-		Weapon*& afterWeapon = curWeapon;
+		Weapon*& afterWeapon = weapons[curWeaponIdx];
 		afterWeapon = other;
 		afterWeapon->col->SetParentT(*col);
 		afterWeapon->idle->isVisible = true;

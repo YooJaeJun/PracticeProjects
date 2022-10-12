@@ -159,15 +159,14 @@ namespace Gungeon
 
     void Boss::InitWeapon()
     {
-        weapon = new WeaponData;
-        curWeapon = weapon->data[1];
-        curWeapon->col->SetParentRT(*col);
-        curWeapon->col->SetLocalPos(Vector2(10.0f, -15.0f));
-        curWeapon->idle->SetParentRT(*curWeapon->col);
-        curWeapon->firePos->SetLocalPos(Vector2(curWeapon->col->scale.x / 2.0f, 0.0f));
-        curWeapon->fireEffect->idle->SetParentRT(*curWeapon->firePos);
-        curWeapon->imgReloading->SetParentRT(*curWeapon->col);
-        curWeapon->Equip();
+        weapon = new Weapon2;
+        weapon->col->SetParentRT(*col);
+        weapon->col->SetLocalPos(Vector2(10.0f, -15.0f));
+        weapon->idle->SetParentRT(*weapon->col);
+        weapon->firePos->SetLocalPos(Vector2(weapon->col->scale.x / 2.0f, 0.0f));
+        weapon->fireEffect->idle->SetParentRT(*weapon->firePos);
+        weapon->imgReloading->SetParentRT(*weapon->col);
+        weapon->Equip();
     }
 
     void Boss::InitBullet()
@@ -218,7 +217,7 @@ namespace Gungeon
     void Boss::Release()
     {
         Unit::Release();
-        curWeapon->Release();
+        weapon->Release();
         SafeDelete(hpGuage);
         SafeDelete(hpGuageBar);
     }
@@ -234,8 +233,8 @@ namespace Gungeon
             InitBullet();
         }
         
-        bulletSpawnPos = curWeapon->firePos->GetWorldPos();
-        bulletSpawnDir = curWeapon->moveDir;
+        bulletSpawnPos = weapon->firePos->GetWorldPos();
+        bulletSpawnDir = weapon->moveDir;
 
         switch (state)
         {
@@ -272,7 +271,7 @@ namespace Gungeon
             break;
         }
 
-        curWeapon->Update();
+        weapon->Update();
         hpGuageBar->Update();
         hpGuage->Update();
         dropItem->Update();
@@ -298,7 +297,7 @@ namespace Gungeon
             break;
         }
 
-        curWeapon->Render();
+        weapon->Render();
         hpGuageBar->Render();
         hpGuage->Render();
         dropItem->Render();
@@ -314,6 +313,7 @@ namespace Gungeon
 
     void Boss::Idle()
     {
+        Unit::SetTarget(weapon);
         Unit::Idle();
 
         Hitting();
@@ -423,9 +423,9 @@ namespace Gungeon
     {
         Unit::StartDie();
 
-        curWeapon->col->isVisible = false;
-        curWeapon->idle->isVisible = false;
-        curWeapon->firePos->isVisible = false;
+        weapon->col->isVisible = false;
+        weapon->idle->isVisible = false;
+        weapon->firePos->isVisible = false;
 
         hpGuageBar->img->isVisible = false;
         hpGuage->img->isVisible = false;
@@ -436,10 +436,10 @@ namespace Gungeon
         dropItem->idle->isVisible = true;
         dropItem->state = State::idle;
 
-        curWeapon->Spawn(Pos());
-        curWeapon->col->isVisible = true;
-        curWeapon->idle->isVisible = true;
-        curWeapon->state = State::idle;
+        weapon->Spawn(Pos());
+        weapon->col->isVisible = true;
+        weapon->idle->isVisible = true;
+        weapon->state = State::idle;
     }
 
     void Boss::Spawn(const Vector2 wpos)
@@ -448,9 +448,9 @@ namespace Gungeon
 
         InitVar();
 
-        curWeapon->col->isVisible = true;
-        curWeapon->idle->isVisible = true;
-        curWeapon->firePos->isVisible = true;
+        weapon->col->isVisible = true;
+        weapon->idle->isVisible = true;
+        weapon->firePos->isVisible = true;
 
         if (pushedDir.x < 0.0f)
         {
@@ -511,7 +511,7 @@ namespace Gungeon
         bullet.resize(stringBullet.inputString.size() * 25);
 
         int size = stringBullet.inputString.size();
-        float angleFactor = curWeapon->col->rotation - stringBullet.midForTargetFactor;
+        float angleFactor = weapon->col->rotation - stringBullet.midForTargetFactor;
 
         for (int r = 0; r < 5; r++)
         {
@@ -662,7 +662,7 @@ namespace Gungeon
             stringBullet.SetStringBullet();
         }
 
-        float angleFactor = curWeapon->col->rotation - stringBullet.midForTargetFactor;
+        float angleFactor = weapon->col->rotation - stringBullet.midForTargetFactor;
         for (int r = 0; r < 5; r++)
         {
             for (int c = 0; c < 5; c++)

@@ -50,7 +50,7 @@ namespace Gungeon
         {
             if (!elem)
             {
-                elem = new Enemy();
+                elem = new Enemy1();
             }
         }
 
@@ -287,7 +287,7 @@ namespace Gungeon
             flagCleared = false;
 
             boss->targetPos = player->Pos();
-            boss->curWeapon->col->rotation = Utility::DirToRadian(player->Pos());
+            boss->weapon->col->rotation = Utility::DirToRadian(player->Pos());
 
             switch (boss->pattern)
             {
@@ -480,7 +480,7 @@ namespace Gungeon
             player->PlusMoney(1);
         }
 
-        Weapon* bossWeapon = boss->curWeapon;
+        Weapon* bossWeapon = boss->weapon;
         if (bossWeapon->state == State::idle &&
             bossWeapon->col->Intersect(player->col))
         {
@@ -523,52 +523,6 @@ namespace Gungeon
         }
     }
 
-    void Scene02::ColOnOff()
-    {
-        player->col->isVisible = !player->col->isVisible;
-        player->colTile->isVisible = !player->colTile->isVisible;
-        player->curWeapon->firePos->isVisible = !player->curWeapon->firePos->isVisible;
-
-        for (auto& bulletElem : player->bullet)
-        {
-            bulletElem->col->isVisible = !bulletElem->col->isVisible;
-        }
-
-        for (auto& elem : enemy)
-        {
-            elem->col->isVisible = !elem->col->isVisible;
-            elem->colTile->isVisible = !elem->colTile->isVisible;
-            elem->curWeapon->firePos->isVisible = !elem->curWeapon->firePos->isVisible;
-
-            for (auto& bulletElem : elem->bullet)
-            {
-                bulletElem->col->isVisible = !bulletElem->col->isVisible;
-            }
-        }
-
-        boss->col->isVisible = !boss->col->isVisible;
-        boss->colTile->isVisible = !boss->colTile->isVisible;
-        boss->curWeapon->firePos->isVisible = !boss->curWeapon->firePos->isVisible;
-
-        for (auto& bulletElem : boss->bullet)
-        {
-            bulletElem->col->isVisible = !bulletElem->col->isVisible;
-        }
-
-        for (auto& elem : mapObj->doorClosed)
-        {
-            elem->col->isVisible = !elem->col->isVisible;
-        }
-        for (auto& elem : mapObj->doorOpenDown)
-        {
-            elem->col->isVisible = !elem->col->isVisible;
-        }
-        for (auto& elem : mapObj->doorOpenUp)
-        {
-            elem->col->isVisible = !elem->col->isVisible;
-        }
-    }
-
     void Scene02::ChangeUpdateScene()
     {
         if (fadeOut)
@@ -590,6 +544,53 @@ namespace Gungeon
             LIGHT->light.lightColor.x = 0.5f;
             LIGHT->light.lightColor.y = 0.5f;
             LIGHT->light.lightColor.z = 0.5f;
+        }
+    }
+
+    // ġƮ
+    void Scene02::ColOnOff()
+    {
+        player->col->isVisible = !player->col->isVisible;
+        player->colTile->isVisible = !player->colTile->isVisible;
+        player->weapons[player->curWeaponIdx]->firePos->isVisible = !player->weapons[player->curWeaponIdx]->firePos->isVisible;
+
+        for (auto& bulletElem : player->bullet)
+        {
+            bulletElem->col->isVisible = !bulletElem->col->isVisible;
+        }
+
+        for (auto& elem : enemy)
+        {
+            elem->col->isVisible = !elem->col->isVisible;
+            elem->colTile->isVisible = !elem->colTile->isVisible;
+            elem->weapon->firePos->isVisible = !elem->weapon->firePos->isVisible;
+
+            for (auto& bulletElem : elem->bullet)
+            {
+                bulletElem->col->isVisible = !bulletElem->col->isVisible;
+            }
+        }
+
+        boss->col->isVisible = !boss->col->isVisible;
+        boss->colTile->isVisible = !boss->colTile->isVisible;
+        boss->weapon->firePos->isVisible = !boss->weapon->firePos->isVisible;
+
+        for (auto& bulletElem : boss->bullet)
+        {
+            bulletElem->col->isVisible = !bulletElem->col->isVisible;
+        }
+
+        for (auto& elem : mapObj->doorClosed)
+        {
+            elem->col->isVisible = !elem->col->isVisible;
+        }
+        for (auto& elem : mapObj->doorOpenDown)
+        {
+            elem->col->isVisible = !elem->col->isVisible;
+        }
+        for (auto& elem : mapObj->doorOpenUp)
+        {
+            elem->col->isVisible = !elem->col->isVisible;
         }
     }
 }

@@ -41,7 +41,6 @@ namespace Gungeon
 		Item*				dropItem;
 		vector<Bullet*>		bullet;
 		Vector2				lastPos;
-		Weapon*				curWeapon;		// data index 실수 막기 위함
 		DirState			curMoveDirState;
 		DirState			curMoveDirStateBefore;
 		DirState			curTargetDirState;

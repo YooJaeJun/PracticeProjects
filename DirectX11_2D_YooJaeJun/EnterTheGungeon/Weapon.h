@@ -5,7 +5,8 @@ namespace Gungeon
 	enum class WeaponType
 	{
 		pistol,
-		shotgun
+		shotgun,
+		max
 	};
 
 	class Weapon : public Item

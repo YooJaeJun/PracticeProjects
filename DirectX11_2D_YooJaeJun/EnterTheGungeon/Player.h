@@ -2,6 +2,8 @@
 
 namespace Gungeon
 {
+	const int curWeaponMax = 3;
+
 	class Player : public Unit
 	{
 	public:
@@ -40,35 +42,35 @@ namespace Gungeon
 		void EquipWeapon(Weapon* other);
 
 	public:
-		ObImage*				roll[8];
-		ObImage*				kick;
-		ObImage*				obtain;
-		vector<WeaponData*>		weapon;
-		int						curWeaponMax;
-		int						curWeaponIdx;
-		bool					canFireOnce[weaponTypeMax];
-		bool					isReloading;
-		float					timeReload;
-		int						curBulletIdx;
-		float					timeRoll;
-		bool					flagFireCamShake;
-		float					timeFireCamShake;
-		float					timeHitCamShake;
-		UI*						uiReload;
-		UI*						uiReloadBar;
-		bool					godMode;
-		float					timeLastPosForDust;
-		Effect*					dust;
-		UI*						uiWeaponFrame;
-		vector<UI*>				uiHeartFull;
-		vector<UI*>				uiHeartHalf;
-		vector<UI*>				uiHeartNone;
-		vector<UI*>				uiBlank;
-		UI*						uiKey;
-		UI*						uiGold;
-		UI*						uiFireBottle;
-		UI*						uiFireBottleFrame;
-		int						money;
-		int						key;
+		ObImage*			roll[8];
+		ObImage*			kick;
+		ObImage*			obtain;
+		Weapon*				weapons[curWeaponMax];
+		int					curWeaponMax;
+		int					curWeaponIdx;
+		bool				canFireOnce[(int)WeaponType::max + 1];
+		bool				isReloading;
+		float				timeReload;
+		int					curBulletIdx;
+		float				timeRoll;
+		bool				flagFireCamShake;
+		float				timeFireCamShake;
+		float				timeHitCamShake;
+		UI*					uiReload;
+		UI*					uiReloadBar;
+		bool				godMode;
+		float				timeLastPosForDust;
+		Effect*				dust;
+		UI*					uiWeaponFrame;
+		vector<UI*>			uiHeartFull;
+		vector<UI*>			uiHeartHalf;
+		vector<UI*>			uiHeartNone;
+		vector<UI*>			uiBlank;
+		UI*					uiKey;
+		UI*					uiGold;
+		UI*					uiFireBottle;
+		UI*					uiFireBottleFrame;
+		int					money;
+		int					key;
 	};
 }
