@@ -23,11 +23,13 @@
     <ClInclude Include="BossBullet.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Enemy1.h" />
     <ClInclude Include="Enemy2.h" />
     <ClInclude Include="EnemyBullet.h" />
+    <ClInclude Include="Gate.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Obstacle.h" />
@@ -51,9 +53,11 @@
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BossBullet.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy1.cpp" />
     <ClCompile Include="Enemy2.cpp" />
+    <ClCompile Include="Gate.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ProcedureMapGeneration.cpp" />

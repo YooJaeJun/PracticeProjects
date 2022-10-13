@@ -52,7 +52,7 @@ namespace Gungeon
             }
         }
 
-        gate = new Obstacle;
+        gate = new Gate;
         gate->col->isVisible = false;
         gate->col->scale = Vector2(40.0F, 20.0f) * 2.0f;
         gate->SetPos(DEFAULTSPAWN);
@@ -90,6 +90,10 @@ namespace Gungeon
         else if (INPUT->KeyDown('2'))
         {
             gameState = GameState::start;
+            for (auto& elem : curRoom->doorTileIdxs)
+            {
+                mapGen->tilemap->SetTileState(elem, TileState::door);
+            }
             Release();
             Init();
         }
@@ -229,19 +233,15 @@ namespace Gungeon
             afterRoomIdx = mapGen->tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
 
             if (afterRoomIdx > 0 &&
+                curRoomIdx != afterRoomIdx &&
                 false == mapGen->selectedRooms[afterRoomIdx]->cleared)
             {
-                if (curRoomIdx != afterRoomIdx)
-                {
-                    curRoomIdx = afterRoomIdx;
-                    if (curRoomIdx > 0)
-                    {
-                        curRoom = mapGen->selectedRooms[curRoomIdx];
-                        SpawnEffect();
+                curRoomIdx = afterRoomIdx;
+                curRoom = mapGen->selectedRooms[curRoomIdx];
 
-                        gameState = GameState::waitingSpawn;
-                    }
-                }
+                SpawnEffect();
+
+                gameState = GameState::waitingSpawn;
             }
         }
     }
@@ -261,6 +261,12 @@ namespace Gungeon
         if (flag)
         {
             SpawnEnemy();
+
+            for (auto& elem : curRoom->doorTileIdxs)
+            {
+                mapGen->tilemap->SetTileState(elem, TileState::wall);
+            }
+
             gameState = GameState::fight;
         }
     }
@@ -283,6 +289,12 @@ namespace Gungeon
         if (flagCleared)
         {
             curRoom->cleared = true;
+
+            for (auto& elem : curRoom->doorTileIdxs)
+            {
+                mapGen->tilemap->SetTileState(elem, TileState::door);
+            }
+
             for (auto& elem : enemy)
             {
                 elem->dropItem->flagAbsorbed = true;

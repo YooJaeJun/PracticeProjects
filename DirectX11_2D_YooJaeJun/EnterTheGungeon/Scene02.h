@@ -59,12 +59,13 @@ namespace Gungeon
 		int						afterRoomIdx;
 		int						roomClearCount;
 		int						roomClearCountForBossBattle;
-		Obstacle*				gate;
+		Gate*					gate;
 		float					timeGateOpen;
 		float					timeGateClosed;
 		bool					flagGateOpen;
 		bool					flagGateClosed;
 		ObRect*					cinematicBox[2];
 		int						curRoomIdx;
+		Door*					door;
 	};
 }

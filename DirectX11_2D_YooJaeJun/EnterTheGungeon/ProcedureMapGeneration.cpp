@@ -589,7 +589,7 @@ namespace Gungeon
                     imgIdx,
                     (int)TileState::floor, 
                     Color(0.5f, 0.5f, 0.5f, 0.5f),
-                    roomIdx);
+                    -1);
             }
 
             tilemap->SetTile(doorTileIdx,
@@ -597,7 +597,9 @@ namespace Gungeon
                 imgIdx,
                 (int)TileState::door,
                 Color(0.5f, 0.5f, 0.5f, 0.5f),
-                roomIdx);
+                -1);
+
+            selectedRooms[roomIdx]->doorTileIdxs.push_back(doorTileIdx);
         };
 
 
@@ -609,6 +611,9 @@ namespace Gungeon
         {
             if (tilemap->PathFinding(sour, dest, way, false))
             {
+                int sourRoomIdx = tilemap->GetTileRoomIndex(sour);
+                int destRoomIdx = tilemap->GetTileRoomIndex(dest);
+
                 Tile* before = way.back();
                 Int2 beforeOn = before->idx;
                 int beforeRoomIdx = tilemap->GetTileRoomIndex(beforeOn);
@@ -627,7 +632,6 @@ namespace Gungeon
                             imgIdx,
                             (int)TileState::floor);
                     }
-
                     if (roomIdx != beforeRoomIdx ||
                         tileStateOn == TileState::door)
                     {
@@ -640,11 +644,11 @@ namespace Gungeon
 
                         if (first)
                         {
-                            SetDoor(beforeOn, !doorRight, -1);
+                            SetDoor(beforeOn, !doorRight, beforeRoomIdx);
                         }
-                        else
+                        else if (roomIdx == destRoomIdx)
                         {
-                            SetDoor(on, doorRight, -1);
+                            SetDoor(on, doorRight, roomIdx);
                         }
 
                         way.clear();
@@ -703,7 +707,7 @@ namespace Gungeon
 
                         if (tilemap->Tiles[nx][ny].state == TileState::none)
                         {
-                            tilemap->SetTile(Int2(nx, ny), Int2(RANDOM->Int(1, 4), 0), imgIdx, (int)TileState::wall);
+                            tilemap->SetTile(Int2(nx, ny), Int2(8, 7), imgIdx, (int)TileState::wall);
                         }
                     }
                 }

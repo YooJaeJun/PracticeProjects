@@ -36,6 +36,11 @@ namespace Gungeon
         {
             player = new Player();
         }
+        else
+        {
+            // ġƮ
+            player->Spawn(Vector2(0.0f, 0.0f));
+        }
 
         if (!boss)
         {
@@ -188,6 +193,11 @@ namespace Gungeon
         {
             curRoom->cleared = true;
             boss->dropItem->flagAbsorbed = true;
+        }
+
+        if (boss->dropItem->flagAbsorbed)
+        {
+            boss->dropItem->targetPos = player->Pos();
         }
 
         tilemap->Update();

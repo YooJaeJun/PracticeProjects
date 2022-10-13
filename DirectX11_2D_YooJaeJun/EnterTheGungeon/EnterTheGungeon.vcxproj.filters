@@ -107,6 +107,12 @@
     <ClInclude Include="Scene03.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>GameObject\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Gate.h">
+      <Filter>GameObject\Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -184,6 +190,12 @@
     </ClCompile>
     <ClCompile Include="Scene03.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Gate.cpp">
+      <Filter>GameObject\Level</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

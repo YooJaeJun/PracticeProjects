@@ -21,10 +21,10 @@ namespace Gungeon
 		virtual void Render() override;
 
 	public:
-		bool		selected;
-		Vector2		enemySpawnPos[4];
-		bool		cleared;
-		RoomType	roomType;
-
+		bool			selected;
+		Vector2			enemySpawnPos[4];
+		bool			cleared;
+		RoomType		roomType;
+		vector<Int2>	doorTileIdxs;
 	};
 }
