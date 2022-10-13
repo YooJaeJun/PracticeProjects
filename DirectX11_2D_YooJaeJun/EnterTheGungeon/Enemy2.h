@@ -16,8 +16,5 @@ namespace Gungeon
 		void InitSelf();
 		void InitWeapon();
 		void InitBullet();
-
-	public:
-		Enemy* kinRed;
 	};
 }

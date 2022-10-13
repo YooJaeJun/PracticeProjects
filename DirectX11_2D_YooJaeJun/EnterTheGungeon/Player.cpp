@@ -69,7 +69,7 @@ namespace Gungeon
 		spawn->maxFrame.x = 3;
 		spawn->scale.x = 48.0f / 3.0f * scaleFactor;
 		spawn->scale.y = 22.0f * scaleFactor;
-		spawn->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
+		spawn->ChangeAnim(AnimState::once, 0.2f);
 		spawn->SetParentRT(*col);
 		spawn->zOrder = ZOrder::object;
 
@@ -92,7 +92,7 @@ namespace Gungeon
 			elem->maxFrame.x = 4;
 			elem->scale.x = 72.0 / 4.0f * scaleFactor;
 			elem->scale.y = 20.0f * scaleFactor;
-			elem->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+			elem->ChangeAnim(AnimState::loop, 0.2f);
 			elem->SetParentRT(*col);
 			elem->zOrder = ZOrder::object;
 			idx++;
@@ -118,7 +118,7 @@ namespace Gungeon
 			elem->maxFrame.x = 6;
 			elem->scale.x = 102.0f / 6.0f * scaleFactor;
 			elem->scale.y = 24.0f * scaleFactor;
-			elem->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+			elem->ChangeAnim(AnimState::loop, 0.1f);
 			elem->SetParentRT(*col);
 			elem->zOrder = ZOrder::object;
 			idx++;
@@ -145,7 +145,7 @@ namespace Gungeon
 			elem->scale.x = 180.0f / 9.0f * scaleFactor;
 			elem->scale.y = 24.0f * scaleFactor;
 			elem->uv = Vector4(0.0f, 0.0f, 1.0f / 9.0f, 1.0f);
-			elem->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
+			elem->ChangeAnim(AnimState::once, 0.2f);
 			elem->SetParentRT(*col);
 			elem->zOrder = ZOrder::object;
 			idx++;
@@ -158,7 +158,7 @@ namespace Gungeon
 		fall->maxFrame.x = 3;
 		fall->scale.x = 48.0f / 3.0f * scaleFactor;
 		fall->scale.y = 22.0f * scaleFactor;
-		fall->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+		fall->ChangeAnim(AnimState::loop, 0.2f);
 		fall->SetParentRT(*col);
 		fall->zOrder = ZOrder::object;
 
@@ -167,7 +167,7 @@ namespace Gungeon
 		die->maxFrame.x = 8;
 		die->scale.x = 160.0f / 8.0f * scaleFactor;
 		die->scale.y = 24.0f * scaleFactor;
-		die->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
+		die->ChangeAnim(AnimState::once, 0.2f);
 		die->SetParentRT(*col);
 		die->zOrder = ZOrder::object;
 
@@ -176,7 +176,7 @@ namespace Gungeon
 		kick->maxFrame.x = 3;
 		kick->scale.x = 48.0f / 3.0f * scaleFactor;
 		kick->scale.y = 22.0f * scaleFactor;
-		kick->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+		kick->ChangeAnim(AnimState::loop, 0.2f);
 		kick->SetParentRT(*col);
 		kick->zOrder = ZOrder::object;
 
@@ -185,7 +185,7 @@ namespace Gungeon
 		obtain->maxFrame.x = 3;
 		obtain->scale.x = 48.0f / 3.0f * scaleFactor;
 		obtain->scale.y = 22.0f * scaleFactor;
-		obtain->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+		obtain->ChangeAnim(AnimState::loop, 0.2f);
 		obtain->SetParentRT(*col);
 		obtain->zOrder = ZOrder::object;
 	}
@@ -600,28 +600,28 @@ namespace Gungeon
 	{
 		if (INPUT->KeyPress('A'))
 		{
-			moveDir.x = -1.0f;
+			moveDir.x = dx[DirState::dirL];
 		}
 		else if (INPUT->KeyPress('D'))
 		{
-			moveDir.x = 1.0f;
+			moveDir.x = dx[DirState::dirR];
 		}
 		else
 		{
-			moveDir.x = 0.0f;
+			moveDir.x = dx[DirState::dirNone];
 		}
 
 		if (INPUT->KeyPress('W'))
 		{
-			moveDir.y = 1.0f;
+			moveDir.y = dy[DirState::dirT];
 		}
 		else if (INPUT->KeyPress('S'))
 		{
-			moveDir.y = -1.0f;
+			moveDir.y = dy[DirState::dirB];
 		}
 		else
 		{
-			moveDir.y = 0.0f;
+			moveDir.y = dy[DirState::dirNone];
 		}
 
 		if (moveDir.x != 0.0f || moveDir.y != 0.0f)
@@ -784,7 +784,7 @@ namespace Gungeon
 			SetMoveDirState();
 
 			roll[curMoveDirState]->isVisible = true;
-			roll[curMoveDirState]->ChangeAnim(ANIMSTATE::ONCE, 0.07f);
+			roll[curMoveDirState]->ChangeAnim(AnimState::once, 0.07f);
 
 			timeRoll = 0.0f;
 

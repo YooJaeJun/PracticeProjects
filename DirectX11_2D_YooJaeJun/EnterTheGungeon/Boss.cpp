@@ -68,7 +68,7 @@ namespace Gungeon
             elem->maxFrame.x = 4;
             elem->scale.x = 104.0f / 4.0f * scaleFactor;
             elem->scale.y = 40.0f * scaleFactor;
-            elem->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+            elem->ChangeAnim(AnimState::loop, 0.2f);
             elem->SetParentRT(*col);
             elem->zOrder = ZOrder::object;
             idx++;
@@ -94,7 +94,7 @@ namespace Gungeon
             elem->maxFrame.x = 6;
             elem->scale.x = 180.0f / 6.0f * scaleFactor;
             elem->scale.y = 40.0f * scaleFactor;
-            elem->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+            elem->ChangeAnim(AnimState::loop, 0.1f);
             elem->SetParentRT(*col);
             elem->zOrder = ZOrder::object;
             idx++;
@@ -105,7 +105,7 @@ namespace Gungeon
         hit->maxFrame.x = 1;
         hit->scale.x = 32.0 * 1.0f * scaleFactor;
         hit->scale.y = 40.0f * scaleFactor;
-        hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+        hit->ChangeAnim(AnimState::loop, 0.2f);
         hit->SetParentRT(*col);
         hit->zOrder = ZOrder::object;
 
@@ -224,6 +224,7 @@ namespace Gungeon
 
     void Boss::Update()
     {
+        Unit::SetTarget(weapon);
         Unit::Update();
 
         int curPattern = static_cast<int>(pattern);
@@ -313,7 +314,6 @@ namespace Gungeon
 
     void Boss::Idle()
     {
-        Unit::SetTarget(weapon);
         Unit::Idle();
 
         Hitting();
@@ -322,7 +322,6 @@ namespace Gungeon
 
     void Boss::Walk()
     {
-        Unit::SetTarget(weapon);
         moveDir = targetDir;
         Unit::Walk();
 
@@ -347,7 +346,7 @@ namespace Gungeon
 
         Unit::Hit(damage);
 
-        hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+        hit->ChangeAnim(AnimState::once, 0.1f);
 
         if (pushedDir.x < 0.0f)
         {
@@ -436,11 +435,6 @@ namespace Gungeon
         dropItem->col->isVisible = true;
         dropItem->idle->isVisible = true;
         dropItem->state = State::idle;
-
-        weapon->Spawn(Pos());
-        weapon->col->isVisible = true;
-        weapon->idle->isVisible = true;
-        weapon->state = State::idle;
     }
 
     void Boss::Spawn(const Vector2 wpos)

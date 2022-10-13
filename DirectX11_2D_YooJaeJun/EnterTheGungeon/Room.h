@@ -2,6 +2,14 @@
 
 namespace Gungeon
 {
+	enum class RoomType
+	{
+		start,
+		enemy,
+		boss,
+		treasure
+	};
+
 	class Room : public Character
 	{
 	public:
@@ -16,5 +24,7 @@ namespace Gungeon
 		bool		selected;
 		Vector2		enemySpawnPos[4];
 		bool		cleared;
+		RoomType	roomType;
+
 	};
 }

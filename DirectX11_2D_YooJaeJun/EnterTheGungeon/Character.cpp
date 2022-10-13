@@ -54,10 +54,9 @@ namespace Gungeon
 	{
 		SetPos(wpos);
 		col->Update();
+		col->isVisible = true;
 
 		state = State::idle;
 		isHit = false;
-
-		col->isVisible = true;
 	}
 }

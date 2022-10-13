@@ -32,12 +32,15 @@ namespace Gungeon
         CAM->position = curRoom->Pos();
         CAM->zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
 
-        if (!player) player = new Player();
+        if (!player)
+        {
+            player = new Player();
+        }
 
         if (!boss)
         {
             boss = new Boss();
-            boss->Spawn(Vector2(300.0f, 0.0f));
+            boss->Spawn(Vector2(0.0f, 300.0f));
         }
 
 
@@ -187,6 +190,7 @@ namespace Gungeon
             boss->dropItem->flagAbsorbed = true;
         }
 
+        tilemap->Update();
         player->Update();
         boss->Update();
     }
@@ -201,6 +205,7 @@ namespace Gungeon
 
     void Scene03::Render()
     {
+        tilemap->Render();
         if (player) player->shadow->Render();
         if (player) player->Render();
         if (boss) boss->shadow->Render();
@@ -281,14 +286,6 @@ namespace Gungeon
         {
             boss->dropItem->Hit();
             player->PlusMoney(1);
-        }
-
-        Weapon* bossWeapon = boss->weapon;
-        if (bossWeapon->state == State::idle &&
-            bossWeapon->col->Intersect(player->col))
-        {
-            bossWeapon->Hit();
-            player->EquipWeapon(bossWeapon);
         }
 
         boss->LateUpdate();

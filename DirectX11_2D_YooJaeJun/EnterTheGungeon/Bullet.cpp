@@ -6,6 +6,7 @@ namespace Gungeon
     {
         col = new ObCircle();
         col->isFilled = false;
+        col->isVisible = false;
 
         isFired = false;
         damage = 1;

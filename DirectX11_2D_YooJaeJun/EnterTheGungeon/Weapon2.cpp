@@ -65,7 +65,7 @@ namespace Gungeon
 		imgReloading->maxFrame.x = 2;
 		imgReloading->scale.x = 42.0f / 2.0f * scaleFactor;
 		imgReloading->scale.y = 22.0f * scaleFactor;
-		imgReloading->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+		imgReloading->ChangeAnim(AnimState::loop, 0.1f);
 		imgReloading->zOrder = ZOrder::UI;
 		imgReloading->isVisible = false;
 

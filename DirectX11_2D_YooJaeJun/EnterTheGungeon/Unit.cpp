@@ -44,7 +44,7 @@ namespace Gungeon
 		switch (state)
 		{
 		case Gungeon::State::idle:
-			if (moveDir.x != 0.0f || moveDir.y != 0.0f)
+			if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))
 			{
 				StartWalk();
 			}
@@ -146,7 +146,7 @@ namespace Gungeon
 					idle[curTargetDirState]->isVisible = false;
 					walk[curTargetDirState]->isVisible = false;
 					hit->isVisible = true;
-					hit->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+					hit->ChangeAnim(AnimState::loop, 0.2f);
 				}
 
 				if (curHp <= 0)
@@ -165,25 +165,22 @@ namespace Gungeon
 			state = State::die;
 
 			isHit = false;
-			scalar = 0.0f;
 
 			col->isVisible = false;
 			for (auto& elem : idle)
 			{
 				elem->isVisible = false;
-				elem->ChangeAnim(ANIMSTATE::STOP, 0.2f);
 			}
 			for (auto& elem : walk)
 			{
 				elem->isVisible = false;
-				elem->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 			}
 
 			if (hit) hit->isVisible = false;
 			shadow->isVisible = false;
 			die->isVisible = true;
 
-			die->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+			die->ChangeAnim(AnimState::once, 0.1f);
 		}
 	}
 
@@ -210,7 +207,7 @@ namespace Gungeon
 		state = State::walk;
 		for (auto& elem : idle) elem->isVisible = false;
 		walk[curTargetDirState]->isVisible = true;
-		walk[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+		walk[curTargetDirState]->ChangeAnim(AnimState::loop, 0.1f);
 	}
 
 	void Unit::StartIdle()
@@ -218,7 +215,7 @@ namespace Gungeon
 		state = State::idle;
 		for (auto& elem : walk) elem->isVisible = false;
 		idle[curTargetDirState]->isVisible = true;
-		idle[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+		idle[curTargetDirState]->ChangeAnim(AnimState::loop, 0.2f);
 	}
 
 	void Unit::StepBack()

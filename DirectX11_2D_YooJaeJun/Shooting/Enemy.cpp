@@ -46,7 +46,7 @@ void Enemy::Init()
 		elem->maxFrame.x = 4.0f;
 		elem->scale.x = 128.0f / elem->maxFrame.x;
 		elem->scale.y = 32.0f;
-		elem->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+		elem->ChangeAnim(AnimState::loop, 0.1f);
 		elem->SetParentT(*col);
 	}
 	timeBombBetween = 0.0f;

@@ -569,32 +569,57 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
             if (Temp.first->idx.x > 0 &&
                 Temp.first->idx.y < tileSize.y - 1)
             {
-                LoopIdx.push_back(Int2(Temp.first->idx.x - 1,
-                    Temp.first->idx.y + 1));
+                Int2 on = Int2(Temp.first->idx.x - 1,
+                    Temp.first->idx.y + 1);
+
+                // 주위 벽이 있을 땐 대각선으로 가지 않기
+                if (Tiles[on.x - 1][on.y].state != TileState::wall && 
+                    Tiles[on.x][on.y - 1].state != TileState::wall)
+                {
+                    LoopIdx.push_back(on);
+                }
             }
 
             //LT
             if (Temp.first->idx.x > 0 &&
                 Temp.first->idx.y > 0)
             {
-                LoopIdx.push_back(Int2(Temp.first->idx.x - 1,
-                    Temp.first->idx.y - 1));
+                Int2 on = Int2(Temp.first->idx.x - 1,
+                    Temp.first->idx.y - 1);
+
+                if (Tiles[on.x - 1][on.y].state != TileState::wall &&
+                    Tiles[on.x][on.y + 1].state != TileState::wall)
+                {
+                    LoopIdx.push_back(on);
+                }
             }
 
             //RB
             if (Temp.first->idx.x < tileSize.x - 1 &&
                 Temp.first->idx.y < tileSize.y - 1)
             {
-                LoopIdx.push_back(Int2(Temp.first->idx.x + 1,
-                    Temp.first->idx.y + 1));
+                Int2 on = Int2(Temp.first->idx.x + 1,
+                    Temp.first->idx.y + 1);
+
+                if (Tiles[on.x + 1][on.y].state != TileState::wall &&
+                    Tiles[on.x][on.y - 1].state != TileState::wall)
+                {
+                    LoopIdx.push_back(on);
+                }
             }
 
             //RT
             if (Temp.first->idx.x < tileSize.x - 1 &&
                 Temp.first->idx.y > 0)
             {
-                LoopIdx.push_back(Int2(Temp.first->idx.x + 1,
-                    Temp.first->idx.y - 1));
+                Int2 on = Int2(Temp.first->idx.x + 1,
+                    Temp.first->idx.y - 1);
+
+                if (Tiles[on.x + 1][on.y].state != TileState::wall &&
+                    Tiles[on.x][on.y + 1].state != TileState::wall)
+                {
+                    LoopIdx.push_back(on);
+                }
             }
         }
 

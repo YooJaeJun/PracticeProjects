@@ -48,7 +48,7 @@ namespace Gungeon
 	{
 		state = State::idle;
 		idle->SetWorldPos(wpos);
-		idle->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+		idle->ChangeAnim(AnimState::once, 0.1f);
 		idle->isVisible = true;
 	}
 

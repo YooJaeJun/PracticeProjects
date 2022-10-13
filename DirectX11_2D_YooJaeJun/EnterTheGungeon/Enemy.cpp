@@ -78,6 +78,7 @@ namespace Gungeon
 
 	void Enemy::Update()
 	{
+		Unit::SetTarget(weapon);
 		Unit::Update();
 
 		switch (state)
@@ -115,7 +116,7 @@ namespace Gungeon
 
 	void Enemy::Idle()
 	{
-		Unit::SetTarget(weapon);
+		moveDir = targetDir;
 		Unit::Idle();
 
 		Fire();
@@ -124,7 +125,6 @@ namespace Gungeon
 
 	void Enemy::Walk()
 	{
-		Unit::SetTarget(weapon);
 		moveDir = targetDir;
 		Unit::Walk();
 
@@ -170,7 +170,7 @@ namespace Gungeon
 
 		Unit::Hit(damage);
 
-		hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+		hit->ChangeAnim(AnimState::once, 0.1f);
 
 		if (pushedDir.x < 0.0f)
 		{
@@ -238,6 +238,8 @@ namespace Gungeon
 	{
 		Unit::StartDie();
 
+		way.clear();
+
 		weapon->col->isVisible = false;
 		weapon->idle->isVisible = false;
 		weapon->firePos->isVisible = false;
@@ -272,9 +274,6 @@ namespace Gungeon
 		Unit::Spawn(wpos);
 
 		InitVar();
-
-		walk[curTargetDirState]->isVisible = true;
-		walk[curTargetDirState]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 
 		weapon->col->isVisible = true;
 		weapon->idle->isVisible = true;

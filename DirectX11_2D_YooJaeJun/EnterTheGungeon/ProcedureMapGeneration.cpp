@@ -302,6 +302,9 @@ namespace Gungeon
                 selectedRooms.push_back(elem);
             }
         }
+
+        selectedRooms[0]->roomType = RoomType::start;
+        selectedRooms[1]->roomType = RoomType::treasure;
     }
 
     void ProcedureMapGeneration::Triangulate()
@@ -508,11 +511,6 @@ namespace Gungeon
         // 1. 8방향 체크해 문의 방향을 정하고, 2. 좌우문 뒤집을지, 3. 모서리에 위치할 시 예외처리
         auto SetDoor = [&](Int2 on, bool right, const int roomIdx)
         {
-            if (tilemap->GetTileState(on) == TileState::door)
-            {
-                return;
-            }
-
             deque<bool> dirWall(8);
 
             for (int i = 0; i < 8; i++)
@@ -527,7 +525,7 @@ namespace Gungeon
                 }
             }
 
-            Int2 doorFrameIdx = Int2(9, 0);
+            Int2 doorFrameIdx = doorImgDir[DirState::dirLB];
             Int2 doorTileIdx = on;
             Int2 floorTileIdx;
 
@@ -537,16 +535,16 @@ namespace Gungeon
                 // 문 좌우
                 if (right)
                 {
-                    doorFrameIdx = Int2(6, 0);
+                    doorFrameIdx = doorImgDir[DirState::dirR];
                 }
                 else
                 {
-                    doorFrameIdx = Int2(7, 0);
+                    doorFrameIdx = doorImgDir[DirState::dirL];
                 }
             }
             else if (dirWall[DirState::dirL] && dirWall[DirState::dirR])
             {
-                doorFrameIdx = Int2(8, 0);
+                doorFrameIdx = doorImgDir[DirState::dirB];
             }
             // 모서리에 위치 시 다른 이미지 출력. 그리고 이동 가능하게 옆에 평면타일로 예외처리
             else
@@ -557,7 +555,7 @@ namespace Gungeon
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirL];
                     doorTileIdx.y = on.y + dy[DirState::dirL];
-                    doorFrameIdx = Int2(9, 0);
+                    doorFrameIdx = doorImgDir[DirState::dirRT];
                 }
                 else if ((dirWall[DirState::dirB] && dirWall[DirState::dirR]))
                 {
@@ -565,7 +563,7 @@ namespace Gungeon
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirR];
                     doorTileIdx.y = on.y + dy[DirState::dirR];
-                    doorFrameIdx = Int2(9, 0);
+                    doorFrameIdx = doorImgDir[DirState::dirLT];
                 }
 
                 else if ((dirWall[DirState::dirR] && dirWall[DirState::dirT]))
@@ -574,7 +572,7 @@ namespace Gungeon
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirR];
                     doorTileIdx.y = on.y + dy[DirState::dirR];
-                    doorFrameIdx = Int2(9, 0);
+                    doorFrameIdx = doorImgDir[DirState::dirLB];
                 }
                 else if (dirWall[DirState::dirT] && dirWall[DirState::dirL])
                 {
@@ -582,7 +580,7 @@ namespace Gungeon
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirL];
                     doorTileIdx.y = on.y + dy[DirState::dirL];
-                    doorFrameIdx = Int2(9, 0);
+                    doorFrameIdx = doorImgDir[DirState::dirRB];
                 }
 
                 tilemap->SetTile(floorTileIdx,
@@ -630,7 +628,8 @@ namespace Gungeon
                             (int)TileState::floor);
                     }
 
-                    if (roomIdx != beforeRoomIdx)
+                    if (roomIdx != beforeRoomIdx ||
+                        tileStateOn == TileState::door)
                     {
                         bool doorRight = false;
 
@@ -704,7 +703,7 @@ namespace Gungeon
 
                         if (tilemap->Tiles[nx][ny].state == TileState::none)
                         {
-                            tilemap->SetTile(Int2(nx, ny), Int2(9, RANDOM->Int(4, 5)), imgIdx, (int)TileState::wall);
+                            tilemap->SetTile(Int2(nx, ny), Int2(RANDOM->Int(1, 4), 0), imgIdx, (int)TileState::wall);
                         }
                     }
                 }

@@ -10,32 +10,19 @@ namespace Gungeon
 		// 맵 생성 기다리는 상태
 		start,
 		waitingRoom,
-		enteringRoom,
 		// 이하 반복되는 상태
+		enteringRoom,
 		waitingSpawn,
 		fight
 	};
 
 	class Scene02 : public Scene
 	{
-	private:
-		GameState				gameState;
-		Enemy*					enemy[enemyMax];
-
-	public:
-		ProcedureMapGeneration* mapGen;
-		Room*					curRoom;
-		int						curRoomIdx;
-		vector<Effect*>			spawnEffect;
-		bool					fadeOut;
-		float					timeFade;
-		int						afterRoomIdx;
-		Player*					player;
-
 	public:
 		Scene02();
 		~Scene02();
 
+	protected:
 		virtual void Init() override;
 		virtual void Release() override;
 		virtual void Update() override;
@@ -43,21 +30,41 @@ namespace Gungeon
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
 
+	private:
 		void Start();
 		void WaitingRoom();
 		void EnteringRoom();
 		void WaitingSpawn();
 		void Fight();
-
 		void SpawnPlayer();
 		void SpawnEffect();
 		void SpawnEnemy();
-
 		void IntersectPlayer();
 		void IntersectEnemy();
-
+		void GateProcess();
 		void ChangeUpdateScene();
-
 		void ColOnOff();
+
+	public:
+		ProcedureMapGeneration* mapGen;
+		Player*					player;
+
+	private:
+		Room*					curRoom;
+		GameState				gameState;
+		Enemy*					enemy[enemyMax];
+		bool					fadeOut;
+		float					timeFade;
+		vector<Effect*>			spawnEffect;
+		int						afterRoomIdx;
+		int						roomClearCount;
+		int						roomClearCountForBossBattle;
+		Obstacle*				gate;
+		float					timeGateOpen;
+		float					timeGateClosed;
+		bool					flagGateOpen;
+		bool					flagGateClosed;
+		ObRect*					cinematicBox[2];
+		int						curRoomIdx;
 	};
 }

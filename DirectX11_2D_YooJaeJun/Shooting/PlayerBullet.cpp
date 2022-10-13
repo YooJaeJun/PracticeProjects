@@ -29,7 +29,7 @@ void PlayerBullet::Init()
         img[i]->maxFrame.x = 4;
         img[i]->scale.x = idleImgSize.x / img[i]->maxFrame.x;
         img[i]->scale.y = idleImgSize.y;
-        img[i]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+        img[i]->ChangeAnim(AnimState::loop, 0.1f);
         img[i]->SetParentRT(*col);
         img[i]->SetLocalPosY(20.0f);
     }

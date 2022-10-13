@@ -11,6 +11,7 @@ namespace Gungeon
     {
         selected = false;
         cleared = false;
+        roomType = RoomType::enemy;
         
         col = new ObRect();
     }

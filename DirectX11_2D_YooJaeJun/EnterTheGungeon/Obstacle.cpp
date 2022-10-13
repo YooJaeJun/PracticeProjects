@@ -29,7 +29,7 @@ namespace Gungeon
 
 	void Obstacle::Render()
 	{
-		Character::Render();
 		idle->Render(); // RENDER->push(idle);
+		Character::Render();
 	}
 }

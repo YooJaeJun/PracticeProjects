@@ -126,7 +126,7 @@ namespace Dir8
 		if (moveDir != Vector2(0.0f, 0.0f))
 		{
 			state = PlayerState::WALK;
-			walk->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+			walk->ChangeAnim(AnimState::loop, 0.1f);
 		}
 	}
 
@@ -141,7 +141,7 @@ namespace Dir8
 		if (moveDir == Vector2(0.0f, 0.0f))
 		{
 			state = PlayerState::IDLE;
-			walk->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+			walk->ChangeAnim(AnimState::stop, 0.1f);
 			walk->frame.x = 0;
 		}
 
@@ -149,7 +149,7 @@ namespace Dir8
 		{
 			//walk -> roll
 			state = PlayerState::ROLL;
-			roll->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+			roll->ChangeAnim(AnimState::once, 0.1f);
 			roll->isVisible = true;
 			walk->isVisible = false;
 			timeRoll = 0.0f;
@@ -167,7 +167,7 @@ namespace Dir8
 		if (timeRoll > 0.6f)
 		{
 			state = PlayerState::IDLE;
-			walk->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+			walk->ChangeAnim(AnimState::stop, 0.1f);
 			roll->isVisible = false;
 			walk->isVisible = true;
 			walk->frame.x = 0;

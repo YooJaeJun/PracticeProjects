@@ -6,7 +6,9 @@ namespace Gungeon
 	const int roomMax = 20;
 	const int gridMax = 7000;
 
+	// B, L, R, LB, RB, T, LT, RT
 	const Int2 wallImgDir[8] = { {1, 5}, {0, 1}, {5, 1}, {0, 4}, {5, 4}, {1, 0}, {0, 0}, {5, 0} };
+	const Int2 doorImgDir[8] = { {8, 0}, {7, 0}, {6, 0}, {9, 0}, {9, 0}, {8, 0}, {9, 0}, {9, 0} };
 
 
 	enum class MapGenState 

@@ -18,10 +18,16 @@ namespace Gungeon
         curRoom = nullptr;
         curRoomIdx = 0;
         afterRoomIdx = -2;
+        roomClearCount = 0;
+        roomClearCountForBossBattle = 1;
+        timeGateOpen = 0.0f;
+        timeGateClosed = 0.0f;
+        flagGateOpen = false;
+        flagGateClosed = false;
 
         if (!player) player = new Player();
 
-        spawnEffect.resize(enemyMax + bossMax);
+        spawnEffect.resize(enemyMax);
         int idx = 0;
         for (auto& elem : spawnEffect)
         {
@@ -34,11 +40,6 @@ namespace Gungeon
                 elem->idle->scale = Vector2(663.0f / 18.0f, 39.0f) * 2.0f;
                 elem->idle->isVisible = false;
                 elem->intervalDie = 1.8f;
-
-                if (idx == spawnEffect.size() - 1)
-                {
-                    spawnEffect[spawnEffect.size() - 1]->idle->scale *= 2.5f;
-                }
             }
             idx++;
         }
@@ -51,6 +52,17 @@ namespace Gungeon
             }
         }
 
+        gate = new Obstacle;
+        gate->col->isVisible = false;
+        gate->col->scale = Vector2(40.0F, 20.0f) * 2.0f;
+        gate->SetPos(DEFAULTSPAWN);
+        gate->idle = new ObImage(L"EnterTheGungeon/Level/Gate.png");
+        gate->idle->isVisible = false;
+        gate->idle->maxFrame.x = 9;
+        gate->idle->scale = Vector2(604.0f / 9.0f, 165.0f) * 2.0f;
+        gate->idle->SetParentRT(*gate->col);
+        gate->idle->pivot = OFFSET_B;
+        
 
         fadeOut = false;
         timeFade = 0.0f;
@@ -64,6 +76,7 @@ namespace Gungeon
     {
         for (auto& elem : mapGen->selectedRooms) elem->cleared = false;
         for (auto& elem : enemy) SafeRelease(elem);
+        SafeRelease(player);
     }
 
     void Scene02::Update()
@@ -117,6 +130,7 @@ namespace Gungeon
         if (player) player->Update();
         for (auto& elem : spawnEffect) if (elem) elem->Update();
         for (auto& elem : enemy) if (elem) elem->Update();
+        gate->Update();
     }
 
     void Scene02::LateUpdate()
@@ -138,6 +152,8 @@ namespace Gungeon
             IntersectEnemy();
             break;
         }
+
+        GateProcess();
     }
 
     void Scene02::Render()
@@ -154,6 +170,7 @@ namespace Gungeon
 
         for (auto& elem : enemy) if (elem) elem->Render();
         if (player) player->Render();
+        gate->Render();
 
         // ÃÖÀûÈ­ ÀÌ½´·Î zorder ÁÖ¼®
         /*
@@ -263,7 +280,6 @@ namespace Gungeon
             }
         }
 
-        // °ñµå Èí¼ö ÇÃ·¡±×
         if (flagCleared)
         {
             curRoom->cleared = true;
@@ -275,6 +291,14 @@ namespace Gungeon
 
         if (curRoom->cleared)
         {
+            roomClearCount++;
+            if (roomClearCount >= roomClearCountForBossBattle)
+            {
+                gate->SetPos(curRoom->Pos());
+                gate->idle->ChangeAnim(AnimState::once, 0.1f);
+                gate->idle->isVisible = true;
+            }
+
             gameState = GameState::enteringRoom;
         }
     }
@@ -285,7 +309,6 @@ namespace Gungeon
         CAM->zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
 
         player->Spawn(Vector2(curRoom->Pos().x, curRoom->Pos().y));
-        player->Update();
     }
 
     void Scene02::SpawnEffect()
@@ -384,6 +407,35 @@ namespace Gungeon
             }
 
             enemyElem->LateUpdate();
+        }
+    }
+
+    void Scene02::GateProcess()
+    {
+        if (roomClearCount >= roomClearCountForBossBattle)
+        {
+            if (TIMER->GetTick(timeGateOpen, 1.5f))
+            {
+                flagGateOpen = true;
+            }
+
+            if (flagGateOpen)
+            {
+                gate->col->isVisible = true;
+                if (gate->col->Intersect(player->col))
+                {
+                    roomClearCount = 0;
+                    gate->idle->ChangeAnim(AnimState::reverseOnce, 0.1f);
+                    flagGateClosed = true;
+                }
+            }
+        }
+
+        if (flagGateClosed)
+        {
+            flagGateClosed = false;
+            fadeOut = true;
+            SCENE->ChangeScene("Scene03", 1.0f);
         }
     }
 

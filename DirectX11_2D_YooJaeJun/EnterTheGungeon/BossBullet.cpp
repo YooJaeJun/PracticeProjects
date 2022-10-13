@@ -15,7 +15,7 @@ namespace Gungeon
         SetPos(DEFAULTSPAWN);
 
         idle = new ObImage(L"EnterTheGungeon/Boss_0/Bullet_0.png");
-        idle->isVisible = true;
+        idle->isVisible = false;
         idle->scale = col->scale;
         idle->SetParentRT(*col);
 

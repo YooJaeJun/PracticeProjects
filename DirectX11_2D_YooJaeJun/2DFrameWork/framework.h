@@ -106,10 +106,11 @@ enum DirState
     dirRB,
     dirT,
     dirLT,
-    dirRT
+    dirRT,
+    dirNone
 };
-const int dx[8] = { 0,-1,1,-1,1,0,-1,1 };
-const int dy[8] = { -1,0,0,-1,-1,1,1,1 };
+const int dx[9] = { 0,-1,1,-1,1,0,-1,1,0 };
+const int dy[9] = { -1,0,0,-1,-1,1,1,1,0 };
 
 
 //2DFramework Header

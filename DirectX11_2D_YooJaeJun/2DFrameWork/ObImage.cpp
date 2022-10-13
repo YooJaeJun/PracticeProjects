@@ -72,14 +72,14 @@ void ObImage::PlayAnim()
     if (maxFrame.x == 1 && maxFrame.y == 1)
         return;
 
-    if (animState != ANIMSTATE::STOP)
+    if (animState != AnimState::stop)
     {
         if (TIMER->GetTick(animTime, animInterval))
         {
             //재생간격이 지났을 때
             if (animXAxis) //가로재생
             {
-                if (animState == ANIMSTATE::LOOP)
+                if (animState == AnimState::loop)
                 {
                     frame.x++;
                     if (frame.x == maxFrame.x)
@@ -87,16 +87,16 @@ void ObImage::PlayAnim()
                         frame.x = 0;
                     }
                 }
-                else if (animState == ANIMSTATE::ONCE)
+                else if (animState == AnimState::once)
                 {
                     frame.x++;
                     if (frame.x == maxFrame.x)
                     {
                         frame.x = maxFrame.x - 1;
-                        animState = ANIMSTATE::STOP;
+                        animState = AnimState::stop;
                     }
                 }
-                else if (animState == ANIMSTATE::REVERSE_LOOP)
+                else if (animState == AnimState::reverseLoop)
                 {
                     frame.x--;
                     if (frame.x == -1)
@@ -110,13 +110,13 @@ void ObImage::PlayAnim()
                     if (frame.x == -1)
                     {
                         frame.x = 0;
-                        animState = ANIMSTATE::STOP;
+                        animState = AnimState::stop;
                     }
                 }
             }
             else //세로재생
             {
-                if (animState == ANIMSTATE::LOOP)
+                if (animState == AnimState::loop)
                 {
                     frame.y++;
                     if (frame.y == maxFrame.y)
@@ -124,16 +124,16 @@ void ObImage::PlayAnim()
                         frame.y = 0;
                     }
                 }
-                else if (animState == ANIMSTATE::ONCE)
+                else if (animState == AnimState::once)
                 {
                     frame.y++;
                     if (frame.y == maxFrame.y)
                     {
                         frame.y = maxFrame.y - 1;
-                        animState = ANIMSTATE::STOP;
+                        animState = AnimState::stop;
                     }
                 }
-                else if (animState == ANIMSTATE::REVERSE_LOOP)
+                else if (animState == AnimState::reverseLoop)
                 {
                     frame.y--;
                     if (frame.y == -1)
@@ -147,7 +147,7 @@ void ObImage::PlayAnim()
                     if (frame.y == -1)
                     {
                         frame.y = 0;
-                        animState = ANIMSTATE::STOP;
+                        animState = AnimState::stop;
                     }
                 }
             }
@@ -235,20 +235,20 @@ void ObImage::Render()
     D3D->GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
 }
 
-void ObImage::ChangeAnim(ANIMSTATE anim, float interval, bool xAxis)
+void ObImage::ChangeAnim(AnimState anim, float interval, bool xAxis)
 {
     animState = anim;
     animInterval = interval;
     animXAxis = xAxis;
 
-    if (animState == ANIMSTATE::ONCE)
+    if (animState == AnimState::once)
     {
         if (xAxis)
             frame.x = 0;
         else
             frame.y = 0;
     }
-    else if (animState == ANIMSTATE::REVERSE_ONCE)
+    else if (animState == AnimState::reverseOnce)
     {
         if (xAxis)
             frame.x = maxFrame.x - 1;

@@ -49,7 +49,7 @@ namespace Gungeon
 			elem2->maxFrame.x = 2;
 			elem2->scale.x = 28.0f / 2.0f * scaleFactor;
 			elem2->scale.y = 24.0f * scaleFactor;
-			elem2->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+			elem2->ChangeAnim(AnimState::loop, 0.2f);
 			elem2->SetParentRT(*col);
 			elem2->zOrder = ZOrder::object;
 			idx++;
@@ -75,7 +75,7 @@ namespace Gungeon
 			elem2->maxFrame.x = 6;
 			elem2->scale.x = 96.0f / 6.0f * scaleFactor;
 			elem2->scale.y = 24.0f * scaleFactor;
-			elem2->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+			elem2->ChangeAnim(AnimState::loop, 0.1f);
 			elem2->SetParentRT(*col);
 			elem2->zOrder = ZOrder::object;
 			idx++;
@@ -86,7 +86,7 @@ namespace Gungeon
 		hit->maxFrame.x = 1;
 		hit->scale.x = 16.0f * scaleFactor;
 		hit->scale.y = 24.0f * scaleFactor;
-		hit->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
+		hit->ChangeAnim(AnimState::once, 0.2f);
 		hit->SetParentRT(*col);
 		hit->zOrder = ZOrder::object;
 
@@ -100,7 +100,7 @@ namespace Gungeon
 
 		shadow->scale.x = 12.0f * scaleFactor;
 		shadow->scale.y = 4.0f * scaleFactor;
-		shadow->SetWorldPosY(-35.0f);
+		shadow->SetLocalPosY(-35.0f);
 	}
 
 	void Enemy1::InitWeapon()

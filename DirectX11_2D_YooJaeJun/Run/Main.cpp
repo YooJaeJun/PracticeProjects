@@ -104,7 +104,7 @@ void Main::Init()
 		elem->col->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
 		elem->idle->scale.x = elem->idleImgSize.x / elem->idle->maxFrame.x * elem->scaleCoef.x;
 		elem->idle->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
-		elem->idle->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+		elem->idle->ChangeAnim(AnimState::stop, 0.1f);
 		elem->idle->SetParentRT(*elem->col);
 		elem->type = ItemType::LIFE;
 		elem->Spawn(0.0f, idx);
@@ -124,7 +124,7 @@ void Main::Init()
 		elem->col->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
 		elem->idle->scale.x = elem->idleImgSize.x / elem->idle->maxFrame.x * elem->scaleCoef.x;
 		elem->idle->scale.y = elem->idleImgSize.y * elem->scaleCoef.y;
-		elem->idle->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+		elem->idle->ChangeAnim(AnimState::loop, 0.1f);
 		elem->idle->SetParentRT(*elem->col);
 		elem->type = ItemType::BOOST;
 		elem->Spawn(0.0f, idx);

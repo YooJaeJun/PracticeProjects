@@ -35,7 +35,7 @@ void Player::Init()
 	boost->scale = Vector2(idleImgSize.x / boost->maxFrame.x, idleImgSize.y) * 2.4f;
 	boost->uv = Vector4(0.0f, 0.0f, 1.0f / boost->maxFrame.x, 1.0f);
 	boost->isVisible = false;
-	boost->ChangeAnim(ANIMSTATE::LOOP, 0.05f);
+	boost->ChangeAnim(AnimState::loop, 0.05f);
 	boost->SetParentRT(*col);
 	boost->SetLocalPosY(40.0f);
 
@@ -46,7 +46,7 @@ void Player::Init()
 	hit->scale = Vector2(1610.0f / hit->maxFrame.x, 322.0f);
 	hit->uv = Vector4(0.0f, 0.0f, 1.0f / hit->maxFrame.x, 1.0f);
 	hit->isVisible = false;
-	hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	hit->ChangeAnim(AnimState::once, 0.1f);
 	hit->SetParentRT(*col);
 
 	die = new ObImage(L"Cookie/Die.png");
@@ -55,7 +55,7 @@ void Player::Init()
 	die->scale = Vector2(1932.0f / die->maxFrame.x, 322.0f);
 	die->uv = Vector4(0.0f, 0.0f, 1.0f / die->maxFrame.x, 1.0f);
 	die->isVisible = false;
-	die->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	die->ChangeAnim(AnimState::once, 0.1f);
 	die->SetParentRT(*col);
 
 	key = 0.0f;
@@ -282,7 +282,7 @@ void Player::Hit(const float damage)
 			boost->isVisible = false;
 			die->isVisible = false;
 
-			hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+			hit->ChangeAnim(AnimState::once, 0.1f);
 		}
 	}
 }

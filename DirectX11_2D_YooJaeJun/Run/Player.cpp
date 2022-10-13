@@ -22,7 +22,7 @@ void Player::Init()
 	idle->maxFrame.x = 4;
 	idle->scale = Vector2(1288.0f / idle->maxFrame.x, 322.0f);
 	idle->uv = Vector4(0.0f, 0.0f, 1.0f / idle->maxFrame.x, 1.0f);
-	idle->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+	idle->ChangeAnim(AnimState::loop, 0.1f);
 	idle->SetParentRT(*col);
 
 	slide = new ObImage(L"Cookie/Slide.png");
@@ -31,7 +31,7 @@ void Player::Init()
 	slide->scale = Vector2(644.0f / slide->maxFrame.x, 322.0f);
 	slide->uv = Vector4(0.0f, 0.0f, 1.0f / slide->maxFrame.x, 1.0f);
 	slide->isVisible = false;
-	slide->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+	slide->ChangeAnim(AnimState::loop, 0.1f);
 	slide->SetParentRT(*col);
 
 	jump = new ObImage(L"Cookie/Jump.png");
@@ -40,7 +40,7 @@ void Player::Init()
 	jump->scale = Vector2(644.0f / jump->maxFrame.x, 322.0f);
 	jump->uv = Vector4(0.0f, 0.0f, 1.0f / jump->maxFrame.x, 1.0f);
 	jump->isVisible = false;
-	jump->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	jump->ChangeAnim(AnimState::once, 0.1f);
 	jump->SetParentRT(*col);
 
 	doubleJump = new ObImage(L"Cookie/DoubleJump.png");
@@ -49,7 +49,7 @@ void Player::Init()
 	doubleJump->scale = Vector2(1932.0f / doubleJump->maxFrame.x, 322.0f);
 	doubleJump->uv = Vector4(0.0f, 0.0f, 1.0f / doubleJump->maxFrame.x, 1.0f);
 	doubleJump->isVisible = false;
-	doubleJump->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	doubleJump->ChangeAnim(AnimState::once, 0.1f);
 	doubleJump->SetParentRT(*col);
 
 	land = new ObImage(L"Cookie/Land.png");
@@ -58,7 +58,7 @@ void Player::Init()
 	land->scale = Vector2(322.0f / land->maxFrame.x, 322.0f);
 	land->uv = Vector4(0.0f, 0.0f, 1.0f / land->maxFrame.x, 1.0f);
 	land->isVisible = false;
-	land->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	land->ChangeAnim(AnimState::once, 0.1f);
 	land->SetParentRT(*col);
 
 	hit = new ObImage(L"Cookie/Hit.png");
@@ -67,7 +67,7 @@ void Player::Init()
 	hit->scale = Vector2(1610.0f / hit->maxFrame.x, 322.0f);
 	hit->uv = Vector4(0.0f, 0.0f, 1.0f / hit->maxFrame.x, 1.0f);
 	hit->isVisible = false;
-	hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	hit->ChangeAnim(AnimState::once, 0.1f);
 	hit->SetParentRT(*col);
 
 	boost = new ObImage(L"Cookie/Boost.png");
@@ -76,7 +76,7 @@ void Player::Init()
 	boost->scale = Vector2(1288.0f / boost->maxFrame.x, 322.0f);
 	boost->uv = Vector4(0.0f, 0.0f, 1.0f / boost->maxFrame.x, 1.0f);
 	boost->isVisible = false;
-	boost->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+	boost->ChangeAnim(AnimState::loop, 0.1f);
 	boost->SetParentRT(*col);
 
 	die = new ObImage(L"Cookie/Die.png");
@@ -85,7 +85,7 @@ void Player::Init()
 	die->scale = Vector2(1932.0f / die->maxFrame.x, 322.0f);
 	die->uv = Vector4(0.0f, 0.0f, 1.0f / die->maxFrame.x, 1.0f);
 	die->isVisible = false;
-	die->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	die->ChangeAnim(AnimState::once, 0.1f);
 	die->SetParentRT(*col);
 
 	state = PlState::RUN;
@@ -303,7 +303,7 @@ void Player::Jump()
 	hit->isVisible = false;
 	isHitAnim = false;
 
-	jump->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	jump->ChangeAnim(AnimState::once, 0.1f);
 }
 
 void Player::DoubleJump()
@@ -318,7 +318,7 @@ void Player::DoubleJump()
 	hit->isVisible = false;
 	isHitAnim = false;
 
-	doubleJump->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	doubleJump->ChangeAnim(AnimState::once, 0.1f);
 }
 
 void Player::Slide()
@@ -334,7 +334,7 @@ void Player::Slide()
 	hit->isVisible = false;
 	isHitAnim = false;
 
-	slide->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+	slide->ChangeAnim(AnimState::loop, 0.1f);
 }
 
 void Player::CancelSlide()
@@ -396,7 +396,7 @@ void Player::Hit(const float damage)
 			boost->isVisible = false;
 			die->isVisible = false;
 
-			hit->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+			hit->ChangeAnim(AnimState::once, 0.1f);
 		}
 	}
 }
