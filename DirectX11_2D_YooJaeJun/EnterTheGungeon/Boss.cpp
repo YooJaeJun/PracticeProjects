@@ -42,69 +42,31 @@ namespace Gungeon
         col = new ObCircle;
         col->isVisible = false;
         col->isFilled = false;
-        col->scale.x = 25.0f * scaleFactor;
-        col->scale.y = 25.0f * scaleFactor;
+        col->scale = Vector2(25.0f, 25.0f) * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f);
         col->zOrder = ZOrder::object;
         SetPos(DEFAULTSPAWN);
 
-        idle[dirB] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
-        idle[dirL] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
-        idle[dirR] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
-        idle[dirLB] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
-        idle[dirRB] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Front.png");
-        idle[dirT] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
-        idle[dirLT] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
-        idle[dirRT] = new ObImage(L"EnterTheGungeon/Boss_0/Idle_Back.png");
+        idle = new ObImage(L"EnterTheGungeon/Boss_0/Idle.png");
+        idle->isVisible = false;
+        idle->maxFrame = Int2(4, 8);
+        idle->scale = Vector2(104.0f / 4.0f, 320.0f / 8.0f) * scaleFactor;
+        idle->ChangeAnim(AnimState::loop, 0.2f);
+        idle->SetParentRT(*col);
+        idle->zOrder = ZOrder::object;
 
-        int idx = 0;
-        for (auto& elem : idle)
-        {
-            if (idx == dirL || idx == dirLB || idx == dirLT)
-            {
-                elem->reverseLR = true;
-            }
-            elem->isVisible = false;
-            elem->maxFrame.x = 4;
-            elem->scale.x = 104.0f / 4.0f * scaleFactor;
-            elem->scale.y = 40.0f * scaleFactor;
-            elem->ChangeAnim(AnimState::loop, 0.2f);
-            elem->SetParentRT(*col);
-            elem->zOrder = ZOrder::object;
-            idx++;
-        }
-
-        walk[dirB] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
-        walk[dirL] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
-        walk[dirR] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
-        walk[dirLB] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
-        walk[dirRB] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Front.png");
-        walk[dirT] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Back.png");
-        walk[dirLT] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Back.png");
-        walk[dirRT] = new ObImage(L"EnterTheGungeon/Boss_0/Walk_Back.png");
-
-        idx = 0;
-        for (auto& elem : walk)
-        {
-            if (idx == dirL || idx == dirLB || idx == dirLT)
-            {
-                elem->reverseLR = true;
-            }
-            elem->isVisible = false;
-            elem->maxFrame.x = 6;
-            elem->scale.x = 180.0f / 6.0f * scaleFactor;
-            elem->scale.y = 40.0f * scaleFactor;
-            elem->ChangeAnim(AnimState::loop, 0.1f);
-            elem->SetParentRT(*col);
-            elem->zOrder = ZOrder::object;
-            idx++;
-        }
+        walk = new ObImage(L"EnterTheGungeon/Boss_0/Walk.png");
+        walk->isVisible = false;
+        walk->maxFrame = Int2(6, 8);
+        walk->scale = Vector2(180.0f / 6.0f, 40.0f) * scaleFactor;
+        walk->ChangeAnim(AnimState::loop, 0.1f);
+        walk->SetParentRT(*col);
+        walk->zOrder = ZOrder::object;
 
         hit = new ObImage(L"EnterTheGungeon/Boss_0/Hit.png");
         hit->isVisible = false;
         hit->maxFrame.x = 1;
-        hit->scale.x = 32.0 * 1.0f * scaleFactor;
-        hit->scale.y = 40.0f * scaleFactor;
+        hit->scale = Vector2(32.0 * 1.0f, 40.0f) * scaleFactor;
         hit->ChangeAnim(AnimState::loop, 0.2f);
         hit->SetParentRT(*col);
         hit->zOrder = ZOrder::object;
@@ -112,8 +74,7 @@ namespace Gungeon
         die = new ObImage(L"EnterTheGungeon/Boss_0/Die.png");
         die->isVisible = false;
         die->maxFrame.x = 8;
-        die->scale.x = 320.0f / 8.0f * scaleFactor;
-        die->scale.y = 40.0f * scaleFactor;
+        die->scale = Vector2(320.0f / 8.0f, 40.0f) * scaleFactor;
         die->SetParentRT(*col);
         die->zOrder = ZOrder::object;
 
@@ -129,8 +90,7 @@ namespace Gungeon
 
         hpGuageBar = new UI;
         hpGuageBar->img = new ObImage(L"EnterTheGungeon/Boss_0/Hp_GuageBar.png");
-        hpGuageBar->img->scale.x = 400.0f * hpGuageFactor;
-        hpGuageBar->img->scale.y = 30.0f * hpGuageFactor;
+        hpGuageBar->img->scale = Vector2(400.0f, 30.0f) * hpGuageFactor;
         hpGuageBar->img->SetWorldPosX(-hpGuageBar->img->scale.x / 2.0f);
         hpGuageBar->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
         hpGuageBar->img->pivot = OFFSET_L;
@@ -141,17 +101,16 @@ namespace Gungeon
         hpGuage->img = new ObImage(L"EnterTheGungeon/Boss_0/Hp_Guage.png");
         hpGuage->imgSize.x = 330.0f * hpGuageFactor;
         hpGuage->imgSize.y = 16.0f * hpGuageFactor;
-        hpGuage->img->scale.x = hpGuage->imgSize.x;
-        hpGuage->img->scale.y = hpGuage->imgSize.y;
+        hpGuage->img->scale = Vector2(330.0f, 16.0f) * hpGuageFactor;
         hpGuage->img->SetWorldPosX(-hpGuage->img->scale.x / 2.0f);
         hpGuage->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
         hpGuage->img->pivot = OFFSET_L;
         hpGuage->img->space = Space::screen;
         hpGuage->img->zOrder = ZOrder::UI;
 
+        float shadowScaleFactor = scaleFactor * 2.0f;
         shadow = new ObImage(L"EnterTheGungeon/Boss_0/Shadow_1.png");
-        shadow->scale.x = 12.0f * scaleFactor * 2.0f;
-        shadow->scale.y = 4.0f * scaleFactor * 2.0f;
+        shadow->scale = Vector2(12.0f, 4.0f) * shadowScaleFactor;
         shadow->SetParentRT(*col);
         shadow->SetWorldPosY(-55.0f);
         shadow->zOrder = ZOrder::shadow;
@@ -384,26 +343,26 @@ namespace Gungeon
         if (isHitAnim)
         {
             Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
-            for (auto& elem : idle) elem->color = c;
-            for (auto& elem : walk) elem->color = c;
+            idle->color = c;
+            walk->color = c;
             hit->color = c;
 
             SetPosX(Pos().x + RANDOM->Float(-1.0f, 1.0f));
             SetPosY(Pos().y + RANDOM->Float(-1.0f, 1.0f));
 
-            for (auto& elem : idle) elem->isVisible = false;
-            for (auto& elem : walk) elem->isVisible = false;
+            idle->isVisible = false;
+            walk->isVisible = false;
             hit->isVisible = true;
 
             if (TIMER->GetTick(timeHitAnim, 0.4f))
             {
                 Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
-                for (auto& elem : idle) elem->color = c;
-                for (auto& elem : walk) elem->color = c;
+                idle->color = c;
+                walk->color = c;
                 hit->color = c;
                 die->color = c;
 
-                walk[curTargetDirState]->isVisible = true;
+                walk->isVisible = true;
                 hit->isVisible = false;
 
                 isHitAnim = false;
@@ -413,8 +372,8 @@ namespace Gungeon
         }
         else
         {
-            idle[curTargetDirState]->color.w = 1.0f;
-            walk[curTargetDirState]->color.w = 1.0f;
+            idle->color.w = 1.0f;
+            walk->color.w = 1.0f;
             hit->isVisible = false;
         }
     }

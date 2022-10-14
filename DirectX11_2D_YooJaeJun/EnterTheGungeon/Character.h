@@ -37,6 +37,5 @@ namespace Gungeon
 		int				curHp;
 		int				maxHp;
 		bool			isHit;
-		Int2*			on;
 	};
 }

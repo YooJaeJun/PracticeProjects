@@ -220,7 +220,7 @@ void ObTileMap::Render()
     D3D->GetDC()->Draw(tileSize.x * tileSize.y * 6, 0);
 }
 
-void ObTileMap::SetTile(Int2 TileIdx, Int2 FrameIdx, int ImgIdx, int TileState, Color color, int roomIdx)
+void ObTileMap::SetTile(Int2 TileIdx, Int2 FrameIdx, int ImgIdx, int TileState, Color color, int roomIdx, DirState dir)
 {
     int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
 
@@ -246,6 +246,7 @@ void ObTileMap::SetTile(Int2 TileIdx, Int2 FrameIdx, int ImgIdx, int TileState, 
         vertices[tileIdx * 6 + i].color = color;
         vertices[tileIdx * 6 + i].tileState = TileState;
         vertices[tileIdx * 6 + i].tileRoomIdx = roomIdx;
+        vertices[tileIdx * 6 + i].tileDir = dir;
     }
 
     // SubResource - CPU와 GPU의 중간다리 역할
@@ -315,6 +316,20 @@ void ObTileMap::SetTileRoomIndex(Int2 TileIdx, const int tileRoomIndex)
     int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
 
     vertices[tileIdx * 6].tileRoomIdx = tileRoomIndex;
+}
+
+int ObTileMap::GetTileDoorDir(Int2 TileIdx)
+{
+    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
+
+    return vertices[tileIdx * 6].tileDir;
+}
+
+void ObTileMap::SetTileDoorDir(Int2 TileIdx, const DirState dirState)
+{
+    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
+
+    vertices[tileIdx * 6].tileDir = dirState;
 }
 
 void ObTileMap::Save()

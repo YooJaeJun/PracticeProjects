@@ -8,8 +8,7 @@ namespace Gungeon
         damage = 50;
 
         float scaleFactor = 1.5f;
-        col->scale.x = 19.0f * scaleFactor;
-        col->scale.y = 19.0f * scaleFactor;
+        col->scale = Vector2(19.0f, 19.0f) * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
 

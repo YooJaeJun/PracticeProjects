@@ -46,8 +46,7 @@ namespace Gungeon
 		float scaleFactor = 3.0f;
 		col = new ObCircle;
 		col->isFilled = false;
-		col->scale.x = 12.0f * scaleFactor;
-		col->scale.y = 12.0f * scaleFactor;
+		col->scale = Vector2(12.0f, 12.0f) * scaleFactor;
 		col->zOrder = ZOrder::object;
 		col->color = Color(1.0f, 1.0f, 1.0f);
 
@@ -67,97 +66,40 @@ namespace Gungeon
 		spawn = new ObImage(L"EnterTheGungeon/Player_0/Spawn.png");
 		spawn->isVisible = false;
 		spawn->maxFrame.x = 3;
-		spawn->scale.x = 48.0f / 3.0f * scaleFactor;
-		spawn->scale.y = 22.0f * scaleFactor;
+		spawn->scale = Vector2(48.0f / 3.0f, 22.0f) * scaleFactor;
 		spawn->ChangeAnim(AnimState::once, 0.2f);
 		spawn->SetParentRT(*col);
 		spawn->zOrder = ZOrder::object;
 
-		idle[dirB] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Front.png");
-		idle[dirL] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
-		idle[dirR] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
-		idle[dirLB] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
-		idle[dirRB] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Side.png");
-		idle[dirT] = new ObImage(L"EnterTheGungeon/Player_0/Idle_Back.png");
-		idle[dirLT] = new ObImage(L"EnterTheGungeon/Player_0/Idle_BackDiag.png");
-		idle[dirRT] = new ObImage(L"EnterTheGungeon/Player_0/Idle_BackDiag.png");
+		idle = new ObImage(L"EnterTheGungeon/Player_0/Idle.png");
+		idle->maxFrame = Int2(4, 8);
+		idle->scale = Vector2(72.0 / 4.0f, 160.0f / 8.0f) * scaleFactor;
+		idle->ChangeAnim(AnimState::loop, 0.2f);
+		idle->SetParentRT(*col);
+		idle->zOrder = ZOrder::object;
 
-		idx = 0;
-		for (auto& elem : idle)
-		{
-			if (idx == dirL || idx == dirLB || idx == dirLT)
-			{
-				elem->reverseLR = true;
-			}
-			elem->maxFrame.x = 4;
-			elem->scale.x = 72.0 / 4.0f * scaleFactor;
-			elem->scale.y = 20.0f * scaleFactor;
-			elem->ChangeAnim(AnimState::loop, 0.2f);
-			elem->SetParentRT(*col);
-			elem->zOrder = ZOrder::object;
-			idx++;
-		}
+		walk = new ObImage(L"EnterTheGungeon/Player_0/Walk.png");
+		walk->isVisible = false;
+		walk->maxFrame = Int2(6, 8);
+		walk->scale = Vector2(102.0f / 6.0f, 192.0f / 8.0f) * scaleFactor;
+		walk->ChangeAnim(AnimState::loop, 0.1f);
+		walk->SetParentRT(*col);
+		walk->zOrder = ZOrder::object;
 
-		walk[dirB] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Front.png");
-		walk[dirL] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
-		walk[dirR] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
-		walk[dirLB] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
-		walk[dirRB] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Side.png");
-		walk[dirT] = new ObImage(L"EnterTheGungeon/Player_0/Walk_Back.png");
-		walk[dirLT] = new ObImage(L"EnterTheGungeon/Player_0/Walk_BackDiag.png");
-		walk[dirRT] = new ObImage(L"EnterTheGungeon/Player_0/Walk_BackDiag.png");
-
-		idx = 0;
-		for (auto& elem : walk)
-		{
-			if (idx == dirL || idx == dirLB || idx == dirLT)
-			{
-				elem->reverseLR = true;
-			}
-			elem->isVisible = false;
-			elem->maxFrame.x = 6;
-			elem->scale.x = 102.0f / 6.0f * scaleFactor;
-			elem->scale.y = 24.0f * scaleFactor;
-			elem->ChangeAnim(AnimState::loop, 0.1f);
-			elem->SetParentRT(*col);
-			elem->zOrder = ZOrder::object;
-			idx++;
-		}
-
-		roll[dirB] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Front.png");
-		roll[dirL] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Side.png");
-		roll[dirR] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Side.png");
-		roll[dirLB] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Side.png");
-		roll[dirRB] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Side.png");
-		roll[dirT] = new ObImage(L"EnterTheGungeon/Player_0/Roll_Back.png");
-		roll[dirLT] = new ObImage(L"EnterTheGungeon/Player_0/Roll_BackDiag.png");
-		roll[dirRT] = new ObImage(L"EnterTheGungeon/Player_0/Roll_BackDiag.png");
-
-		idx = 0;
-		for (auto& elem : roll)
-		{
-			if (idx == dirL || idx == dirLB || idx == dirLT)
-			{
-				elem->reverseLR = true;
-			}
-			elem->isVisible = false;
-			elem->maxFrame.x = 9;
-			elem->scale.x = 180.0f / 9.0f * scaleFactor;
-			elem->scale.y = 24.0f * scaleFactor;
-			elem->uv = Vector4(0.0f, 0.0f, 1.0f / 9.0f, 1.0f);
-			elem->ChangeAnim(AnimState::once, 0.2f);
-			elem->SetParentRT(*col);
-			elem->zOrder = ZOrder::object;
-			idx++;
-		}
+		roll = new ObImage(L"EnterTheGungeon/Player_0/Roll.png");
+		roll->isVisible = false;
+		roll->maxFrame = Int2(9, 8);
+		roll->scale = Vector2(180.0f / 9.0f, 192.0f / 8.0f) * scaleFactor;
+		roll->ChangeAnim(AnimState::once, 0.2f);
+		roll->SetParentRT(*col);
+		roll->zOrder = ZOrder::object;
 
 		hit = nullptr;
 
 		fall = new ObImage(L"EnterTheGungeon/Player_0/Fall.png");
 		fall->isVisible = false;
 		fall->maxFrame.x = 3;
-		fall->scale.x = 48.0f / 3.0f * scaleFactor;
-		fall->scale.y = 22.0f * scaleFactor;
+		fall->scale = Vector2(48.0f / 3.0f, 22.0f) * scaleFactor;
 		fall->ChangeAnim(AnimState::loop, 0.2f);
 		fall->SetParentRT(*col);
 		fall->zOrder = ZOrder::object;
@@ -165,8 +107,7 @@ namespace Gungeon
 		die = new ObImage(L"EnterTheGungeon/Player_0/Die.png");
 		die->isVisible = false;
 		die->maxFrame.x = 8;
-		die->scale.x = 160.0f / 8.0f * scaleFactor;
-		die->scale.y = 24.0f * scaleFactor;
+		die->scale = Vector2(160.0f / 8.0f, 24.0f) * scaleFactor;
 		die->ChangeAnim(AnimState::once, 0.2f);
 		die->SetParentRT(*col);
 		die->zOrder = ZOrder::object;
@@ -174,8 +115,7 @@ namespace Gungeon
 		kick = new ObImage(L"EnterTheGungeon/Player_0/Kick.png");
 		kick->isVisible = false;
 		kick->maxFrame.x = 3;
-		kick->scale.x = 48.0f / 3.0f * scaleFactor;
-		kick->scale.y = 22.0f * scaleFactor;
+		kick->scale = Vector2(48.0f / 3.0f, 22.0f) * scaleFactor;
 		kick->ChangeAnim(AnimState::loop, 0.2f);
 		kick->SetParentRT(*col);
 		kick->zOrder = ZOrder::object;
@@ -183,8 +123,7 @@ namespace Gungeon
 		obtain = new ObImage(L"EnterTheGungeon/Player_0/Obtain.png");
 		obtain->isVisible = false;
 		obtain->maxFrame.x = 3;
-		obtain->scale.x = 48.0f / 3.0f * scaleFactor;
-		obtain->scale.y = 22.0f * scaleFactor;
+		obtain->scale = Vector2(48.0f / 3.0f, 22.0f) * scaleFactor;
 		obtain->ChangeAnim(AnimState::loop, 0.2f);
 		obtain->SetParentRT(*col);
 		obtain->zOrder = ZOrder::object;
@@ -389,7 +328,7 @@ namespace Gungeon
 	void Player::Release()
 	{
 		Unit::Release();
-		for (auto& elem : roll) SafeDelete(elem);
+		SafeDelete(roll);
 		for (auto& elem : bullet) elem->Release();
 		weapons[curWeaponIdx]->Release();
 		uiReload->Release();
@@ -430,7 +369,7 @@ namespace Gungeon
 		}
 
 		dust->Update();
-		for (auto& elem : roll) elem->Update();
+		roll->Update();
 		spawn->Update();
 		kick->Update();
 		obtain->Update();
@@ -460,7 +399,7 @@ namespace Gungeon
 
 		Unit::Render();
 
-		for (auto& elem : roll) elem->Render(); // RENDER->push(elem);
+		roll->Render(); // RENDER->push(elem);
 		spawn->Render(); //RENDER->push(respawn);
 		kick->Render(); //RENDER->push(kick);
 		obtain->Render(); //RENDER->push(obtain);
@@ -520,12 +459,12 @@ namespace Gungeon
 	{
 		targetPos = INPUT->GetWorldMousePos();
 
-		CAM->position.x = Utility::Saturate((targetPos.x + idle[curTargetDirState]->GetWorldPos().x) / 2,
-			idle[curTargetDirState]->GetWorldPos().x - 250.0f,
-			idle[curTargetDirState]->GetWorldPos().x + 250.0f);
-		CAM->position.y = Utility::Saturate((targetPos.y + idle[curTargetDirState]->GetWorldPos().y) / 2,
-			idle[curTargetDirState]->GetWorldPos().y - 250.0f,
-			idle[curTargetDirState]->GetWorldPos().y + 250.0f);
+		CAM->position.x = Utility::Saturate((targetPos.x + idle->GetWorldPos().x) / 2,
+			idle->GetWorldPos().x - 250.0f,
+			idle->GetWorldPos().x + 250.0f);
+		CAM->position.y = Utility::Saturate((targetPos.y + idle->GetWorldPos().y) / 2,
+			idle->GetWorldPos().y - 250.0f,
+			idle->GetWorldPos().y + 250.0f);
 	}
 
 	void Player::Idle()
@@ -624,7 +563,7 @@ namespace Gungeon
 			moveDir.y = dy[DirState::dirNone];
 		}
 
-		if (moveDir.x != 0.0f || moveDir.y != 0.0f)
+		if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))
 		{
 			moveDir.Normalize();
 			col->MoveWorldPos(moveDir * scalar * DELTA);
@@ -760,13 +699,13 @@ namespace Gungeon
 	void Player::StartWalk()
 	{
 		Unit::StartWalk();
-		for (auto& elem : roll) elem->isVisible = false;
+		roll->isVisible = false;
 	}
 
 	void Player::StartIdle()
 	{
 		Unit::StartIdle();
-		for (auto& elem : roll) elem->isVisible = false;
+		roll->isVisible = false;
 	}
 
 	void Player::StartRoll()
@@ -775,16 +714,16 @@ namespace Gungeon
 		{
 			state = State::roll;
 
-			for (auto& elem : idle) elem->isVisible = false;
-			for (auto& elem : walk) elem->isVisible = false;
+			idle->isVisible = false;
+			walk->isVisible = false;
 			weapons[curWeaponIdx]->idle->isVisible = false;
 			weapons[curWeaponIdx]->imgReloading->isVisible = false;
 			weapons[curWeaponIdx]->firePos->isVisible = false;
 
-			SetMoveDirState();
-
-			roll[curMoveDirState]->isVisible = true;
-			roll[curMoveDirState]->ChangeAnim(AnimState::once, 0.07f);
+			SetDirState(moveDir, curMoveDirState);
+			roll->frame.y = curMoveDirState;
+			roll->isVisible = true;
+			roll->ChangeAnim(AnimState::once, 0.07f);
 
 			timeRoll = 0.0f;
 
@@ -802,10 +741,7 @@ namespace Gungeon
 
 		DecreaseHeart();
 
-		for (auto& elem : roll)
-		{
-			elem->isVisible = false;
-		}
+		roll->isVisible = false;
 
 		for (auto& elem : bullet)
 		{
@@ -850,26 +786,26 @@ namespace Gungeon
 		if (isHitAnim)
 		{
 			Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
-			for (auto& elem : idle) elem->color = c;
-			for (auto& elem : walk) elem->color = c;
-			for (auto& elem : roll) elem->color = c;
+			idle->color = c;
+			walk->color = c;
+			roll->color = c;
 
 			ShakeCam(timeHitCamShake);
 
 			if (TIMER->GetTick(timeHitAnim, 1.0f))
 			{
 				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
-				for (auto& elem : idle) elem->color = c;
-				for (auto& elem : walk) elem->color = c;
-				for (auto& elem : roll) elem->color = c;
+				idle->color = c;
+				walk->color = c;
+				roll->color = c;
 
 				isHitAnim = false;
 			}
 		}
 		else
 		{
-			idle[curTargetDirState]->color.w = 1.0f;
-			walk[curTargetDirState]->color.w = 1.0f;
+			idle->color.w = 1.0f;
+			walk->color.w = 1.0f;
 		}
 	}
 

@@ -104,21 +104,21 @@ public:
 	//getter setter
 public:
 	//위치 받아오기
-	Vector2 GetLocalPos()	{ return position;}
-	Vector2 GetWorldPos()	{ 
+	Vector2 GetLocalPos() const	{ return position;}
+	Vector2 GetWorldPos() const	{ 
 		return Vector2(RT._41, RT._42); 
 	}
-	Vector2 GetWorldPivot() { return Vector2(W._41, W._42); }
+	Vector2 GetWorldPivot() const { return Vector2(W._41, W._42); }
 	//위치를 고정할때 =
 	void	SetLocalPos(Vector2 location)	{ position = location; }
-	void	SetLocalPosX(float lcationX)	{ position.x = lcationX; }
-	void	SetLocalPosY(float lcationY)	{ position.y = lcationY; }
+	void	SetLocalPosX(float locationX)	{ position.x = locationX; }
+	void	SetLocalPosY(float locationY)	{ position.y = locationY; }
 	void	SetWorldPos(Vector2 worldPos);
 	void	SetWorldPosX(float worldPosX);
 	void	SetWorldPosY(float worldPosY);
 	//이동시킬때 +=
-	void	MoveLocalPos(Vector2 Velocity)	{ position += Velocity; }
-	void	MoveWorldPos(Vector2 Velocity);
+	void	MoveLocalPos(Vector2 velocity)	{ position += velocity; }
+	void	MoveWorldPos(Vector2 velocity);
 	//월드기준 방향
 	Vector2 GetRight()	{ return Vector2(RT._11, RT._12); }
 	Vector2 GetUp()		{ return Vector2(RT._21, RT._22); }

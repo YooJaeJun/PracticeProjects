@@ -17,9 +17,10 @@ public:
     Int2        idx;    //타일 인덱스
     Tile*       P;      //나를 갱신시킨 타일
     bool        isFind; //검사한적이 있는가?
+    Vector2     Pos; //타일의 중점
     TileState   state;
     int         roomIdx;
-    Vector2     Pos; //타일의 중점
+    DirState    dir;
 
     void ClearCost();
     void ClacH(Int2 DestIdx);
@@ -48,7 +49,8 @@ public:
     void            RenderGui(Int2& GuiPickingIdx, int& ImgIdx);
     void            Render() override;
     void            SetTile(Int2 TileIdx, Int2 FrameIdx, int ImgIdx = 0,
-        int TileState = none, Color color = Color(0.5f, 0.5f, 0.5f, 0.5f), int roomIndex = -1);
+        int TileState = none, Color color = Color(0.5f, 0.5f, 0.5f, 0.5f), 
+        int roomIndex = -1, DirState dir = DirState::dirT);
 
     void            Save();
     virtual void    Load();
@@ -61,6 +63,8 @@ public:
     Vector2         GetTilePosition(Int2 TileIdx);
     int             GetTileRoomIndex(Int2 TileIdx);
     void            SetTileRoomIndex(Int2 TileIdx, const int tileRoomIndex);
+    int             GetTileDoorDir(Int2 TileIdx);
+    void            SetTileDoorDir(Int2 TileIdx, const DirState dirState);
 
     bool            IntersectTilePos(Vector2 wpos);
     bool            IntersectTileUnit(ObRect* colTile);

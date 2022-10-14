@@ -42,7 +42,7 @@ namespace Gungeon
 		void EquipWeapon(Weapon* other);
 
 	public:
-		ObImage*			roll[8];
+		ObImage*			roll;
 		ObImage*			kick;
 		ObImage*			obtain;
 		Weapon*				weapons[curWeaponMax];

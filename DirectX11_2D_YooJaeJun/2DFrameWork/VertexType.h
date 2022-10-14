@@ -39,6 +39,7 @@ struct VertexTile
     float tileMapIdx;
     float tileState;
     int tileRoomIdx;
+    DirState tileDir;
 
     VertexTile()
     {

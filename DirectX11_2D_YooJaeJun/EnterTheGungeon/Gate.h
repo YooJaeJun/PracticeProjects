@@ -11,5 +11,11 @@ namespace Gungeon
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
+
+	public:
+		float		timeGateOpen;
+		float		timeGateClosed;
+		bool		flagGateOpen;
+		bool		flagGateClosed;
 	};
 }

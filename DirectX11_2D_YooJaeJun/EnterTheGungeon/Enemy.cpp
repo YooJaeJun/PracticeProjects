@@ -195,28 +195,28 @@ namespace Gungeon
 		if (isHitAnim)
 		{
 			Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
-			for (auto& elem : idle) elem->color = c;
-			for (auto& elem : walk) elem->color = c;
+			idle->color = c;
+			walk->color = c;
 			hit->color = c;
 
 			pushedScalar -= pushedScalarFactor * DELTA;
 			pushedScalarFactor += 200.0f * DELTA;
 			col->MoveWorldPos(pushedDir * pushedScalar * DELTA);
 
-			for (auto& elem : idle) elem->isVisible = false;
-			for (auto& elem : walk) elem->isVisible = false;
+			idle->isVisible = false;
+			walk->isVisible = false;
 			hit->isVisible = true;
 
 
 			if (TIMER->GetTick(timeHitAnim, 0.5f))
 			{
 				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
-				for (auto& elem : idle) elem->color = c;
-				for (auto& elem : walk) elem->color = c;
+				idle->color = c;
+				walk->color = c;
 				hit->color = c;
 				die->color = c;
 
-				walk[curTargetDirState]->isVisible = true;
+				walk->isVisible = true;
 				hit->isVisible = false;
 
 				isHitAnim = false;
@@ -228,8 +228,8 @@ namespace Gungeon
 		}
 		else
 		{
-			idle[curTargetDirState]->color.w = 1.0f;
-			walk[curTargetDirState]->color.w = 1.0f;
+			idle->color.w = 1.0f;
+			walk->color.w = 1.0f;
 			hit->isVisible = false;
 		}
 	}

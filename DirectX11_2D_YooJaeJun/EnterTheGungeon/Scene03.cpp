@@ -76,8 +76,8 @@ namespace Gungeon
         auto SetTile2 = [&](Int2 on, int roomIdx)
         {
             tilemap->SetTile(on,
-                Int2(RANDOM->Int(1, 4),
-                    RANDOM->Int(1, 3)),
+                Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
+                    RANDOM->Int(floorImgMin.y, floorImgMax.y)),
                 imgIdx,
                 (int)TileState::floor,
                 Color(0.5f, 0.5f, 0.5f, 1.0f),

@@ -24,16 +24,15 @@ namespace Gungeon
 		virtual void Spawn(const Vector2 wpos) override;
 		void SetLastPosAndDir();
 		void StepBack();
-		void SetMoveDirState();
-		void SetTargetDirState();
+		void SetDirState(const Vector2 dir, DirState& dirState);
 		void FindPath(ObTileMap* map);
 		void DontFindPath();
 
 	public:
 		ObImage*			spawn;
-		ObImage*			idle[8];
-		ObImage*			walk[8];
-		ObImage*			kick[8];
+		ObImage*			idle;
+		ObImage*			walk;
+		ObImage*			kick;
 		ObImage*			hit;
 		ObImage*			fall;
 		ObImage*			die;
@@ -49,7 +48,6 @@ namespace Gungeon
 		Vector2				targetDir;
 		Vector2				targetDirBefore;
 		Vector2				originCamPos;
-		float				targetRotation;
 		float				timeFire;
 		float				timeReload;
 		Vector2				pushedDir;

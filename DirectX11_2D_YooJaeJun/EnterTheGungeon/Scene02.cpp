@@ -20,10 +20,6 @@ namespace Gungeon
         afterRoomIdx = -2;
         roomClearCount = 0;
         roomClearCountForBossBattle = 1;
-        timeGateOpen = 0.0f;
-        timeGateClosed = 0.0f;
-        flagGateOpen = false;
-        flagGateClosed = false;
 
         if (!player) player = new Player();
 
@@ -53,15 +49,22 @@ namespace Gungeon
         }
 
         gate = new Gate;
-        gate->col->isVisible = false;
-        gate->col->scale = Vector2(40.0F, 20.0f) * 2.0f;
-        gate->SetPos(DEFAULTSPAWN);
-        gate->idle = new ObImage(L"EnterTheGungeon/Level/Gate.png");
-        gate->idle->isVisible = false;
-        gate->idle->maxFrame.x = 9;
-        gate->idle->scale = Vector2(604.0f / 9.0f, 165.0f) * 2.0f;
-        gate->idle->SetParentRT(*gate->col);
-        gate->idle->pivot = OFFSET_B;
+
+        door.resize(doorMax);
+        for (auto& elem : door)
+        {
+            elem = new Door;
+            elem->col->isVisible = false;
+            elem->col->scale = Vector2(16.0f, 128.0f / 8.0f) * 6.0f;
+            elem->col->pivot = OFFSET_LB;
+            elem->SetPos(DEFAULTSPAWN);
+            elem->idle = new ObImage(L"EnterTheGungeon/Level/Door.png");
+            elem->idle->isVisible = false;
+            elem->idle->maxFrame.y = 8;
+            elem->idle->scale = Vector2(16.0f, 128.0f / 8.0f) * 6.0f;
+            elem->idle->SetParentRT(*elem->col);
+            elem->idle->pivot = OFFSET_LB;
+        }
         
 
         fadeOut = false;
@@ -131,10 +134,11 @@ namespace Gungeon
 
 
         if (mapGen) mapGen->Update();
+        gate->Update();
+        for (auto& elem : door) elem->Update();
         if (player) player->Update();
         for (auto& elem : spawnEffect) if (elem) elem->Update();
         for (auto& elem : enemy) if (elem) elem->Update();
-        gate->Update();
     }
 
     void Scene02::LateUpdate()
@@ -169,12 +173,14 @@ namespace Gungeon
             for (auto& elem : spawnEffect) if (elem) elem->Render();
         }
 
+        gate->Render();
+        for (auto& elem : door) elem->Render();
+
         if (player) player->shadow->Render();
         for (auto& elem : enemy) if (elem) elem->shadow->Render();
 
         for (auto& elem : enemy) if (elem) elem->Render();
         if (player) player->Render();
-        gate->Render();
 
         // 최적화 이슈로 zorder 주석
         /*
@@ -262,9 +268,15 @@ namespace Gungeon
         {
             SpawnEnemy();
 
-            for (auto& elem : curRoom->doorTileIdxs)
+            int idx = 0;
+            for (auto& on : curRoom->doorTileIdxs)
             {
-                mapGen->tilemap->SetTileState(elem, TileState::wall);
+                mapGen->tilemap->SetTileState(on, TileState::wall);
+                door[idx]->idle->frame.y = mapGen->tilemap->GetTileDoorDir(on);
+                door[idx]->SetPos(mapGen->tilemap->TileIdxToWorldPos(on));
+                door[idx]->col->isVisible = true;
+                door[idx]->idle->isVisible = true;
+                idx++;
             }
 
             gameState = GameState::fight;
@@ -290,9 +302,13 @@ namespace Gungeon
         {
             curRoom->cleared = true;
 
+            int idx = 0;
             for (auto& elem : curRoom->doorTileIdxs)
             {
                 mapGen->tilemap->SetTileState(elem, TileState::door);
+                door[idx]->col->isVisible = false;
+                door[idx]->idle->isVisible = false;
+                idx++;
             }
 
             for (auto& elem : enemy)
@@ -426,26 +442,34 @@ namespace Gungeon
     {
         if (roomClearCount >= roomClearCountForBossBattle)
         {
-            if (TIMER->GetTick(timeGateOpen, 1.5f))
+            if (TIMER->GetTick(gate->timeGateOpen, 1.5f))
             {
-                flagGateOpen = true;
+                gate->flagGateOpen = true;
             }
 
-            if (flagGateOpen)
+            if (gate->col->Intersect(player->col))
+            {
+                player->StepBack();
+            }
+
+            if (gate->flagGateOpen)
             {
                 gate->col->isVisible = true;
-                if (gate->col->Intersect(player->col))
+                gate->colTile->isVisible = true;
+                if (gate->colTile->Intersect(player->col))
                 {
                     roomClearCount = 0;
+                    gate->col->isVisible = false;
+                    gate->colTile->isVisible = false;
                     gate->idle->ChangeAnim(AnimState::reverseOnce, 0.1f);
-                    flagGateClosed = true;
+                    gate->flagGateClosed = true;
                 }
             }
         }
 
-        if (flagGateClosed)
+        if (gate->flagGateClosed)
         {
-            flagGateClosed = false;
+            gate->flagGateClosed = false;
             fadeOut = true;
             SCENE->ChangeScene("Scene03", 1.0f);
         }

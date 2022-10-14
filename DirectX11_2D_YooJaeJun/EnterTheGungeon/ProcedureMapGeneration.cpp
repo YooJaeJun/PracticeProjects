@@ -419,8 +419,8 @@ namespace Gungeon
         auto SetTile2 = [&](Int2 on, int roomIdx)
         {
             tilemap->SetTile(on,
-                Int2(RANDOM->Int(1, 4),
-                    RANDOM->Int(1, 3)),
+                Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
+                    RANDOM->Int(floorImgMin.y, floorImgMax.y)),
                 imgIdx,
                 (int)TileState::floor,
                 Color(0.5f, 0.5f, 0.5f, 1.0f),
@@ -525,7 +525,7 @@ namespace Gungeon
                 }
             }
 
-            Int2 doorFrameIdx = doorImgDir[DirState::dirLB];
+            DirState doorDir = DirState::dirLB;
             Int2 doorTileIdx = on;
             Int2 floorTileIdx;
 
@@ -535,16 +535,16 @@ namespace Gungeon
                 // 문 좌우
                 if (right)
                 {
-                    doorFrameIdx = doorImgDir[DirState::dirR];
+                    doorDir = DirState::dirR;
                 }
                 else
                 {
-                    doorFrameIdx = doorImgDir[DirState::dirL];
+                    doorDir = DirState::dirL;
                 }
             }
             else if (dirWall[DirState::dirL] && dirWall[DirState::dirR])
             {
-                doorFrameIdx = doorImgDir[DirState::dirB];
+                doorDir = DirState::dirT;
             }
             // 모서리에 위치 시 다른 이미지 출력. 그리고 이동 가능하게 옆에 평면타일로 예외처리
             else
@@ -555,7 +555,7 @@ namespace Gungeon
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirL];
                     doorTileIdx.y = on.y + dy[DirState::dirL];
-                    doorFrameIdx = doorImgDir[DirState::dirRT];
+                    doorDir = DirState::dirRT;
                 }
                 else if ((dirWall[DirState::dirB] && dirWall[DirState::dirR]))
                 {
@@ -563,7 +563,7 @@ namespace Gungeon
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirR];
                     doorTileIdx.y = on.y + dy[DirState::dirR];
-                    doorFrameIdx = doorImgDir[DirState::dirLT];
+                    doorDir = DirState::dirLT;
                 }
 
                 else if ((dirWall[DirState::dirR] && dirWall[DirState::dirT]))
@@ -572,7 +572,7 @@ namespace Gungeon
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirR];
                     doorTileIdx.y = on.y + dy[DirState::dirR];
-                    doorFrameIdx = doorImgDir[DirState::dirLB];
+                    doorDir = DirState::dirLB;
                 }
                 else if (dirWall[DirState::dirT] && dirWall[DirState::dirL])
                 {
@@ -580,24 +580,25 @@ namespace Gungeon
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirL];
                     doorTileIdx.y = on.y + dy[DirState::dirL];
-                    doorFrameIdx = doorImgDir[DirState::dirRB];
+                    doorDir = DirState::dirRB;
                 }
 
                 tilemap->SetTile(floorTileIdx,
-                    Int2(RANDOM->Int(1, 4),
-                        RANDOM->Int(1, 3)),
+                    Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
+                        RANDOM->Int(floorImgMin.y, floorImgMax.y)),
                     imgIdx,
                     (int)TileState::floor, 
                     Color(0.5f, 0.5f, 0.5f, 0.5f),
-                    -1);
+                    -1, doorDir);
             }
 
             tilemap->SetTile(doorTileIdx,
-                doorFrameIdx,
+                Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
+                    RANDOM->Int(floorImgMin.y, floorImgMax.y)),
                 imgIdx,
                 (int)TileState::door,
                 Color(0.5f, 0.5f, 0.5f, 0.5f),
-                -1);
+                -1, doorDir);
 
             selectedRooms[roomIdx]->doorTileIdxs.push_back(doorTileIdx);
         };
@@ -627,8 +628,8 @@ namespace Gungeon
                     if (tileStateOn == TileState::none)
                     {
                         tilemap->SetTile(on,
-                            Int2(RANDOM->Int(1, 4),
-                                RANDOM->Int(1, 3)),
+                            Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
+                                RANDOM->Int(floorImgMin.y, floorImgMax.y)),
                             imgIdx,
                             (int)TileState::floor);
                     }
@@ -707,7 +708,11 @@ namespace Gungeon
 
                         if (tilemap->Tiles[nx][ny].state == TileState::none)
                         {
-                            tilemap->SetTile(Int2(nx, ny), Int2(8, 7), imgIdx, (int)TileState::wall);
+                            tilemap->SetTile(Int2(nx, ny), 
+                                Int2(RANDOM->Int(passageWallImgMin.x, passageWallImgMax.x),
+                                    RANDOM->Int(passageWallImgMin.y, passageWallImgMax.y)),
+                                imgIdx, 
+                                (int)TileState::wall);
                         }
                     }
                 }
@@ -731,7 +736,8 @@ namespace Gungeon
             if (tilemap->Tiles[rx][ry].state == TileState::floor)
             {
                 tilemap->SetTile(Int2(rx, ry),
-                    Int2(7, 7),
+                    Int2(RANDOM->Int(propImgMin.x, propImgMax.x),
+                        RANDOM->Int(propImgMin.y, propImgMax.y)),
                     imgIdx);
             }
         }

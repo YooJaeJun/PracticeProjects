@@ -349,15 +349,15 @@ void GameObject::SetWorldPosY(float worldPosY)
 		position.y = location.y;
 	}
 }
-void GameObject::MoveWorldPos(Vector2 Velocity)
+void GameObject::MoveWorldPos(Vector2 velocity)
 {
 	if (!P)
 	{
-		position += Velocity;
+		position += velocity;
 	}
 	else
 	{
-		Vector2 locVelocity = Vector2::TransformNormal(Velocity, (*P).Invert());
+		Vector2 locVelocity = Vector2::TransformNormal(velocity, (*P).Invert());
 		position += locVelocity;
 	}
 }

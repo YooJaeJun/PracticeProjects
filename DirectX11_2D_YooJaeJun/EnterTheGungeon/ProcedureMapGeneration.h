@@ -2,13 +2,18 @@
 
 namespace Gungeon
 {
-	const float timeDefault = 1.0f;
+	const float timeDefault = 0.0f;
 	const int roomMax = 20;
 	const int gridMax = 7000;
 
 	// B, L, R, LB, RB, T, LT, RT
-	const Int2 wallImgDir[8] = { {1, 5}, {0, 1}, {5, 1}, {0, 4}, {5, 4}, {1, 0}, {0, 0}, {5, 0} };
-	const Int2 doorImgDir[8] = { {8, 0}, {7, 0}, {6, 0}, {9, 0}, {9, 0}, {8, 0}, {9, 0}, {9, 0} };
+	const Int2 wallImgDir[8] = { {1, 3}, {0, 1}, {3, 1}, {0, 3}, {3, 3}, {1, 0}, {0, 0}, {3, 0} };
+	const Int2 floorImgMin = { 1, 1 };
+	const Int2 floorImgMax = { 2, 2 };
+	const Int2 passageWallImgMin = { 0, 4 };
+	const Int2 passageWallImgMax = { 2, 4 };
+	const Int2 propImgMin = { 0, 5 };
+	const Int2 propImgMax = { 0, 5 };
 
 
 	enum class MapGenState 

@@ -29,8 +29,8 @@ namespace Gungeon
 	void Unit::Release()
 	{
 		Character::Release();
-		for (auto& elem : idle) SafeDelete(elem);
-		for (auto& elem : walk) SafeDelete(elem);
+		SafeDelete(idle);
+		SafeDelete(walk);
 		SafeDelete(hit);
 		SafeDelete(fall);
 		SafeDelete(die);
@@ -63,8 +63,8 @@ namespace Gungeon
 
 		Character::Update();
 
-		for (auto& elem : idle) elem->Update();
-		for (auto& elem : walk) elem->Update();
+		idle->Update();
+		walk->Update();
 		if (hit) hit->Update();
 		if (fall) fall->Update();
 		if (die) die->Update();
@@ -77,8 +77,8 @@ namespace Gungeon
 
 	void Unit::Render()
 	{
-		idle[curTargetDirState]->Render(); // RENDER->push(idle[curTargetDirState]);
-		walk[curTargetDirState]->Render(); // RENDER->push(walk[curTargetDirState]);
+		idle->Render(); // RENDER->push(idle[curTargetDirState]);
+		walk->Render(); // RENDER->push(walk[curTargetDirState]);
 		if (hit)  hit->Render();  // RENDER->push(hit);
 		if (fall) fall->Render(); // RENDER->push(fall);
 		if (die)  die->Render();  // RENDER->push(die);
@@ -92,9 +92,11 @@ namespace Gungeon
 	void Unit::SetTarget(Weapon*& weapon)
 	{
 		targetDir = targetPos - Pos();
-		targetDir.Normalize();	// targetDir도 사용하므로 미리 정규화
-		targetRotation = Utility::DirToRadian(targetDir);
-		SetTargetDirState();
+		targetDir.Normalize();
+		SetDirState(targetDir, curTargetDirState);
+
+		idle->frame.y = curTargetDirState;
+		walk->frame.y = curTargetDirState;
 
 		if (weapon)
 		{
@@ -119,16 +121,10 @@ namespace Gungeon
 
 	void Unit::Idle()
 	{
-		SetMoveDirState();
-		for (auto& elem : walk) elem->isVisible = false;
-		idle[curTargetDirState]->isVisible = true;
 	}
 
 	void Unit::Walk()
 	{
-		SetMoveDirState();
-		for (auto& elem : idle) elem->isVisible = false;
-		walk[curTargetDirState]->isVisible = true;
 	}
 
 	void Unit::Hit(const int damage)
@@ -143,8 +139,8 @@ namespace Gungeon
 			{
 				if (hit)
 				{
-					idle[curTargetDirState]->isVisible = false;
-					walk[curTargetDirState]->isVisible = false;
+					idle->isVisible = false;
+					walk->isVisible = false;
 					hit->isVisible = true;
 					hit->ChangeAnim(AnimState::loop, 0.2f);
 				}
@@ -167,14 +163,8 @@ namespace Gungeon
 			isHit = false;
 
 			col->isVisible = false;
-			for (auto& elem : idle)
-			{
-				elem->isVisible = false;
-			}
-			for (auto& elem : walk)
-			{
-				elem->isVisible = false;
-			}
+			idle->isVisible = false;
+			walk->isVisible = false;
 
 			if (hit) hit->isVisible = false;
 			shadow->isVisible = false;
@@ -205,105 +195,62 @@ namespace Gungeon
 	void Unit::StartWalk()
 	{
 		state = State::walk;
-		for (auto& elem : idle) elem->isVisible = false;
-		walk[curTargetDirState]->isVisible = true;
-		walk[curTargetDirState]->ChangeAnim(AnimState::loop, 0.1f);
+		idle->isVisible = false;
+		walk->isVisible = true;
+		walk->ChangeAnim(AnimState::loop, 0.1f);
 	}
 
 	void Unit::StartIdle()
 	{
 		state = State::idle;
-		for (auto& elem : walk) elem->isVisible = false;
-		idle[curTargetDirState]->isVisible = true;
-		idle[curTargetDirState]->ChangeAnim(AnimState::loop, 0.2f);
+		walk->isVisible = false;
+		idle->isVisible = true;
+		idle->ChangeAnim(AnimState::loop, 0.2f);
 	}
 
 	void Unit::StepBack()
 	{
 		SetPos(lastPos);
-		Update();
 	}
 
-	void Unit::SetMoveDirState()
+	// moveDir: 이동방향에 따라 다른 방향 애니메이션(플레이어는 roll) 설정
+	// targetDir: 타겟 좌표(플레이어는 마우스)에 따라 다른 방향 애니메이션(공통 Idle, Walk) 설정
+	void Unit::SetDirState(const Vector2 dir, DirState& dirState)
 	{
-		// 이동방향에 따라 다른 방향 애니메이션 설정하는 코드
-		if (almostEqualFloat(moveDir.x, 0.707107f) && almostEqualFloat(moveDir.y, 0.707107f))
-		{
-			curMoveDirState = dirRT;
-		}
-		else if (almostEqualFloat(moveDir.x, -0.707107f) && almostEqualFloat(moveDir.y, 0.707107f))
-		{
-			curMoveDirState = dirLT;
-		}
-		else if (almostEqualFloat(moveDir.x, -0.707107f) && almostEqualFloat(moveDir.y, -0.707107f))
-		{
-			curMoveDirState = dirLB;
-		}
-		else if (almostEqualFloat(moveDir.x, 0.707107f) && almostEqualFloat(moveDir.y, -0.707107f))
-		{
-			curMoveDirState = dirRB;
-		}
-		else if (moveDir.x == 1.0f)
-		{
-			curMoveDirState = dirR;
-		}
-		else if (moveDir.x == -1.0f)
-		{
-			curMoveDirState = dirL;
-		}
-		else if (moveDir.y == 1.0f)
-		{
-			curMoveDirState = dirT;
-		}
-		else if (moveDir.y == -1.0f)
-		{
-			curMoveDirState = dirB;
-		}
-		else
-		{
-			curMoveDirState = curMoveDirStateBefore;
-		}
-	}
+		float rotation = Utility::DirToRadian(dir);
 
-	void Unit::SetTargetDirState()
-	{
-		// 타겟 좌표(플레이어는 마우스)에 따라 다른 방향 애니메이션 설정하는 코드
-		if (targetRotation >= 30.0f * ToRadian && targetRotation < 60.0f * ToRadian)
+		if (rotation >= 30.0f * ToRadian && rotation < 60.0f * ToRadian)
 		{
-			curTargetDirState = dirRT;
+			dirState = dirRT;
 		}
-		else if (targetRotation >= 120.0f * ToRadian && targetRotation < 150.0f * ToRadian)
+		else if (rotation >= 120.0f * ToRadian && rotation < 150.0f * ToRadian)
 		{
-			curTargetDirState = dirLT;
+			dirState = dirLT;
 		}
-		else if (targetRotation >= -150.0f * ToRadian && targetRotation < -120.0f * ToRadian)
+		else if (rotation >= -150.0f * ToRadian && rotation < -120.0f * ToRadian)
 		{
-			curTargetDirState = dirLB;
+			dirState = dirLB;
 		}
-		else if (targetRotation >= -60.0f * ToRadian && targetRotation < -30.0f * ToRadian)
+		else if (rotation >= -60.0f * ToRadian && rotation < -30.0f * ToRadian)
 		{
-			curTargetDirState = dirRB;
+			dirState = dirRB;
 		}
-		else if (targetRotation >= -30.0f * ToRadian && targetRotation < 30.0f * ToRadian)
+		else if (rotation >= -30.0f * ToRadian && rotation < 30.0f * ToRadian)
 		{
-			curTargetDirState = dirR;
+			dirState = dirR;
 		}
-		else if ((targetRotation >= -180.0f * ToRadian && targetRotation < -150.0f * ToRadian) ||
-			(targetRotation >= 150.0f * ToRadian && targetRotation < 180.0f * ToRadian))
+		else if ((rotation > -181.0f * ToRadian && rotation <= -150.0f * ToRadian) ||
+			(rotation >= 150.0f * ToRadian && rotation < 181.0f * ToRadian))
 		{
-			curTargetDirState = dirL;
+			dirState = dirL;
 		}
-		else if (targetRotation >= 60.0f * ToRadian && targetRotation < 120.0f * ToRadian)
+		else if (rotation >= 60.0f * ToRadian && rotation < 120.0f * ToRadian)
 		{
-			curTargetDirState = dirT;
+			dirState = dirT;
 		}
-		else if (targetRotation >= -120.0f * ToRadian && targetRotation < -60.0f * ToRadian)
+		else if (rotation >= -120.0f * ToRadian && rotation < -60.0f * ToRadian)
 		{
-			curTargetDirState = dirB;
-		}
-		else
-		{
-			curTargetDirState = curTargetDirStateBefore;
+			dirState = dirB;
 		}
 	}
 
@@ -361,12 +308,12 @@ namespace Gungeon
 		Character::Spawn(wpos);
 
 		die->isVisible = false;
-		idle[curTargetDirState]->isVisible = true;
+		idle->isVisible = true;
 		shadow->isVisible = true;
 
 		Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
-		for (auto& elem : idle) elem->color = c;
-		for (auto& elem : walk) elem->color = c;
+		idle->color = c;
+		walk->color = c;
 		if (hit) hit->color = c;
 		if (die) die->color = c;
 	}
