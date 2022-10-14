@@ -44,7 +44,7 @@ namespace Gungeon
 		void IntersectEnemy();
 		void GateProcess();
 		void ChangeUpdateScene();
-		void ColOnOff();
+		void ColToggle();
 
 	public:
 		ProcedureMapGeneration* mapGen;

@@ -59,4 +59,9 @@ namespace Gungeon
 		state = State::idle;
 		isHit = false;
 	}
+	void Character::ColToggle()
+	{
+		col->isVisible = !col->isVisible;
+		colTile->isVisible = !colTile->isVisible;
+	}
 }

@@ -39,6 +39,7 @@ namespace Gungeon
 		timeLastPosForDust = 0.0f;
 		money = 0;
 		key = 0;
+		curDustIdx = 0;
 	}
 
 	void Player::InitCol()
@@ -53,7 +54,8 @@ namespace Gungeon
 		colTile = new ObRect;
 		colTile->scale = Vector2(col->scale.x, col->scale.y / 2.0f);
 		colTile->SetParentRT(*col);
-		colTile->SetLocalPosY(col->GetWorldPos().y - col->scale.y / 2.0f);
+		colTile->SetLocalPosY(Pos().y - col->scale.y);
+		colTile->pivot = OFFSET_B;
 		colTile->isFilled = false;
 		colTile->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
@@ -135,6 +137,7 @@ namespace Gungeon
 		weapons[curWeaponIdx] = new Weapon1;
 		weapons[curWeaponIdx]->col->SetParentRT(*col);
 		weapons[curWeaponIdx]->col->SetLocalPos(Vector2(10.0f, -15.0f));
+		weapons[curWeaponIdx]->col->isVisible = true;
 		weapons[curWeaponIdx]->idle->SetParentRT(*weapons[curWeaponIdx]->col);
 		weapons[curWeaponIdx]->idle->isVisible = true;
 		weapons[curWeaponIdx]->firePos->SetLocalPos(Vector2(weapons[curWeaponIdx]->col->scale.x / 2.0f, 0.0f));
@@ -172,13 +175,16 @@ namespace Gungeon
 		shadow->zOrder = ZOrder::shadow;
 
 		float dustScaleFactor = 2.0f;
-		dust = new Effect;
-		dust->idle = new ObImage(L"EnterTheGungeon/Player_0/Dust.png");
-		dust->idle->maxFrame.x = 4;
-		dust->idle->scale.x = 44.0f / 3.0f * dustScaleFactor;
-		dust->idle->scale.y = 10.0f * dustScaleFactor;
-		dust->idle->isVisible = false;
-		dust->intervalDie = 0.3f;
+		for (auto& elem : dust)
+		{
+			elem = new Effect;
+			elem->idle = new ObImage(L"EnterTheGungeon/Player_0/Dust.png");
+			elem->idle->maxFrame.x = 4;
+			elem->idle->scale = Vector2(44.0f / 4.0f, 10.0f) * dustScaleFactor;
+			elem->idle->isVisible = false;
+			elem->idle->ChangeAnim(AnimState::loop, 0.2f);
+			elem->intervalDie = 0.8f;
+		}
 	}
 
 	void Player::InitUI()
@@ -368,7 +374,7 @@ namespace Gungeon
 			break;
 		}
 
-		dust->Update();
+		for (auto& elem : dust) elem->Update();
 		roll->Update();
 		spawn->Update();
 		kick->Update();
@@ -395,7 +401,7 @@ namespace Gungeon
 
 	void Player::Render()
 	{
-		dust->Render();
+		for (auto& elem : dust) elem->Render();
 
 		Unit::Render();
 
@@ -482,7 +488,6 @@ namespace Gungeon
 
 		Reloading();
 		Hitting();
-		Dusting();
 	}
 
 	void Player::Walk()
@@ -530,9 +535,9 @@ namespace Gungeon
 	void Player::Die()
 	{
 		Unit::Die();
-		dust->idle->isVisible = false;
-
+		for (auto& elem : dust) elem->idle->isVisible = false;
 		weapons[curWeaponIdx]->idle->isVisible = false;
+		weapons[curWeaponIdx]->imgReloading->isVisible = false;
 	}
 
 	void Player::Move()
@@ -813,7 +818,8 @@ namespace Gungeon
 	{
 		if (TIMER->GetTick(timeLastPosForDust, 0.6f))
 		{
-			dust->Spawn(colTile->GetWorldPos());
+			dust[curDustIdx++]->Spawn(colTile->GetWorldPos());
+			if (curDustIdx >= dustMax) curDustIdx = 0;
 		}
 	}
 
@@ -895,6 +901,16 @@ namespace Gungeon
 		if (afterWeapon->uiBulletFrame)
 		{
 			afterWeapon->uiBulletFrame->img->isVisible = true;
+		}
+	}
+	void Player::ColToggle()
+	{
+		Character::ColToggle();
+		weapons[curWeaponIdx]->col->isVisible = !weapons[curWeaponIdx]->col->isVisible;
+		weapons[curWeaponIdx]->firePos->isVisible = !weapons[curWeaponIdx]->firePos->isVisible;
+		for (auto& bulletElem : bullet)
+		{
+			bulletElem->col->isVisible = !bulletElem->col->isVisible;
 		}
 	}
 }

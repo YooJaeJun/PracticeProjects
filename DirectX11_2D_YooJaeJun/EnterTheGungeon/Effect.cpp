@@ -23,15 +23,9 @@ namespace Gungeon
 		{
 		case Gungeon::State::idle:
 			Idle();
-			break;
-		case Gungeon::State::die:
-			Die();
-			break;
-		default:
+			idle->Update();
 			break;
 		}
-
-		idle->Update();
 	}
 
 	void Effect::LateUpdate()
@@ -41,7 +35,12 @@ namespace Gungeon
 	void Effect::Render()
 	{
 		Character::Render();
-		idle->Render();	// RENDER->push(idle);
+		switch (state)
+		{
+		case Gungeon::State::idle:
+			idle->Render();	// RENDER->push(idle);
+			break;
+		}
 	}
 
 	void Effect::Spawn(const Vector2 wpos)
@@ -57,6 +56,7 @@ namespace Gungeon
 		if (TIMER->GetTick(timeDie, intervalDie))
 		{
 			state = State::die;
+			idle->SetWorldPos(DEFAULTSPAWN);
 			idle->isVisible = false;
 		}
 	}

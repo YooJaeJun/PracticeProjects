@@ -3,6 +3,7 @@
 namespace Gungeon
 {
 	const int curWeaponMax = 3;
+	const int dustMax = 2;
 
 	class Player : public Unit
 	{
@@ -40,6 +41,7 @@ namespace Gungeon
 		void DecreaseHeart();
 		void PlusMoney(const int n);
 		void EquipWeapon(Weapon* other);
+		virtual void ColToggle() override;
 
 	public:
 		ObImage*			roll;
@@ -60,7 +62,8 @@ namespace Gungeon
 		UI*					uiReloadBar;
 		bool				godMode;
 		float				timeLastPosForDust;
-		Effect*				dust;
+		Effect*				dust[dustMax];
+		int					curDustIdx;
 		UI*					uiWeaponFrame;
 		vector<UI*>			uiHeartFull;
 		vector<UI*>			uiHeartHalf;

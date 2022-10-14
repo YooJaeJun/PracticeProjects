@@ -44,7 +44,9 @@ namespace Gungeon
         {
             if (!elem)
             {
-                elem = new Enemy1();
+                int r = RANDOM->Int(0, 1);
+                if (r) elem = new Enemy1();
+                else elem = new Enemy2();
             }
         }
 
@@ -110,7 +112,7 @@ namespace Gungeon
 
         if (INPUT->KeyDown('H'))
         {
-            ColOnOff();
+            ColToggle();
         }
 
         switch (gameState)
@@ -500,27 +502,13 @@ namespace Gungeon
     }
 
     // ġƮ
-    void Scene02::ColOnOff()
+    void Scene02::ColToggle()
     {
-        player->col->isVisible = !player->col->isVisible;
-        player->colTile->isVisible = !player->colTile->isVisible;
-        player->weapons[player->curWeaponIdx]->firePos->isVisible = !player->weapons[player->curWeaponIdx]->firePos->isVisible;
-
-        for (auto& bulletElem : player->bullet)
-        {
-            bulletElem->col->isVisible = !bulletElem->col->isVisible;
-        }
+        player->ColToggle();
 
         for (auto& elem : enemy)
         {
-            elem->col->isVisible = !elem->col->isVisible;
-            elem->colTile->isVisible = !elem->colTile->isVisible;
-            elem->weapon->firePos->isVisible = !elem->weapon->firePos->isVisible;
-
-            for (auto& bulletElem : elem->bullet)
-            {
-                bulletElem->col->isVisible = !bulletElem->col->isVisible;
-            }
+            elem->ColToggle();
         }
     }
 }

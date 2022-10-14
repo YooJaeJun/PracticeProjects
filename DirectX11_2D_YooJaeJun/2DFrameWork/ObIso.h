@@ -12,10 +12,5 @@ public:
     bool WorldPosToTileIdx(Vector2 WPos, Int2& TileIdx);
     void ResizeTile(Int2 TileSize);
     void CreateTileCost();
-
-public:
-
-public:
-
 };
 

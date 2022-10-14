@@ -28,46 +28,44 @@ namespace Gungeon
 		float scaleFactor = 3.0f;
 		col->scale = Vector2(16.0f, 16.0f) * scaleFactor;
 
-		idle = new ObImage(L"EnterTheGungeon/Enemy_0/Idle.png");
+		idle = new ObImage(L"EnterTheGungeon/Enemy_1/Idle.png");
 		idle->isVisible = false;
 		idle->maxFrame = Int2(2, 8);
-		idle->scale = Vector2(28.0f / 2.0f, 192.0f / 8.0f) * scaleFactor;
+		idle->scale = Vector2(24.0f / 2.0f, 240.0f / 8.0f) * scaleFactor;
 		idle->ChangeAnim(AnimState::loop, 0.2f);
 		idle->SetParentRT(*col);
 		idle->zOrder = ZOrder::object;
 
-		walk = new ObImage(L"EnterTheGungeon/Enemy_0/Walk.png");
-
-		idx = 0;
+		walk = new ObImage(L"EnterTheGungeon/Enemy_1/Walk.png");
 		walk->isVisible = false;
 		walk->maxFrame = Int2(6, 8);
-		walk->scale = Vector2(96.0f / 6.0f, 192.0f / 8.0f) * scaleFactor;
+		walk->scale = Vector2(108.0f / 6.0f, 240.0f / 8.0f) * scaleFactor;
 		walk->ChangeAnim(AnimState::loop, 0.1f);
 		walk->SetParentRT(*col);
 		walk->zOrder = ZOrder::object;
 
-		hit = new ObImage(L"EnterTheGungeon/Enemy_0/Hit.png");
+		hit = new ObImage(L"EnterTheGungeon/Enemy_1/Hit.png");
 		hit->isVisible = false;
 		hit->maxFrame.x = 1;
-		hit->scale = Vector2(16.0f, 24.0f) * scaleFactor;
+		hit->scale = Vector2(17.0f, 24.0f) * scaleFactor;
 		hit->ChangeAnim(AnimState::once, 0.2f);
 		hit->SetParentRT(*col);
 		hit->zOrder = ZOrder::object;
 
-		die = new ObImage(L"EnterTheGungeon/Enemy_0/Die.png");
+		die = new ObImage(L"EnterTheGungeon/Enemy_1/Die.png");
 		die->isVisible = false;
-		die->maxFrame.x = 5;
-		die->scale = Vector2(110.0f / 5.0f, 22.0f) * scaleFactor;
+		die->maxFrame.x = 4;
+		die->scale = Vector2(84.0f / 4.0f, 24.0f) * scaleFactor;
 		die->SetParentRT(*col);
 		die->zOrder = ZOrder::object;
 
 		shadow->scale = Vector2(12.0f, 4.0f) * scaleFactor;
-		shadow->SetLocalPosY(-35.0f);
+		shadow->SetLocalPosY(-45.0f);
 	}
 
 	void Enemy2::InitWeapon()
 	{
-		weapon = new Weapon1;
+		weapon = new Weapon2;
 		weapon->col->SetParentRT(*col);
 		weapon->col->SetLocalPos(Vector2(10.0f, -15.0f));
 		weapon->idle->SetParentRT(*weapon->col);

@@ -27,6 +27,7 @@ namespace Gungeon
 		inline void SetPosX(const float x) { col->SetWorldPosX(x); }
 		inline void SetPosY(const float y) { col->SetWorldPosY(y); }
 		virtual void Spawn(const Vector2 wpos);
+		virtual void ColToggle();
 
 	public:
 		GameObject*		col;

@@ -23,6 +23,7 @@ namespace Gungeon
 		void Hitting();
 		virtual void StartDie() override;
 		virtual void Spawn(const Vector2 wpos) override;
+		virtual void ColToggle() override;
 
 	private:
 		float		timeSetMoveDir;

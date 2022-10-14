@@ -164,6 +164,10 @@ namespace Gungeon
 
         ChangeUpdateScene();
 
+        if (INPUT->KeyDown('H'))
+        {
+            ColToggle();
+        }
 
         if (!boss) return;
         
@@ -327,15 +331,9 @@ namespace Gungeon
     }
 
     // ġƮ
-    void Scene03::ColOnOff()
+    void Scene03::ColToggle()
     {
-        boss->col->isVisible = !boss->col->isVisible;
-        boss->colTile->isVisible = !boss->colTile->isVisible;
-        boss->weapon->firePos->isVisible = !boss->weapon->firePos->isVisible;
-
-        for (auto& bulletElem : boss->bullet)
-        {
-            bulletElem->col->isVisible = !bulletElem->col->isVisible;
-        }
+        player->ColToggle();
+        boss->ColToggle();
     }
 }

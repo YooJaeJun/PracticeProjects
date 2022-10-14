@@ -295,4 +295,14 @@ namespace Gungeon
 		dropItem->idle->isVisible = false;
 		dropItem->state = State::die;
 	}
+	void Enemy::ColToggle()
+	{
+		Character::ColToggle();
+		weapon->col->isVisible = !weapon->col->isVisible;
+		weapon->firePos->isVisible = !weapon->firePos->isVisible;
+		for (auto& bulletElem : bullet)
+		{
+			bulletElem->col->isVisible = !bulletElem->col->isVisible;
+		}
+	}
 }

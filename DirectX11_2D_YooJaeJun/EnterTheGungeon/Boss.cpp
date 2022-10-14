@@ -420,6 +420,17 @@ namespace Gungeon
         dropItem->state = State::die;
     }
 
+    void Boss::ColToggle()
+    {
+        Character::ColToggle();
+        weapon->col->isVisible = !weapon->col->isVisible;
+        weapon->firePos->isVisible = !weapon->firePos->isVisible;
+        for (auto& bulletElem : bullet)
+        {
+            bulletElem->col->isVisible = !bulletElem->col->isVisible;
+        }
+    }
+
 
     /// <summary>
     /// Pattern
