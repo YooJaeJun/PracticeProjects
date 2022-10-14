@@ -89,6 +89,9 @@
     <ClInclude Include="DWrite.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="ObIso.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -185,6 +188,9 @@
     </ClCompile>
     <ClCompile Include="DWrite.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="ObIso.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

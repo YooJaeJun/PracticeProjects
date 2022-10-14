@@ -144,6 +144,7 @@ extern Application app;//Extern Global
 #include "ObCircle.h"
 #include "ObImage.h"
 #include "ObTileMap.h"
+#include "ObIso.h"
 
 #include "Delaunay.h"
 

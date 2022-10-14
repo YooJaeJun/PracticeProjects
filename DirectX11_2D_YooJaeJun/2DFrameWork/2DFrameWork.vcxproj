@@ -170,6 +170,7 @@
     <ClInclude Include="Numeric.h" />
     <ClInclude Include="ObCircle.h" />
     <ClInclude Include="ObImage.h" />
+    <ClInclude Include="ObIso.h" />
     <ClInclude Include="ObLine.h" />
     <ClInclude Include="ObNode.h" />
     <ClInclude Include="ObRect.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="ObCircle.cpp" />
     <ClCompile Include="ObImage.cpp" />
+    <ClCompile Include="ObIso.cpp" />
     <ClCompile Include="ObLine.cpp" />
     <ClCompile Include="ObNode.cpp" />
     <ClCompile Include="ObRect.cpp" />
