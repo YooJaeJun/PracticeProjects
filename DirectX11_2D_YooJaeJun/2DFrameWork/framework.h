@@ -145,7 +145,7 @@ extern Application app;//Extern Global
 #include "ObImage.h"
 #include "ObTileMap.h"
 #include "ObIso.h"
-
+#include "Map.h"
 #include "Delaunay.h"
 
 //Singleton Macro
@@ -163,3 +163,4 @@ extern Application app;//Extern Global
 #define SCENE       SceneManager::GetInstance()
 #define RENDER      RenderOrder::GetInstance()
 #define DWRITE		DWrite::GetInstance()
+#define MAP         Map::GetInstance()

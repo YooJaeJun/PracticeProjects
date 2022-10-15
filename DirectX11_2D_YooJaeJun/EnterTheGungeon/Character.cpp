@@ -26,7 +26,11 @@ namespace Gungeon
 
 	void Character::Update()
 	{
-		if (col) col->Update();
+		if (col)
+		{
+			col->Update();
+			MAP->tilemap->WorldPosToTileIdx(Pos(), on);
+		}
 		if (colTile) colTile->Update();
 	}
 
@@ -59,9 +63,10 @@ namespace Gungeon
 		state = State::idle;
 		isHit = false;
 	}
+
 	void Character::ColToggle()
 	{
-		col->isVisible = !col->isVisible;
-		colTile->isVisible = !colTile->isVisible;
+		if (col) col->isVisible = !col->isVisible;
+		if (colTile) colTile->isVisible = !colTile->isVisible;
 	}
 }

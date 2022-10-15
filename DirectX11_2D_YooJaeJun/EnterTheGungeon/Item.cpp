@@ -41,7 +41,6 @@ namespace Gungeon
 	void Item::Hit()
 	{
 		SetPos(DEFAULTSPAWN);
-		col->isVisible = false;
 		idle->isVisible = false;
 		flagAbsorbed = false;
 		state = State::die;

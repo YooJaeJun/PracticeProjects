@@ -12,12 +12,12 @@ namespace Gungeon
 
     void Scene01::Init()
     {
-        if (mapGen) mapGen->useGui = true;
+       MAP->useGui = true;
 
         CAM->position = Vector2(0.0f, 0.0f);
         CAM->zoomFactor = Vector3(0.08f, 0.08f, 0.08f);
 
-        fadeOut = false;
+        isChangingScene = false;
         timeFade = 0.0f;
         SOUND->Stop("SCENE02");
         //SOUND->AddSound("Vaquero Perdido - The Mini Vandals.mp3", "SCENE01", true);
@@ -32,17 +32,18 @@ namespace Gungeon
     {
         if (INPUT->KeyDown('1'))
         {
+            MAP->Init();
             mapGen->Release();
             mapGen->Init();
         }
         else if (INPUT->KeyDown('2'))
         {
-            fadeOut = true;
+            isChangingScene = true;
             SCENE->ChangeScene("Scene02", 1.0f);
         }
         else if (INPUT->KeyDown('3'))
         {
-            fadeOut = true;
+            isChangingScene = true;
             SCENE->ChangeScene("Scene03", 1.0f);
         }
 
@@ -68,7 +69,7 @@ namespace Gungeon
 
     void Scene01::ChangeUpdateScene()
     {
-        if (fadeOut)
+        if (isChangingScene)
         {
             LIGHT->light.radius -= 2000.0f * DELTA;
             LIGHT->light.lightColor.x += 0.5f * DELTA;
@@ -77,7 +78,7 @@ namespace Gungeon
 
             if (TIMER->GetTick(timeFade, 1.0f))
             {
-                fadeOut = false;
+                isChangingScene = false;
             }
         }
         else

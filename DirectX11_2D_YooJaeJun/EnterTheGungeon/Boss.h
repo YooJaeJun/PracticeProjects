@@ -20,8 +20,8 @@ namespace Gungeon
 	const int shieldMax = 60;
 	const int spiralMax = 60;
 	const int clusterMax = 10;
-	const int bruteMax = 720;
-	const int randMax = 400;
+	const int bruteMax = 2000;
+	const int randMax = 200;
 
 	class Boss : public Unit
 	{
@@ -81,6 +81,7 @@ namespace Gungeon
 		bool				flagSpiralRespawn;
 		float				timeCluster;
 		float				timeBrute;
+		int					curBruteIdx;
 		float				timeRand;
 		int					curRandIdx;
 	};

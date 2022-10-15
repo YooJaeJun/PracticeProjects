@@ -36,12 +36,11 @@ namespace Gungeon
 	class ProcedureMapGeneration
 	{
 	public:
-		bool						useGui;
 		float						timer;
 		// Spread
 		bool						flagSpread;
 		// Room
-		vector<Room*>				rooms;
+		vector<Room*>				candidateRooms;
 		vector<Room*>				selectedRooms;
 		MapGenState					state;
 		float						roomScaleForSelect;
@@ -56,14 +55,6 @@ namespace Gungeon
 		// Passage
 		map<ObNode, int>			nodesForRoomIndex;
 		vector<Tile*>				way;
-		// Tilemap
-		ObTileMap*					tilemap;
-		int							imgIdx;
-		Int2						tileSize;
-		Color						tileColor;
-		int							tileState;
-		Int2						mouseIdx;
-		Int2						pickingIdx;
 
 	public:
 		ProcedureMapGeneration();

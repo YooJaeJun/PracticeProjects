@@ -167,6 +167,7 @@
     <ClInclude Include="Gui.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="Numeric.h" />
     <ClInclude Include="ObCircle.h" />
     <ClInclude Include="ObImage.h" />
@@ -199,6 +200,7 @@
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="ObCircle.cpp" />
     <ClCompile Include="ObImage.cpp" />
     <ClCompile Include="ObIso.cpp" />

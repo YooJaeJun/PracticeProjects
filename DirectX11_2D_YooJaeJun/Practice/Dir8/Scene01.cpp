@@ -84,7 +84,7 @@ namespace Dir8
 		}
 
 		//TileState
-		ImGui::SliderInt("TileState", &tileState, int(TileState::none), int(TileState::tileSize));
+		ImGui::SliderInt("TileState", &tileState, int(TileState::none), int(TileState::max));
 
 		//TileColor
 		ImGui::ColorEdit4("TileColor", (float*)&tileColor, ImGuiColorEditFlags_PickerHueWheel);

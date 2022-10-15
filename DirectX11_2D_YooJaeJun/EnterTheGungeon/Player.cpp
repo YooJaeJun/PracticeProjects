@@ -23,6 +23,7 @@ namespace Gungeon
 		scalar = 300.0f;
 		curHp = maxHp = 6;
 		for (auto& elem : canFireOnce) elem = true;
+		fireInterval = 0.0f;
 		isReloading = false;
 		timeReload = 0.0f;
 		timeRoll = 0.0f;
@@ -144,6 +145,7 @@ namespace Gungeon
 		weapons[curWeaponIdx]->fireEffect->idle->SetParentRT(*weapons[curWeaponIdx]->firePos);
 		weapons[curWeaponIdx]->imgReloading->SetParentRT(*weapons[curWeaponIdx]->col);
 		weapons[curWeaponIdx]->Equip();
+		SetFireInterval();
 
 		for (auto& elem : weapons[curWeaponIdx]->uiBullet)
 		{
@@ -479,7 +481,12 @@ namespace Gungeon
 		Unit::Idle();
 		Move();
 
-		Action();
+		FireProcess();
+
+		if (INPUT->KeyDown(VK_RBUTTON))
+		{
+			StartRoll();
+		}
 
 		if (flagFireCamShake)
 		{
@@ -496,7 +503,12 @@ namespace Gungeon
 		Unit::Walk();
 		Move();
 
-		Action();
+		FireProcess();
+
+		if (INPUT->KeyDown(VK_RBUTTON))
+		{
+			StartRoll();
+		}
 
 		if (flagFireCamShake)
 		{
@@ -511,7 +523,6 @@ namespace Gungeon
 	void Player::Roll()
 	{
 		timeRoll += DELTA;
-
 		col->MoveWorldPos(moveDir * (scalar * 2.0f) * cos(timeRoll / 0.63f * DIV2PI) * DELTA);
 
 		if (timeRoll > 0.63f)
@@ -521,8 +532,6 @@ namespace Gungeon
 
 			weapons[curWeaponIdx]->idle->isVisible = true;
 			weapons[curWeaponIdx]->firePos->isVisible = true;
-
-			scalar = 300.0f;
 
 			godMode = false;
 		}
@@ -575,9 +584,8 @@ namespace Gungeon
 		}
 	}
 
-	void Player::Action()
+	void Player::SetFireInterval()
 	{
-		float fireInterval;
 		switch (weapons[curWeaponIdx]->type)
 		{
 		case WeaponType::pistol:
@@ -590,7 +598,10 @@ namespace Gungeon
 			fireInterval = 0.1f;
 			break;
 		}
+	}
 
+	void Player::FireProcess()
+	{
 		int firstFire = weapons[curWeaponIdx]->bulletCount - 1;
 
 		if (curBulletIdx == firstFire ||
@@ -612,11 +623,6 @@ namespace Gungeon
 			{
 				Fire();
 			}
-		}
-
-		if (INPUT->KeyDown(VK_RBUTTON))
-		{
-			StartRoll();
 		}
 	}
 
@@ -740,19 +746,11 @@ namespace Gungeon
 	{
 		Unit::StartDie();
 
-		weapons[curWeaponIdx]->col->isVisible = false;
 		weapons[curWeaponIdx]->idle->isVisible = false;
-		weapons[curWeaponIdx]->firePos->isVisible = false;
 
 		DecreaseHeart();
 
 		roll->isVisible = false;
-
-		for (auto& elem : bullet)
-		{
-			elem->col->isVisible = false;
-			elem->idle->isVisible = false;
-		}
 	}
 
 	void Player::Reloading()
@@ -878,6 +876,8 @@ namespace Gungeon
 		{
 			afterWeapon->EquipRight();
 		}
+
+		SetFireInterval();
 
 		// bullet
 		curBulletIdx = afterWeapon->bulletCount - 1;

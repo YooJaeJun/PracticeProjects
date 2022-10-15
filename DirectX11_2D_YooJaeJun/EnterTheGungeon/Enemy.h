@@ -18,7 +18,7 @@ namespace Gungeon
 		void Idle();
 		void Walk();
 		virtual void Die() override;
-		void Fire();
+		virtual void Fire();
 		void Hit(const int damage, const Vector2& dir);
 		void Hitting();
 		virtual void StartDie() override;
@@ -29,7 +29,6 @@ namespace Gungeon
 		float		timeSetMoveDir;
 		float		timeSetTargetDir;
 		float		pushedScalar;
-		float		pushedScalarFactor;
 		float		timeAiming;
 
 	protected:

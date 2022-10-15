@@ -5,7 +5,6 @@ namespace Gungeon
 	Weapon::Weapon()
 	{
 		col = new ObRect;
-		col->isVisible = false;
 		col->isFilled = false;
 		col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 		col->pivot = OFFSET_LB;

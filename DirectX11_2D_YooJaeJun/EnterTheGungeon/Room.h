@@ -10,6 +10,8 @@ namespace Gungeon
 		treasure
 	};
 
+	const int enemySpawnPosMax = 4;
+
 	class Room : public Character
 	{
 	public:
@@ -22,7 +24,7 @@ namespace Gungeon
 
 	public:
 		bool			selected;
-		Vector2			enemySpawnPos[4];
+		Vector2			enemySpawnPos[enemySpawnPosMax];
 		bool			cleared;
 		RoomType		roomType;
 		vector<Int2>	doorTileIdxs;

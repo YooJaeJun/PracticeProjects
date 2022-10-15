@@ -4,7 +4,7 @@ namespace Gungeon
 {
 	const int enemyMax = 3;
 	const int bossMax = 1;
-	const int doorMax = 4;
+	const int doorMax = 5;
 
 	enum class GameState
 	{
@@ -54,7 +54,7 @@ namespace Gungeon
 		Room*					curRoom;
 		GameState				gameState;
 		Enemy*					enemy[enemyMax];
-		bool					fadeOut;
+		bool					isChangingScene;
 		float					timeFade;
 		vector<Effect*>			spawnEffect;
 		int						afterRoomIdx;

@@ -4,7 +4,6 @@ namespace Gungeon
 {
     Scene03::Scene03()
     {
-        Init();
     }
 
     Scene03::~Scene03()
@@ -17,15 +16,15 @@ namespace Gungeon
         CAM->zoomFactor = Vector3(0.08f, 0.08f, 0.08f);
 
         // tilemap
-        tilemap = new ObTileMap;
-        tilemap->scale = Vector2(100.0f, 100.0f);
-        tilemap->SetWorldPos(Vector2(-app.GetHalfWidth() - 1000.0f, -app.GetHalfHeight() - 1000.0f));
-        imgIdx = 1;
-        tileSize = Int2(30, 30);
-        tilemap->ResizeTile(tileSize);
-        tileColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
-        tileState = 0;
-        tilemap->CreateTileCost();
+        MAP->tilemap = new ObTileMap;
+        MAP->tilemap->scale = Vector2(100.0f, 100.0f);
+        MAP->tilemap->SetWorldPos(Vector2(-app.GetHalfWidth() - 1000.0f, -app.GetHalfHeight() - 1000.0f));
+        MAP->imgIdx = 1;
+        MAP->tileSize = Int2(30, 30);
+        MAP->tilemap->ResizeTile(MAP->tileSize);
+        MAP->tileColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
+        MAP->tileState = 0;
+        MAP->tilemap->CreateTileCost();
 
         InitRoom();
 
@@ -38,7 +37,6 @@ namespace Gungeon
         }
         else
         {
-            // ġƮ
             player->Spawn(Vector2(0.0f, 0.0f));
         }
 
@@ -49,7 +47,7 @@ namespace Gungeon
         }
 
 
-        fadeOut = false;
+        isChangingScene = false;
         timeFade = 0.0f;
         SOUND->Stop("SCENE01");
         SOUND->Stop("SCENE02");
@@ -59,14 +57,14 @@ namespace Gungeon
 
     void Scene03::InitRoom()
     {
-        imgIdx = 1;
+        MAP->imgIdx = 1;
 
         curRoom = new Room;
         curRoom->col->scale = Vector2(1500.0f, 1500.0f);
         curRoom->SetPos(Vector2(0.0f, 0.0f));
         curRoom->col->isVisible = false;
 
-        float tileScale = tilemap->scale.x;
+        float tileScale = MAP->tilemap->scale.x;
 
         Vector2 start;
         Vector2 end;
@@ -75,10 +73,10 @@ namespace Gungeon
 
         auto SetTile2 = [&](Int2 on, int roomIdx)
         {
-            tilemap->SetTile(on,
+            MAP->tilemap->SetTile(on,
                 Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
                     RANDOM->Int(floorImgMin.y, floorImgMax.y)),
-                imgIdx,
+                MAP->imgIdx,
                 (int)TileState::floor,
                 Color(0.5f, 0.5f, 0.5f, 1.0f),
                 roomIdx);
@@ -86,9 +84,9 @@ namespace Gungeon
 
         auto SetWall2 = [&](Int2 on, int roomIdx, Int2 frameIdx)
         {
-            tilemap->SetTile(on,
+            MAP->tilemap->SetTile(on,
                 frameIdx,
-                imgIdx,
+                MAP->imgIdx,
                 (int)TileState::wall,
                 Color(0.5f, 0.5f, 0.5f, 1.0f),
                 roomIdx);
@@ -103,8 +101,8 @@ namespace Gungeon
             end.x = r->rt().x;
             end.y = r->rt().y;
 
-            tilemap->WorldPosToTileIdx(start, sour);
-            tilemap->WorldPosToTileIdx(end, dest);
+            MAP->tilemap->WorldPosToTileIdx(start, sour);
+            MAP->tilemap->WorldPosToTileIdx(end, dest);
 
 
             for (int y = sour.y + 1; y <= dest.y - 1; y++)
@@ -153,12 +151,12 @@ namespace Gungeon
         else if (INPUT->KeyDown('2'))
         {
             Release();
-            fadeOut = true;
+            isChangingScene = true;
             SCENE->ChangeScene("Scene02", 1.0f);
         }
         else if (INPUT->KeyDown('3'))
         {
-            fadeOut = true;
+            isChangingScene = true;
             SCENE->ChangeScene("Scene03", 1.0f);
         }
 
@@ -184,7 +182,7 @@ namespace Gungeon
             {
             case BossPattern::shield:
             case BossPattern::cluster:
-                boss->FindPath(tilemap);
+                boss->FindPath(MAP->tilemap);
                 break;
             default:
                 boss->DontFindPath();
@@ -204,7 +202,7 @@ namespace Gungeon
             boss->dropItem->targetPos = player->Pos();
         }
 
-        tilemap->Update();
+        MAP->tilemap->Update();
         player->Update();
         boss->Update();
     }
@@ -219,7 +217,7 @@ namespace Gungeon
 
     void Scene03::Render()
     {
-        tilemap->Render();
+        MAP->tilemap->Render();
         if (player) player->shadow->Render();
         if (player) player->Render();
         if (boss) boss->shadow->Render();
@@ -234,7 +232,7 @@ namespace Gungeon
 
     void Scene03::IntersectPlayer()
     {
-        if (tilemap->IntersectTileUnit(player->colTile))
+        if (MAP->tilemap->IntersectTileObj(player->colTile))
         {
             player->StepBack();
         }
@@ -253,7 +251,7 @@ namespace Gungeon
                     bulletElem->Hit(1);
                 }
 
-                if (tilemap->IntersectTilePos(bulletElem->Pos()))
+                if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
                 {
                     bulletElem->Hit(1);
                 }
@@ -270,7 +268,7 @@ namespace Gungeon
             player->Hit(1);
         }
 
-        if (tilemap->IntersectTileUnit(boss->colTile))
+        if (MAP->tilemap->IntersectTileObj(boss->colTile))
         {
             boss->StepBack();
         }
@@ -288,7 +286,7 @@ namespace Gungeon
                     bulletElem->Hit(1);
                 }
 
-                if (tilemap->IntersectTilePos(bulletElem->Pos()))
+                if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
                 {
                     bulletElem->Hit(1);
                 }
@@ -308,7 +306,7 @@ namespace Gungeon
 
     void Scene03::ChangeUpdateScene()
     {
-        if (fadeOut)
+        if (isChangingScene)
         {
             LIGHT->light.radius -= 2000.0f * DELTA;
             LIGHT->light.lightColor.x += 0.5f * DELTA;
@@ -317,7 +315,7 @@ namespace Gungeon
 
             if (TIMER->GetTick(timeFade, 1.0f))
             {
-                fadeOut = false;
+                isChangingScene = false;
             }
         }
         else

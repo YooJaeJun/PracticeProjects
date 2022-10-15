@@ -14,7 +14,8 @@ namespace Gungeon
 
     void Scene02::Init()
     {
-        if (mapGen) mapGen->useGui = false;
+        MAP->useGui = false;
+
         curRoom = nullptr;
         curRoomIdx = 0;
         afterRoomIdx = -2;
@@ -40,15 +41,7 @@ namespace Gungeon
             idx++;
         }
 
-        for (auto& elem : enemy)
-        {
-            if (!elem)
-            {
-                int r = RANDOM->Int(0, 1);
-                if (r) elem = new Enemy1();
-                else elem = new Enemy2();
-            }
-        }
+        SpawnEnemy();
 
         gate = new Gate;
 
@@ -56,12 +49,10 @@ namespace Gungeon
         for (auto& elem : door)
         {
             elem = new Door;
-            elem->col->isVisible = false;
             elem->col->scale = Vector2(16.0f, 128.0f / 8.0f) * 6.0f;
             elem->col->pivot = OFFSET_LB;
             elem->SetPos(DEFAULTSPAWN);
             elem->idle = new ObImage(L"EnterTheGungeon/Level/Door.png");
-            elem->idle->isVisible = false;
             elem->idle->maxFrame.y = 8;
             elem->idle->scale = Vector2(16.0f, 128.0f / 8.0f) * 6.0f;
             elem->idle->SetParentRT(*elem->col);
@@ -69,7 +60,7 @@ namespace Gungeon
         }
         
 
-        fadeOut = false;
+        isChangingScene = false;
         timeFade = 0.0f;
         SOUND->Stop("SCENE01");
         // SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
@@ -89,22 +80,25 @@ namespace Gungeon
         if (INPUT->KeyDown('1'))
         {
             gameState = GameState::start;
-            fadeOut = true;
+            isChangingScene = true;
             SCENE->ChangeScene("Scene01", 1.0f);
         }
         else if (INPUT->KeyDown('2'))
         {
             gameState = GameState::start;
-            for (auto& elem : curRoom->doorTileIdxs)
+            if (curRoom)
             {
-                mapGen->tilemap->SetTileState(elem, TileState::door);
+                for (auto& elem : curRoom->doorTileIdxs)
+                {
+                    MAP->tilemap->SetTileState(elem, TileState::door);
+                }
             }
             Release();
             Init();
         }
         else if (INPUT->KeyDown('3'))
         {
-            fadeOut = true;
+            isChangingScene = true;
             SCENE->ChangeScene("Scene03", 1.0f);
         }
 
@@ -138,7 +132,6 @@ namespace Gungeon
         if (mapGen) mapGen->Update();
         gate->Update();
         for (auto& elem : door) elem->Update();
-        if (player) player->Update();
         for (auto& elem : spawnEffect) if (elem) elem->Update();
         for (auto& elem : enemy) if (elem) elem->Update();
     }
@@ -159,6 +152,7 @@ namespace Gungeon
         case Gungeon::GameState::waitingSpawn:
         case Gungeon::GameState::fight:
             IntersectPlayer();
+            player->Update();
             IntersectEnemy();
             break;
         }
@@ -236,9 +230,10 @@ namespace Gungeon
 
         // 다음 방 입장 판단
         Int2 playerOn;
-        if (mapGen->tilemap->WorldPosToTileIdx(player->Pos(), playerOn))
+        if (MAP->tilemap->WorldPosToTileIdx(player->Pos(), playerOn) &&
+            MAP->tilemap->GetTileState(playerOn) == TileState::floor)
         {
-            afterRoomIdx = mapGen->tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
+            afterRoomIdx = MAP->tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
 
             if (afterRoomIdx > 0 &&
                 curRoomIdx != afterRoomIdx &&
@@ -248,6 +243,17 @@ namespace Gungeon
                 curRoom = mapGen->selectedRooms[curRoomIdx];
 
                 SpawnEffect();
+
+                int idx = 0;
+                for (auto& on : curRoom->doorTileIdxs)
+                {
+                    MAP->tilemap->SetTileState(on, TileState::wall);
+                    door[idx]->idle->frame.y = MAP->tilemap->GetTileDoorDir(on);
+                    door[idx]->SetPos(MAP->tilemap->TileIdxToWorldPos(on));
+                    door[idx]->col->isVisible = true;
+                    door[idx]->idle->isVisible = true;
+                    idx++;
+                }
 
                 gameState = GameState::waitingSpawn;
             }
@@ -270,17 +276,6 @@ namespace Gungeon
         {
             SpawnEnemy();
 
-            int idx = 0;
-            for (auto& on : curRoom->doorTileIdxs)
-            {
-                mapGen->tilemap->SetTileState(on, TileState::wall);
-                door[idx]->idle->frame.y = mapGen->tilemap->GetTileDoorDir(on);
-                door[idx]->SetPos(mapGen->tilemap->TileIdxToWorldPos(on));
-                door[idx]->col->isVisible = true;
-                door[idx]->idle->isVisible = true;
-                idx++;
-            }
-
             gameState = GameState::fight;
         }
     }
@@ -296,7 +291,7 @@ namespace Gungeon
                 flagCleared = false;
 
                 elem->targetPos = player->Pos();
-                elem->FindPath(mapGen->tilemap);
+                elem->FindPath(MAP->tilemap);
             }
         }
 
@@ -307,9 +302,11 @@ namespace Gungeon
             int idx = 0;
             for (auto& elem : curRoom->doorTileIdxs)
             {
-                mapGen->tilemap->SetTileState(elem, TileState::door);
-                door[idx]->col->isVisible = false;
+                MAP->tilemap->SetTileState(elem, TileState::door);
+
+                door[idx]->SetPos(DEFAULTSPAWN);
                 door[idx]->idle->isVisible = false;
+
                 idx++;
             }
 
@@ -356,16 +353,73 @@ namespace Gungeon
         int idx = 0;
         for (auto& elem : enemy)
         {
-            elem->Spawn(curRoom->enemySpawnPos[idx]);
+            SafeRelease(elem);
+            int r = RANDOM->Int(0, 1);
+            if (r) elem = new Enemy1();
+            else elem = new Enemy2();
+            if (curRoom) elem->Spawn(curRoom->enemySpawnPos[idx]);
             idx++;
         }
     }
 
     void Scene02::IntersectPlayer()
     {
-        if (mapGen->tilemap->IntersectTileUnit(player->colTile))
+        if (MAP->tilemap->IntersectTileObj(player->colTile))
         {
             player->StepBack();
+        }
+
+        if (player->col->Intersect(gate->col))
+        {
+            player->col->MoveWorldPos(Vector2(-150.0f, -100.0f) * DELTA);
+        }
+
+        if (curRoom)
+        {
+            for (auto& elem : door)
+            {
+                if (player->colTile->Intersect(elem->col))
+                {
+                    DirState doorDir = MAP->tilemap->GetTileDoorDir(elem->On());
+                    float x, y;
+                    switch (doorDir)
+                    {
+                    case dirB:
+                        x = -dx[DirState::dirB];
+                        y = -dy[DirState::dirB];
+                        break;
+                    case dirLB:
+                        x = -dx[DirState::dirLB];
+                        y = -dy[DirState::dirLB];
+                        break;
+                    case dirRB:
+                        x = -dx[DirState::dirRB];
+                        y = -dy[DirState::dirRB];
+                        break;
+                    case dirT:
+                        x = dx[DirState::dirT];
+                        y = dy[DirState::dirT];
+                        break;
+                    case dirLT:
+                        x = dx[DirState::dirLT];
+                        y = dy[DirState::dirLT];
+                        break;
+                    case dirRT:
+                        x = dx[DirState::dirRT];
+                        y = dy[DirState::dirRT];
+                        break;
+                    case dirL:
+                        x = dx[DirState::dirL];
+                        y = dy[DirState::dirL];
+                        break;
+                    case dirR:
+                        x = dx[DirState::dirR];
+                        y = dy[DirState::dirR];
+                        break;
+                    }
+                    player->col->MoveWorldPos(Vector2(x, y));
+                }
+            }
         }
 
         // 플레이어 총알
@@ -385,7 +439,7 @@ namespace Gungeon
                     }
                 }
 
-                if (mapGen->tilemap->IntersectTilePos(bulletElem->Pos()))
+                if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
                 {
                     bulletElem->Hit(1);
                 }
@@ -404,7 +458,7 @@ namespace Gungeon
                 player->Hit(1);
             }
 
-            if (mapGen->tilemap->IntersectTileUnit(enemyElem->colTile))
+            if (MAP->tilemap->IntersectTileObj(enemyElem->colTile))
             {
                 enemyElem->StepBack();
             }
@@ -422,7 +476,7 @@ namespace Gungeon
                         bulletElem->Hit(1);
                     }
 
-                    if (mapGen->tilemap->IntersectTilePos(bulletElem->Pos()))
+                    if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
                     {
                         bulletElem->Hit(1);
                     }
@@ -449,20 +503,11 @@ namespace Gungeon
                 gate->flagGateOpen = true;
             }
 
-            if (gate->col->Intersect(player->col))
-            {
-                player->StepBack();
-            }
-
             if (gate->flagGateOpen)
             {
-                gate->col->isVisible = true;
-                gate->colTile->isVisible = true;
                 if (gate->colTile->Intersect(player->col))
                 {
                     roomClearCount = 0;
-                    gate->col->isVisible = false;
-                    gate->colTile->isVisible = false;
                     gate->idle->ChangeAnim(AnimState::reverseOnce, 0.1f);
                     gate->flagGateClosed = true;
                 }
@@ -472,14 +517,14 @@ namespace Gungeon
         if (gate->flagGateClosed)
         {
             gate->flagGateClosed = false;
-            fadeOut = true;
+            isChangingScene = true;
             SCENE->ChangeScene("Scene03", 1.0f);
         }
     }
 
     void Scene02::ChangeUpdateScene()
     {
-        if (fadeOut)
+        if (isChangingScene)
         {
             LIGHT->light.radius -= 2000.0f * DELTA;
             LIGHT->light.lightColor.x += 0.5f * DELTA;
@@ -488,7 +533,7 @@ namespace Gungeon
 
             if (TIMER->GetTick(timeFade, 1.0f))
             {
-                fadeOut = false;
+                isChangingScene = false;
             }
         }
         else
@@ -510,5 +555,8 @@ namespace Gungeon
         {
             elem->ColToggle();
         }
+
+        for (auto& elem : door) elem->ColToggle();
+        gate->ColToggle();
     }
 }

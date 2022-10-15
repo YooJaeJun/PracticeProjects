@@ -5,17 +5,8 @@ namespace Gungeon
 	class Scene03 : public Scene
 	{
 	public:
-		bool		fadeOut;
+		bool		isChangingScene;
 		float		timeFade;
-
-		ObTileMap*  tilemap;
-		int			imgIdx;
-		Int2		tileSize;
-		Color		tileColor;
-		int			tileState;
-		Int2		mouseIdx;
-		Int2		pickingIdx;
-
 		Room*		curRoom;
 		Player*		player;
 		Boss*		boss;

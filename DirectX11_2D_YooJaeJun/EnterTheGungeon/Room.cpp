@@ -18,12 +18,12 @@ namespace Gungeon
 
     void Room::Release()
     {
-        SafeDelete(col);
+        Character::Release();
     }
 
     void Room::Update()
     {
-        col->Update();
+        Character::Update();
     }
 
     void Room::LateUpdate()
@@ -32,6 +32,6 @@ namespace Gungeon
 
     void Room::Render()
     {
-        col->Render();
+        Character::Render();
     }
 }

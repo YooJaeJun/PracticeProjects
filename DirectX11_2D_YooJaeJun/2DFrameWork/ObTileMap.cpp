@@ -59,6 +59,7 @@ void ObTileMap::CreateTileCost()
             Tiles[i][j].idx = Int2(i, j);
             Tiles[i][j].state = GetTileState(Tiles[i][j].idx);
             Tiles[i][j].roomIdx = GetTileRoomIndex(Tiles[i][j].idx);
+            Tiles[i][j].doorDir = GetTileDoorDir(Tiles[i][j].idx);
 
             Tiles[i][j].Pos.x = i * scale.x + GetWorldPos().x + half.x;
             Tiles[i][j].Pos.y = j * scale.y + GetWorldPos().y + half.y;
@@ -318,18 +319,18 @@ void ObTileMap::SetTileRoomIndex(Int2 TileIdx, const int tileRoomIndex)
     vertices[tileIdx * 6].tileRoomIdx = tileRoomIndex;
 }
 
-int ObTileMap::GetTileDoorDir(Int2 TileIdx)
+DirState ObTileMap::GetTileDoorDir(Int2 TileIdx)
 {
     int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
 
     return vertices[tileIdx * 6].tileDir;
 }
 
-void ObTileMap::SetTileDoorDir(Int2 TileIdx, const DirState dirState)
+void ObTileMap::SetTileDoorDir(Int2 TileIdx, const DirState doorDir)
 {
     int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
 
-    vertices[tileIdx * 6].tileDir = dirState;
+    vertices[tileIdx * 6].tileDir = doorDir;
 }
 
 void ObTileMap::Save()
@@ -468,7 +469,7 @@ bool ObTileMap::IntersectTilePos(Vector2 wpos)
     return false;
 }
 
-bool ObTileMap::IntersectTileUnit(ObRect* colTile)
+bool ObTileMap::IntersectTileObj(ObRect* colTile)
 {
     Vector2 pos;
     bool flag = false;
@@ -644,7 +645,8 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
             Tile* loop = &Tiles[LoopIdx[i].x][LoopIdx[i].y];
 
             //벽이 아닐때
-            if (loop->state != TileState::wall)
+            if (loop->state != TileState::wall && 
+                loop->state != TileState::door)
             {
                 //예상비용 만들기
                 loop->ClacH(dest);

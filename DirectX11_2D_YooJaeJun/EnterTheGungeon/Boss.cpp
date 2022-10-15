@@ -32,6 +32,7 @@ namespace Gungeon
         flagSpiralRespawn = false;
         timeCluster = 0.0f;
         timeBrute = 0.0f;
+        curBruteIdx = 0;
     }
 
     void Boss::InitSelf()
@@ -40,7 +41,6 @@ namespace Gungeon
 
         float scaleFactor = 3.0f;
         col = new ObCircle;
-        col->isVisible = false;
         col->isFilled = false;
         col->scale = Vector2(25.0f, 25.0f) * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f);
@@ -164,7 +164,6 @@ namespace Gungeon
         dropItem = new Item;
         dropItem->col = new ObCircle;
         dropItem->col->scale = Vector2(40.0f, 40.0f) * scaleFactor;
-        dropItem->col->isVisible = false;
         dropItem->col->isFilled = false;
         dropItem->SetPos(DEFAULTSPAWN);
         dropItem->idle = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
@@ -294,7 +293,6 @@ namespace Gungeon
 
         for (auto& elem : bullet)
         {
-            elem->col->isVisible = false;
             elem->idle->isVisible = false;
         }
     }
@@ -382,9 +380,7 @@ namespace Gungeon
     {
         Unit::StartDie();
 
-        weapon->col->isVisible = false;
         weapon->idle->isVisible = false;
-        weapon->firePos->isVisible = false;
 
         hpGuageBar->img->isVisible = false;
         hpGuage->img->isVisible = false;
@@ -415,7 +411,6 @@ namespace Gungeon
             die->reverseLR = false;
         }
 
-        dropItem->col->isVisible = false;
         dropItem->idle->isVisible = false;
         dropItem->state = State::die;
     }
@@ -551,8 +546,7 @@ namespace Gungeon
         for (auto& elem : bullet)
         {
             if (nullptr == elem) elem = new BossBullet;
-            elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
-            elem->scalar = (idx + 1) * 3.0f;
+            elem->scalar = RANDOM->Float(10.0f, 100.0f);
             elem->moveDir = Vector2(cos(idx * 6.0f * ToRadian), sin(idx * 6.0f * ToRadian));
             idx++;
         }
@@ -617,7 +611,7 @@ namespace Gungeon
         int size = stringBullet.inputString.size();
         char* s = const_cast<char*>(stringBullet.inputString.c_str());
 
-        if (ImGui::InputText("String Danmaku", s, 26) || 
+        if (ImGui::InputText("String Danmaku", s, 27) || 
             bullet.size() != size * 25)
         {
             stringBullet.inputString = s;
@@ -707,16 +701,14 @@ namespace Gungeon
 
     void Boss::UpdateBrute()
     {
-        if (TIMER->GetTick(timeBrute, 3.0f))
+        int t = 50;
+        while (t--)
         {
-            int idx = 0;
-            for (auto& elem : bullet)
-            {
-                elem->Spawn(bulletSpawnPos);
-                idx++;
-            }
+            bullet[curBruteIdx++]->Spawn(bulletSpawnPos);
         }
+        if (curBruteIdx >= bruteMax) curBruteIdx = 0;
     }
+
     void Boss::UpdateRand()
     {
         bullet[curRandIdx++]->Spawn(bulletSpawnPos);

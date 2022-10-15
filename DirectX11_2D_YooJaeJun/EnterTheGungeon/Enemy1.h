@@ -11,11 +11,14 @@ namespace Gungeon
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
-
 		void InitVar();
 		void InitSelf();
 		void InitWeapon();
 		void InitBullet();
+		virtual void Fire() override;
 
+	public:
+		const int bulletMax = 5;
+		int curBulletIdx;
 	};
 }

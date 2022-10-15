@@ -28,7 +28,8 @@ namespace Gungeon
 		void Roll();
 		virtual void Die() override;
 		void Move();
-		void Action();
+		void SetFireInterval();
+		void FireProcess();
 		void Fire();
 		void ShakeCam(float& time);
 		void StartWalk();
@@ -51,6 +52,7 @@ namespace Gungeon
 		int					curWeaponMax;
 		int					curWeaponIdx;
 		bool				canFireOnce[(int)WeaponType::max + 1];
+		float				fireInterval;
 		bool				isReloading;
 		float				timeReload;
 		int					curBulletIdx;

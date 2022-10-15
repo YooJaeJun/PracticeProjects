@@ -162,7 +162,6 @@ namespace Gungeon
 
 			isHit = false;
 
-			col->isVisible = false;
 			idle->isVisible = false;
 			walk->isVisible = false;
 

@@ -19,6 +19,7 @@ namespace Gungeon
 	{
 		curHp = maxHp = 3;
 		scalar = 80.0f;
+		curBulletIdx = 0;
 	}
 
 	void Enemy2::InitSelf()
@@ -77,10 +78,30 @@ namespace Gungeon
 
 	void Enemy2::InitBullet()
 	{
-		bullet.resize(10);
+		bullet.resize(bulletMax);
 		for (auto& elem : bullet)
 		{
 			elem = new EnemyBullet;
+		}
+	}
+
+	void Enemy2::Fire()
+	{
+		if (TIMER->GetTick(timeFire, 1.5f))
+		{
+			weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
+
+			int t = 5;
+			while (t--)
+			{
+				bullet[curBulletIdx]->scalar = RANDOM->Float(600.0f, 800.0f);
+				Vector2 fireDir = Vector2(RANDOM->Float(moveDir.x - 0.2f, moveDir.x + 0.2f), 
+					RANDOM->Float(moveDir.y - 0.2f, moveDir.y + 0.2f));
+				bullet[curBulletIdx]->Spawn(weapon->firePos->GetWorldPos(), fireDir);
+				curBulletIdx++;
+			}
+
+			if (curBulletIdx >= bulletMax) curBulletIdx = 0;
 		}
 	}
 

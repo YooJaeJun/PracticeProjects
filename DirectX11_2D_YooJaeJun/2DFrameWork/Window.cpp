@@ -10,6 +10,8 @@ WPARAM Window::Run(Scene* main)
 	Create();
 	D3D->Create();
 	GameObject::CreateStaticMember();
+	ObLine::CreateStaticMember();
+	ObTriangle::CreateStaticMember();
 	ObRect::CreateStaticMember();
 	ObLine::CreateStaticMember();
 	ObCircle::CreateStaticMember();
@@ -34,6 +36,7 @@ WPARAM Window::Run(Scene* main)
 			INPUT->Update();
 			SOUND->Update();
 			GUI->Update();
+			MAP->Update();
 			main->Update();
 			main->LateUpdate();
 			CAM->Set();
@@ -42,6 +45,7 @@ WPARAM Window::Run(Scene* main)
 			D3D->Clear(app.background);
 			DWRITE->GetDC()->BeginDraw();
 			{
+				MAP->Render();
 				main->Render();
 				GUI->Render();
 			}
@@ -51,8 +55,9 @@ WPARAM Window::Run(Scene* main)
 	}
 	Save();
 	GameObject::DeleteStaticMember();
-	ObRect::DeleteStaticMember();
 	ObLine::DeleteStaticMember();
+	ObTriangle::DeleteStaticMember();
+	ObRect::DeleteStaticMember();
 	ObCircle::DeleteStaticMember();
 	ObStar::DeleteStaticMember();
 	ObStarPointed::DeleteStaticMember();
@@ -70,6 +75,7 @@ WPARAM Window::Run(Scene* main)
 	SCENE->DeleteSingleton();
 	RENDER->DeleteSingleton();
 	D3D->DeleteSingleton();
+	MAP->DeleteSingleton();
 	Destroy();
 
 	return msg.wParam;

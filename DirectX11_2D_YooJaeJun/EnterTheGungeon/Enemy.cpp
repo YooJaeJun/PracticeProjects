@@ -24,7 +24,6 @@ namespace Gungeon
 		timeSetMoveDir = 0.0f;
 		timeSetTargetDir = 0.0f;
 		pushedScalar = 400.0f;
-		pushedScalarFactor = 0.0f;
 		timeAiming = 0.0f;
 	}
 
@@ -35,7 +34,6 @@ namespace Gungeon
 		state = State::die;
 
 		col = new ObCircle;
-		col->isVisible = false;
 		col->isFilled = false;
 		col->color = Color(1.0f, 1.0f, 1.0f);
 		col->zOrder = ZOrder::object;
@@ -59,7 +57,6 @@ namespace Gungeon
 		dropItem = new Item;
 		dropItem->col = new ObCircle;
 		dropItem->col->scale = Vector2(40.0f, 40.0f) * scaleFactor;
-		dropItem->col->isVisible = false;
 		dropItem->col->isFilled = false;
 		dropItem->SetPos(DEFAULTSPAWN);
 		dropItem->idle = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
@@ -136,32 +133,17 @@ namespace Gungeon
 	{
 		Unit::Die();
 
-		pushedScalar -= pushedScalarFactor * DELTA;
-		pushedScalarFactor += 800.0f * DELTA;
-		col->MoveWorldPos(pushedDir * pushedScalar * DELTA);
+		timeRealDie += DELTA;
+		col->MoveWorldPos(pushedDir * pushedScalar * cos(timeRealDie / 0.63f * DIV2PI) * DELTA);
 
-		if (TIMER->GetTick(timeRealDie, 0.5f))
+		if (timeRealDie > 0.63f)
 		{
 			pushedDir = Vector2(0.0f, 0.0f);
-			pushedScalar = 400.0f;
-			pushedScalarFactor = 0.0f;
 		}
 	}
 
 	void Enemy::Fire()
 	{
-		if (TIMER->GetTick(timeFire, 1.0f))
-		{
-			for (auto& elem : bullet)
-			{
-				if (elem->isFired) continue;
-
-				elem->Spawn(weapon->firePos->GetWorldPos(), moveDir);
-				weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
-
-				break;
-			}
-		}
 	}
 
 	void Enemy::Hit(const int damage, const Vector2& dir)
@@ -199,16 +181,14 @@ namespace Gungeon
 			walk->color = c;
 			hit->color = c;
 
-			pushedScalar -= pushedScalarFactor * DELTA;
-			pushedScalarFactor += 200.0f * DELTA;
-			col->MoveWorldPos(pushedDir * pushedScalar * DELTA);
-
 			idle->isVisible = false;
 			walk->isVisible = false;
 			hit->isVisible = true;
 
+			timeHitAnim += DELTA;
+			col->MoveWorldPos(pushedDir * pushedScalar * cos(timeHitAnim / 0.63f * DIV2PI) * DELTA);
 
-			if (TIMER->GetTick(timeHitAnim, 0.5f))
+			if (timeHitAnim > 0.63f)
 			{
 				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
 				idle->color = c;
@@ -222,8 +202,6 @@ namespace Gungeon
 				isHitAnim = false;
 
 				pushedDir = Vector2(0.0f, 0.0f);
-				pushedScalar = 400.0f;
-				pushedScalarFactor = 0.0f;
 			}
 		}
 		else
@@ -240,9 +218,7 @@ namespace Gungeon
 
 		way.clear();
 
-		weapon->col->isVisible = false;
 		weapon->idle->isVisible = false;
-		weapon->firePos->isVisible = false;
 
 		if (pushedDir.x < 0.0f)
 		{
@@ -254,14 +230,6 @@ namespace Gungeon
 		}
 
 		pushedScalar = 400.0f;
-		pushedScalarFactor = 0.0f;
-
-		for (auto& elem : bullet)
-		{
-			elem->col->isVisible = false;
-			elem->idle->isVisible = false;
-			elem->hitBomb->idle->isVisible = false;
-		}
 
 		dropItem->Spawn(Pos());
 		dropItem->col->isVisible = true;
@@ -288,10 +256,6 @@ namespace Gungeon
 			die->reverseLR = false;
 		}
 
-		pushedScalar = 400.0f;
-		pushedScalarFactor = 0.0f;
-
-		dropItem->col->isVisible = false;
 		dropItem->idle->isVisible = false;
 		dropItem->state = State::die;
 	}

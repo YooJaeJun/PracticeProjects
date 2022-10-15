@@ -6,7 +6,7 @@ namespace Gungeon
 	{
 	public:
 		ProcedureMapGeneration* mapGen;
-		bool					fadeOut;
+		bool					isChangingScene;
 		float					timeFade;
 
 	public:

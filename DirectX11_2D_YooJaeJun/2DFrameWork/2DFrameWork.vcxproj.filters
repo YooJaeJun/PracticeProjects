@@ -92,6 +92,9 @@
     <ClInclude Include="ObIso.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -191,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="ObIso.cpp">
       <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
