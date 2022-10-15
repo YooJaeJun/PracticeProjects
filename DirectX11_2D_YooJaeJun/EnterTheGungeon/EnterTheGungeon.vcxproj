@@ -28,6 +28,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Enemy1.h" />
     <ClInclude Include="Enemy2.h" />
+    <ClInclude Include="Enemy3.h" />
     <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="Gate.h" />
     <ClInclude Include="Item.h" />
@@ -57,6 +58,7 @@
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy1.cpp" />
     <ClCompile Include="Enemy2.cpp" />
+    <ClCompile Include="Enemy3.cpp" />
     <ClCompile Include="Gate.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Obstacle.cpp" />

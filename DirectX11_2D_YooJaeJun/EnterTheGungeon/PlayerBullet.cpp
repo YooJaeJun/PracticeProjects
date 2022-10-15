@@ -5,10 +5,10 @@ namespace Gungeon
     PlayerBullet::PlayerBullet()
     {
         scalar = 600.0f;
-        damage = 50;
+        damage = 2;
 
         float scaleFactor = 1.5f;
-        col->scale = Vector2(19.0f, 19.0f) * scaleFactor;
+        col->scale = Vector2(16.0f, 16.0f) * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
 

@@ -18,7 +18,7 @@ namespace Gungeon
 		virtual void Fire() override;
 
 	public:
-		const int bulletMax = 5;
-		int curBulletIdx;
+		const int	bulletMax = 5;
+		int			curBulletIdx;
 	};
 }

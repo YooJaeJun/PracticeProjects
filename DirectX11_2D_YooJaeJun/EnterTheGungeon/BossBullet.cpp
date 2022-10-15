@@ -9,7 +9,7 @@ namespace Gungeon
         angle = 0.0f;
         atkAngle = 0.0f;
 
-        float scaleFactor = 4.0f;
+        float scaleFactor = 5.0f;
         col->scale = Vector2(8.0f, 8.0f) * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);

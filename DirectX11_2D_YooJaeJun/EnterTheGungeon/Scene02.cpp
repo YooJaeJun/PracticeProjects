@@ -250,7 +250,6 @@ namespace Gungeon
                     MAP->tilemap->SetTileState(on, TileState::wall);
                     door[idx]->idle->frame.y = MAP->tilemap->GetTileDoorDir(on);
                     door[idx]->SetPos(MAP->tilemap->TileIdxToWorldPos(on));
-                    door[idx]->col->isVisible = true;
                     door[idx]->idle->isVisible = true;
                     idx++;
                 }
@@ -291,7 +290,18 @@ namespace Gungeon
                 flagCleared = false;
 
                 elem->targetPos = player->Pos();
-                elem->FindPath(MAP->tilemap);
+                
+                if (Enemy3* tempEnemy = dynamic_cast<Enemy3*>(elem))
+                {
+                    switch (tempEnemy->fireState)
+                    {
+                    case Gungeon::FireState::none:
+                        elem->FindPath(MAP->tilemap);
+                        break;
+                    default:
+                        break;
+                    }
+                }
             }
         }
 
@@ -354,8 +364,9 @@ namespace Gungeon
         for (auto& elem : enemy)
         {
             SafeRelease(elem);
-            int r = RANDOM->Int(0, 1);
-            if (r) elem = new Enemy1();
+            int r = RANDOM->Int(0, 5);
+            if (r > 0) elem = new Enemy3();
+            else if (r == 1) elem = new Enemy1();
             else elem = new Enemy2();
             if (curRoom) elem->Spawn(curRoom->enemySpawnPos[idx]);
             idx++;
@@ -397,16 +408,16 @@ namespace Gungeon
                         y = -dy[DirState::dirRB];
                         break;
                     case dirT:
-                        x = dx[DirState::dirT];
-                        y = dy[DirState::dirT];
+                        x = -dx[DirState::dirT];
+                        y = -dy[DirState::dirT];
                         break;
                     case dirLT:
-                        x = dx[DirState::dirLT];
-                        y = dy[DirState::dirLT];
+                        x = -dx[DirState::dirLT];
+                        y = -dy[DirState::dirLT];
                         break;
                     case dirRT:
-                        x = dx[DirState::dirRT];
-                        y = dy[DirState::dirRT];
+                        x = -dx[DirState::dirRT];
+                        y = -dy[DirState::dirRT];
                         break;
                     case dirL:
                         x = dx[DirState::dirL];
@@ -415,6 +426,10 @@ namespace Gungeon
                     case dirR:
                         x = dx[DirState::dirR];
                         y = dy[DirState::dirR];
+                        break;
+                    case dirNone:
+                        x = dx[DirState::dirNone];
+                        y = dy[DirState::dirNone];
                         break;
                     }
                     player->col->MoveWorldPos(Vector2(x, y));

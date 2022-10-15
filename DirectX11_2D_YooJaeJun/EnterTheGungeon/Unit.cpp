@@ -11,10 +11,10 @@ namespace Gungeon
 	{
 		lastPos = Vector2(0.0f, 0.0f);
 		targetDirBefore = targetDir = Vector2(0.0f, 0.0f);
-		curMoveDirState = dirB;
-		curMoveDirStateBefore = dirB;
-		curTargetDirState = dirB;
-		curTargetDirStateBefore = dirB;
+		curMoveDirState = DirState::dirB;
+		curMoveDirStateBefore = DirState::dirB;
+		curTargetDirState = DirState::dirB;
+		curTargetDirStateBefore = DirState::dirB;
 		timeFire = 0.0f;
 		timeReload = 0.0f;
 		pushedDir = Vector2(0.0f, 0.0f);
@@ -296,11 +296,6 @@ namespace Gungeon
 			}
 		}
 	}
-
-	void Unit::DontFindPath()
-	{
-		moveDir = Vector2(0.0f, 0.0f);
-	}
 	
 	void Unit::Spawn(const Vector2 wpos)
 	{
@@ -315,5 +310,35 @@ namespace Gungeon
 		walk->color = c;
 		if (hit) hit->color = c;
 		if (die) die->color = c;
+	}
+
+	void Unit::Stop()
+	{
+		moveDir = Vector2(0.0f, 0.0f);
+	}
+
+	void Unit::Attack()
+	{
+	}
+
+	void Unit::AttackStart()
+	{
+		idle->isVisible = false;
+		walk->isVisible = false;
+		attack->isVisible = true;
+		attack->ChangeAnim(AnimState::loop , 0.1f);
+	}
+
+	void Unit::AttackEnd()
+	{
+		attack->isVisible = false;
+		attackEnd->isVisible = true;
+		attackEnd->ChangeAnim(AnimState::once, 0.1f);
+	}
+
+	void Unit::AttackToWalk()
+	{
+		attackEnd->isVisible = false;
+		walk->isVisible = true;
 	}
 }

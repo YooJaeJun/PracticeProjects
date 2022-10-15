@@ -87,17 +87,6 @@ namespace Gungeon
 		}
 	}
 
-	void Enemy1::Fire()
-	{
-		if (TIMER->GetTick(timeFire, 1.0f))
-		{
-			bullet[curBulletIdx++]->Spawn(weapon->firePos->GetWorldPos(), moveDir);
-			weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
-
-			if (curBulletIdx >= bulletMax) curBulletIdx = 0;
-		}
-	}
-
 	void Enemy1::Release()
 	{
 		Enemy::Release();
@@ -116,5 +105,16 @@ namespace Gungeon
 	void Enemy1::Render()
 	{
 		Enemy::Render();
+	}
+
+	void Enemy1::Fire()
+	{
+		if (TIMER->GetTick(timeFire, 1.0f))
+		{
+			bullet[curBulletIdx++]->Spawn(weapon->firePos->GetWorldPos(), moveDir);
+			weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
+
+			if (curBulletIdx >= bulletMax) curBulletIdx = 0;
+		}
 	}
 }

@@ -387,7 +387,6 @@ namespace Gungeon
 
         // drop
         dropItem->Spawn(Vector2(Pos().x - 10.0f, Pos().y - 10.0f));
-        dropItem->col->isVisible = true;
         dropItem->idle->isVisible = true;
         dropItem->state = State::idle;
     }
@@ -398,7 +397,6 @@ namespace Gungeon
 
         InitVar();
 
-        weapon->col->isVisible = true;
         weapon->idle->isVisible = true;
         weapon->firePos->isVisible = true;
 
@@ -500,7 +498,6 @@ namespace Gungeon
         for (auto& elem : bullet)
         {
             if (nullptr == elem) elem = new BossBullet;
-            elem->col->isVisible = true;
             elem->col->SetParentRT(*col);
             elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
             elem->scalar = (idx + 1) * 3.0f;
@@ -655,7 +652,6 @@ namespace Gungeon
         for (auto& elem : bullet)
         {
             elem->isFired = true;
-            elem->col->isVisible = true;
             elem->idle->isVisible = true;
 
             elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));

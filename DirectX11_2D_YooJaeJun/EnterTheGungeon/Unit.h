@@ -26,7 +26,11 @@ namespace Gungeon
 		void StepBack();
 		void SetDirState(const Vector2 dir, DirState& dirState);
 		void FindPath(ObTileMap* map);
-		void DontFindPath();
+		void Stop();
+		virtual void Attack();
+		void AttackStart();
+		void AttackEnd();
+		void AttackToWalk();
 
 	public:
 		ObImage*			spawn;
@@ -36,6 +40,8 @@ namespace Gungeon
 		ObImage*			hit;
 		ObImage*			fall;
 		ObImage*			die;
+		ObImage*			attack;
+		ObImage*			attackEnd;
 		ObImage*			shadow;
 		Item*				dropItem;
 		vector<Bullet*>		bullet;

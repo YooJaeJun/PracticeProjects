@@ -18,6 +18,7 @@
 #include "Enemy.h"
 #include "Enemy1.h"
 #include "Enemy2.h"
+#include "Enemy3.h"
 #include "StringBulletData.h"
 #include "Boss.h"
 #include "Pet.h"

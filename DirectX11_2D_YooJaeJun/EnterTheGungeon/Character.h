@@ -7,6 +7,7 @@ namespace Gungeon
 		idle,
 		walk,
 		roll,
+		attack,
 		die
 	};
 

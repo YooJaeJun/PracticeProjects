@@ -138,7 +138,6 @@ namespace Gungeon
 		weapons[curWeaponIdx] = new Weapon1;
 		weapons[curWeaponIdx]->col->SetParentRT(*col);
 		weapons[curWeaponIdx]->col->SetLocalPos(Vector2(10.0f, -15.0f));
-		weapons[curWeaponIdx]->col->isVisible = true;
 		weapons[curWeaponIdx]->idle->SetParentRT(*weapons[curWeaponIdx]->col);
 		weapons[curWeaponIdx]->idle->isVisible = true;
 		weapons[curWeaponIdx]->firePos->SetLocalPos(Vector2(weapons[curWeaponIdx]->col->scale.x / 2.0f, 0.0f));
@@ -531,7 +530,6 @@ namespace Gungeon
 			state = State::idle;
 
 			weapons[curWeaponIdx]->idle->isVisible = true;
-			weapons[curWeaponIdx]->firePos->isVisible = true;
 
 			godMode = false;
 		}

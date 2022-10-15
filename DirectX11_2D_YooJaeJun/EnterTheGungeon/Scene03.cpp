@@ -185,7 +185,7 @@ namespace Gungeon
                 boss->FindPath(MAP->tilemap);
                 break;
             default:
-                boss->DontFindPath();
+                boss->Stop();
                 break;
             }
         }

@@ -41,7 +41,6 @@ namespace Gungeon
         {
             Character::Update(notRotation);
 
-            moveDir.Normalize();
             Vector2 velocity = moveDir * scalar * DELTA;
             col->MoveWorldPos(velocity);
         }
@@ -65,7 +64,6 @@ namespace Gungeon
     {
         SetPos(coord);
         isFired = true;
-        col->isVisible = true;
         idle->isVisible = true;
     }
 

@@ -113,6 +113,9 @@
     <ClInclude Include="Gate.h">
       <Filter>GameObject\Level</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy3.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -196,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="Gate.cpp">
       <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy3.cpp">
+      <Filter>GameObject\Unit</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

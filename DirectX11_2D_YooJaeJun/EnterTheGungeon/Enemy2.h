@@ -11,7 +11,6 @@ namespace Gungeon
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
-
 		void InitVar();
 		void InitSelf();
 		void InitWeapon();
@@ -19,7 +18,7 @@ namespace Gungeon
 		virtual void Fire() override;
 
 	public:
-		const int bulletMax = 25;
-		int curBulletIdx;
+		const int	bulletMax = 25;
+		int			curBulletIdx;
 	};
 }

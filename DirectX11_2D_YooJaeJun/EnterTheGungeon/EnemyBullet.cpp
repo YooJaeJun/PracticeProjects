@@ -34,14 +34,6 @@ namespace Gungeon
     void EnemyBullet::Update()
     {
         Bullet::Update();
-
-        if (isFired)
-        {
-            if (TIMER->GetTick(timeRespawn, 4.0f))
-            {
-                Reload();
-            }
-        }
     }
 
     void EnemyBullet::LateUpdate()

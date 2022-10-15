@@ -69,7 +69,7 @@ namespace Gungeon
 	void Enemy::Release()
 	{
 		Unit::Release();
-		weapon->Release();
+		if (weapon) weapon->Release();
 		for (auto& elem : bullet) elem->Release();
 	}
 
@@ -86,6 +86,9 @@ namespace Gungeon
 		case State::walk:
 			Walk();
 			break;
+		case State::attack:
+			Attack();
+			break;
 		case State::die:
 			Die();
 			break;
@@ -93,7 +96,7 @@ namespace Gungeon
 			break;
 		}
 
-		weapon->Update();
+		if (weapon) weapon->Update();
 		for (auto& elem : bullet) elem->Update();
 		dropItem->Update();
 	}
@@ -107,7 +110,7 @@ namespace Gungeon
 		for (auto& elem : bullet) elem->Render();
 		Unit::Render();
 
-		weapon->Render();
+		if (weapon) weapon->Render();
 		dropItem->Render();
 	}
 
@@ -218,7 +221,7 @@ namespace Gungeon
 
 		way.clear();
 
-		weapon->idle->isVisible = false;
+		if (weapon) weapon->idle->isVisible = false;
 
 		if (pushedDir.x < 0.0f)
 		{
@@ -232,7 +235,6 @@ namespace Gungeon
 		pushedScalar = 400.0f;
 
 		dropItem->Spawn(Pos());
-		dropItem->col->isVisible = true;
 		dropItem->idle->isVisible = true;
 		dropItem->state = State::idle;
 	}
@@ -243,9 +245,8 @@ namespace Gungeon
 
 		InitVar();
 
-		weapon->col->isVisible = true;
-		weapon->idle->isVisible = true;
-		weapon->firePos->isVisible = true;
+		if (weapon) weapon->idle->isVisible = true;
+		if (weapon) weapon->firePos->isVisible = true;
 
 		if (pushedDir.x < 0.0f)
 		{
@@ -262,8 +263,8 @@ namespace Gungeon
 	void Enemy::ColToggle()
 	{
 		Character::ColToggle();
-		weapon->col->isVisible = !weapon->col->isVisible;
-		weapon->firePos->isVisible = !weapon->firePos->isVisible;
+		if (weapon) weapon->col->isVisible = !weapon->col->isVisible;
+		if (weapon) weapon->firePos->isVisible = !weapon->firePos->isVisible;
 		for (auto& bulletElem : bullet)
 		{
 			bulletElem->col->isVisible = !bulletElem->col->isVisible;

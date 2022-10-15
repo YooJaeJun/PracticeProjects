@@ -4,38 +4,10 @@ namespace Gungeon
 {
 	Weapon1::Weapon1()
 	{
-		// 공통
 		float scaleFactor = 1.0f;
 		float effectScaleFactor = 1.0f;
 		float uiWeaponScaleFactor = 1.0f;
 		int uiBulletIdx = 0;
-
-		timeFireEffect = 0.0f;
-
-		firePos = new ObRect;
-		firePos->isFilled = false;
-		firePos->scale = Vector2(10.0f, 10.0f);
-		firePos->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-		firePos->SetParentRT(*col);
-		firePos->zOrder = ZOrder::none;
-
-		fireEffect = new Effect;
-
-		uiBulletFrame = new UI;
-
-		uiWeapon = new UI;
-
-		uiBulletCount = new UI;
-		uiBulletCount->img = new ObImage(L"EnterTheGungeon/Weapon/UI_BulletCount_Infinity.png");
-		uiBulletCount->img->scale.x = 60.0f;
-		uiBulletCount->img->scale.y = 28.0f;
-		uiBulletCount->anchor = Anchor::rightBottom;
-		uiBulletCount->img->pivot = OFFSET_RB;
-		uiBulletCount->Spawn(-70.0f, 155.0f);
-		uiBulletCount->img->space = Space::screen;
-		uiBulletCount->img->zOrder = ZOrder::UI;
-		uiBulletCount->img->isVisible = false;
-
 
 		// 차이
 		type = WeaponType::pistol;

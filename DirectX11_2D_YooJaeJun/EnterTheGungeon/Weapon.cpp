@@ -4,10 +4,36 @@ namespace Gungeon
 {
 	Weapon::Weapon()
 	{
+		timeFireEffect = 0.0f;
+
 		col = new ObRect;
 		col->isFilled = false;
 		col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 		col->pivot = OFFSET_LB;
+
+		firePos = new ObRect;
+		firePos->isFilled = false;
+		firePos->scale = Vector2(10.0f, 10.0f);
+		firePos->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+		firePos->SetParentRT(*col);
+		firePos->zOrder = ZOrder::none;
+
+		fireEffect = new Effect;
+
+		uiBulletFrame = new UI;
+
+		uiWeapon = new UI;
+
+		uiBulletCount = new UI;
+		uiBulletCount->img = new ObImage(L"EnterTheGungeon/Weapon/UI_BulletCount_Infinity.png");
+		uiBulletCount->img->scale.x = 60.0f;
+		uiBulletCount->img->scale.y = 28.0f;
+		uiBulletCount->anchor = Anchor::rightBottom;
+		uiBulletCount->img->pivot = OFFSET_RB;
+		uiBulletCount->Spawn(-70.0f, 155.0f);
+		uiBulletCount->img->space = Space::screen;
+		uiBulletCount->img->zOrder = ZOrder::UI;
+		uiBulletCount->img->isVisible = false;
 	}
 
 	void Weapon::Release()
