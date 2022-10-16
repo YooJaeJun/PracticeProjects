@@ -33,40 +33,40 @@ namespace Gungeon
 		void AttackToWalk();
 
 	public:
-		ObImage*			spawn;
-		ObImage*			idle;
-		ObImage*			walk;
-		ObImage*			kick;
-		ObImage*			hit;
-		ObImage*			fall;
-		ObImage*			die;
-		ObImage*			attack;
-		ObImage*			attackEnd;
-		ObImage*			shadow;
-		Item*				dropItem;
+		ObImage*			spawn = nullptr;
+		ObImage*			idle = nullptr;
+		ObImage*			walk = nullptr;
+		ObImage*			kick = nullptr;
+		ObImage*			hit = nullptr;
+		ObImage*			fall = nullptr;
+		ObImage*			die = nullptr;
+		ObImage*			attack = nullptr;
+		ObImage*			attackEnd = nullptr;
+		ObImage*			shadow = nullptr;
+		Item*				dropItem = nullptr;
 		vector<Bullet*>		bullet;
 		Vector2				lastPos;
-		DirState			curMoveDirState;
-		DirState			curMoveDirStateBefore;
-		DirState			curTargetDirState;
-		DirState			curTargetDirStateBefore;
+		DirState			curMoveDirState = DirState::dirB;
+		DirState			curMoveDirStateBefore = DirState::dirB;
+		DirState			curTargetDirState = DirState::dirB;
+		DirState			curTargetDirStateBefore = DirState::dirB;
 		Vector2				targetPos;
 		Vector2				targetDir;
 		Vector2				targetDirBefore;
 		Vector2				originCamPos;
-		float				timeFire;
-		float				timeReload;
+		float				timeFire = 0.0f;
+		float				timeReload = 0.0f;
 		Vector2				pushedDir;
-		float				timeHit;
-		bool				isHit;
-		bool				isHitAnim;
-		float				timeHitAnim;
-		float				timeDieAnim;
-		float				timeRealDie;
+		float				timeHit = 0.0f;
+		bool				isHit = false;
+		bool				isHitAnim = false;
+		float				timeHitAnim = 0.0f;
+		float				timeDieAnim = 0.0f;
+		float				timeRealDie = 0.0f;
 		vector<Tile*>		way;
 		Vector2				start;
 		Vector2				end;
-		float				g;	// 비율
-		float				timeFindPath;
+		float				g = 0.0f;	// 비율
+		float				timeFindPath = 0.0f;
 	};
 }

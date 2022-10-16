@@ -4,14 +4,6 @@ namespace Gungeon
 {
 	Character::Character()
 	{
-		col = nullptr;
-		moveDir = Vector2(0.0f, 0.0f);
-		scalar = 0.0f;
-		curHp = 0;
-		maxHp = 0;
-		scalar = 0.0f;
-		isHit = false;
-		state = State::idle;
 	}
 
 	void Character::Init()

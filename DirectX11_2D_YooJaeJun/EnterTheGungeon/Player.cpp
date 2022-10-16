@@ -23,24 +23,6 @@ namespace Gungeon
 		scalar = 300.0f;
 		curHp = maxHp = 6;
 		for (auto& elem : canFireOnce) elem = true;
-		fireInterval = 0.0f;
-		isReloading = false;
-		timeReload = 0.0f;
-		timeRoll = 0.0f;
-		curBulletIdx = 4;
-		timeFire = 0.0f;
-		timeHit = 0.0f;
-		isHit = false;
-		isHitAnim = false;
-		timeHitAnim = 0.0f;
-		flagFireCamShake = false;
-		timeFireCamShake = 0.0f;
-		timeHitCamShake = 0.0f;
-		godMode = false;
-		timeLastPosForDust = 0.0f;
-		money = 0;
-		key = 0;
-		curDustIdx = 0;
 	}
 
 	void Player::InitCol()

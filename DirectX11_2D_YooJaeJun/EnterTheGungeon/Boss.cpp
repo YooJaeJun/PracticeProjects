@@ -21,18 +21,7 @@ namespace Gungeon
         pattern = BossPattern::string;
 
         curHp = maxHp = 30;
-        moveDir = Vector2(0.0f, 0.0f);
         scalar = 120.0f;
-        timeFire = 0.0f;
-        timeHit = 0.0f;
-        isHit = false;
-        isHitAnim = false;
-        timeHitAnim = 0.0f;
-        timeSpiral = 0.0f;
-        flagSpiralRespawn = false;
-        timeCluster = 0.0f;
-        timeBrute = 0.0f;
-        curBruteIdx = 0;
     }
 
     void Boss::InitSelf()

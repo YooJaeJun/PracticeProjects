@@ -17,12 +17,11 @@ namespace Gungeon
 		void Update();
 		void LateUpdate();
 		void Render();
-
 		void Hit();
 
 	public:
-		ObImage*	idle;
-		bool		flagAbsorbed;
+		ObImage*	idle = nullptr;
+		bool		flagAbsorbed = false;
 		Vector2		targetPos;
 	};
 }

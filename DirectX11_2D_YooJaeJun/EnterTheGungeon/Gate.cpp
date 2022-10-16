@@ -9,11 +9,6 @@ namespace Gungeon
 
     void Gate::Init()
     {
-        timeGateOpen = 0.0f;
-        timeGateClosed = 0.0f;
-        flagGateOpen = false;
-        flagGateClosed = false;
-
         float scaleFactor = 2.0f;
 
         col = new ObRect;

@@ -112,6 +112,28 @@ void ObLine::Init(const Vector2& v1, const Vector2& v2)
     scale.x = v1.Distance(v1, v2);
 }
 
+void ObLine::SetV(const ObNode& other)
+{
+    v = other;
+    Init();
+}
+
+void ObLine::SetW(const ObNode& other)
+{
+    w = other;
+    Init();
+}
+
+void ObLine::SetVIdx(const int other)
+{
+    v.index = other;
+}
+
+void ObLine::SetWIdx(const int other)
+{
+    w.index = other;
+}
+
 bool ObLine::operator<(const ObLine& other) const
 {
     return ObNode(v) < ObNode(other.v) ||

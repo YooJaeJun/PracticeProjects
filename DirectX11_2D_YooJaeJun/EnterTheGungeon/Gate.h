@@ -13,9 +13,9 @@ namespace Gungeon
 		virtual void Render() override;
 
 	public:
-		float		timeGateOpen;
-		float		timeGateClosed;
-		bool		flagGateOpen;
-		bool		flagGateClosed;
+		float		timeGateOpen = 0.0f;
+		float		timeGateClosed = 0.0f;
+		bool		flagGateOpen = false;
+		bool		flagGateClosed = false;
 	};
 }

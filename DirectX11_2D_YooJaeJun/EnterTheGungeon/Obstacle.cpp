@@ -4,8 +4,6 @@ namespace Gungeon
 {
 	Obstacle::Obstacle()
 	{
-		isOpen = false;
-
 		col = new ObRect;
 		col->isFilled = false;
 		col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);

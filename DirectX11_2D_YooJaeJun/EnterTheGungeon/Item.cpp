@@ -4,8 +4,6 @@ namespace Gungeon
 {
 	Item::Item()
 	{
-		flagAbsorbed = false;
-		targetPos = Vector2(0.0f, 0.0f);
 		scalar = 600.0f;
 	}
 

@@ -9,21 +9,6 @@ namespace Gungeon
 
 	void Unit::Init()
 	{
-		lastPos = Vector2(0.0f, 0.0f);
-		targetDirBefore = targetDir = Vector2(0.0f, 0.0f);
-		curMoveDirState = DirState::dirB;
-		curMoveDirStateBefore = DirState::dirB;
-		curTargetDirState = DirState::dirB;
-		curTargetDirStateBefore = DirState::dirB;
-		timeFire = 0.0f;
-		timeReload = 0.0f;
-		pushedDir = Vector2(0.0f, 0.0f);
-		timeHit = 0.0f;
-		isHit = false;
-		isHitAnim = 0.0f;
-		timeHitAnim = 0.0f;
-		timeDieAnim = 0.0f;
-		timeRealDie = 0.0f;
 	}
 
 	void Unit::Release()
@@ -164,7 +149,8 @@ namespace Gungeon
 
 			idle->isVisible = false;
 			walk->isVisible = false;
-
+			if (attack) attack->isVisible = false;
+			if (attackEnd) attackEnd->isVisible = false;
 			if (hit) hit->isVisible = false;
 			shadow->isVisible = false;
 			die->isVisible = true;

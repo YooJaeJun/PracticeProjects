@@ -202,13 +202,13 @@ ColPos Utility::IntersectRectCircle(RECT & rc, CIRCLE & cc)
 
     RECT Wrect(rectPivot, RectScale + Vector2(cc.radius * 2.0f, 0.0f));
 
-    if (IntersectRectCoord(Wrect, cc.pivot))
+    if ((bool)IntersectRectCoord(Wrect, cc.pivot))
     {
         return ColPos::leftRight;
     }
 
     RECT Hrect(rectPivot, RectScale + Vector2(0.0f, cc.radius * 2.0f));
-    if (IntersectRectCoord(Hrect, cc.pivot))
+    if ((bool)IntersectRectCoord(Hrect, cc.pivot))
     {
         return ColPos::upDown;
     }

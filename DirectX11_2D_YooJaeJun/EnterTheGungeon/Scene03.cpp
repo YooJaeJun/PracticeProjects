@@ -46,9 +46,6 @@ namespace Gungeon
             boss->Spawn(Vector2(0.0f, 300.0f));
         }
 
-
-        isChangingScene = false;
-        timeFade = 0.0f;
         SOUND->Stop("SCENE01");
         SOUND->Stop("SCENE02");
         //SOUND->AddSound("Vaquero Perdido - The Mini Vandals.mp3", "Scene03", true);

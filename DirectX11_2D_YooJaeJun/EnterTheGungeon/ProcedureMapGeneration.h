@@ -15,7 +15,6 @@ namespace Gungeon
 	const Int2 propImgMin = { 0, 5 };
 	const Int2 propImgMax = { 0, 5 };
 
-
 	enum class MapGenState 
 	{ 
 		spray, 
@@ -35,27 +34,6 @@ namespace Gungeon
 
 	class ProcedureMapGeneration
 	{
-	public:
-		float						timer;
-		// Spread
-		bool						flagSpread;
-		// Room
-		vector<Room*>				candidateRooms;
-		vector<Room*>				selectedRooms;
-		MapGenState					state;
-		float						roomScaleForSelect;
-		// Delaunay Triangulation
-		vector<ObNode>				roomNode;
-		Delaunay					triangulation;
-		// MST - Prim
-		priority_queue<ObLine, vector<ObLine>, greater<ObLine>>	edgePq;
-		unordered_map<int, bool>	visited;
-		vector<ObLine>				linesTriangulated;
-		vector<ObLine>				linesMST;
-		// Passage
-		map<ObNode, int>			nodesForRoomIndex;
-		vector<Tile*>				way;
-
 	public:
 		ProcedureMapGeneration();
 
@@ -81,5 +59,26 @@ namespace Gungeon
 		void Finish();
 
 		void SetTilemapGUI();
+
+	public:
+		float						timer = 0.0f;
+		// Spread
+		bool						flagSpread = false;
+		// Room
+		vector<Room*>				candidateRooms;
+		vector<Room*>				selectedRooms;
+		MapGenState					state = MapGenState::spray;
+		float						roomScaleForSelect = 0.0f;
+		// Delaunay Triangulation
+		vector<ObNode>				roomNode;
+		Delaunay					triangulation;
+		// MST - Prim
+		priority_queue<ObLine, vector<ObLine>, greater<ObLine>>	edgePq;
+		unordered_map<int, bool>	visited;
+		vector<ObLine>				linesTriangulated;
+		vector<ObLine>				linesMST;
+		// Passage
+		map<ObNode, int>			nodesForRoomIndex;
+		vector<Tile*>				way;
 	};
 }

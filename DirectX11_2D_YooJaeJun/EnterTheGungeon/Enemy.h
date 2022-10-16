@@ -2,6 +2,15 @@
 
 namespace Gungeon
 {
+	enum class EnemyFireState
+	{
+		none,
+		z,
+		circle,
+		target,
+		toWalk
+	};
+
 	class Enemy : public Unit
 	{
 	public:
@@ -26,15 +35,16 @@ namespace Gungeon
 		virtual void ColToggle() override;
 
 	private:
-		float		timeSetMoveDir;
-		float		timeSetTargetDir;
-		float		pushedScalar;
-		float		timeAiming;
+		float		timeSetMoveDir = 0.0f;
+		float		timeSetTargetDir = 0.0f;
+		float		pushedScalar = 400.0f;
+		float		timeAiming = 0.0f;
 
 	protected:
 
 	public:
-		float		timeSetDir;
-		Weapon*		weapon;
+		float			timeSetDir = 0.0f;
+		Weapon*			weapon = nullptr;
+		EnemyFireState	fireState = EnemyFireState::none;
 	};
 }

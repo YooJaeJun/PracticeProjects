@@ -90,6 +90,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TileMapEditor", "TileMapEdi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IsoTileMapEditor", "IsoTileMapEditor\IsoTileMapEditor.vcxproj", "{A005309C-DC69-467D-8376-CC4CB337535B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DanmakuEditor", "DanmakuEditor\DanmakuEditor.vcxproj", "{E2666A6D-40A9-4666-906B-5F71EB313A0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -186,6 +188,14 @@ Global
 		{A005309C-DC69-467D-8376-CC4CB337535B}.Release|x64.Build.0 = Release|x64
 		{A005309C-DC69-467D-8376-CC4CB337535B}.Release|x86.ActiveCfg = Release|Win32
 		{A005309C-DC69-467D-8376-CC4CB337535B}.Release|x86.Build.0 = Release|Win32
+		{E2666A6D-40A9-4666-906B-5F71EB313A0C}.Debug|x64.ActiveCfg = Debug|x64
+		{E2666A6D-40A9-4666-906B-5F71EB313A0C}.Debug|x64.Build.0 = Debug|x64
+		{E2666A6D-40A9-4666-906B-5F71EB313A0C}.Debug|x86.ActiveCfg = Debug|Win32
+		{E2666A6D-40A9-4666-906B-5F71EB313A0C}.Debug|x86.Build.0 = Debug|Win32
+		{E2666A6D-40A9-4666-906B-5F71EB313A0C}.Release|x64.ActiveCfg = Release|x64
+		{E2666A6D-40A9-4666-906B-5F71EB313A0C}.Release|x64.Build.0 = Release|x64
+		{E2666A6D-40A9-4666-906B-5F71EB313A0C}.Release|x86.ActiveCfg = Release|Win32
+		{E2666A6D-40A9-4666-906B-5F71EB313A0C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

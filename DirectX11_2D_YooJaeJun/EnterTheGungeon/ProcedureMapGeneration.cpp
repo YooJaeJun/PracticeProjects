@@ -11,13 +11,7 @@ namespace Gungeon
     {
         MAP->useGui = true;
 
-        timer = 0.0f;
-
-        state = MapGenState::spray;
-
         LIGHT->light.radius = 4000.0f;
-
-        flagSpread = false;
 
         // room
         candidateRooms = vector<Room*>(roomMax);
@@ -319,19 +313,19 @@ namespace Gungeon
         {
             ObLine curLine = edgePq.top();
             // 노드의 인덱스를 검사
-            curLine.v.index = triangulation.nodesForIndex[curLine.v];
-            curLine.w.index = triangulation.nodesForIndex[curLine.w];
+            curLine.SetVIdx(triangulation.nodesForIndex[curLine.V()]);
+            curLine.SetWIdx(triangulation.nodesForIndex[curLine.W()]);
 
             edgePq.pop();
 
-            if (visited[curLine.v.index] && visited[curLine.w.index]) continue;
-            visited[curLine.v.index] = true;
-            visited[curLine.w.index] = true;
+            if (visited[curLine.V().index] && visited[curLine.W().index]) continue;
+            visited[curLine.V().index] = true;
+            visited[curLine.W().index] = true;
 
             curLine.color = Color(0.5f, 1.0f, 0.5f);
             linesMST.push_back(curLine);
 
-            auto push = [&](ObNode& node)
+            auto push = [&](const ObNode& node)
             {
                 int size = triangulation.nodesLinked[node].size();
                 ObNode nextNode;
@@ -342,8 +336,8 @@ namespace Gungeon
                     edgePq.push(ObLine(node, nextNode));
                 }
             };
-            push(curLine.v);
-            push(curLine.w);
+            push(curLine.V());
+            push(curLine.W());
         }
     }
 
@@ -357,8 +351,8 @@ namespace Gungeon
             bool flag = false;
             for (auto& elem : linesMST)
             {
-                if ((elem.v == linesTriangulated[rand].v && elem.w == linesTriangulated[rand].w) ||
-                    (elem.v == linesTriangulated[rand].w && elem.w == linesTriangulated[rand].v))
+                if ((elem.V() == linesTriangulated[rand].V() && elem.W() == linesTriangulated[rand].W()) ||
+                    (elem.V() == linesTriangulated[rand].W() && elem.W() == linesTriangulated[rand].V()))
                 {
                     count++;
                     flag = true;
@@ -368,8 +362,8 @@ namespace Gungeon
             if (false == flag)
             {
                 // 노드의 인덱스를 검사
-                linesTriangulated[rand].v.index = triangulation.nodesForIndex[linesTriangulated[rand].v];
-                linesTriangulated[rand].w.index = triangulation.nodesForIndex[linesTriangulated[rand].w];
+                linesTriangulated[rand].SetVIdx(triangulation.nodesForIndex[linesTriangulated[rand].V()]);
+                linesTriangulated[rand].SetWIdx(triangulation.nodesForIndex[linesTriangulated[rand].W()]);
 
                 linesTriangulated[rand].color = Color(0.5f, 0.5f, 1.0f);
                 linesMST.push_back(linesTriangulated[rand]);
@@ -478,13 +472,13 @@ namespace Gungeon
         {
             for (int roomIndex = 0; roomIndex < selectedRooms.size(); roomIndex++)
             {
-                Vector2 v = Vector2(elem.v.x, elem.v.y);
+                Vector2 v = Vector2(elem.V().x, elem.V().y);
                 if (almostEqualVector2(v, selectedRooms[roomIndex]->Pos()))
                 {
                     nodesForRoomIndex[v] = roomIndex;
                 }
 
-                Vector2 w = Vector2(elem.w.x, elem.w.y);
+                Vector2 w = Vector2(elem.W().x, elem.W().y);
                 if (almostEqualVector2(w, selectedRooms[roomIndex]->Pos()))
                 {
                     nodesForRoomIndex[w] = roomIndex;
@@ -646,8 +640,8 @@ namespace Gungeon
         // 시작
         for (auto& elem : linesMST)
         {
-            const ObNode& v = elem.v;
-            const ObNode& w = elem.w;
+            const ObNode& v = elem.V();
+            const ObNode& w = elem.W();
 
             ObNode mid = ObNode((w.x + v.x) / 2.0f, (w.y + v.y) / 2.0f);
 

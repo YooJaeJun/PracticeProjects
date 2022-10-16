@@ -5,11 +5,6 @@ namespace Gungeon
 	class Scene01 : public Scene
 	{
 	public:
-		ProcedureMapGeneration* mapGen;
-		bool					isChangingScene;
-		float					timeFade;
-
-	public:
 		Scene01();
 		~Scene01();
 
@@ -21,5 +16,10 @@ namespace Gungeon
 		virtual void ResizeScreen() override;
 
 		void ChangeUpdateScene();
+
+	public:
+		ProcedureMapGeneration* mapGen = nullptr;
+		bool					isChangingScene = false;
+		float					timeFade = 0.0f;
 	};
 }

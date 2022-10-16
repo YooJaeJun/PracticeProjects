@@ -32,16 +32,16 @@ namespace Gungeon
 		virtual void ColToggle();
 
 	public:
-		GameObject*		col;
-		ObRect*			colTile;
-		State			state;
-		Vector2			moveDir;
-		float			scalar;
-		int				curHp;
-		int				maxHp;
-		bool			isHit;
+		GameObject*	col = nullptr;
+		ObRect*		colTile = nullptr;
+		State		state = State::idle;
+		Vector2		moveDir = Vector2(0.0f, 0.0f);
+		float		scalar = 0.0f;
+		int			curHp = 0;
+		int			maxHp = 0;
+		bool		isHit = false;
 
 	private:
-		Int2			on;
+		Int2		on = Int2(0, 0);
 	};
 }

@@ -4,7 +4,6 @@ namespace Gungeon
 {
     UI::UI()
     {
-        anchor = Anchor::none;
     }
 
     void UI::Release()

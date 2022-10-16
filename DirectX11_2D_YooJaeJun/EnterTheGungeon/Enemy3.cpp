@@ -19,15 +19,6 @@ namespace Gungeon
 	{
 		curHp = maxHp = 3;
 		scalar = 100.0f;
-		timeBulletTarget = 0.0f;
-		spawnPos = Vector2(0.0f, 0.0f);
-		timeBulletZ = 0.0f;
-		timeBulletCircle = 0.0f;
-		timeAttackToWalk = 0.0f;
-		curBulletIdx = 0;
-		curBulletX = 0;
-		curBulletY = 0;
-		fireState = FireState::none;
 	}
 
 	void Enemy3::InitSelf()
@@ -129,7 +120,7 @@ namespace Gungeon
 	{
 		switch (fireState)
 		{
-		case Gungeon::FireState::none:
+		case Gungeon::EnemyFireState::none:
 
 			if (TIMER->GetTick(timeFire, 1.0f))
 			{
@@ -145,7 +136,7 @@ namespace Gungeon
 
 				AttackStart();
 				state = State::attack;
-				fireState = FireState::z;
+				fireState = EnemyFireState::z;
 			}
 
 			break;
@@ -156,7 +147,7 @@ namespace Gungeon
 	{
 		switch (fireState)
 		{
-		case Gungeon::FireState::z:
+		case Gungeon::EnemyFireState::z:
 
 			if (TIMER->GetTick(timeBulletZ, 0.05f))
 			{
@@ -169,7 +160,7 @@ namespace Gungeon
 						{
 							curBulletY = 0;
 							AttackEnd();
-							fireState = FireState::circle;
+							fireState = EnemyFireState::circle;
 						}
 					}
 					curBulletIdx++;
@@ -189,7 +180,7 @@ namespace Gungeon
 
 			break;
 
-		case Gungeon::FireState::circle:
+		case Gungeon::EnemyFireState::circle:
 
 			if (TIMER->GetTick(timeBulletCircle, 0.05f))
 			{
@@ -200,13 +191,13 @@ namespace Gungeon
 				if (curBulletIdx >= bulletMax)
 				{
 					curBulletIdx = 0;
-					fireState = FireState::target;
+					fireState = EnemyFireState::target;
 				}
 			}
 
 			break;
 
-		case Gungeon::FireState::target:
+		case Gungeon::EnemyFireState::target:
 
 			for (auto& elem : bullet)
 			{
@@ -214,17 +205,17 @@ namespace Gungeon
 				elem->moveDir = targetDir;
 			}
 
-			fireState = FireState::toWalk;
+			fireState = EnemyFireState::toWalk;
 
 			break;
 
-		case Gungeon::FireState::toWalk:
+		case Gungeon::EnemyFireState::toWalk:
 
 			if (TIMER->GetTick(timeAttackToWalk, 1.5f))
 			{
 				AttackToWalk();
 				state = State::walk;
-				fireState = FireState::none;
+				fireState = EnemyFireState::none;
 			}
 
 			break;

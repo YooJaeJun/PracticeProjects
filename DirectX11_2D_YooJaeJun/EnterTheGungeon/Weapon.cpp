@@ -4,8 +4,6 @@ namespace Gungeon
 {
 	Weapon::Weapon()
 	{
-		timeFireEffect = 0.0f;
-
 		col = new ObRect;
 		col->isFilled = false;
 		col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);

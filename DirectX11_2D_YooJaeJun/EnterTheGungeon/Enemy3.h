@@ -2,15 +2,6 @@
 
 namespace Gungeon
 {
-	enum class FireState
-	{
-		none,
-		z,
-		circle,
-		target,
-		toWalk
-	};
-
 	class Enemy3 : public Enemy
 	{
 	public:
@@ -29,14 +20,13 @@ namespace Gungeon
 
 	public:
 		const int			bulletMax = 43;
-		FireState			fireState;
-		float				timeBulletTarget;
+		float				timeBulletTarget = 0.0f;
 		Vector2				spawnPos;
-		float				timeBulletZ;
-		float				timeBulletCircle;
-		float				timeAttackToWalk;
-		int					curBulletIdx;
-		int					curBulletX;
-		int					curBulletY;
+		float				timeBulletZ = 0.0f;
+		float				timeBulletCircle = 0.0f;
+		float				timeAttackToWalk = 0.0f;
+		int					curBulletIdx = 0;
+		int					curBulletX = 0;
+		int					curBulletY = 0;
 	};
 }

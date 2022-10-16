@@ -32,8 +32,8 @@ namespace Gungeon
 		bool DownGauge();
 
 	public:
-		ObImage*	img;
-		Anchor		anchor;
+		ObImage*	img = nullptr;
+		Anchor		anchor = Anchor::none;
 		Vector2		imgSize;
 	};
 }

@@ -5,13 +5,6 @@ namespace Gungeon
 	class Scene03 : public Scene
 	{
 	public:
-		bool		isChangingScene;
-		float		timeFade;
-		Room*		curRoom;
-		Player*		player;
-		Boss*		boss;
-
-	public:
 		Scene03();
 		~Scene03();
 
@@ -26,5 +19,12 @@ namespace Gungeon
 		void IntersectBoss();
 		void ChangeUpdateScene();
 		void ColToggle();
+
+	public:
+		bool		isChangingScene = false;
+		float		timeFade = 0.0f;
+		Room*		curRoom = nullptr;
+		Player*		player = nullptr;
+		Boss*		boss = nullptr;
 	};
 }

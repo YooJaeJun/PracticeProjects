@@ -9,28 +9,16 @@ namespace Gungeon
 
 	void Enemy::Init()
 	{
-		InitVar();
 		InitSelf();
 		InitItem();
 	}
 
 	void Enemy::InitVar()
 	{
-		timeFire = 0.0f;
-		timeHit = 0.0f;
-		isHit = false;
-		isHitAnim = false;
-		timeHitAnim = 0.0f;
-		timeSetMoveDir = 0.0f;
-		timeSetTargetDir = 0.0f;
-		pushedScalar = 400.0f;
-		timeAiming = 0.0f;
 	}
 
 	void Enemy::InitSelf()
 	{
-		int idx = 0;
-
 		state = State::die;
 
 		col = new ObCircle;
@@ -231,8 +219,6 @@ namespace Gungeon
 		{
 			die->reverseLR = false;
 		}
-
-		pushedScalar = 400.0f;
 
 		dropItem->Spawn(Pos());
 		dropItem->idle->isVisible = true;

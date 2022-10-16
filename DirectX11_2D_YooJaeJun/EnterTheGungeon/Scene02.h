@@ -2,7 +2,7 @@
 
 namespace Gungeon
 {
-	const int enemyMax = 3;
+	const int enemyMax = 4;
 	const int bossMax = 1;
 	const int doorMax = 5;
 
@@ -47,21 +47,21 @@ namespace Gungeon
 		void ColToggle();
 
 	public:
-		ProcedureMapGeneration* mapGen;
-		Player*					player;
+		ProcedureMapGeneration* mapGen = nullptr;
+		Player*					player = nullptr;
 
 	private:
-		Room*					curRoom;
-		GameState				gameState;
+		Room*					curRoom = nullptr;
+		GameState				gameState = GameState::start;
 		Enemy*					enemy[enemyMax];
-		bool					isChangingScene;
-		float					timeFade;
+		bool					isChangingScene = false;
+		float					timeFade = 0.0f;
 		vector<Effect*>			spawnEffect;
-		int						afterRoomIdx;
-		int						curRoomIdx;
-		int						roomClearCount;
-		int						roomClearCountForBossBattle;
-		Gate*					gate;
+		int						afterRoomIdx = -2;
+		int						curRoomIdx = 0;
+		int						roomClearCount = 0;
+		int						roomClearCountForBossBattle = 1;
+		Gate*					gate = nullptr;
 		ObRect*					cinematicBox[2];
 		vector<Door*>			door;
 	};

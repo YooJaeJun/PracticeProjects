@@ -12,7 +12,7 @@ namespace Gungeon
 		void Render();
 
 	public:
-		ObImage*	idle;
-		bool		isOpen;
+		ObImage*	idle = nullptr;
+		bool		isOpen = false;
 	};
 }

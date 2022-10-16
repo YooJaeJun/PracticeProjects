@@ -27,19 +27,19 @@ namespace Gungeon
 		void SwapUvY();
 
 	public:
-		GameObject* firePos;
-		Effect*		fireEffect;
-		float		timeFireEffect;
+		GameObject* firePos = nullptr;
+		Effect*		fireEffect = nullptr;
+		float		timeFireEffect = 0.0f;
 		Vector2		pivotDefault;
 		Vector2		localPosDefault;
 		Vector2		localFirePosDefault;
-		ObImage*	imgReloading;
-		UI*			uiWeaponFrame;
-		UI*			uiWeapon;
-		UI*			uiBulletFrame;
+		ObImage*	imgReloading = nullptr;
+		UI*			uiWeaponFrame = nullptr;
+		UI*			uiWeapon = nullptr;
+		UI*			uiBulletFrame = nullptr;
 		vector<UI*>	uiBullet;
-		UI*			uiBulletCount;
-		int			bulletCount;
-		WeaponType	type;
+		UI*			uiBulletCount = nullptr;
+		int			bulletCount = 0;
+		WeaponType	type = WeaponType::pistol;
 	};
 }

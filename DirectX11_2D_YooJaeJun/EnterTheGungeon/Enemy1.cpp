@@ -19,7 +19,6 @@ namespace Gungeon
 	{
 		curHp = maxHp = 3;
 		scalar = 80.0f;
-		curBulletIdx = 0;
 	}
 
 	void Enemy1::InitSelf()

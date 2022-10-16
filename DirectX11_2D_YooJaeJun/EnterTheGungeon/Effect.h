@@ -15,8 +15,8 @@ namespace Gungeon
 		void Die();
 
 	public:
-		ObImage*	idle;
-		float		timeDie;
-		float		intervalDie;
+		ObImage*	idle = nullptr;
+		float		timeDie = 0.0f;
+		float		intervalDie = 0.5f;
 	};
 }

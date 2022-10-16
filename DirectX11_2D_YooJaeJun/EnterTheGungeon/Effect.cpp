@@ -5,8 +5,6 @@ namespace Gungeon
 	Effect::Effect()
 	{
 		state = State::die;
-		timeDie = 0.0f;
-		intervalDie = 0.5f;
 	}
 
 	void Effect::Release()

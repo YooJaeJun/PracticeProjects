@@ -19,6 +19,6 @@ namespace Gungeon
 
 	public:
 		const int	bulletMax = 5;
-		int			curBulletIdx;
+		int			curBulletIdx = 0;
 	};
 }

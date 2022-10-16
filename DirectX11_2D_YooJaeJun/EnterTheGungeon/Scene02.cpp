@@ -16,16 +16,9 @@ namespace Gungeon
     {
         MAP->useGui = false;
 
-        curRoom = nullptr;
-        curRoomIdx = 0;
-        afterRoomIdx = -2;
-        roomClearCount = 0;
-        roomClearCountForBossBattle = 1;
-
         if (!player) player = new Player();
 
         spawnEffect.resize(enemyMax);
-        int idx = 0;
         for (auto& elem : spawnEffect)
         {
             if (!elem)
@@ -38,7 +31,6 @@ namespace Gungeon
                 elem->idle->isVisible = false;
                 elem->intervalDie = 1.8f;
             }
-            idx++;
         }
 
         SpawnEnemy();
@@ -59,9 +51,6 @@ namespace Gungeon
             elem->idle->pivot = OFFSET_LB;
         }
         
-
-        isChangingScene = false;
-        timeFade = 0.0f;
         SOUND->Stop("SCENE01");
         // SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
         SOUND->Play("SCENE02");
@@ -290,17 +279,14 @@ namespace Gungeon
                 flagCleared = false;
 
                 elem->targetPos = player->Pos();
-                
-                if (Enemy3* tempEnemy = dynamic_cast<Enemy3*>(elem))
+
+                switch (elem->fireState)
                 {
-                    switch (tempEnemy->fireState)
-                    {
-                    case Gungeon::FireState::none:
-                        elem->FindPath(MAP->tilemap);
-                        break;
-                    default:
-                        break;
-                    }
+                case Gungeon::EnemyFireState::none:
+                    elem->FindPath(MAP->tilemap);
+                    break;
+                default:
+                    break;
                 }
             }
         }
@@ -364,9 +350,9 @@ namespace Gungeon
         for (auto& elem : enemy)
         {
             SafeRelease(elem);
-            int r = RANDOM->Int(0, 5);
-            if (r > 0) elem = new Enemy3();
-            else if (r == 1) elem = new Enemy1();
+            int r = RANDOM->Int(0, 6);
+            if (r < 2) elem = new Enemy3();
+            else if (r < 4) elem = new Enemy1();
             else elem = new Enemy2();
             if (curRoom) elem->Spawn(curRoom->enemySpawnPos[idx]);
             idx++;

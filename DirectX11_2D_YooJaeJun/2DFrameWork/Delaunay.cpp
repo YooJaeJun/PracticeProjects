@@ -67,7 +67,7 @@ const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<ObNode>& nodes)
 			}), end(polygon));
 
 		for (const auto& e : polygon)
-			triangles.push_back(ObTriangle(e.v, e.w, p));
+			triangles.push_back(ObTriangle(e.V(), e.W(), p));
 	}
 
 	triangles.erase(std::remove_if(begin(triangles), end(triangles), [p1, p2, p3](ObTriangle& t) {

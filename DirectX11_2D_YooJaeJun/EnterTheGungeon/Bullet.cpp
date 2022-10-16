@@ -6,11 +6,6 @@ namespace Gungeon
     {
         col = new ObCircle();
         col->isFilled = false;
-
-        isFired = false;
-        damage = 1;
-        moveDir = Vector2(0.0f, 0.0f);
-        timeRespawn = 0.0f;
     }
 
     void Bullet::Release()

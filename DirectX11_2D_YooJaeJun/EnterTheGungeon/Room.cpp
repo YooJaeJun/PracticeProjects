@@ -9,10 +9,6 @@ namespace Gungeon
 
     void Room::Init()
     {
-        selected = false;
-        cleared = false;
-        roomType = RoomType::enemy;
-        
         col = new ObRect();
     }
 

@@ -18,15 +18,13 @@ namespace Gungeon
 		virtual void Reload();
 
 	public:
-		ObImage*	idle;
-		bool		isFired;
+		ObImage*	idle = nullptr;
+		bool		isFired = false;
 		Vector2		moveDir;
-		int			damage;
-		float		timeRespawn;
-		Effect*		hitBomb;
-
-	public:
-		float angle;
-		float atkAngle;
+		int			damage = 1;
+		float		timeRespawn = 0.0f;
+		Effect*		hitBomb = nullptr;
+		float		angle = 0.0f;
+		float		atkAngle = 0.0f;
 	};
 }

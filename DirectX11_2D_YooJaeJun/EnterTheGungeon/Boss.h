@@ -66,23 +66,23 @@ namespace Gungeon
 		void UpdateRand();
 
 	public:
-		Weapon*				weapon;
-		UI*					hpGuageBar;
-		UI*					hpGuage;
+		Weapon*				weapon = nullptr;
+		UI*					hpGuageBar = nullptr;
+		UI*					hpGuage = nullptr;
 		vector<Bullet*>		bullet;
-		BossPattern         pattern;
+		BossPattern         pattern = BossPattern::none;
 		StringBulletData    stringBullet;
 		Vector2				bulletSpawnPos;
 		Vector2				bulletSpawnDir;
-		float				timeSetMoveDir;
-		float				timeSetTargetDir;
-		float				timeSpiral;
-		float				curSpiralIdx;
-		bool				flagSpiralRespawn;
-		float				timeCluster;
-		float				timeBrute;
-		int					curBruteIdx;
-		float				timeRand;
-		int					curRandIdx;
+		float				timeSetMoveDir = 0.0f;
+		float				timeSetTargetDir = 0.0f;
+		float				timeSpiral = 0.0f;
+		float				curSpiralIdx = 0.0f;
+		bool				flagSpiralRespawn = false;
+		float				timeCluster = 0.0f;
+		float				timeBrute = 0.0f;
+		int					curBruteIdx = 0;
+		float				timeRand = 0.0f;
+		int					curRandIdx = 0;
 	};
 }

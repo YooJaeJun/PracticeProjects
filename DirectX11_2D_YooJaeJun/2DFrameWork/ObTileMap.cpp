@@ -68,66 +68,66 @@ void ObTileMap::CreateTileCost()
 }
 
 //사이즈 재조정, 정정 재조정
-void ObTileMap::ResizeTile(Int2 TileSize)
+void ObTileMap::ResizeTile(Int2 newTileSize)
 {
-    VertexTile* Vertices = new VertexTile[TileSize.x * TileSize.y * 6];
+    VertexTile* newVertices = new VertexTile[newTileSize.x * newTileSize.y * 6];
 
     //세로
-    for (int i = 0; i < TileSize.y; i++)
+    for (int i = 0; i < newTileSize.y; i++)
     {
         //가로
-        for (int j = 0; j < TileSize.x; j++)
+        for (int j = 0; j < newTileSize.x; j++)
         {
-            int tileIdx = TileSize.x * i + j;
+            int tileIdx = newTileSize.x * i + j;
             //0
-            Vertices[tileIdx * 6].position.x = 0.0f + j;
-            Vertices[tileIdx * 6].position.y = 0.0f + i;
-            Vertices[tileIdx * 6].uv = Vector2(0.0f, 1.0f);
+            newVertices[tileIdx * 6].position.x = 0.0f + j;
+            newVertices[tileIdx * 6].position.y = 0.0f + i;
+            newVertices[tileIdx * 6].uv = Vector2(0.0f, 1.0f);
             //1                             
-            Vertices[tileIdx * 6 + 1].position.x = 0.0f + j;
-            Vertices[tileIdx * 6 + 1].position.y = 1.0f + i;
-            Vertices[tileIdx * 6 + 1].uv = Vector2(0.0f, 0.0f);
+            newVertices[tileIdx * 6 + 1].position.x = 0.0f + j;
+            newVertices[tileIdx * 6 + 1].position.y = 1.0f + i;
+            newVertices[tileIdx * 6 + 1].uv = Vector2(0.0f, 0.0f);
             //2                             
-            Vertices[tileIdx * 6 + 2].position.x = 1.0f + j;
-            Vertices[tileIdx * 6 + 2].position.y = 0.0f + i;
-            Vertices[tileIdx * 6 + 2].uv = Vector2(1.0f, 1.0f);
+            newVertices[tileIdx * 6 + 2].position.x = 1.0f + j;
+            newVertices[tileIdx * 6 + 2].position.y = 0.0f + i;
+            newVertices[tileIdx * 6 + 2].uv = Vector2(1.0f, 1.0f);
             //3
-            Vertices[tileIdx * 6 + 3].position.x = 1.0f + j;
-            Vertices[tileIdx * 6 + 3].position.y = 1.0f + i;
-            Vertices[tileIdx * 6 + 3].uv = Vector2(1.0f, 0.0f);
+            newVertices[tileIdx * 6 + 3].position.x = 1.0f + j;
+            newVertices[tileIdx * 6 + 3].position.y = 1.0f + i;
+            newVertices[tileIdx * 6 + 3].uv = Vector2(1.0f, 0.0f);
             //4
-            Vertices[tileIdx * 6 + 4].position.x = 1.0f + j;
-            Vertices[tileIdx * 6 + 4].position.y = 0.0f + i;
-            Vertices[tileIdx * 6 + 4].uv = Vector2(1.0f, 1.0f);
+            newVertices[tileIdx * 6 + 4].position.x = 1.0f + j;
+            newVertices[tileIdx * 6 + 4].position.y = 0.0f + i;
+            newVertices[tileIdx * 6 + 4].uv = Vector2(1.0f, 1.0f);
             //5
-            Vertices[tileIdx * 6 + 5].position.x = 0.0f + j;
-            Vertices[tileIdx * 6 + 5].position.y = 1.0f + i;
-            Vertices[tileIdx * 6 + 5].uv = Vector2(0.0f, 0.0f);
+            newVertices[tileIdx * 6 + 5].position.x = 0.0f + j;
+            newVertices[tileIdx * 6 + 5].position.y = 1.0f + i;
+            newVertices[tileIdx * 6 + 5].uv = Vector2(0.0f, 0.0f);
         }
     }
 
     //Copy
     if (vertices)
     {
-        Int2 Min = Int2(min(TileSize.x, tileSize.x), min(TileSize.y, tileSize.y));
+        Int2 Min = Int2(min(newTileSize.x, tileSize.x), min(newTileSize.y, tileSize.y));
         for (int i = 0; i < Min.y; i++)
         {
             for (int j = 0; j < Min.x; j++)
             {
                 int SrcIdx = tileSize.x * i + j;
-                int DestIdx = TileSize.x * i + j;
+                int DestIdx = newTileSize.x * i + j;
 
                 for (int k = 0; k < 6; k++)
                 {
-                    Vertices[DestIdx * 6 + k] = vertices[SrcIdx * 6 + k];
+                    newVertices[DestIdx * 6 + k] = vertices[SrcIdx * 6 + k];
                 }
             }
         }
     }
 
     SafeDeleteArray(vertices);
-    vertices = Vertices;
-    tileSize = TileSize;
+    vertices = newVertices;
+    tileSize = newTileSize;
 
     SafeRelease(vertexBuffer);
     //CreateVertexBuffer
@@ -144,22 +144,22 @@ void ObTileMap::ResizeTile(Int2 TileSize)
     }
 }
 
-void ObTileMap::RenderGui(Int2& GuiPickingIdx, int& ImgIdx)
+void ObTileMap::RenderGui(Int2& guiPickingIdx, int& imgIdx)
 {
-    if (ImGui::InputInt("ImgIdx", &ImgIdx))
+    if (ImGui::InputInt("ImgIdx", &imgIdx))
     {
-        if (ImgIdx > imageCount - 1)
+        if (imgIdx > imageCount - 1)
         {
-            ImgIdx = 0; //첫번째이미지로 돌리기
+            imgIdx = 0; //첫번째이미지로 돌리기
         }
-        else if (ImgIdx < 0)
+        else if (imgIdx < 0)
         {
             //마지막 이미지로 돌리기
-            ImgIdx = imageCount - 1;
+            imgIdx = imageCount - 1;
         }
     }
 
-    Int2 MF = tileImages[ImgIdx]->maxFrame;
+    Int2 MF = tileImages[imgIdx]->maxFrame;
     ImVec2 size;
     size.x = 200.0f / (float)MF.x;
     size.y = 200.0f / (float)MF.y;
@@ -185,10 +185,10 @@ void ObTileMap::RenderGui(Int2& GuiPickingIdx, int& ImgIdx)
             RB.y = 1.0f / MF.y * (i + 1);
 
             ImGui::PushID(index);
-            if (ImGui::ImageButton((void*)tileImages[ImgIdx]->SRV, size, LT, RB))
+            if (ImGui::ImageButton((void*)tileImages[imgIdx]->SRV, size, LT, RB))
             {
-                GuiPickingIdx.x = j;
-                GuiPickingIdx.y = i;
+                guiPickingIdx.x = j;
+                guiPickingIdx.y = i;
             }
             index++;
             ImGui::PopID();
@@ -221,47 +221,47 @@ void ObTileMap::Render()
     D3D->GetDC()->Draw(tileSize.x * tileSize.y * 6, 0);
 }
 
-void ObTileMap::SetTile(Int2 TileIdx, Int2 FrameIdx, int ImgIdx, int TileState, Color color, int roomIdx, DirState dir)
+void ObTileMap::SetTile(Int2 tileIdx, Int2 frameIdx, int imgIdx, int tileState, Color color, int roomIdx, DirState dir)
 {
-    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
+    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
 
-    vertices[tileIdx * 6 + 0].uv.x = FrameIdx.x / (float)tileImages[ImgIdx]->maxFrame.x;
-    vertices[tileIdx * 6 + 1].uv.x = FrameIdx.x / (float)tileImages[ImgIdx]->maxFrame.x;
-    vertices[tileIdx * 6 + 5].uv.x = FrameIdx.x / (float)tileImages[ImgIdx]->maxFrame.x;
+    vertices[verticeIdx * 6 + 0].uv.x = frameIdx.x / (float)tileImages[imgIdx]->maxFrame.x;
+    vertices[verticeIdx * 6 + 1].uv.x = frameIdx.x / (float)tileImages[imgIdx]->maxFrame.x;
+    vertices[verticeIdx * 6 + 5].uv.x = frameIdx.x / (float)tileImages[imgIdx]->maxFrame.x;
 
-    vertices[tileIdx * 6 + 2].uv.x = (FrameIdx.x + 1.0f) / (float)tileImages[ImgIdx]->maxFrame.x;
-    vertices[tileIdx * 6 + 3].uv.x = (FrameIdx.x + 1.0f) / (float)tileImages[ImgIdx]->maxFrame.x;
-    vertices[tileIdx * 6 + 4].uv.x = (FrameIdx.x + 1.0f) / (float)tileImages[ImgIdx]->maxFrame.x;
+    vertices[verticeIdx * 6 + 2].uv.x = (frameIdx.x + 1.0f) / (float)tileImages[imgIdx]->maxFrame.x;
+    vertices[verticeIdx * 6 + 3].uv.x = (frameIdx.x + 1.0f) / (float)tileImages[imgIdx]->maxFrame.x;
+    vertices[verticeIdx * 6 + 4].uv.x = (frameIdx.x + 1.0f) / (float)tileImages[imgIdx]->maxFrame.x;
 
-    vertices[tileIdx * 6 + 3].uv.y = FrameIdx.y / (float)tileImages[ImgIdx]->maxFrame.y;
-    vertices[tileIdx * 6 + 1].uv.y = FrameIdx.y / (float)tileImages[ImgIdx]->maxFrame.y;
-    vertices[tileIdx * 6 + 5].uv.y = FrameIdx.y / (float)tileImages[ImgIdx]->maxFrame.y;
+    vertices[verticeIdx * 6 + 3].uv.y = frameIdx.y / (float)tileImages[imgIdx]->maxFrame.y;
+    vertices[verticeIdx * 6 + 1].uv.y = frameIdx.y / (float)tileImages[imgIdx]->maxFrame.y;
+    vertices[verticeIdx * 6 + 5].uv.y = frameIdx.y / (float)tileImages[imgIdx]->maxFrame.y;
 
-    vertices[tileIdx * 6 + 2].uv.y = (FrameIdx.y + 1.0f) / (float)tileImages[ImgIdx]->maxFrame.y;
-    vertices[tileIdx * 6 + 0].uv.y = (FrameIdx.y + 1.0f) / (float)tileImages[ImgIdx]->maxFrame.y;
-    vertices[tileIdx * 6 + 4].uv.y = (FrameIdx.y + 1.0f) / (float)tileImages[ImgIdx]->maxFrame.y;
+    vertices[verticeIdx * 6 + 2].uv.y = (frameIdx.y + 1.0f) / (float)tileImages[imgIdx]->maxFrame.y;
+    vertices[verticeIdx * 6 + 0].uv.y = (frameIdx.y + 1.0f) / (float)tileImages[imgIdx]->maxFrame.y;
+    vertices[verticeIdx * 6 + 4].uv.y = (frameIdx.y + 1.0f) / (float)tileImages[imgIdx]->maxFrame.y;
 
     for (int i = 0; i < 6; i++)
     {
-        vertices[tileIdx * 6 + i].tileMapIdx = ImgIdx;
-        vertices[tileIdx * 6 + i].color = color;
-        vertices[tileIdx * 6 + i].tileState = TileState;
-        vertices[tileIdx * 6 + i].tileRoomIdx = roomIdx;
-        vertices[tileIdx * 6 + i].tileDir = dir;
+        vertices[verticeIdx * 6 + i].tileMapIdx = imgIdx;
+        vertices[verticeIdx * 6 + i].color = color;
+        vertices[verticeIdx * 6 + i].tileState = tileState;
+        vertices[verticeIdx * 6 + i].tileRoomIdx = roomIdx;
+        vertices[verticeIdx * 6 + i].tileDir = dir;
     }
 
     // SubResource - CPU와 GPU의 중간다리 역할
     D3D->GetDC()->UpdateSubresource(vertexBuffer, 0, NULL, vertices, 0, 0);
 }
 
-bool ObTileMap::WorldPosToTileIdx(Vector2 Wpos, Int2& TileIdx)
+bool ObTileMap::WorldPosToTileIdx(Vector2 wpos, Int2& tileIdx)
 {
-    Wpos -= GetWorldPos();
+    wpos -= GetWorldPos();
 
     Vector2 tileCoord;
 
-    tileCoord.x = Wpos.x / scale.x;
-    tileCoord.y = Wpos.y / scale.y;
+    tileCoord.x = wpos.x / scale.x;
+    tileCoord.y = wpos.y / scale.y;
 
     if ((tileCoord.x < 0) or (tileCoord.y < 0) or
         (tileCoord.x >= tileSize.x) or (tileCoord.y >= tileSize.y))
@@ -269,68 +269,61 @@ bool ObTileMap::WorldPosToTileIdx(Vector2 Wpos, Int2& TileIdx)
         return false;
     }
 
-    TileIdx.x = tileCoord.x;
-    TileIdx.y = tileCoord.y;
+    tileIdx.x = tileCoord.x;
+    tileIdx.y = tileCoord.y;
 
     return true;
 }
 
-Vector2 ObTileMap::TileIdxToWorldPos(Int2 TileIdx)
+Vector2 ObTileMap::TileIdxToWorldPos(Int2 tileIdx)
 {
     Vector2 Wpos;
-    Wpos.x = TileIdx.x * scale.x;
-    Wpos.y = TileIdx.y * scale.y;
+    Wpos.x = tileIdx.x * scale.x;
+    Wpos.y = tileIdx.y * scale.y;
     Wpos += GetWorldPos();
     return Wpos;
 }
 
-TileState ObTileMap::GetTileState(Int2 TileIdx)
+TileState ObTileMap::GetTileState(Int2 tileIdx)
 {
-    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
-
-    return static_cast<TileState>(vertices[tileIdx * 6].tileState);
+    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+    return static_cast<TileState>(vertices[verticeIdx * 6].tileState);
 }
 
-void ObTileMap::SetTileState(Int2 TileIdx, TileState tileState)
+void ObTileMap::SetTileState(Int2 tileIdx, TileState tileState)
 {
-    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
-
-    vertices[tileIdx * 6].tileState = static_cast<int>(tileState);
+    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+    vertices[verticeIdx * 6].tileState = static_cast<int>(tileState);
 }
 
-Vector2 ObTileMap::GetTilePosition(Int2 TileIdx)
+Vector2 ObTileMap::GetTilePosition(Int2 tileIdx)
 {
-    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
-
-    return Vector2(vertices[tileIdx * 6].position.x, vertices[tileIdx * 6].position.y);
+    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+    return Vector2(vertices[verticeIdx * 6].position.x, vertices[verticeIdx * 6].position.y);
 }
 
-int ObTileMap::GetTileRoomIndex(Int2 TileIdx)
+int ObTileMap::GetTileRoomIndex(Int2 tileIdx)
 {
-    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
-
-    return vertices[tileIdx * 6].tileRoomIdx;
+    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+    return vertices[verticeIdx * 6].tileRoomIdx;
 }
 
-void ObTileMap::SetTileRoomIndex(Int2 TileIdx, const int tileRoomIndex)
+void ObTileMap::SetTileRoomIndex(Int2 tileIdx, const int tileRoomIndex)
 {
-    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
-
-    vertices[tileIdx * 6].tileRoomIdx = tileRoomIndex;
+    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+    vertices[verticeIdx * 6].tileRoomIdx = tileRoomIndex;
 }
 
-DirState ObTileMap::GetTileDoorDir(Int2 TileIdx)
+DirState ObTileMap::GetTileDoorDir(Int2 tileIdx)
 {
-    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
-
-    return vertices[tileIdx * 6].tileDir;
+    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+    return vertices[verticeIdx * 6].tileDir;
 }
 
-void ObTileMap::SetTileDoorDir(Int2 TileIdx, const DirState doorDir)
+void ObTileMap::SetTileDoorDir(Int2 tileIdx, const DirState doorDir)
 {
-    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
-
-    vertices[tileIdx * 6].tileDir = doorDir;
+    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+    vertices[verticeIdx * 6].tileDir = doorDir;
 }
 
 void ObTileMap::Save()
@@ -372,13 +365,13 @@ void ObTileMap::Save()
         //가로
         for (int j = 0; j < tileSize.x; j++)
         {
-            int tileIdx = tileSize.x * i + j;
+            int verticeIdx = tileSize.x * i + j;
             fout << j << " " << i << " "
-                << vertices[tileIdx * 6 + 1].uv.x << " " << vertices[tileIdx * 6 + 1].uv.y << " "
-                << vertices[tileIdx * 6 + 2].uv.x << " " << vertices[tileIdx * 6 + 2].uv.y << " "
-                << vertices[tileIdx * 6].color.x << " " << vertices[tileIdx * 6].color.y << " "
-                << vertices[tileIdx * 6].color.z << " " << vertices[tileIdx * 6].color.w << " "
-                << vertices[tileIdx * 6].tileMapIdx << " " << vertices[tileIdx * 6].tileState << endl;
+                << vertices[verticeIdx * 6 + 1].uv.x << " " << vertices[verticeIdx * 6 + 1].uv.y << " "
+                << vertices[verticeIdx * 6 + 2].uv.x << " " << vertices[verticeIdx * 6 + 2].uv.y << " "
+                << vertices[verticeIdx * 6].color.x << " " << vertices[verticeIdx * 6].color.y << " "
+                << vertices[verticeIdx * 6].color.z << " " << vertices[verticeIdx * 6].color.w << " "
+                << vertices[verticeIdx * 6].tileMapIdx << " " << vertices[verticeIdx * 6].tileState << endl;
         }
     }
 
@@ -415,10 +408,10 @@ void ObTileMap::Load()
         }
     }
 
-    Int2 TileSize;
-    fin >> temp >> TileSize.x >> TileSize.y;
+    Int2 newTileSize;
+    fin >> temp >> newTileSize.x >> newTileSize.y;
 
-    ResizeTile(TileSize);
+    ResizeTile(newTileSize);
 
     fin >> temp >> scale.x >> scale.y;
 
@@ -431,25 +424,25 @@ void ObTileMap::Load()
         //가로
         for (int j = 0; j < tileSize.x; j++)
         {
-            int temp; Vector2 MinUV, MaxUV; Color color; float tileMapIdx, tileMapState;
+            int temp; Vector2 minUV, maxUV; Color color; float tileMapIdx, tileMapState;
 
-            fin >> temp >> temp >> MinUV.x >> MinUV.y >> MaxUV.x >> MaxUV.y
+            fin >> temp >> temp >> minUV.x >> minUV.y >> maxUV.x >> maxUV.y
                 >> color.x >> color.y >> color.z >> color.w >> tileMapIdx >> tileMapState;
 
-            int tileIdx = tileSize.x * i + j;
+            int verticeIdx = tileSize.x * i + j;
 
-            vertices[tileIdx * 6].uv = Vector2(MinUV.x, MaxUV.y);
-            vertices[tileIdx * 6 + 1].uv = Vector2(MinUV.x, MinUV.y);
-            vertices[tileIdx * 6 + 2].uv = Vector2(MaxUV.x, MaxUV.y);
-            vertices[tileIdx * 6 + 3].uv = Vector2(MaxUV.x, MinUV.y);
-            vertices[tileIdx * 6 + 4].uv = Vector2(MaxUV.x, MaxUV.y);
-            vertices[tileIdx * 6 + 5].uv = Vector2(MinUV.x, MinUV.y);
+            vertices[verticeIdx * 6].uv = Vector2(minUV.x, maxUV.y);
+            vertices[verticeIdx * 6 + 1].uv = Vector2(minUV.x, minUV.y);
+            vertices[verticeIdx * 6 + 2].uv = Vector2(maxUV.x, maxUV.y);
+            vertices[verticeIdx * 6 + 3].uv = Vector2(maxUV.x, minUV.y);
+            vertices[verticeIdx * 6 + 4].uv = Vector2(maxUV.x, maxUV.y);
+            vertices[verticeIdx * 6 + 5].uv = Vector2(minUV.x, minUV.y);
 
             for (int k = 0; k < 6; k++)
             {
-                vertices[tileIdx * 6 + k].color = color;
-                vertices[tileIdx * 6 + k].tileMapIdx = tileMapIdx;
-                vertices[tileIdx * 6 + k].tileState = tileMapState;
+                vertices[verticeIdx * 6 + k].color = color;
+                vertices[verticeIdx * 6 + k].tileMapIdx = tileMapIdx;
+                vertices[verticeIdx * 6 + k].tileState = tileMapState;
             }
         }
     }
