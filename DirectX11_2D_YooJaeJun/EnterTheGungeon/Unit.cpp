@@ -42,6 +42,8 @@ namespace Gungeon
 			break;
 		case Gungeon::State::die:
 			break;
+		case Gungeon::State::cinematic:
+			break;
 		default:
 			break;
 		}
@@ -156,6 +158,12 @@ namespace Gungeon
 			die->isVisible = true;
 
 			die->ChangeAnim(AnimState::once, 0.1f);
+
+			for (auto& elem : bullet)
+			{
+				elem->idle->isVisible = false;
+				elem->SetPos(DEFAULTSPAWN);
+			}
 		}
 	}
 
@@ -301,30 +309,5 @@ namespace Gungeon
 	void Unit::Stop()
 	{
 		moveDir = Vector2(0.0f, 0.0f);
-	}
-
-	void Unit::Attack()
-	{
-	}
-
-	void Unit::AttackStart()
-	{
-		idle->isVisible = false;
-		walk->isVisible = false;
-		attack->isVisible = true;
-		attack->ChangeAnim(AnimState::loop , 0.1f);
-	}
-
-	void Unit::AttackEnd()
-	{
-		attack->isVisible = false;
-		attackEnd->isVisible = true;
-		attackEnd->ChangeAnim(AnimState::once, 0.1f);
-	}
-
-	void Unit::AttackToWalk()
-	{
-		attackEnd->isVisible = false;
-		walk->isVisible = true;
 	}
 }

@@ -29,16 +29,24 @@ namespace Gungeon
     {
         switch (anchor)
         {
-        case Anchor::leftTop:
+        case DirState::dirLT:
             img->SetWorldPos(Vector2(-app.GetHalfWidth() + xFactor, app.GetHalfHeight() + yFactor));
             break;
-        case Anchor::leftBottom:
+        case DirState::dirLB:
             img->SetWorldPos(Vector2(-app.GetHalfWidth() + xFactor, -app.GetHalfHeight() + yFactor));
             break;
-        case Anchor::rightBottom:
+        case DirState::dirRT:
+            img->SetWorldPos(Vector2(app.GetHalfWidth() + xFactor, app.GetHalfHeight() + yFactor));
+            break;
+        case DirState::dirRB:
             img->SetWorldPos(Vector2(app.GetHalfWidth() + xFactor, -app.GetHalfHeight() + yFactor));
             break;
+        default:
+            img->SetWorldPos(Vector2(xFactor, yFactor));
+            break;
         }
+
+        img->isVisible = true;
     }
 
     bool UI::DownGauge()

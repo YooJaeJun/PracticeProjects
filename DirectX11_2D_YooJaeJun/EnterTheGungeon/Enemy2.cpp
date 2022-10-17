@@ -13,6 +13,7 @@ namespace Gungeon
 		InitSelf();
 		InitWeapon();
 		InitBullet();
+		InitFireCycle();
 	}
 
 	void Enemy2::InitVar()
@@ -28,7 +29,7 @@ namespace Gungeon
 		float scaleFactor = 3.0f;
 		col->scale = Vector2(16.0f, 16.0f) * scaleFactor;
 
-		idle = new ObImage(L"EnterTheGungeon/Enemy_1/Idle.png");
+		idle = new ObImage(L"EnterTheGungeon/enemy_2/Idle.png");
 		idle->isVisible = false;
 		idle->maxFrame = Int2(2, 8);
 		idle->scale = Vector2(24.0f / 2.0f, 240.0f / 8.0f) * scaleFactor;
@@ -36,7 +37,7 @@ namespace Gungeon
 		idle->SetParentRT(*col);
 		idle->zOrder = ZOrder::object;
 
-		walk = new ObImage(L"EnterTheGungeon/Enemy_1/Walk.png");
+		walk = new ObImage(L"EnterTheGungeon/enemy_2/Walk.png");
 		walk->isVisible = false;
 		walk->maxFrame = Int2(6, 8);
 		walk->scale = Vector2(108.0f / 6.0f, 240.0f / 8.0f) * scaleFactor;
@@ -44,7 +45,7 @@ namespace Gungeon
 		walk->SetParentRT(*col);
 		walk->zOrder = ZOrder::object;
 
-		hit = new ObImage(L"EnterTheGungeon/Enemy_1/Hit.png");
+		hit = new ObImage(L"EnterTheGungeon/enemy_2/Hit.png");
 		hit->isVisible = false;
 		hit->maxFrame.x = 1;
 		hit->scale = Vector2(17.0f, 24.0f) * scaleFactor;
@@ -52,7 +53,7 @@ namespace Gungeon
 		hit->SetParentRT(*col);
 		hit->zOrder = ZOrder::object;
 
-		die = new ObImage(L"EnterTheGungeon/Enemy_1/Die.png");
+		die = new ObImage(L"EnterTheGungeon/enemy_2/Die.png");
 		die->isVisible = false;
 		die->maxFrame.x = 4;
 		die->scale = Vector2(84.0f / 4.0f, 24.0f) * scaleFactor;
@@ -84,6 +85,11 @@ namespace Gungeon
 		}
 	}
 
+	void Enemy2::InitFireCycle()
+	{
+		fireCycle = RANDOM->Float(2.0f, 3.0f);
+	}
+
 	void Enemy2::Release()
 	{
 		Enemy::Release();
@@ -106,7 +112,7 @@ namespace Gungeon
 
 	void Enemy2::Fire()
 	{
-		if (TIMER->GetTick(timeFire, 1.5f))
+		if (TIMER->GetTick(timeFire, fireCycle))
 		{
 			weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
 
@@ -121,6 +127,8 @@ namespace Gungeon
 			}
 
 			if (curBulletIdx >= bulletMax) curBulletIdx = 0;
+
+			InitFireCycle();
 		}
 	}
 }

@@ -15,7 +15,7 @@ void DanmakuEditor::Main::InitBullet()
 	{
 		if (!elem)
 		{
-			elem = new ObImage(L"EnterTheGungeon/Player_0/Bullet_0.png");
+			elem = new ObImage(L"EnterTheGungeon/player_1/Bullet_0.png");
 			elem->scale = Vector2(16.0f, 16.0f) * 2.0f;
 			elem->isVisible = false;
 		}

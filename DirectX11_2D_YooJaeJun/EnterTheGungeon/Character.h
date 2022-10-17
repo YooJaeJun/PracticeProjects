@@ -8,7 +8,8 @@ namespace Gungeon
 		walk,
 		roll,
 		attack,
-		die
+		die,
+		cinematic
 	};
 
 	class Character

@@ -32,6 +32,11 @@ namespace Gungeon
 		void Hitting();
 		virtual void StartDie() override;
 		virtual void Spawn(const Vector2 wpos) override;
+		virtual void Attack();
+		void AttackStart();
+		void AttackEnd();
+		void AttackToWalk();
+		virtual void InitFireCycle();
 		virtual void ColToggle() override;
 
 	private:
@@ -41,6 +46,7 @@ namespace Gungeon
 		float		timeAiming = 0.0f;
 
 	protected:
+		float		fireCycle = 0.0f;
 
 	public:
 		float			timeSetDir = 0.0f;

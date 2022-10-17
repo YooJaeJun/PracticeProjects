@@ -13,6 +13,8 @@ namespace Gungeon
 
         LIGHT->light.radius = 4000.0f;
 
+        state = MapGenState::spray;
+
         // room
         candidateRooms = vector<Room*>(roomMax);
         int idx = 0;
@@ -23,13 +25,13 @@ namespace Gungeon
             // 일부 방 선택할 만한 크기 보장
             if (idx < 5)
             {
-                room->col->scale.x = 100.0f * RANDOM->Int(10, 14);
-                room->col->scale.y = 100.0f * RANDOM->Int(10, 14);
+                room->col->scale.x = 100.0f * RANDOM->Int(11, 14);
+                room->col->scale.y = 100.0f * RANDOM->Int(11, 14);
             }
             else
             {
-                room->col->scale.x = 100.0f * RANDOM->Int(5, 12);
-                room->col->scale.y = 100.0f * RANDOM->Int(5, 12);
+                room->col->scale.x = 100.0f * RANDOM->Int(9, 13);
+                room->col->scale.y = 100.0f * RANDOM->Int(9, 13);
             }
 
             map<Int2, bool> dic;
@@ -49,7 +51,7 @@ namespace Gungeon
 
             idx++;
         }
-        roomScaleForSelect = 800.0f;
+        roomScaleForSelect = 1000.0f;
     }
 
     void ProcedureMapGeneration::Release()
@@ -607,8 +609,8 @@ namespace Gungeon
                             MAP->imgIdx,
                             (int)TileState::floor);
                     }
-                    if (roomIdx != beforeRoomIdx ||
-                        tileStateOn == TileState::door)
+                    if ((roomIdx != beforeRoomIdx && first) ||
+                        (roomIdx == destRoomIdx && !first))
                     {
                         // 문 상하좌우
                         bool isRight = false, isTop = false;
@@ -704,14 +706,19 @@ namespace Gungeon
             Int2 scaleOn = Int2(elem->col->scale.x / 100, elem->col->scale.y / 100);
             Int2 halfScaleOn = scaleOn / 2;
 
-            int rx = RANDOM->Int(on.x - halfScaleOn.x, on.x + halfScaleOn.x);
-            int ry = RANDOM->Int(on.y - halfScaleOn.y, on.y + halfScaleOn.y);
-            if (MAP->tilemap->Tiles[rx][ry].state == TileState::floor)
+            int t = 3;
+            while (t--)
             {
-                MAP->tilemap->SetTile(Int2(rx, ry),
-                    Int2(RANDOM->Int(propImgMin.x, propImgMax.x),
-                        RANDOM->Int(propImgMin.y, propImgMax.y)),
-                    MAP->imgIdx);
+                int rx = RANDOM->Int(on.x - halfScaleOn.x, on.x + halfScaleOn.x);
+                int ry = RANDOM->Int(on.y - halfScaleOn.y, on.y + halfScaleOn.y);
+
+                if (MAP->tilemap->Tiles[rx][ry].state == TileState::floor)
+                {
+                    MAP->tilemap->SetTile(Int2(rx, ry),
+                        Int2(RANDOM->Int(propImgMin.x, propImgMax.x),
+                            RANDOM->Int(propImgMin.y, propImgMax.y)),
+                        MAP->imgIdx);
+                }
             }
         }
     }

@@ -34,7 +34,7 @@ namespace Gungeon
 		colTile->isFilled = false;
 		colTile->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-		shadow = new ObImage(L"EnterTheGungeon/Enemy_0/Shadow_1.png");
+		shadow = new ObImage(L"EnterTheGungeon/enemy_1/Shadow_1.png");
 		shadow->SetParentRT(*col);
 		shadow->zOrder = ZOrder::shadow;
 	}
@@ -47,7 +47,7 @@ namespace Gungeon
 		dropItem->col->scale = Vector2(40.0f, 40.0f) * scaleFactor;
 		dropItem->col->isFilled = false;
 		dropItem->SetPos(DEFAULTSPAWN);
-		dropItem->idle = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
+		dropItem->idle = new ObImage(L"EnterTheGungeon/player_1/UI_Gold.png");
 		dropItem->idle->scale = Vector2(40.0f, 40.0f) * scaleFactor;
 		dropItem->idle->SetParentRT(*dropItem->col);
 		dropItem->idle->isVisible = false;
@@ -246,6 +246,36 @@ namespace Gungeon
 		dropItem->idle->isVisible = false;
 		dropItem->state = State::die;
 	}
+
+	void Enemy::Attack()
+	{
+	}
+
+	void Enemy::AttackStart()
+	{
+		idle->isVisible = false;
+		walk->isVisible = false;
+		attack->isVisible = true;
+		attack->ChangeAnim(AnimState::loop, 0.1f);
+	}
+
+	void Enemy::AttackEnd()
+	{
+		attack->isVisible = false;
+		attackEnd->isVisible = true;
+		attackEnd->ChangeAnim(AnimState::once, 0.1f);
+	}
+
+	void Enemy::AttackToWalk()
+	{
+		attackEnd->isVisible = false;
+		walk->isVisible = true;
+	}
+
+	void Enemy::InitFireCycle()
+	{
+	}
+
 	void Enemy::ColToggle()
 	{
 		Character::ColToggle();

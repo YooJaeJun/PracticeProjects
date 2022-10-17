@@ -36,7 +36,7 @@ namespace Gungeon
         {
             Character::Update(notRotation);
 
-            Vector2 velocity = moveDir * scalar * DELTA;
+            Vector2 velocity = moveDir * scalar * moveFactor * DELTA;
             col->MoveWorldPos(velocity);
         }
 

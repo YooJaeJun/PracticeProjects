@@ -98,14 +98,13 @@ void Map::SetTilemapGUI()
 
     ImGui::Text("mouse pos : %f , %f", INPUT->GetWorldMousePos().x, INPUT->GetWorldMousePos().y);
 
-    tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), mouseIdx);
-    ImGui::Text("mouseIdx : %d , %d", mouseIdx.x, mouseIdx.y);
-
-    ImGui::Text("mouseOverTileState : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].state);
-
-    ImGui::Text("mouseOverRoomIndex : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].roomIdx);
-
-    ImGui::Text("mouseOverDoorDir : %d", static_cast<int>(tilemap->Tiles[mouseIdx.x][mouseIdx.y].doorDir));
+    if (tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), mouseIdx))
+    {
+        ImGui::Text("mouseIdx : %d , %d", mouseIdx.x, mouseIdx.y);
+        ImGui::Text("mouseOverTileState : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].state);
+        ImGui::Text("mouseOverRoomIndex : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].roomIdx);
+        ImGui::Text("mouseOverDoorDir : %d", static_cast<int>(tilemap->Tiles[mouseIdx.x][mouseIdx.y].doorDir));
+    }
 
     //ImageButton
     tilemap->RenderGui(pickingIdx, imgIdx);

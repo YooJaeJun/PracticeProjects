@@ -10,14 +10,6 @@ namespace Gungeon
 		font
 	};
 
-	enum class Anchor
-	{
-		none,
-		leftTop,
-		leftBottom,
-		rightBottom
-	};
-
 	class UI
 	{
 	public:
@@ -33,7 +25,7 @@ namespace Gungeon
 
 	public:
 		ObImage*	img = nullptr;
-		Anchor		anchor = Anchor::none;
+		DirState	anchor = DirState::dirNone;
 		Vector2		imgSize;
 	};
 }

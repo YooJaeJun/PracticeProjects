@@ -2,8 +2,7 @@
 
 namespace Gungeon
 {
-	const int enemyMax = 4;
-	const int bossMax = 1;
+	const int enemyMax = 1;
 	const int doorMax = 5;
 
 	enum class GameState
@@ -37,6 +36,7 @@ namespace Gungeon
 		void EnteringRoom();
 		void WaitingSpawn();
 		void Fight();
+		void SetCamera();
 		void SpawnPlayer();
 		void SpawnEffect();
 		void SpawnEnemy();
@@ -62,7 +62,6 @@ namespace Gungeon
 		int						roomClearCount = 0;
 		int						roomClearCountForBossBattle = 1;
 		Gate*					gate = nullptr;
-		ObRect*					cinematicBox[2];
 		vector<Door*>			door;
 	};
 }

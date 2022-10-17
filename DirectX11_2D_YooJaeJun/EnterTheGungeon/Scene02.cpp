@@ -24,7 +24,7 @@ namespace Gungeon
             if (!elem)
             {
                 elem = new Effect;
-                elem->idle = new ObImage(L"EnterTheGungeon/Enemy_0/Spawn.png");
+                elem->idle = new ObImage(L"EnterTheGungeon/enemy_1/Spawn.png");
                 elem->state = State::die;
                 elem->idle->maxFrame.x = 18;
                 elem->idle->scale = Vector2(663.0f / 18.0f, 39.0f) * 2.0f;
@@ -46,7 +46,7 @@ namespace Gungeon
             elem->SetPos(DEFAULTSPAWN);
             elem->idle = new ObImage(L"EnterTheGungeon/Level/Door.png");
             elem->idle->maxFrame.y = 8;
-            elem->idle->scale = Vector2(16.0f, 128.0f / 8.0f) * 6.0f;
+            elem->idle->scale = Vector2(24.0f, 192.0f / 8.0f) * 4.0f;
             elem->idle->SetParentRT(*elem->col);
             elem->idle->pivot = OFFSET_LB;
         }
@@ -117,6 +117,7 @@ namespace Gungeon
             break;
         }
 
+        GateProcess();
 
         if (mapGen) mapGen->Update();
         gate->Update();
@@ -145,8 +146,6 @@ namespace Gungeon
             IntersectEnemy();
             break;
         }
-
-        GateProcess();
     }
 
     void Scene02::Render()
@@ -201,6 +200,7 @@ namespace Gungeon
     {
         curRoomIdx = 0;
         curRoom = mapGen->selectedRooms[curRoomIdx];
+        SetCamera();
         SpawnPlayer();
 
         gameState = GameState::enteringRoom;
@@ -315,22 +315,19 @@ namespace Gungeon
         if (curRoom->cleared)
         {
             roomClearCount++;
-            if (roomClearCount >= roomClearCountForBossBattle)
-            {
-                gate->SetPos(curRoom->Pos());
-                gate->idle->ChangeAnim(AnimState::once, 0.1f);
-                gate->idle->isVisible = true;
-            }
 
             gameState = GameState::enteringRoom;
         }
     }
 
-    void Scene02::SpawnPlayer()
+    void Scene02::SetCamera()
     {
         CAM->position = curRoom->Pos();
         CAM->zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
+    }
 
+    void Scene02::SpawnPlayer()
+    {
         player->Spawn(Vector2(curRoom->Pos().x, curRoom->Pos().y));
     }
 
@@ -366,7 +363,8 @@ namespace Gungeon
             player->StepBack();
         }
 
-        if (player->col->Intersect(gate->col))
+        if (false == gate->flagIntersectPlayer &&
+            player->col->Intersect(gate->col))
         {
             player->col->MoveWorldPos(Vector2(-150.0f, -100.0f) * DELTA);
         }
@@ -464,6 +462,12 @@ namespace Gungeon
                 enemyElem->StepBack();
             }
 
+            if (enemyElem->col->Intersect(gate->col))
+            {
+                Vector2 velocity = gate->Pos() - enemyElem->Pos();
+                enemyElem->col->MoveWorldPos(-velocity * DELTA);
+            }
+
             // Àû ÃÑ¾Ë
             for (auto& bulletElem : enemyElem->bullet)
             {
@@ -499,27 +503,68 @@ namespace Gungeon
     {
         if (roomClearCount >= roomClearCountForBossBattle)
         {
-            if (TIMER->GetTick(gate->timeGateOpen, 1.5f))
-            {
-                gate->flagGateOpen = true;
-            }
-
-            if (gate->flagGateOpen)
-            {
-                if (gate->colTile->Intersect(player->col))
-                {
-                    roomClearCount = 0;
-                    gate->idle->ChangeAnim(AnimState::reverseOnce, 0.1f);
-                    gate->flagGateClosed = true;
-                }
-            }
+            roomClearCount = 0;
+            gate->Spawn(curRoom->Pos());
         }
 
-        if (gate->flagGateClosed)
+        switch (gate->gateState)
         {
-            gate->flagGateClosed = false;
+        case Gungeon::GateState::none:
+        case Gungeon::GateState::opening:
+            break;
+
+        case Gungeon::GateState::open:
+            if (gate->colTile->Intersect(player->col))
+            {
+                gate->flagIntersectPlayer = true;
+            }
+            break;
+
+        case Gungeon::GateState::cinematic:
+            player->state = State::cinematic;
+            break;
+
+        case Gungeon::GateState::process:
+            gate->playerDest = Vector2(gate->col->GetWorldPos().x, gate->col->GetWorldPos().y + 70.0f);
+
+            if (abs(gate->playerDest.x - player->Pos().x) > 1.0f &&
+                abs(gate->playerDest.y - player->Pos().y) > 1.0f)
+            {
+                player->idle->isVisible = false;
+                player->walk->isVisible = true;
+                Vector2 dir = gate->playerDest - player->Pos();
+                dir.Normalize();
+                player->col->MoveWorldPos(dir * 80.0f * DELTA);
+            }
+            else
+            {
+                gate->gateState = GateState::setting;
+            }
+            break;
+
+        case Gungeon::GateState::setting:
+            player->walk->isVisible = false;
+            player->idle->isVisible = true;
+            break;
+
+        case Gungeon::GateState::set:
+            break;
+
+        case Gungeon::GateState::closing:
+            if (gate->flagPlayerDisappear)
+            {
+                player->idle->isVisible = false;
+                player->walk->isVisible = false;
+                player->weapons[player->curWeaponIdx]->idle->isVisible = false;
+                player->shadow->isVisible = false;
+            }
+            break;
+
+        case Gungeon::GateState::closed:
+            gate->gateState = GateState::none;
             isChangingScene = true;
             SCENE->ChangeScene("Scene03", 1.0f);
+            break;
         }
     }
 

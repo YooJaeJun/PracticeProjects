@@ -48,7 +48,7 @@ namespace Gungeon
 		int idx = 0;
 		float scaleFactor = 3.0f;
 
-		spawn = new ObImage(L"EnterTheGungeon/Player_0/Spawn.png");
+		spawn = new ObImage(L"EnterTheGungeon/player_1/Spawn.png");
 		spawn->isVisible = false;
 		spawn->maxFrame.x = 3;
 		spawn->scale = Vector2(48.0f / 3.0f, 22.0f) * scaleFactor;
@@ -56,14 +56,14 @@ namespace Gungeon
 		spawn->SetParentRT(*col);
 		spawn->zOrder = ZOrder::object;
 
-		idle = new ObImage(L"EnterTheGungeon/Player_0/Idle.png");
+		idle = new ObImage(L"EnterTheGungeon/player_1/Idle.png");
 		idle->maxFrame = Int2(4, 8);
 		idle->scale = Vector2(72.0 / 4.0f, 160.0f / 8.0f) * scaleFactor;
 		idle->ChangeAnim(AnimState::loop, 0.2f);
 		idle->SetParentRT(*col);
 		idle->zOrder = ZOrder::object;
 
-		walk = new ObImage(L"EnterTheGungeon/Player_0/Walk.png");
+		walk = new ObImage(L"EnterTheGungeon/player_1/Walk.png");
 		walk->isVisible = false;
 		walk->maxFrame = Int2(6, 8);
 		walk->scale = Vector2(102.0f / 6.0f, 192.0f / 8.0f) * scaleFactor;
@@ -71,7 +71,7 @@ namespace Gungeon
 		walk->SetParentRT(*col);
 		walk->zOrder = ZOrder::object;
 
-		roll = new ObImage(L"EnterTheGungeon/Player_0/Roll.png");
+		roll = new ObImage(L"EnterTheGungeon/player_1/Roll.png");
 		roll->isVisible = false;
 		roll->maxFrame = Int2(9, 8);
 		roll->scale = Vector2(180.0f / 9.0f, 192.0f / 8.0f) * scaleFactor;
@@ -81,7 +81,7 @@ namespace Gungeon
 
 		hit = nullptr;
 
-		fall = new ObImage(L"EnterTheGungeon/Player_0/Fall.png");
+		fall = new ObImage(L"EnterTheGungeon/player_1/Fall.png");
 		fall->isVisible = false;
 		fall->maxFrame.x = 3;
 		fall->scale = Vector2(48.0f / 3.0f, 22.0f) * scaleFactor;
@@ -89,7 +89,7 @@ namespace Gungeon
 		fall->SetParentRT(*col);
 		fall->zOrder = ZOrder::object;
 
-		die = new ObImage(L"EnterTheGungeon/Player_0/Die.png");
+		die = new ObImage(L"EnterTheGungeon/player_1/Die.png");
 		die->isVisible = false;
 		die->maxFrame.x = 8;
 		die->scale = Vector2(160.0f / 8.0f, 24.0f) * scaleFactor;
@@ -97,7 +97,7 @@ namespace Gungeon
 		die->SetParentRT(*col);
 		die->zOrder = ZOrder::object;
 
-		kick = new ObImage(L"EnterTheGungeon/Player_0/Kick.png");
+		kick = new ObImage(L"EnterTheGungeon/player_1/Kick.png");
 		kick->isVisible = false;
 		kick->maxFrame.x = 3;
 		kick->scale = Vector2(48.0f / 3.0f, 22.0f) * scaleFactor;
@@ -105,7 +105,7 @@ namespace Gungeon
 		kick->SetParentRT(*col);
 		kick->zOrder = ZOrder::object;
 
-		obtain = new ObImage(L"EnterTheGungeon/Player_0/Obtain.png");
+		obtain = new ObImage(L"EnterTheGungeon/player_1/Obtain.png");
 		obtain->isVisible = false;
 		obtain->maxFrame.x = 3;
 		obtain->scale = Vector2(48.0f / 3.0f, 22.0f) * scaleFactor;
@@ -150,7 +150,7 @@ namespace Gungeon
 	void Player::InitEffect()
 	{
 		float scaleFactor = 2.0f;
-		shadow = new ObImage(L"EnterTheGungeon/Player_0/Shadow.png");
+		shadow = new ObImage(L"EnterTheGungeon/player_1/Shadow.png");
 		shadow->scale.x = 16.0f * scaleFactor;
 		shadow->scale.y = 5.0f * scaleFactor;
 		shadow->SetParentRT(*col);
@@ -161,7 +161,7 @@ namespace Gungeon
 		for (auto& elem : dust)
 		{
 			elem = new Effect;
-			elem->idle = new ObImage(L"EnterTheGungeon/Player_0/Dust.png");
+			elem->idle = new ObImage(L"EnterTheGungeon/player_1/Dust.png");
 			elem->idle->maxFrame.x = 4;
 			elem->idle->scale = Vector2(44.0f / 4.0f, 10.0f) * dustScaleFactor;
 			elem->idle->isVisible = false;
@@ -175,7 +175,7 @@ namespace Gungeon
 		int idx = 0;
 
 		uiReload = new UI;
-		uiReload->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Reload.png");
+		uiReload->img = new ObImage(L"EnterTheGungeon/player_1/UI_Reload.png");
 		uiReload->img->isVisible = false;
 		uiReload->img->scale = Vector2(144.0f, 20.0f);
 		uiReload->img->SetParentT(*col);
@@ -184,7 +184,7 @@ namespace Gungeon
 		uiReload->img->zOrder = ZOrder::UI;
 
 		uiReloadBar = new UI;
-		uiReloadBar->img = new ObImage(L"EnterTheGungeon/Player_0/UI_ReloadBar.png");
+		uiReloadBar->img = new ObImage(L"EnterTheGungeon/player_1/UI_ReloadBar.png");
 		uiReloadBar->img->isVisible = false;
 		uiReloadBar->img->scale = Vector2(4.0f, 20.0f);
 		uiReloadBar->img->SetParentT(*col);
@@ -197,7 +197,7 @@ namespace Gungeon
 		uiWeaponFrame->img->scale.x = 188.0f;
 		uiWeaponFrame->img->scale.y = 116.0f;
 		uiWeaponFrame->img->pivot = OFFSET_RB;
-		uiWeaponFrame->anchor = Anchor::rightBottom;
+		uiWeaponFrame->anchor = DirState::dirRB;
 		uiWeaponFrame->Spawn(-70.0f, 30.0f);
 		uiWeaponFrame->img->space = Space::screen;
 		uiWeaponFrame->img->zOrder = ZOrder::UI;
@@ -218,8 +218,8 @@ namespace Gungeon
 		for (auto& elem : uiHeartNone)
 		{
 			elem = new UI;
-			elem->img = new ObImage(L"EnterTheGungeon/Player_0/HeartNone.png");
-			elem->anchor = Anchor::leftTop;
+			elem->img = new ObImage(L"EnterTheGungeon/player_1/HeartNone.png");
+			elem->anchor = DirState::dirLT;
 			elem->Spawn(10.0f + idx * 60.0f, -40.0f);
 			elem->img->pivot = OFFSET_L;
 			elem->img->scale.x = 52.0f * heartScaleFactor;
@@ -232,8 +232,8 @@ namespace Gungeon
 		for (auto& elem : uiHeartHalf)
 		{
 			elem = new UI;
-			elem->img = new ObImage(L"EnterTheGungeon/Player_0/HeartHalf.png");
-			elem->anchor = Anchor::leftTop;
+			elem->img = new ObImage(L"EnterTheGungeon/player_1/HeartHalf.png");
+			elem->anchor = DirState::dirLT;
 			elem->Spawn(10.0f + idx * 60.0f, -40.0f);
 			elem->img->pivot = OFFSET_L;
 			elem->img->scale.x = 52.0f * heartScaleFactor;
@@ -246,8 +246,8 @@ namespace Gungeon
 		for (auto& elem : uiHeartFull)
 		{
 			elem = new UI;
-			elem->img = new ObImage(L"EnterTheGungeon/Player_0/HeartFull.png");
-			elem->anchor = Anchor::leftTop;
+			elem->img = new ObImage(L"EnterTheGungeon/player_1/HeartFull.png");
+			elem->anchor = DirState::dirLT;
 			elem->Spawn(10.0f + idx * 60.0f, -40.0f);
 			elem->img->pivot = OFFSET_L;
 			elem->img->scale.x = 52.0f * heartScaleFactor;
@@ -262,8 +262,8 @@ namespace Gungeon
 		for (auto& elem : uiBlank)
 		{
 			elem = new UI;
-			elem->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Blank.png");
-			elem->anchor = Anchor::leftTop;
+			elem->img = new ObImage(L"EnterTheGungeon/player_1/UI_Blank.png");
+			elem->anchor = DirState::dirLT;
 			elem->Spawn(10.0f + idx * 50.0f, -100.0f);
 			elem->img->pivot = OFFSET_L;
 			elem->img->scale.x = 40.0f;
@@ -274,8 +274,8 @@ namespace Gungeon
 		}
 
 		uiKey = new UI;
-		uiKey->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Key.png");
-		uiKey->anchor = Anchor::leftTop;
+		uiKey->img = new ObImage(L"EnterTheGungeon/player_1/UI_Key.png");
+		uiKey->anchor = DirState::dirLT;
 		uiKey->Spawn(10.0f, -160.0f);
 		uiKey->img->pivot = OFFSET_L;
 		uiKey->img->scale.x = 56.0f;
@@ -284,34 +284,14 @@ namespace Gungeon
 		uiKey->img->zOrder = ZOrder::UI;
 
 		uiGold = new UI;
-		uiGold->img = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
-		uiGold->anchor = Anchor::leftTop;
+		uiGold->img = new ObImage(L"EnterTheGungeon/player_1/UI_Gold.png");
+		uiGold->anchor = DirState::dirLT;
 		uiGold->Spawn(120.0f, -160.0f);
 		uiGold->img->pivot = OFFSET_L;
 		uiGold->img->scale.x = 40.0f;
 		uiGold->img->scale.y = 40.0f;
 		uiGold->img->space = Space::screen;
 		uiGold->img->zOrder = ZOrder::UI;
-
-		uiFireBottle = new UI;
-		uiFireBottle->img = new ObImage(L"EnterTheGungeon/Player_0/UI_FireBottle.png");
-		uiFireBottle->anchor = Anchor::leftBottom;
-		uiFireBottle->Spawn(85.0f, 70.0f);
-		uiFireBottle->img->pivot = OFFSET_L;
-		uiFireBottle->img->scale.x = 36.0f;
-		uiFireBottle->img->scale.y = 76.0f;
-		uiFireBottle->img->space = Space::screen;
-		uiFireBottle->img->zOrder = ZOrder::UI;
-
-		uiFireBottleFrame = new UI;
-		uiFireBottleFrame->img = new ObImage(L"EnterTheGungeon/Player_0/UI_FireBottleFrame.png");
-		uiFireBottleFrame->anchor = Anchor::leftBottom;
-		uiFireBottleFrame->Spawn(10.0f, 70.0f);
-		uiFireBottleFrame->img->pivot = OFFSET_L;
-		uiFireBottleFrame->img->scale.x = 180.0f;
-		uiFireBottleFrame->img->scale.y = 112.0f;
-		uiFireBottleFrame->img->space = Space::screen;
-		uiFireBottleFrame->img->zOrder = ZOrder::UI;
 	}
 
 	void Player::Release()
@@ -329,8 +309,6 @@ namespace Gungeon
 		for (auto& elem : uiBlank) elem->Release();
 		uiKey->Release();
 		uiGold->Release();
-		uiFireBottle->Release();
-		uiFireBottleFrame->Release();
 	}
 
 	void Player::Update()
@@ -374,8 +352,6 @@ namespace Gungeon
 		for (auto& elem : uiBlank) elem->Update();
 		uiKey->Update();
 		uiGold->Update();
-		uiFireBottle->Update();
-		uiFireBottleFrame->Update();
 	}
 
 	void Player::LateUpdate()
@@ -404,8 +380,6 @@ namespace Gungeon
 		for (auto& elem : uiBlank) elem->Render();
 		uiKey->Render();
 		uiGold->Render();
-		uiFireBottle->Render();
-		uiFireBottleFrame->Render();
 
 		DWRITE->RenderText(to_wstring(money),
 			RECT{ 170, 140, (long)app.GetWidth(), (long)app.GetHeight() },
@@ -460,8 +434,8 @@ namespace Gungeon
 	{
 		Unit::SetTarget(weapons[curWeaponIdx]);
 		Unit::Idle();
-		Move();
 
+		Move();
 		FireProcess();
 
 		if (INPUT->KeyDown(VK_RBUTTON))
@@ -482,8 +456,8 @@ namespace Gungeon
 	{
 		Unit::SetTarget(weapons[curWeaponIdx]);
 		Unit::Walk();
-		Move();
 
+		Move();
 		FireProcess();
 
 		if (INPUT->KeyDown(VK_RBUTTON))
@@ -527,6 +501,10 @@ namespace Gungeon
 		for (auto& elem : dust) elem->idle->isVisible = false;
 		weapons[curWeaponIdx]->idle->isVisible = false;
 		weapons[curWeaponIdx]->imgReloading->isVisible = false;
+	}
+
+	void Player::Cinematic()
+	{
 	}
 
 	void Player::Move()
@@ -599,7 +577,7 @@ namespace Gungeon
 				uiReloadBar->img->isVisible = true;
 			}
 
-			if (INPUT->KeyPress(VK_LBUTTON) || INPUT->KeyDown(VK_LBUTTON))
+			if ((INPUT->KeyPress(VK_LBUTTON) || INPUT->KeyDown(VK_LBUTTON)))
 			{
 				Fire();
 			}
@@ -709,7 +687,6 @@ namespace Gungeon
 			walk->isVisible = false;
 			weapons[curWeaponIdx]->idle->isVisible = false;
 			weapons[curWeaponIdx]->imgReloading->isVisible = false;
-			weapons[curWeaponIdx]->firePos->isVisible = false;
 
 			SetDirState(moveDir, curMoveDirState);
 			roll->frame.y = curMoveDirState;

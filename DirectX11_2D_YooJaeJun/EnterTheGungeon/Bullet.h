@@ -26,5 +26,6 @@ namespace Gungeon
 		Effect*		hitBomb = nullptr;
 		float		angle = 0.0f;
 		float		atkAngle = 0.0f;
+		float		moveFactor = 1.0f;
 	};
 }

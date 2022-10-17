@@ -27,6 +27,7 @@ namespace Gungeon
 		void Walk();
 		void Roll();
 		virtual void Die() override;
+		void Cinematic();
 		void Move();
 		void SetFireInterval();
 		void FireProcess();
@@ -73,8 +74,6 @@ namespace Gungeon
 		vector<UI*>			uiBlank;
 		UI*					uiKey = nullptr;
 		UI*					uiGold = nullptr;
-		UI*					uiFireBottle = nullptr;
-		UI*					uiFireBottleFrame = nullptr;
 		int					money = 0;
 		int					key = 0;
 	};

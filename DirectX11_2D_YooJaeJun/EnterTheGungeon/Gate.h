@@ -2,6 +2,19 @@
 
 namespace Gungeon
 {
+	enum class GateState
+	{
+		none,
+		opening,
+		open,
+		cinematic,
+		process,
+		setting,
+		set,
+		closing,
+		closed
+	};
+
 	class Gate : public Obstacle
 	{
 	public:
@@ -11,11 +24,20 @@ namespace Gungeon
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
+		virtual void Spawn(const Vector2 wpos) override;
 
 	public:
-		float		timeGateOpen = 0.0f;
-		float		timeGateClosed = 0.0f;
-		bool		flagGateOpen = false;
-		bool		flagGateClosed = false;
+		GateState	gateState = GateState::none;
+		float		timeOpen = 0.0f;
+		bool		flagIntersectPlayer = false;
+		float		timeProcess = 0.0f;
+		float		timeCinematicBox = 0.0f;
+		float		timeSet = 0.0f;
+		float		timeClosing = 0.0f;
+		float		timePlayerDisappear = 0.0f;
+		bool		flagPlayerDisappear = false;
+		float		timeClosed = 0.0f;
+		UI*			cinematicBox[2];
+		Vector2		playerDest;
 	};
 }

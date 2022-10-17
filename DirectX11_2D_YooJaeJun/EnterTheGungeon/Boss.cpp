@@ -36,7 +36,7 @@ namespace Gungeon
         col->zOrder = ZOrder::object;
         SetPos(DEFAULTSPAWN);
 
-        idle = new ObImage(L"EnterTheGungeon/Boss_0/Idle.png");
+        idle = new ObImage(L"EnterTheGungeon/boss_1/Idle.png");
         idle->isVisible = false;
         idle->maxFrame = Int2(4, 8);
         idle->scale = Vector2(104.0f / 4.0f, 320.0f / 8.0f) * scaleFactor;
@@ -44,7 +44,7 @@ namespace Gungeon
         idle->SetParentRT(*col);
         idle->zOrder = ZOrder::object;
 
-        walk = new ObImage(L"EnterTheGungeon/Boss_0/Walk.png");
+        walk = new ObImage(L"EnterTheGungeon/boss_1/Walk.png");
         walk->isVisible = false;
         walk->maxFrame = Int2(6, 8);
         walk->scale = Vector2(180.0f / 6.0f, 40.0f) * scaleFactor;
@@ -52,7 +52,7 @@ namespace Gungeon
         walk->SetParentRT(*col);
         walk->zOrder = ZOrder::object;
 
-        hit = new ObImage(L"EnterTheGungeon/Boss_0/Hit.png");
+        hit = new ObImage(L"EnterTheGungeon/boss_1/Hit.png");
         hit->isVisible = false;
         hit->maxFrame.x = 1;
         hit->scale = Vector2(32.0 * 1.0f, 40.0f) * scaleFactor;
@@ -60,7 +60,7 @@ namespace Gungeon
         hit->SetParentRT(*col);
         hit->zOrder = ZOrder::object;
 
-        die = new ObImage(L"EnterTheGungeon/Boss_0/Die.png");
+        die = new ObImage(L"EnterTheGungeon/boss_1/Die.png");
         die->isVisible = false;
         die->maxFrame.x = 8;
         die->scale = Vector2(320.0f / 8.0f, 40.0f) * scaleFactor;
@@ -78,7 +78,7 @@ namespace Gungeon
         float hpGuageFactor = 1.5f;
 
         hpGuageBar = new UI;
-        hpGuageBar->img = new ObImage(L"EnterTheGungeon/Boss_0/Hp_GuageBar.png");
+        hpGuageBar->img = new ObImage(L"EnterTheGungeon/boss_1/Hp_GuageBar.png");
         hpGuageBar->img->scale = Vector2(400.0f, 30.0f) * hpGuageFactor;
         hpGuageBar->img->SetWorldPosX(-hpGuageBar->img->scale.x / 2.0f);
         hpGuageBar->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
@@ -87,7 +87,7 @@ namespace Gungeon
         hpGuageBar->img->zOrder = ZOrder::UI;
 
         hpGuage = new UI;
-        hpGuage->img = new ObImage(L"EnterTheGungeon/Boss_0/Hp_Guage.png");
+        hpGuage->img = new ObImage(L"EnterTheGungeon/boss_1/Hp_Guage.png");
         hpGuage->imgSize.x = 330.0f * hpGuageFactor;
         hpGuage->imgSize.y = 16.0f * hpGuageFactor;
         hpGuage->img->scale = Vector2(330.0f, 16.0f) * hpGuageFactor;
@@ -98,7 +98,7 @@ namespace Gungeon
         hpGuage->img->zOrder = ZOrder::UI;
 
         float shadowScaleFactor = scaleFactor * 2.0f;
-        shadow = new ObImage(L"EnterTheGungeon/Boss_0/Shadow_1.png");
+        shadow = new ObImage(L"EnterTheGungeon/boss_1/Shadow_1.png");
         shadow->scale = Vector2(12.0f, 4.0f) * shadowScaleFactor;
         shadow->SetParentRT(*col);
         shadow->SetWorldPosY(-55.0f);
@@ -155,7 +155,7 @@ namespace Gungeon
         dropItem->col->scale = Vector2(40.0f, 40.0f) * scaleFactor;
         dropItem->col->isFilled = false;
         dropItem->SetPos(DEFAULTSPAWN);
-        dropItem->idle = new ObImage(L"EnterTheGungeon/Player_0/UI_Gold.png");
+        dropItem->idle = new ObImage(L"EnterTheGungeon/player_1/UI_Gold.png");
         dropItem->idle->scale = Vector2(40.0f, 40.0f) * scaleFactor;
         dropItem->idle->SetParentRT(*dropItem->col);
         dropItem->idle->isVisible = false;

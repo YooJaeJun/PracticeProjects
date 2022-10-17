@@ -3,7 +3,7 @@
 namespace Gungeon
 {
 	const float timeDefault = 0.0f;
-	const int roomMax = 20;
+	const int roomMax = 12;
 	const int gridMax = 7000;
 
 	// B, L, R, LB, RB, T, LT, RT
@@ -13,7 +13,7 @@ namespace Gungeon
 	const Int2 passageWallImgMin = { 0, 4 };
 	const Int2 passageWallImgMax = { 2, 4 };
 	const Int2 propImgMin = { 0, 5 };
-	const Int2 propImgMax = { 0, 5 };
+	const Int2 propImgMax = { 2, 5 };
 
 	enum class MapGenState 
 	{ 

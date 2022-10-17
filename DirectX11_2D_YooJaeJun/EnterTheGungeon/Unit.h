@@ -27,10 +27,6 @@ namespace Gungeon
 		void SetDirState(const Vector2 dir, DirState& dirState);
 		void FindPath(ObTileMap* map);
 		void Stop();
-		virtual void Attack();
-		void AttackStart();
-		void AttackEnd();
-		void AttackToWalk();
 
 	public:
 		ObImage*			spawn = nullptr;

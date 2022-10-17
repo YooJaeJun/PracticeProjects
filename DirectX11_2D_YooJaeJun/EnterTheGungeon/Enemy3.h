@@ -7,14 +7,15 @@ namespace Gungeon
 	public:
 		Enemy3();
 		virtual void Init() override;
-		virtual void Release() override;
-		virtual void Update() override;
-		virtual void LateUpdate() override;
-		virtual void Render() override;
 		void InitVar();
 		void InitSelf();
 		void InitWeapon();
 		void InitBullet();
+		virtual void InitFireCycle() override;
+		virtual void Release() override;
+		virtual void Update() override;
+		virtual void LateUpdate() override;
+		virtual void Render() override;
 		virtual void Fire() override;
 		virtual void Attack() override;
 
