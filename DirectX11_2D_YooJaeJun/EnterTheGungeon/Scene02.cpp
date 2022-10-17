@@ -24,10 +24,10 @@ namespace Gungeon
             if (!elem)
             {
                 elem = new Effect;
-                elem->idle = new ObImage(L"EnterTheGungeon/enemy_1/Spawn.png");
+                elem->idle = new ObImage(L"EnterTheGungeon/Level/Spawn.png");
                 elem->state = State::die;
                 elem->idle->maxFrame.x = 18;
-                elem->idle->scale = Vector2(663.0f / 18.0f, 39.0f) * 2.0f;
+                elem->idle->scale = Vector2(663.0f / 18.0f, 39.0f) * 2.5f;
                 elem->idle->isVisible = false;
                 elem->intervalDie = 1.8f;
             }
