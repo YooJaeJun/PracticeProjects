@@ -89,7 +89,7 @@ namespace Gungeon
 
 	void Enemy1::InitFireCycle()
 	{
-		fireCycle = RANDOM->Float(1.5f, 2.0f);
+		intervalFire = RANDOM->Float(1.5f, 2.0f);
 	}
 
 	void Enemy1::Release()
@@ -114,7 +114,7 @@ namespace Gungeon
 
 	void Enemy1::Fire()
 	{
-		if (TIMER->GetTick(timeFire, fireCycle))
+		if (TIMER->GetTick(timeFire, intervalFire))
 		{
 			bullet[curBulletIdx++]->Spawn(weapon->firePos->GetWorldPos(), moveDir);
 			weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());

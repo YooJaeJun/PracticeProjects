@@ -87,7 +87,7 @@ namespace Gungeon
 
 	void Enemy2::InitFireCycle()
 	{
-		fireCycle = RANDOM->Float(2.0f, 3.0f);
+		intervalFire = RANDOM->Float(2.0f, 3.0f);
 	}
 
 	void Enemy2::Release()
@@ -112,7 +112,7 @@ namespace Gungeon
 
 	void Enemy2::Fire()
 	{
-		if (TIMER->GetTick(timeFire, fireCycle))
+		if (TIMER->GetTick(timeFire, intervalFire))
 		{
 			weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
 

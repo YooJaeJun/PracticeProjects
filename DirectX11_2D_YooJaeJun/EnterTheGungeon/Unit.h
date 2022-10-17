@@ -64,5 +64,10 @@ namespace Gungeon
 		Vector2				end;
 		float				g = 0.0f;	// ∫Ò¿≤
 		float				timeFindPath = 0.0f;
+		float				intervalIdle = 0.0f;
+		float				intervalWalk = 0.0f;
+		float				intervalAttack = 0.0f;
+		float				intervalHit = 0.0f;
+		float				intervalDie = 0.0f;
 	};
 }

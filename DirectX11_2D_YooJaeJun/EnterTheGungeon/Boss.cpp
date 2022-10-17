@@ -11,7 +11,6 @@ namespace Gungeon
     {
         InitVar();
         InitSelf();
-        InitWeapon();
         InitBullet();
         InitItem();
     }
@@ -22,6 +21,12 @@ namespace Gungeon
 
         curHp = maxHp = 30;
         scalar = 120.0f;
+
+        intervalIdle = 0.5f;
+        intervalWalk = 0.5f;
+        intervalAttack = 0.2f;
+        intervalHit = 0.2f;
+        intervalDie = 0.2f;
     }
 
     void Boss::InitSelf()
@@ -33,39 +38,7 @@ namespace Gungeon
         col->isFilled = false;
         col->scale = Vector2(25.0f, 25.0f) * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f);
-        col->zOrder = ZOrder::object;
         SetPos(DEFAULTSPAWN);
-
-        idle = new ObImage(L"EnterTheGungeon/boss_1/Idle.png");
-        idle->isVisible = false;
-        idle->maxFrame = Int2(4, 8);
-        idle->scale = Vector2(104.0f / 4.0f, 320.0f / 8.0f) * scaleFactor;
-        idle->ChangeAnim(AnimState::loop, 0.2f);
-        idle->SetParentRT(*col);
-        idle->zOrder = ZOrder::object;
-
-        walk = new ObImage(L"EnterTheGungeon/boss_1/Walk.png");
-        walk->isVisible = false;
-        walk->maxFrame = Int2(6, 8);
-        walk->scale = Vector2(180.0f / 6.0f, 40.0f) * scaleFactor;
-        walk->ChangeAnim(AnimState::loop, 0.1f);
-        walk->SetParentRT(*col);
-        walk->zOrder = ZOrder::object;
-
-        hit = new ObImage(L"EnterTheGungeon/boss_1/Hit.png");
-        hit->isVisible = false;
-        hit->maxFrame.x = 1;
-        hit->scale = Vector2(32.0 * 1.0f, 40.0f) * scaleFactor;
-        hit->ChangeAnim(AnimState::loop, 0.2f);
-        hit->SetParentRT(*col);
-        hit->zOrder = ZOrder::object;
-
-        die = new ObImage(L"EnterTheGungeon/boss_1/Die.png");
-        die->isVisible = false;
-        die->maxFrame.x = 8;
-        die->scale = Vector2(320.0f / 8.0f, 40.0f) * scaleFactor;
-        die->SetParentRT(*col);
-        die->zOrder = ZOrder::object;
 
         colTile = new ObRect;
         colTile->scale = Vector2(col->scale.x, col->scale.y / 2.0f);
@@ -74,6 +47,98 @@ namespace Gungeon
         colTile->isFilled = false;
         colTile->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
+        idle = new ObImage(L"EnterTheGungeon/Boss_1/Idle.png");
+        idle->isVisible = true;
+        idle->maxFrame = Int2(2, 8);
+        idle->scale = Vector2(80.0f / 2.0f, 352.0f / 8.0f) * scaleFactor;
+        idle->ChangeAnim(AnimState::loop, intervalIdle);
+        idle->SetParentRT(*col);
+
+        walk = new ObImage(L"EnterTheGungeon/Boss_1/Walk.png");
+        walk->isVisible = false;
+        walk->maxFrame = Int2(2, 8);
+        walk->scale = Vector2(80.0f / 2.0f, 352.0f / 8.0f) * scaleFactor;
+        walk->ChangeAnim(AnimState::loop, intervalWalk);
+        walk->SetParentRT(*col);
+
+        attack = new ObImage(L"EnterTheGungeon/Boss_1/Attack_2.png");
+        attack->isVisible = false;
+        attack->maxFrame.x = 2;
+        attack->scale = Vector2(80.0f / 2.0f, 44.0f) * scaleFactor;
+        attack->ChangeAnim(AnimState::loop, intervalHit);
+        attack->SetParentRT(*col);
+
+        hit = new ObImage(L"EnterTheGungeon/Boss_1/Hit.png");
+        hit->isVisible = false;
+        hit->maxFrame.x = 2;
+        hit->scale = Vector2(72.0 / 2.0f, 38.0f) * scaleFactor;
+        hit->ChangeAnim(AnimState::loop, intervalHit);
+        hit->SetParentRT(*col);
+
+        die = new ObImage(L"EnterTheGungeon/Boss_1/Die.png");
+        die->isVisible = false;
+        die->maxFrame.x = 2;
+        die->scale = Vector2(72.0f / 2.0f, 40.0f) * scaleFactor;
+        die->ChangeAnim(AnimState::loop, intervalDie);
+        die->SetParentRT(*col);
+
+        chairIdle = new ObImage(L"EnterTheGungeon/Boss_1/Chair_Idle.png");
+        chairIdle->isVisible = true;
+        chairIdle->maxFrame = Int2(2, 8);
+        chairIdle->scale = Vector2(168.0f / 2.0f, 616.0f / 8.0f) * scaleFactor;
+        chairIdle->ChangeAnim(AnimState::loop, 0.5f);
+        chairIdle->SetParentRT(*col);
+
+        chairWalk = new ObImage(L"EnterTheGungeon/Boss_1/Chair_Walk.png");
+        chairWalk->isVisible = false;
+        chairWalk->maxFrame = Int2(2, 8);
+        chairWalk->scale = Vector2(168.0f / 2.0f, 616.0f / 8.0f) * scaleFactor;
+        chairWalk->ChangeAnim(AnimState::loop, 0.5f);
+        chairWalk->SetParentRT(*col);
+
+        chairAttack1Start = new ObImage(L"EnterTheGungeon/Boss_1/Chair_Attack_1_Start.png");
+        chairAttack1Start->isVisible = false;
+        chairAttack1Start->maxFrame.x = 1;
+        chairAttack1Start->scale = Vector2(64.0f, 78.0f) * scaleFactor;
+        chairAttack1Start->ChangeAnim(AnimState::once, 0.2f);
+        chairAttack1Start->SetParentRT(*col);
+
+        chairAttack1 = new ObImage(L"EnterTheGungeon/Boss_1/Chair_Attack_1.png");
+        chairAttack1->isVisible = false;
+        chairAttack1->maxFrame.x = 2;
+        chairAttack1->scale = Vector2(120.0f / 2.0f, 74.0f) * scaleFactor;
+        chairAttack1->ChangeAnim(AnimState::loop, 0.05f);
+        chairAttack1->SetParentRT(*col);
+
+        chairAttack2 = new ObImage(L"EnterTheGungeon/Boss_1/Chair_Attack_2.png");
+        chairAttack2->isVisible = false;
+        chairAttack2->maxFrame.x = 3;
+        chairAttack2->scale = Vector2(204.0f / 3.0f, 79.0f) * scaleFactor;
+        chairAttack2->ChangeAnim(AnimState::loop, 0.2f);
+        chairAttack2->SetParentRT(*col);
+
+        chairDie = new ObImage(L"EnterTheGungeon/Boss_1/Chair_Die.png");
+        chairDie->isVisible = false;
+        chairDie->maxFrame.x = 1;
+        chairDie->scale = Vector2(73.0f, 75.0f) * scaleFactor;
+        chairDie->ChangeAnim(AnimState::once, 0.2f);
+        chairDie->SetParentRT(*col);
+
+        firePos = new ObCircle;
+        firePos->isVisible = true;
+        firePos->scale = Vector2(20.0f, 20.0f);
+        firePos->isFilled = false;
+        firePos->color = Color(1.0f, 1.0f, 1.0f);
+        firePos->SetParentRT(*col);
+        firePos->SetLocalPos(Vector2(100.0f, 0.0f));
+
+
+        float shadowScaleFactor = scaleFactor * 2.0f;
+        shadow = new ObImage(L"EnterTheGungeon/boss_1/Shadow_1.png");
+        shadow->scale = Vector2(12.0f, 4.0f) * shadowScaleFactor;
+        shadow->SetParentRT(*col);
+        shadow->SetWorldPosY(-55.0f);
+        shadow->zOrder = ZOrder::shadow;
 
         float hpGuageFactor = 1.5f;
 
@@ -96,25 +161,6 @@ namespace Gungeon
         hpGuage->img->pivot = OFFSET_L;
         hpGuage->img->space = Space::screen;
         hpGuage->img->zOrder = ZOrder::UI;
-
-        float shadowScaleFactor = scaleFactor * 2.0f;
-        shadow = new ObImage(L"EnterTheGungeon/boss_1/Shadow_1.png");
-        shadow->scale = Vector2(12.0f, 4.0f) * shadowScaleFactor;
-        shadow->SetParentRT(*col);
-        shadow->SetWorldPosY(-55.0f);
-        shadow->zOrder = ZOrder::shadow;
-    }
-
-    void Boss::InitWeapon()
-    {
-        weapon = new Weapon2;
-        weapon->col->SetParentRT(*col);
-        weapon->col->SetLocalPos(Vector2(10.0f, -15.0f));
-        weapon->idle->SetParentRT(*weapon->col);
-        weapon->firePos->SetLocalPos(Vector2(weapon->col->scale.x / 2.0f, 0.0f));
-        weapon->fireEffect->idle->SetParentRT(*weapon->firePos);
-        weapon->imgReloading->SetParentRT(*weapon->col);
-        weapon->Equip();
     }
 
     void Boss::InitBullet()
@@ -164,7 +210,12 @@ namespace Gungeon
     void Boss::Release()
     {
         Unit::Release();
-        weapon->Release();
+        SafeDelete(chairIdle);
+        SafeDelete(chairWalk);
+        SafeDelete(chairAttack1Start);
+        SafeDelete(chairAttack1);
+        SafeDelete(chairAttack2);
+        SafeDelete(chairDie);
         SafeDelete(hpGuage);
         SafeDelete(hpGuageBar);
     }
@@ -174,6 +225,31 @@ namespace Gungeon
         Unit::SetTarget(weapon);
         Unit::Update();
 
+        switch (state)
+        {
+        case Gungeon::State::idle:
+            if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))
+            {
+                chairIdle->isVisible = false;
+                chairWalk->isVisible = true;
+            }
+            Idle();
+            break;
+        case Gungeon::State::walk:
+            if (moveDir.x == 0.0f && moveDir.y == 0.0f)
+            {
+                chairWalk->isVisible = false;
+                chairIdle->isVisible = true;
+            }
+            Walk();
+            break;
+        case Gungeon::State::die:
+            Die();
+            break;
+        case Gungeon::State::cinematic:
+            break;
+        }
+
         int curPattern = static_cast<int>(pattern);
         if (ImGui::SliderInt("Boss Pattern", &curPattern, 0, patternMax))
         {
@@ -181,21 +257,9 @@ namespace Gungeon
             InitBullet();
         }
         
-        bulletSpawnPos = weapon->firePos->GetWorldPos();
-        bulletSpawnDir = weapon->moveDir;
+        bulletSpawnPos = firePos->GetWorldPos();
+        bulletSpawnDir = targetDir;
 
-        switch (state)
-        {
-        case State::idle:
-            Idle();
-            break;
-        case State::walk:
-            Walk();
-            break;
-        case State::die:
-            Die();
-            break;
-        }
 
         switch (pattern)
         {
@@ -219,7 +283,14 @@ namespace Gungeon
             break;
         }
 
-        weapon->Update();
+        chairIdle->Update();
+        chairWalk->Update();
+        chairAttack1Start->Update();
+        chairAttack1->Update();
+        chairAttack2->Update();
+        chairDie->Update();
+
+        firePos->Update();
         hpGuageBar->Update();
         hpGuage->Update();
         dropItem->Update();
@@ -231,6 +302,13 @@ namespace Gungeon
 
     void Boss::Render()
     {
+        chairIdle->Render();
+        chairWalk->Render();
+        chairAttack1Start->Render();
+        chairAttack1->Render();
+        chairAttack2->Render();
+        chairDie->Render();
+
         Unit::Render();
 
         switch (state)
@@ -245,7 +323,7 @@ namespace Gungeon
             break;
         }
 
-        weapon->Render();
+        firePos->Render();
         hpGuageBar->Render();
         hpGuage->Render();
         dropItem->Render();
@@ -262,7 +340,7 @@ namespace Gungeon
     void Boss::Idle()
     {
         Unit::Idle();
-
+        
         Hitting();
         UpdateBullet();
     }
@@ -369,7 +447,9 @@ namespace Gungeon
     {
         Unit::StartDie();
 
-        weapon->idle->isVisible = false;
+        chairIdle->isVisible = false;
+        chairWalk->isVisible = false;
+        chairDie->isVisible = true;
 
         hpGuageBar->img->isVisible = false;
         hpGuage->img->isVisible = false;
@@ -385,9 +465,6 @@ namespace Gungeon
         Unit::Spawn(wpos);
 
         InitVar();
-
-        weapon->idle->isVisible = true;
-        weapon->firePos->isVisible = true;
 
         if (pushedDir.x < 0.0f)
         {
@@ -405,11 +482,10 @@ namespace Gungeon
     void Boss::ColToggle()
     {
         Character::ColToggle();
-        weapon->col->isVisible = !weapon->col->isVisible;
-        weapon->firePos->isVisible = !weapon->firePos->isVisible;
+        firePos->isVisible ^= 1;
         for (auto& bulletElem : bullet)
         {
-            bulletElem->col->isVisible = !bulletElem->col->isVisible;
+            bulletElem->col->isVisible ^= 1;
         }
     }
 
@@ -458,7 +534,6 @@ namespace Gungeon
         bullet.resize(stringBullet.inputString.size() * 25);
 
         int size = stringBullet.inputString.size();
-        float angleFactor = weapon->col->rotation - stringBullet.midForTargetFactor;
 
         for (int r = 0; r < 5; r++)
         {
@@ -607,25 +682,26 @@ namespace Gungeon
             stringBullet.SetStringBullet();
         }
 
-        float angleFactor = weapon->col->rotation - stringBullet.midForTargetFactor;
-        for (int r = 0; r < 5; r++)
+        if (TIMER->GetTick(timeFire, 2.0f))
         {
-            for (int c = 0; c < 5; c++)
+            angleFactor = firePos->rotation2 - stringBullet.midForTargetFactor;
+
+            for (int r = 0; r < 5; r++)
             {
-                for (int i = 0; i < size; i++)
+                for (int c = 0; c < 5; c++)
                 {
-                    if (stringBullet.outputAlphbets[i][r][c])
+                    for (int i = 0; i < size; i++)
                     {
-                        int idx = i * 25 + r * 5 + c;
-                        bullet[idx]->atkAngle = (bullet[idx]->angle / 60.0f) + (0.2f * i) + angleFactor;
-                        bullet[idx]->moveDir = Vector2(cos(bullet[idx]->atkAngle), sin(bullet[idx]->atkAngle));
+                        if (stringBullet.outputAlphbets[i][r][c])
+                        {
+                            int idx = i * 25 + r * 5 + c;
+                            bullet[idx]->atkAngle = (bullet[idx]->angle / 60.0f) + (0.2f * i) + angleFactor;
+                            bullet[idx]->moveDir = Vector2(cos(bullet[idx]->atkAngle), sin(bullet[idx]->atkAngle));
+                        }
                     }
                 }
             }
-        }
 
-        if (TIMER->GetTick(timeFire, 2.0f))
-        {
             for (auto& elem : bullet)
             {
                 if (elem->moveDir.x == 0.0f && elem->moveDir.y == 0.0f) continue;
@@ -696,7 +772,14 @@ namespace Gungeon
 
     void Boss::UpdateRand()
     {
-        bullet[curRandIdx++]->Spawn(bulletSpawnPos);
-        if (curRandIdx >= randMax) curRandIdx = 0;
+        if (TIMER->GetTick(timeRand, 2.0f))
+        {
+            int t = 5;
+            while (t--)
+            {
+                bullet[curRandIdx++]->Spawn(bulletSpawnPos);
+                if (curRandIdx >= randMax) curRandIdx = 0;
+            }
+        }
     }
 }

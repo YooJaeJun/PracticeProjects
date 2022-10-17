@@ -23,6 +23,10 @@ namespace Gungeon
 		scalar = 300.0f;
 		curHp = maxHp = 6;
 		for (auto& elem : canFireOnce) elem = true;
+
+		intervalIdle = 0.2f;
+		intervalWalk = 0.1f;
+		intervalDie = 0.2f;
 	}
 
 	void Player::InitCol()
@@ -59,7 +63,7 @@ namespace Gungeon
 		idle = new ObImage(L"EnterTheGungeon/player_1/Idle.png");
 		idle->maxFrame = Int2(4, 8);
 		idle->scale = Vector2(72.0 / 4.0f, 160.0f / 8.0f) * scaleFactor;
-		idle->ChangeAnim(AnimState::loop, 0.2f);
+		idle->ChangeAnim(AnimState::loop, intervalIdle);
 		idle->SetParentRT(*col);
 		idle->zOrder = ZOrder::object;
 
@@ -67,7 +71,7 @@ namespace Gungeon
 		walk->isVisible = false;
 		walk->maxFrame = Int2(6, 8);
 		walk->scale = Vector2(102.0f / 6.0f, 192.0f / 8.0f) * scaleFactor;
-		walk->ChangeAnim(AnimState::loop, 0.1f);
+		walk->ChangeAnim(AnimState::loop, intervalWalk);
 		walk->SetParentRT(*col);
 		walk->zOrder = ZOrder::object;
 
@@ -79,7 +83,13 @@ namespace Gungeon
 		roll->SetParentRT(*col);
 		roll->zOrder = ZOrder::object;
 
-		hit = nullptr;
+		die = new ObImage(L"EnterTheGungeon/player_1/Die.png");
+		die->isVisible = false;
+		die->maxFrame.x = 8;
+		die->scale = Vector2(160.0f / 8.0f, 24.0f) * scaleFactor;
+		die->ChangeAnim(AnimState::once, intervalDie);
+		die->SetParentRT(*col);
+		die->zOrder = ZOrder::object;
 
 		fall = new ObImage(L"EnterTheGungeon/player_1/Fall.png");
 		fall->isVisible = false;
@@ -88,14 +98,6 @@ namespace Gungeon
 		fall->ChangeAnim(AnimState::loop, 0.2f);
 		fall->SetParentRT(*col);
 		fall->zOrder = ZOrder::object;
-
-		die = new ObImage(L"EnterTheGungeon/player_1/Die.png");
-		die->isVisible = false;
-		die->maxFrame.x = 8;
-		die->scale = Vector2(160.0f / 8.0f, 24.0f) * scaleFactor;
-		die->ChangeAnim(AnimState::once, 0.2f);
-		die->SetParentRT(*col);
-		die->zOrder = ZOrder::object;
 
 		kick = new ObImage(L"EnterTheGungeon/player_1/Kick.png");
 		kick->isVisible = false;
@@ -863,11 +865,11 @@ namespace Gungeon
 	void Player::ColToggle()
 	{
 		Character::ColToggle();
-		weapons[curWeaponIdx]->col->isVisible = !weapons[curWeaponIdx]->col->isVisible;
-		weapons[curWeaponIdx]->firePos->isVisible = !weapons[curWeaponIdx]->firePos->isVisible;
+		weapons[curWeaponIdx]->col->isVisible ^= 1;
+		weapons[curWeaponIdx]->firePos->isVisible ^= 1;
 		for (auto& bulletElem : bullet)
 		{
-			bulletElem->col->isVisible = !bulletElem->col->isVisible;
+			bulletElem->col->isVisible ^= 1;
 		}
 	}
 }

@@ -15,6 +15,10 @@ namespace Gungeon
 
 	void Enemy::InitVar()
 	{
+		intervalIdle = 0.2f;
+		intervalWalk = 0.1f;
+		intervalHit = 0.2f;
+		intervalDie = 0.2f;
 	}
 
 	void Enemy::InitSelf()
@@ -279,11 +283,11 @@ namespace Gungeon
 	void Enemy::ColToggle()
 	{
 		Character::ColToggle();
-		if (weapon) weapon->col->isVisible = !weapon->col->isVisible;
-		if (weapon) weapon->firePos->isVisible = !weapon->firePos->isVisible;
+		if (weapon) weapon->col->isVisible ^= 1;
+		if (weapon) weapon->firePos->isVisible ^= 1;
 		for (auto& bulletElem : bullet)
 		{
-			bulletElem->col->isVisible = !bulletElem->col->isVisible;
+			bulletElem->col->isVisible ^= 1;
 		}
 	}
 }

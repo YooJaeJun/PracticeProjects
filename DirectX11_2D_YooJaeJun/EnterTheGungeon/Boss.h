@@ -30,7 +30,6 @@ namespace Gungeon
 		virtual void Init() override;
 		void InitVar();
 		void InitSelf();
-		void InitWeapon();
 		void InitBullet();
 		void InitItem();
 		virtual void Release() override;
@@ -66,7 +65,14 @@ namespace Gungeon
 		void UpdateRand();
 
 	public:
+		ObImage*			chairIdle = nullptr;
+		ObImage*			chairWalk = nullptr;
+		ObImage*			chairAttack1Start = nullptr;
+		ObImage*			chairAttack1 = nullptr;
+		ObImage*			chairAttack2 = nullptr;
+		ObImage*			chairDie = nullptr;
 		Weapon*				weapon = nullptr;
+		ObCircle*			firePos = nullptr;
 		UI*					hpGuageBar = nullptr;
 		UI*					hpGuage = nullptr;
 		vector<Bullet*>		bullet;
@@ -76,6 +82,7 @@ namespace Gungeon
 		Vector2				bulletSpawnDir;
 		float				timeSetMoveDir = 0.0f;
 		float				timeSetTargetDir = 0.0f;
+		float				angleFactor = 0.0f;
 		float				timeSpiral = 0.0f;
 		float				curSpiralIdx = 0.0f;
 		bool				flagSpiralRespawn = false;

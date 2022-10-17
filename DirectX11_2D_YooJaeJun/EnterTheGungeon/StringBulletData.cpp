@@ -4,7 +4,7 @@ namespace Gungeon
 {
     void StringBulletData::SetStringBullet()
     {
-        midForTargetFactor = 0.1f + inputString.size() * 0.1f;
+        midForTargetFactor = 0.0f + inputString.size() * 0.1f;
 
         for (int i = 0; i < inputString.size(); i++)
         {

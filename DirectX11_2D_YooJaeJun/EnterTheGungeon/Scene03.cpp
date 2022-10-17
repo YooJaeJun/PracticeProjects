@@ -173,7 +173,7 @@ namespace Gungeon
             flagCleared = false;
 
             boss->targetPos = player->Pos();
-            boss->weapon->col->rotation = Utility::DirToRadian(player->Pos());
+            boss->firePos->rotation2 = Utility::DirToRadian(player->Pos() - boss->firePos->GetWorldPos());
 
             switch (boss->pattern)
             {
@@ -216,9 +216,9 @@ namespace Gungeon
     {
         MAP->tilemap->Render();
         if (player) player->shadow->Render();
-        if (player) player->Render();
         if (boss) boss->shadow->Render();
         if (boss) boss->Render();
+        if (player) player->Render();
     }
 
     void Scene03::ResizeScreen()

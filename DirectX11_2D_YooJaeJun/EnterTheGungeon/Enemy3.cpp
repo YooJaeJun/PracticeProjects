@@ -96,7 +96,7 @@ namespace Gungeon
 
 	void Enemy3::InitFireCycle()
 	{
-		fireCycle = RANDOM->Float(1.5f, 3.0f);
+		intervalFire = RANDOM->Float(1.5f, 3.0f);
 	}
 
 	void Enemy3::Release()
@@ -129,7 +129,7 @@ namespace Gungeon
 		{
 		case Gungeon::EnemyFireState::none:
 
-			if (TIMER->GetTick(timeFire, fireCycle))
+			if (TIMER->GetTick(timeFire, intervalFire))
 			{
 				spawnPos = Pos();
 				for (auto& elem : bullet)

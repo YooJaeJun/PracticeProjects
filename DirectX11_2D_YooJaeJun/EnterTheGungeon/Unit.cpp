@@ -40,12 +40,6 @@ namespace Gungeon
 				StartIdle();
 			}
 			break;
-		case Gungeon::State::die:
-			break;
-		case Gungeon::State::cinematic:
-			break;
-		default:
-			break;
 		}
 
 		Character::Update();
@@ -129,7 +123,7 @@ namespace Gungeon
 					idle->isVisible = false;
 					walk->isVisible = false;
 					hit->isVisible = true;
-					hit->ChangeAnim(AnimState::loop, 0.2f);
+					hit->ChangeAnim(AnimState::loop, intervalHit);
 				}
 
 				if (curHp <= 0)
@@ -181,8 +175,6 @@ namespace Gungeon
 		{
 			die->color = Color(0.4f, 0.4f, 0.4f, 0.4f);
 		}
-
-		if (colTile) colTile->isVisible = false;
 	}
 
 	void Unit::StartWalk()
@@ -190,7 +182,7 @@ namespace Gungeon
 		state = State::walk;
 		idle->isVisible = false;
 		walk->isVisible = true;
-		walk->ChangeAnim(AnimState::loop, 0.1f);
+		walk->ChangeAnim(AnimState::loop, intervalWalk);
 	}
 
 	void Unit::StartIdle()
@@ -198,7 +190,7 @@ namespace Gungeon
 		state = State::idle;
 		walk->isVisible = false;
 		idle->isVisible = true;
-		idle->ChangeAnim(AnimState::loop, 0.2f);
+		idle->ChangeAnim(AnimState::loop, intervalIdle);
 	}
 
 	void Unit::StepBack()

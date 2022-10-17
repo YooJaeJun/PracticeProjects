@@ -40,13 +40,13 @@ namespace Gungeon
 		virtual void ColToggle() override;
 
 	private:
-		float		timeSetMoveDir = 0.0f;
-		float		timeSetTargetDir = 0.0f;
-		float		pushedScalar = 400.0f;
-		float		timeAiming = 0.0f;
+		float			timeSetMoveDir = 0.0f;
+		float			timeSetTargetDir = 0.0f;
+		float			pushedScalar = 400.0f;
+		float			timeAiming = 0.0f;
 
 	protected:
-		float		fireCycle = 0.0f;
+		float			intervalFire = 0.0f;
 
 	public:
 		float			timeSetDir = 0.0f;

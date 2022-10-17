@@ -57,7 +57,7 @@ namespace Gungeon
 
 	void Character::ColToggle()
 	{
-		if (col) col->isVisible = !col->isVisible;
-		if (colTile) colTile->isVisible = !colTile->isVisible;
+		if (col) col->isVisible ^= 1;
+		if (colTile) colTile->isVisible ^= 1;
 	}
 }
