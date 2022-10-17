@@ -16,6 +16,8 @@
 #include <chrono>
 #include <random>
 #include <iostream>
+#include <thread>
+#include <mutex>
 using namespace std;
 
 //DirectX d3d 11
