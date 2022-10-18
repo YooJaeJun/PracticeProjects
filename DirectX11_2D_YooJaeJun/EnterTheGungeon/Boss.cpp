@@ -635,6 +635,10 @@ namespace Gungeon
         {
             bulletElem->col->isVisible ^= 1;
         }
+        for (auto& bulletElem : trailBullet)
+        {
+            bulletElem->col->isVisible ^= 1;
+        }
     }
 
 
@@ -663,6 +667,7 @@ namespace Gungeon
             elem->moveDir.x = cos(idx * 6.0f * ToRadian);
             elem->moveDir.y = sin(idx * 6.0f * ToRadian);
             elem->scalar = 250.0f;
+            elem->idle->color = Color(0.5f, 0.5f, 0.5f, 1.0f);
             idx++;
         }
     }
@@ -694,6 +699,7 @@ namespace Gungeon
                         bullet[idx]->Init();
                         bullet[idx]->scalar = 200.0f + (r + 10.0f) * 15.0f;
                         bullet[idx]->angle = PI * 2 * (c + 1) / 5;
+                        bullet[idx]->idle->color = Color(0.5f, 0.5f, 0.5f, 1.0f);
                     }
                 }
             }
@@ -709,11 +715,11 @@ namespace Gungeon
         {
             if (nullptr == elem) elem = new BossBullet;
             elem->Init();
+            elem->scalar = (idx + 1) * 3.0f;
             elem->col->SetParentRT(*col);
             elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
-            elem->scalar = (idx + 1) * 3.0f;
             elem->idle->isVisible = true;
-            elem->idle->color = Color(1.0f, 0.7f, 0.0f);
+            elem->idle->color = Color(1.0f, 0.7f, 0.0f, 1.0f);
             idx++;
         }
     }
@@ -730,6 +736,7 @@ namespace Gungeon
             elem->Init();
             elem->scalar = 100.0f + (idx + 10.0f) * 5.0f;
             elem->moveDir = Vector2(cos(idx * 360.0f / spiralMax * ToRadian), sin(idx * 360.0f / spiralMax * ToRadian));
+            elem->idle->color = Color(0.5f, 0.5f, 0.5f, 1.0f);
             idx++;
         }
     }
@@ -745,6 +752,7 @@ namespace Gungeon
             if (nullptr == elem) elem = new TrailBullet;
             elem->Init();
             elem->scalar = 700.0f;
+            elem->idle->color = Color(0.5f, 0.5f, 0.5f, 1.0f);
             idx++;
         }
     }
@@ -761,6 +769,7 @@ namespace Gungeon
             elem->Init();
             elem->scalar = RANDOM->Float(10.0f, 100.0f);
             elem->moveDir = Vector2(cos(idx * 6.0f * ToRadian), sin(idx * 6.0f * ToRadian));
+            elem->idle->color = Color(0.5f, 0.5f, 0.5f, 1.0f);
             idx++;
         }
     }
@@ -779,6 +788,7 @@ namespace Gungeon
             if (nullptr == elem) elem = new BossBullet;
             elem->Init();
             elem->scalar = 600.0f;
+            elem->idle->color = Color(0.5f, 0.5f, 0.5f, 1.0f);
 
             if (idx % 12 == 0) flagAngleTrans ^= 1;
             if (flagAngleTrans) factor = 0.0f;

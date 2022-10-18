@@ -6,6 +6,8 @@ struct VertexInput
     float4 color : COLOR0;
     float tileMapIdx : INDICES0;
     float tileState : STATE0;
+    int tileRoomIdx : ROOMIDX0;
+    int tileDir : DIR0;
 };
 // PI
 struct PixelInput
@@ -15,6 +17,8 @@ struct PixelInput
     float4 color : COLOR0;
     float tileMapIdx : INDICES0;
     float tileState : STATE0;
+    int tileRoomIdx : ROOMIDX0;
+    int tileDir : DIR0;
 };
 
 
@@ -41,6 +45,8 @@ PixelInput VS(VertexInput input)
     output.uv = input.uv;
     output.tileMapIdx = input.tileMapIdx;
     output.tileState = input.tileState;
+    output.tileRoomIdx = input.tileRoomIdx;
+    output.tileDir = input.tileDir;
     return output;
 }
 

@@ -13,6 +13,8 @@ void Main::Init()
 	tileSize = Int2(50, 50);
 	tileColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
 	tileState = 0;
+
+	MAP->useGui = true;
 }
 
 void Main::Release()

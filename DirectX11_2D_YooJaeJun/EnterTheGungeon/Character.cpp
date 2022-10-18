@@ -55,6 +55,16 @@ namespace Gungeon
 		isHit = false;
 	}
 
+	void Character::StepBack()
+	{
+		SetPos(lastPos);
+	}
+
+	void Character::SetLastPos()
+	{
+		lastPos = Pos();
+	}
+
 	void Character::ColToggle()
 	{
 		if (col) col->isVisible ^= 1;

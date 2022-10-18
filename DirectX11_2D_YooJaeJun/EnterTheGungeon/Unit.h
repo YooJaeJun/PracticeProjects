@@ -24,8 +24,7 @@ namespace Gungeon
 		virtual void StartAttack();
 		virtual void StartDie();
 		virtual void Spawn(const Vector2 wpos) override;
-		void SetLastPosAndDir();
-		void StepBack();
+		void SetLastDir();
 		void SetDirState(const Vector2 dir, DirState& dirState);
 		void FindPath(ObTileMap* map);
 		void Stop();
@@ -43,7 +42,6 @@ namespace Gungeon
 		ObImage*			shadow = nullptr;
 		Item*				dropItem = nullptr;
 		vector<Bullet*>		bullet;
-		Vector2				lastPos;
 		DirState			curMoveDirState = DirState::dirB;
 		DirState			curMoveDirStateBefore = DirState::dirB;
 		DirState			curTargetDirState = DirState::dirB;

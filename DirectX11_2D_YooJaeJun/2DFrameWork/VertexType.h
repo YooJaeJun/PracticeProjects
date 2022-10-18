@@ -13,7 +13,7 @@ struct VertexPC
         this->position.z = 0.0f;
     }
 };
-   
+
 
 struct VertexPT
 {
@@ -39,20 +39,21 @@ struct VertexTile
     float tileMapIdx;
     float tileState;
     int tileRoomIdx;
-    DirState tileDir;
+    int tileDir;
 
     VertexTile()
     {
         position = Vector3(0.0f, 0.0f, 0.0f);
         uv = Vector2(0.0f, 0.0f);
+        color = Color(0.5f, 0.5f, 0.5f, 0.5f);
         tileMapIdx = 0.0f;
         tileState = 0.0f;
         tileRoomIdx = -1;
-        color = Color(0.5f, 0.5f, 0.5f, 0.5f);
+        tileDir = -1;
     }
 
     VertexTile(Vector3 position, Vector2 uv, Color color, float tileMapIdx, float tileState)
-        : position(position), uv(uv), color(color), tileMapIdx(tileMapIdx), tileState(tileState), tileRoomIdx(-1)
+        : position(position), uv(uv), color(color), tileMapIdx(tileMapIdx), tileState(tileState), tileRoomIdx(-1), tileDir(-1)
     {
         this->position.z = 0.0f;
     }

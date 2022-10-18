@@ -16,7 +16,6 @@ namespace Gungeon
         col->rotation = 0.0f;
         col->rotation2 = 0.0f;
         SetPos(DEFAULTSPAWN);
-        idle->color = Color(0.5f, 0.5f, 0.5f, 1.0f);
         timeLife = 0.0f;
         intervalLife = 10.0f;
     }
@@ -32,16 +31,16 @@ namespace Gungeon
     {
         if (isFired)
         {
+            SetLastPos();
             Character::Update();
 
             moveDir.Normalize();
             Vector2 velocity = moveDir * scalar * DELTA;
             col->MoveWorldPos(velocity);
 
-            if (TIMER->GetTick(timeLife, intervalLife))
-            {
-
-            }
+            //if (TIMER->GetTick(timeLife, intervalLife))
+            //{
+            //}
         }
 
         idle->Update();

@@ -317,7 +317,7 @@ void ObTileMap::SetTileRoomIndex(Int2 tileIdx, const int tileRoomIndex)
 DirState ObTileMap::GetTileDoorDir(Int2 tileIdx)
 {
     int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
-    return vertices[verticeIdx * 6].tileDir;
+    return (DirState)vertices[verticeIdx * 6].tileDir;
 }
 
 void ObTileMap::SetTileDoorDir(Int2 tileIdx, const DirState doorDir)
@@ -371,7 +371,8 @@ void ObTileMap::Save()
                 << vertices[verticeIdx * 6 + 2].uv.x << " " << vertices[verticeIdx * 6 + 2].uv.y << " "
                 << vertices[verticeIdx * 6].color.x << " " << vertices[verticeIdx * 6].color.y << " "
                 << vertices[verticeIdx * 6].color.z << " " << vertices[verticeIdx * 6].color.w << " "
-                << vertices[verticeIdx * 6].tileMapIdx << " " << vertices[verticeIdx * 6].tileState << endl;
+                << vertices[verticeIdx * 6].tileMapIdx << " " << vertices[verticeIdx * 6].tileState << " "
+                << vertices[verticeIdx * 6].tileRoomIdx << " " << vertices[verticeIdx * 6].tileDir << endl;
         }
     }
 
@@ -424,10 +425,11 @@ void ObTileMap::Load()
         //°¡·Î
         for (int j = 0; j < tileSize.x; j++)
         {
-            int temp; Vector2 minUV, maxUV; Color color; float tileMapIdx, tileMapState;
+            int temp; Vector2 minUV, maxUV; Color color; float tileMapIdx, tileMapState; int tileRoomIdx, tileDirState;
 
             fin >> temp >> temp >> minUV.x >> minUV.y >> maxUV.x >> maxUV.y
-                >> color.x >> color.y >> color.z >> color.w >> tileMapIdx >> tileMapState;
+                >> color.x >> color.y >> color.z >> color.w >> tileMapIdx >> tileMapState
+                >> tileRoomIdx >> tileDirState;
 
             int verticeIdx = tileSize.x * i + j;
 
@@ -443,8 +445,12 @@ void ObTileMap::Load()
                 vertices[verticeIdx * 6 + k].color = color;
                 vertices[verticeIdx * 6 + k].tileMapIdx = tileMapIdx;
                 vertices[verticeIdx * 6 + k].tileState = tileMapState;
+                vertices[verticeIdx * 6 + k].tileRoomIdx = tileRoomIdx;
+                vertices[verticeIdx * 6 + k].tileDir = tileDirState;
             }
         }
+
+        CreateTileCost();
     }
 
     D3D->GetDC()->UpdateSubresource(vertexBuffer, 0, NULL, vertices, 0, 0);

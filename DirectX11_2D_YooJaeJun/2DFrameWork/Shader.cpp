@@ -75,14 +75,16 @@ Shader::Shader(wstring file)
     
     else if (file == L"3.TileMap")
     {
-        D3D11_INPUT_ELEMENT_DESC LayoutDesc[5];
+        D3D11_INPUT_ELEMENT_DESC LayoutDesc[7];
         LayoutDesc[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
         LayoutDesc[1] = { "UV", 0,DXGI_FORMAT_R32G32_FLOAT, 0, 12,D3D11_INPUT_PER_VERTEX_DATA, 0 };
         LayoutDesc[2] = { "COLOR", 0,DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 20,D3D11_INPUT_PER_VERTEX_DATA, 0 };
         LayoutDesc[3] = { "INDICES", 0,DXGI_FORMAT_R32_FLOAT, 0, 36,D3D11_INPUT_PER_VERTEX_DATA, 0 };
         LayoutDesc[4] = { "STATE", 0,DXGI_FORMAT_R32_FLOAT, 0, 40,D3D11_INPUT_PER_VERTEX_DATA, 0 };
+        LayoutDesc[5] = { "ROOMIDX", 0,DXGI_FORMAT_R32_UINT, 0, 40,D3D11_INPUT_PER_VERTEX_DATA, 0 };
+        LayoutDesc[6] = { "DIR", 0,DXGI_FORMAT_R32_UINT, 0, 40,D3D11_INPUT_PER_VERTEX_DATA, 0 };
 
-        UINT NumElements = 5;
+        UINT NumElements = 7;
         // 받는 역할은 Input Layout인데, vertext Layout에 담아 쓰기
         D3D->GetDevice()->CreateInputLayout
         (

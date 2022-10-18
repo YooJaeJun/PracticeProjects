@@ -30,7 +30,8 @@ namespace Gungeon
 
 	void Unit::Update()
 	{
-		SetLastPosAndDir();
+		SetLastPos();
+		SetLastDir();
 
 		switch (state)
 		{
@@ -168,9 +169,8 @@ namespace Gungeon
 		}
 	}
 
-	void Unit::SetLastPosAndDir()
+	void Unit::SetLastDir()
 	{
-		lastPos = Pos();
 		curMoveDirStateBefore = curMoveDirState;
 		curTargetDirStateBefore = curTargetDirState;
 		targetDirBefore = targetDir;
@@ -206,11 +206,6 @@ namespace Gungeon
 		{
 			state = State::attack;
 		}
-	}
-
-	void Unit::StepBack()
-	{
-		SetPos(lastPos);
 	}
 
 	// moveDir: 이동방향에 따라 다른 방향 애니메이션(플레이어는 roll) 설정

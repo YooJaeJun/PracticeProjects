@@ -295,7 +295,10 @@ namespace Gungeon
 
                     if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
                     {
-                        bulletElem->Hit(1);
+                        // bulletElem->Hit(1);
+                        bulletElem->moveDir.x *= -1.0f;
+                        bulletElem->StepBack();
+                        bulletElem->Update();
                     }
                 }
             }

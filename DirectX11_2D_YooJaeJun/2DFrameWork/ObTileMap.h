@@ -20,7 +20,7 @@ public:
     Vector2     Pos; //타일의 중점
     TileState   state;
     int         roomIdx;
-    DirState    doorDir;
+    int         doorDir;
 
     void ClearCost();
     void ClacH(Int2 DestIdx);

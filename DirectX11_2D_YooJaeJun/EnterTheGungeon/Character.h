@@ -32,13 +32,16 @@ namespace Gungeon
 		inline void SetPosX(const float x) { col->SetWorldPosX(x); }
 		inline void SetPosY(const float y) { col->SetWorldPosY(y); }
 		virtual void Spawn(const Vector2 wpos);
+		void StepBack();
+		void SetLastPos();
 		virtual void ColToggle();
 
 	public:
 		GameObject*	col = nullptr;
 		ObRect*		colTile = nullptr;
 		State		state = State::idle;
-		Vector2		moveDir = Vector2(0.0f, 0.0f);
+		Vector2		moveDir;
+		Vector2		lastPos;
 		float		scalar = 0.0f;
 		int			curHp = 0;
 		int			maxHp = 0;
