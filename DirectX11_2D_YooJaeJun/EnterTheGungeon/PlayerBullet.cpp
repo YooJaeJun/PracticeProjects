@@ -4,8 +4,7 @@ namespace Gungeon
 {
     PlayerBullet::PlayerBullet()
     {
-        scalar = 600.0f;
-        damage = 2;
+        Init();
 
         float scaleFactor = 1.5f;
         col->scale = Vector2(16.0f, 16.0f) * scaleFactor;
@@ -23,6 +22,14 @@ namespace Gungeon
         hitBomb->idle->maxFrame.x = 4;
         hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * bombScaleFactor;
         hitBomb->idle->isVisible = false;
+    }
+
+    void PlayerBullet::Init()
+    {
+        Bullet::Init();
+
+        scalar = 600.0f;
+        damage = 2;
     }
 
     void PlayerBullet::Release()

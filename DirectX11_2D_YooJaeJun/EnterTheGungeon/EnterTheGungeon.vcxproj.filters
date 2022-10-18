@@ -113,6 +113,9 @@
     <ClInclude Include="Enemy3.h">
       <Filter>GameObject\Unit</Filter>
     </ClInclude>
+    <ClInclude Include="TrailBullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -196,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="Enemy3.cpp">
       <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="TrailBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

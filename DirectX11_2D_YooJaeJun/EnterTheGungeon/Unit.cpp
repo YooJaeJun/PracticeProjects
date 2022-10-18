@@ -147,27 +147,24 @@ namespace Gungeon
 
 	void Unit::StartDie()
 	{
-		if (state != State::die)
+		state = State::die;
+
+		isHit = false;
+
+		idle->isVisible = false;
+		walk->isVisible = false;
+		if (attack) attack->isVisible = false;
+		if (attackEnd) attackEnd->isVisible = false;
+		if (hit) hit->isVisible = false;
+		shadow->isVisible = false;
+		die->isVisible = true;
+
+		die->ChangeAnim(AnimState::once, 0.1f);
+
+		for (auto& elem : bullet)
 		{
-			state = State::die;
-
-			isHit = false;
-
-			idle->isVisible = false;
-			walk->isVisible = false;
-			if (attack) attack->isVisible = false;
-			if (attackEnd) attackEnd->isVisible = false;
-			if (hit) hit->isVisible = false;
-			shadow->isVisible = false;
-			die->isVisible = true;
-
-			die->ChangeAnim(AnimState::once, 0.1f);
-
-			for (auto& elem : bullet)
-			{
-				elem->idle->isVisible = false;
-				elem->SetPos(DEFAULTSPAWN);
-			}
+			elem->idle->isVisible = false;
+			elem->SetPos(DEFAULTSPAWN);
 		}
 	}
 

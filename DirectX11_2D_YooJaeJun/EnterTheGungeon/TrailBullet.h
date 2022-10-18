@@ -2,10 +2,10 @@
 
 namespace Gungeon
 {
-	class BossBullet : public Bullet
+	class TrailBullet : public Bullet
 	{
 	public:
-		BossBullet();
+		TrailBullet();
 		virtual void Init() override;
 		virtual void Release() override;
 		virtual void Update() override;
@@ -14,5 +14,12 @@ namespace Gungeon
 		virtual void Render() override;
 
 		virtual void Reload() override;
+
+	public:
+		deque<ObImage*>	trails;
+		float			timeTrail;
+		float			timeSpawnTrail;
+		float			trailDuration;
+		int				trailNum;
 	};
 }

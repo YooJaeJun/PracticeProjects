@@ -184,7 +184,7 @@ namespace Gungeon
                 switch (boss->pattern)
                 {
                 case BossPattern::shield:
-                case BossPattern::cluster:
+                case BossPattern::trail:
                     boss->FindPath(MAP->tilemap);
                     break;
                 }

@@ -9,7 +9,7 @@ namespace Gungeon
 		string,
 		shield,
 		spiral,
-		cluster,
+		trail,
 		brute,
 		tornado,
 		max
@@ -19,7 +19,7 @@ namespace Gungeon
 	{
 		none,
 		start,
-		in,
+		loop,
 		end
 	};
 
@@ -27,7 +27,7 @@ namespace Gungeon
 	const int circularMax = 180;
 	const int shieldMax = 60;
 	const int spiralMax = 60;
-	const int clusterMax = 40;
+	const int trailMax = 30;
 	const int bruteMax = 2000;
 	const int tornadoMax = 150;
 
@@ -62,7 +62,7 @@ namespace Gungeon
 		void InitString();
 		void InitShield();
 		void InitSpiral();
-		void InitCluster();
+		void InitTrail();
 		void InitBrute();
 		void InitTornado();
 		void UpdateBullet();
@@ -70,7 +70,7 @@ namespace Gungeon
 		void UpdateString();
 		void UpdateShield();
 		void UpdateSpiral();
-		void UpdateCluster();
+		void UpdateTrail();
 		void UpdateBrute();
 		void UpdateTornado();
 
@@ -107,5 +107,6 @@ namespace Gungeon
 		float				timeAttackEnd = 0.0f;
 		float				intervalFire[(int)BossPattern::max];
 		float				intervalEnd[(int)BossPattern::max];
+		vector<TrailBullet*>trailBullet;
 	};
 }

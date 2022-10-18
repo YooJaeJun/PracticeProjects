@@ -42,6 +42,7 @@
     <ClInclude Include="Scene02.h" />
     <ClInclude Include="Scene03.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TrailBullet.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Weapon.h" />
@@ -73,6 +74,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="TrailBullet.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Weapon.cpp" />

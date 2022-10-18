@@ -6,6 +6,7 @@ namespace Gungeon
 	{
 	public:
 		Bullet();
+		virtual void Init() override;
 		virtual void Release() override;
 		virtual void Update() override;
 		virtual void Update(const bool notRotation) override;
@@ -27,5 +28,7 @@ namespace Gungeon
 		float		angle = 0.0f;
 		float		atkAngle = 0.0f;
 		float		moveFactor = 1.0f;
+		float		timeLife = 0.0f;
+		float		intervalLife = 10.0f;
 	};
 }

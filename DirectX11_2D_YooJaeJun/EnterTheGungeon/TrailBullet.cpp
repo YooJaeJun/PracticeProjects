@@ -2,7 +2,7 @@
 
 namespace Gungeon
 {
-    BossBullet::BossBullet()
+    TrailBullet::TrailBullet()
     {
         Init();
 
@@ -22,42 +22,66 @@ namespace Gungeon
         hitBomb->idle->maxFrame.x = 4;
         hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * bombScaleFactor;
         hitBomb->idle->isVisible = false;
+
+
+        trails.resize(trailNum);
+
+        for (auto& trail : trails)
+        {
+            trail = new ObImage(L"EnterTheGungeon/boss_1/Bullet_0.png");
+            trail->isVisible = false;
+            trail->scale = col->scale;
+        }
     }
 
-    void BossBullet::Init()
+    void TrailBullet::Init()
     {
         Bullet::Init();
         scalar = 400.0f;
         damage = 1;
         angle = 0.0f;
         atkAngle = 0.0f;
+
+        timeTrail = 0.2f;
+        trailNum = 10;
+        timeSpawnTrail = 0.0f;
     }
 
-    void BossBullet::Release()
+    void TrailBullet::Release()
     {
         Bullet::Release();
+        for (auto& trail : trails) SafeDelete(trail);
     }
 
-    void BossBullet::Update()
+    void TrailBullet::Update()
     {
         Bullet::Update();
     }
 
-    void BossBullet::Update(const bool notRotation)
+    void TrailBullet::Update(const bool notRotation)
     {
         Bullet::Update(notRotation);
+
+        if (TIMER->GetTick(timeSpawnTrail, timeTrail))
+        {
+            trails[0]->isVisible = true;
+            trails[0]->SetWorldPos(Pos());
+            trails[0]->rotation = col->rotation;
+            trails.push_back(trails[0]);
+            trails.pop_front();
+        }
     }
 
-    void BossBullet::LateUpdate()
+    void TrailBullet::LateUpdate()
     {
     }
 
-    void BossBullet::Render()
+    void TrailBullet::Render()
     {
         Bullet::Render();
     }
 
-    void BossBullet::Reload()
+    void TrailBullet::Reload()
     {
         Bullet::Reload();
     }

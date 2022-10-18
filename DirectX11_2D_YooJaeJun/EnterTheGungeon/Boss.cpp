@@ -29,25 +29,25 @@ namespace Gungeon
 
         intervalHit = 0.2f;
         timeAttackStart = 0.0f;
-        intervalAttackStart = 1.0f;
+        intervalAttackStart = 0.5f;
 
         intervalFire[(int)BossPattern::none] = 0.0f;
         intervalFire[(int)BossPattern::circular] = 1.2f;
-        intervalFire[(int)BossPattern::string] = 3.0f;
+        intervalFire[(int)BossPattern::string] = 2.0f;
         intervalFire[(int)BossPattern::shield] = 0.0f;
         intervalFire[(int)BossPattern::spiral] = 0.05f;
-        intervalFire[(int)BossPattern::cluster] = 1.0f;
+        intervalFire[(int)BossPattern::trail] = 0.4f;
         intervalFire[(int)BossPattern::brute] = 4.0f;
         intervalFire[(int)BossPattern::tornado] = 0.2f;
 
         intervalEnd[(int)BossPattern::none] = 0.0f;
-        intervalEnd[(int)BossPattern::circular] = 3.0f;
-        intervalEnd[(int)BossPattern::string] = 5.0f;
+        intervalEnd[(int)BossPattern::circular] = 4.0f;
+        intervalEnd[(int)BossPattern::string] = 6.0f;
         intervalEnd[(int)BossPattern::shield] = 15.0f;
         intervalEnd[(int)BossPattern::spiral] = 4.0f;
-        intervalEnd[(int)BossPattern::cluster] = 3.0f;
+        intervalEnd[(int)BossPattern::trail] = 10.0f;
         intervalEnd[(int)BossPattern::brute] = 1.0f;
-        intervalEnd[(int)BossPattern::tornado] = 3.0f;
+        intervalEnd[(int)BossPattern::tornado] = 4.0f;
     }
 
     void Boss::InitSelf()
@@ -237,8 +237,8 @@ namespace Gungeon
         case Gungeon::BossPattern::spiral:
             InitSpiral();
             break;
-        case Gungeon::BossPattern::cluster:
-            InitCluster();
+        case Gungeon::BossPattern::trail:
+            InitTrail();
             break;
         case Gungeon::BossPattern::brute:
             InitBrute();
@@ -369,6 +369,7 @@ namespace Gungeon
         attack3->Render();
 
         for (auto& elem : bullet) elem->Render();
+        for (auto& elem : trailBullet) elem->Render();
         firePosTargeting->Render();
         firePosCannon->Render();
         hpGuageBar->Render();
@@ -413,28 +414,40 @@ namespace Gungeon
             case Gungeon::BossPattern::brute:
             case Gungeon::BossPattern::shield:
             case Gungeon::BossPattern::tornado:
+                hit->isVisible = false;
                 attack1->isVisible = true;
                 chairAttack1->isVisible = true;
                 break;
 
             case Gungeon::BossPattern::spiral:
+                hit->isVisible = false;
                 attack2->isVisible = true;
                 chairAttack2->isVisible = true;
                 break;
 
             case Gungeon::BossPattern::circular:
             case Gungeon::BossPattern::string:
-            case Gungeon::BossPattern::cluster:
+            case Gungeon::BossPattern::trail:
+                hit->isVisible = false;
                 attack3->isVisible = true;
                 chairAttack3->isVisible = true;
                 break;
             }
 
-            attackState = BossAttackState::in;
+            attackState = BossAttackState::loop;
             break;
-        case Gungeon::BossAttackState::in:
+        case Gungeon::BossAttackState::loop:
+
+            hit->isVisible = false;
+            idle->isVisible = false;
+            walk->isVisible = false;
+
             if (TIMER->GetTick(timeAttackEnd, intervalEnd[(int)pattern]))
             {
+                for (auto& elem : bullet)
+                {
+                    elem->Hit(1);
+                }
                 attackState = BossAttackState::end;
             }
             break;
@@ -460,11 +473,6 @@ namespace Gungeon
     void Boss::Die()
     {
         Unit::Die();
-
-        for (auto& elem : bullet)
-        {
-            elem->idle->isVisible = false;
-        }
     }
 
     void Boss::Hit(const int damage, const Vector2& dir)
@@ -530,7 +538,7 @@ namespace Gungeon
                 hit->color = c;
                 die->color = c;
 
-                walk->isVisible = true;
+                idle->isVisible = true;
                 hit->isVisible = false;
 
                 isHitAnim = false;
@@ -563,9 +571,23 @@ namespace Gungeon
     {
         Unit::StartDie();
 
+        attack1Start->isVisible = false;
+        attack1->isVisible = false;
+        attack2->isVisible = false;
+        attack3->isVisible = false;
+
         chairIdle->isVisible = false;
         chairWalk->isVisible = false;
+        chairAttack1Start->isVisible = false;
+        chairAttack1->isVisible = false;
+        chairAttack2->isVisible = false;
+        chairAttack3->isVisible = false;
         chairDie->isVisible = true;
+
+        for (auto& elem : bullet)
+        {
+            elem->Hit(1);
+        }
 
         hpGuageBar->img->isVisible = false;
         hpGuage->img->isVisible = false;
@@ -620,12 +642,8 @@ namespace Gungeon
 
         for (auto& elem : bullet)
         {
-            elem->moveDir = Vector2(0.0f, 0.0f);
-            elem->scalar = 120.0f;
-            elem->col->rotation = 0.0f;
-            elem->col->rotation2 = 0.0f;
-            elem->SetPos(DEFAULTSPAWN);
-            elem->idle->color = Color(0.5f, 0.5f, 0.5f);
+            elem->Init();
+            idle->color = Color(0.5f, 0.5f, 0.5f);
         }
     }
 
@@ -709,16 +727,16 @@ namespace Gungeon
         }
     }
 
-    void Boss::InitCluster()
+    void Boss::InitTrail()
     {
-        bullet.resize(clusterMax);
+        trailBullet.resize(trailMax);
         bulletSpawnPos = firePosTargeting->GetWorldPos();
 
         int idx = 0;
-        for (auto& elem : bullet)
+        for (auto& elem : trailBullet)
         {
-            if (nullptr == elem) elem = new BossBullet;
-            elem->scalar = 200.0f;
+            if (nullptr == elem) elem = new TrailBullet;
+            elem->scalar = 700.0f;
             idx++;
         }
     }
@@ -779,8 +797,8 @@ namespace Gungeon
         case Gungeon::BossPattern::spiral:
             UpdateSpiral();
             break;
-        case Gungeon::BossPattern::cluster:
-            UpdateCluster();
+        case Gungeon::BossPattern::trail:
+            UpdateTrail();
             break;
         case Gungeon::BossPattern::brute:
             UpdateBrute();
@@ -879,19 +897,19 @@ namespace Gungeon
         }
     }
 
-    void Boss::UpdateCluster()
+    void Boss::UpdateTrail()
     {
-        if (TIMER->GetTick(timeCluster, intervalFire[(int)BossPattern::circular]))
+        if (TIMER->GetTick(timeCluster, intervalFire[(int)BossPattern::trail]))
         {
-            int t = 10;
-            while (t--)
-            {
-                bullet[curBulletIdx]->moveDir.x = min(targetDir.x + RANDOM->Float(0.0f, 0.1f), 1.0f);
-                bullet[curBulletIdx]->moveDir.y = min(targetDir.y + RANDOM->Float(0.0f, 0.1f), 1.0f);
-                bullet[curBulletIdx]->scalar = RANDOM->Float(200.0f, 700.0f);
-                bullet[curBulletIdx]->Spawn(bulletSpawnPos);
-                curBulletIdx++;
-            }
+            trailBullet[curBulletIdx]->moveDir.x = min(targetDir.x + RANDOM->Float(0.0f, 0.1f), 1.0f);
+            trailBullet[curBulletIdx]->moveDir.y = min(targetDir.y + RANDOM->Float(0.0f, 0.1f), 1.0f);
+            trailBullet[curBulletIdx]->Spawn(bulletSpawnPos);
+            curBulletIdx++;
+        }
+
+        for (auto& elem : trailBullet)
+        {
+            elem->Update();
         }
     }
 
