@@ -36,7 +36,7 @@ namespace Gungeon
         intervalFire[(int)BossPattern::string] = 2.0f;
         intervalFire[(int)BossPattern::shield] = 0.0f;
         intervalFire[(int)BossPattern::spiral] = 0.05f;
-        intervalFire[(int)BossPattern::trail] = 0.4f;
+        intervalFire[(int)BossPattern::trail] = 0.6f;
         intervalFire[(int)BossPattern::brute] = 4.0f;
         intervalFire[(int)BossPattern::tornado] = 0.2f;
 
@@ -369,7 +369,12 @@ namespace Gungeon
         attack3->Render();
 
         for (auto& elem : bullet) elem->Render();
-        for (auto& elem : trailBullet) elem->Render();
+
+        if (pattern == BossPattern::trail)
+        {
+            for (auto& elem : trailBullet) elem->Render();
+        }
+        
         firePosTargeting->Render();
         firePosCannon->Render();
         hpGuageBar->Render();
@@ -445,6 +450,10 @@ namespace Gungeon
             if (TIMER->GetTick(timeAttackEnd, intervalEnd[(int)pattern]))
             {
                 for (auto& elem : bullet)
+                {
+                    elem->Hit(1);
+                }
+                for (auto& elem : trailBullet)
                 {
                     elem->Hit(1);
                 }
@@ -639,12 +648,6 @@ namespace Gungeon
     {
         pattern = newPattern;
         curBulletIdx = 0;
-
-        for (auto& elem : bullet)
-        {
-            elem->Init();
-            idle->color = Color(0.5f, 0.5f, 0.5f);
-        }
     }
 
     void Boss::InitCircular()
@@ -656,6 +659,7 @@ namespace Gungeon
         for (auto& elem : bullet)
         {
             if (nullptr == elem) elem = new BossBullet;
+            elem->Init();
             elem->moveDir.x = cos(idx * 6.0f * ToRadian);
             elem->moveDir.y = sin(idx * 6.0f * ToRadian);
             elem->scalar = 250.0f;
@@ -687,6 +691,7 @@ namespace Gungeon
 
                     if (stringBullet.outputAlphbets[i][r][c])
                     {
+                        bullet[idx]->Init();
                         bullet[idx]->scalar = 200.0f + (r + 10.0f) * 15.0f;
                         bullet[idx]->angle = PI * 2 * (c + 1) / 5;
                     }
@@ -703,6 +708,7 @@ namespace Gungeon
         for (auto& elem : bullet)
         {
             if (nullptr == elem) elem = new BossBullet;
+            elem->Init();
             elem->col->SetParentRT(*col);
             elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
             elem->scalar = (idx + 1) * 3.0f;
@@ -721,6 +727,7 @@ namespace Gungeon
         for (auto& elem : bullet)
         {
             if (nullptr == elem) elem = new BossBullet;
+            elem->Init();
             elem->scalar = 100.0f + (idx + 10.0f) * 5.0f;
             elem->moveDir = Vector2(cos(idx * 360.0f / spiralMax * ToRadian), sin(idx * 360.0f / spiralMax * ToRadian));
             idx++;
@@ -736,6 +743,7 @@ namespace Gungeon
         for (auto& elem : trailBullet)
         {
             if (nullptr == elem) elem = new TrailBullet;
+            elem->Init();
             elem->scalar = 700.0f;
             idx++;
         }
@@ -750,6 +758,7 @@ namespace Gungeon
         for (auto& elem : bullet)
         {
             if (nullptr == elem) elem = new BossBullet;
+            elem->Init();
             elem->scalar = RANDOM->Float(10.0f, 100.0f);
             elem->moveDir = Vector2(cos(idx * 6.0f * ToRadian), sin(idx * 6.0f * ToRadian));
             idx++;
@@ -768,6 +777,7 @@ namespace Gungeon
         for (auto& elem : bullet)
         {
             if (nullptr == elem) elem = new BossBullet;
+            elem->Init();
             elem->scalar = 600.0f;
 
             if (idx % 12 == 0) flagAngleTrans ^= 1;
@@ -899,6 +909,11 @@ namespace Gungeon
 
     void Boss::UpdateTrail()
     {
+        if (bulletSpawnPos == Vector2(0.0f, 0.0f))
+        {
+            cout << "1";
+        }
+
         if (TIMER->GetTick(timeCluster, intervalFire[(int)BossPattern::trail]))
         {
             trailBullet[curBulletIdx]->moveDir.x = min(targetDir.x + RANDOM->Float(0.0f, 0.1f), 1.0f);

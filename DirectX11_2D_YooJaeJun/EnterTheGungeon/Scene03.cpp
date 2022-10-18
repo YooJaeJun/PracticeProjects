@@ -278,23 +278,49 @@ namespace Gungeon
         }
 
         // º¸½º ÃÑ¾Ë
-        for (auto& bulletElem : boss->bullet)
+        switch (boss->pattern)
         {
-            if (bulletElem->isFired)
+        case BossPattern::trail:
+            for (auto& bulletElem : boss->trailBullet)
             {
-                if (false == player->godMode &&
-                    boss->state != State::die &&
-                    bulletElem->col->Intersect(player->col))
+                if (bulletElem->isFired)
                 {
-                    player->Hit(bulletElem->damage);
-                    bulletElem->Hit(1);
-                }
+                    if (false == player->godMode &&
+                        boss->state != State::die &&
+                        bulletElem->col->Intersect(player->col))
+                    {
+                        player->Hit(bulletElem->damage);
+                        bulletElem->Hit(1);
+                    }
 
-                if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
-                {
-                    bulletElem->Hit(1);
+                    if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
+                    {
+                        bulletElem->Hit(1);
+                    }
                 }
             }
+            break;
+            
+        default:
+            for (auto& bulletElem : boss->bullet)
+            {
+                if (bulletElem->isFired)
+                {
+                    if (false == player->godMode &&
+                        boss->state != State::die &&
+                        bulletElem->col->Intersect(player->col))
+                    {
+                        player->Hit(bulletElem->damage);
+                        bulletElem->Hit(1);
+                    }
+
+                    if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
+                    {
+                        bulletElem->Hit(1);
+                    }
+                }
+            }
+            break;
         }
 
         if (boss->dropItem->state == State::idle &&

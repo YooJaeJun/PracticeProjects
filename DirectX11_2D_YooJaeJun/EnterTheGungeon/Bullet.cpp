@@ -16,6 +16,7 @@ namespace Gungeon
         col->rotation = 0.0f;
         col->rotation2 = 0.0f;
         SetPos(DEFAULTSPAWN);
+        idle->color = Color(0.5f, 0.5f, 0.5f, 1.0f);
         timeLife = 0.0f;
         intervalLife = 10.0f;
     }
@@ -67,8 +68,11 @@ namespace Gungeon
 
     void Bullet::Render()
     {
-        idle->Render(); // RENDER->push(idle);
-        Character::Render();
+        if (isFired)
+        {
+            idle->Render(); // RENDER->push(idle);
+            Character::Render();
+        }
         hitBomb->Render();
     }
 
