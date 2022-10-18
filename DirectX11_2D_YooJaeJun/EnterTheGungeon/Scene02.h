@@ -2,8 +2,8 @@
 
 namespace Gungeon
 {
-	const int enemyMax = 1;
-	const int doorMax = 5;
+	const int enemyMax = 4;
+	const int doorMax = 10;
 
 	enum class GameState
 	{

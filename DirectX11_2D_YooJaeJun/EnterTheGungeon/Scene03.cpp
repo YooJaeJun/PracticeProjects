@@ -173,14 +173,21 @@ namespace Gungeon
             flagCleared = false;
 
             boss->targetPos = player->Pos();
-            boss->firePos->rotation2 = Utility::DirToRadian(player->Pos() - boss->firePos->GetWorldPos());
+            boss->firePosTargeting->rotation2 = Utility::DirToRadian(player->Pos() - boss->firePosTargeting->GetWorldPos());
 
-            switch (boss->pattern)
+            switch (boss->state)
             {
-            case BossPattern::shield:
-            case BossPattern::cluster:
+            case State::walk:
                 boss->FindPath(MAP->tilemap);
                 break;
+            case State::attack:
+                switch (boss->pattern)
+                {
+                case BossPattern::shield:
+                case BossPattern::cluster:
+                    boss->FindPath(MAP->tilemap);
+                    break;
+                }
             default:
                 boss->Stop();
                 break;

@@ -13,7 +13,7 @@ namespace Gungeon
 		InitSelf();
 		InitWeapon();
 		InitBullet();
-		InitFireCycle();
+		InitIntervalAttack();
 	}
 
 	void Enemy2::InitVar()
@@ -85,9 +85,9 @@ namespace Gungeon
 		}
 	}
 
-	void Enemy2::InitFireCycle()
+	void Enemy2::InitIntervalAttack()
 	{
-		intervalFire = RANDOM->Float(2.0f, 3.0f);
+		intervalAttackStart = RANDOM->Float(2.0f, 3.0f);
 	}
 
 	void Enemy2::Release()
@@ -112,23 +112,22 @@ namespace Gungeon
 
 	void Enemy2::Fire()
 	{
-		if (TIMER->GetTick(timeFire, intervalFire))
+		weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
+
+		int t = 5;
+		while (t--)
 		{
-			weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
-
-			int t = 5;
-			while (t--)
-			{
-				bullet[curBulletIdx]->scalar = RANDOM->Float(600.0f, 800.0f);
-				Vector2 fireDir = Vector2(RANDOM->Float(moveDir.x - 0.2f, moveDir.x + 0.2f),
-					RANDOM->Float(moveDir.y - 0.2f, moveDir.y + 0.2f));
-				bullet[curBulletIdx]->Spawn(weapon->firePos->GetWorldPos(), fireDir);
-				curBulletIdx++;
-			}
-
-			if (curBulletIdx >= bulletMax) curBulletIdx = 0;
-
-			InitFireCycle();
+			bullet[curBulletIdx]->scalar = RANDOM->Float(600.0f, 800.0f);
+			Vector2 fireDir = Vector2(RANDOM->Float(moveDir.x - 0.2f, moveDir.x + 0.2f),
+				RANDOM->Float(moveDir.y - 0.2f, moveDir.y + 0.2f));
+			bullet[curBulletIdx]->Spawn(weapon->firePos->GetWorldPos(), fireDir);
+			curBulletIdx++;
 		}
+
+		if (curBulletIdx >= bulletMax) curBulletIdx = 0;
+
+		InitIntervalAttack();
+
+		state = State::idle;
 	}
 }

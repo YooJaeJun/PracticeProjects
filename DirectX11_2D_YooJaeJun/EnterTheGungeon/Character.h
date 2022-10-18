@@ -9,7 +9,8 @@ namespace Gungeon
 		roll,
 		attack,
 		die,
-		cinematic
+		cinematic,
+		max
 	};
 
 	class Character

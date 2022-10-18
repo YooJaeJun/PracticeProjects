@@ -9,6 +9,12 @@ namespace Gungeon
 
 	void Unit::Init()
 	{
+		intervalAnim[(int)State::idle] = 0.0f;
+		intervalAnim[(int)State::walk] = 0.0f;
+		intervalAnim[(int)State::roll] = 0.0f;
+		intervalAnim[(int)State::attack] = 0.0f;
+		intervalAnim[(int)State::die] = 0.0f;
+		intervalAnim[(int)State::cinematic] = 0.0f;
 	}
 
 	void Unit::Release()
@@ -108,6 +114,10 @@ namespace Gungeon
 	{
 	}
 
+	void Unit::Attack()
+	{
+	}
+
 	void Unit::Hit(const int damage)
 	{
 		if (false == isHit)
@@ -182,7 +192,7 @@ namespace Gungeon
 		state = State::walk;
 		idle->isVisible = false;
 		walk->isVisible = true;
-		walk->ChangeAnim(AnimState::loop, intervalWalk);
+		walk->ChangeAnim(AnimState::loop, intervalAnim[(int)State::walk]);
 	}
 
 	void Unit::StartIdle()
@@ -190,7 +200,15 @@ namespace Gungeon
 		state = State::idle;
 		walk->isVisible = false;
 		idle->isVisible = true;
-		idle->ChangeAnim(AnimState::loop, intervalIdle);
+		idle->ChangeAnim(AnimState::loop, intervalAnim[(int)State::idle]);
+	}
+
+	void Unit::StartAttack()
+	{
+		if (TIMER->GetTick(timeAttackStart, intervalAttackStart))
+		{
+			state = State::attack;
+		}
 	}
 
 	void Unit::StepBack()

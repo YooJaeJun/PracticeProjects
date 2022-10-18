@@ -13,7 +13,7 @@ namespace Gungeon
 		InitSelf();
 		InitWeapon();
 		InitBullet();
-		InitFireCycle();
+		InitIntervalAttack();
 	}
 
 	void Enemy3::InitVar()
@@ -94,9 +94,9 @@ namespace Gungeon
 		}
 	}
 
-	void Enemy3::InitFireCycle()
+	void Enemy3::InitIntervalAttack()
 	{
-		intervalFire = RANDOM->Float(1.5f, 3.0f);
+		intervalAttackStart = RANDOM->Float(1.5f, 3.0f);
 	}
 
 	void Enemy3::Release()
@@ -127,34 +127,24 @@ namespace Gungeon
 	{
 		switch (fireState)
 		{
-		case Gungeon::EnemyFireState::none:
+		case Gungeon::Enemy3FireState::none:
 
-			if (TIMER->GetTick(timeFire, intervalFire))
+			AttackAnimStart();
+
+			spawnPos = Pos();
+			for (auto& elem : bullet)
 			{
-				spawnPos = Pos();
-				for (auto& elem : bullet)
-				{
-					elem->scalar = 0.0f;
-					elem->moveDir = Vector2(0.0f, 0.0f);
-				}
-
-				idle->isVisible = false;
-				walk->isVisible = false;
-
-				AttackStart();
-				state = State::attack;
-				fireState = EnemyFireState::z;
+				elem->scalar = 0.0f;
+				elem->moveDir = Vector2(0.0f, 0.0f);
 			}
 
-			break;
-		}
-	}
+			idle->isVisible = false;
+			walk->isVisible = false;
+			fireState = Enemy3FireState::z;
 
-	void Enemy3::Attack()
-	{
-		switch (fireState)
-		{
-		case Gungeon::EnemyFireState::z:
+			break;
+
+		case Gungeon::Enemy3FireState::z:
 
 			if (TIMER->GetTick(timeBulletZ, 0.05f))
 			{
@@ -166,8 +156,8 @@ namespace Gungeon
 						if (++curBulletY >= 5)
 						{
 							curBulletY = 0;
-							AttackEnd();
-							fireState = EnemyFireState::circle;
+							AttackAnimEnd();
+							fireState = Enemy3FireState::circle;
 						}
 					}
 					curBulletIdx++;
@@ -187,7 +177,7 @@ namespace Gungeon
 
 			break;
 
-		case Gungeon::EnemyFireState::circle:
+		case Gungeon::Enemy3FireState::circle:
 
 			if (TIMER->GetTick(timeBulletCircle, 0.05f))
 			{
@@ -198,13 +188,13 @@ namespace Gungeon
 				if (curBulletIdx >= bulletMax)
 				{
 					curBulletIdx = 0;
-					fireState = EnemyFireState::target;
+					fireState = Enemy3FireState::target;
 				}
 			}
 
 			break;
 
-		case Gungeon::EnemyFireState::target:
+		case Gungeon::Enemy3FireState::target:
 
 			for (auto& elem : bullet)
 			{
@@ -212,11 +202,11 @@ namespace Gungeon
 				elem->moveDir = targetDir;
 			}
 
-			fireState = EnemyFireState::toWalk;
+			fireState = Enemy3FireState::toWalk;
 
 			break;
 
-		case Gungeon::EnemyFireState::toWalk:
+		case Gungeon::Enemy3FireState::toWalk:
 
 			for (auto& elem : bullet)
 			{
@@ -226,9 +216,9 @@ namespace Gungeon
 			if (TIMER->GetTick(timeAttackToWalk, 1.5f))
 			{
 				AttackToWalk();
-				InitFireCycle();
+				InitIntervalAttack();
 				state = State::walk;
-				fireState = EnemyFireState::none;
+				fireState = Enemy3FireState::none;
 			}
 
 			break;

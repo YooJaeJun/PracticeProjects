@@ -53,9 +53,6 @@
     <ClInclude Include="Character.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Pet.h">
-      <Filter>GameObject\Unit</Filter>
-    </ClInclude>
     <ClInclude Include="Boss.h">
       <Filter>GameObject\Unit</Filter>
     </ClInclude>
@@ -139,9 +136,6 @@
     </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Pet.cpp">
-      <Filter>GameObject\Unit</Filter>
     </ClCompile>
     <ClCompile Include="Unit.cpp">
       <Filter>GameObject\Unit</Filter>

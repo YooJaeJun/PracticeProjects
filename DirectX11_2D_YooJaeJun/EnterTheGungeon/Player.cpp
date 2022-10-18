@@ -24,9 +24,12 @@ namespace Gungeon
 		curHp = maxHp = 6;
 		for (auto& elem : canFireOnce) elem = true;
 
-		intervalIdle = 0.2f;
-		intervalWalk = 0.1f;
-		intervalDie = 0.2f;
+		intervalAnim[(int)State::idle] = 0.2f;
+		intervalAnim[(int)State::walk] = 0.1f;
+		intervalAnim[(int)State::roll] = 0.0f;
+		intervalAnim[(int)State::attack] = 0.0f;
+		intervalAnim[(int)State::die] = 0.2f;
+		intervalAnim[(int)State::cinematic] = 0.0f;
 	}
 
 	void Player::InitCol()
@@ -63,7 +66,7 @@ namespace Gungeon
 		idle = new ObImage(L"EnterTheGungeon/player_1/Idle.png");
 		idle->maxFrame = Int2(4, 8);
 		idle->scale = Vector2(72.0 / 4.0f, 160.0f / 8.0f) * scaleFactor;
-		idle->ChangeAnim(AnimState::loop, intervalIdle);
+		idle->ChangeAnim(AnimState::loop, intervalAnim[(int)State::idle]);
 		idle->SetParentRT(*col);
 		idle->zOrder = ZOrder::object;
 
@@ -71,7 +74,7 @@ namespace Gungeon
 		walk->isVisible = false;
 		walk->maxFrame = Int2(6, 8);
 		walk->scale = Vector2(102.0f / 6.0f, 192.0f / 8.0f) * scaleFactor;
-		walk->ChangeAnim(AnimState::loop, intervalWalk);
+		walk->ChangeAnim(AnimState::loop, intervalAnim[(int)State::walk]);
 		walk->SetParentRT(*col);
 		walk->zOrder = ZOrder::object;
 
@@ -87,7 +90,7 @@ namespace Gungeon
 		die->isVisible = false;
 		die->maxFrame.x = 8;
 		die->scale = Vector2(160.0f / 8.0f, 24.0f) * scaleFactor;
-		die->ChangeAnim(AnimState::once, intervalDie);
+		die->ChangeAnim(AnimState::once, intervalAnim[(int)State::die]);
 		die->SetParentRT(*col);
 		die->zOrder = ZOrder::object;
 
@@ -435,8 +438,6 @@ namespace Gungeon
 	void Player::Idle()
 	{
 		Unit::SetTarget(weapons[curWeaponIdx]);
-		Unit::Idle();
-
 		Move();
 		FireProcess();
 
@@ -457,8 +458,6 @@ namespace Gungeon
 	void Player::Walk()
 	{
 		Unit::SetTarget(weapons[curWeaponIdx]);
-		Unit::Walk();
-
 		Move();
 		FireProcess();
 

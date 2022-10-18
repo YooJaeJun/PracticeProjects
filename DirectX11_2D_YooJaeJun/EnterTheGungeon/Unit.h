@@ -16,10 +16,12 @@ namespace Gungeon
 		virtual void SetTarget(Weapon*& weapon);
 		virtual void Idle();
 		virtual void Walk();
+		virtual void Attack();
 		virtual void Hit(const int damage);
 		virtual void Die();
 		void StartWalk();
 		void StartIdle();
+		virtual void StartAttack();
 		virtual void StartDie();
 		virtual void Spawn(const Vector2 wpos) override;
 		void SetLastPosAndDir();
@@ -50,6 +52,8 @@ namespace Gungeon
 		Vector2				targetDir;
 		Vector2				targetDirBefore;
 		Vector2				originCamPos;
+		float				intervalAnim[(int)State::max];
+		float				intervalHit = 0.0f;
 		float				timeFire = 0.0f;
 		float				timeReload = 0.0f;
 		Vector2				pushedDir;
@@ -62,12 +66,9 @@ namespace Gungeon
 		vector<Tile*>		way;
 		Vector2				start;
 		Vector2				end;
-		float				g = 0.0f;	// 비율
+		float				timeAttackStart = 0.0f;
+		float				intervalAttackStart = 0.0f;
 		float				timeFindPath = 0.0f;
-		float				intervalIdle = 0.0f;
-		float				intervalWalk = 0.0f;
-		float				intervalAttack = 0.0f;
-		float				intervalHit = 0.0f;
-		float				intervalDie = 0.0f;
+		float				g = 0.0f;	// 비율
 	};
 }

@@ -2,6 +2,15 @@
 
 namespace Gungeon
 {
+	enum class Enemy3FireState
+	{
+		none,
+		z,
+		circle,
+		target,
+		toWalk
+	};
+
 	class Enemy3 : public Enemy
 	{
 	public:
@@ -11,15 +20,15 @@ namespace Gungeon
 		void InitSelf();
 		void InitWeapon();
 		void InitBullet();
-		virtual void InitFireCycle() override;
+		virtual void InitIntervalAttack() override;
 		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 		virtual void Fire() override;
-		virtual void Attack() override;
 
 	public:
+		Enemy3FireState		fireState = Enemy3FireState::none;
 		const int			bulletMax = 43;
 		float				timeBulletTarget = 0.0f;
 		Vector2				spawnPos;

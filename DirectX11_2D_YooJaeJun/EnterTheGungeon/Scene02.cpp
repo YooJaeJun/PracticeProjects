@@ -280,13 +280,14 @@ namespace Gungeon
 
                 elem->targetPos = player->Pos();
 
-                switch (elem->fireState)
+                
+                switch (elem->state)
                 {
-                case Gungeon::EnemyFireState::none:
-                    elem->FindPath(MAP->tilemap);
+                case State::attack:
+                case State::cinematic:
                     break;
                 default:
-                    break;
+                    elem->FindPath(MAP->tilemap);
                 }
             }
         }

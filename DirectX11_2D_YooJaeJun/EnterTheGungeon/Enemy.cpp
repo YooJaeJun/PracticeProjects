@@ -15,10 +15,10 @@ namespace Gungeon
 
 	void Enemy::InitVar()
 	{
-		intervalIdle = 0.2f;
-		intervalWalk = 0.1f;
+		intervalAnim[(int)State::idle] = 0.2f;
+		intervalAnim[(int)State::walk] = 0.1f;
+		intervalAnim[(int)State::die] = 0.2f;
 		intervalHit = 0.2f;
-		intervalDie = 0.2f;
 	}
 
 	void Enemy::InitSelf()
@@ -58,6 +58,10 @@ namespace Gungeon
 		dropItem->state = State::die;
 	}
 
+	void Enemy::InitIntervalAttack()
+	{
+	}
+
 	void Enemy::Release()
 	{
 		Unit::Release();
@@ -73,9 +77,11 @@ namespace Gungeon
 		switch (state)
 		{
 		case State::idle:
+			StartAttack();
 			Idle();
 			break;
 		case State::walk:
+			StartAttack();
 			Walk();
 			break;
 		case State::attack:
@@ -109,19 +115,19 @@ namespace Gungeon
 	void Enemy::Idle()
 	{
 		moveDir = targetDir;
-		Unit::Idle();
-
-		Fire();
 		Hitting();
 	}
 
 	void Enemy::Walk()
 	{
 		moveDir = targetDir;
-		Unit::Walk();
-
-		Fire();
 		Hitting();
+	}
+
+	void Enemy::Attack()
+	{
+		Hitting();
+		Fire();
 	}
 
 	void Enemy::Die()
@@ -251,11 +257,7 @@ namespace Gungeon
 		dropItem->state = State::die;
 	}
 
-	void Enemy::Attack()
-	{
-	}
-
-	void Enemy::AttackStart()
+	void Enemy::AttackAnimStart()
 	{
 		idle->isVisible = false;
 		walk->isVisible = false;
@@ -263,7 +265,7 @@ namespace Gungeon
 		attack->ChangeAnim(AnimState::loop, 0.1f);
 	}
 
-	void Enemy::AttackEnd()
+	void Enemy::AttackAnimEnd()
 	{
 		attack->isVisible = false;
 		attackEnd->isVisible = true;
@@ -274,10 +276,6 @@ namespace Gungeon
 	{
 		attackEnd->isVisible = false;
 		walk->isVisible = true;
-	}
-
-	void Enemy::InitFireCycle()
-	{
 	}
 
 	void Enemy::ColToggle()

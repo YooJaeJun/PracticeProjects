@@ -21,7 +21,6 @@
 #include "Enemy3.h"
 #include "StringBulletData.h"
 #include "Boss.h"
-#include "Pet.h"
 #include "Obstacle.h"
 #include "Door.h"
 #include "Gate.h"

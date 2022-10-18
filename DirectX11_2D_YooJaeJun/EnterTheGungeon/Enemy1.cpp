@@ -13,7 +13,7 @@ namespace Gungeon
 		InitSelf();
 		InitWeapon();
 		InitBullet();
-		InitFireCycle();
+		InitIntervalAttack();
 	}
 
 	void Enemy1::InitVar()
@@ -87,9 +87,9 @@ namespace Gungeon
 		}
 	}
 
-	void Enemy1::InitFireCycle()
+	void Enemy1::InitIntervalAttack()
 	{
-		intervalFire = RANDOM->Float(1.5f, 2.0f);
+		intervalAttackStart = RANDOM->Float(1.5f, 2.0f);
 	}
 
 	void Enemy1::Release()
@@ -114,14 +114,14 @@ namespace Gungeon
 
 	void Enemy1::Fire()
 	{
-		if (TIMER->GetTick(timeFire, intervalFire))
-		{
-			bullet[curBulletIdx++]->Spawn(weapon->firePos->GetWorldPos(), moveDir);
-			weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
+		weapon->fireEffect->Spawn(weapon->firePos->GetWorldPos());
 
-			if (curBulletIdx >= bulletMax) curBulletIdx = 0;
+		bullet[curBulletIdx++]->Spawn(weapon->firePos->GetWorldPos(), moveDir);
 
-			InitFireCycle();
-		}
+		if (curBulletIdx >= bulletMax) curBulletIdx = 0;
+
+		InitIntervalAttack();
+
+		state = State::idle;
 	}
 }
