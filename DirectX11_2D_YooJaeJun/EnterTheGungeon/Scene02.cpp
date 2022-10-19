@@ -59,7 +59,15 @@ namespace Gungeon
 
     void Scene02::Release()
     {
-        for (auto& elem : mapGen->selectedRooms) elem->cleared = false;
+        int idx = 0;
+        for (auto& elem : mapGen->selectedRooms)
+        {
+            if (idx != 0 and idx != 1)
+            {
+                elem->cleared = false;
+            }
+            idx++;
+        }
         for (auto& elem : enemy) SafeRelease(elem);
         SafeRelease(player);
     }
@@ -121,6 +129,7 @@ namespace Gungeon
 
         if (mapGen) mapGen->Update();
         gate->Update();
+        if (treasureBox) treasureBox->Update();
         for (auto& elem : door) elem->Update();
         for (auto& elem : spawnEffect) if (elem) elem->Update();
         for (auto& elem : enemy) if (elem) elem->Update();
@@ -159,10 +168,10 @@ namespace Gungeon
 
         gate->Render();
         for (auto& elem : door) elem->Render();
+        if (treasureBox) treasureBox->Render();
 
         if (player) player->shadow->Render();
         for (auto& elem : enemy) if (elem) elem->shadow->Render();
-
         for (auto& elem : enemy) if (elem) elem->Render();
         if (player) player->Render();
 
@@ -225,8 +234,7 @@ namespace Gungeon
             afterRoomIdx = MAP->tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
 
             if (afterRoomIdx > 0 &&
-                curRoomIdx != afterRoomIdx &&
-                false == mapGen->selectedRooms[afterRoomIdx]->cleared)
+                curRoomIdx != afterRoomIdx)
             {
                 curRoomIdx = afterRoomIdx;
                 curRoom = mapGen->selectedRooms[curRoomIdx];
@@ -236,27 +244,27 @@ namespace Gungeon
                 {
                 case RoomType::treasure:
                     SpawnTreasureBox();
-
                     gameState = GameState::fight;
-                    break;
-
                     break;
 
                 case RoomType::enemy:
                 {
-                    SpawnEffect();
-
-                    int idx = 0;
-                    for (auto& on : curRoom->doorTileIdxs)
+                    if (false == mapGen->selectedRooms[afterRoomIdx]->cleared)
                     {
-                        MAP->tilemap->SetTileState(on, TileState::wall);
-                        door[idx]->idle->frame.y = MAP->tilemap->GetTileDir(on);
-                        door[idx]->SetPos(MAP->tilemap->TileIdxToWorldPos(on));
-                        door[idx]->idle->isVisible = true;
-                        idx++;
-                    }
+                        SpawnEffect();
 
-                    gameState = GameState::waitingSpawn;
+                        int idx = 0;
+                        for (auto& on : curRoom->doorTileIdxs)
+                        {
+                            MAP->tilemap->SetTileState(on, TileState::wall);
+                            door[idx]->idle->frame.y = MAP->tilemap->GetTileDir(on);
+                            door[idx]->SetPos(MAP->tilemap->TileIdxToWorldPos(on));
+                            door[idx]->idle->isVisible = true;
+                            idx++;
+                        }
+
+                        gameState = GameState::waitingSpawn;
+                    }
                     break;
                 }
 
@@ -310,23 +318,31 @@ namespace Gungeon
 
         if (curRoom->cleared)
         {
-            int idx = 0;
-            for (auto& elem : curRoom->doorTileIdxs)
+            switch (curRoom->roomType)
             {
-                MAP->tilemap->SetTileState(elem, TileState::door);
+            case RoomType::treasure:
+                break;
 
-                door[idx]->SetPos(DEFAULTSPAWN);
-                door[idx]->idle->isVisible = false;
-
-                idx++;
-            }
-
-            for (auto& elem : enemy)
-            {
-                if (elem)
+            default:
+                int idx = 0;
+                for (auto& elem : curRoom->doorTileIdxs)
                 {
-                    elem->dropItem->flagAbsorbed = true;
+                    MAP->tilemap->SetTileState(elem, TileState::door);
+
+                    door[idx]->SetPos(DEFAULTSPAWN);
+                    door[idx]->idle->isVisible = false;
+
+                    idx++;
                 }
+
+                for (auto& elem : enemy)
+                {
+                    if (elem)
+                    {
+                        elem->dropItem->flagAbsorbed = true;
+                    }
+                }
+                break;
             }
 
             roomClearCount++;
@@ -394,22 +410,38 @@ namespace Gungeon
 
             if (treasureBox)
             {
-                if (player->col->Intersect(treasureBox->col))
+                if (false == treasureBox->isOpen)
                 {
-                    treasureBox->idle->ChangeAnim(AnimState::once, 0.5f);
-                    treasureBox->weaponA = new Weapon2;
-                    treasureBox->weaponA->SetPos(Vector2(treasureBox->Pos().x - 50.0f, treasureBox->Pos().y));
-                    treasureBox->weaponB = new Weapon3;
-                    treasureBox->weaponB->SetPos(Vector2(treasureBox->Pos().x + 50.0f, treasureBox->Pos().y));
+                    if (player->col->Intersect(treasureBox->col))
+                    {
+                        treasureBox->idle->ChangeAnim(AnimState::once, 0.5f);
+                        treasureBox->idle->color = Color(0.5f, 0.5f, 0.5f, 0.5f);
+                        treasureBox->isOpen = true;
+
+                        treasureBox->weaponA = new Weapon2;
+                        treasureBox->weaponA->Spawn(Vector2(treasureBox->Pos().x - 100.0f, treasureBox->Pos().y));
+                        treasureBox->weaponA->idle->isVisible = true;
+                        treasureBox->weaponA->idle->Update();
+
+                        treasureBox->weaponB = new Weapon3;
+                        treasureBox->weaponB->Spawn(Vector2(treasureBox->Pos().x + 100.0f, treasureBox->Pos().y));
+                        treasureBox->weaponB->idle->isVisible = true;
+                        treasureBox->weaponB->idle->Update();
+                    }
                 }
-                else if (treasureBox->weaponA &&
+
+                if (treasureBox->weaponA &&
+                    treasureBox->weaponA->state == State::idle &&
                     player->col->Intersect(treasureBox->weaponA->col))
                 {
+                    treasureBox->weaponA->Hit();
                     player->EquipWeapon(treasureBox->weaponA);
                 }
                 else if (treasureBox->weaponB &&
+                    treasureBox->weaponB->state == State::idle &&
                     player->col->Intersect(treasureBox->weaponB->col))
                 {
+                    treasureBox->weaponB->Hit();
                     player->EquipWeapon(treasureBox->weaponB);
                 }
             }

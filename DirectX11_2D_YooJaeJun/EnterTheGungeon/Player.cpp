@@ -125,13 +125,7 @@ namespace Gungeon
 		weapons[curWeaponIdx] = new Weapon1;
 		weapons[curWeaponIdx]->col->SetParentRT(*col);
 		weapons[curWeaponIdx]->col->SetLocalPos(Vector2(10.0f, -15.0f));
-		weapons[curWeaponIdx]->idle->SetParentRT(*weapons[curWeaponIdx]->col);
-		weapons[curWeaponIdx]->idle->isVisible = true;
-		weapons[curWeaponIdx]->firePos->SetLocalPos(Vector2(weapons[curWeaponIdx]->col->scale.x / 2.0f, 0.0f));
-		weapons[curWeaponIdx]->fireEffect->idle->SetParentRT(*weapons[curWeaponIdx]->firePos);
-		weapons[curWeaponIdx]->imgReloading->SetParentRT(*weapons[curWeaponIdx]->col);
 		weapons[curWeaponIdx]->Equip();
-		SetFireInterval();
 
 		for (auto& elem : weapons[curWeaponIdx]->uiBullet)
 		{
@@ -340,6 +334,9 @@ namespace Gungeon
 			break;
 		}
 
+		SetWeaponFrameToOrigin();
+
+
 		for (auto& elem : dust) elem->Update();
 		roll->Update();
 		spawn->Update();
@@ -543,19 +540,12 @@ namespace Gungeon
 		}
 	}
 
-	void Player::SetFireInterval()
-	{
-		intervalFire[(int)WeaponType::pistol] = 0.2f;
-		intervalFire[(int)WeaponType::shotgun] = 0.7f;
-		intervalFire[(int)WeaponType::machineGun] = 0.05f;
-	}
-
 	void Player::FireProcess()
 	{
 		int firstFire = weapons[curWeaponIdx]->bulletCount - 1;
 
 		if (curBulletIdx == firstFire ||
-			TIMER->GetTick(timeFire, intervalFire[(int)weapons[curWeaponIdx]->type]))
+			TIMER->GetTick(timeFire, weapons[curWeaponIdx]->intervalFire))
 		{
 			if (curBulletIdx < 0)
 			{
@@ -586,6 +576,9 @@ namespace Gungeon
 
 		Vector2 dir = INPUT->GetWorldMousePos() - Pos();
 		dir.Normalize();
+
+		weapons[curWeaponIdx]->idle->ChangeAnim(AnimState::once, 0.2f);
+		flagLbutton = true;
 
 		switch (weapons[curWeaponIdx]->type)
 		{
@@ -831,46 +824,56 @@ namespace Gungeon
 
 		// »õ ¹«±â
 		Weapon*& afterWeapon = weapons[curWeaponIdx];
-		afterWeapon = other;
-		afterWeapon->col->SetParentT(*col);
-		afterWeapon->idle->isVisible = true;
-		beforeWeapon->firePos->isVisible = true;
 
-		if (targetDir.x < 0.0f)
+		switch (other->type)
 		{
-			afterWeapon->EquipLeft();
-		}
-		else
-		{
-			afterWeapon->EquipRight();
+		case WeaponType::pistol:
+			afterWeapon = new Weapon1;
+			break;
+		case WeaponType::shotgun:
+			afterWeapon = new Weapon2;
+			break;
+		case WeaponType::machineGun:
+			afterWeapon = new Weapon3;
+			break;
+		default:
+			break;
 		}
 
-		SetFireInterval();
+		afterWeapon->col->SetParentRT(*col);
+		afterWeapon->col->SetLocalPos(Vector2(10.0f, -15.0f));
+		afterWeapon->Equip();
 
 		// bullet
 		curBulletIdx = afterWeapon->bulletCount - 1;
-		bullet.clear();
 		bullet.resize(afterWeapon->bulletCount);
 		for (auto& elem : bullet)
 		{
-			elem = new PlayerBullet;
+			if (!elem)
+			{
+				elem = new PlayerBullet;
+			}
 		}
 
-		// UI Bullet
-		for (auto& elem : afterWeapon->uiBullet)
+		// UI
+		for (auto& elem : weapons[curWeaponIdx]->uiBullet)
 		{
 			elem->img->isVisible = true;
 		}
-		
-		if (afterWeapon->uiWeapon)
+		weapons[curWeaponIdx]->uiBulletFrame->img->isVisible = true;
+		weapons[curWeaponIdx]->uiWeapon->img->isVisible = true;
+		weapons[curWeaponIdx]->uiBulletCount->img->isVisible = true;
+	}
+
+	void Player::SetWeaponFrameToOrigin()
+	{
+		if (TIMER->GetTick(timeWeaponFrameToOrigin, 0.2f))
 		{
-			afterWeapon->uiWeapon->img->isVisible = true;
-		}
-		if (afterWeapon->uiBulletFrame)
-		{
-			afterWeapon->uiBulletFrame->img->isVisible = true;
+			flagLbutton = false;
+			weapons[curWeaponIdx]->idle->frame.x = 0;
 		}
 	}
+
 	void Player::ColToggle()
 	{
 		Character::ColToggle();

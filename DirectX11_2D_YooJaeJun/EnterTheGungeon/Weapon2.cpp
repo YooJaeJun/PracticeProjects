@@ -12,6 +12,7 @@ namespace Gungeon
 
 		// Â÷ÀÌ
 		type = WeaponType::shotgun;
+		intervalFire = 0.7f;
 
 		scaleFactor = 2.0f;
 		col->scale = Vector2(84.0f / 2.0f, 23.0f) * scaleFactor;
@@ -20,6 +21,10 @@ namespace Gungeon
 		idle->isVisible = true;
 		idle->maxFrame.x = 2;
 		idle->scale = Vector2(84.0f / 2.0f, 23.0f) * scaleFactor;
+		idle->SetParentRT(*col);
+		idle->pivot = OFFSET_LB;
+
+		firePos->SetLocalPos(Vector2(col->scale.x / 2.0f, 0.0f));
 
 		fireEffect->idle = new ObImage(L"EnterTheGungeon/Weapon/2/Effect_Fire.png");
 		fireEffect->idle->isVisible = false;
@@ -35,6 +40,7 @@ namespace Gungeon
 		imgReloading->scale = Vector2(42.0f / 2.0f, 22.0f) * scaleFactor;
 		imgReloading->ChangeAnim(AnimState::loop, 0.1f);
 		imgReloading->isVisible = false;
+		imgReloading->SetParentRT(*col);
 
 		pivotDefault = Vector2(0.6f, 0.25f);
 		localPosDefault = Vector2(10.0f, -15.0f);

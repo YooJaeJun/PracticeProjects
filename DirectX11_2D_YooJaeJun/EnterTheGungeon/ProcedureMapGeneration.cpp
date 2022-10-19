@@ -286,7 +286,7 @@ namespace Gungeon
         selectedRooms[0]->roomType = RoomType::start;
         selectedRooms[0]->cleared = true;
         selectedRooms[1]->roomType = RoomType::treasure;
-        selectedRooms[1]->treasureSpawnPos = Vector2(0.0f, 300.0f);
+        selectedRooms[1]->treasureSpawnPos = Vector2(selectedRooms[1]->Pos().x, selectedRooms[1]->Pos().y + 250.0f);
         selectedRooms[1]->cleared = true;
     }
 

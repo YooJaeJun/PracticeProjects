@@ -14,7 +14,6 @@ namespace Gungeon
 		firePos->scale = Vector2(10.0f, 10.0f);
 		firePos->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 		firePos->SetParentRT(*col);
-		firePos->zOrder = ZOrder::none;
 
 		fireEffect = new Effect;
 

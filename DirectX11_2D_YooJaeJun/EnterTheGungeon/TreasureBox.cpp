@@ -9,11 +9,11 @@ namespace Gungeon
 
     void TreasureBox::Init()
     {
-        col->scale = Vector2(50.0f, 19.0f) * 2.0f;
+        col->scale = Vector2(50.0f / 2.0f, 19.0f) * 3.0f;
         col->SetWorldPos(DEFAULTSPAWN);
         idle = new ObImage(L"EnterTheGungeon/Level/Treasure.png");
         idle->maxFrame.x = 2;
-        idle->scale = Vector2(50.0f / 2.0f, 19.0f) * 2.0f;
+        idle->scale = Vector2(50.0f / 2.0f, 19.0f) * 3.0f;
         idle->SetParentT(*col);
     }
 
@@ -27,6 +27,8 @@ namespace Gungeon
     {
         Obstacle::Update();
         col->Update();
+        if (weaponA) weaponA->Update();
+        if (weaponB) weaponB->Update();
     }
 
     void TreasureBox::LateUpdate()
@@ -37,5 +39,7 @@ namespace Gungeon
     {
         Obstacle::Render();
         col->Render();
+        if (weaponA) weaponA->Render();
+        if (weaponB) weaponB->Render();
     }
 }

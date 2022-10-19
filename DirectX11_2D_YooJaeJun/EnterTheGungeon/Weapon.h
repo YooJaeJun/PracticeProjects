@@ -42,5 +42,7 @@ namespace Gungeon
 		UI*			uiBulletCount = nullptr;
 		int			bulletCount = 0;
 		WeaponType	type = WeaponType::pistol;
+		float		intervalFire;
+
 	};
 }

@@ -29,7 +29,6 @@ namespace Gungeon
 		virtual void Die() override;
 		void Cinematic();
 		void Move();
-		void SetFireInterval();
 		void FireProcess();
 		void Fire();
 		void ShakeCam(float& time);
@@ -43,6 +42,7 @@ namespace Gungeon
 		void DecreaseHeart();
 		void PlusMoney(const int n);
 		void EquipWeapon(Weapon* other);
+		void SetWeaponFrameToOrigin();
 		virtual void ColToggle() override;
 
 	public:
@@ -53,7 +53,6 @@ namespace Gungeon
 		int					curWeaponMax = 0;
 		int					curWeaponIdx = 0;
 		bool				canFireOnce[(int)WeaponType::max];
-		float				intervalFire[(int)WeaponType::max];
 		bool				isReloading = false;
 		float				timeReload = 0.0f;
 		int					curBulletIdx = 4;
@@ -76,5 +75,7 @@ namespace Gungeon
 		UI*					uiGold = nullptr;
 		int					money = 0;
 		int					key = 0;
+		bool				flagLbutton = false;
+		float				timeWeaponFrameToOrigin = 0.0f;
 	};
 }

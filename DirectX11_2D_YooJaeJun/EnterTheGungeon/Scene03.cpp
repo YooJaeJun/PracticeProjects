@@ -12,9 +12,6 @@ namespace Gungeon
 
     void Scene03::Init()
     {
-        CAM->position = Vector2(0.0f, 0.0f);
-        CAM->zoomFactor = Vector3(0.08f, 0.08f, 0.08f);
-
         // tilemap
         MAP->tilemap = new ObTileMap;
         MAP->tilemap->scale = Vector2(100.0f, 100.0f);
