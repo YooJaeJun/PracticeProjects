@@ -22,6 +22,13 @@ namespace Gungeon
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 
+		Int2 TileLB() const;
+		Int2 TileLT() const;
+		Int2 TileRB() const;
+		Int2 TileRT() const;
+		int TileWidth() const;
+		int TileHeight() const;
+
 	public:
 		bool			selected = false;
 		Vector2			enemySpawnPos[enemySpawnPosMax];

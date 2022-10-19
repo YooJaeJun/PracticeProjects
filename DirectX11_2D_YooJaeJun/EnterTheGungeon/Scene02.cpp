@@ -612,6 +612,8 @@ namespace Gungeon
                 abs(gate->playerDest.y - player->Pos().y) > 1.0f)
             {
                 player->idle->isVisible = false;
+                player->weapons[player->curWeaponIdx]->idle->isVisible = false;
+                player->weapons[player->curWeaponIdx]->imgReloading->isVisible = false;
                 player->walk->isVisible = true;
                 Vector2 dir = gate->playerDest - player->Pos();
                 dir.Normalize();

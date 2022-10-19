@@ -29,7 +29,9 @@ namespace Gungeon
 		passageWallTile, 
 		prop,
 		spawner,
-		finish
+		propWall,
+		finish,
+		max
 	};
 
 	class ProcedureMapGeneration
@@ -56,9 +58,8 @@ namespace Gungeon
 		void PassageWallTile();
 		void Prop();
 		void Spawner();
+		void PropWall();
 		void Finish();
-
-		void SetTilemapGUI();
 
 	public:
 		float						timer = 0.0f;

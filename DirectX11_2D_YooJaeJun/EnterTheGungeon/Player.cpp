@@ -867,10 +867,11 @@ namespace Gungeon
 
 	void Player::SetWeaponFrameToOrigin()
 	{
-		if (TIMER->GetTick(timeWeaponFrameToOrigin, 0.2f))
+		if (flagLbutton && TIMER->GetTick(timeWeaponFrameToOrigin, 0.15f))
 		{
 			flagLbutton = false;
 			weapons[curWeaponIdx]->idle->frame.x = 0;
+			weapons[curWeaponIdx]->idle->ChangeAnim(AnimState::stop, 0.1f);
 		}
 	}
 

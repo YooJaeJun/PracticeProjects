@@ -39,6 +39,8 @@ void Main::Release()
 void Main::Update()
 {
     ImGui::Text("FPS : %d", TIMER->GetFramePerSecond());
+    ImGui::Text("World Time : %f", TIMER->GetWorldTime());
+    ImGui::Text("Delta Time : %f", TIMER->GetDeltaTime());
 
     SCENE->Update();
 }

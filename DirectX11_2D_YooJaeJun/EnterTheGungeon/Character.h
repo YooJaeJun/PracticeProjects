@@ -26,7 +26,7 @@ namespace Gungeon
 		virtual void Render();
 		virtual void ResizeScreen();
 
-		inline Int2 On() { return on; }
+		inline Int2 On() const { return on; }
 		inline Vector2 Pos() const { return col->GetWorldPos(); }
 		inline void SetPos(const Vector2 pos) { col->SetWorldPos(pos); }
 		inline void SetPosX(const float x) { col->SetWorldPosX(x); }
