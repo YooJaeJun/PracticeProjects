@@ -46,6 +46,7 @@ namespace Gungeon
             boss->Spawn(Vector2(0.0f, 300.0f));
         }
 
+
         SOUND->Stop("SCENE01");
         SOUND->Stop("SCENE02");
         //SOUND->AddSound("Vaquero Perdido - The Mini Vandals.mp3", "Scene03", true);
@@ -192,6 +193,19 @@ namespace Gungeon
                 boss->Stop();
                 break;
             }
+
+            switch (boss->pattern)
+            {
+            case BossPattern::miro:
+                if (boss->pushingPlayer)
+                {
+                    Vector2 dest = Vector2(0.0f, -500.0f);
+                    boss->col->SetWorldPos(Vector2(0.0f, 500.0f));
+                    boss->SpawnPlayerByForce(dest);
+                    player->col->SetWorldPos(dest);
+                    player->Update();
+                }
+            }
         }
 
         // °ñµå Èí¼ö ÇÃ·¡±×
@@ -236,7 +250,7 @@ namespace Gungeon
 
     void Scene03::IntersectPlayer()
     {
-        if (MAP->tilemap->IntersectTileObj(player->colTile))
+        if (MAP->tilemap->IntersectTileColTile(player->colTile))
         {
             player->StepBack();
         }
@@ -255,7 +269,7 @@ namespace Gungeon
                     bulletElem->Hit(1);
                 }
 
-                if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
+                if (MAP->tilemap->IntersectTile(bulletElem->On()))
                 {
                     bulletElem->Hit(1);
                 }
@@ -265,65 +279,60 @@ namespace Gungeon
 
     void Scene03::IntersectBoss()
     {
-        if (false == player->godMode &&
+        if (player->godMode == false &&
+            player->state != State::die &&
             boss->state != State::die &&
             boss->col->Intersect(player->col))
         {
             player->Hit(1);
         }
 
-        if (MAP->tilemap->IntersectTileObj(boss->colTile))
+        if (MAP->tilemap->IntersectTileColTile(boss->colTile))
         {
             boss->StepBack();
         }
 
         // º¸½º ÃÑ¾Ë
-        switch (boss->pattern)
+        for (auto& bulletElem : boss->bullet)
         {
-        case BossPattern::trail:
-            for (auto& bulletElem : boss->trailBullet)
+            if (bulletElem->isFired)
             {
-                if (bulletElem->isFired)
+                if (player->godMode == false &&
+                    player->state != State::die &&
+                    boss->state != State::die &&
+                    bulletElem->col->Intersect(player->col))
                 {
-                    if (false == player->godMode &&
-                        boss->state != State::die &&
-                        bulletElem->col->Intersect(player->col))
-                    {
-                        player->Hit(bulletElem->damage);
-                        bulletElem->Hit(1);
-                    }
+                    player->Hit(bulletElem->damage);
+                    bulletElem->Hit(1);
+                }
 
-                    if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
+                Int2 on = bulletElem->On();
+                switch (boss->pattern)
+                {
+                case BossPattern::trail:
+                    if (MAP->tilemap->IntersectTile(on))
                     {
                         // bulletElem->Hit(1);
-                        bulletElem->moveDir.x *= -1.0f;
+                        if (on.y <= 6 || on.y >= 21)
+                        {
+                            bulletElem->moveDir.y *= -1.0f;
+                        }
+                        else
+                        {
+                            bulletElem->moveDir.x *= -1.0f;
+                        }
                         bulletElem->StepBack();
                         bulletElem->Update();
                     }
-                }
-            }
-            break;
-            
-        default:
-            for (auto& bulletElem : boss->bullet)
-            {
-                if (bulletElem->isFired)
-                {
-                    if (false == player->godMode &&
-                        boss->state != State::die &&
-                        bulletElem->col->Intersect(player->col))
-                    {
-                        player->Hit(bulletElem->damage);
-                        bulletElem->Hit(1);
-                    }
-
+                    break;
+                default:
                     if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
                     {
                         bulletElem->Hit(1);
                     }
+                break;
                 }
             }
-            break;
         }
 
         if (boss->dropItem->state == State::idle &&

@@ -116,6 +116,12 @@
     <ClInclude Include="TrailBullet.h">
       <Filter>GameObject\Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="Weapon3.h">
+      <Filter>GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="TreasureBox.h">
+      <Filter>GameObject\Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -202,6 +208,12 @@
     </ClCompile>
     <ClCompile Include="TrailBullet.cpp">
       <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon3.cpp">
+      <Filter>GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="TreasureBox.cpp">
+      <Filter>GameObject\Level</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

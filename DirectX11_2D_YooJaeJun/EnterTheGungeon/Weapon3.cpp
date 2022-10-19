@@ -1,0 +1,102 @@
+#include "stdafx.h"
+
+namespace Gungeon
+{
+	Weapon3::Weapon3()
+	{
+		// 공통
+		float scaleFactor = 1.0f;
+		float effectScaleFactor = 1.0f;
+		float uiWeaponScaleFactor = 2.0f;
+		int uiBulletIdx = 0;
+
+		// 차이
+		type = WeaponType::machineGun;
+
+		scaleFactor = 2.0f;
+		col->scale = Vector2(70.0f / 2.0f, 15.0f) * scaleFactor;
+
+		idle = new ObImage(L"EnterTheGungeon/Weapon/3/Weapon.png");
+		idle->isVisible = true;
+		idle->maxFrame.x = 2;
+		idle->scale = Vector2(70.0f / 2.0f, 15.0f) * scaleFactor;
+
+		fireEffect->idle = new ObImage(L"EnterTheGungeon/Weapon/3/Effect_Fire.png");
+		fireEffect->idle->isVisible = false;
+		fireEffect->idle->maxFrame.x = 3;
+		fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * scaleFactor;
+		fireEffect->idle->SetParentRT(*firePos);
+		fireEffect->intervalDie = 0.2f;
+
+		imgReloading = new ObImage(L"EnterTheGungeon/Weapon/3/Reloading.png");
+		imgReloading->isVisible = false;
+		imgReloading->pivot = Vector2(0.4f, 0.25f);
+		imgReloading->maxFrame.x = 2;
+		imgReloading->scale = Vector2(42.0f / 2.0f, 22.0f) * scaleFactor;
+		imgReloading->ChangeAnim(AnimState::loop, 0.1f);
+		imgReloading->isVisible = false;
+
+		pivotDefault = Vector2(0.6f, 0.25f);
+		localPosDefault = Vector2(10.0f, -15.0f);
+		localFirePosDefault = Vector2(80.0f, 6.0f);
+		state = State::die;
+
+		uiBulletFrame->img = new ObImage(L"EnterTheGungeon/Weapon/3/UI_Magazine.png");
+		uiBulletFrame->img->scale = Vector2(28.0f, 220.0f);
+		uiBulletFrame->img->pivot = OFFSET_RB;
+		uiBulletFrame->anchor = DirState::dirRB;
+		uiBulletFrame->Spawn(-26.0f, 30.0f);
+		uiBulletFrame->img->space = Space::screen;
+		uiBulletFrame->img->isVisible = false;
+
+		bulletCount = 15;
+		uiBullet.resize(bulletCount);
+
+		uiBulletIdx = 0;
+		for (auto& elem : uiBullet)
+		{
+			elem = new UI;
+			elem->img = new ObImage(L"EnterTheGungeon/Weapon/UI_Bullet.png");
+			elem->img->scale = Vector2(12.0f, 4.0f);
+			elem->anchor = DirState::dirRB;
+			elem->Spawn(-40.0f, 56.0f + uiBulletIdx * 12.0f);
+			elem->img->space = Space::screen;
+			elem->img->isVisible = false;
+			uiBulletIdx++;
+		}
+
+		uiWeaponScaleFactor = 2.5f;
+		uiWeapon->img = new ObImage(L"EnterTheGungeon/Weapon/3/UI_Weapon.png");
+		uiWeapon->img->scale = Vector2(37.0f, 13.0f) * uiWeaponScaleFactor;
+		uiWeapon->img->pivot = OFFSET_RB;
+		uiWeapon->anchor = DirState::dirRB;
+		uiWeapon->Spawn(-120.0f, 70.0f);
+		uiWeapon->img->space = Space::screen;
+		uiWeapon->img->isVisible = false;
+	}
+
+	void Weapon3::Release()
+	{
+		Weapon::Release();
+	}
+
+	void Weapon3::Update()
+	{
+		Weapon::Update();
+	}
+
+	void Weapon3::LateUpdate()
+	{
+		Weapon::LateUpdate();
+	}
+
+	void Weapon3::Render()
+	{
+		Weapon::Render();
+	}
+
+	void Weapon3::ResizeScreen()
+	{
+		Weapon::ResizeScreen();
+	}
+}

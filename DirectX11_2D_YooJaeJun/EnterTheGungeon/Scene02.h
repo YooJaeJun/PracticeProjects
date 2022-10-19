@@ -2,7 +2,7 @@
 
 namespace Gungeon
 {
-	const int enemyMax = 4;
+	const int enemyMax = 1;
 	const int doorMax = 10;
 
 	enum class GameState
@@ -40,6 +40,7 @@ namespace Gungeon
 		void SpawnPlayer();
 		void SpawnEffect();
 		void SpawnEnemy();
+		void SpawnTreasureBox();
 		void IntersectPlayer();
 		void IntersectEnemy();
 		void GateProcess();
@@ -63,5 +64,6 @@ namespace Gungeon
 		int						roomClearCountForBossBattle = 1;
 		Gate*					gate = nullptr;
 		vector<Door*>			door;
+		TreasureBox*			treasureBox = nullptr;
 	};
 }

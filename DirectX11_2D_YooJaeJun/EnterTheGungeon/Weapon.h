@@ -6,6 +6,7 @@ namespace Gungeon
 	{
 		pistol,
 		shotgun,
+		machineGun,
 		max
 	};
 

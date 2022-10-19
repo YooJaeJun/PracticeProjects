@@ -231,19 +231,38 @@ namespace Gungeon
                 curRoomIdx = afterRoomIdx;
                 curRoom = mapGen->selectedRooms[curRoomIdx];
 
-                SpawnEffect();
 
-                int idx = 0;
-                for (auto& on : curRoom->doorTileIdxs)
+                switch (curRoom->roomType)
                 {
-                    MAP->tilemap->SetTileState(on, TileState::wall);
-                    door[idx]->idle->frame.y = MAP->tilemap->GetTileDoorDir(on);
-                    door[idx]->SetPos(MAP->tilemap->TileIdxToWorldPos(on));
-                    door[idx]->idle->isVisible = true;
-                    idx++;
+                case RoomType::treasure:
+                    SpawnTreasureBox();
+
+                    gameState = GameState::fight;
+                    break;
+
+                    break;
+
+                case RoomType::enemy:
+                {
+                    SpawnEffect();
+
+                    int idx = 0;
+                    for (auto& on : curRoom->doorTileIdxs)
+                    {
+                        MAP->tilemap->SetTileState(on, TileState::wall);
+                        door[idx]->idle->frame.y = MAP->tilemap->GetTileDir(on);
+                        door[idx]->SetPos(MAP->tilemap->TileIdxToWorldPos(on));
+                        door[idx]->idle->isVisible = true;
+                        idx++;
+                    }
+
+                    gameState = GameState::waitingSpawn;
+                    break;
                 }
 
-                gameState = GameState::waitingSpawn;
+                default:
+                    break;
+                }
             }
         }
     }
@@ -270,17 +289,14 @@ namespace Gungeon
 
     void Scene02::Fight()
     {
-        bool flagCleared = true;
-
         for (auto& elem : enemy)
         {
             if (elem->state != State::die)
             {
-                flagCleared = false;
+                curRoom->cleared = true;
 
                 elem->targetPos = player->Pos();
 
-                
                 switch (elem->state)
                 {
                 case State::attack:
@@ -292,10 +308,8 @@ namespace Gungeon
             }
         }
 
-        if (flagCleared)
+        if (curRoom->cleared)
         {
-            curRoom->cleared = true;
-
             int idx = 0;
             for (auto& elem : curRoom->doorTileIdxs)
             {
@@ -309,12 +323,12 @@ namespace Gungeon
 
             for (auto& elem : enemy)
             {
-                elem->dropItem->flagAbsorbed = true;
+                if (elem)
+                {
+                    elem->dropItem->flagAbsorbed = true;
+                }
             }
-        }
 
-        if (curRoom->cleared)
-        {
             roomClearCount++;
 
             gameState = GameState::enteringRoom;
@@ -357,67 +371,99 @@ namespace Gungeon
         }
     }
 
+    void Scene02::SpawnTreasureBox()
+    {
+        treasureBox = new TreasureBox;
+        treasureBox->SetPos(curRoom->treasureSpawnPos);
+    }
+
     void Scene02::IntersectPlayer()
     {
-        if (MAP->tilemap->IntersectTileObj(player->colTile))
+        if (player->state != State::die)
         {
-            player->StepBack();
-        }
-
-        if (false == gate->flagIntersectPlayer &&
-            player->col->Intersect(gate->col))
-        {
-            player->col->MoveWorldPos(Vector2(-150.0f, -100.0f) * DELTA);
-        }
-
-        if (curRoom)
-        {
-            for (auto& elem : door)
+            if (MAP->tilemap->IntersectTileColTile(player->colTile))
             {
-                if (player->colTile->Intersect(elem->col))
+                player->StepBack();
+            }
+
+            if (false == gate->flagIntersectPlayer &&
+                player->col->Intersect(gate->col))
+            {
+                player->col->MoveWorldPos(Vector2(-150.0f, -100.0f) * DELTA);
+            }
+
+            if (treasureBox)
+            {
+                if (player->col->Intersect(treasureBox->col))
                 {
-                    DirState doorDir = MAP->tilemap->GetTileDoorDir(elem->On());
-                    float x, y;
-                    switch (doorDir)
+                    treasureBox->idle->ChangeAnim(AnimState::once, 0.5f);
+                    treasureBox->weaponA = new Weapon2;
+                    treasureBox->weaponA->SetPos(Vector2(treasureBox->Pos().x - 50.0f, treasureBox->Pos().y));
+                    treasureBox->weaponB = new Weapon3;
+                    treasureBox->weaponB->SetPos(Vector2(treasureBox->Pos().x + 50.0f, treasureBox->Pos().y));
+                }
+                else if (treasureBox->weaponA &&
+                    player->col->Intersect(treasureBox->weaponA->col))
+                {
+                    player->EquipWeapon(treasureBox->weaponA);
+                }
+                else if (treasureBox->weaponB &&
+                    player->col->Intersect(treasureBox->weaponB->col))
+                {
+                    player->EquipWeapon(treasureBox->weaponB);
+                }
+            }
+
+
+            if (curRoom)
+            {
+                for (auto& elem : door)
+                {
+                    if (player->colTile->Intersect(elem->col))
                     {
-                    case dirB:
-                        x = -dx[DirState::dirB];
-                        y = -dy[DirState::dirB];
-                        break;
-                    case dirLB:
-                        x = -dx[DirState::dirLB];
-                        y = -dy[DirState::dirLB];
-                        break;
-                    case dirRB:
-                        x = -dx[DirState::dirRB];
-                        y = -dy[DirState::dirRB];
-                        break;
-                    case dirT:
-                        x = -dx[DirState::dirT];
-                        y = -dy[DirState::dirT];
-                        break;
-                    case dirLT:
-                        x = -dx[DirState::dirLT];
-                        y = -dy[DirState::dirLT];
-                        break;
-                    case dirRT:
-                        x = -dx[DirState::dirRT];
-                        y = -dy[DirState::dirRT];
-                        break;
-                    case dirL:
-                        x = dx[DirState::dirL];
-                        y = dy[DirState::dirL];
-                        break;
-                    case dirR:
-                        x = dx[DirState::dirR];
-                        y = dy[DirState::dirR];
-                        break;
-                    case dirNone:
-                        x = dx[DirState::dirNone];
-                        y = dy[DirState::dirNone];
-                        break;
+                        DirState doorDir = MAP->tilemap->GetTileDir(elem->On());
+                        float x, y;
+                        switch (doorDir)
+                        {
+                        case dirB:
+                            x = -dx[DirState::dirB];
+                            y = -dy[DirState::dirB];
+                            break;
+                        case dirLB:
+                            x = -dx[DirState::dirLB];
+                            y = -dy[DirState::dirLB];
+                            break;
+                        case dirRB:
+                            x = -dx[DirState::dirRB];
+                            y = -dy[DirState::dirRB];
+                            break;
+                        case dirT:
+                            x = -dx[DirState::dirT];
+                            y = -dy[DirState::dirT];
+                            break;
+                        case dirLT:
+                            x = -dx[DirState::dirLT];
+                            y = -dy[DirState::dirLT];
+                            break;
+                        case dirRT:
+                            x = -dx[DirState::dirRT];
+                            y = -dy[DirState::dirRT];
+                            break;
+                        case dirL:
+                            x = -dx[DirState::dirL];
+                            y = -dy[DirState::dirL];
+                            break;
+                        case dirR:
+                            x = -dx[DirState::dirR];
+                            y = -dy[DirState::dirR];
+                            break;
+                        case dirNone:
+                            x = -dx[DirState::dirNone];
+                            y = -dy[DirState::dirNone];
+                            break;
+                        }
+                        player->col->MoveWorldPos(Vector2(x, y));
                     }
-                    player->col->MoveWorldPos(Vector2(x, y));
                 }
             }
         }
@@ -439,7 +485,7 @@ namespace Gungeon
                     }
                 }
 
-                if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
+                if (MAP->tilemap->IntersectTile(bulletElem->On()))
                 {
                     bulletElem->Hit(1);
                 }
@@ -451,14 +497,15 @@ namespace Gungeon
     {
         for (auto& enemyElem : enemy)
         {
-            if (false == player->godMode &&
+            if (player->godMode == false &&
+                player->state != State::die && 
                 enemyElem->state != State::die &&
                 enemyElem->col->Intersect(player->col))
             {
                 player->Hit(1);
             }
 
-            if (MAP->tilemap->IntersectTileObj(enemyElem->colTile))
+            if (MAP->tilemap->IntersectTileColTile(enemyElem->colTile))
             {
                 enemyElem->StepBack();
             }
@@ -474,7 +521,8 @@ namespace Gungeon
             {
                 if (bulletElem->isFired)
                 {
-                    if (false == player->godMode &&
+                    if (player->godMode == false &&
+                        player->state != State::die &&
                         enemyElem->state != State::die &&
                         bulletElem->col->Intersect(player->col))
                     {
@@ -482,7 +530,7 @@ namespace Gungeon
                         bulletElem->Hit(1);
                     }
 
-                    if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
+                    if (MAP->tilemap->IntersectTile(bulletElem->On()))
                     {
                         bulletElem->Hit(1);
                     }

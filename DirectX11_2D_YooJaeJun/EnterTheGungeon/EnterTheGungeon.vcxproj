@@ -43,12 +43,14 @@
     <ClInclude Include="Scene03.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TrailBullet.h" />
+    <ClInclude Include="TreasureBox.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="StringBulletData.h" />
     <ClInclude Include="Weapon1.h" />
     <ClInclude Include="Weapon2.h" />
+    <ClInclude Include="Weapon3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Boss.cpp" />
@@ -75,11 +77,13 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="TrailBullet.cpp" />
+    <ClCompile Include="TreasureBox.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="Weapon1.cpp" />
     <ClCompile Include="Weapon2.cpp" />
+    <ClCompile Include="Weapon3.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

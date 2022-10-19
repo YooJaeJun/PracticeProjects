@@ -5,6 +5,7 @@ namespace Gungeon
     Bullet::Bullet()
     {
         col = new ObCircle();
+        col->isVisible = false;
         col->isFilled = false;
         Init();
     }
@@ -98,8 +99,8 @@ namespace Gungeon
     void Bullet::Reload()
     {
         SetPos(DEFAULTSPAWN);
-        Update();
         idle->isVisible = false;
+        Update();
         isFired = false;
     }
 }

@@ -121,7 +121,8 @@ namespace Gungeon
 
 	void Unit::Hit(const int damage)
 	{
-		if (false == isHit)
+		if (state != State::die && 
+			false == isHit)
 		{
 			curHp -= damage;
 			isHit = true;

@@ -59,7 +59,7 @@ void ObTileMap::CreateTileCost()
             Tiles[i][j].idx = Int2(i, j);
             Tiles[i][j].state = GetTileState(Tiles[i][j].idx);
             Tiles[i][j].roomIdx = GetTileRoomIndex(Tiles[i][j].idx);
-            Tiles[i][j].doorDir = GetTileDoorDir(Tiles[i][j].idx);
+            Tiles[i][j].dir = GetTileDir(Tiles[i][j].idx);
 
             Tiles[i][j].Pos.x = i * scale.x + GetWorldPos().x + half.x;
             Tiles[i][j].Pos.y = j * scale.y + GetWorldPos().y + half.y;
@@ -314,16 +314,16 @@ void ObTileMap::SetTileRoomIndex(Int2 tileIdx, const int tileRoomIndex)
     vertices[verticeIdx * 6].tileRoomIdx = tileRoomIndex;
 }
 
-DirState ObTileMap::GetTileDoorDir(Int2 tileIdx)
+DirState ObTileMap::GetTileDir(Int2 tileIdx)
 {
     int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
     return (DirState)vertices[verticeIdx * 6].tileDir;
 }
 
-void ObTileMap::SetTileDoorDir(Int2 tileIdx, const DirState doorDir)
+void ObTileMap::SetTileDir(Int2 tileIdx, const DirState dir)
 {
     int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
-    vertices[verticeIdx * 6].tileDir = doorDir;
+    vertices[verticeIdx * 6].tileDir = dir;
 }
 
 void ObTileMap::Save()
@@ -458,6 +458,11 @@ void ObTileMap::Load()
     fin.close();
 }
 
+bool ObTileMap::IntersectTile(Int2 on)
+{
+    return GetTileState(on) == TileState::wall;
+}
+
 bool ObTileMap::IntersectTilePos(Vector2 wpos)
 {
     Int2 on;
@@ -468,7 +473,7 @@ bool ObTileMap::IntersectTilePos(Vector2 wpos)
     return false;
 }
 
-bool ObTileMap::IntersectTileObj(ObRect* colTile)
+bool ObTileMap::IntersectTileColTile(ObRect* colTile)
 {
     Vector2 pos;
     bool flag = false;

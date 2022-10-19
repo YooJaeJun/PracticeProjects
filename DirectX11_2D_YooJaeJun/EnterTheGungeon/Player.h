@@ -52,8 +52,8 @@ namespace Gungeon
 		Weapon*				weapons[curWeaponMax];
 		int					curWeaponMax = 0;
 		int					curWeaponIdx = 0;
-		bool				canFireOnce[(int)WeaponType::max + 1];
-		float				fireInterval = 0.0f;
+		bool				canFireOnce[(int)WeaponType::max];
+		float				intervalFire[(int)WeaponType::max];
 		bool				isReloading = false;
 		float				timeReload = 0.0f;
 		int					curBulletIdx = 4;

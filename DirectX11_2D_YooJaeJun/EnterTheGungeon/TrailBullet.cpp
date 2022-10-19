@@ -14,7 +14,7 @@ namespace Gungeon
         idle = new ObImage(L"EnterTheGungeon/boss_1/Bullet_0.png");
         idle->isVisible = false;
         idle->scale = col->scale;
-        idle->color = Color(0.5f, 0.7f, 1.0f);
+        idle->color = Color(0.9f, 0.7f, 0.5f);
         idle->SetParentRT(*col);
 
         float bombScaleFactor = 2.5f;
@@ -43,8 +43,8 @@ namespace Gungeon
         angle = 0.0f;
         atkAngle = 0.0f;
 
-        timeTrail = 0.01f;
-        trailNum = 15;
+        timeTrail = 0.02f;
+        trailNum = 10;
         timeSpawnTrail = 0.0f;
     }
 
@@ -61,7 +61,7 @@ namespace Gungeon
         if (TIMER->GetTick(timeSpawnTrail, timeTrail))
         {
             trails[0]->isVisible = true;
-            trails[0]->SetWorldPos(Pos());
+            trails[0]->SetWorldPos(Pos() == Vector2(0.0f, 0.0f) ? DEFAULTSPAWN : Pos());
             trails[0]->rotation = col->rotation;
             trails[0]->scale = Vector2(30.0f, 30.0f);
             trails.push_back(trails[0]);
@@ -72,7 +72,7 @@ namespace Gungeon
         for (auto& elem : trails)
         {
             if (idx == trails.size() - 1) elem->color = Color(1.0f, 0.6f, 0.5f);
-            else elem->color = Color(0.5f, 0.5f, 0.8f); 
+            else elem->color = Color(0.7f, 0.5f, 0.3f); 
             elem->Update();
             idx++;
         }

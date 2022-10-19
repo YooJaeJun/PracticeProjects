@@ -28,5 +28,6 @@ namespace Gungeon
 		bool			cleared = false;
 		RoomType		roomType = RoomType::enemy;
 		vector<Int2>	doorTileIdxs;
+		Vector2			treasureSpawnPos;
 	};
 }

@@ -38,5 +38,6 @@ namespace Gungeon
 		int					curBulletIdx = 0;
 		int					curBulletX = 0;
 		int					curBulletY = 0;
+		StringBulletData	stringBullet;
 	};
 }

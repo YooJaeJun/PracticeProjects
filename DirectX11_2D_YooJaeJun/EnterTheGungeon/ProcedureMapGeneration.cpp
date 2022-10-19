@@ -284,7 +284,10 @@ namespace Gungeon
         }
 
         selectedRooms[0]->roomType = RoomType::start;
+        selectedRooms[0]->cleared = true;
         selectedRooms[1]->roomType = RoomType::treasure;
+        selectedRooms[1]->treasureSpawnPos = Vector2(0.0f, 300.0f);
+        selectedRooms[1]->cleared = true;
     }
 
     void ProcedureMapGeneration::Triangulate()
@@ -407,14 +410,15 @@ namespace Gungeon
                 roomIdx);
         };
 
-        auto SetWall2 = [&](Int2 on, int roomIdx, Int2 frameIdx)
+        auto SetWall2 = [&](Int2 on, int roomIdx, DirState dir)
         {
             MAP->tilemap->SetTile(on,
-                frameIdx,
+                wallImgDir[(int)dir],
                 MAP->imgIdx,
                 (int)TileState::wall,
                 Color(0.5f, 0.5f, 0.5f, 1.0f),
-                roomIdx);
+                roomIdx,
+                dir);
         };
 
         auto SetTile1 = [&](Room* elem, int roomIdx)
@@ -442,20 +446,20 @@ namespace Gungeon
 
             for (int x = sour.x; x <= dest.x; x++)
             {
-                SetWall2(Int2(x, dest.y), roomIdx, wallImgDir[DirState::dirT]);
-                SetWall2(Int2(x, sour.y), roomIdx, wallImgDir[DirState::dirB]);
+                SetWall2(Int2(x, dest.y), roomIdx, DirState::dirT);
+                SetWall2(Int2(x, sour.y), roomIdx, DirState::dirB);
             }
 
             for (int y = sour.y; y <= dest.y; y++)
             {
-                SetWall2(Int2(sour.x, y), roomIdx, wallImgDir[DirState::dirL]);
-                SetWall2(Int2(dest.x, y), roomIdx, wallImgDir[DirState::dirR]);
+                SetWall2(Int2(sour.x, y), roomIdx, DirState::dirL);
+                SetWall2(Int2(dest.x, y), roomIdx, DirState::dirR);
             }
 
-            SetWall2(Int2(sour.x, sour.y), roomIdx, wallImgDir[DirState::dirLB]);
-            SetWall2(Int2(sour.x, dest.y), roomIdx, wallImgDir[DirState::dirLT]);
-            SetWall2(Int2(dest.x, sour.y), roomIdx, wallImgDir[DirState::dirRB]);
-            SetWall2(Int2(dest.x, dest.y), roomIdx, wallImgDir[DirState::dirRT]);
+            SetWall2(Int2(sour.x, sour.y), roomIdx, DirState::dirLB);
+            SetWall2(Int2(sour.x, dest.y), roomIdx, DirState::dirLT);
+            SetWall2(Int2(dest.x, sour.y), roomIdx, DirState::dirRB);
+            SetWall2(Int2(dest.x, dest.y), roomIdx, DirState::dirRT);
         };
 
         int idx = 0;
@@ -488,8 +492,8 @@ namespace Gungeon
             }
         }
 
-        // 1. 8방향 체크해 문의 방향을 정하고, 2. 좌우,상하 뒤집을지, 3. 모서리에 위치할 시 예외처리
-        auto SetDoor = [&](Int2 on, bool dirR, bool dirT, const int roomIdx)
+        // 1. 8방향 체크해 문의 방향을 정하고, 2. 방향에 따라 다른 이미지, 3. 모서리에 위치할 시 예외처리
+        auto SetDoor = [&](Int2 on, const int roomIdx, const DirState dir)
         {
             deque<bool> dirWall(8);
 
@@ -505,23 +509,14 @@ namespace Gungeon
                 }
             }
 
-            DirState doorDir = DirState::dirNone;
             Int2 doorTileIdx = on;
             Int2 floorTileIdx;
 
             // 가로, 세로
-            if (dirWall[DirState::dirB] && dirWall[DirState::dirT])
-            {
-                // 문 좌우
-                if (dirR) doorDir = DirState::dirR;
-                else doorDir = DirState::dirL;
-            }
-            else if (dirWall[DirState::dirL] && dirWall[DirState::dirR])
-            {
-                // 문 상하
-                if (dirT) doorDir = DirState::dirT;
-                else doorDir = DirState::dirB;
-            }
+            if (dirWall[DirState::dirB] && dirWall[DirState::dirT]) 
+            {}
+            else if (dirWall[DirState::dirL] && dirWall[DirState::dirR]) 
+            {}
             // 모서리에 위치 시 다른 이미지 출력. 그리고 이동 가능하게 옆에 평면타일로 예외처리
             else
             {
@@ -531,7 +526,6 @@ namespace Gungeon
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirL];
                     doorTileIdx.y = on.y + dy[DirState::dirL];
-                    doorDir = DirState::dirRT;
                 }
                 else if ((dirWall[DirState::dirB] && dirWall[DirState::dirR]))
                 {
@@ -539,7 +533,6 @@ namespace Gungeon
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirR];
                     doorTileIdx.y = on.y + dy[DirState::dirR];
-                    doorDir = DirState::dirLT;
                 }
 
                 else if ((dirWall[DirState::dirR] && dirWall[DirState::dirT]))
@@ -548,7 +541,6 @@ namespace Gungeon
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirR];
                     doorTileIdx.y = on.y + dy[DirState::dirR];
-                    doorDir = DirState::dirLB;
                 }
                 else if (dirWall[DirState::dirT] && dirWall[DirState::dirL])
                 {
@@ -556,7 +548,6 @@ namespace Gungeon
                     floorTileIdx.y = on.y;
                     doorTileIdx.x = on.x + dx[DirState::dirL];
                     doorTileIdx.y = on.y + dy[DirState::dirL];
-                    doorDir = DirState::dirRB;
                 }
 
                 MAP->tilemap->SetTile(floorTileIdx,
@@ -565,7 +556,8 @@ namespace Gungeon
                     MAP->imgIdx,
                     (int)TileState::floor, 
                     Color(0.5f, 0.5f, 0.5f, 0.5f),
-                    -1, doorDir);
+                    -1, 
+                    dir);
             }
 
             MAP->tilemap->SetTile(doorTileIdx,
@@ -574,7 +566,8 @@ namespace Gungeon
                 MAP->imgIdx,
                 (int)TileState::door,
                 Color(0.5f, 0.5f, 0.5f, 0.5f),
-                -1, doorDir);
+                -1, 
+                dir);
 
             selectedRooms[roomIdx]->doorTileIdxs.push_back(doorTileIdx);
         };
@@ -591,49 +584,42 @@ namespace Gungeon
                 int sourRoomIdx = MAP->tilemap->GetTileRoomIndex(sour);
                 int destRoomIdx = MAP->tilemap->GetTileRoomIndex(dest);
 
-                Tile* before = way.back();
-                Int2 beforeOn = before->idx;
+                Int2 beforeOn = way.back()->idx;
                 int beforeRoomIdx = MAP->tilemap->GetTileRoomIndex(beforeOn);
+                DirState beforeDir = MAP->tilemap->GetTileDir(beforeOn);
 
                 for (int cur = way.size() - 2; cur >= 0; cur--)
                 {
-                    Int2 on = way[cur]->idx;
-                    TileState tileStateOn = MAP->tilemap->GetTileState(on);
-                    int roomIdx = MAP->tilemap->GetTileRoomIndex(on);
+                    Int2 curOn = way[cur]->idx;
+                    TileState curTileStateOn = MAP->tilemap->GetTileState(curOn);
+                    int curRoomIdx = MAP->tilemap->GetTileRoomIndex(curOn);
+                    DirState curDir = MAP->tilemap->GetTileDir(curOn);
 
-                    if (tileStateOn == TileState::none)
+                    if (curTileStateOn == TileState::none)
                     {
-                        MAP->tilemap->SetTile(on,
+                        MAP->tilemap->SetTile(curOn,
                             Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
                                 RANDOM->Int(floorImgMin.y, floorImgMax.y)),
                             MAP->imgIdx,
                             (int)TileState::floor);
                     }
-                    if ((roomIdx != beforeRoomIdx && first) ||
-                        (roomIdx == destRoomIdx && !first))
+
+                    if (first && curRoomIdx != beforeRoomIdx)
                     {
-                        // 문 상하좌우
-                        bool isRight = false, isTop = false;
-
-                        if (sour.x < dest.x) isRight = true;
-                        if (sour.y > dest.y) isTop = true;
-
-                        if (first)
-                        {
-                            SetDoor(beforeOn, !isRight, !isTop, beforeRoomIdx);
-                        }
-                        else if (roomIdx == destRoomIdx)
-                        {
-                            SetDoor(on, isRight, isTop, roomIdx);
-                        }
-
+                        SetDoor(beforeOn, beforeRoomIdx, beforeDir);
                         way.clear();
-                        return on;
+                        return curOn;
+                    }
+                    else if (!first && curRoomIdx == destRoomIdx)
+                    {
+                        SetDoor(curOn, curRoomIdx, curDir);
+                        way.clear();
+                        return curOn;
                     }
 
-                    before = way[cur];
-                    beforeOn = before->idx;
+                    beforeOn = way[cur]->idx;
                     beforeRoomIdx = MAP->tilemap->GetTileRoomIndex(beforeOn);
+                    beforeDir = MAP->tilemap->GetTileDir(beforeOn);
                 }
             }
             assert(false);

@@ -162,15 +162,13 @@ namespace Gungeon
 					}
 					curBulletIdx++;
 				};
-
-				StringBulletData stringBullet;
 				while (0 == stringBullet.Z[curBulletY][curBulletX])
 				{
 					plusXY();
 				}
 
-				bullet[curBulletIdx]->Spawn(Vector2(spawnPos.x - 50.0f + curBulletX * 20,
-					spawnPos.y + 50.0f - curBulletY * 20));
+				bullet[curBulletIdx]->Spawn(Vector2(spawnPos.x - 50.0f + curBulletX * 20.0f,
+					spawnPos.y + 50.0f - curBulletY * 20.0f));
 
 				plusXY();
 			}

@@ -20,7 +20,7 @@ public:
     Vector2     Pos; //타일의 중점
     TileState   state;
     int         roomIdx;
-    int         doorDir;
+    int         dir;
 
     void ClearCost();
     void ClacH(Int2 DestIdx);
@@ -63,11 +63,12 @@ public:
     Vector2         GetTilePosition(Int2 TileIdx);
     int             GetTileRoomIndex(Int2 TileIdx);
     void            SetTileRoomIndex(Int2 TileIdx, const int tileRoomIndex);
-    DirState        GetTileDoorDir(Int2 TileIdx);
-    void            SetTileDoorDir(Int2 TileIdx, const DirState doorDir);
+    DirState        GetTileDir(Int2 TileIdx);
+    void            SetTileDir(Int2 TileIdx, const DirState dir);
 
+    bool            IntersectTile(Int2 on);
     bool            IntersectTilePos(Vector2 wpos);
-    bool            IntersectTileObj(ObRect* colTile);
+    bool            IntersectTileColTile(ObRect* colTile);
     bool            PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool checkDiagnoal = true);
 
 protected:

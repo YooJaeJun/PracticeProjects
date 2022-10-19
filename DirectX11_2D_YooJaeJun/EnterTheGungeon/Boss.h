@@ -10,7 +10,7 @@ namespace Gungeon
 		shield,
 		spiral,
 		trail,
-		brute,
+		miro,
 		tornado,
 		max
 	};
@@ -28,8 +28,10 @@ namespace Gungeon
 	const int shieldMax = 60;
 	const int spiralMax = 60;
 	const int trailMax = 30;
-	const int bruteMax = 2000;
+	const int miroMax = 75;
 	const int tornadoMax = 150;
+	const int miroWidth = 35;
+	const int miroHeight = 32;
 
 	class Boss : public Unit
 	{
@@ -55,6 +57,8 @@ namespace Gungeon
 		virtual void StartAttack() override;
 		virtual void StartDie() override;
 		virtual void Spawn(const Vector2 wpos) override;
+		void HitBullet();
+		void SpawnPlayerByForce(const Vector2 wpos);
 		virtual void ColToggle() override;
 
 		void ChangePattern(const BossPattern newPattern);
@@ -63,7 +67,7 @@ namespace Gungeon
 		void InitShield();
 		void InitSpiral();
 		void InitTrail();
-		void InitBrute();
+		void InitMiro();
 		void InitTornado();
 		void UpdateBullet();
 		void UpdateCircular();
@@ -71,7 +75,7 @@ namespace Gungeon
 		void UpdateShield();
 		void UpdateSpiral();
 		void UpdateTrail();
-		void UpdateBrute();
+		void UpdateMiro();
 		void UpdateTornado();
 
 	public:
@@ -98,15 +102,18 @@ namespace Gungeon
 		float				timeSetTargetDir = 0.0f;
 		int					curBulletIdx = 0;
 		float				angleFactor = 0.0f;
-		float				timeSpiral = 0.0f;
+		vector<string>		candidateString;
+		int					candidateStringCount = 0;
 		bool				flagSpiralRespawn = false;
-		float				timeCluster = 0.0f;
-		float				timeBrute = 0.0f;
-		float				timeTornado = 0.0f;
-		BossAttackState		attackState = BossAttackState::none;
+		vector<string>		miro;
+		bool				miroStart = false;
+		bool				pushingPlayer = false;
+		int					curBulletX = 0;
+		int					curBulletY = 0;
 		float				timeAttackEnd = 0.0f;
+		BossAttackState		attackState = BossAttackState::none;
 		float				intervalFire[(int)BossPattern::max];
 		float				intervalEnd[(int)BossPattern::max];
-		vector<TrailBullet*>trailBullet;
+		Effect*				spawnPlayerByForce = nullptr;
 	};
 }

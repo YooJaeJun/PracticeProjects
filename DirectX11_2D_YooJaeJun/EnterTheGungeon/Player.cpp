@@ -545,18 +545,9 @@ namespace Gungeon
 
 	void Player::SetFireInterval()
 	{
-		switch (weapons[curWeaponIdx]->type)
-		{
-		case WeaponType::pistol:
-			fireInterval = 0.2f;
-			break;
-		case WeaponType::shotgun:
-			fireInterval = 0.7f;
-			break;
-		default:
-			fireInterval = 0.1f;
-			break;
-		}
+		intervalFire[(int)WeaponType::pistol] = 0.2f;
+		intervalFire[(int)WeaponType::shotgun] = 0.7f;
+		intervalFire[(int)WeaponType::machineGun] = 0.05f;
 	}
 
 	void Player::FireProcess()
@@ -564,7 +555,7 @@ namespace Gungeon
 		int firstFire = weapons[curWeaponIdx]->bulletCount - 1;
 
 		if (curBulletIdx == firstFire ||
-			TIMER->GetTick(timeFire, fireInterval))
+			TIMER->GetTick(timeFire, intervalFire[(int)weapons[curWeaponIdx]->type]))
 		{
 			if (curBulletIdx < 0)
 			{
@@ -618,7 +609,6 @@ namespace Gungeon
 
 				curBulletIdx--;
 			}
-
 			break;
 
 		case WeaponType::shotgun:
@@ -646,10 +636,30 @@ namespace Gungeon
 
 				curBulletIdx--;
 			}
+			break;
 
+		case WeaponType::machineGun:
+
+			if (canFireOnce[(int)WeaponType::machineGun])
+			{
+				weapons[curWeaponIdx]->fireEffect->Spawn(weapons[curWeaponIdx]->firePos->GetWorldPos());
+				weapons[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
+
+				bullet[curBulletIdx]->Spawn(
+					weapons[curWeaponIdx]->firePos->GetWorldPos(),
+					Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
+						RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
+				);
+
+				SOUND->Stop("GUN");
+				SOUND->Play("GUN");
+
+				canFireOnce[(int)WeaponType::machineGun] = false;
+
+				curBulletIdx--;
+			}
 			break;
 		}
-
 		// originCamPos = CAM->position;
 	}
 	
