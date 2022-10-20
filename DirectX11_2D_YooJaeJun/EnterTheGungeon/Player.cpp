@@ -122,7 +122,7 @@ namespace Gungeon
 	void Player::InitWeapon()
 	{
 		curWeaponIdx = 0;
-		weapons[curWeaponIdx] = new Weapon1;
+		weapons[curWeaponIdx] = new Weapon3;
 		weapons[curWeaponIdx]->col->SetParentRT(*col);
 		weapons[curWeaponIdx]->col->SetLocalPos(Vector2(10.0f, -15.0f));
 		weapons[curWeaponIdx]->Equip();
@@ -134,12 +134,12 @@ namespace Gungeon
 
 		weapons[curWeaponIdx]->uiBulletFrame->img->isVisible = true;
 		weapons[curWeaponIdx]->uiWeapon->img->isVisible = true;
-		weapons[curWeaponIdx]->uiBulletCount->img->isVisible = true;
 	}
 
 	void Player::InitBullet()
 	{
-		bullet.resize(5);
+		curBulletIdx = weapons[curWeaponIdx]->bulletCount - 1;
+		bullet.resize(weapons[curWeaponIdx]->bulletCount);
 		for (auto& elem : bullet)
 		{
 			elem = new PlayerBullet;
@@ -392,6 +392,12 @@ namespace Gungeon
 			RECT{ 80, 140, (long)app.GetWidth(), (long)app.GetHeight() },
 			40.0f,
 			L"Alagard");
+
+		DWRITE->RenderText(to_wstring(weapons[curWeaponIdx]->remainBulletCount),
+			RECT{ (long)app.GetWidth() - 140, (long)app.GetHeight() - 190, 
+			(long)app.GetWidth(), (long)app.GetHeight() },
+			45.0f,
+			L"Alagard");
 	}
 
 	void Player::ResizeScreen()
@@ -549,14 +555,19 @@ namespace Gungeon
 		{
 			if (curBulletIdx < 0)
 			{
-				isReloading = true;
+				if (weapons[curWeaponIdx]->remainBulletCount > 0)
+				{
+					isReloading = true;
 
-				curBulletIdx = weapons[curWeaponIdx]->bulletCount - 1;
+					for (auto& elem : canFireOnce) elem = false;
 
-				for (auto& elem : canFireOnce) elem = false;
-
-				uiReload->img->isVisible = true;
-				uiReloadBar->img->isVisible = true;
+					uiReload->img->isVisible = true;
+					uiReloadBar->img->isVisible = true;
+				}
+				else
+				{
+					// 사운드
+				}
 			}
 
 			if ((INPUT->KeyPress(VK_LBUTTON) || INPUT->KeyDown(VK_LBUTTON)))
@@ -574,86 +585,85 @@ namespace Gungeon
 			flagFireCamShake = true;
 		}
 
-		Vector2 dir = INPUT->GetWorldMousePos() - Pos();
-		dir.Normalize();
-
 		weapons[curWeaponIdx]->idle->ChangeAnim(AnimState::once, 0.2f);
 		flagLbutton = true;
 
-		switch (weapons[curWeaponIdx]->type)
+		if (curBulletIdx >= 0)
 		{
-		case WeaponType::pistol:
-
-			if (canFireOnce[(int)WeaponType::pistol])
+			switch (weapons[curWeaponIdx]->type)
 			{
-				weapons[curWeaponIdx]->fireEffect->Spawn(weapons[curWeaponIdx]->firePos->GetWorldPos());
-				weapons[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
+			case WeaponType::pistol:
 
-				bullet[curBulletIdx]->Spawn(
-					weapons[curWeaponIdx]->firePos->GetWorldPos(),
-					Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
-						RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
-				);
-
-				SOUND->Stop("GUN");
-				SOUND->Play("GUN");
-
-				canFireOnce[(int)WeaponType::pistol] = false;
-
-				curBulletIdx--;
-			}
-			break;
-
-		case WeaponType::shotgun:
-
-			if (canFireOnce[(int)WeaponType::shotgun])
-			{
-				weapons[curWeaponIdx]->fireEffect->Spawn(weapons[curWeaponIdx]->firePos->GetWorldPos());
-				weapons[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
-
-				for (int bulletOnce = 6; bulletOnce >= 0; bulletOnce--)
+				if (canFireOnce[(int)WeaponType::pistol])
 				{
-					bullet[bulletOnce]->scalar = RANDOM->Float(800.0f, 1000.0f);
+					weapons[curWeaponIdx]->fireEffect->Spawn(weapons[curWeaponIdx]->firePos->GetWorldPos());
+					weapons[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
 
-					bullet[bulletOnce]->Spawn(
+					bullet[curBulletIdx]->Spawn(
 						weapons[curWeaponIdx]->firePos->GetWorldPos(),
-						Vector2(RANDOM->Float(dir.x - 0.2f, dir.x + 0.2f),
-							RANDOM->Float(dir.y - 0.2f, dir.y + 0.2f))
+						Vector2(RANDOM->Float(targetDir.x - 0.1f, targetDir.x + 0.1f),
+							RANDOM->Float(targetDir.y - 0.1f, targetDir.y + 0.1f))
 					);
+
+					SOUND->Stop("GUN");
+					SOUND->Play("GUN");
+
+					canFireOnce[(int)WeaponType::pistol] = false;
+
+					curBulletIdx--;
 				}
+				break;
 
-				SOUND->Stop("GUN");
-				SOUND->Play("GUN");
+			case WeaponType::shotgun:
 
-				canFireOnce[(int)WeaponType::shotgun] = false;
+				if (canFireOnce[(int)WeaponType::shotgun])
+				{
+					weapons[curWeaponIdx]->fireEffect->Spawn(weapons[curWeaponIdx]->firePos->GetWorldPos());
+					weapons[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
 
-				curBulletIdx--;
+					for (int bulletOnce = 6; bulletOnce >= 0; bulletOnce--)
+					{
+						bullet[bulletOnce]->scalar = RANDOM->Float(800.0f, 1000.0f);
+
+						bullet[bulletOnce]->Spawn(
+							weapons[curWeaponIdx]->firePos->GetWorldPos(),
+							Vector2(RANDOM->Float(targetDir.x - 0.2f, targetDir.x + 0.2f),
+								RANDOM->Float(targetDir.y - 0.2f, targetDir.y + 0.2f))
+						);
+					}
+
+					SOUND->Stop("GUN");
+					SOUND->Play("GUN");
+
+					canFireOnce[(int)WeaponType::shotgun] = false;
+
+					curBulletIdx--;
+				}
+				break;
+
+			case WeaponType::machineGun:
+
+				if (canFireOnce[(int)WeaponType::machineGun])
+				{
+					weapons[curWeaponIdx]->fireEffect->Spawn(weapons[curWeaponIdx]->firePos->GetWorldPos());
+					weapons[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
+
+					bullet[curBulletIdx]->Spawn(
+						weapons[curWeaponIdx]->firePos->GetWorldPos(),
+						Vector2(RANDOM->Float(targetDir.x - 0.1f, targetDir.x + 0.1f),
+							RANDOM->Float(targetDir.y - 0.1f, targetDir.y + 0.1f))
+					);
+
+					SOUND->Stop("GUN");
+					SOUND->Play("GUN");
+
+					canFireOnce[(int)WeaponType::machineGun] = false;
+
+					curBulletIdx--;
+				}
+				break;
 			}
-			break;
-
-		case WeaponType::machineGun:
-
-			if (canFireOnce[(int)WeaponType::machineGun])
-			{
-				weapons[curWeaponIdx]->fireEffect->Spawn(weapons[curWeaponIdx]->firePos->GetWorldPos());
-				weapons[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
-
-				bullet[curBulletIdx]->Spawn(
-					weapons[curWeaponIdx]->firePos->GetWorldPos(),
-					Vector2(RANDOM->Float(dir.x - 0.1f, dir.x + 0.1f),
-						RANDOM->Float(dir.y - 0.1f, dir.y + 0.1f))
-				);
-
-				SOUND->Stop("GUN");
-				SOUND->Play("GUN");
-
-				canFireOnce[(int)WeaponType::machineGun] = false;
-
-				curBulletIdx--;
-			}
-			break;
 		}
-		// originCamPos = CAM->position;
 	}
 	
 	// 발사 시, 피격 시
@@ -724,13 +734,26 @@ namespace Gungeon
 
 			if (TIMER->GetTick(timeReload, 1.5f))
 			{
+				int tempRemain = weapons[curWeaponIdx]->remainBulletCount;
+				weapons[curWeaponIdx]->remainBulletCount -= 
+					min(weapons[curWeaponIdx]->bulletCount - curBulletIdx - 1, 
+						weapons[curWeaponIdx]->remainBulletCount);
+				curBulletIdx = min(weapons[curWeaponIdx]->bulletCount - 1, tempRemain);
+
+				int idx = 0;
+				for (auto& elem : weapons[curWeaponIdx]->uiBullet)
+				{
+					if (idx > curBulletIdx) break;
+					elem->img->isVisible = true;
+					idx++;
+				}
+
 				weapons[curWeaponIdx]->idle->isVisible = true;
 				weapons[curWeaponIdx]->imgReloading->isVisible = false;
 				uiReload->img->isVisible = false;
 				uiReloadBar->img->isVisible = false;
 				isReloading = false;
 				uiReloadBar->img->SetLocalPosX(-60.0f);
-				for (auto& elem : weapons[curWeaponIdx]->uiBullet) elem->img->isVisible = true;
 			}
 		}
 	}
@@ -862,7 +885,6 @@ namespace Gungeon
 		}
 		weapons[curWeaponIdx]->uiBulletFrame->img->isVisible = true;
 		weapons[curWeaponIdx]->uiWeapon->img->isVisible = true;
-		weapons[curWeaponIdx]->uiBulletCount->img->isVisible = true;
 	}
 
 	void Player::SetWeaponFrameToOrigin()

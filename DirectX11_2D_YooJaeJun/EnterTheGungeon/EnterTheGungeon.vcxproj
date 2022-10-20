@@ -23,6 +23,7 @@
     <ClInclude Include="BossBullet.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="ShurikenBullet.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
@@ -56,6 +57,7 @@
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BossBullet.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="ShurikenBullet.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy1.cpp" />

@@ -15,6 +15,7 @@ namespace Gungeon
 
 		void Spawn(const Vector2& coord);
 		void Spawn(const Vector2& coord, const Vector2& fireDir);
+		void Fire();
 		void Hit(const float damage);
 		virtual void Reload();
 

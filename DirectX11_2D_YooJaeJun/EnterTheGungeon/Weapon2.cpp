@@ -13,6 +13,7 @@ namespace Gungeon
 		// Â÷ÀÌ
 		type = WeaponType::shotgun;
 		intervalFire = 0.7f;
+		remainBulletCount = 150;
 
 		scaleFactor = 2.0f;
 		col->scale = Vector2(84.0f / 2.0f, 23.0f) * scaleFactor;

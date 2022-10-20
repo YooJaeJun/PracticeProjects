@@ -6,14 +6,16 @@ namespace Gungeon
     {
         Init();
 
-        float scaleFactor = 5.0f;
-        col->scale = Vector2(8.0f, 8.0f) * scaleFactor;
+        float scaleFactor = 2.5f;
+        col->scale = Vector2(16.0f, 16.0f) * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
 
         idle = new ObImage(L"EnterTheGungeon/boss_1/Bullet_0.png");
         idle->isVisible = false;
         idle->scale = col->scale;
+        // idle->maxFrame.x = 4;
+        // idle->ChangeAnim(AnimState::loop, 0.1f);
         idle->SetParentRT(*col);
 
         float bombScaleFactor = 2.5f;
@@ -31,34 +33,5 @@ namespace Gungeon
         damage = 1;
         angle = 0.0f;
         atkAngle = 0.0f;
-    }
-
-    void BossBullet::Release()
-    {
-        Bullet::Release();
-    }
-
-    void BossBullet::Update()
-    {
-        Bullet::Update();
-    }
-
-    void BossBullet::Update(const bool notRotation)
-    {
-        Bullet::Update(notRotation);
-    }
-
-    void BossBullet::LateUpdate()
-    {
-    }
-
-    void BossBullet::Render()
-    {
-        Bullet::Render();
-    }
-
-    void BossBullet::Reload()
-    {
-        Bullet::Reload();
     }
 }

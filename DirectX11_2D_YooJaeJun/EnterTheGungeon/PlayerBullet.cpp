@@ -29,25 +29,6 @@ namespace Gungeon
         Bullet::Init();
 
         scalar = 600.0f;
-        damage = 2;
-    }
-
-    void PlayerBullet::Release()
-    {
-        Bullet::Release();
-    }
-
-    void PlayerBullet::Update()
-    {
-        Bullet::Update();
-    }
-
-    void PlayerBullet::LateUpdate()
-    {
-    }
-
-    void PlayerBullet::Render()
-    {
-        Bullet::Render();
+        damage = 1;
     }
 }

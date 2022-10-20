@@ -318,6 +318,7 @@ namespace Gungeon
                         {
                             bulletElem->moveDir.x *= -1.0f;
                         }
+                        bulletElem->col->rotation = Utility::DirToRadian(bulletElem->moveDir);
                         bulletElem->StepBack();
                         bulletElem->Update();
                     }

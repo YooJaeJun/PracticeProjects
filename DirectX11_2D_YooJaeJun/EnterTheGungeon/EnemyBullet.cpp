@@ -32,23 +32,4 @@ namespace Gungeon
         scalar = 400.0f;
         damage = 1;
     }
-
-    void EnemyBullet::Release()
-    {
-        Bullet::Release();
-    }
-
-    void EnemyBullet::Update()
-    {
-        Bullet::Update();
-    }
-
-    void EnemyBullet::LateUpdate()
-    {
-    }
-
-    void EnemyBullet::Render()
-    {
-        Bullet::Render();
-    }
 }

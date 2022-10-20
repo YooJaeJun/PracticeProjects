@@ -55,7 +55,7 @@ namespace Gungeon
 		bool				canFireOnce[(int)WeaponType::max];
 		bool				isReloading = false;
 		float				timeReload = 0.0f;
-		int					curBulletIdx = 4;
+		int					curBulletIdx = 0;
 		float				timeRoll = 0.0f;
 		bool				flagFireCamShake = false;
 		float				timeFireCamShake = 0.0f;

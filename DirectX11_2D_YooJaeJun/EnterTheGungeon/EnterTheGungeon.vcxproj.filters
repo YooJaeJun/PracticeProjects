@@ -122,6 +122,9 @@
     <ClInclude Include="TreasureBox.h">
       <Filter>GameObject\Level</Filter>
     </ClInclude>
+    <ClInclude Include="ShurikenBullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -214,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="TreasureBox.cpp">
       <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="ShurikenBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

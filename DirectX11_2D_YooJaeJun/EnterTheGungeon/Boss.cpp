@@ -19,7 +19,7 @@ namespace Gungeon
     {
         pattern = BossPattern::none;
 
-        curHp = maxHp = 30;
+        curHp = maxHp = 100;
         scalar = 120.0f;
 
         intervalAnim[(int)State::idle] = 0.5f;
@@ -39,17 +39,17 @@ namespace Gungeon
         intervalFire[(int)BossPattern::trail] = 0.6f;
         intervalFire[(int)BossPattern::miro] = 0.3f;
         intervalFire[(int)BossPattern::tornado] = 0.2f;
-        intervalFire[(int)BossPattern::pid] = 0.2f;
+        intervalFire[(int)BossPattern::shuriken] = 0.2f;
 
         intervalEnd[(int)BossPattern::none] = 0.0f;
         intervalEnd[(int)BossPattern::circular] = 5.8f;
         intervalEnd[(int)BossPattern::string] = 11.5f;
         intervalEnd[(int)BossPattern::shield] = 15.0f;
         intervalEnd[(int)BossPattern::spiral] = 6.3f;
-        intervalEnd[(int)BossPattern::trail] = 10.0f;
+        intervalEnd[(int)BossPattern::trail] = 8.0f;
         intervalEnd[(int)BossPattern::miro] = 13.0f;
         intervalEnd[(int)BossPattern::tornado] = 4.0f;
-        intervalEnd[(int)BossPattern::pid] = 7.0f;
+        intervalEnd[(int)BossPattern::shuriken] = 6.0f;
 
         candidateStringCount = 3;
         candidateString = {
@@ -86,8 +86,8 @@ namespace Gungeon
             "11111100001111111111111111111111111",
             "11111100001111111111111111111111111",
             "11111100001111111111111111111111111",
-            "11111100000000111111111111111111111",
-            "11111100000000111111111111111111111",
+            "11111100001111111111111111111111111",
+            "11111100000000000000000000111111111",
             "11111100000000000000000000111111111",
             "11111100000000000000000000111111111",
             "11111111110000000000000000111111111",
@@ -301,8 +301,8 @@ namespace Gungeon
         case Gungeon::BossPattern::tornado:
             InitTornado();
             break;
-        case Gungeon::BossPattern::pid:
-            InitPid();
+        case Gungeon::BossPattern::shuriken:
+            InitShuriken();
             break;
         }//switch
     }
@@ -475,7 +475,7 @@ namespace Gungeon
 
             case Gungeon::BossPattern::miro:
             case Gungeon::BossPattern::spiral:
-            case Gungeon::BossPattern::pid:
+            case Gungeon::BossPattern::shuriken:
                 hit->isVisible = false;
                 attack2->isVisible = true;
                 chairAttack2->isVisible = true;
@@ -624,7 +624,7 @@ namespace Gungeon
                 InitBullet();
 
                 // test
-                pattern = BossPattern::pid;
+                pattern = BossPattern::shuriken;
                 ChangePattern(pattern);
                 InitBullet();
 
@@ -878,17 +878,21 @@ namespace Gungeon
         }
     }
 
-    void Boss::InitPid()
+    void Boss::InitShuriken()
     {
-        bullet.resize(pidMax);
+        bullet.resize(shurikenMax);
         bulletSpawnPos = firePosTargeting->GetWorldPos();
 
+        int idx = 0;
         for (auto& elem : bullet)
         {
-            elem = new BossBullet;
+            elem = new ShurikenBullet;
             elem->Init();
-            elem->scalar = 200.0f;
-            elem->idle->color = Color(0.5f, 0.5f, 0.5f, 1.0f);
+            elem->scalar = 600.0f;
+            elem->col->SetParentRT(*col);
+            elem->idle->color = Color(0.5f, 0.5f, 0.5f);
+            elem->idle->ChangeAnim(AnimState::loop, RANDOM->Float(0.05f, 0.2f));
+            idx++;
         }
     }
 
@@ -918,8 +922,8 @@ namespace Gungeon
         case Gungeon::BossPattern::tornado:
             UpdateTornado();
             break;
-        case Gungeon::BossPattern::pid:
-            UpdatePid();
+        case Gungeon::BossPattern::shuriken:
+            UpdateShuriken();
             break;
         }
     }
@@ -1029,7 +1033,8 @@ namespace Gungeon
 
             bullet[curBulletIdx]->moveDir.x = min(targetDir.x + RANDOM->Float(0.0f, 0.1f), 1.0f);
             bullet[curBulletIdx]->moveDir.y = min(targetDir.y + RANDOM->Float(0.0f, 0.1f), 1.0f);
-            bullet[curBulletIdx]->Spawn(bulletSpawnPos);
+
+            bullet[curBulletIdx]->Spawn(bulletSpawnPos, bullet[curBulletIdx]->moveDir);
             curBulletIdx++;
         }
     }
@@ -1091,23 +1096,28 @@ namespace Gungeon
         }
     }
 
-    void Boss::UpdatePid()
+    void Boss::UpdateShuriken()
     {
-        if (TIMER->GetTick(timeFire, intervalFire[(int)BossPattern::pid]))
+        if (TIMER->GetTick(timeFire, intervalFire[(int)BossPattern::shuriken]))
         {
-            bullet[curBulletIdx]->Spawn(bulletSpawnPos);
+            bullet[curBulletIdx]->Spawn(Vector2(0.0f, 0.0f));
+            bullet[curBulletIdx]->col->SetLocalPos(Vector2((curBulletIdx + 1) * 20.0f, (curBulletIdx + 1) * 20.0f));
             curBulletIdx++;
+            if (curBulletIdx >= shurikenMax) curBulletIdx = 0;
         }
 
+        int idx = 0;
         for (auto& elem : bullet)
         {
-            Vector2 current_error = targetPos - elem->Pos();
-            float lengthSq = current_error.LengthSquared();
-            m_intE += current_error * DELTA;
-            m_dE = (current_error - previous_error) / DELTA;
-            m_MV = m_kP * current_error + m_kI * m_intE + m_kD * m_dE;
-            previous_error = current_error;
-            elem->moveDir = current_error;
+            ShurikenBullet* childElem; 
+            if (childElem = dynamic_cast<ShurikenBullet*>(elem))
+            {
+                if (childElem->ShurikenBulletState == ShurikenBulletState::targeting)
+                {
+                    childElem->moveDir = targetPos - childElem->Pos();
+                }
+            }
+            idx++;
         }
     }
 }

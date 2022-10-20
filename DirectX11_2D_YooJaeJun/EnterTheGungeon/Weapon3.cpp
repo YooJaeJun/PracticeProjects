@@ -13,6 +13,7 @@ namespace Gungeon
 		// Â÷ÀÌ
 		type = WeaponType::machineGun;
 		intervalFire = 0.05f;
+		remainBulletCount = 30;
 
 		scaleFactor = 2.0f;
 		col->scale = Vector2(70.0f / 2.0f, 15.0f) * scaleFactor;
@@ -48,7 +49,7 @@ namespace Gungeon
 		state = State::die;
 
 		uiBulletFrame->img = new ObImage(L"EnterTheGungeon/Weapon/3/UI_Magazine.png");
-		uiBulletFrame->img->scale = Vector2(28.0f, 220.0f);
+		uiBulletFrame->img->scale = Vector2(28.0f, 280.0f);
 		uiBulletFrame->img->pivot = OFFSET_RB;
 		uiBulletFrame->anchor = DirState::dirRB;
 		uiBulletFrame->Spawn(-26.0f, 30.0f);

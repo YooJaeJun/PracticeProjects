@@ -6,15 +6,16 @@ namespace Gungeon
     {
         Init();
 
-        float scaleFactor = 5.0f;
-        col->scale = Vector2(8.0f, 8.0f) * scaleFactor;
+        float scaleFactor = 3.0f;
+        col->scale = Vector2(80.0f / 4.0f, 17.0f) * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
 
-        idle = new ObImage(L"EnterTheGungeon/boss_1/Bullet_0.png");
+        idle = new ObImage(L"EnterTheGungeon/boss_1/Bullet_1.png");
         idle->isVisible = false;
         idle->scale = col->scale;
-        idle->color = Color(0.9f, 0.7f, 0.5f);
+        idle->maxFrame.x = 4;
+        idle->ChangeAnim(AnimState::loop, 0.2f);
         idle->SetParentRT(*col);
 
         float bombScaleFactor = 2.5f;
@@ -29,7 +30,7 @@ namespace Gungeon
 
         for (auto& trail : trails)
         {
-            trail = new ObImage(L"EnterTheGungeon/boss_1/Bullet_0.png");
+            trail = new ObImage(L"EnterTheGungeon/boss_1/Bullet_2.png");
             trail->isVisible = false;
             trail->scale = col->scale;
         }
@@ -78,30 +79,15 @@ namespace Gungeon
         }
     }
 
-    void TrailBullet::Update(const bool notRotation)
-    {
-        Bullet::Update(notRotation);
-    }
-
-    void TrailBullet::LateUpdate()
-    {
-    }
-
     void TrailBullet::Render()
     {
         if (isFired)
         {
-            Bullet::Render();
-
             for (auto& elem : trails)
             {
                 elem->Render();
             }
+            Bullet::Render();
         }
-    }
-
-    void TrailBullet::Reload()
-    {
-        Bullet::Reload();
     }
 }

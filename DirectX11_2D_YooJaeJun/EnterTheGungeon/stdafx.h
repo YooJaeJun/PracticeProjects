@@ -10,6 +10,7 @@
 #include "EnemyBullet.h"
 #include "BossBullet.h"
 #include "TrailBullet.h"
+#include "ShurikenBullet.h"
 #include "StringBulletData.h"
 #include "Item.h"
 #include "Weapon.h"

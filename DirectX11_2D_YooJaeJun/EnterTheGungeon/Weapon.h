@@ -43,6 +43,6 @@ namespace Gungeon
 		int			bulletCount = 0;
 		WeaponType	type = WeaponType::pistol;
 		float		intervalFire;
-
+		int			remainBulletCount = 0;
 	};
 }

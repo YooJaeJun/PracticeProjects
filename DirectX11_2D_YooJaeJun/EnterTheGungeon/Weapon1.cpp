@@ -13,6 +13,7 @@ namespace Gungeon
 		// Â÷ÀÌ
 		type = WeaponType::pistol;
 		intervalFire = 0.2f;
+		remainBulletCount = 9999;
 
 		scaleFactor = 1.5f;
 		col->scale = Vector2(58.0f / 2.0f, 34.0f) * scaleFactor;
@@ -79,6 +80,8 @@ namespace Gungeon
 		uiWeapon->Spawn(-130.0f, 60.0f);
 		uiWeapon->img->space = Space::screen;
 		uiWeapon->img->isVisible = false;
+
+		uiBulletCount->img->isVisible = true;
 	}
 
 	void Weapon1::Release()

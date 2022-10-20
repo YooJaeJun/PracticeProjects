@@ -34,10 +34,7 @@ namespace Gungeon
         {
             SetLastPos();
             Character::Update();
-
-            moveDir.Normalize();
-            Vector2 velocity = moveDir * scalar * DELTA;
-            col->MoveWorldPos(velocity);
+            Fire();
         }
 
         idle->Update();
@@ -48,12 +45,8 @@ namespace Gungeon
     {
         if (isFired)
         {
-            SetLastPos();
             Character::Update(notRotation);
-
-            moveDir.Normalize();
-            Vector2 velocity = moveDir * scalar * moveFactor * DELTA;
-            col->MoveWorldPos(velocity);
+            Fire();
         }
 
         idle->Update(false);
@@ -86,6 +79,13 @@ namespace Gungeon
         Spawn(coord);
         col->rotation = Utility::DirToRadian(fireDir);
         moveDir = fireDir;
+    }
+
+    void Bullet::Fire()
+    {
+        moveDir.Normalize();
+        Vector2 velocity = moveDir * scalar * DELTA;
+        col->MoveWorldPos(velocity);
     }
 
     void Bullet::Hit(const float damage)

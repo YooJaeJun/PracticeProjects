@@ -12,7 +12,7 @@ namespace Gungeon
 		trail,
 		miro,
 		tornado,
-		pid,
+		shuriken,
 		max
 	};
 
@@ -60,7 +60,7 @@ namespace Gungeon
 		void InitTrail();
 		void InitMiro();
 		void InitTornado();
-		void InitPid();
+		void InitShuriken();
 		void UpdateBullet();
 		void UpdateCircular();
 		void UpdateString();
@@ -69,7 +69,7 @@ namespace Gungeon
 		void UpdateTrail();
 		void UpdateMiro();
 		void UpdateTornado();
-		void UpdatePid();
+		void UpdateShuriken();
 
 	private:
 		const int			patternMax = static_cast<int>(BossPattern::max) - 1;
@@ -81,16 +81,7 @@ namespace Gungeon
 		const int			tornadoMax = 150;
 		const int			miroWidth = 35;
 		const int			miroHeight = 35;
-		const int			pidMax = 50;
-		// PID
-		const float			m_kP = 0.3f;
-		const float			m_kI = 0.0001f;
-		const float			m_kD = 0.3f;
-		const float			m_MaxSpeed = 0.5f;
-		Vector2				m_intE;
-		Vector2				m_dE;
-		Vector2				m_MV;
-		Vector2				previous_error;
+		const int			shurikenMax = 40;
 
 	public:
 		ObImage*			attack1Start = nullptr;
