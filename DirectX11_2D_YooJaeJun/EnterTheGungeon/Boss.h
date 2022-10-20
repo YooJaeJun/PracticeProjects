@@ -12,6 +12,7 @@ namespace Gungeon
 		trail,
 		miro,
 		tornado,
+		pid,
 		max
 	};
 
@@ -22,16 +23,6 @@ namespace Gungeon
 		loop,
 		end
 	};
-
-	const int patternMax = static_cast<int>(BossPattern::max) - 1;
-	const int circularMax = 180;
-	const int shieldMax = 60;
-	const int spiralMax = 60;
-	const int trailMax = 30;
-	const int miroMax = 75;
-	const int tornadoMax = 150;
-	const int miroWidth = 35;
-	const int miroHeight = 32;
 
 	class Boss : public Unit
 	{
@@ -69,6 +60,7 @@ namespace Gungeon
 		void InitTrail();
 		void InitMiro();
 		void InitTornado();
+		void InitPid();
 		void UpdateBullet();
 		void UpdateCircular();
 		void UpdateString();
@@ -77,6 +69,28 @@ namespace Gungeon
 		void UpdateTrail();
 		void UpdateMiro();
 		void UpdateTornado();
+		void UpdatePid();
+
+	private:
+		const int			patternMax = static_cast<int>(BossPattern::max) - 1;
+		const int			circularMax = 180;
+		const int			shieldMax = 60;
+		const int			spiralMax = 60;
+		const int			trailMax = 30;
+		const int			miroMax = 75;
+		const int			tornadoMax = 150;
+		const int			miroWidth = 35;
+		const int			miroHeight = 35;
+		const int			pidMax = 50;
+		// PID
+		const float			m_kP = 0.3f;
+		const float			m_kI = 0.0001f;
+		const float			m_kD = 0.3f;
+		const float			m_MaxSpeed = 0.5f;
+		Vector2				m_intE;
+		Vector2				m_dE;
+		Vector2				m_MV;
+		Vector2				previous_error;
 
 	public:
 		ObImage*			attack1Start = nullptr;
@@ -115,5 +129,6 @@ namespace Gungeon
 		float				intervalFire[(int)BossPattern::max];
 		float				intervalEnd[(int)BossPattern::max];
 		Effect*				spawnPlayerByForce = nullptr;
+		bool				flagRandomPattern = false;
 	};
 }

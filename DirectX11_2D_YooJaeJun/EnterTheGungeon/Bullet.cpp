@@ -38,10 +38,6 @@ namespace Gungeon
             moveDir.Normalize();
             Vector2 velocity = moveDir * scalar * DELTA;
             col->MoveWorldPos(velocity);
-
-            //if (TIMER->GetTick(timeLife, intervalLife))
-            //{
-            //}
         }
 
         idle->Update();
@@ -52,13 +48,15 @@ namespace Gungeon
     {
         if (isFired)
         {
+            SetLastPos();
             Character::Update(notRotation);
 
+            moveDir.Normalize();
             Vector2 velocity = moveDir * scalar * moveFactor * DELTA;
             col->MoveWorldPos(velocity);
         }
 
-        idle->Update();
+        idle->Update(false);
         hitBomb->Update();
     }
 
