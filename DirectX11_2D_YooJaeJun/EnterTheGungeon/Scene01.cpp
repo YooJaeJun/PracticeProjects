@@ -4,6 +4,7 @@ namespace Gungeon
 {
     Scene01::Scene01()
     {
+        Init();
     }
 
     Scene01::~Scene01()
@@ -12,10 +13,27 @@ namespace Gungeon
 
     void Scene01::Init()
     {
-       MAP->useGui = true;
+        MAP->useGui = true;
 
         CAM->position = Vector2(0.0f, 0.0f);
         CAM->zoomFactor = Vector3(0.08f, 0.08f, 0.08f);
+
+        int idx = 0;
+        if (mapGen && mapGen->selectedRooms.size() > 0)
+        {
+            for (auto& elem : mapGen->selectedRooms)
+            {
+                if (idx == 1)
+                {
+                    elem->treasureSpawner->isVisible = true;
+                }
+                for (auto& enemySpawerElem : elem->enemySpawner)
+                {
+                    enemySpawerElem->isVisible = true;
+                }
+                idx++;
+            }
+        }
 
         SOUND->Stop("SCENE02");
         //SOUND->AddSound("Vaquero Perdido - The Mini Vandals.mp3", "SCENE01", true);

@@ -103,7 +103,7 @@ void Map::SetTilemapGUI()
         ImGui::Text("mouseIdx : %d , %d", mouseIdx.x, mouseIdx.y);
         ImGui::Text("mouseOverTileState : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].state);
         ImGui::Text("mouseOverRoomIndex : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].roomIdx);
-        ImGui::Text("mouseOverDoorDir : %d", static_cast<int>(tilemap->Tiles[mouseIdx.x][mouseIdx.y].dir));
+        ImGui::Text("mouseOverTileDir : %d", static_cast<int>(tilemap->Tiles[mouseIdx.x][mouseIdx.y].dir));
     }
 
     //ImageButton

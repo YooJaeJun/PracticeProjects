@@ -61,7 +61,16 @@ namespace Gungeon
 		void PropWall();
 		void Finish();
 
+		void MSTPrim();
+		void SetTileRange(const Int2 sour, const Int2 dest, const int roomIdx);
+		void SetWallSpecificDir(const Int2 on, const DirState dir, const int roomIdx);
+		void SetWallAllDir(const Int2 sour, const Int2 dest, const int roomIdx);
+		void MaximalSquare(const Room* elem);
+		void Histogram(const Room* elem);
+		void SpawnerOn();
+
 	public:
+		// 동적할당하지 않은 변수들은 보여주기 용도
 		float						timer = 0.0f;
 		// Spread
 		bool						flagSpread = false;
@@ -81,5 +90,6 @@ namespace Gungeon
 		// Passage
 		map<ObNode, int>			nodesForRoomIndex;
 		vector<Tile*>				way;
+		vector<vector<Int2>>		passages;
 	};
 }

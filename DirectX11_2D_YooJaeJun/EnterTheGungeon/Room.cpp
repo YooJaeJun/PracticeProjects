@@ -10,6 +10,27 @@ namespace Gungeon
     void Room::Init()
     {
         col = new ObRect();
+
+        for (auto& elem : enemySpawner)
+        {
+            elem = new ObCircle;
+            elem->scale = Vector2(20.0f, 20.0f);
+            elem->color = Color(1.0f, 0.5f, 0.5f);
+            elem->isVisible = false;
+        }
+
+        treasureSpawner = new ObCircle;
+        treasureSpawner->scale = Vector2(20.0f, 20.0f);
+        treasureSpawner->color = Color(0.5f, 0.5f, 1.0f);
+        treasureSpawner->isVisible = false;
+
+        for (auto& elem : gateSpawner)
+        {
+            elem = new ObCircle;
+            elem->scale = Vector2(20.0f, 20.0f);
+            elem->color = Color(0.5f, 1.0f, 0.5f);
+            elem->isVisible = false;
+        }
     }
 
     void Room::Release()
@@ -20,6 +41,9 @@ namespace Gungeon
     void Room::Update()
     {
         Character::Update();
+        for (auto& elem : enemySpawner) elem->Update();
+        treasureSpawner->Update();
+        for (auto& elem : gateSpawner) elem->Update();
     }
 
     void Room::LateUpdate()
@@ -29,6 +53,9 @@ namespace Gungeon
     void Room::Render()
     {
         Character::Render();
+        for (auto& elem : enemySpawner) elem->Render();
+        treasureSpawner->Render();
+        for (auto& elem : gateSpawner) elem->Render();
     }
 
     Int2 Room::TileLB() const

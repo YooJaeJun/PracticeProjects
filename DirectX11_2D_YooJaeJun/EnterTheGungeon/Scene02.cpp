@@ -9,7 +9,6 @@ namespace Gungeon
 
     Scene02::~Scene02()
     {
-        Release();
     }
 
     void Scene02::Init()
@@ -50,7 +49,28 @@ namespace Gungeon
             elem->idle->SetParentRT(*elem->col);
             elem->idle->pivot = OFFSET_LB;
         }
-        
+
+        int idx = 0;
+        if (mapGen && mapGen->selectedRooms.size() > 0)
+        {
+            for (auto& elem : mapGen->selectedRooms)
+            {
+                if (idx == 1)
+                {
+                    elem->treasureSpawner->isVisible = false;
+                }
+                for (auto& enemySpawerElem : elem->enemySpawner)
+                {
+                    enemySpawerElem->isVisible = false;
+                }
+                for (auto& gateSpawerElem : elem->gateSpawner)
+                {
+                    gateSpawerElem->isVisible = false;
+                }
+                idx++;
+            }
+        }
+
         SOUND->Stop("SCENE01");
         // SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
         SOUND->Play("SCENE02");
@@ -228,8 +248,10 @@ namespace Gungeon
 
         // 다음 방 입장 판단
         Int2 playerOn;
-        if (MAP->tilemap->WorldPosToTileIdx(player->Pos(), playerOn) &&
-            MAP->tilemap->GetTileState(playerOn) == TileState::floor)
+        MAP->tilemap->WorldPosToTileIdx(player->Pos(), playerOn);
+        TileState tileState = MAP->tilemap->GetTileState(playerOn);
+
+        if (tileState == TileState::floor || tileState == TileState::spawner)
         {
             afterRoomIdx = MAP->tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
 
@@ -297,12 +319,13 @@ namespace Gungeon
 
     void Scene02::Fight()
     {
+        bool flagAllDie = true;
+
         for (auto& elem : enemy)
         {
             if (elem->state != State::die)
             {
-                curRoom->cleared = true;
-
+                flagAllDie = false;
                 elem->targetPos = player->Pos();
 
                 switch (elem->state)
@@ -314,6 +337,11 @@ namespace Gungeon
                     elem->FindPath(MAP->tilemap);
                 }
             }
+        }
+
+        if (flagAllDie)
+        {
+            curRoom->cleared = true;
         }
 
         if (curRoom->cleared)
@@ -359,7 +387,7 @@ namespace Gungeon
 
     void Scene02::SpawnPlayer()
     {
-        player->Spawn(Vector2(curRoom->Pos().x, curRoom->Pos().y));
+        player->Spawn(curRoom->Pos());
     }
 
     void Scene02::SpawnEffect()
@@ -367,7 +395,7 @@ namespace Gungeon
         int idx = 0;
         for (auto& elem : spawnEffect)
         {
-            elem->Spawn(curRoom->enemySpawnPos[idx]);
+            elem->Spawn(curRoom->enemySpawner[idx]->GetWorldPos());
             idx++;
         }
     }
@@ -382,7 +410,7 @@ namespace Gungeon
             if (r < 2) elem = new Enemy3();
             else if (r < 4) elem = new Enemy1();
             else elem = new Enemy2();
-            if (curRoom) elem->Spawn(curRoom->enemySpawnPos[idx]);
+            if (curRoom) elem->Spawn(curRoom->enemySpawner[idx]->GetWorldPos());
             idx++;
         }
     }
@@ -390,7 +418,7 @@ namespace Gungeon
     void Scene02::SpawnTreasureBox()
     {
         treasureBox = new TreasureBox;
-        treasureBox->SetPos(curRoom->treasureSpawnPos);
+        treasureBox->SetPos(curRoom->treasureSpawner->GetWorldPos());
     }
 
     void Scene02::IntersectPlayer()

@@ -5,9 +5,9 @@ namespace Gungeon
 	enum class RoomType
 	{
 		start,
+		treasure,
 		enemy,
 		boss,
-		treasure
 	};
 
 	const int enemySpawnPosMax = 4;
@@ -31,10 +31,11 @@ namespace Gungeon
 
 	public:
 		bool			selected = false;
-		Vector2			enemySpawnPos[enemySpawnPosMax];
+		ObCircle*		enemySpawner[enemySpawnPosMax];
 		bool			cleared = false;
 		RoomType		roomType = RoomType::enemy;
 		vector<Int2>	doorTileIdxs;
-		Vector2			treasureSpawnPos;
+		ObCircle*		treasureSpawner;
+		ObCircle*		gateSpawner[9];
 	};
 }
