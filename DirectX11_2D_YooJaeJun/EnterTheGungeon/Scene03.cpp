@@ -31,6 +31,7 @@ namespace Gungeon
         if (!player)
         {
             player = new Player();
+            player->state = State::cinematic;
         }
         else
         {
@@ -41,6 +42,11 @@ namespace Gungeon
         {
             boss = new Boss();
             boss->Spawn(Vector2(0.0f, 300.0f));
+            boss->state = State::cinematic;
+            boss->idle->isVisible = false;
+            boss->chairIdle->ChangeAnim(AnimState::stop, 0.1f);
+            cinematic = new Cinematic;
+            cinematic->cinematicState = CinematicState::cinematicBox1;
         }
 
 
@@ -134,6 +140,7 @@ namespace Gungeon
     void Scene03::Release()
     {
         SafeRelease(boss);
+        SafeRelease(cinematic);
     }
 
     void Scene03::Update()
@@ -217,9 +224,106 @@ namespace Gungeon
             boss->dropItem->targetPos = player->Pos();
         }
 
+
+        Vector2 camVelocity;
+        const float camDiff = 30.0f;
+
+        switch (cinematic->cinematicState)
+        {
+            // 등장연출
+        case Gungeon::CinematicState::none:
+            if (boss->state == State::die)
+            {
+                cinematic->cinematicState = CinematicState::cinematicBox3;
+            }
+            break;
+        case Gungeon::CinematicState::cinematicBox1:
+            break;
+        case Gungeon::CinematicState::cameraTargeting1:
+            camVelocity = CAM->position - boss->Pos();
+            CAM->position -= camVelocity * DELTA;
+            if (abs(CAM->position.x - boss->Pos().x) <= camDiff &&
+                abs(CAM->position.y - boss->Pos().y) <= camDiff)
+            {
+                boss->SpawnAnim();
+                cinematic->cinematicState = CinematicState::bossSpawnAnim;
+            }
+            break;
+        case Gungeon::CinematicState::bossSpawnAnim:
+            if (boss->spawn->frame.x == 15)
+            {
+                boss->SpawnAnimEnd();
+                cinematic->cinematicState = CinematicState::cutScene;
+            }
+            break;
+        case Gungeon::CinematicState::cutScene:
+            boss->cutScene->img->isVisible = true;
+            boss->cutScene->img->ChangeAnim(AnimState::loop, 0.3f);
+            break;
+        case Gungeon::CinematicState::cameraTargeting2:
+            boss->cutScene->img->isVisible = false;
+            boss->cutScene->img->ChangeAnim(AnimState::stop, 0.1f);
+
+            camVelocity = CAM->position - player->Pos();
+            CAM->position -= camVelocity * DELTA;
+            if (abs(CAM->position.x - player->Pos().x) <= camDiff &&
+                abs(CAM->position.y - player->Pos().y) <= camDiff)
+            {
+                cinematic->cinematicState = CinematicState::cinematicBox2;
+            }
+            break;
+        case Gungeon::CinematicState::cinematicBox2:
+            break;
+        case Gungeon::CinematicState::finish:
+            boss->state = State::idle;
+            player->state = State::idle;
+            cinematic->cinematicState = CinematicState::none;
+            break;
+
+            // 사망연출
+        case Gungeon::CinematicState::cinematicBox3:
+            player->state = State::cinematic;
+            break;
+        case Gungeon::CinematicState::cameraTargeting3:
+            camVelocity = CAM->position - boss->Pos();
+            CAM->position -= camVelocity * DELTA;
+            if (abs(CAM->position.x - boss->Pos().x) <= camDiff &&
+                abs(CAM->position.y - boss->Pos().y) <= camDiff)
+            {
+                cinematic->cinematicState = CinematicState::bossDieAnim;
+            }
+            break;
+        case Gungeon::CinematicState::bossDieAnim:
+            if (boss->realDie)
+            {
+                cinematic->cinematicState = CinematicState::cameraTargeting4;
+            }
+            break;
+        case Gungeon::CinematicState::cameraTargeting4:
+            camVelocity = CAM->position - player->Pos();
+            CAM->position -= camVelocity * DELTA;
+            if (abs(CAM->position.x - player->Pos().x) <= camDiff &&
+                abs(CAM->position.y - player->Pos().y) <= camDiff)
+            {
+                cinematic->cinematicState = CinematicState::cinematicBox4;
+            }
+            break;
+        case Gungeon::CinematicState::cinematicBox4:
+            break;
+        case Gungeon::CinematicState::finish2:
+            boss->state = State::die;
+            player->state = State::idle;
+            cinematic->cinematicState = CinematicState::clear;
+            break;
+        case Gungeon::CinematicState::clear:
+            break;
+        }
+
+
         MAP->tilemap->Update();
         player->Update();
         boss->Update();
+        cinematic->Update();
     }
 
     void Scene03::LateUpdate()
@@ -237,6 +341,20 @@ namespace Gungeon
         if (boss) boss->shadow->Render();
         if (boss) boss->Render();
         if (player) player->Render();
+
+        cinematic->Render();
+        if (cinematic->cinematicState == CinematicState::cutScene)
+        {
+            boss->cutScene->Render();
+            DWRITE->RenderText(boss->desc,
+                RECT{ 30, 50, (long)app.GetWidth(), (long)app.GetHeight() },
+                50.0f,
+                L"PF스타더스트");
+            DWRITE->RenderText(boss->name,
+                RECT{ 60, 110, (long)app.GetWidth(), (long)app.GetHeight() },
+                70.0f,
+                L"PF스타더스트");
+        }
     }
 
     void Scene03::ResizeScreen()

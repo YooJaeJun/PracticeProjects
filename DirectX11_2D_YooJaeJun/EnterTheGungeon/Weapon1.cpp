@@ -13,7 +13,7 @@ namespace Gungeon
 		// Â÷ÀÌ
 		type = WeaponType::pistol;
 		intervalFire = 0.2f;
-		remainBulletCount = 9999;
+		remainBulletCount = INT_MAX;
 
 		scaleFactor = 1.5f;
 		col->scale = Vector2(58.0f / 2.0f, 34.0f) * scaleFactor;

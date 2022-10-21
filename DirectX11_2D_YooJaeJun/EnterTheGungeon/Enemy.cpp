@@ -26,12 +26,14 @@ namespace Gungeon
 		state = State::die;
 
 		col = new ObCircle;
+		col->isVisible = false;
 		col->isFilled = false;
 		col->color = Color(1.0f, 1.0f, 1.0f);
 		col->zOrder = ZOrder::object;
 		SetPos(DEFAULTSPAWN);
 
 		colTile = new ObRect;
+		colTile->isVisible = false;
 		colTile->scale = Vector2(col->scale.x, col->scale.y / 2.0f);
 		colTile->SetParentRT(*col);
 		colTile->SetLocalPosY(col->GetWorldPos().y - col->scale.y / 2.0f);

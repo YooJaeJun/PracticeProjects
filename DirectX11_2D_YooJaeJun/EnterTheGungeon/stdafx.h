@@ -31,6 +31,7 @@
 #include "Room.h"
 #include "ProcedureMapGeneration.h"
 #include "UI.h"
+#include "Cinematic.h"
 #include "Scene01.h"
 #include "Scene02.h"
 #include "Scene03.h"

@@ -19,6 +19,8 @@ namespace Gungeon
     {
         pattern = BossPattern::none;
 
+        name = L"ÃÑÅº Å·";
+        desc = L"³³À¸·Î µÈ ¿ÕÁÂ¿¡ ¾É¾Æ";
         curHp = maxHp = 100;
         scalar = 120.0f;
 
@@ -26,6 +28,7 @@ namespace Gungeon
         intervalAnim[(int)State::walk] = 0.5f;
         intervalAnim[(int)State::attack] = 0.2f;
         intervalAnim[(int)State::die] = 0.2f;
+        intervalAnim[(int)State::cinematic] = 0.3f;
 
         intervalHit = 0.2f;
         timeAttackStart = 0.0f;
@@ -45,7 +48,7 @@ namespace Gungeon
         intervalEnd[(int)BossPattern::circular] = 5.8f;
         intervalEnd[(int)BossPattern::string] = 11.5f;
         intervalEnd[(int)BossPattern::shield] = 15.0f;
-        intervalEnd[(int)BossPattern::spiral] = 6.3f;
+        intervalEnd[(int)BossPattern::spiral] = 6.0f;
         intervalEnd[(int)BossPattern::trail] = 8.0f;
         intervalEnd[(int)BossPattern::miro] = 13.0f;
         intervalEnd[(int)BossPattern::tornado] = 4.0f;
@@ -111,17 +114,25 @@ namespace Gungeon
 
         float scaleFactor = 3.0f;
         col = new ObCircle;
+        col->isVisible = false;
         col->isFilled = false;
         col->scale = Vector2(25.0f, 25.0f) * scaleFactor * 3.0f;
         col->color = Color(1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
 
         colTile = new ObRect;
+        colTile->isVisible = false;
         colTile->scale = Vector2(col->scale.x / 2.0f, col->scale.y / 4.0f);
         colTile->SetParentRT(*col);
         colTile->SetLocalPosY(col->GetWorldPos().y - col->scale.y / 2.0f + 10.0f);
         colTile->isFilled = false;
         colTile->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+        spawn = new ObImage(L"EnterTheGungeon/Boss_1/Spawn.png");
+        spawn->isVisible = true;
+        spawn->maxFrame.x = 20;
+        spawn->scale = Vector2(800.0f / 16.0f, 44.0f) * scaleFactor;
+        spawn->SetParentRT(*col);
 
         idle = new ObImage(L"EnterTheGungeon/Boss_1/Idle.png");
         idle->isVisible = true;
@@ -229,7 +240,7 @@ namespace Gungeon
         chairDie->SetParentRT(*col);
 
         firePosTargeting = new ObCircle;
-        firePosTargeting->isVisible = true;
+        firePosTargeting->isVisible = false;
         firePosTargeting->scale = Vector2(10.0f, 10.0f);
         firePosTargeting->isFilled = false;
         firePosTargeting->color = Color(1.0f, 1.0f, 1.0f);
@@ -237,7 +248,7 @@ namespace Gungeon
         firePosTargeting->SetLocalPos(Vector2(100.0f, 0.0f));
 
         firePosCannon = new ObCircle;
-        firePosCannon->isVisible = true;
+        firePosCannon->isVisible = false;
         firePosCannon->scale = Vector2(10.0f, 10.0f);
         firePosCannon->isFilled = false;
         firePosCannon->color = Color(1.0f, 1.0f, 1.0f);
@@ -249,7 +260,6 @@ namespace Gungeon
         shadow->scale = Vector2(12.0f, 4.0f) * shadowScaleFactor;
         shadow->SetParentRT(*col);
         shadow->SetWorldPosY(-55.0f);
-        shadow->zOrder = ZOrder::shadow;
 
         float hpGuageFactor = 1.5f;
 
@@ -272,6 +282,14 @@ namespace Gungeon
         hpGuage->img->pivot = OFFSET_L;
         hpGuage->img->space = Space::screen;
         hpGuage->img->zOrder = ZOrder::UI;
+
+        cutScene = new UI;
+        cutScene->img = new ObImage(L"EnterTheGungeon/boss_1/CutScene.png");
+        cutScene->img->maxFrame.x = 2;
+        cutScene->img->scale = Vector2(2800.0f / 2.0f, 740.0f);
+        cutScene->img->isVisible = false;
+        cutScene->img->space = Space::screen;
+        cutScene->anchor = DirState::dirLB;
     }
 
     void Boss::InitBullet()
@@ -378,7 +396,10 @@ namespace Gungeon
 
         for (auto& elem : bullet)
         {
-            elem->Update();
+            if (elem)
+            {
+                elem->Update();
+            }
         }
 
         attack1Start->Update();
@@ -400,6 +421,8 @@ namespace Gungeon
         hpGuage->Update();
         dropItem->Update();
         spawnPlayerByForce->Update();
+
+        cutScene->Update();
     }
 
     void Boss::LateUpdate()
@@ -430,6 +453,17 @@ namespace Gungeon
         hpGuage->Render();
         dropItem->Render();
         spawnPlayerByForce->Render();
+
+        if (state != State::cinematic && state != State::die)
+        {
+            DWRITE->RenderText(name,
+                RECT{ (long)app.GetHalfWidth() - 280, (long)app.GetHeight() - 100,
+                (long)app.GetWidth(), (long)app.GetHeight() },
+                35.0f,
+                L"PF½ºÅ¸´õ½ºÆ®");
+        }
+
+        cutScene->Render();
     }
 
     void Boss::ResizeScreen()
@@ -524,7 +558,13 @@ namespace Gungeon
 
     void Boss::Die()
     {
-        Unit::Die();
+        if (TIMER->GetTick(timeRealDie, 3.5f))
+        {
+            die->ChangeAnim(AnimState::stop, 0.1f);
+            die->color = Color(0.4f, 0.4f, 0.4f, 0.4f);
+            chairDie->color = Color(0.4f, 0.4f, 0.4f, 0.4f);
+            realDie = true;
+        }
     }
 
     void Boss::Hit(const int damage, const Vector2& dir)
@@ -610,7 +650,8 @@ namespace Gungeon
     {
         if (flagRandomPattern)
         {
-            if (attackState == BossAttackState::none &&
+            if (state != State::cinematic &&
+                attackState == BossAttackState::none &&
                 TIMER->GetTick(timeAttackStart, intervalAttackStart))
             {
                 intervalAttackStart = RANDOM->Float(1.0f, 3.0f);
@@ -624,9 +665,9 @@ namespace Gungeon
                 InitBullet();
 
                 // test
-                pattern = BossPattern::shuriken;
-                ChangePattern(pattern);
-                InitBullet();
+                //pattern = BossPattern::shuriken;
+                //ChangePattern(pattern);
+                //InitBullet();
 
                 state = State::attack;
                 attackState = BossAttackState::start;
@@ -708,6 +749,34 @@ namespace Gungeon
         spawnPlayerByForce->Spawn(wpos);
         spawnPlayerByForce->idle->ChangeAnim(AnimState::once, 0.15f);
         pushingPlayer = false;
+    }
+
+    void Boss::SpawnAnim()
+    {
+        idle->isVisible = false;
+        chairIdle->ChangeAnim(AnimState::stop, 0.2f);
+        spawn->isVisible = true;
+        spawn->ChangeAnim(AnimState::once, intervalAnim[(int)State::cinematic]);
+    }
+
+    void Boss::SpawnAnimEnd()
+    {
+        spawn->isVisible = false;
+        idle->isVisible = true;
+        chairIdle->isVisible = true;
+        chairIdle->ChangeAnim(AnimState::loop, 0.5f);
+    }
+
+    void Boss::DieAnim()
+    {
+        idle->isVisible = false;
+        die->isVisible = true;
+        die->ChangeAnim(AnimState::loop, intervalAnim[(int)State::cinematic]);
+        chairIdle->ChangeAnim(AnimState::stop, 0.2f);
+    }
+
+    void Boss::DieAnimEnd()
+    {
     }
 
     void Boss::ColToggle()
@@ -1003,8 +1072,8 @@ namespace Gungeon
             elem->idle->isVisible = true;
 
             elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
-            elem->col->rotation += 5.0f * idx * ToRadian * DELTA;
-            elem->col->rotation2 += 5.0f * idx * ToRadian * DELTA;
+            elem->col->rotation += idx * 10.0f * ToRadian * DELTA;
+            elem->col->rotation2 += idx * 5.0f * ToRadian * DELTA;
 
             idx++;
         }

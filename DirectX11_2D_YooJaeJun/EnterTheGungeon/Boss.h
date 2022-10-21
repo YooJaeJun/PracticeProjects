@@ -50,6 +50,10 @@ namespace Gungeon
 		virtual void Spawn(const Vector2 wpos) override;
 		void HitBullet();
 		void SpawnPlayerByForce(const Vector2 wpos);
+		void SpawnAnim();
+		void SpawnAnimEnd();
+		void DieAnim();
+		void DieAnimEnd();
 		virtual void ColToggle() override;
 
 		void ChangePattern(const BossPattern newPattern);
@@ -121,5 +125,7 @@ namespace Gungeon
 		float				intervalEnd[(int)BossPattern::max];
 		Effect*				spawnPlayerByForce = nullptr;
 		bool				flagRandomPattern = false;
+		UI*					cutScene = nullptr;
+		bool				realDie = false;
 	};
 }

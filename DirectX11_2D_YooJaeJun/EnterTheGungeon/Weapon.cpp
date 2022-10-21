@@ -5,11 +5,13 @@ namespace Gungeon
 	Weapon::Weapon()
 	{
 		col = new ObRect;
+		col->isVisible = false;
 		col->isFilled = false;
 		col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 		col->pivot = OFFSET_LB;
 
 		firePos = new ObRect;
+		firePos->isVisible = false;
 		firePos->isFilled = false;
 		firePos->scale = Vector2(10.0f, 10.0f);
 		firePos->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -85,7 +87,10 @@ namespace Gungeon
 		uiBulletFrame->Spawn(-40.0f, 80.0f);
 		if (uiWeaponFrame) uiWeaponFrame->Spawn(-240.0f, 50.0f);
 		uiWeapon->Spawn(-190.0f, 60.0f);
-		uiBulletCount->Spawn(-140.0f, 150.0f);
+		if (remainBulletCount == INT_MAX)
+		{
+			uiBulletCount->Spawn(-140.0f, 150.0f);
+		}
 
 		idx = 0;
 		for (auto& elem : uiBullet)

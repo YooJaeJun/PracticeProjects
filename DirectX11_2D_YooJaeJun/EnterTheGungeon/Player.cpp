@@ -36,12 +36,14 @@ namespace Gungeon
 	{
 		float scaleFactor = 3.0f;
 		col = new ObCircle;
+		col->isVisible = false;
 		col->isFilled = false;
 		col->scale = Vector2(12.0f, 12.0f) * scaleFactor;
 		col->zOrder = ZOrder::object;
 		col->color = Color(1.0f, 1.0f, 1.0f);
 
 		colTile = new ObRect;
+		colTile->isVisible = false;
 		colTile->scale = Vector2(col->scale.x, col->scale.y / 2.0f);
 		colTile->SetParentRT(*col);
 		colTile->SetLocalPosY(Pos().y - col->scale.y);
@@ -122,7 +124,7 @@ namespace Gungeon
 	void Player::InitWeapon()
 	{
 		curWeaponIdx = 0;
-		weapons[curWeaponIdx] = new Weapon3;
+		weapons[curWeaponIdx] = new Weapon2;
 		weapons[curWeaponIdx]->col->SetParentRT(*col);
 		weapons[curWeaponIdx]->col->SetLocalPos(Vector2(10.0f, -15.0f));
 		weapons[curWeaponIdx]->Equip();
@@ -156,13 +158,13 @@ namespace Gungeon
 		shadow->SetWorldPosY(-30.0f);
 		shadow->zOrder = ZOrder::shadow;
 
-		float dustScaleFactor = 2.0f;
+		float dustScaleFactor = 1.0f;
 		for (auto& elem : dust)
 		{
 			elem = new Effect;
 			elem->idle = new ObImage(L"EnterTheGungeon/player_1/Dust.png");
-			elem->idle->maxFrame.x = 4;
-			elem->idle->scale = Vector2(44.0f / 4.0f, 10.0f) * dustScaleFactor;
+			elem->idle->maxFrame.x = 7;
+			elem->idle->scale = Vector2(189.0f / 7.0f, 27.0f) * dustScaleFactor;
 			elem->idle->isVisible = false;
 			elem->idle->ChangeAnim(AnimState::loop, 0.2f);
 			elem->intervalDie = 0.8f;
@@ -383,21 +385,31 @@ namespace Gungeon
 		uiKey->Render();
 		uiGold->Render();
 
-		DWRITE->RenderText(to_wstring(money),
-			RECT{ 170, 140, (long)app.GetWidth(), (long)app.GetHeight() },
-			40.0f,
-			L"Alagard");
+		if (state != State::cinematic)
+		{
+			DWRITE->RenderText(to_wstring(money),
+				RECT{ 170, 140, (long)app.GetWidth(), (long)app.GetHeight() },
+				40.0f,
+				L"Alagard");
 
-		DWRITE->RenderText(to_wstring(key),
-			RECT{ 80, 140, (long)app.GetWidth(), (long)app.GetHeight() },
-			40.0f,
-			L"Alagard");
+			DWRITE->RenderText(to_wstring(key),
+				RECT{ 80, 140, (long)app.GetWidth(), (long)app.GetHeight() },
+				40.0f,
+				L"Alagard");
 
-		DWRITE->RenderText(to_wstring(weapons[curWeaponIdx]->remainBulletCount),
-			RECT{ (long)app.GetWidth() - 140, (long)app.GetHeight() - 190, 
-			(long)app.GetWidth(), (long)app.GetHeight() },
-			45.0f,
-			L"Alagard");
+			if (weapons[curWeaponIdx]->remainBulletCount == INT_MAX)
+			{
+				weapons[curWeaponIdx]->uiBulletCount->img->isVisible = true;
+			}
+			else
+			{
+				DWRITE->RenderText(to_wstring(weapons[curWeaponIdx]->remainBulletCount),
+					RECT{ (long)app.GetWidth() - 140, (long)app.GetHeight() - 190,
+					(long)app.GetWidth(), (long)app.GetHeight() },
+					45.0f,
+					L"Alagard");
+			}
+		}
 	}
 
 	void Player::ResizeScreen()
@@ -428,14 +440,17 @@ namespace Gungeon
 
 	void Player::SetTargetAndCamera()
 	{
-		targetPos = INPUT->GetWorldMousePos();
+		if (state != State::cinematic)
+		{
+			targetPos = INPUT->GetWorldMousePos();
 
-		CAM->position.x = Utility::Saturate((targetPos.x + idle->GetWorldPos().x) / 2,
-			idle->GetWorldPos().x - 250.0f,
-			idle->GetWorldPos().x + 250.0f);
-		CAM->position.y = Utility::Saturate((targetPos.y + idle->GetWorldPos().y) / 2,
-			idle->GetWorldPos().y - 250.0f,
-			idle->GetWorldPos().y + 250.0f);
+			CAM->position.x = Utility::Saturate((targetPos.x + idle->GetWorldPos().x) / 2,
+				idle->GetWorldPos().x - 250.0f,
+				idle->GetWorldPos().x + 250.0f);
+			CAM->position.y = Utility::Saturate((targetPos.y + idle->GetWorldPos().y) / 2,
+				idle->GetWorldPos().y - 250.0f,
+				idle->GetWorldPos().y + 250.0f);
+		}
 	}
 
 	void Player::Idle()
@@ -674,7 +689,6 @@ namespace Gungeon
 
 		if (TIMER->GetTick(time, 0.2f))
 		{
-			// CAM->position = originCamPos;
 			flagFireCamShake = false;
 		}
 	}
@@ -734,11 +748,18 @@ namespace Gungeon
 
 			if (TIMER->GetTick(timeReload, 1.5f))
 			{
-				int tempRemain = weapons[curWeaponIdx]->remainBulletCount;
-				weapons[curWeaponIdx]->remainBulletCount -= 
-					min(weapons[curWeaponIdx]->bulletCount - curBulletIdx - 1, 
-						weapons[curWeaponIdx]->remainBulletCount);
-				curBulletIdx = min(weapons[curWeaponIdx]->bulletCount - 1, tempRemain);
+				if (weapons[curWeaponIdx]->remainBulletCount == INT_MAX)
+				{
+					curBulletIdx = weapons[curWeaponIdx]->bulletCount - 1;
+				}
+				else
+				{
+					int tempRemain = weapons[curWeaponIdx]->remainBulletCount;
+					weapons[curWeaponIdx]->remainBulletCount -=
+						min(weapons[curWeaponIdx]->bulletCount - curBulletIdx - 1,
+							weapons[curWeaponIdx]->remainBulletCount);
+					curBulletIdx = min(weapons[curWeaponIdx]->bulletCount - 1, tempRemain);
+				}
 
 				int idx = 0;
 				for (auto& elem : weapons[curWeaponIdx]->uiBullet)
@@ -889,7 +910,7 @@ namespace Gungeon
 
 	void Player::SetWeaponFrameToOrigin()
 	{
-		if (flagLbutton && TIMER->GetTick(timeWeaponFrameToOrigin, 0.15f))
+		if (flagLbutton && TIMER->GetTick(timeWeaponFrameToOrigin, 0.2f))
 		{
 			flagLbutton = false;
 			weapons[curWeaponIdx]->idle->frame.x = 0;

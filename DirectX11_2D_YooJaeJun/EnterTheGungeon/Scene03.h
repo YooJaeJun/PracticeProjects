@@ -26,5 +26,6 @@ namespace Gungeon
 		Room*		curRoom = nullptr;
 		Player*		player = nullptr;
 		Boss*		boss = nullptr;
+		Cinematic*	cinematic = nullptr;
 	};
 }

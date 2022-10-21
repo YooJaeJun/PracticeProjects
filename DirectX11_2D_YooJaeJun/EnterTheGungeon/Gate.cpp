@@ -11,14 +11,12 @@ namespace Gungeon
     {
         float scaleFactor = 2.0f;
 
-        col = new ObRect;
         col->scale = Vector2(70.0f, 70.0f) * scaleFactor;
-        col->color = Color(1.0f, 1.0f, 1.0f);
-        col->isFilled = false;
         col->pivot = OFFSET_B;
         SetPos(DEFAULTSPAWN);
 
         colTile = new ObRect;
+        colTile->isVisible = false;
         colTile->scale = Vector2(40.0f, 20.0f) * scaleFactor;
         colTile->color = Color(1.0f, 1.0f, 1.0f);
         colTile->isFilled = false;

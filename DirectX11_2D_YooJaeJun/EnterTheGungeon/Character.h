@@ -9,7 +9,6 @@ namespace Gungeon
 		roll,
 		attack,
 		die,
-		realDie,
 		cinematic,
 		max
 	};

@@ -87,7 +87,7 @@ namespace Gungeon
             {
                 elem->Render();
             }
-            Bullet::Render();
         }
+        Bullet::Render();
     }
 }

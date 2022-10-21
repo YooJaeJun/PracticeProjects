@@ -13,13 +13,14 @@ namespace Gungeon
 		intervalAnim[(int)State::walk] = 0.0f;
 		intervalAnim[(int)State::roll] = 0.0f;
 		intervalAnim[(int)State::attack] = 0.0f;
-		intervalAnim[(int)State::die] = 0.0f;
+		intervalAnim[(int)State::die] = 2.0f;
 		intervalAnim[(int)State::cinematic] = 0.0f;
 	}
 
 	void Unit::Release()
 	{
 		Character::Release();
+		SafeDelete(spawn);
 		SafeDelete(idle);
 		SafeDelete(walk);
 		SafeDelete(hit);
@@ -51,6 +52,7 @@ namespace Gungeon
 
 		Character::Update();
 
+		if (spawn) spawn->Update();
 		idle->Update();
 		walk->Update();
 		if (hit) hit->Update();
@@ -65,6 +67,7 @@ namespace Gungeon
 
 	void Unit::Render()
 	{
+		if (spawn) spawn->Render();
 		idle->Render(); // RENDER->push(idle[curTargetDirState]);
 		walk->Render(); // RENDER->push(walk[curTargetDirState]);
 		if (hit)  hit->Render();  // RENDER->push(hit);
@@ -161,7 +164,7 @@ namespace Gungeon
 		shadow->isVisible = false;
 		die->isVisible = true;
 
-		die->ChangeAnim(AnimState::once, 0.1f);
+		die->ChangeAnim(AnimState::loop, intervalAnim[(int)State::die]);
 
 		for (auto& elem : bullet)
 		{

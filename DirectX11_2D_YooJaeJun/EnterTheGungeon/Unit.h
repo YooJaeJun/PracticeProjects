@@ -68,5 +68,7 @@ namespace Gungeon
 		float				intervalAttackStart = 0.0f;
 		float				timeFindPath = 0.0f;
 		float				g = 0.0f;	// ∫Ò¿≤
+		wstring				name;
+		wstring				desc;
 	};
 }
