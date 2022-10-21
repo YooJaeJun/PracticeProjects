@@ -124,7 +124,7 @@ namespace Gungeon
 	void Player::InitWeapon()
 	{
 		curWeaponIdx = 0;
-		weapons[curWeaponIdx] = new Weapon2;
+		weapons[curWeaponIdx] = new Weapon3;
 		weapons[curWeaponIdx]->col->SetParentRT(*col);
 		weapons[curWeaponIdx]->col->SetLocalPos(Vector2(10.0f, -15.0f));
 		weapons[curWeaponIdx]->Equip();

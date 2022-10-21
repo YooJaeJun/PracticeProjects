@@ -29,6 +29,6 @@ namespace Gungeon
         Bullet::Init();
 
         scalar = 600.0f;
-        damage = 1111;
+        damage = 1;
     }
 }

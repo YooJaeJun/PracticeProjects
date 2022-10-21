@@ -215,6 +215,24 @@ namespace Gungeon
         }//case
         }//switch
 
+        if (ImGui::Button("SaveRoomInfo"))
+        {
+
+        }
+        if (ImGui::Button("LoadRoomInfo"))
+        {
+
+        }
+
+        if (MAP->isLoaded && 
+            selectedRooms.size() > 0 &&
+            false == almostEqualVector2(selectedRooms[0]->gateSpawner[4]->GetWorldPos(), selectedRooms[0]->Pos()))
+        {
+            for (auto& elem : selectedRooms) SafeRelease(elem);
+            selectedRooms.clear();
+            MAP->isLoaded = false;
+        }
+
         for (auto& elem : candidateRooms) if (elem) elem->Update();
         for (auto& elem : selectedRooms) if (elem) elem->Update();
         for (auto& elem : linesTriangulated) elem.Update();
@@ -697,7 +715,6 @@ namespace Gungeon
         for (auto& elem : selectedRooms)
         {
             MaximalSquare(elem);
-
             // Histogram(elem);
         }
 
@@ -838,15 +855,19 @@ namespace Gungeon
                     SetWallAllDir(sour, dest, roomIdx);
 
                     flagLoopBreak = true;
+
+                    length = 0;
                 }
             }
         }
+
+        cout << length << '\n';
     }
 
     void ProcedureMapGeneration::Histogram(const Room* elem)
     {
-        const int xSize = RANDOM->Int(2, 5);
-        const int ySize = RANDOM->Int(2, 5);
+        const int xSize = RANDOM->Int(2, 4);
+        const int ySize = RANDOM->Int(2, 4);
         int roomIdx = MAP->tilemap->GetTileRoomIndex(elem->On());
 
         int xStart = elem->TileLB().x + 2;
@@ -879,23 +900,27 @@ namespace Gungeon
                 {
                     int h1 = height[st.top()];
                     st.pop();
-                    int w1 = x - 1 - st.top();
-                    searchingSize = max(searchingSize, h1 * w1);
-
-                    if (h1 > 4 || w1 > 4)
+                    if (!st.empty())
                     {
-                        Int2 sour, dest;
-                        sour = Int2(xStart + x - w1 + 1, yStart + y);
-                        dest = Int2(xStart + x, yStart + y + h1 - 1);
+                        int w1 = x - 1 - st.top();
+                        searchingSize = max(searchingSize, h1 * w1);
 
-                        SetWallAllDir(sour, dest, roomIdx);
-                        flag = true;
+                        if (h1 > 1 && w1 > 1)
+                        {
+                            Int2 sour, dest;
+                            sour = Int2(xStart + x - w1 + 1, yStart + y);
+                            dest = Int2(xStart + x, yStart + y + h1 - 1);
+
+                            SetWallAllDir(sour, dest, roomIdx);
+                            flag = true;
+                        }
                     }
                 }
                 st.push(x);
             }
         }
     }
+
     void ProcedureMapGeneration::SpawnerOn()
     {
         // spawner ½Ã°¢È­

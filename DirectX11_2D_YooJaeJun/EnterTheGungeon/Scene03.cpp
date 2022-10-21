@@ -250,7 +250,7 @@ namespace Gungeon
             }
             break;
         case Gungeon::CinematicState::bossSpawnAnim:
-            if (boss->spawn->frame.x == 15)
+            if (boss->spawn->frame.x == boss->spawn->maxFrame.x - 1)
             {
                 boss->SpawnAnimEnd();
                 cinematic->cinematicState = CinematicState::cutScene;
@@ -311,8 +311,8 @@ namespace Gungeon
         case Gungeon::CinematicState::cinematicBox4:
             break;
         case Gungeon::CinematicState::finish2:
-            boss->state = State::die;
-            player->state = State::idle;
+            boss->StartDie();
+            player->StartIdle();
             cinematic->cinematicState = CinematicState::clear;
             break;
         case Gungeon::CinematicState::clear:
