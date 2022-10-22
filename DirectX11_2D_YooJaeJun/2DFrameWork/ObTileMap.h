@@ -6,6 +6,7 @@ enum class TileState
     wall,
     door,
     prop,
+    spawner,
     max
 };
 

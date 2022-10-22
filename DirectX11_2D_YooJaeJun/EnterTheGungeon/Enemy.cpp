@@ -219,6 +219,8 @@ namespace Gungeon
 	{
 		Unit::StartDie();
 
+		die->ChangeAnim(AnimState::once, intervalAnim[(int)State::die]);
+
 		way.clear();
 
 		if (weapon) weapon->idle->isVisible = false;
@@ -244,7 +246,6 @@ namespace Gungeon
 		InitVar();
 
 		if (weapon) weapon->idle->isVisible = true;
-		if (weapon) weapon->firePos->isVisible = true;
 
 		if (pushedDir.x < 0.0f)
 		{

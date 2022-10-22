@@ -43,9 +43,9 @@ namespace Gungeon
 		imgReloading->isVisible = false;
 		imgReloading->SetParentRT(*col);
 
-		pivotDefault = Vector2(0.6f, 0.25f);
-		localPosDefault = Vector2(10.0f, -15.0f);
-		localFirePosDefault = Vector2(80.0f, 6.0f);
+		pivotDefault = Vector2(0.5f, 0.25f);
+		localPosDefault = Vector2(0.0f, -15.0f);
+		localFirePosDefault = Vector2(70.0f, 5.0f);
 		state = State::die;
 
 		uiBulletFrame->img = new ObImage(L"EnterTheGungeon/Weapon/3/UI_Magazine.png");

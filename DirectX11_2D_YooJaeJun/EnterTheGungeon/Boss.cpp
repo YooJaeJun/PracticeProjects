@@ -691,6 +691,8 @@ namespace Gungeon
     {
         Unit::StartDie();
 
+        die->ChangeAnim(AnimState::loop, intervalAnim[(int)State::die]);
+
         attack1Start->isVisible = false;
         attack1->isVisible = false;
         attack2->isVisible = false;

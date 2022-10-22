@@ -35,7 +35,6 @@ namespace Gungeon
 		idle->scale = Vector2(28.0f / 2.0f, 192.0f / 8.0f) * scaleFactor;
 		idle->ChangeAnim(AnimState::loop, 0.2f);
 		idle->SetParentRT(*col);
-		idle->zOrder = ZOrder::object;
 
 		walk = new ObImage(L"EnterTheGungeon/enemy_1/Walk.png");
 		walk->isVisible = false;
@@ -45,7 +44,6 @@ namespace Gungeon
 		walk->scale.y = 24.0f * scaleFactor;
 		walk->ChangeAnim(AnimState::loop, 0.1f);
 		walk->SetParentRT(*col);
-		walk->zOrder = ZOrder::object;
 
 		hit = new ObImage(L"EnterTheGungeon/enemy_1/Hit.png");
 		hit->isVisible = false;
@@ -53,14 +51,12 @@ namespace Gungeon
 		hit->scale = Vector2(16.0f, 24.0f) * scaleFactor;
 		hit->ChangeAnim(AnimState::once, 0.2f);
 		hit->SetParentRT(*col);
-		hit->zOrder = ZOrder::object;
 
 		die = new ObImage(L"EnterTheGungeon/enemy_1/Die.png");
 		die->isVisible = false;
 		die->maxFrame.x = 5;
 		die->scale = Vector2(110.0f / 5.0f, 22.0f) * scaleFactor;
 		die->SetParentRT(*col);
-		die->zOrder = ZOrder::object;
 
 		shadow->scale = Vector2(12.0f, 4.0f) * scaleFactor;
 		shadow->SetLocalPosY(-35.0f);

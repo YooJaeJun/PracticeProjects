@@ -164,8 +164,6 @@ namespace Gungeon
 		shadow->isVisible = false;
 		die->isVisible = true;
 
-		die->ChangeAnim(AnimState::loop, intervalAnim[(int)State::die]);
-
 		for (auto& elem : bullet)
 		{
 			elem->idle->isVisible = false;

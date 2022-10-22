@@ -63,6 +63,25 @@ namespace Gungeon
             SCENE->ChangeScene("Scene03", 1.0f);
         }
 
+
+        if (INPUT->KeyPress(VK_LEFT) || INPUT->KeyPress('A'))
+        {
+            CAM->position.x -= 1500.0f * DELTA;
+        }
+        if (INPUT->KeyPress(VK_RIGHT) || INPUT->KeyPress('D'))
+        {
+            CAM->position.x += 1500.0f * DELTA;
+        }
+        if (INPUT->KeyPress(VK_UP) || INPUT->KeyPress('W'))
+        {
+            CAM->position.y += 1500.0f * DELTA;
+        }
+        if (INPUT->KeyPress(VK_DOWN) || INPUT->KeyPress('S'))
+        {
+            CAM->position.y -= 1500.0f * DELTA;
+        }
+
+
         if (mapGen) mapGen->Update();
 
         ChangeUpdateScene();

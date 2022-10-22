@@ -44,7 +44,7 @@ namespace Gungeon
 		imgReloading->SetParentRT(*col);
 
 		pivotDefault = Vector2(0.6f, 0.25f);
-		localPosDefault = Vector2(10.0f, -15.0f);
+		localPosDefault = Vector2(-10.0f, -15.0f);
 		localFirePosDefault = Vector2(80.0f, 6.0f);
 		state = State::die;
 

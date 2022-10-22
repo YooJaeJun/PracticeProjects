@@ -444,10 +444,14 @@ namespace Gungeon
 		{
 			targetPos = INPUT->GetWorldMousePos();
 
-			CAM->position.x = Utility::Saturate((targetPos.x + idle->GetWorldPos().x) / 2,
+			Vector2 camTargetPos = (targetPos + Pos()) / 2.0f;
+			Vector2 velocity = camTargetPos - CAM->position;
+			CAM->position += velocity * 2.0f * DELTA;
+
+			CAM->position.x = Utility::Saturate(CAM->position.x,
 				idle->GetWorldPos().x - 250.0f,
 				idle->GetWorldPos().x + 250.0f);
-			CAM->position.y = Utility::Saturate((targetPos.y + idle->GetWorldPos().y) / 2,
+			CAM->position.y = Utility::Saturate(CAM->position.y,
 				idle->GetWorldPos().y - 250.0f,
 				idle->GetWorldPos().y + 250.0f);
 		}
@@ -730,6 +734,8 @@ namespace Gungeon
 	void Player::StartDie()
 	{
 		Unit::StartDie();
+		
+		die->ChangeAnim(AnimState::once, intervalAnim[(int)State::die]);
 
 		weapons[curWeaponIdx]->idle->isVisible = false;
 
