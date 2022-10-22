@@ -68,6 +68,9 @@ namespace Gungeon
 		void MaximalSquare(const Room* elem);
 		void Histogram(const Room* elem);
 		void SpawnerOn();
+		void SetSpawner();
+		void Save();
+		void Load();
 
 	public:
 		// 동적할당하지 않은 변수들은 보여주기 용도
@@ -91,5 +94,6 @@ namespace Gungeon
 		map<ObNode, int>			nodesForRoomIndex;
 		vector<Tile*>				way;
 		vector<vector<Int2>>		passages;
+		string						file;
 	};
 }

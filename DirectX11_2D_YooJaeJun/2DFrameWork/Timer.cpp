@@ -60,3 +60,10 @@ void Timer::Chronometry(UINT lock)
     }
     deltaScaleTime = deltaTime * app.deltaScale;
 }
+
+void Timer::Update()
+{
+    ImGui::Text("FPS : %d", GetFramePerSecond());
+    ImGui::Text("World Time : %f", GetWorldTime());
+    ImGui::Text("Delta Time : %f", GetDeltaTime());
+}

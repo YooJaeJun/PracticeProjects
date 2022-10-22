@@ -23,7 +23,6 @@ void Map::Init()
     tileState = 0;
     tilemap->CreateTileCost();
     useGui = false;
-    isLoaded = false;
 }
 
 void Map::Release()
@@ -131,7 +130,6 @@ void Map::SetTilemapGUI()
         tilemap->file = path;
         tilemap->Load();
         tileSize = tilemap->GetTileSize();
-        isLoaded = true;
     }
 
     //Brush

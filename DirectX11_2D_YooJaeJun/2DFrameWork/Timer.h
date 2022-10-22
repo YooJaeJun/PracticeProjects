@@ -19,4 +19,6 @@ public:
     float   GetDeltaTime()      { return deltaScaleTime; }
     UINT    GetFramePerSecond() { return framePerSecond; }
     float   GetWorldTime()      { return worldTime; }
+
+    void Update();
 };

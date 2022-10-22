@@ -32,10 +32,10 @@ namespace Gungeon
 	public:
 		bool			selected = false;
 		ObCircle*		enemySpawner[enemySpawnPosMax];
+		ObCircle*		treasureSpawner;
+		ObCircle*		gateSpawner[9];
 		bool			cleared = false;
 		RoomType		roomType = RoomType::enemy;
 		vector<Int2>	doorTileIdxs;
-		ObCircle*		treasureSpawner;
-		ObCircle*		gateSpawner[9];
 	};
 }

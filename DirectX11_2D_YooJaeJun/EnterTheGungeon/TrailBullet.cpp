@@ -65,7 +65,7 @@ namespace Gungeon
             trails[0]->SetWorldPos(Pos() == Vector2(0.0f, 0.0f) ? DEFAULTSPAWN : Pos());
             trails[0]->rotation = col->rotation;
             trails[0]->scale = Vector2(30.0f, 30.0f);
-            trails.push_back(trails[0]);
+            trails.emplace_back(trails[0]);
             trails.pop_front();
         }
 

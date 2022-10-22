@@ -21,6 +21,5 @@ public:
 	Int2		mouseIdx;
 	Int2		pickingIdx;
 	bool		useGui;
-	bool		isLoaded;
 };
 

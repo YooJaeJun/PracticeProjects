@@ -1141,7 +1141,7 @@ namespace Gungeon
                 Bullet* elem = new BossBullet;
                 elem->Init();
                 elem->scalar = 100.0f;
-                bullet.push_back(elem);
+                bullet.emplace_back(elem);
                 bullet.back()->Spawn(Vector2(-700.0f + curBulletX * 40.0f,
                     720.0f - curBulletY * 40.0f), Vector2(0.0f, -1.0f));
 

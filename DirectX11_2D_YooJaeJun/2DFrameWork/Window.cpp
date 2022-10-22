@@ -36,6 +36,7 @@ WPARAM Window::Run(Scene* main)
 			INPUT->Update();
 			SOUND->Update();
 			GUI->Update();
+			TIMER->Update();
 			MAP->Update();
 			main->Update();
 			main->LateUpdate();

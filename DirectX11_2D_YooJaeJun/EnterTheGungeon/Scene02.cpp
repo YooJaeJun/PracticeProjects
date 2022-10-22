@@ -251,7 +251,7 @@ namespace Gungeon
         MAP->tilemap->WorldPosToTileIdx(player->Pos(), playerOn);
         TileState tileState = MAP->tilemap->GetTileState(playerOn);
 
-        if (tileState == TileState::floor || tileState == TileState::spawner)
+        if (tileState == TileState::floor)
         {
             afterRoomIdx = MAP->tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
 

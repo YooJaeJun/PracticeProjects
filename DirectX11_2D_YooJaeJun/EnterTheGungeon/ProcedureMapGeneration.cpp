@@ -208,29 +208,24 @@ namespace Gungeon
                 Finish();
             }
             break;
-        }
-        default:
-        {
-            break;
         }//case
         }//switch
 
-        if (ImGui::Button("SaveRoomInfo"))
+        //SaveLoad
+        if (GUI->FileImGui("SaveRoomInfo", "Save Map",
+            ".txt", "../Contents/Room"))
         {
-
+            string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
+            file = path;
+            Save();
         }
-        if (ImGui::Button("LoadRoomInfo"))
+        ImGui::SameLine();
+        if (GUI->FileImGui("LoadRoomInfo", "Load Map",
+            ".txt", "../Contents/Room"))
         {
-
-        }
-
-        if (MAP->isLoaded && 
-            selectedRooms.size() > 0 &&
-            false == almostEqualVector2(selectedRooms[0]->gateSpawner[4]->GetWorldPos(), selectedRooms[0]->Pos()))
-        {
-            for (auto& elem : selectedRooms) SafeRelease(elem);
-            selectedRooms.clear();
-            MAP->isLoaded = false;
+            string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
+            file = path;
+            Load();
         }
 
         for (auto& elem : candidateRooms) if (elem) elem->Update();
@@ -305,7 +300,7 @@ namespace Gungeon
                 elem->col->isFilled = true;
                 elem->selected = true;
 
-                selectedRooms.push_back(elem);
+                selectedRooms.emplace_back(elem);
             }
         }
 
@@ -330,7 +325,7 @@ namespace Gungeon
         for (auto& elem : selectedRooms)
         {
             // 들로네 삼각분할 위한 노드
-            roomNode.push_back(ObNode(idx, elem->Pos()));
+            roomNode.emplace_back(ObNode(idx, elem->Pos()));
             idx++;
         }
 
@@ -373,7 +368,7 @@ namespace Gungeon
         //        linesTriangulated[rand].SetWIdx(triangulation.nodesForIndex[linesTriangulated[rand].W()]);
 
         //        linesTriangulated[rand].color = Color(0.5f, 0.5f, 1.0f);
-        //        linesMST.push_back(linesTriangulated[rand]);
+        //        linesMST.emplace_back(linesTriangulated[rand]);
         //    }
         //}
     }
@@ -501,7 +496,7 @@ namespace Gungeon
                 -1, 
                 dir);
 
-            selectedRooms[roomIdx]->doorTileIdxs.push_back(doorTileIdx);
+            selectedRooms[roomIdx]->doorTileIdxs.emplace_back(doorTileIdx);
         };
 
 
@@ -535,7 +530,7 @@ namespace Gungeon
                             MAP->imgIdx,
                             (int)TileState::floor);
 
-                        passages[passageIdx].push_back(curOn);
+                        passages[passageIdx].emplace_back(curOn);
                     }
 
                     if (first && curRoomIdx != beforeRoomIdx)
@@ -650,72 +645,15 @@ namespace Gungeon
 
     void ProcedureMapGeneration::Spawner()
     {
-        int idx = 0;
-        for (auto& elem : selectedRooms)
-        {
-            int tileRoomIdx = MAP->tilemap->GetTileRoomIndex(elem->On());
-            float xHalf = MAP->tilemap->scale.x / 2.0f;
-            float yHalf = MAP->tilemap->scale.y / 2.0f;
-
-            // 적 스포너
-            if (idx != (int)RoomType::start && idx != (int)RoomType::treasure)
-            {
-                for (auto& spawnPosElem : elem->enemySpawner)
-                {
-                    int rx, ry;
-                    rx = RANDOM->Int(elem->TileLB().x + 1, elem->TileRB().x - 1);
-                    ry = RANDOM->Int(elem->TileLB().y + 1, elem->TileLT().y - 1);
-
-                    Int2 on = Int2(rx, ry);
-
-                    MAP->tilemap->SetTile(on,
-                        Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
-                            RANDOM->Int(floorImgMin.y, floorImgMax.y)),
-                        MAP->imgIdx,
-                        (int)TileState::spawner,
-                        Color(0.5f, 0.5f, 0.5f),
-                        tileRoomIdx);
-
-                    Vector2 wpos = MAP->tilemap->TileIdxToWorldPos(on);
-                    spawnPosElem->SetWorldPos(Vector2(wpos.x + xHalf, wpos.y + yHalf));
-                    spawnPosElem->isVisible = true;
-                }
-            }
-
-            // 게이트 스포너
-            Int2 sour = Int2(elem->On().x - 1, elem->On().y - 1);
-            Int2 dest = Int2(elem->On().x + 1, elem->On().y + 1);
-            int curGateIdx = 0;
-
-            for (int y = sour.y; y <= dest.y; y++)
-            {
-                for (int x = sour.x; x <= dest.x; x++)
-                {
-                    MAP->tilemap->SetTile(Int2(x, y),
-                        Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
-                            RANDOM->Int(floorImgMin.y, floorImgMax.y)),
-                        MAP->imgIdx,
-                        (int)TileState::spawner,
-                        Color(0.5f, 0.5f, 0.5f),
-                        tileRoomIdx);
-
-                    Vector2 wpos = MAP->tilemap->TileIdxToWorldPos(Int2(x, y));
-                    elem->gateSpawner[curGateIdx]->SetWorldPos(Vector2(wpos.x + xHalf, wpos.y + yHalf));
-                    elem->gateSpawner[curGateIdx]->isVisible = true;
-                    curGateIdx++;
-                }
-            }
-
-            idx++;
-        }
+        SetSpawner();
     }
 
     void ProcedureMapGeneration::PropWall()
     {
         for (auto& elem : selectedRooms)
         {
-            MaximalSquare(elem);
-            // Histogram(elem);
+            // MaximalSquare(elem);
+            Histogram(elem);
         }
 
         MAP->tilemap->CreateTileCost();
@@ -745,7 +683,7 @@ namespace Gungeon
             visited[curLine.W().index] = true;
 
             curLine.color = Color(0.5f, 1.0f, 0.5f);
-            linesMST.push_back(curLine);
+            linesMST.emplace_back(curLine);
 
             auto push = [&](const ObNode& node)
             {
@@ -947,5 +885,216 @@ namespace Gungeon
 
             roomIdx++;
         }
+    }
+
+    void ProcedureMapGeneration::SetSpawner()
+    {
+        int idx = 0;
+        for (auto& elem : selectedRooms)
+        {
+            int tileRoomIdx = MAP->tilemap->GetTileRoomIndex(elem->On());
+            float xHalf = MAP->tilemap->scale.x / 2.0f;
+            float yHalf = MAP->tilemap->scale.y / 2.0f;
+
+            // 적 스포너
+            if (idx != (int)RoomType::start && idx != (int)RoomType::treasure)
+            {
+                for (auto& spawnPosElem : elem->enemySpawner)
+                {
+                    int rx, ry;
+                    rx = RANDOM->Int(elem->TileLB().x + 1, elem->TileRB().x - 1);
+                    ry = RANDOM->Int(elem->TileLB().y + 1, elem->TileLT().y - 1);
+
+                    Int2 on = Int2(rx, ry);
+
+                    Vector2 wpos = MAP->tilemap->TileIdxToWorldPos(on);
+                    spawnPosElem->SetWorldPos(Vector2(wpos.x + xHalf, wpos.y + yHalf));
+                    spawnPosElem->isVisible = true;
+                }
+            }
+
+            // 게이트 스포너
+            Int2 sour = Int2(elem->On().x - 1, elem->On().y - 1);
+            Int2 dest = Int2(elem->On().x + 1, elem->On().y + 1);
+            int curGateIdx = 0;
+
+            for (int y = sour.y; y <= dest.y; y++)
+            {
+                for (int x = sour.x; x <= dest.x; x++)
+                {
+                    Vector2 wpos = MAP->tilemap->TileIdxToWorldPos(Int2(x, y));
+                    elem->gateSpawner[curGateIdx]->SetWorldPos(Vector2(wpos.x + xHalf, wpos.y + yHalf));
+                    elem->gateSpawner[curGateIdx]->isVisible = true;
+                    curGateIdx++;
+                }
+            }
+
+            idx++;
+        }
+    }
+
+    void ProcedureMapGeneration::Save()
+    {
+        ofstream fout;
+        string path = "../Contents/Room/" + file;
+
+        fout.open(path.c_str(), ios::out);
+
+        if (fout.is_open())
+        {
+            int roomIdx = 0;
+            for (auto& roomElem : selectedRooms)
+            {
+                fout << "roomIdx " << roomIdx << '\n';
+
+                fout << "colPos " << roomElem->Pos().x << " " << roomElem->Pos().y << '\n';
+                fout << "colScale " << roomElem->col->scale.x << " " << roomElem->col->scale.y << '\n';
+
+                for (auto& spawnerElem : roomElem->enemySpawner)
+                {
+                    fout << "enemySpawner " << spawnerElem->GetWorldPos().x << " " << 
+                        spawnerElem->GetWorldPos().y << '\n';
+                }
+
+                fout << "treasureSpawner " << roomElem->treasureSpawner->GetWorldPos().x << " " <<
+                    roomElem->treasureSpawner->GetWorldPos().y << '\n';
+
+                for (auto& spawnerElem : roomElem->gateSpawner)
+                {
+                    fout << "gateSpawner " << spawnerElem->GetWorldPos().x << " " <<
+                        spawnerElem->GetWorldPos().y << '\n';
+                }
+
+                fout << "cleared " << (int)roomElem->cleared << '\n';
+                fout << "roomType " << (int)roomElem->roomType << '\n';
+
+                fout << "doorTileNum " << roomElem->doorTileIdxs.size() << '\n';
+
+                for (auto& doorTileIdx : roomElem->doorTileIdxs)
+                {
+                    fout << "doorTileIdx " << doorTileIdx.x << " " << doorTileIdx.y << '\n';
+                }
+
+                fout << '\n';
+                roomIdx++;
+            }
+        }
+
+        fout.close();
+    }
+
+    void ProcedureMapGeneration::Load()
+    {
+        for (auto& elem : selectedRooms)
+        {
+            SafeRelease(elem);
+        }
+        selectedRooms.clear();
+
+
+        ifstream fin;
+        string path = "../Contents/Room/" + file;
+
+        fin.open(path.c_str(), ios::in);
+
+        string temp;
+
+        if (fin.is_open())
+        {
+            int roomIdx = 0;
+            while (1)
+            {
+                Room* room = new Room;
+
+                // index
+                fin >> temp >> temp;
+                if (fin.eof()) break;
+
+                // colPos
+                float x, y;
+                fin >> temp >> x >> y;
+                room->SetPos(Vector2(x, y));
+
+                // colScale
+                fin >> temp >> room->col->scale.x >> room->col->scale.y;
+
+                // enemySpawner
+                if (roomIdx == (int)RoomType::start || roomIdx == (int)RoomType::treasure)
+                {
+                    for (auto& spawnerElem : room->enemySpawner)
+                    {
+                        fin >> temp >> temp >> temp;
+                    }
+                }
+                else
+                {
+                    int spawnerIdx = 0;
+                    for (auto& spawnerElem : room->enemySpawner)
+                    {
+                        float x, y;
+                        fin >> temp >> x >> y;
+                        room->enemySpawner[spawnerIdx]->SetWorldPos(Vector2(x, y));
+                        spawnerIdx++;
+                    }
+                }
+
+                // treasureSpawner
+                if (roomIdx == (int)RoomType::treasure)
+                {
+                    float x, y;
+                    fin >> temp >> x >> y;
+                    room->treasureSpawner->SetWorldPos(Vector2(x, y));
+                }
+                else
+                {
+                    fin >> temp >> temp >> temp;
+                }
+
+                // gateSpawner
+                int spawnerIdx = 0;
+                for (auto& spawnerElem : room->gateSpawner)
+                {
+                    float x, y;
+                    fin >> temp >> x >> y;
+                    room->gateSpawner[spawnerIdx]->SetWorldPos(Vector2(x, y));
+                    spawnerIdx++;
+                }
+
+                // cleared
+                int cleared;
+                fin >> temp >> cleared;
+                room->cleared = cleared;
+                
+                // roomType
+                int type;
+                fin >> temp >> type;
+                room->roomType = (RoomType)type;
+
+                // doorTileNum
+                int n;
+                fin >> temp >> n;
+
+                // doorTileIdx
+                for (int i = 0; i < n; i++)
+                {
+                    float x, y;
+                    fin >> temp >> x >> y;
+                    room->doorTileIdxs.emplace_back(Int2(x, y));
+                }
+
+                selectedRooms.emplace_back(room);
+                roomIdx++;
+            }
+        }
+
+        for (auto& elem : selectedRooms)
+        {
+            elem->col->isVisible = false;
+            elem->Update();
+        }
+
+        SetSpawner();
+
+        fin.close();
     }
 }
