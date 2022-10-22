@@ -63,6 +63,7 @@ namespace Gungeon
 		int						roomClearCount = 0;
 		int						roomClearCountForBossBattle = 1;
 		Gate*					gate = nullptr;
+		Cinematic*				cinematic = nullptr;
 		vector<Door*>			door;
 		TreasureBox*			treasureBox = nullptr;
 	};

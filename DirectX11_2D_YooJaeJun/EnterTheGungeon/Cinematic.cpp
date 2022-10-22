@@ -13,6 +13,7 @@ namespace Gungeon
         {
             elem = new UI;
             elem->img = new ObImage(L"EnterTheGungeon/Level/Cinematic_Box.png");
+            elem->img->isVisible = false;
             elem->img->scale = Vector2(app.GetWidth(), 150.0f);
             elem->img->isFilled = true;
             elem->img->color = Color(0.0f, 0.0f, 0.0f);
@@ -20,9 +21,9 @@ namespace Gungeon
             elem->img->pivot = OFFSET_LT;
         }
         cinematicBox[0]->anchor = DirState::dirLT;
-        cinematicBox[0]->Spawn(0.0f, 150.0f);
+        cinematicBox[0]->Spawn(Vector2(0.0f, 150.0f));
         cinematicBox[1]->anchor = DirState::dirLB;
-        cinematicBox[1]->Spawn(0.0f, 0.0f);
+        cinematicBox[1]->Spawn(Vector2(0.0f, 0.0f));
 
         cinematicState = CinematicState::none;
 
@@ -51,8 +52,7 @@ namespace Gungeon
         case Gungeon::CinematicState::none:
             break;
         case Gungeon::CinematicState::cinematicBox1:
-            cinematicBox[0]->img->MoveWorldPos(Vector2(0.0f, -75.0f * DELTA));
-            cinematicBox[1]->img->MoveWorldPos(Vector2(0.0f, 75.0f * DELTA));
+            BoxUp(true);
 
             if (TIMER->GetTick(timeCinematic[(int)CinematicState::cinematicBox1],
                 intervalCinematic[(int)CinematicState::cinematicBox1]))
@@ -74,8 +74,7 @@ namespace Gungeon
         case Gungeon::CinematicState::cameraTargeting2:
             break;
         case Gungeon::CinematicState::cinematicBox2:
-            cinematicBox[0]->img->MoveWorldPos(Vector2(0.0f, 75.0f * DELTA));
-            cinematicBox[1]->img->MoveWorldPos(Vector2(0.0f, -75.0f * DELTA));
+            BoxUp(false);
 
             if (TIMER->GetTick(timeCinematic[(int)CinematicState::cinematicBox2],
                 intervalCinematic[(int)CinematicState::cinematicBox2]))
@@ -88,8 +87,7 @@ namespace Gungeon
 
             // »ç¸Á¿¬Ãâ
         case Gungeon::CinematicState::cinematicBox3:
-            cinematicBox[0]->img->MoveWorldPos(Vector2(0.0f, -75.0f * DELTA));
-            cinematicBox[1]->img->MoveWorldPos(Vector2(0.0f, 75.0f * DELTA));
+            BoxUp(true);
 
             if (TIMER->GetTick(timeCinematic[(int)CinematicState::cinematicBox3],
                 intervalCinematic[(int)CinematicState::cinematicBox3]))
@@ -103,8 +101,7 @@ namespace Gungeon
             break;
         case Gungeon::CinematicState::cameraTargeting4:
         case Gungeon::CinematicState::cinematicBox4:
-            cinematicBox[0]->img->MoveWorldPos(Vector2(0.0f, 75.0f * DELTA));
-            cinematicBox[1]->img->MoveWorldPos(Vector2(0.0f, -75.0f * DELTA));
+            BoxUp(false);
 
             if (TIMER->GetTick(timeCinematic[(int)CinematicState::cinematicBox4],
                 intervalCinematic[(int)CinematicState::cinematicBox4]))
@@ -123,5 +120,22 @@ namespace Gungeon
     void Cinematic::Render()
     {
         for (auto& elem : cinematicBox) elem->Render();
+    }
+
+    void Cinematic::ResizeScreen()
+    {
+        cinematicBox[0]->Spawn(Vector2(0.0f, 150.0f));
+        cinematicBox[1]->Spawn(Vector2(0.0f, 0.0f));
+    }
+
+    void Cinematic::BoxUp(const bool isUp)
+    {
+        float factor = 75.0f;
+        if (false == isUp) factor *= factor;
+
+        cinematicBox[0]->img->isVisible = isUp;
+        cinematicBox[0]->img->MoveWorldPos(Vector2(0.0f, -factor * DELTA));
+        cinematicBox[1]->img->isVisible = isUp;
+        cinematicBox[1]->img->MoveWorldPos(Vector2(0.0f, factor * DELTA));
     }
 }

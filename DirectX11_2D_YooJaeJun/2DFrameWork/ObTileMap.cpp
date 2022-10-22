@@ -458,34 +458,51 @@ void ObTileMap::Load()
     fin.close();
 }
 
-bool ObTileMap::IntersectTile(Int2 on)
+bool ObTileMap::isOnWall(const Int2 on)
 {
     return GetTileState(on) == TileState::wall;
 }
 
-bool ObTileMap::IntersectTilePos(Vector2 wpos)
+bool ObTileMap::isInTileState(const Vector2 wpos, const TileState tileState)
 {
     Int2 on;
     if (WorldPosToTileIdx(wpos, on))
     {
-        return GetTileState(on) == TileState::wall;
+        return GetTileState(on) == tileState;
     }
     return false;
 }
 
-bool ObTileMap::IntersectTileColTile(ObRect* colTile)
+bool ObTileMap::isFootOnWall(const ObRect* colTile)
 {
     Vector2 pos;
     bool flag = false;
+    
+    pos = colTile->lt();
+    flag |= isInTileState(pos, TileState::wall);
+    pos = colTile->lb();
+    flag |= isInTileState(pos, TileState::wall);
+    pos = colTile->rt();
+    flag |= isInTileState(pos, TileState::wall);
+    pos = colTile->rb();
+    flag |= isInTileState(pos, TileState::wall);
+
+    return flag;
+}
+
+bool ObTileMap::isBodyOnPit(const ObRect* colTile)
+{
+    Vector2 pos;
+    bool flag = true;
 
     pos = colTile->lt();
-    flag |= IntersectTilePos(pos);
+    flag &= (isInTileState(pos, TileState::pit) || isInTileState(pos, TileState::none));
     pos = colTile->lb();
-    flag |= IntersectTilePos(pos);
+    flag &= (isInTileState(pos, TileState::pit) || isInTileState(pos, TileState::none));
     pos = colTile->rt();
-    flag |= IntersectTilePos(pos);
+    flag &= (isInTileState(pos, TileState::pit) || isInTileState(pos, TileState::none));
     pos = colTile->rb();
-    flag |= IntersectTilePos(pos);
+    flag &= (isInTileState(pos, TileState::pit) || isInTileState(pos, TileState::none));
 
     return flag;
 }
@@ -593,8 +610,12 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
                     Temp.first->idx.y + 1);
 
                 // 주위 벽이 있을 땐 대각선으로 가지 않기
-                if (Tiles[on.x - 1][on.y].state != TileState::wall && 
-                    Tiles[on.x][on.y - 1].state != TileState::wall)
+                TileState state1 = Tiles[on.x - 1][on.y].state;
+                TileState state2 = Tiles[on.x][on.y - 1].state;
+                if (state1 != TileState::wall &&
+                    state2 != TileState::wall &&
+                    state1 != TileState::pit &&
+                    state2 != TileState::pit)
                 {
                     LoopIdx.push_back(on);
                 }
@@ -607,8 +628,12 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
                 Int2 on = Int2(Temp.first->idx.x - 1,
                     Temp.first->idx.y - 1);
 
-                if (Tiles[on.x - 1][on.y].state != TileState::wall &&
-                    Tiles[on.x][on.y + 1].state != TileState::wall)
+                TileState state1 = Tiles[on.x - 1][on.y].state;
+                TileState state2 = Tiles[on.x][on.y + 1].state;
+                if (state1 != TileState::wall &&
+                    state2 != TileState::wall &&
+                    state1 != TileState::pit &&
+                    state2 != TileState::pit)
                 {
                     LoopIdx.push_back(on);
                 }
@@ -621,8 +646,12 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
                 Int2 on = Int2(Temp.first->idx.x + 1,
                     Temp.first->idx.y + 1);
 
-                if (Tiles[on.x + 1][on.y].state != TileState::wall &&
-                    Tiles[on.x][on.y - 1].state != TileState::wall)
+                TileState state1 = Tiles[on.x + 1][on.y].state;
+                TileState state2 = Tiles[on.x][on.y - 1].state;
+                if (state1 != TileState::wall &&
+                    state2 != TileState::wall &&
+                    state1 != TileState::pit &&
+                    state2 != TileState::pit)
                 {
                     LoopIdx.push_back(on);
                 }
@@ -635,8 +664,12 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
                 Int2 on = Int2(Temp.first->idx.x + 1,
                     Temp.first->idx.y - 1);
 
-                if (Tiles[on.x + 1][on.y].state != TileState::wall &&
-                    Tiles[on.x][on.y + 1].state != TileState::wall)
+                TileState state1 = Tiles[on.x + 1][on.y].state;
+                TileState state2 = Tiles[on.x][on.y + 1].state;
+                if (state1 != TileState::wall &&
+                    state2 != TileState::wall &&
+                    state1 != TileState::pit &&
+                    state2 != TileState::pit)
                 {
                     LoopIdx.push_back(on);
                 }
@@ -650,7 +683,8 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
 
             //벽이 아닐때
             if (loop->state != TileState::wall && 
-                loop->state != TileState::door)
+                loop->state != TileState::door &&
+                loop->state != TileState::pit)
             {
                 //예상비용 만들기
                 loop->ClacH(dest);

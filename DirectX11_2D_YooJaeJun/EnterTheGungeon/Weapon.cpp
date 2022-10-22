@@ -23,16 +23,14 @@ namespace Gungeon
 
 		uiWeapon = new UI;
 
-		uiBulletCount = new UI;
-		uiBulletCount->img = new ObImage(L"EnterTheGungeon/Weapon/UI_BulletCount_Infinity.png");
-		uiBulletCount->img->scale.x = 60.0f;
-		uiBulletCount->img->scale.y = 28.0f;
-		uiBulletCount->anchor = DirState::dirRB;
-		uiBulletCount->img->pivot = OFFSET_RB;
-		uiBulletCount->Spawn(-70.0f, 155.0f);
-		uiBulletCount->img->space = Space::screen;
-		uiBulletCount->img->zOrder = ZOrder::UI;
-		uiBulletCount->img->isVisible = false;
+		uiBulletCountInfinity = new UI;
+		uiBulletCountInfinity->img = new ObImage(L"EnterTheGungeon/Weapon/UI_BulletCount_Infinity.png");
+		uiBulletCountInfinity->img->isVisible = false;
+		uiBulletCountInfinity->img->scale = Vector2(60.0f, 28.0f);
+		uiBulletCountInfinity->anchor = DirState::dirRB;
+		uiBulletCountInfinity->img->pivot = OFFSET_RB;
+		uiBulletCountInfinityPos = Vector2(-70.0f, 155.0f);
+		uiBulletCountInfinity->img->space = Space::screen;
 	}
 
 	void Weapon::Release()
@@ -45,7 +43,7 @@ namespace Gungeon
 
 		SafeRelease(uiBulletFrame);
 		SafeRelease(uiWeapon);
-		SafeRelease(uiBulletCount);
+		SafeRelease(uiBulletCountInfinity);
 		for (auto& elem : uiBullet) SafeRelease(elem);
 	}
 
@@ -60,7 +58,7 @@ namespace Gungeon
 		if (uiBulletFrame) uiBulletFrame->Update();
 		for (auto& elem : uiBullet) if (elem) elem->Update();
 		if (uiWeapon) uiWeapon->Update();
-		if (uiBulletCount) uiBulletCount->Update();
+		if (uiBulletCountInfinity) uiBulletCountInfinity->Update();
 	}
 
 	void Weapon::LateUpdate()
@@ -77,25 +75,24 @@ namespace Gungeon
 		if (uiBulletFrame) uiBulletFrame->Render();
 		for (auto& elem : uiBullet) if (elem) elem->Render();
 		if (uiWeapon) uiWeapon->Render();
-		if (uiBulletCount) uiBulletCount->Render();
+		if (uiBulletCountInfinity) uiBulletCountInfinity->Render();
 	}
 
 	void Weapon::ResizeScreen()
 	{
 		int idx = 0;
 
-		uiBulletFrame->Spawn(-40.0f, 80.0f);
-		if (uiWeaponFrame) uiWeaponFrame->Spawn(-240.0f, 50.0f);
-		uiWeapon->Spawn(-190.0f, 60.0f);
+		uiBulletFrame->Spawn(Vector2(-26.0f, 30.0f));
+		uiWeapon->Spawn(uiWeaponSpawnPos);
 		if (remainBulletCount == INT_MAX)
 		{
-			uiBulletCount->Spawn(-140.0f, 150.0f);
+			uiBulletCountInfinity->Spawn(uiBulletCountInfinityPos);
 		}
 
 		idx = 0;
 		for (auto& elem : uiBullet)
 		{
-			elem->Spawn(-40.0f, 56.0f + idx * 12.0f);
+			elem->Spawn(Vector2(-40.0f, 56.0f + idx * 12.0f));
 			idx++;
 		}
 	}

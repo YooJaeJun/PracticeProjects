@@ -52,8 +52,6 @@ namespace Gungeon
 		void SpawnPlayerByForce(const Vector2 wpos);
 		void SpawnAnim();
 		void SpawnAnimEnd();
-		void DieAnim();
-		void DieAnimEnd();
 		virtual void ColToggle() override;
 
 		void ChangePattern(const BossPattern newPattern);

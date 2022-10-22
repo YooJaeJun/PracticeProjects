@@ -20,7 +20,7 @@ namespace Gungeon
 	void Unit::Release()
 	{
 		Character::Release();
-		SafeDelete(spawn);
+		SafeDelete(respawn);
 		SafeDelete(idle);
 		SafeDelete(walk);
 		SafeDelete(hit);
@@ -52,7 +52,7 @@ namespace Gungeon
 
 		Character::Update();
 
-		if (spawn) spawn->Update();
+		if (respawn) respawn->Update();
 		idle->Update();
 		walk->Update();
 		if (hit) hit->Update();
@@ -67,7 +67,7 @@ namespace Gungeon
 
 	void Unit::Render()
 	{
-		if (spawn) spawn->Render();
+		if (respawn) respawn->Render();
 		idle->Render(); // RENDER->push(idle[curTargetDirState]);
 		walk->Render(); // RENDER->push(walk[curTargetDirState]);
 		if (hit)  hit->Render();  // RENDER->push(hit);

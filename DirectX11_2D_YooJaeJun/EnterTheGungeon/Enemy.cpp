@@ -29,7 +29,6 @@ namespace Gungeon
 		col->isVisible = false;
 		col->isFilled = false;
 		col->color = Color(1.0f, 1.0f, 1.0f);
-		col->zOrder = ZOrder::object;
 		SetPos(DEFAULTSPAWN);
 
 		colTile = new ObRect;
@@ -42,7 +41,6 @@ namespace Gungeon
 
 		shadow = new ObImage(L"EnterTheGungeon/enemy_1/Shadow_1.png");
 		shadow->SetParentRT(*col);
-		shadow->zOrder = ZOrder::shadow;
 	}
 
 	void Enemy::InitItem()
@@ -50,6 +48,7 @@ namespace Gungeon
 		float scaleFactor = 0.5f;
 		dropItem = new Item;
 		dropItem->col = new ObCircle;
+		dropItem->col->isVisible = false;
 		dropItem->col->scale = Vector2(40.0f, 40.0f) * scaleFactor;
 		dropItem->col->isFilled = false;
 		dropItem->SetPos(DEFAULTSPAWN);

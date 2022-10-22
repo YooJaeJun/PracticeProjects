@@ -32,6 +32,9 @@ namespace Gungeon
 		void Release();
 		void Update();
 		void Render();
+		void ResizeScreen();
+
+		void BoxUp(const bool isUp);
 
 	public:
 		CinematicState cinematicState = CinematicState::none;

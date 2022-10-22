@@ -8,6 +8,8 @@ namespace Gungeon
 		walk,
 		roll,
 		attack,
+		fall,
+		respawn,
 		die,
 		cinematic,
 		max

@@ -11,6 +11,7 @@ namespace Gungeon
     {
         col->scale = Vector2(50.0f / 2.0f, 19.0f) * 3.0f;
         col->SetWorldPos(DEFAULTSPAWN);
+        col->isVisible = false;
         idle = new ObImage(L"EnterTheGungeon/Level/Treasure.png");
         idle->maxFrame.x = 2;
         idle->scale = Vector2(50.0f / 2.0f, 19.0f) * 3.0f;

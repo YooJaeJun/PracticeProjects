@@ -206,6 +206,7 @@ namespace Gungeon
                     Vector2 dest = Vector2(0.0f, -500.0f);
                     boss->col->SetWorldPos(Vector2(0.0f, 500.0f));
                     boss->SpawnPlayerByForce(dest);
+                    boss->Update();
                     player->col->SetWorldPos(dest);
                     player->Update();
                 }
@@ -250,7 +251,7 @@ namespace Gungeon
             }
             break;
         case Gungeon::CinematicState::bossSpawnAnim:
-            if (boss->spawn->frame.x == boss->spawn->maxFrame.x - 1)
+            if (boss->respawn->frame.x == boss->respawn->maxFrame.x - 1)
             {
                 boss->SpawnAnimEnd();
                 cinematic->cinematicState = CinematicState::cutScene;
@@ -361,11 +362,12 @@ namespace Gungeon
     {
         if (player) player->ResizeScreen();
         if (boss) boss->ResizeScreen();
+        if (cinematic) cinematic->ResizeScreen();
     }
 
     void Scene03::IntersectPlayer()
     {
-        if (MAP->tilemap->IntersectTileColTile(player->colTile))
+        if (MAP->tilemap->isFootOnWall(player->colTile))
         {
             player->StepBack();
         }
@@ -384,7 +386,7 @@ namespace Gungeon
                     bulletElem->Hit(1);
                 }
 
-                if (MAP->tilemap->IntersectTile(bulletElem->On()))
+                if (MAP->tilemap->isOnWall(bulletElem->On()))
                 {
                     bulletElem->Hit(1);
                 }
@@ -402,7 +404,7 @@ namespace Gungeon
             player->Hit(1);
         }
 
-        if (MAP->tilemap->IntersectTileColTile(boss->colTile))
+        if (MAP->tilemap->isFootOnWall(boss->colTile))
         {
             boss->StepBack();
         }
@@ -425,7 +427,7 @@ namespace Gungeon
                 switch (boss->pattern)
                 {
                 case BossPattern::trail:
-                    if (MAP->tilemap->IntersectTile(on))
+                    if (MAP->tilemap->isOnWall(on))
                     {
                         // bulletElem->Hit(1);
                         if (on.y <= 6 || on.y >= 21)
@@ -442,7 +444,7 @@ namespace Gungeon
                     }
                     break;
                 default:
-                    if (MAP->tilemap->IntersectTilePos(bulletElem->Pos()))
+                    if (MAP->tilemap->isInTileState(bulletElem->Pos(), TileState::wall))
                     {
                         bulletElem->Hit(1);
                     }

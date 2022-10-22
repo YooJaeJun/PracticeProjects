@@ -17,6 +17,7 @@ namespace Gungeon
 	{
 		if (flagAbsorbed)
 		{
+			col->isVisible = false;
 			Vector2 dir = targetPos - Pos();
 			dir.Normalize();
 			col->MoveWorldPos(dir * scalar * DELTA);

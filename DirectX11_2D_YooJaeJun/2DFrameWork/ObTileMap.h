@@ -7,6 +7,7 @@ enum class TileState
     door,
     prop,
     spawner,
+    pit,
     max
 };
 
@@ -68,9 +69,10 @@ public:
     DirState        GetTileDir(Int2 TileIdx);
     void            SetTileDir(Int2 TileIdx, const DirState dir);
 
-    bool            IntersectTile(Int2 on);
-    bool            IntersectTilePos(Vector2 wpos);
-    bool            IntersectTileColTile(ObRect* colTile);
+    bool            isOnWall(const Int2 on);
+    bool            isInTileState(const Vector2 wpos, const TileState tileState);
+    bool            isFootOnWall(const ObRect* colTile);
+    bool            isBodyOnPit(const ObRect* colTile);
     bool            PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool checkDiagnoal = true);
 
 protected:

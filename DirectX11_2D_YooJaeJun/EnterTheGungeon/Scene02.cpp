@@ -71,6 +71,8 @@ namespace Gungeon
             }
         }
 
+        cinematic = new Cinematic;
+
         SOUND->Stop("SCENE01");
         // SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
         SOUND->Play("SCENE02");
@@ -153,6 +155,7 @@ namespace Gungeon
         for (auto& elem : door) elem->Update();
         for (auto& elem : spawnEffect) if (elem) elem->Update();
         for (auto& elem : enemy) if (elem) elem->Update();
+        cinematic->Update();
     }
 
     void Scene02::LateUpdate()
@@ -194,16 +197,7 @@ namespace Gungeon
         for (auto& elem : enemy) if (elem) elem->shadow->Render();
         for (auto& elem : enemy) if (elem) elem->Render();
         if (player) player->Render();
-
-        // 최적화 이슈로 zorder 주석
-        /*
-        int size = RENDER->pq.size();
-        while (false == RENDER->pq.empty())
-        {
-            RENDER->pq.top()->Render();
-            RENDER->pq.pop();
-        }
-        */
+        cinematic->Render();
     }
 
     void Scene02::ResizeScreen()
@@ -211,6 +205,10 @@ namespace Gungeon
         mapGen->ResizeScreen();
 
         player->ResizeScreen();
+
+        gate->ResizeScreen();
+
+        cinematic->ResizeScreen();
     }
 
     void Scene02::Start()
@@ -425,9 +423,17 @@ namespace Gungeon
     {
         if (player->state != State::die)
         {
-            if (MAP->tilemap->IntersectTileColTile(player->colTile))
+            if (MAP->tilemap->isFootOnWall(player->colTile))
             {
                 player->StepBack();
+            }
+
+            if (MAP->tilemap->isBodyOnPit(player->colTile) && 
+                player->state != State::fall &&
+                player->state != State::respawn &&
+                player->state != State::roll)
+            {
+                player->StartFall();
             }
 
             if (false == gate->flagIntersectPlayer &&
@@ -545,7 +551,7 @@ namespace Gungeon
                     }
                 }
 
-                if (MAP->tilemap->IntersectTile(bulletElem->On()))
+                if (MAP->tilemap->isOnWall(bulletElem->On()))
                 {
                     bulletElem->Hit(1);
                 }
@@ -565,7 +571,7 @@ namespace Gungeon
                 player->Hit(1);
             }
 
-            if (MAP->tilemap->IntersectTileColTile(enemyElem->colTile))
+            if (MAP->tilemap->isFootOnWall(enemyElem->colTile))
             {
                 enemyElem->StepBack();
             }
@@ -590,7 +596,7 @@ namespace Gungeon
                         bulletElem->Hit(1);
                     }
 
-                    if (MAP->tilemap->IntersectTile(bulletElem->On()))
+                    if (MAP->tilemap->isOnWall(bulletElem->On()))
                     {
                         bulletElem->Hit(1);
                     }
@@ -630,6 +636,7 @@ namespace Gungeon
             break;
 
         case Gungeon::GateState::cinematic:
+            cinematic->BoxUp(true);
             player->state = State::cinematic;
             break;
 

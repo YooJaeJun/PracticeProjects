@@ -20,7 +20,7 @@ namespace Gungeon
 		void LateUpdate();
 		void Render();
 
-		void Spawn(const float xFactor, const float yFactor);
+		void Spawn(const Vector2 factor);
 		bool DownGauge();
 
 	public:

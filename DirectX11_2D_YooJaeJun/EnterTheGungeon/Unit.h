@@ -30,7 +30,7 @@ namespace Gungeon
 		void Stop();
 
 	public:
-		ObImage*			spawn = nullptr;
+		ObImage*			respawn = nullptr;
 		ObImage*			idle = nullptr;
 		ObImage*			walk = nullptr;
 		ObImage*			kick = nullptr;

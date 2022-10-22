@@ -25,28 +25,38 @@ namespace Gungeon
         if (img) img->Render(); // RENDER->push(img);
     }
 
-    void UI::Spawn(const float xFactor, const float yFactor)
+    void UI::Spawn(const Vector2 factor)
     {
         switch (anchor)
         {
-        case DirState::dirLT:
-            img->SetWorldPos(Vector2(-app.GetHalfWidth() + xFactor, app.GetHalfHeight() + yFactor));
+        case DirState::dirB:
+            img->SetWorldPos(Vector2(factor.x, -app.GetHalfHeight() + factor.y));
+            break;
+        case DirState::dirL:
+            img->SetWorldPos(Vector2(-app.GetHalfWidth() + factor.x, factor.y));
+            break;
+        case DirState::dirR:
+            img->SetWorldPos(Vector2(app.GetHalfWidth() + factor.x, factor.y));
             break;
         case DirState::dirLB:
-            img->SetWorldPos(Vector2(-app.GetHalfWidth() + xFactor, -app.GetHalfHeight() + yFactor));
-            break;
-        case DirState::dirRT:
-            img->SetWorldPos(Vector2(app.GetHalfWidth() + xFactor, app.GetHalfHeight() + yFactor));
+            img->SetWorldPos(Vector2(-app.GetHalfWidth() + factor.x, -app.GetHalfHeight() + factor.y));
             break;
         case DirState::dirRB:
-            img->SetWorldPos(Vector2(app.GetHalfWidth() + xFactor, -app.GetHalfHeight() + yFactor));
+            img->SetWorldPos(Vector2(app.GetHalfWidth() + factor.x, -app.GetHalfHeight() + factor.y));
+            break;
+        case DirState::dirT:
+            img->SetWorldPos(Vector2(factor.x, app.GetHalfHeight() + factor.y));
+            break;
+        case DirState::dirLT:
+            img->SetWorldPos(Vector2(-app.GetHalfWidth() + factor.x, app.GetHalfHeight() + factor.y));
+            break;
+        case DirState::dirRT:
+            img->SetWorldPos(Vector2(app.GetHalfWidth() + factor.x, app.GetHalfHeight() + factor.y));
             break;
         default:
-            img->SetWorldPos(Vector2(xFactor, yFactor));
+            img->SetWorldPos(Vector2(factor.x, factor.y));
             break;
         }
-
-        img->isVisible = true;
     }
 
     bool UI::DownGauge()

@@ -53,7 +53,7 @@ namespace Gungeon
 		uiBulletFrame->img->scale = Vector2(28.0f, 99.0f);
 		uiBulletFrame->img->pivot = OFFSET_RB;
 		uiBulletFrame->anchor = DirState::dirRB;
-		uiBulletFrame->Spawn(-26.0f, 30.0f);
+		uiBulletFrame->Spawn(Vector2(-26.0f, 30.0f));
 		uiBulletFrame->img->space = Space::screen;
 		uiBulletFrame->img->isVisible = false;
 
@@ -67,7 +67,7 @@ namespace Gungeon
 			elem->img = new ObImage(L"EnterTheGungeon/Weapon/UI_Bullet.png");
 			elem->img->scale = Vector2(12.0f, 4.0f);
 			elem->anchor = DirState::dirRB;
-			elem->Spawn(-40.0f, 56.0f + uiBulletIdx * 12.0f);
+			elem->Spawn(Vector2(-40.0f, 56.0f + uiBulletIdx * 12.0f));
 			elem->img->space = Space::screen;
 			elem->img->isVisible = false;
 			uiBulletIdx++;
@@ -77,11 +77,10 @@ namespace Gungeon
 		uiWeapon->img->scale = Vector2(31.0f, 23.0f) * uiWeaponScaleFactor;
 		uiWeapon->img->pivot = OFFSET_RB;
 		uiWeapon->anchor = DirState::dirRB;
-		uiWeapon->Spawn(-130.0f, 60.0f);
+		uiWeaponSpawnPos = Vector2(-130.0f, 60.0f);
+		uiWeapon->Spawn(uiWeaponSpawnPos);
 		uiWeapon->img->space = Space::screen;
 		uiWeapon->img->isVisible = false;
-
-		uiBulletCount->img->isVisible = true;
 	}
 
 	void Weapon1::Release()

@@ -26,6 +26,8 @@ namespace Gungeon
 		void Idle();
 		void Walk();
 		void Roll();
+		void Fall();
+		void Respawn();
 		virtual void Die() override;
 		void Cinematic();
 		void Move();
@@ -35,6 +37,8 @@ namespace Gungeon
 		void StartWalk();
 		void StartIdle();
 		void StartRoll();
+		void StartFall();
+		void StartRespawn();
 		virtual void StartDie() override;
 		void Reloading();
 		void Hitting();
@@ -77,5 +81,9 @@ namespace Gungeon
 		int					key = 0;
 		bool				flagLbutton = false;
 		float				timeWeaponFrameToOrigin = 0.0f;
+		float				timeFallEnd = 0.0f;
+		float				intervalFallEnd = 1.2f;
+		float				timeRespawnEnd = 0.0f;
+		float				intervalRespawnEnd = 0.7f;
 	};
 }

@@ -128,11 +128,11 @@ namespace Gungeon
         colTile->isFilled = false;
         colTile->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-        spawn = new ObImage(L"EnterTheGungeon/Boss_1/Spawn.png");
-        spawn->isVisible = true;
-        spawn->maxFrame.x = 20;
-        spawn->scale = Vector2(800.0f / 16.0f, 44.0f) * scaleFactor;
-        spawn->SetParentRT(*col);
+        respawn = new ObImage(L"EnterTheGungeon/Boss_1/Spawn.png");
+        respawn->isVisible = true;
+        respawn->maxFrame.x = 20;
+        respawn->scale = Vector2(800.0f / 16.0f, 44.0f) * scaleFactor;
+        respawn->SetParentRT(*col);
 
         idle = new ObImage(L"EnterTheGungeon/Boss_1/Idle.png");
         idle->isVisible = true;
@@ -265,31 +265,28 @@ namespace Gungeon
 
         hpGuageBar = new UI;
         hpGuageBar->img = new ObImage(L"EnterTheGungeon/boss_1/Hp_GuageBar.png");
-        hpGuageBar->img->scale = Vector2(400.0f, 30.0f) * hpGuageFactor;
-        hpGuageBar->img->SetWorldPosX(-hpGuageBar->img->scale.x / 2.0f);
-        hpGuageBar->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
+        hpGuageBar->imgSize = Vector2(400.0f, 30.0f) * hpGuageFactor;   // 게이지는 imgSize 필요
+        hpGuageBar->img->scale = hpGuageBar->imgSize;
+        hpGuageBar->anchor = DirState::dirB;
+        hpGuageBar->Spawn(Vector2(-hpGuageBar->img->scale.x / 2.0f, 40.0f));
         hpGuageBar->img->pivot = OFFSET_L;
         hpGuageBar->img->space = Space::screen;
-        hpGuageBar->img->zOrder = ZOrder::UI;
 
         hpGuage = new UI;
         hpGuage->img = new ObImage(L"EnterTheGungeon/boss_1/Hp_Guage.png");
-        hpGuage->imgSize.x = 330.0f * hpGuageFactor;
-        hpGuage->imgSize.y = 16.0f * hpGuageFactor;
-        hpGuage->img->scale = Vector2(330.0f, 16.0f) * hpGuageFactor;
-        hpGuage->img->SetWorldPosX(-hpGuage->img->scale.x / 2.0f);
-        hpGuage->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
+        hpGuage->imgSize = Vector2(330.0f, 16.0f) * hpGuageFactor;   // 게이지는 imgSize 필요
+        hpGuage->img->scale = hpGuage->imgSize;
+        hpGuage->anchor = DirState::dirB;
+        hpGuage->Spawn(Vector2(-hpGuage->img->scale.x / 2.0f, 40.0f));
         hpGuage->img->pivot = OFFSET_L;
         hpGuage->img->space = Space::screen;
-        hpGuage->img->zOrder = ZOrder::UI;
 
         cutScene = new UI;
-        cutScene->img = new ObImage(L"EnterTheGungeon/boss_1/CutScene.png");
+        cutScene->img = new ObImage(L"EnterTheGungeon/Level/CutScene.png");
         cutScene->img->maxFrame.x = 2;
-        cutScene->img->scale = Vector2(2800.0f / 2.0f, 740.0f);
+        cutScene->img->scale = Vector2(app.GetWidth(), app.GetHeight());
         cutScene->img->isVisible = false;
         cutScene->img->space = Space::screen;
-        cutScene->anchor = DirState::dirLB;
     }
 
     void Boss::InitBullet()
@@ -468,10 +465,10 @@ namespace Gungeon
 
     void Boss::ResizeScreen()
     {
-        hpGuageBar->img->SetWorldPosX(-hpGuageBar->img->scale.x / 2.0f);
-        hpGuageBar->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
-        hpGuage->img->SetWorldPosX(-hpGuage->img->scale.x / 2.0f);
-        hpGuage->img->SetWorldPosY(-app.GetHalfHeight() + 40.0f);
+        hpGuageBar->Spawn(Vector2(-hpGuageBar->img->scale.x / 2.0f, 40.0f));
+        hpGuage->Spawn(Vector2(-hpGuage->img->scale.x / 2.0f, 40.0f));
+        
+        cutScene->img->scale = Vector2(app.GetWidth(), app.GetHeight());
     }
 
     void Boss::Idle()
@@ -689,6 +686,8 @@ namespace Gungeon
 
     void Boss::StartDie()
     {
+        if (realDie) return;
+
         Unit::StartDie();
 
         die->ChangeAnim(AnimState::loop, intervalAnim[(int)State::die]);
@@ -757,28 +756,16 @@ namespace Gungeon
     {
         idle->isVisible = false;
         chairIdle->ChangeAnim(AnimState::stop, 0.2f);
-        spawn->isVisible = true;
-        spawn->ChangeAnim(AnimState::once, intervalAnim[(int)State::cinematic]);
+        respawn->isVisible = true;
+        respawn->ChangeAnim(AnimState::once, intervalAnim[(int)State::cinematic]);
     }
 
     void Boss::SpawnAnimEnd()
     {
-        spawn->isVisible = false;
+        respawn->isVisible = false;
         idle->isVisible = true;
         chairIdle->isVisible = true;
         chairIdle->ChangeAnim(AnimState::loop, 0.5f);
-    }
-
-    void Boss::DieAnim()
-    {
-        idle->isVisible = false;
-        die->isVisible = true;
-        die->ChangeAnim(AnimState::loop, intervalAnim[(int)State::cinematic]);
-        chairIdle->ChangeAnim(AnimState::stop, 0.2f);
-    }
-
-    void Boss::DieAnimEnd()
-    {
     }
 
     void Boss::ColToggle()

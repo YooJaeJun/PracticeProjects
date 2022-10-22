@@ -37,7 +37,6 @@ namespace Gungeon
 		float		timePlayerDisappear = 0.0f;
 		bool		flagPlayerDisappear = false;
 		float		timeClosed = 0.0f;
-		UI*			cinematicBox[2];
 		Vector2		playerDest;
 	};
 }

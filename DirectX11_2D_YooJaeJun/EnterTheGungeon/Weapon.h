@@ -34,12 +34,13 @@ namespace Gungeon
 		Vector2		pivotDefault;
 		Vector2		localPosDefault;
 		Vector2		localFirePosDefault;
+		Vector2		uiWeaponSpawnPos;
 		ObImage*	imgReloading = nullptr;
-		UI*			uiWeaponFrame = nullptr;
 		UI*			uiWeapon = nullptr;
 		UI*			uiBulletFrame = nullptr;
 		vector<UI*>	uiBullet;
-		UI*			uiBulletCount = nullptr;
+		UI*			uiBulletCountInfinity = nullptr;
+		Vector2		uiBulletCountInfinityPos;
 		int			bulletCount = 0;
 		WeaponType	type = WeaponType::pistol;
 		float		intervalFire;

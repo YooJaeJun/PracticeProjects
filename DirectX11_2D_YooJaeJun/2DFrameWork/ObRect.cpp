@@ -136,22 +136,22 @@ void ObRect::Render()
     }
 }
 
-Vector2 ObRect::lb()
+const Vector2 ObRect::lb() const
 {
     return Vector2(GetWorldPos().x - scale.x / 2.0f, GetWorldPos().y - scale.y / 2.0f);
 }
 
-Vector2 ObRect::rb()
+const Vector2 ObRect::rb() const
 {
     return Vector2(GetWorldPos().x + scale.x / 2.0f, GetWorldPos().y - scale.y / 2.0f);
 }
 
-Vector2 ObRect::lt()
+const Vector2 ObRect::lt() const
 {
     return Vector2(GetWorldPos().x - scale.x / 2.0f, GetWorldPos().y + scale.y / 2.0f);
 }
 
-Vector2 ObRect::rt()
+const Vector2 ObRect::rt() const
 {
     return Vector2(GetWorldPos().x + scale.x / 2.0f, GetWorldPos().y + scale.y / 2.0f);
 }
