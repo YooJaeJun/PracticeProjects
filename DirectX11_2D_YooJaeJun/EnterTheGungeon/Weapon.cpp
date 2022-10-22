@@ -27,9 +27,10 @@ namespace Gungeon
 		uiBulletCountInfinity->img = new ObImage(L"EnterTheGungeon/Weapon/UI_BulletCount_Infinity.png");
 		uiBulletCountInfinity->img->isVisible = false;
 		uiBulletCountInfinity->img->scale = Vector2(60.0f, 28.0f);
-		uiBulletCountInfinity->anchor = DirState::dirRB;
 		uiBulletCountInfinity->img->pivot = OFFSET_RB;
+		uiBulletCountInfinity->anchor = DirState::dirRB;
 		uiBulletCountInfinityPos = Vector2(-70.0f, 155.0f);
+		uiBulletCountInfinity->Spawn(uiBulletCountInfinityPos);
 		uiBulletCountInfinity->img->space = Space::screen;
 	}
 

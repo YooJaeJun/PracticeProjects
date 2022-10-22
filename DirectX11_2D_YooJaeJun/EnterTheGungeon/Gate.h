@@ -27,6 +27,7 @@ namespace Gungeon
 		virtual void Spawn(const Vector2 wpos) override;
 
 	public:
+		ObImage*	bottom = nullptr;
 		GateState	gateState = GateState::none;
 		float		timeOpen = 0.0f;
 		bool		flagIntersectPlayer = false;

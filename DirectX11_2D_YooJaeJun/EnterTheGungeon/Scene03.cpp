@@ -28,26 +28,17 @@ namespace Gungeon
         CAM->position = curRoom->Pos();
         CAM->zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
 
-        if (!player)
-        {
-            player = new Player();
-            player->state = State::cinematic;
-        }
-        else
-        {
-            player->Spawn(Vector2(0.0f, 0.0f));
-        }
+        player->Spawn(Vector2(0.0f, 0.0f));
+        player->state = State::cinematic;
 
-        if (!boss)
-        {
-            boss = new Boss();
-            boss->Spawn(Vector2(0.0f, 300.0f));
-            boss->state = State::cinematic;
-            boss->idle->isVisible = false;
-            boss->chairIdle->ChangeAnim(AnimState::stop, 0.1f);
-            cinematic = new Cinematic;
-            cinematic->cinematicState = CinematicState::cinematicBox1;
-        }
+        boss = new Boss();
+        boss->Spawn(Vector2(0.0f, 300.0f));
+        boss->state = State::cinematic;
+        boss->idle->isVisible = false;
+        boss->chairIdle->ChangeAnim(AnimState::stop, 0.1f);
+
+        cinematic = new Cinematic;
+        cinematic->cinematicState = CinematicState::cinematicBox1;
 
 
         SOUND->Stop("SCENE01");
@@ -139,27 +130,16 @@ namespace Gungeon
 
     void Scene03::Release()
     {
+        SafeRelease(curRoom);
         SafeRelease(boss);
         SafeRelease(cinematic);
     }
 
     void Scene03::Update()
     {
-        if (INPUT->KeyDown('1'))
+        if (INPUT->KeyDown('3'))
         {
-            Release();
-            SCENE->ChangeScene("Scene01", 1.0f);
-        }
-        else if (INPUT->KeyDown('2'))
-        {
-            Release();
-            isChangingScene = true;
-            SCENE->ChangeScene("Scene02", 1.0f);
-        }
-        else if (INPUT->KeyDown('3'))
-        {
-            isChangingScene = true;
-            SCENE->ChangeScene("Scene03", 1.0f);
+            ChangeScene3();
         }
 
         ChangeUpdateScene();
@@ -429,7 +409,6 @@ namespace Gungeon
                 case BossPattern::trail:
                     if (MAP->tilemap->isOnWall(on))
                     {
-                        // bulletElem->Hit(1);
                         if (on.y <= 6 || on.y >= 21)
                         {
                             bulletElem->moveDir.y *= -1.0f;
@@ -486,6 +465,12 @@ namespace Gungeon
             LIGHT->light.lightColor.y = 0.5f;
             LIGHT->light.lightColor.z = 0.5f;
         }
+    }
+
+    void Scene03::ChangeScene3()
+    {
+        isChangingScene = true;
+        SCENE->ChangeScene("Scene03", 1.0f);
     }
 
     // ġƮ

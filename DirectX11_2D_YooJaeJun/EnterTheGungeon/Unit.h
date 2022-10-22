@@ -19,8 +19,8 @@ namespace Gungeon
 		virtual void Attack();
 		virtual void Hit(const int damage);
 		virtual void Die();
-		void StartWalk();
-		void StartIdle();
+		virtual void StartWalk();
+		virtual void StartIdle();
 		virtual void StartAttack();
 		virtual void StartDie();
 		virtual void Spawn(const Vector2 wpos) override;

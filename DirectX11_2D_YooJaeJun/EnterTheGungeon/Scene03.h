@@ -18,14 +18,17 @@ namespace Gungeon
 		void IntersectPlayer();
 		void IntersectBoss();
 		void ChangeUpdateScene();
+		void ChangeScene3();
 		void ColToggle();
 
 	public:
+		Room* curRoom = nullptr;
+		Player* player = nullptr;
+		Boss* boss = nullptr;
+		Cinematic* cinematic = nullptr;
+
+	private:
 		bool		isChangingScene = false;
 		float		timeFade = 0.0f;
-		Room*		curRoom = nullptr;
-		Player*		player = nullptr;
-		Boss*		boss = nullptr;
-		Cinematic*	cinematic = nullptr;
 	};
 }

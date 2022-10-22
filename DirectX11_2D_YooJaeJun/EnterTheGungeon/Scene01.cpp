@@ -4,7 +4,6 @@ namespace Gungeon
 {
     Scene01::Scene01()
     {
-        Init();
     }
 
     Scene01::~Scene01()
@@ -48,19 +47,11 @@ namespace Gungeon
     {
         if (INPUT->KeyDown('1'))
         {
-            MAP->Init();
-            mapGen->Release();
-            mapGen->Init();
+            ChangeScene1();
         }
         else if (INPUT->KeyDown('2'))
         {
-            isChangingScene = true;
-            SCENE->ChangeScene("Scene02", 1.0f);
-        }
-        else if (INPUT->KeyDown('3'))
-        {
-            isChangingScene = true;
-            SCENE->ChangeScene("Scene03", 1.0f);
+            ChangeScene2();
         }
 
 
@@ -100,6 +91,25 @@ namespace Gungeon
     void Scene01::ResizeScreen()
     {
         if (mapGen) mapGen->ResizeScreen();
+    }
+
+    void Scene01::ChangeScene1()
+    {
+        MAP->Init();
+        mapGen->Release();
+        mapGen->Init();
+    }
+
+    void Scene01::ChangeScene2()
+    {
+        isChangingScene = true;
+        {
+            Scene02* tempScene = new Scene02();
+            tempScene->mapGen = mapGen;
+            tempScene->player = player;
+            SCENE->AddScene("Scene02", tempScene);
+        }
+        SCENE->ChangeScene("Scene02", 1.0f);
     }
 
     void Scene01::ChangeUpdateScene()

@@ -47,7 +47,7 @@ namespace Gungeon
         intervalEnd[(int)BossPattern::none] = 0.0f;
         intervalEnd[(int)BossPattern::circular] = 5.8f;
         intervalEnd[(int)BossPattern::string] = 11.5f;
-        intervalEnd[(int)BossPattern::shield] = 15.0f;
+        intervalEnd[(int)BossPattern::shield] = 12.0f;
         intervalEnd[(int)BossPattern::spiral] = 6.0f;
         intervalEnd[(int)BossPattern::trail] = 8.0f;
         intervalEnd[(int)BossPattern::miro] = 13.0f;
@@ -442,7 +442,10 @@ namespace Gungeon
         attack2->Render();
         attack3->Render();
 
-        for (auto& elem : bullet) elem->Render();
+        for (auto& elem : bullet)
+        {
+            elem->Render();
+        }
 
         firePosTargeting->Render();
         firePosCannon->Render();
@@ -531,10 +534,10 @@ namespace Gungeon
 
             if (TIMER->GetTick(timeAttackEnd, intervalEnd[(int)pattern]))
             {
-                attackState = BossAttackState::end;
+                attackState = BossAttackState::reload;
             }
             break;
-        case Gungeon::BossAttackState::end:
+        case Gungeon::BossAttackState::reload:
             idle->isVisible = true;
             attack1->isVisible = false;
             attack2->isVisible = false;
@@ -543,14 +546,28 @@ namespace Gungeon
             chairAttack2->isVisible = false;
             chairAttack3->isVisible = false;
             chairIdle->isVisible = true;
-            attackState = BossAttackState::none;
-            state = State::walk;
+
+            HitBullet();
+
+            attackState = BossAttackState::end;
+            break;
+        case Gungeon::BossAttackState::end:
+            if (TIMER->GetTick(timeInit, intervalInit))
+            {
+                attackState = BossAttackState::none;
+                state = State::walk;
+            }
             break;
         default:
             break;
         }
 
-        UpdateBullet();
+
+        if (attackState != BossAttackState::reload &&
+            attackState != BossAttackState::end)
+        {
+            UpdateBullet();
+        }
     }
 
     void Boss::Die()
@@ -569,8 +586,16 @@ namespace Gungeon
         pushedDir = dir;
 
         Unit::Hit(damage);
+        if (attackState == BossAttackState::loop)
+        {
+            hit->isVisible = false;
+            hit->ChangeAnim(AnimState::stop, 0.1f);
+        }
+        else
+        {
+            hit->ChangeAnim(AnimState::once, 0.1f);
+        }
 
-        hit->ChangeAnim(AnimState::once, 0.1f);
 
         if (pushedDir.x < 0.0f)
         {
@@ -791,12 +816,11 @@ namespace Gungeon
         curBulletIdx = 0;
         scalar = 120.0f;
 
-        HitBullet();
-
         for (auto& elem : bullet)
         {
             SafeDelete(elem);
         }
+        bullet.clear();
     }
 
     void Boss::InitCircular()
@@ -851,7 +875,7 @@ namespace Gungeon
 
     void Boss::InitShield()
     {
-        scalar *= 1.5f;
+        scalar *= 1.2f;
 
         bullet.resize(shieldMax);
 
@@ -1062,7 +1086,7 @@ namespace Gungeon
 
             elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
             elem->col->rotation += idx * 10.0f * ToRadian * DELTA;
-            elem->col->rotation2 += idx * 5.0f * ToRadian * DELTA;
+            elem->col->rotation2 += idx * 4.0f * ToRadian * DELTA;
 
             idx++;
         }

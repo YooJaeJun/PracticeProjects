@@ -38,7 +38,7 @@ namespace Gungeon
 
 	public:
 		CinematicState cinematicState = CinematicState::none;
-		UI* cinematicBox[2];
+		UI* box[2];
 		float timeCinematic[(int)CinematicState::max];
 		float intervalCinematic[(int)CinematicState::max];
 	};

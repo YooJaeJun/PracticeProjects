@@ -26,11 +26,18 @@ namespace Gungeon
 
         idle = new ObImage(L"EnterTheGungeon/Level/Gate.png");
         idle->isVisible = false;
-        idle->maxFrame.x = 9;
-        idle->scale = Vector2(604.0f / 9.0f, 165.0f) * scaleFactor;
+        idle->maxFrame.x = 15;
+        idle->scale = Vector2(960.0f / 15.0f, 165.0f) * scaleFactor;
         idle->SetParentRT(*col);
         idle->SetLocalPosY(-20.0f);
         idle->pivot = OFFSET_B;
+
+        bottom = new ObImage(L"EnterTheGungeon/Level/Gate_Bottom.png");
+        bottom->isVisible = false;
+        bottom->scale = Vector2(64.0f, 73.0f) * scaleFactor;
+        bottom->SetParentRT(*col);
+        bottom->SetLocalPosY(-20.0f);
+        bottom->pivot = OFFSET_B;
 
         gateState = GateState::none;
     }
@@ -107,6 +114,7 @@ namespace Gungeon
         Obstacle::Update();
         col->Update();
         colTile->Update();
+        bottom->Update();
     }
 
     void Gate::LateUpdate()
@@ -115,6 +123,7 @@ namespace Gungeon
 
     void Gate::Render()
     {
+        bottom->Render();
         Obstacle::Render();
         col->Render();
         colTile->Render();
@@ -123,8 +132,9 @@ namespace Gungeon
     void Gate::Spawn(const Vector2 wpos)
     {
         SetPos(wpos);
-        idle->ChangeAnim(AnimState::once, 0.1f);
+        idle->ChangeAnim(AnimState::once, 0.15f);
         idle->isVisible = true;
+        bottom->isVisible = true;
         gateState = GateState::opening;
     }
 }

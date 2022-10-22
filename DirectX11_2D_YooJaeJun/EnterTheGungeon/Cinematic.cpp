@@ -9,7 +9,7 @@ namespace Gungeon
 
     void Cinematic::Init()
     {
-        for (auto& elem : cinematicBox)
+        for (auto& elem : box)
         {
             elem = new UI;
             elem->img = new ObImage(L"EnterTheGungeon/Level/Cinematic_Box.png");
@@ -20,10 +20,10 @@ namespace Gungeon
             elem->img->space = Space::screen;
             elem->img->pivot = OFFSET_LT;
         }
-        cinematicBox[0]->anchor = DirState::dirLT;
-        cinematicBox[0]->Spawn(Vector2(0.0f, 150.0f));
-        cinematicBox[1]->anchor = DirState::dirLB;
-        cinematicBox[1]->Spawn(Vector2(0.0f, 0.0f));
+        box[0]->anchor = DirState::dirLT;
+        box[0]->Spawn(Vector2(0.0f, 150.0f));
+        box[1]->anchor = DirState::dirLB;
+        box[1]->Spawn(Vector2(0.0f, 0.0f));
 
         cinematicState = CinematicState::none;
 
@@ -41,7 +41,7 @@ namespace Gungeon
 
     void Cinematic::Release()
     {
-        for (auto& elem : cinematicBox) elem->Release();
+        for (auto& elem : box) elem->Release();
     }
 
     void Cinematic::Update()
@@ -52,6 +52,8 @@ namespace Gungeon
         case Gungeon::CinematicState::none:
             break;
         case Gungeon::CinematicState::cinematicBox1:
+            box[0]->img->isVisible = true;
+            box[1]->img->isVisible = true;
             BoxUp(true);
 
             if (TIMER->GetTick(timeCinematic[(int)CinematicState::cinematicBox1],
@@ -87,6 +89,8 @@ namespace Gungeon
 
             // »ç¸Á¿¬Ãâ
         case Gungeon::CinematicState::cinematicBox3:
+            box[0]->img->isVisible = true;
+            box[1]->img->isVisible = true;
             BoxUp(true);
 
             if (TIMER->GetTick(timeCinematic[(int)CinematicState::cinematicBox3],
@@ -114,28 +118,26 @@ namespace Gungeon
             break;
         }
 
-        for (auto& elem : cinematicBox) elem->Update();
+        for (auto& elem : box) elem->Update();
     }
 
     void Cinematic::Render()
     {
-        for (auto& elem : cinematicBox) elem->Render();
+        for (auto& elem : box) elem->Render();
     }
 
     void Cinematic::ResizeScreen()
     {
-        cinematicBox[0]->Spawn(Vector2(0.0f, 150.0f));
-        cinematicBox[1]->Spawn(Vector2(0.0f, 0.0f));
+        box[0]->Spawn(Vector2(0.0f, 150.0f));
+        box[1]->Spawn(Vector2(0.0f, 0.0f));
     }
 
     void Cinematic::BoxUp(const bool isUp)
     {
         float factor = 75.0f;
-        if (false == isUp) factor *= factor;
+        if (false == isUp) factor *= -1;
 
-        cinematicBox[0]->img->isVisible = isUp;
-        cinematicBox[0]->img->MoveWorldPos(Vector2(0.0f, -factor * DELTA));
-        cinematicBox[1]->img->isVisible = isUp;
-        cinematicBox[1]->img->MoveWorldPos(Vector2(0.0f, factor * DELTA));
+        box[0]->img->MoveWorldPos(Vector2(0.0f, -factor * DELTA));
+        box[1]->img->MoveWorldPos(Vector2(0.0f, factor * DELTA));
     }
 }

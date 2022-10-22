@@ -45,7 +45,7 @@ namespace Gungeon
 
 		colTile = new ObRect;
 		colTile->isVisible = false;
-		colTile->scale = Vector2(col->scale.x, col->scale.y / 2.0f + 15.0f);
+		colTile->scale = Vector2(col->scale.x * 0.8f, col->scale.y / 2.0f + 15.0f);
 		colTile->SetParentRT(*col);
 		colTile->SetLocalPosY(-20.0f);
 		colTile->isFilled = false;
@@ -99,7 +99,7 @@ namespace Gungeon
 	void Player::InitWeapon()
 	{
 		curWeaponIdx = 0;
-		weapons[curWeaponIdx] = new Weapon3;
+		weapons[curWeaponIdx] = new Weapon1;
 		weapons[curWeaponIdx]->col->SetParentRT(*col);
 		weapons[curWeaponIdx]->col->SetLocalPos(Vector2(10.0f, -15.0f));
 		weapons[curWeaponIdx]->Equip();
@@ -385,6 +385,15 @@ namespace Gungeon
 					45.0f,
 					L"Alagard");
 			}
+		}
+
+		if (flagInteractionUI)
+		{
+			DWRITE->RenderText(L"E키 입력",
+				RECT{ (long)app.GetHalfWidth() + 100, (long)app.GetHalfHeight() + 50,
+				(long)app.GetWidth(), (long)app.GetHeight() },
+				30.0f,
+				L"PF스타더스트");
 		}
 	}
 
@@ -739,12 +748,14 @@ namespace Gungeon
 	{
 		Unit::StartWalk();
 		roll->isVisible = false;
+		respawn->isVisible = false;
 	}
 
 	void Player::StartIdle()
 	{
 		Unit::StartIdle();
 		roll->isVisible = false;
+		respawn->isVisible = false;
 	}
 
 	void Player::StartRoll()
@@ -775,6 +786,7 @@ namespace Gungeon
 		walk->isVisible = false;
 		roll->isVisible = false;
 		weapons[curWeaponIdx]->idle->isVisible = false;
+		weapons[curWeaponIdx]->imgReloading->isVisible = false;
 		shadow->isVisible = false;
 
 		fall->isVisible = true;
@@ -959,7 +971,7 @@ namespace Gungeon
 		}
 
 		afterWeapon->col->SetParentRT(*col);
-		afterWeapon->col->SetLocalPos(Vector2(10.0f, -15.0f));
+		afterWeapon->col->SetLocalPos(afterWeapon->localPosDefault);
 		afterWeapon->Equip();
 
 		// bullet

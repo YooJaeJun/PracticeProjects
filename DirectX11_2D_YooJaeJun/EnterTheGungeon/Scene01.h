@@ -15,10 +15,13 @@ namespace Gungeon
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
 
+		void ChangeScene1();
+		void ChangeScene2();
 		void ChangeUpdateScene();
 
 	public:
 		ProcedureMapGeneration* mapGen = nullptr;
+		Player*					player = nullptr;
 		bool					isChangingScene = false;
 		float					timeFade = 0.0f;
 	};

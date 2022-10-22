@@ -2,7 +2,7 @@
 
 namespace Gungeon
 {
-	const int enemyMax = 1;
+	const int enemyMax = 4;
 	const int doorMax = 10;
 
 	enum class GameState
@@ -45,6 +45,9 @@ namespace Gungeon
 		void IntersectEnemy();
 		void GateProcess();
 		void ChangeUpdateScene();
+		void ChangeScene1();
+		void ChangeScene2();
+		void ChangeScene3();
 		void ColToggle();
 
 	public:

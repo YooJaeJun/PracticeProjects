@@ -14,6 +14,6 @@ namespace Gungeon
 
 	private:
 		ProcedureMapGeneration* mapGen = nullptr;
-		Player* player = nullptr;
+		Player*					player = nullptr;
 	};
 }

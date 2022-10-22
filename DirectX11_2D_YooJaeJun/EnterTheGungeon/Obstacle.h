@@ -13,6 +13,5 @@ namespace Gungeon
 
 	public:
 		ObImage*	idle = nullptr;
-		bool		isOpen = false;
 	};
 }

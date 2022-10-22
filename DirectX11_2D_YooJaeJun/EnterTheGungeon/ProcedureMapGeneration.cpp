@@ -890,7 +890,7 @@ namespace Gungeon
 
         Int2 on;
         MAP->tilemap->WorldPosToTileIdx(treasure->Pos(), on);
-        Vector2 wpos = MAP->tilemap->TileIdxToWorldPos(Int2(on.x -2, on.y));
+        Vector2 wpos = MAP->tilemap->TileIdxToWorldPos(Int2(on.x, on.y));
         float tileXHalf = MAP->tilemap->scale.x / 2.0f;
         float tileYHalf = MAP->tilemap->scale.y / 2.0f;
         treasure->treasureSpawner->SetWorldPos(Vector2(wpos.x + tileXHalf, wpos.y + tileYHalf));

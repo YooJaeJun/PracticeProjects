@@ -8,25 +8,16 @@ void Main::Init()
     LIGHT->light.select = 0.0f;
 
     mapGen = new ProcedureMapGeneration;
+    player = new Player;
 
     {
         Scene01* tempScene = new Scene01();
         tempScene->mapGen = mapGen;
+        tempScene->player = player;
         SCENE->AddScene("Scene01", tempScene);
     }
-    {
-        Scene02* tempScene = new Scene02();
-        tempScene->mapGen = mapGen;
-        tempScene->player = player;
-        SCENE->AddScene("Scene02", tempScene);
-    }
-    {
-        Scene03* tempScene = new Scene03();
-        tempScene->player = player;
-        SCENE->AddScene("Scene03", tempScene);
-    }
 
-    SCENE->ChangeScene("Scene03");
+    SCENE->ChangeScene("Scene01");
 }
 
 void Main::Release()

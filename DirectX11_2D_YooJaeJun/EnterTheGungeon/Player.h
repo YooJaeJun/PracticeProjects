@@ -34,8 +34,8 @@ namespace Gungeon
 		void FireProcess();
 		void Fire();
 		void ShakeCam(float& time);
-		void StartWalk();
-		void StartIdle();
+		virtual void StartWalk() override;
+		virtual void StartIdle() override;
 		void StartRoll();
 		void StartFall();
 		void StartRespawn();
@@ -85,5 +85,6 @@ namespace Gungeon
 		float				intervalFallEnd = 1.2f;
 		float				timeRespawnEnd = 0.0f;
 		float				intervalRespawnEnd = 0.7f;
+		bool				flagInteractionUI = false;
 	};
 }

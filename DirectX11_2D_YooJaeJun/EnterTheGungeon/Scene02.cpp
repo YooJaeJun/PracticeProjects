@@ -4,7 +4,6 @@ namespace Gungeon
 {
     Scene02::Scene02()
     {
-        Init();
     }
 
     Scene02::~Scene02()
@@ -14,8 +13,6 @@ namespace Gungeon
     void Scene02::Init()
     {
         MAP->useGui = false;
-
-        if (!player) player = new Player();
 
         spawnEffect.resize(enemyMax);
         for (auto& elem : spawnEffect)
@@ -91,34 +88,26 @@ namespace Gungeon
             idx++;
         }
         for (auto& elem : enemy) SafeRelease(elem);
-        SafeRelease(player);
+        SafeRelease(curRoom);
+        SafeRelease(gate);
+        SafeRelease(cinematic);
+        for (auto& elem : door) SafeRelease(elem);
+        SafeRelease(treasureBox);
     }
 
     void Scene02::Update()
     {
         if (INPUT->KeyDown('1'))
         {
-            gameState = GameState::start;
-            isChangingScene = true;
-            SCENE->ChangeScene("Scene01", 1.0f);
+            ChangeScene1();
         }
         else if (INPUT->KeyDown('2'))
         {
-            gameState = GameState::start;
-            if (curRoom)
-            {
-                for (auto& elem : curRoom->doorTileIdxs)
-                {
-                    MAP->tilemap->SetTileState(elem, TileState::door);
-                }
-            }
-            Release();
-            Init();
+            ChangeScene2();
         }
         else if (INPUT->KeyDown('3'))
         {
-            isChangingScene = true;
-            SCENE->ChangeScene("Scene03", 1.0f);
+            ChangeScene3();
         }
 
         ChangeUpdateScene();
@@ -154,6 +143,7 @@ namespace Gungeon
         if (treasureBox) treasureBox->Update();
         for (auto& elem : door) elem->Update();
         for (auto& elem : spawnEffect) if (elem) elem->Update();
+        player->Update();
         for (auto& elem : enemy) if (elem) elem->Update();
         cinematic->Update();
     }
@@ -174,7 +164,6 @@ namespace Gungeon
         case Gungeon::GameState::waitingSpawn:
         case Gungeon::GameState::fight:
             IntersectPlayer();
-            player->Update();
             IntersectEnemy();
             break;
         }
@@ -325,15 +314,16 @@ namespace Gungeon
             {
                 flagAllDie = false;
                 elem->targetPos = player->Pos();
+            }
 
-                switch (elem->state)
-                {
-                case State::attack:
-                case State::cinematic:
-                    break;
-                default:
-                    elem->FindPath(MAP->tilemap);
-                }
+            switch (elem->state)
+            {
+            case State::attack:
+            case State::cinematic:
+            case State::die:
+                break;
+            default:
+                elem->FindPath(MAP->tilemap);
             }
         }
 
@@ -379,7 +369,7 @@ namespace Gungeon
 
     void Scene02::SetCamera()
     {
-        CAM->position = curRoom->Pos();
+        if (curRoom) CAM->position = curRoom->Pos();
         CAM->zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
     }
 
@@ -415,8 +405,12 @@ namespace Gungeon
 
     void Scene02::SpawnTreasureBox()
     {
-        treasureBox = new TreasureBox;
-        treasureBox->SetPos(curRoom->treasureSpawner->GetWorldPos());
+        if (!treasureBox)
+        {
+            treasureBox = new TreasureBox;
+            treasureBox->SetPos(curRoom->treasureSpawner->GetWorldPos());
+            treasureBox->treasureState = TreasureState::spawn;
+        }
     }
 
     void Scene02::IntersectPlayer()
@@ -444,39 +438,50 @@ namespace Gungeon
 
             if (treasureBox)
             {
-                if (false == treasureBox->isOpen)
+                if (treasureBox->treasureState == TreasureState::spawn)
                 {
                     if (player->col->Intersect(treasureBox->col))
                     {
-                        treasureBox->idle->ChangeAnim(AnimState::once, 0.5f);
-                        treasureBox->idle->color = Color(0.5f, 0.5f, 0.5f, 0.5f);
-                        treasureBox->isOpen = true;
+                        player->flagInteractionUI = true;
 
-                        treasureBox->weaponA = new Weapon2;
-                        treasureBox->weaponA->Spawn(Vector2(treasureBox->Pos().x - 100.0f, treasureBox->Pos().y));
-                        treasureBox->weaponA->idle->isVisible = true;
-                        treasureBox->weaponA->idle->Update();
-
-                        treasureBox->weaponB = new Weapon3;
-                        treasureBox->weaponB->Spawn(Vector2(treasureBox->Pos().x + 100.0f, treasureBox->Pos().y));
-                        treasureBox->weaponB->idle->isVisible = true;
-                        treasureBox->weaponB->idle->Update();
+                        if (INPUT->KeyDown('E'))
+                        {
+                            treasureBox->treasureState = TreasureState::opening;
+                            player->flagInteractionUI = false;
+                        }
                     }
                 }
+                else
+                {
+                    bool flagOnceInteraction = false;
+                    int weaponIdx = 0;
+                    for (auto& elem : treasureBox->weapon)
+                    {
+                        if (elem &&
+                            elem->state == State::idle &&
+                            player->col->Intersect(elem->col))
+                        {
+                            if (INPUT->KeyDown('E'))
+                            {
+                                elem->Hit();
+                                player->EquipWeapon(elem);
+                            }
+                            else
+                            {
+                                flagOnceInteraction = true;
+                            }
+                        }
+                        weaponIdx++;
+                    }
 
-                if (treasureBox->weaponA &&
-                    treasureBox->weaponA->state == State::idle &&
-                    player->col->Intersect(treasureBox->weaponA->col))
-                {
-                    treasureBox->weaponA->Hit();
-                    player->EquipWeapon(treasureBox->weaponA);
-                }
-                else if (treasureBox->weaponB &&
-                    treasureBox->weaponB->state == State::idle &&
-                    player->col->Intersect(treasureBox->weaponB->col))
-                {
-                    treasureBox->weaponB->Hit();
-                    player->EquipWeapon(treasureBox->weaponB);
+                    if (flagOnceInteraction)
+                    {
+                        player->flagInteractionUI = true;
+                    }
+                    else
+                    {
+                        player->flagInteractionUI = false;
+                    }
                 }
             }
 
@@ -616,7 +621,9 @@ namespace Gungeon
 
     void Scene02::GateProcess()
     {
-        if (roomClearCount >= roomClearCountForBossBattle)
+        if (roomClearCount >= roomClearCountForBossBattle &&
+            curRoom->roomType != RoomType::start &&
+            curRoom->roomType != RoomType::treasure)
         {
             roomClearCount = 0;
             gate->Spawn(curRoom->Pos());
@@ -636,6 +643,8 @@ namespace Gungeon
             break;
 
         case Gungeon::GateState::cinematic:
+            cinematic->box[0]->img->isVisible = true;
+            cinematic->box[1]->img->isVisible = true;
             cinematic->BoxUp(true);
             player->state = State::cinematic;
             break;
@@ -681,8 +690,7 @@ namespace Gungeon
 
         case Gungeon::GateState::closed:
             gate->gateState = GateState::none;
-            isChangingScene = true;
-            SCENE->ChangeScene("Scene03", 1.0f);
+            ChangeScene3();
             break;
         }
     }
@@ -709,6 +717,38 @@ namespace Gungeon
             LIGHT->light.lightColor.y = 0.5f;
             LIGHT->light.lightColor.z = 0.5f;
         }
+    }
+
+    void Scene02::ChangeScene1()
+    {
+        gameState = GameState::start;
+        isChangingScene = true;
+        SCENE->ChangeScene("Scene01", 1.0f);
+    }
+
+    void Scene02::ChangeScene2()
+    {
+        gameState = GameState::start;
+        if (curRoom)
+        {
+            for (auto& elem : curRoom->doorTileIdxs)
+            {
+                MAP->tilemap->SetTileState(elem, TileState::door);
+            }
+        }
+        Release();
+        Init();
+    }
+
+    void Scene02::ChangeScene3()
+    {
+        isChangingScene = true;
+        {
+            Scene03* tempScene = new Scene03();
+            tempScene->player = player;
+            SCENE->AddScene("Scene03", tempScene);
+        }
+        SCENE->ChangeScene("Scene03", 1.0f);
     }
 
     // ġƮ

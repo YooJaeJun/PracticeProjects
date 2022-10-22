@@ -21,6 +21,7 @@ namespace Gungeon
 		none,
 		start,
 		loop,
+		reload,
 		end
 	};
 
@@ -125,5 +126,7 @@ namespace Gungeon
 		bool				flagRandomPattern = false;
 		UI*					cutScene = nullptr;
 		bool				realDie = false;
+		float				timeInit = 0.0f;
+		float				intervalInit = 1.0f;
 	};
 }
