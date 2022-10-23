@@ -4,6 +4,7 @@ namespace Gungeon
 {
 	enum class MapGenState 
 	{ 
+		none,
 		spray, 
 		spread, 
 		select, 
@@ -90,13 +91,13 @@ namespace Gungeon
 
 	public:
 		// 동적할당하지 않은 변수들은 보여주기 용도
+		bool						autoProcess = false;
 		float						timer = 0.0f;
-		// Spread
-		bool						flagSpread = false;
 		// Room
 		vector<Room*>				candidateRooms;
 		vector<Room*>				selectedRooms;
-		MapGenState					state = MapGenState::spray;
+		MapGenState					state = MapGenState::none;
+		MapGenState					finalState = MapGenState::none;
 		float						roomScaleForSelect = 0.0f;
 		// Delaunay Triangulation
 		vector<ObNode>				roomNode;

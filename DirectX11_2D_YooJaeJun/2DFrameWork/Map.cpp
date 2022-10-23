@@ -15,7 +15,7 @@ void Map::Init()
     SafeDelete(tilemap);
     tilemap = new ObTileMap;
     tilemap->scale = Vector2(100.0f, 100.0f);
-    tilemap->SetWorldPos(Vector2(-app.GetHalfWidth() - 5000.0f, -app.GetHalfHeight() - 5000.0f));
+    tilemap->SetWorldPos(Vector2(-5000.0f, -5000.0f));
     imgIdx = 1;
     tileSize = Int2(120, 120);
     tilemap->ResizeTile(tileSize);
@@ -93,26 +93,34 @@ void Map::SetTilemapGUI()
         }
     }
 
-    //Coord
-    ImGui::Text("cam pos : %f , %f", CAM->position.x, CAM->position.y);
+    //ImageButton
+    tilemap->RenderGui(pickingIdx, imgIdx);
+    ImGui::Text("Picking Idx : %d , %d", pickingIdx.x, pickingIdx.y);
+    ImGui::Text("Img Idx : %d", imgIdx);
 
-    ImGui::Text("mouse pos : %f , %f", INPUT->GetWorldMousePos().x, INPUT->GetWorldMousePos().y);
+    //maxFrame
+    ImGui::InputInt2("Max Frame", (int*)&tilemap->tileImages[imgIdx]->maxFrame);
+
+    //Coord
+    ImGui::Text("Camera Pos : %f , %f", CAM->position.x, CAM->position.y);
+    ImGui::Text("Camera Zoom Factor : %f", CAM->zoomFactor.x);
+
+    ImGui::Text("Mouse Pos : %f , %f", INPUT->GetWorldMousePos().x, INPUT->GetWorldMousePos().y);
 
     if (tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), mouseIdx))
     {
-        ImGui::Text("mouseIdx : %d , %d", mouseIdx.x, mouseIdx.y);
-        ImGui::Text("mouseOverTileState : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].state);
-        ImGui::Text("mouseOverRoomIndex : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].roomIdx);
-        ImGui::Text("mouseOverTileDir : %d", static_cast<int>(tilemap->Tiles[mouseIdx.x][mouseIdx.y].dir));
+        ImGui::Text("Mouse Idx : %d , %d", mouseIdx.x, mouseIdx.y);
+        ImGui::Text("MouseOver TileState : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].state);
+        ImGui::Text("MouseOver RoomIndex : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].roomIdx);
+        ImGui::Text("MouseOver TileDir : %d", static_cast<int>(tilemap->Tiles[mouseIdx.x][mouseIdx.y].dir));
     }
-
-    //ImageButton
-    tilemap->RenderGui(pickingIdx, imgIdx);
-    ImGui::Text("pickingIdx : %d , %d", pickingIdx.x, pickingIdx.y);
-    ImGui::Text("imgIdx : %d", imgIdx);
-
-    //maxFrame
-    ImGui::InputInt2("maxFrame", (int*)&tilemap->tileImages[imgIdx]->maxFrame);
+    else
+    {
+        ImGui::Text("Mouse Idx : NoTileZone");
+        ImGui::Text("MouseOver TileState : NoTileZone");
+        ImGui::Text("MouseOver RoomIndex : NoTileZone");
+        ImGui::Text("MouseOver TileDir : NoTileZone");
+    }
 
     //SaveLoad
     if (GUI->FileImGui("Save", "Save Map",
@@ -138,15 +146,17 @@ void Map::SetTilemapGUI()
     max.x = min.x + ImGui::GetWindowSize().x;
     max.y = min.y + ImGui::GetWindowSize().y;
 
-    if (!ImGui::IsMouseHoveringRect(min, max))
+    if (!ImGui::IsMouseHoveringRect(min, max, false) &&
+        !ImGuiFileDialog::Instance()->IsOpened())
     {
         if (INPUT->KeyPress(VK_LBUTTON))
         {
-            Vector2 a = INPUT->GetWorldMousePos();
             if (tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), mouseIdx))
             {
                 tilemap->SetTile(mouseIdx, pickingIdx, imgIdx, tileState, tileColor);
             }
         }
     }
+
+    tilemap->Update();
 }

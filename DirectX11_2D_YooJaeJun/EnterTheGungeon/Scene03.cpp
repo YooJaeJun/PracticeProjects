@@ -13,6 +13,8 @@ namespace Gungeon
     void Scene03::Init()
     {
         // tilemap
+        MAP->useGui = false;
+
         MAP->tilemap = new ObTileMap;
         MAP->tilemap->scale = Vector2(100.0f, 100.0f);
         MAP->tilemap->SetWorldPos(Vector2(-app.GetHalfWidth() - 1000.0f, -app.GetHalfHeight() - 1000.0f));

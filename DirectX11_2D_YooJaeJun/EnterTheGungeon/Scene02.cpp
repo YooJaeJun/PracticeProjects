@@ -369,7 +369,7 @@ namespace Gungeon
 
     void Scene02::SetCamera()
     {
-        if (curRoom) CAM->position = curRoom->Pos();
+        if (curRoom && curRoom->col) CAM->position = curRoom->Pos();
         CAM->zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
     }
 

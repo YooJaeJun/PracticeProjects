@@ -9,12 +9,148 @@ namespace Gungeon
 
     void ProcedureMapGeneration::Init()
     {
-        MAP->useGui = true;
-
+        MAP->useGui = false;
         LIGHT->light.radius = 4000.0f;
+        state = MapGenState::none;
+        finalState = state;
+    }
 
-        state = MapGenState::spray;
+    void ProcedureMapGeneration::Release()
+    {
+        for (auto& elem : candidateRooms) elem->Release();
+        candidateRooms.clear();
+        for (auto& elem : selectedRooms) elem->Release();
+        selectedRooms.clear();
+        roomNode.clear();
+        triangulation.nodesLinked.clear();
+        triangulation.edges.clear();
+        triangulation.triangles.clear();
+        triangulation.nodesForIndex.clear();
+        visited.clear();
+        linesTriangulated.clear();
+        linesMST.clear();
+        passages.clear();
+    }
 
+    void ProcedureMapGeneration::Update()
+    {
+        if (state != MapGenState::finish)
+        {
+            if (ImGui::Button("Next Step"))
+            {
+                state = (MapGenState)((int)finalState + 1);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Auto"))
+            {
+                autoProcess = true;
+            }
+        }
+
+        switch (state)
+        {
+        case MapGenState::spray:
+            Spray();
+            break;
+
+        case MapGenState::spread:
+            Spread();
+            break;
+
+        case MapGenState::select:
+            Select();
+            break;
+
+        case MapGenState::triangulate:
+            Triangulate();
+            break;
+
+        case MapGenState::span:
+            Spanning();
+            break;
+
+        case MapGenState::loop:
+            Loop();
+            break;
+
+        case MapGenState::clean:
+            Clean();
+            break;
+
+        case MapGenState::roomTile:
+            RoomTile();
+            break;
+
+        case MapGenState::passageTile:
+            PassageTile();
+            break;
+
+        case MapGenState::passagePitTile:
+            PassagePitTile();
+            break;
+
+        case MapGenState::prop:
+            Prop();
+            break;
+
+        case MapGenState::spawner:
+            Spawner();
+            break;
+
+        case MapGenState::propPit:
+            PropPit();
+            break;
+
+        case MapGenState::propWall:
+            PropWall();
+            MAP->useGui = true;
+            break;
+
+        case MapGenState::finish:
+            Finish();
+            autoProcess = false;
+            break;
+        }//switch
+
+        if (state != MapGenState::finish)
+        {
+            if (autoProcess)
+            {
+                finalState = state;
+                state = (MapGenState)((int)state + 1);
+            }
+            else if (state != MapGenState::none)
+            {
+                finalState = state;
+                state = MapGenState::none;
+            }
+        }
+
+
+        for (auto& elem : candidateRooms) if (elem) elem->Update();
+        for (auto& elem : selectedRooms) if (elem) elem->Update();
+        for (auto& elem : linesTriangulated) elem.Update();
+        for (auto& elem : linesMST) elem.Update();
+    }
+
+    void ProcedureMapGeneration::LateUpdate()
+    {
+    }
+
+    void ProcedureMapGeneration::Render()
+    {
+        for (auto& elem : candidateRooms) if (elem) elem->Render();
+        for (auto& elem : selectedRooms) if (elem) elem->Render();
+        for (auto& elem : linesTriangulated) elem.Render();
+        for (auto& elem : linesMST) elem.Render();
+    }
+
+    void ProcedureMapGeneration::ResizeScreen()
+    {
+    }
+
+    void ProcedureMapGeneration::Spray()
+    {       
         // room
         roomScaleForSelect = 1100.0f;
         candidateRooms = vector<Room*>(roomMax);
@@ -54,223 +190,39 @@ namespace Gungeon
         }
     }
 
-    void ProcedureMapGeneration::Release()
-    {
-        for (auto& elem : candidateRooms) elem->Release();
-        candidateRooms.clear();
-        for (auto& elem : selectedRooms) elem->Release();
-        selectedRooms.clear();
-        roomNode.clear();
-        triangulation.nodesLinked.clear();
-        triangulation.edges.clear();
-        triangulation.triangles.clear();
-        triangulation.nodesForIndex.clear();
-        visited.clear();
-        linesTriangulated.clear();
-        linesMST.clear();
-        passages.clear();
-    }
-
-    void ProcedureMapGeneration::Update()
-    {
-        switch (state)
-        {
-        case MapGenState::spray:
-        {
-            Spray();
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                state = MapGenState::spread;
-            }
-            break;
-        }
-        case MapGenState::spread:
-        {
-            Spread();
-            if (flagSpread)
-            {
-                state = MapGenState::select;
-            }
-            break;
-        }
-        case MapGenState::select:
-        {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                Select();
-                state = MapGenState::triangulate;
-            }
-            break;
-        }
-        case MapGenState::triangulate:
-        {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                Triangulate();
-                state = MapGenState::span;
-            }
-            break;
-        }
-        case MapGenState::span:
-        {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                Spanning();
-                state = MapGenState::loop;
-            }
-            break;
-        }
-        case MapGenState::loop:
-        {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                Loop();
-                state = MapGenState::clean;
-            }
-            break;
-        }
-        case MapGenState::clean:
-        {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                Clean();
-                state = MapGenState::roomTile;
-            }
-            break;
-        }
-        case MapGenState::roomTile:
-        {
-            RoomTile();
-            state = MapGenState::passageTile;
-            break;
-        }
-        case MapGenState::passageTile:
-        {
-            PassageTile();
-            state = MapGenState::passagePitTile;
-            break;
-        }
-        case MapGenState::passagePitTile:
-        {
-            PassagePitTile();
-            state = MapGenState::prop;
-            break;
-        }
-        case MapGenState::prop:
-        {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                Prop();
-                state = MapGenState::spawner;
-            }
-            break;
-        }
-        case MapGenState::spawner:
-        {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                Spawner();
-                state = MapGenState::propPit;
-            }
-            break;
-        }
-        case MapGenState::propPit:
-        {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                PropPit();
-                state = MapGenState::propWall;
-            }
-            break;
-        }
-        case MapGenState::propWall:
-        {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                PropWall();
-                state = MapGenState::finish;
-            }
-            break;
-        }
-        case MapGenState::finish:
-        {
-            if (TIMER->GetTick(timer, timeDefault))
-            {
-                Finish();
-            }
-            break;
-        }//case
-        }//switch
-
-        //SaveLoad
-        if (GUI->FileImGui("SaveRoomInfo", "Save Map",
-            ".txt", "../Contents/Room"))
-        {
-            string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
-            file = path;
-            Save();
-        }
-        ImGui::SameLine();
-        if (GUI->FileImGui("LoadRoomInfo", "Load Map",
-            ".txt", "../Contents/Room"))
-        {
-            string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
-            file = path;
-            Load();
-        }
-
-        for (auto& elem : candidateRooms) if (elem) elem->Update();
-        for (auto& elem : selectedRooms) if (elem) elem->Update();
-        for (auto& elem : linesTriangulated) elem.Update();
-        for (auto& elem : linesMST) elem.Update();
-    }
-
-    void ProcedureMapGeneration::LateUpdate()
-    {
-    }
-
-    void ProcedureMapGeneration::Render()
-    {
-        for (auto& elem : candidateRooms) if (elem) elem->Render();
-        for (auto& elem : selectedRooms) if (elem) elem->Render();
-        for (auto& elem : linesTriangulated) elem.Render();
-        for (auto& elem : linesMST) elem.Render();
-    }
-
-    void ProcedureMapGeneration::ResizeScreen()
-    {
-    }
-
-    void ProcedureMapGeneration::Spray()
-    {
-        // Init이 대체하고, 지연시간만 대기
-    }
-
     void ProcedureMapGeneration::Spread()
     {
-        flagSpread = true;
-
-        for (auto& room : candidateRooms)
+        while (1)
         {
-            for (auto& room2 : candidateRooms)
+            bool flagSpread = true;
+
+            for (auto& room : candidateRooms)
             {
-                if (room == room2) continue;
-
-                if (room->col->Intersect(room2->col))
+                for (auto& room2 : candidateRooms)
                 {
-                    Vector2 dir = room->col->GetWorldPos() - room2->col->GetWorldPos();
+                    if (room == room2) continue;
 
-                    float x, y;
-                    if (dir.x >= 0.0f) x = MAP->tilemap->scale.x / 2.0f;
-                    else x = MAP->tilemap->scale.x * -1.0f / 2.0f;
-                    if (dir.y >= 0.0f) y = MAP->tilemap->scale.y / 2.0f;
-                    else y = MAP->tilemap->scale.y * -1.0f / 2.0f;
+                    if (room->col->Intersect(room2->col))
+                    {
+                        Vector2 dir = room->col->GetWorldPos() - room2->col->GetWorldPos();
 
-                    room->SetPos(Vector2(room->Pos().x + x, room->Pos().y + y));
-                    flagSpread = false;
+                        float x, y;
+                        if (dir.x >= 0.0f) x = MAP->tilemap->scale.x / 2.0f;
+                        else x = MAP->tilemap->scale.x * -1.0f / 2.0f;
+                        if (dir.y >= 0.0f) y = MAP->tilemap->scale.y / 2.0f;
+                        else y = MAP->tilemap->scale.y * -1.0f / 2.0f;
+
+                        room->SetPos(Vector2(room->Pos().x + x, room->Pos().y + y));
+                        flagSpread = false;
+                    }
                 }
+                room->Update();
             }
-            room->Update();
+
+            if (flagSpread)
+            {
+                break;
+            }
         }
     }
 
@@ -685,6 +637,22 @@ namespace Gungeon
 
     void ProcedureMapGeneration::Finish()
     {
+        //SaveLoad
+        if (GUI->FileImGui("Save Room", "Save Map",
+            ".txt", "../Contents/Room"))
+        {
+            string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
+            file = path;
+            Save();
+        }
+        ImGui::SameLine();
+        if (GUI->FileImGui("Load Room", "Load Map",
+            ".txt", "../Contents/Room"))
+        {
+            string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
+            file = path;
+            Load();
+        }
     }
 
 

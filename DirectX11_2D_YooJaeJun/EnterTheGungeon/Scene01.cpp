@@ -12,8 +12,6 @@ namespace Gungeon
 
     void Scene01::Init()
     {
-        MAP->useGui = true;
-
         CAM->position = Vector2(0.0f, 0.0f);
         CAM->zoomFactor = Vector3(0.08f, 0.08f, 0.08f);
 
