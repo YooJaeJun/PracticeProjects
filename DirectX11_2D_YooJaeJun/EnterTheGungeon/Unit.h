@@ -17,7 +17,7 @@ namespace Gungeon
 		virtual void Idle();
 		virtual void Walk();
 		virtual void Attack();
-		virtual void Hit(const int damage);
+		virtual void StartHit(const int damage);
 		virtual void Die();
 		virtual void StartWalk();
 		virtual void StartIdle();

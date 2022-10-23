@@ -21,7 +21,7 @@ namespace Gungeon
 
         name = L"ÃÑÅº Å·";
         desc = L"³³À¸·Î µÈ ¿ÕÁÂ¿¡ ¾É¾Æ";
-        curHp = maxHp = 100;
+        curHp = maxHp = 150;
         scalar = 120.0f;
 
         intervalAnim[(int)State::idle] = 0.5f;
@@ -152,14 +152,14 @@ namespace Gungeon
         attack1Start->isVisible = false;
         attack1Start->maxFrame.x = 1;
         attack1Start->scale = Vector2(40.0f, 44.0f) * scaleFactor;
-        attack1Start->ChangeAnim(AnimState::once, intervalAnim[(int)State::attack]);
+        attack1Start->ChangeAnim(AnimState::loop, intervalAnim[(int)State::attack]);
         attack1Start->SetParentRT(*col);
 
         attack1 = new ObImage(L"EnterTheGungeon/Boss_1/Attack_1.png");
         attack1->isVisible = false;
         attack1->maxFrame.x = 2;
         attack1->scale = Vector2(80.0f / 2.0f, 44.0f) * scaleFactor;
-        attack1->ChangeAnim(AnimState::once, intervalAnim[(int)State::attack]);
+        attack1->ChangeAnim(AnimState::loop, intervalAnim[(int)State::attack]);
         attack1->SetParentRT(*col);
 
         attack2 = new ObImage(L"EnterTheGungeon/Boss_1/Attack_2.png");
@@ -208,7 +208,7 @@ namespace Gungeon
         chairAttack1Start->isVisible = false;
         chairAttack1Start->maxFrame.x = 1;
         chairAttack1Start->scale = Vector2(64.0f, 78.0f) * scaleFactor;
-        chairAttack1Start->ChangeAnim(AnimState::once, 0.2f);
+        chairAttack1Start->ChangeAnim(AnimState::loop, intervalAnim[(int)State::attack]);
         chairAttack1Start->SetParentRT(*col);
 
         chairAttack1 = new ObImage(L"EnterTheGungeon/Boss_1/Chair_Attack_1.png");
@@ -222,21 +222,21 @@ namespace Gungeon
         chairAttack2->isVisible = false;
         chairAttack2->maxFrame.x = 3;
         chairAttack2->scale = Vector2(204.0f / 3.0f, 79.0f) * scaleFactor;
-        chairAttack2->ChangeAnim(AnimState::loop, 0.2f);
+        chairAttack2->ChangeAnim(AnimState::loop, intervalAnim[(int)State::attack]);
         chairAttack2->SetParentRT(*col);
 
         chairAttack3 = new ObImage(L"EnterTheGungeon/Boss_1/Chair_Attack_3.png");
         chairAttack3->isVisible = false;
         chairAttack3->maxFrame.x = 3;
         chairAttack3->scale = Vector2(204.0f / 3.0f, 79.0f) * scaleFactor;
-        chairAttack3->ChangeAnim(AnimState::loop, 0.2f);
+        chairAttack3->ChangeAnim(AnimState::loop, intervalAnim[(int)State::attack]);
         chairAttack3->SetParentRT(*col);
 
         chairDie = new ObImage(L"EnterTheGungeon/Boss_1/Chair_Die.png");
         chairDie->isVisible = false;
         chairDie->maxFrame.x = 1;
         chairDie->scale = Vector2(73.0f, 75.0f) * scaleFactor;
-        chairDie->ChangeAnim(AnimState::once, 0.2f);
+        chairDie->ChangeAnim(AnimState::once, intervalAnim[(int)State::die]);
         chairDie->SetParentRT(*col);
 
         firePosTargeting = new ObCircle;
@@ -526,11 +526,44 @@ namespace Gungeon
 
             attackState = BossAttackState::loop;
             break;
+
         case Gungeon::BossAttackState::loop:
 
             hit->isVisible = false;
             idle->isVisible = false;
             walk->isVisible = false;
+
+            switch (pattern)
+            {
+            case Gungeon::BossPattern::shield:
+            case Gungeon::BossPattern::tornado:
+                if (attack1->frame.x == attack1->maxFrame.x - 1)
+                {
+                    SOUND->Stop("BulletKingSpin");
+                    SOUND->Play("BulletKingSpin");
+                }
+                break;
+
+            case Gungeon::BossPattern::miro:
+            case Gungeon::BossPattern::spiral:
+            case Gungeon::BossPattern::shuriken:
+                if (attack2->frame.x == attack2->maxFrame.x - 1)
+                {
+                    SOUND->Stop("BulletKingThrow");
+                    SOUND->Play("BulletKingThrow");
+                }
+                break;
+
+            case Gungeon::BossPattern::circular:
+            case Gungeon::BossPattern::string:
+            case Gungeon::BossPattern::trail:
+                if (attack3->frame.x == attack3->maxFrame.x - 1)
+                {
+                    SOUND->Stop("BulletKingChairDown");
+                    SOUND->Play("BulletKingCwhairDown");
+                }
+                break;
+            }
 
             if (TIMER->GetTick(timeAttackEnd, intervalEnd[(int)pattern]))
             {
@@ -576,16 +609,17 @@ namespace Gungeon
         {
             die->ChangeAnim(AnimState::stop, 0.1f);
             die->color = Color(0.4f, 0.4f, 0.4f, 0.4f);
+            chairDie->isVisible = true;
             chairDie->color = Color(0.4f, 0.4f, 0.4f, 0.4f);
             realDie = true;
         }
     }
 
-    void Boss::Hit(const int damage, const Vector2& dir)
+    void Boss::StartHit(const int damage, const Vector2& dir)
     {
         pushedDir = dir;
 
-        Unit::Hit(damage);
+        Unit::StartHit(damage);
         if (attackState == BossAttackState::loop)
         {
             hit->isVisible = false;
@@ -728,7 +762,6 @@ namespace Gungeon
         chairAttack1->isVisible = false;
         chairAttack2->isVisible = false;
         chairAttack3->isVisible = false;
-        chairDie->isVisible = true;
 
         hpGuageBar->img->isVisible = false;
         hpGuage->img->isVisible = false;
@@ -738,6 +771,9 @@ namespace Gungeon
         dropItem->state = State::idle;
 
         HitBullet();
+
+        SOUND->Stop("BossBGM");
+        SOUND->Play("FinalShot");
     }
 
     void Boss::Spawn(const Vector2 wpos)
@@ -770,11 +806,14 @@ namespace Gungeon
         }
     }
 
-    void Boss::SpawnPlayerByForce(const Vector2 wpos)
+    void Boss::SpawnByForceInMiro(const Vector2 wpos)
     {
+        col->SetWorldPos(Vector2(0.0f, 500.0f));
         spawnPlayerByForce->Spawn(wpos);
         spawnPlayerByForce->idle->ChangeAnim(AnimState::once, 0.15f);
+        Update();
         pushingPlayer = false;
+        SOUND->Play("SpawnByForce");
     }
 
     void Boss::SpawnAnim()
@@ -790,7 +829,19 @@ namespace Gungeon
         respawn->isVisible = false;
         idle->isVisible = true;
         chairIdle->isVisible = true;
-        chairIdle->ChangeAnim(AnimState::loop, 0.5f);
+    }
+
+    void Boss::CutSceneOn()
+    {
+        cutScene->img->isVisible = true;
+        cutScene->img->ChangeAnim(AnimState::loop, 0.2f);
+        SOUND->Play("BossIntro");
+    }
+
+    void Boss::CutSceneOff()
+    {
+        cutScene->img->isVisible = false;
+        cutScene->img->ChangeAnim(AnimState::stop, 0.1f);
     }
 
     void Boss::ColToggle()
@@ -821,6 +872,8 @@ namespace Gungeon
             SafeDelete(elem);
         }
         bullet.clear();
+        
+        way.clear();
     }
 
     void Boss::InitCircular()
@@ -1020,6 +1073,9 @@ namespace Gungeon
                 bullet[curBulletIdx++]->Spawn(bulletSpawnPos);
                 if (curBulletIdx >= circularMax) curBulletIdx = 0;
             }
+
+            SOUND->Stop("BulletKingShot");
+            SOUND->Play("BulletKingShot");
         }
     }
 
@@ -1073,6 +1129,9 @@ namespace Gungeon
 
                 elem->Spawn(bulletSpawnPos);
             }
+
+            SOUND->Stop("BulletKingShot");
+            SOUND->Play("BulletKingShot");
         }
     }
 
@@ -1088,6 +1147,8 @@ namespace Gungeon
             elem->col->rotation += idx * 10.0f * ToRadian * DELTA;
             elem->col->rotation2 += idx * 4.0f * ToRadian * DELTA;
 
+            SOUND->Stop("BulletKingThrow");
+            SOUND->Play("BulletKingThrow");
             idx++;
         }
     }
@@ -1104,6 +1165,9 @@ namespace Gungeon
             {
                 curBulletIdx = 0;
             }
+
+            SOUND->Stop("BulletKingShot");
+            SOUND->Play("BulletKingShot");
         }
     }
 
@@ -1118,6 +1182,9 @@ namespace Gungeon
 
             bullet[curBulletIdx]->Spawn(bulletSpawnPos, bullet[curBulletIdx]->moveDir);
             curBulletIdx++;
+
+            SOUND->Stop("BulletKingShot");
+            SOUND->Play("BulletKingShot");
         }
     }
 
@@ -1175,6 +1242,9 @@ namespace Gungeon
                 bullet[curBulletIdx++]->Spawn(bulletSpawnPos);
                 if (curBulletIdx >= tornadoMax) curBulletIdx = 0;
             }
+
+            SOUND->Stop("BulletKingShot");
+            SOUND->Play("BulletKingShot");
         }
     }
 
@@ -1186,6 +1256,9 @@ namespace Gungeon
             bullet[curBulletIdx]->col->SetLocalPos(Vector2((curBulletIdx + 1) * 20.0f, (curBulletIdx + 1) * 20.0f));
             curBulletIdx++;
             if (curBulletIdx >= shurikenMax) curBulletIdx = 0;
+
+            SOUND->Stop("BulletKingShot");
+            SOUND->Play("BulletKingShot");
         }
 
         int idx = 0;

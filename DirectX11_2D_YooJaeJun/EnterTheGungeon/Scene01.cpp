@@ -34,9 +34,7 @@ namespace Gungeon
             }
         }
 
-        SOUND->Stop("SCENE02");
-        //SOUND->AddSound("Vaquero Perdido - The Mini Vandals.mp3", "SCENE01", true);
-        SOUND->Play("SCENE01");
+        SOUND->Play("MapGenBGM");
     }
 
     void Scene01::Release()

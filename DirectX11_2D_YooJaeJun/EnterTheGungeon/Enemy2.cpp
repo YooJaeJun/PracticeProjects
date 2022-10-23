@@ -124,6 +124,9 @@ namespace Gungeon
 
 		InitIntervalAttack();
 
+		SOUND->Stop("Shotgun");
+		SOUND->Play("Shotgun");
+
 		state = State::idle;
 	}
 }

@@ -61,6 +61,8 @@ namespace Gungeon
                     col->Update();
                     col->SetWorldPos(wposBeforeRot);
                     ShurikenBulletState = ShurikenBulletState::attack;
+                    
+                    SOUND->Play("BulletKingThrow");
                 }
                 break;
             case Gungeon::ShurikenBulletState::attack:

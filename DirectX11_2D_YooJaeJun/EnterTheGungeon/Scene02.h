@@ -64,7 +64,7 @@ namespace Gungeon
 		int						afterRoomIdx = -2;
 		int						curRoomIdx = 0;
 		int						roomClearCount = 0;
-		int						roomClearCountForBossBattle = 1;
+		int						roomClearCountForBossBattle = 3;
 		Gate*					gate = nullptr;
 		Cinematic*				cinematic = nullptr;
 		vector<Door*>			door;

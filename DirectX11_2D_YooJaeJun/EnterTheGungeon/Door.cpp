@@ -4,7 +4,6 @@ namespace Gungeon
 {
     Door::Door()
     {
-        Init();
     }
 
     void Door::Init()
@@ -31,5 +30,20 @@ namespace Gungeon
     {
         Obstacle::Render();
         col->Render();
+    }
+
+    void Door::Spawn(const Vector2 wpos, const DirState dir)
+    {
+        SetPos(wpos);
+        idle->frame.y = dir;
+        idle->isVisible = true;
+        SOUND->Play("DoorClosed");
+    }
+
+    void Door::Disappear()
+    {
+        SetPos(DEFAULTSPAWN);
+        idle->isVisible = false;
+        SOUND->Play("DoorClosed");
     }
 }

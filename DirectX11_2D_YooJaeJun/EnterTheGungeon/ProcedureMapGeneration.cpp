@@ -16,6 +16,7 @@ namespace Gungeon
         state = MapGenState::spray;
 
         // room
+        roomScaleForSelect = 1100.0f;
         candidateRooms = vector<Room*>(roomMax);
         int idx = 0;
         for (auto& room : candidateRooms)
@@ -25,13 +26,13 @@ namespace Gungeon
             // 일부 방 선택할 만한 크기 보장
             if (idx < 5)
             {
-                room->col->scale.x = 100.0f * RANDOM->Int(11, 14);
-                room->col->scale.y = 100.0f * RANDOM->Int(11, 14);
+                room->col->scale.x = 100.0f * RANDOM->Int(13, 15);
+                room->col->scale.y = 100.0f * RANDOM->Int(13, 15);
             }
             else
             {
-                room->col->scale.x = 100.0f * RANDOM->Int(9, 13);
-                room->col->scale.y = 100.0f * RANDOM->Int(9, 13);
+                room->col->scale.x = 100.0f * RANDOM->Int(9, 14);
+                room->col->scale.y = 100.0f * RANDOM->Int(9, 14);
             }
 
             map<Int2, bool> dic;
@@ -51,7 +52,6 @@ namespace Gungeon
 
             idx++;
         }
-        roomScaleForSelect = 1000.0f;
     }
 
     void ProcedureMapGeneration::Release()

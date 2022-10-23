@@ -21,7 +21,7 @@ namespace Gungeon
 		virtual void Attack() override;
 		virtual void Die() override;
 		virtual void Fire();
-		void Hit(const int damage, const Vector2& dir);
+		void StartHit(const int damage, const Vector2& dir);
 		void Hitting();
 		virtual void StartDie() override;
 		virtual void Spawn(const Vector2 wpos) override;

@@ -21,6 +21,7 @@ namespace Gungeon
 		virtual void Release() override;
 		virtual void Update() override;
 		virtual void Render() override;
+		void Spawn(const Vector2 wpos);
 
 	public:
 		ObImage*	open = nullptr;

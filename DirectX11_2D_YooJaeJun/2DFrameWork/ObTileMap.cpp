@@ -575,29 +575,33 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
         //왼쪽타일이 존재할때
         if (Temp.first->idx.x > 0)
         {
-            LoopIdx.push_back(Int2(Temp.first->idx.x - 1,
-                Temp.first->idx.y));
+            Int2 on = Int2(Temp.first->idx.x - 1,
+                Temp.first->idx.y);
+            LoopIdx.push_back(on);
         }
 
         //위쪽타일이 존재할때
         if (Temp.first->idx.y > 0)
         {
-            LoopIdx.push_back(Int2(Temp.first->idx.x,
-                Temp.first->idx.y - 1));
+            Int2 on = Int2(Temp.first->idx.x,
+                Temp.first->idx.y - 1);
+            LoopIdx.push_back(on);
         }
 
         //오른쪽타일이 존재할때
         if (Temp.first->idx.x < tileSize.x - 1)
         {
-            LoopIdx.push_back(Int2(Temp.first->idx.x + 1,
-                Temp.first->idx.y));
+            Int2 on = Int2(Temp.first->idx.x + 1,
+                Temp.first->idx.y);
+            LoopIdx.push_back(on);
         }
 
         //아래쪽타일이 존재할때
         if (Temp.first->idx.y < tileSize.y - 1)
         {
-            LoopIdx.push_back(Int2(Temp.first->idx.x,
-                Temp.first->idx.y + 1));
+            Int2 on = Int2(Temp.first->idx.x,
+                Temp.first->idx.y + 1);
+            LoopIdx.push_back(on);
         }
 
         if (checkDiagnoal)
@@ -610,8 +614,8 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
                     Temp.first->idx.y + 1);
 
                 // 주위 벽이 있을 땐 대각선으로 가지 않기
-                TileState state1 = Tiles[on.x - 1][on.y].state;
-                TileState state2 = Tiles[on.x][on.y - 1].state;
+                TileState state1 = GetTileState(Int2(on.x - 1, on.y));
+                TileState state2 = GetTileState(Int2(on.x, on.y - 1));
                 if (state1 != TileState::wall &&
                     state2 != TileState::wall &&
                     state1 != TileState::pit &&
@@ -628,8 +632,8 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
                 Int2 on = Int2(Temp.first->idx.x - 1,
                     Temp.first->idx.y - 1);
 
-                TileState state1 = Tiles[on.x - 1][on.y].state;
-                TileState state2 = Tiles[on.x][on.y + 1].state;
+                TileState state1 = GetTileState(Int2(on.x - 1, on.y));
+                TileState state2 = GetTileState(Int2(on.x, on.y + 1));
                 if (state1 != TileState::wall &&
                     state2 != TileState::wall &&
                     state1 != TileState::pit &&
@@ -646,8 +650,8 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
                 Int2 on = Int2(Temp.first->idx.x + 1,
                     Temp.first->idx.y + 1);
 
-                TileState state1 = Tiles[on.x + 1][on.y].state;
-                TileState state2 = Tiles[on.x][on.y - 1].state;
+                TileState state1 = GetTileState(Int2(on.x + 1, on.y));
+                TileState state2 = GetTileState(Int2(on.x, on.y - 1));
                 if (state1 != TileState::wall &&
                     state2 != TileState::wall &&
                     state1 != TileState::pit &&
@@ -664,8 +668,8 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
                 Int2 on = Int2(Temp.first->idx.x + 1,
                     Temp.first->idx.y - 1);
 
-                TileState state1 = Tiles[on.x + 1][on.y].state;
-                TileState state2 = Tiles[on.x][on.y + 1].state;
+                TileState state1 = GetTileState(Int2(on.x + 1, on.y));
+                TileState state2 = GetTileState(Int2(on.x, on.y + 1));
                 if (state1 != TileState::wall &&
                     state2 != TileState::wall &&
                     state1 != TileState::pit &&

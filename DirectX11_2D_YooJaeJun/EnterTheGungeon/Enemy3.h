@@ -26,6 +26,7 @@ namespace Gungeon
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 		virtual void Fire() override;
+		virtual void StartDie() override;
 
 	public:
 		Enemy3FireState		fireState = Enemy3FireState::none;

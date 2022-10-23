@@ -122,17 +122,18 @@ namespace Gungeon
 	{
 	}
 
-	void Unit::Hit(const int damage)
+	void Unit::StartHit(const int damage)
 	{
 		if (state != State::die && 
 			false == isHit)
 		{
 			curHp -= damage;
-			isHit = true;
-			isHitAnim = true;
 
 			if (damage > 0)
 			{
+				isHit = true;
+				isHitAnim = true;
+
 				if (hit)
 				{
 					idle->isVisible = false;

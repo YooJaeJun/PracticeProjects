@@ -491,6 +491,12 @@ namespace Gungeon
 		Reloading();
 		Hitting();
 		Dusting();
+
+		if (TIMER->GetTick(timeWalkSound, intervalWalkSound))
+		{
+			SOUND->Stop("FootstepStone");
+			SOUND->Play("FootstepStone");
+		}
 	}
 
 	void Player::Roll()
@@ -506,6 +512,8 @@ namespace Gungeon
 			weapons[curWeaponIdx]->idle->isVisible = true;
 
 			godMode = false;
+
+			SOUND->Play("Roll");
 		}
 
 		Reloading();
@@ -629,10 +637,8 @@ namespace Gungeon
 
 					uiReload->img->isVisible = true;
 					uiReloadBar->img->isVisible = true;
-				}
-				else
-				{
-					// »ç¿îµå
+
+					SOUND->Play("Reload");
 				}
 			}
 
@@ -654,7 +660,11 @@ namespace Gungeon
 		weapons[curWeaponIdx]->idle->ChangeAnim(AnimState::once, 0.2f);
 		flagLbutton = true;
 
-		if (curBulletIdx >= 0)
+		if (curBulletIdx < 0)
+		{
+			SOUND->Play("EmptyBullet");
+		}
+		else
 		{
 			switch (weapons[curWeaponIdx]->type)
 			{
@@ -671,8 +681,8 @@ namespace Gungeon
 							RANDOM->Float(targetDir.y - 0.1f, targetDir.y + 0.1f))
 					);
 
-					SOUND->Stop("GUN");
-					SOUND->Play("GUN");
+					SOUND->Stop("Pistol");
+					SOUND->Play("Pistol");
 
 					canFireOnce[(int)WeaponType::pistol] = false;
 
@@ -698,8 +708,8 @@ namespace Gungeon
 						);
 					}
 
-					SOUND->Stop("GUN");
-					SOUND->Play("GUN");
+					SOUND->Stop("Shotgun");
+					SOUND->Play("Shotgun");
 
 					canFireOnce[(int)WeaponType::shotgun] = false;
 
@@ -720,8 +730,8 @@ namespace Gungeon
 							RANDOM->Float(targetDir.y - 0.1f, targetDir.y + 0.1f))
 					);
 
-					SOUND->Stop("GUN");
-					SOUND->Play("GUN");
+					SOUND->Stop("MachineGun");
+					SOUND->Play("MachineGun");
 
 					canFireOnce[(int)WeaponType::machineGun] = false;
 
@@ -792,9 +802,11 @@ namespace Gungeon
 		fall->isVisible = true;
 		fall->ChangeAnim(AnimState::once, intervalAnim[(int)State::fall]);
 
-		Hit(1);
+		StartHit(1);
 
 		state = State::fall;
+
+		SOUND->Play("Fall");
 	}
 
 	void Player::StartRespawn()
@@ -809,19 +821,22 @@ namespace Gungeon
 		respawn->ChangeAnim(AnimState::once, intervalAnim[(int)State::respawn]);
 
 		state = State::respawn;
+
+		SOUND->Play("Respawn");
 	}
 
 	void Player::StartDie()
 	{
 		Unit::StartDie();
+
+		roll->isVisible = false;
+		weapons[curWeaponIdx]->idle->isVisible = false;
 		
 		die->ChangeAnim(AnimState::once, intervalAnim[(int)State::die]);
 
-		weapons[curWeaponIdx]->idle->isVisible = false;
-
 		DecreaseHeart();
 
-		roll->isVisible = false;
+		SOUND->Play("Death");
 	}
 
 	void Player::Reloading()
@@ -909,6 +924,8 @@ namespace Gungeon
 		{
 			dust[curDustIdx++]->Spawn(colTile->GetWorldPos());
 			if (curDustIdx >= dustMax) curDustIdx = 0;
+			SOUND->Stop("Dust");
+			SOUND->Play("Dust");
 		}
 	}
 
@@ -927,6 +944,7 @@ namespace Gungeon
 	void Player::PlusMoney(const int n)
 	{
 		money += n;
+		SOUND->Play("Coin");
 	}
 
 	void Player::EquipWeapon(Weapon* other)
@@ -992,6 +1010,8 @@ namespace Gungeon
 		}
 		weapons[curWeaponIdx]->uiBulletFrame->img->isVisible = true;
 		weapons[curWeaponIdx]->uiWeapon->img->isVisible = true;
+
+		SOUND->Play("WeaponPickup");
 	}
 
 	void Player::SetWeaponFrameToOrigin()

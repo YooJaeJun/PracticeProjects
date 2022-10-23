@@ -103,6 +103,7 @@ namespace Gungeon
             if (TIMER->GetTick(timeClosed, 0.3f))
             {
                 gateState = GateState::closed;
+                SOUND->Play("GateSlam");
             }
             break;
 
@@ -136,5 +137,6 @@ namespace Gungeon
         idle->isVisible = true;
         bottom->isVisible = true;
         gateState = GateState::opening;
+        SOUND->Play("GateSlam");
     }
 }

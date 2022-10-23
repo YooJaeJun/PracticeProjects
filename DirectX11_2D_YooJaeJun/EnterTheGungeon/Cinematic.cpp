@@ -111,6 +111,7 @@ namespace Gungeon
                 intervalCinematic[(int)CinematicState::cinematicBox4]))
             {
                 cinematicState = CinematicState::finish2;
+                SOUND->Play("Win");
             }
         case Gungeon::CinematicState::finish2:
             break;

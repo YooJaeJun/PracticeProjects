@@ -72,7 +72,7 @@ namespace Gungeon
 		void Load();
 
 	public:
-		const float timeDefault = 0.0f;
+		const float timeDefault = 0.5f;
 		const int roomMax = 12;
 		const int gridMax = 7000;
 		const Int2 passagePitImgMin = { 0, 4 };

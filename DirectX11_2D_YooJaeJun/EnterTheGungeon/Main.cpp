@@ -7,6 +7,8 @@ void Main::Init()
     LIGHT->light.radius = 2000.0f;
     LIGHT->light.select = 0.0f;
 
+    InitSound();
+
     mapGen = new ProcedureMapGeneration;
     player = new Player;
 
@@ -18,6 +20,45 @@ void Main::Init()
     }
 
     SCENE->ChangeScene("Scene01");
+}
+
+void Gungeon::Main::InitSound()
+{
+    SOUND->AddSound("EnterTheGungeon/MapGenBGM.ogg", "MapGenBGM", true);
+    SOUND->AddSound("EnterTheGungeon/GameBGM.ogg", "GameBGM", true);
+    SOUND->AddSound("EnterTheGungeon/BossBGM.ogg", "BossBGM", true);
+    SOUND->AddSound("EnterTheGungeon/Roll.ogg", "Roll", false);
+    SOUND->AddSound("EnterTheGungeon/Fall.ogg", "Fall", false);
+    SOUND->AddSound("EnterTheGungeon/Respawn.ogg", "Respawn", false);
+    SOUND->AddSound("EnterTheGungeon/Death.ogg", "Death", false);
+    SOUND->AddSound("EnterTheGungeon/Pistol.ogg", "Pistol", false);
+    SOUND->AddSound("EnterTheGungeon/Shotgun.ogg", "Shotgun", false);
+    SOUND->AddSound("EnterTheGungeon/MachineGun.ogg", "MachineGun", false);
+    SOUND->AddSound("EnterTheGungeon/Reload.ogg", "Reload", false);
+    SOUND->AddSound("EnterTheGungeon/EmptyBullet.ogg", "EmptyBullet", false);
+    SOUND->AddSound("EnterTheGungeon/Bomb.ogg", "Bomb", false);
+    SOUND->AddSound("EnterTheGungeon/Dust.ogg", "Dust", false);
+    SOUND->AddSound("EnterTheGungeon/Coin.ogg", "Coin", false);
+    SOUND->AddSound("EnterTheGungeon/FootstepStone.ogg", "FootstepStone", false);
+    SOUND->AddSound("EnterTheGungeon/BookCharge.ogg", "BookCharge", false);
+    SOUND->AddSound("EnterTheGungeon/BookAttack.ogg", "BookAttack", false);
+    SOUND->AddSound("EnterTheGungeon/BookDrop.ogg", "BookDrop", false);
+    SOUND->AddSound("EnterTheGungeon/BulletManDeath.ogg", "BulletManDeath", false);
+    SOUND->AddSound("EnterTheGungeon/BulletManHurt.ogg", "BulletManHurt", false);
+    SOUND->AddSound("EnterTheGungeon/BossIntro.ogg", "BossIntro", false);
+    SOUND->AddSound("EnterTheGungeon/BulletKingChairDown.ogg", "BulletKingChairDown", false);
+    SOUND->AddSound("EnterTheGungeon/BulletKingShot.ogg", "BulletKingShot", false);
+    SOUND->AddSound("EnterTheGungeon/BulletKingThrow.ogg", "BulletKingThrow", false);
+    SOUND->AddSound("EnterTheGungeon/BulletKingSpin.ogg", "BulletKingSpin", false);
+    SOUND->AddSound("EnterTheGungeon/SpawnByForce.ogg", "SpawnByForce", false);
+    SOUND->AddSound("EnterTheGungeon/FinalShot.ogg", "FinalShot", false);
+    SOUND->AddSound("EnterTheGungeon/Win.ogg", "Win", false);
+    SOUND->AddSound("EnterTheGungeon/ChestUnlock.ogg", "ChestUnlock", false);
+    SOUND->AddSound("EnterTheGungeon/ChestOpen.ogg", "ChestOpen", false);
+    SOUND->AddSound("EnterTheGungeon/WeaponPickup.ogg", "WeaponPickup", false);
+    SOUND->AddSound("EnterTheGungeon/GateSlam.ogg", "GateSlam", false);
+    SOUND->AddSound("EnterTheGungeon/GateOpen.ogg", "GateOpen", false);
+    SOUND->AddSound("EnterTheGungeon/DoorClosed.ogg", "DoorClosed", false);
 }
 
 void Main::Release()

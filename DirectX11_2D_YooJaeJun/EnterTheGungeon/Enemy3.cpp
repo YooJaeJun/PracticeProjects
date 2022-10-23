@@ -164,6 +164,9 @@ namespace Gungeon
 				bullet[curBulletIdx]->Spawn(Vector2(spawnPos.x - 50.0f + curBulletX * 20.0f,
 					spawnPos.y + 50.0f - curBulletY * 20.0f));
 
+				SOUND->Stop("BookCharge");
+				SOUND->Play("BookCharge");
+
 				plusXY();
 			}
 
@@ -182,6 +185,9 @@ namespace Gungeon
 					curBulletIdx = 0;
 					fireState = Enemy3FireState::target;
 				}
+
+				SOUND->Stop("BookCharge");
+				SOUND->Play("BookCharge");
 			}
 
 			break;
@@ -193,6 +199,9 @@ namespace Gungeon
 				elem->scalar = 700.0f;
 				elem->moveDir = targetDir;
 			}
+
+			SOUND->Stop("BookCharge");
+			SOUND->Play("BookAttack");
 
 			fireState = Enemy3FireState::toWalk;
 
@@ -215,5 +224,12 @@ namespace Gungeon
 
 			break;
 		}
+	}
+
+	void Enemy3::StartDie()
+	{
+		Enemy::StartDie();
+
+		SOUND->Play("BookDrop");
 	}
 }

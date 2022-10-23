@@ -35,16 +35,14 @@ namespace Gungeon
         boss->Spawn(Vector2(0.0f, 300.0f));
         boss->state = State::cinematic;
         boss->idle->isVisible = false;
-        boss->chairIdle->ChangeAnim(AnimState::stop, 0.1f);
 
         cinematic = new Cinematic;
         cinematic->cinematicState = CinematicState::cinematicBox1;
 
 
-        SOUND->Stop("SCENE01");
-        SOUND->Stop("SCENE02");
-        //SOUND->AddSound("Vaquero Perdido - The Mini Vandals.mp3", "Scene03", true);
-        SOUND->Play("Scene03");
+        SOUND->Stop("MapGenBGM");
+        SOUND->Stop("GameBGM");
+        SOUND->Play("BossBGM");
     }
 
     void Scene03::InitRoom()
@@ -184,9 +182,7 @@ namespace Gungeon
                 if (boss->pushingPlayer)
                 {
                     Vector2 dest = Vector2(0.0f, -500.0f);
-                    boss->col->SetWorldPos(Vector2(0.0f, 500.0f));
-                    boss->SpawnPlayerByForce(dest);
-                    boss->Update();
+                    boss->SpawnByForceInMiro(dest);
                     player->col->SetWorldPos(dest);
                     player->Update();
                 }
@@ -238,12 +234,10 @@ namespace Gungeon
             }
             break;
         case Gungeon::CinematicState::cutScene:
-            boss->cutScene->img->isVisible = true;
-            boss->cutScene->img->ChangeAnim(AnimState::loop, 0.3f);
+            boss->CutSceneOn();
             break;
         case Gungeon::CinematicState::cameraTargeting2:
-            boss->cutScene->img->isVisible = false;
-            boss->cutScene->img->ChangeAnim(AnimState::stop, 0.1f);
+            boss->CutSceneOff();
 
             camVelocity = CAM->position - player->Pos();
             CAM->position -= camVelocity * DELTA;
@@ -256,8 +250,8 @@ namespace Gungeon
         case Gungeon::CinematicState::cinematicBox2:
             break;
         case Gungeon::CinematicState::finish:
-            boss->state = State::idle;
-            player->state = State::idle;
+            boss->StartIdle();
+            player->StartIdle();
             cinematic->cinematicState = CinematicState::none;
             break;
 
@@ -362,7 +356,7 @@ namespace Gungeon
                 {
                     Vector2 dir = boss->col->GetWorldPos() - bulletElem->col->GetWorldPos();
                     dir.Normalize();
-                    boss->Hit(bulletElem->damage, dir);
+                    boss->StartHit(bulletElem->damage, dir);
                     bulletElem->Hit(1);
                 }
 
@@ -381,7 +375,7 @@ namespace Gungeon
             boss->state != State::die &&
             boss->col->Intersect(player->col))
         {
-            player->Hit(1);
+            player->StartHit(1);
         }
 
         if (MAP->tilemap->isFootOnWall(boss->colTile))
@@ -399,7 +393,7 @@ namespace Gungeon
                     boss->state != State::die &&
                     bulletElem->col->Intersect(player->col))
                 {
-                    player->Hit(bulletElem->damage);
+                    player->StartHit(bulletElem->damage);
                     bulletElem->Hit(1);
                 }
 

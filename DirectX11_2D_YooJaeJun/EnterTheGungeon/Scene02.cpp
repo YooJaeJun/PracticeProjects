@@ -70,10 +70,8 @@ namespace Gungeon
 
         cinematic = new Cinematic;
 
-        SOUND->Stop("SCENE01");
-        // SOUND->AddSound("15051562_MotionElements_8-bit-arcade-swordsman.wav", "SCENE02", true);
-        SOUND->Play("SCENE02");
-        SOUND->AddSound("gun.wav", "GUN", false);
+        SOUND->Stop("MapGenBGM");
+        SOUND->Play("GameBGM");
     }
 
     void Scene02::Release()
@@ -266,9 +264,7 @@ namespace Gungeon
                         for (auto& on : curRoom->doorTileIdxs)
                         {
                             MAP->tilemap->SetTileState(on, TileState::wall);
-                            door[idx]->idle->frame.y = MAP->tilemap->GetTileDir(on);
-                            door[idx]->SetPos(MAP->tilemap->TileIdxToWorldPos(on));
-                            door[idx]->idle->isVisible = true;
+                            door[idx]->Spawn(MAP->tilemap->TileIdxToWorldPos(on), MAP->tilemap->GetTileDir(on));
                             idx++;
                         }
 
@@ -286,21 +282,23 @@ namespace Gungeon
 
     void Scene02::WaitingSpawn()
     {
-        bool flag = true;
+        bool flagSpawnEffectAllDie = true;
 
         for (auto& elem : spawnEffect)
         {
             if (elem->state != State::die)
             {
-                flag = false;
+                flagSpawnEffectAllDie = false;
             }
         }
 
-        if (flag)
+        if (flagSpawnEffectAllDie)
         {
             SpawnEnemy();
 
             gameState = GameState::fight;
+
+            SOUND->Play("EnemySpawn");
         }
     }
 
@@ -345,8 +343,7 @@ namespace Gungeon
                 {
                     MAP->tilemap->SetTileState(elem, TileState::door);
 
-                    door[idx]->SetPos(DEFAULTSPAWN);
-                    door[idx]->idle->isVisible = false;
+                    door[idx]->Disappear();
 
                     idx++;
                 }
@@ -408,8 +405,7 @@ namespace Gungeon
         if (!treasureBox)
         {
             treasureBox = new TreasureBox;
-            treasureBox->SetPos(curRoom->treasureSpawner->GetWorldPos());
-            treasureBox->treasureState = TreasureState::spawn;
+            treasureBox->Spawn(curRoom->treasureSpawner->GetWorldPos());
         }
     }
 
@@ -433,7 +429,7 @@ namespace Gungeon
             if (false == gate->flagIntersectPlayer &&
                 player->col->Intersect(gate->col))
             {
-                player->col->MoveWorldPos(Vector2(-150.0f, -100.0f) * DELTA);
+                player->col->MoveWorldPos(Vector2(150.0f, -100.0f) * DELTA);
             }
 
             if (treasureBox)
@@ -448,6 +444,7 @@ namespace Gungeon
                         {
                             treasureBox->treasureState = TreasureState::opening;
                             player->flagInteractionUI = false;
+                            SOUND->Play("ChestOpen");
                         }
                     }
                 }
@@ -551,7 +548,7 @@ namespace Gungeon
                     {
                         Vector2 dir = enemyElem->col->GetWorldPos() - bulletElem->col->GetWorldPos();
                         dir.Normalize();
-                        enemyElem->Hit(bulletElem->damage, dir);
+                        enemyElem->StartHit(bulletElem->damage, dir);
                         bulletElem->Hit(1);
                     }
                 }
@@ -573,7 +570,7 @@ namespace Gungeon
                 enemyElem->state != State::die &&
                 enemyElem->col->Intersect(player->col))
             {
-                player->Hit(1);
+                player->StartHit(1);
             }
 
             if (MAP->tilemap->isFootOnWall(enemyElem->colTile))
@@ -597,7 +594,7 @@ namespace Gungeon
                         enemyElem->state != State::die &&
                         bulletElem->col->Intersect(player->col))
                     {
-                        player->Hit(bulletElem->damage);
+                        player->StartHit(bulletElem->damage);
                         bulletElem->Hit(1);
                     }
 
@@ -627,6 +624,7 @@ namespace Gungeon
         {
             roomClearCount = 0;
             gate->Spawn(curRoom->Pos());
+
         }
 
         switch (gate->gateState)

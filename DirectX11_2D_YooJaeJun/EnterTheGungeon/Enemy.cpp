@@ -148,11 +148,11 @@ namespace Gungeon
 	{
 	}
 
-	void Enemy::Hit(const int damage, const Vector2& dir)
+	void Enemy::StartHit(const int damage, const Vector2& dir)
 	{
 		pushedDir = dir;
 
-		Unit::Hit(damage);
+		Unit::StartHit(damage);
 
 		hit->ChangeAnim(AnimState::once, 0.1f);
 
@@ -164,6 +164,8 @@ namespace Gungeon
 		{
 			hit->reverseLR = false;
 		}
+
+		SOUND->Play("BulletManHurt");
 	}
 
 	void Enemy::Hitting()
@@ -192,6 +194,7 @@ namespace Gungeon
 
 			if (timeHitAnim > 0.63f)
 			{
+				way.clear();
 				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
 				idle->color = c;
 				walk->color = c;
@@ -236,6 +239,8 @@ namespace Gungeon
 		dropItem->Spawn(Pos());
 		dropItem->idle->isVisible = true;
 		dropItem->state = State::idle;
+
+		SOUND->Play("BulletManDeath");
 	}
 
 	void Enemy::Spawn(const Vector2 wpos)

@@ -125,7 +125,6 @@ namespace Gungeon
 	void Weapon::EquipLeft()
 	{
 		SwapUvY();
-		Equip();
 		col->SetLocalPosX(-col->GetLocalPos().x);
 		col->pivot.y = -pivotDefault.y;
 		idle->pivot.y = -pivotDefault.y;

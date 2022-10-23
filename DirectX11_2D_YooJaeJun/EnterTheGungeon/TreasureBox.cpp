@@ -119,4 +119,11 @@ namespace Gungeon
             break;
         }
     }
+
+    void TreasureBox::Spawn(const Vector2 wpos)
+    {
+        SetPos(wpos);
+        treasureState = TreasureState::spawn;
+        SOUND->Play("ChestUnlock");
+    }
 }

@@ -51,8 +51,6 @@ namespace Gungeon
 
 	public:
 		ObImage*			roll = nullptr;
-		ObImage*			kick = nullptr;
-		ObImage*			obtain = nullptr;
 		Weapon*				weapons[curWeaponMax];
 		int					curWeaponMax = 0;
 		int					curWeaponIdx = 0;
@@ -86,5 +84,7 @@ namespace Gungeon
 		float				timeRespawnEnd = 0.0f;
 		float				intervalRespawnEnd = 0.7f;
 		bool				flagInteractionUI = false;
+		float				timeWalkSound = 0.0f;
+		float				intervalWalkSound = 0.4f;
 	};
 }

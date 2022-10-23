@@ -6,6 +6,7 @@ namespace Gungeon
 	{
 	public:
 		virtual void Init() override;
+		void InitSound();
 		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;

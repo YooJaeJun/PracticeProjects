@@ -44,15 +44,17 @@ namespace Gungeon
 		void Walk();
 		virtual void Attack() override;
 		virtual void Die() override;
-		void Hit(const int damage, const Vector2& dir);
+		void StartHit(const int damage, const Vector2& dir);
 		void Hitting();
 		virtual void StartAttack() override;
 		virtual void StartDie() override;
 		virtual void Spawn(const Vector2 wpos) override;
 		void HitBullet();
-		void SpawnPlayerByForce(const Vector2 wpos);
+		void SpawnByForceInMiro(const Vector2 wpos);
 		void SpawnAnim();
 		void SpawnAnimEnd();
+		void CutSceneOn();
+		void CutSceneOff();
 		virtual void ColToggle() override;
 
 		void ChangePattern(const BossPattern newPattern);
