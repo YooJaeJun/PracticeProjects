@@ -47,6 +47,7 @@ namespace Gungeon
 		void PlusMoney(const int n);
 		void EquipWeapon(Weapon* other);
 		void SetWeaponFrameToOrigin();
+		void UIOn(const bool on);
 		virtual void ColToggle() override;
 
 	public:
@@ -65,6 +66,7 @@ namespace Gungeon
 		UI*					uiReload = nullptr;
 		UI*					uiReloadBar = nullptr;
 		bool				godMode = false;
+		bool				godModeByForce = false;
 		float				timeLastPosForDust = 0.0f;
 		Effect*				dust[dustMax];
 		int					curDustIdx = 0;
@@ -85,6 +87,7 @@ namespace Gungeon
 		float				intervalRespawnEnd = 0.7f;
 		bool				flagInteractionUI = false;
 		float				timeWalkSound = 0.0f;
-		float				intervalWalkSound = 0.4f;
+		float				intervalWalkSound = 0.3f;
+		bool				isUIRendering = true;
 	};
 }

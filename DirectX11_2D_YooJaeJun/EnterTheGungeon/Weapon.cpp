@@ -72,11 +72,15 @@ namespace Gungeon
 		Character::Render();
 		if (firePos) firePos->Render();
 		if (fireEffect) fireEffect->Render();
-		if (imgReloading) imgReloading->Render();
-		if (uiBulletFrame) uiBulletFrame->Render();
-		for (auto& elem : uiBullet) if (elem) elem->Render();
-		if (uiWeapon) uiWeapon->Render();
-		if (uiBulletCountInfinity) uiBulletCountInfinity->Render();
+
+		if (isUIRendering)
+		{
+			if (imgReloading) imgReloading->Render();
+			if (uiBulletFrame) uiBulletFrame->Render();
+			for (auto& elem : uiBullet) if (elem) elem->Render();
+			if (uiWeapon) uiWeapon->Render();
+			if (uiBulletCountInfinity) uiBulletCountInfinity->Render();
+		}
 	}
 
 	void Weapon::ResizeScreen()
@@ -134,5 +138,10 @@ namespace Gungeon
 		{
 			fireEffect->idle->pivot.y = -pivotDefault.y;
 		}
+	}
+
+	void Weapon::UIOn(const bool on)
+	{
+		isUIRendering = on;
 	}
 }

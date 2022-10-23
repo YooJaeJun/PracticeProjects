@@ -17,6 +17,8 @@ namespace Gungeon
 		virtual void ResizeScreen() override;
 		void IntersectPlayer();
 		void IntersectBoss();
+		void CinematicProcess();
+		void UIOn(const bool on);
 		void ChangeUpdateScene();
 		void ChangeScene3();
 		void ColToggle();

@@ -314,6 +314,15 @@ namespace Gungeon
 
 		SetWeaponFrameToOrigin();
 
+		if (INPUT->KeyDown('P'))
+		{
+			godModeByForce ^= 1;
+		}
+		if (godModeByForce)
+		{
+			godMode = true;
+		}
+
 
 		for (auto& elem : dust) elem->Update();
 		roll->Update();
@@ -351,15 +360,19 @@ namespace Gungeon
 		for (auto& elem : bullet) elem->Render();
 
 		weapons[curWeaponIdx]->Render();
-		uiReload->Render();
-		uiReloadBar->Render();
-		if (uiWeaponFrame) uiWeaponFrame->Render();
-		for (auto& elem : uiHeartNone) elem->Render();
-		for (auto& elem : uiHeartHalf) elem->Render();
-		for (auto& elem : uiHeartFull) elem->Render();
-		for (auto& elem : uiBlank) elem->Render();
-		uiKey->Render();
-		uiGold->Render();
+
+		if (isUIRendering)
+		{
+			uiReload->Render();
+			uiReloadBar->Render();
+			if (uiWeaponFrame) uiWeaponFrame->Render();
+			for (auto& elem : uiHeartNone) elem->Render();
+			for (auto& elem : uiHeartHalf) elem->Render();
+			for (auto& elem : uiHeartFull) elem->Render();
+			for (auto& elem : uiBlank) elem->Render();
+			uiKey->Render();
+			uiGold->Render();
+		}
 
 		if (state != State::cinematic)
 		{
@@ -703,8 +716,8 @@ namespace Gungeon
 
 						bullet[bulletOnce]->Spawn(
 							weapons[curWeaponIdx]->firePos->GetWorldPos(),
-							Vector2(RANDOM->Float(targetDir.x - 0.2f, targetDir.x + 0.2f),
-								RANDOM->Float(targetDir.y - 0.2f, targetDir.y + 0.2f))
+							Vector2(RANDOM->Float(targetDir.x - 0.3f, targetDir.x + 0.3f),
+								RANDOM->Float(targetDir.y - 0.3f, targetDir.y + 0.3f))
 						);
 					}
 
@@ -1022,6 +1035,12 @@ namespace Gungeon
 			weapons[curWeaponIdx]->idle->frame.x = 0;
 			weapons[curWeaponIdx]->idle->ChangeAnim(AnimState::stop, 0.1f);
 		}
+	}
+
+	void Player::UIOn(const bool on)
+	{
+		isUIRendering = on;
+		weapons[curWeaponIdx]->UIOn(on);
 	}
 
 	void Player::ColToggle()

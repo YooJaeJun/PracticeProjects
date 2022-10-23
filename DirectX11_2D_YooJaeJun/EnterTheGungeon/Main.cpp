@@ -24,9 +24,9 @@ void Main::Init()
 
 void Gungeon::Main::InitSound()
 {
-    SOUND->AddSound("EnterTheGungeon/MapGenBGM.ogg", "MapGenBGM", true);
-    SOUND->AddSound("EnterTheGungeon/GameBGM.ogg", "GameBGM", true);
-    SOUND->AddSound("EnterTheGungeon/BossBGM.ogg", "BossBGM", true);
+    SOUND->AddSound("EnterTheGungeon/BGM_MapGen.ogg", "BGM_MapGen", true);
+    SOUND->AddSound("EnterTheGungeon/BGM_Game.ogg", "BGM_Game", true);
+    SOUND->AddSound("EnterTheGungeon/BGM_Boss.ogg", "BGM_Boss", true);
     SOUND->AddSound("EnterTheGungeon/Roll.ogg", "Roll", false);
     SOUND->AddSound("EnterTheGungeon/Fall.ogg", "Fall", false);
     SOUND->AddSound("EnterTheGungeon/Respawn.ogg", "Respawn", false);
@@ -50,6 +50,11 @@ void Gungeon::Main::InitSound()
     SOUND->AddSound("EnterTheGungeon/BulletKingShot.ogg", "BulletKingShot", false);
     SOUND->AddSound("EnterTheGungeon/BulletKingThrow.ogg", "BulletKingThrow", false);
     SOUND->AddSound("EnterTheGungeon/BulletKingSpin.ogg", "BulletKingSpin", false);
+    SOUND->AddSound("EnterTheGungeon/Voice_Boss_Tornado.ogg", "Voice_Boss_Tornado", false);
+    SOUND->AddSound("EnterTheGungeon/Voice_Boss_Hit1.ogg", "Voice_Boss_Hit1", false);
+    SOUND->AddSound("EnterTheGungeon/Voice_Boss_Hit2.ogg", "Voice_Boss_Hit2", false);
+    SOUND->AddSound("EnterTheGungeon/Voice_Boss_Die.ogg", "Voice_Boss_Die", false);
+    SOUND->AddSound("EnterTheGungeon/Voice_Boss_RealDie.ogg", "Voice_Boss_RealDie", false);
     SOUND->AddSound("EnterTheGungeon/SpawnByForce.ogg", "SpawnByForce", false);
     SOUND->AddSound("EnterTheGungeon/FinalShot.ogg", "FinalShot", false);
     SOUND->AddSound("EnterTheGungeon/Win.ogg", "Win", false);

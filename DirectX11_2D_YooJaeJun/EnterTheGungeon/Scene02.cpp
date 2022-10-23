@@ -70,8 +70,8 @@ namespace Gungeon
 
         cinematic = new Cinematic;
 
-        SOUND->Stop("MapGenBGM");
-        SOUND->Play("GameBGM");
+        SOUND->Stop("BGM_MapGen");
+        SOUND->Play("BGM_Game");
     }
 
     void Scene02::Release()
@@ -144,6 +144,8 @@ namespace Gungeon
         player->Update();
         for (auto& elem : enemy) if (elem) elem->Update();
         cinematic->Update();
+
+        SOUND->SetVolume("BGM_Game", 0.6f);
     }
 
     void Scene02::LateUpdate()
@@ -645,6 +647,7 @@ namespace Gungeon
             cinematic->box[1]->img->isVisible = true;
             cinematic->BoxUp(true);
             player->state = State::cinematic;
+            player->UIOn(true);
             break;
 
         case Gungeon::GateState::process:

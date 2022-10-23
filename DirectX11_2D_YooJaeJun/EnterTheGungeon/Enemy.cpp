@@ -165,6 +165,8 @@ namespace Gungeon
 			hit->reverseLR = false;
 		}
 
+		way.clear();
+
 		SOUND->Play("BulletManHurt");
 	}
 

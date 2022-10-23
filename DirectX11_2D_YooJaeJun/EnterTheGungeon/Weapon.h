@@ -23,6 +23,7 @@ namespace Gungeon
 		void Equip();
 		void EquipRight();
 		void EquipLeft();
+		void UIOn(const bool on);
 
 	private:
 		void SwapUvY();
@@ -45,5 +46,6 @@ namespace Gungeon
 		WeaponType	type = WeaponType::pistol;
 		float		intervalFire;
 		int			remainBulletCount = 0;
+		bool		isUIRendering = true;
 	};
 }

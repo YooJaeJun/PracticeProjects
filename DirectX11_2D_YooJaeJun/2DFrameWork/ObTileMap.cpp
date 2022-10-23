@@ -686,10 +686,14 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
             Tile* loop = &Tiles[LoopIdx[i].x][LoopIdx[i].y];
 
             //벽이 아닐때
-            if (loop->state != TileState::wall && 
-                loop->state != TileState::door &&
-                loop->state != TileState::pit)
+            switch (loop->state)
             {
+            case TileState::wall:
+            case TileState::door:
+            case TileState::pit:
+                break;
+
+            default:
                 //예상비용 만들기
                 loop->ClacH(dest);
 
@@ -709,6 +713,7 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way, bool c
                         List.push({ loop,loop->F });
                     }
                 }
+                break;
             }
         }
         LoopIdx.clear();

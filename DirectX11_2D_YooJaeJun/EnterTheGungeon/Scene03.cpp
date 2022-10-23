@@ -38,11 +38,11 @@ namespace Gungeon
 
         cinematic = new Cinematic;
         cinematic->cinematicState = CinematicState::cinematicBox1;
+        UIOn(false);
 
-
-        SOUND->Stop("MapGenBGM");
-        SOUND->Stop("GameBGM");
-        SOUND->Play("BossBGM");
+        SOUND->Stop("BGM_MapGen");
+        SOUND->Stop("BGM_Game");
+        SOUND->Play("BGM_Boss");
     }
 
     void Scene03::InitRoom()
@@ -201,104 +201,14 @@ namespace Gungeon
             boss->dropItem->targetPos = player->Pos();
         }
 
-
-        Vector2 camVelocity;
-        const float camDiff = 30.0f;
-
-        switch (cinematic->cinematicState)
-        {
-            // 등장연출
-        case Gungeon::CinematicState::none:
-            if (boss->state == State::die)
-            {
-                cinematic->cinematicState = CinematicState::cinematicBox3;
-            }
-            break;
-        case Gungeon::CinematicState::cinematicBox1:
-            break;
-        case Gungeon::CinematicState::cameraTargeting1:
-            camVelocity = CAM->position - boss->Pos();
-            CAM->position -= camVelocity * DELTA;
-            if (abs(CAM->position.x - boss->Pos().x) <= camDiff &&
-                abs(CAM->position.y - boss->Pos().y) <= camDiff)
-            {
-                boss->SpawnAnim();
-                cinematic->cinematicState = CinematicState::bossSpawnAnim;
-            }
-            break;
-        case Gungeon::CinematicState::bossSpawnAnim:
-            if (boss->respawn->frame.x == boss->respawn->maxFrame.x - 1)
-            {
-                boss->SpawnAnimEnd();
-                cinematic->cinematicState = CinematicState::cutScene;
-            }
-            break;
-        case Gungeon::CinematicState::cutScene:
-            boss->CutSceneOn();
-            break;
-        case Gungeon::CinematicState::cameraTargeting2:
-            boss->CutSceneOff();
-
-            camVelocity = CAM->position - player->Pos();
-            CAM->position -= camVelocity * DELTA;
-            if (abs(CAM->position.x - player->Pos().x) <= camDiff &&
-                abs(CAM->position.y - player->Pos().y) <= camDiff)
-            {
-                cinematic->cinematicState = CinematicState::cinematicBox2;
-            }
-            break;
-        case Gungeon::CinematicState::cinematicBox2:
-            break;
-        case Gungeon::CinematicState::finish:
-            boss->StartIdle();
-            player->StartIdle();
-            cinematic->cinematicState = CinematicState::none;
-            break;
-
-            // 사망연출
-        case Gungeon::CinematicState::cinematicBox3:
-            player->state = State::cinematic;
-            break;
-        case Gungeon::CinematicState::cameraTargeting3:
-            camVelocity = CAM->position - boss->Pos();
-            CAM->position -= camVelocity * DELTA;
-            if (abs(CAM->position.x - boss->Pos().x) <= camDiff &&
-                abs(CAM->position.y - boss->Pos().y) <= camDiff)
-            {
-                cinematic->cinematicState = CinematicState::bossDieAnim;
-            }
-            break;
-        case Gungeon::CinematicState::bossDieAnim:
-            if (boss->realDie)
-            {
-                cinematic->cinematicState = CinematicState::cameraTargeting4;
-            }
-            break;
-        case Gungeon::CinematicState::cameraTargeting4:
-            camVelocity = CAM->position - player->Pos();
-            CAM->position -= camVelocity * DELTA;
-            if (abs(CAM->position.x - player->Pos().x) <= camDiff &&
-                abs(CAM->position.y - player->Pos().y) <= camDiff)
-            {
-                cinematic->cinematicState = CinematicState::cinematicBox4;
-            }
-            break;
-        case Gungeon::CinematicState::cinematicBox4:
-            break;
-        case Gungeon::CinematicState::finish2:
-            boss->StartDie();
-            player->StartIdle();
-            cinematic->cinematicState = CinematicState::clear;
-            break;
-        case Gungeon::CinematicState::clear:
-            break;
-        }
-
+        CinematicProcess();
 
         MAP->tilemap->Update();
         player->Update();
         boss->Update();
         cinematic->Update();
+
+        SOUND->SetVolume("BGM_Boss", 0.6f);
     }
 
     void Scene03::LateUpdate()
@@ -436,6 +346,109 @@ namespace Gungeon
         boss->LateUpdate();
     }
 
+    void Scene03::CinematicProcess()
+    {
+        Vector2 camVelocity;
+        const float camDiff = 30.0f;
+
+        switch (cinematic->cinematicState)
+        {
+            // 등장연출
+        case Gungeon::CinematicState::none:
+            if (boss->state == State::die)
+            {
+                cinematic->cinematicState = CinematicState::cinematicBox3;
+            }
+            break;
+        case Gungeon::CinematicState::cinematicBox1:
+            break;
+        case Gungeon::CinematicState::cameraTargeting1:
+            camVelocity = CAM->position - boss->Pos();
+            CAM->position -= camVelocity * DELTA;
+            if (abs(CAM->position.x - boss->Pos().x) <= camDiff &&
+                abs(CAM->position.y - boss->Pos().y) <= camDiff)
+            {
+                boss->SpawnAnim();
+                cinematic->cinematicState = CinematicState::bossSpawnAnim;
+            }
+            break;
+        case Gungeon::CinematicState::bossSpawnAnim:
+            if (boss->respawn->frame.x == boss->respawn->maxFrame.x - 1)
+            {
+                boss->SpawnAnimEnd();
+                cinematic->cinematicState = CinematicState::cutScene;
+            }
+            break;
+        case Gungeon::CinematicState::cutScene:
+            boss->CutSceneOn();
+            break;
+        case Gungeon::CinematicState::cameraTargeting2:
+            boss->CutSceneOff();
+
+            camVelocity = CAM->position - player->Pos();
+            CAM->position -= camVelocity * DELTA;
+            if (abs(CAM->position.x - player->Pos().x) <= camDiff &&
+                abs(CAM->position.y - player->Pos().y) <= camDiff)
+            {
+                cinematic->cinematicState = CinematicState::cinematicBox2;
+            }
+            break;
+        case Gungeon::CinematicState::cinematicBox2:
+            break;
+        case Gungeon::CinematicState::finish:
+            boss->StartIdle();
+            player->StartIdle();
+            UIOn(true);
+            cinematic->cinematicState = CinematicState::none;
+            break;
+
+            // 사망연출
+        case Gungeon::CinematicState::cinematicBox3:
+            player->state = State::cinematic;
+            UIOn(false);
+            break;
+        case Gungeon::CinematicState::cameraTargeting3:
+            camVelocity = CAM->position - boss->Pos();
+            CAM->position -= camVelocity * DELTA;
+            if (abs(CAM->position.x - boss->Pos().x) <= camDiff &&
+                abs(CAM->position.y - boss->Pos().y) <= camDiff)
+            {
+                cinematic->cinematicState = CinematicState::bossDieAnim;
+            }
+            break;
+        case Gungeon::CinematicState::bossDieAnim:
+            if (boss->realDie)
+            {
+                cinematic->cinematicState = CinematicState::cameraTargeting4;
+            }
+            break;
+        case Gungeon::CinematicState::cameraTargeting4:
+            camVelocity = CAM->position - player->Pos();
+            CAM->position -= camVelocity * DELTA;
+            if (abs(CAM->position.x - player->Pos().x) <= camDiff &&
+                abs(CAM->position.y - player->Pos().y) <= camDiff)
+            {
+                cinematic->cinematicState = CinematicState::cinematicBox4;
+            }
+            break;
+        case Gungeon::CinematicState::cinematicBox4:
+            break;
+        case Gungeon::CinematicState::finish2:
+            boss->StartDie();
+            player->StartIdle();
+            UIOn(true);
+            cinematic->cinematicState = CinematicState::clear;
+            break;
+        case Gungeon::CinematicState::clear:
+            break;
+        }
+    }
+
+    void Scene03::UIOn(const bool on)
+    {
+        player->UIOn(on);
+        boss->UIOn(on);
+    }
 
     void Scene03::ChangeUpdateScene()
     {

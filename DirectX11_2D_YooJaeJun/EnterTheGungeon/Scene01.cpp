@@ -34,7 +34,7 @@ namespace Gungeon
             }
         }
 
-        SOUND->Play("MapGenBGM");
+        SOUND->Play("BGM_MapGen");
     }
 
     void Scene01::Release()
@@ -74,6 +74,8 @@ namespace Gungeon
         if (mapGen) mapGen->Update();
 
         ChangeUpdateScene();
+
+        SOUND->SetVolume("BGM_MapGen", 0.6f);
     }
 
     void Scene01::LateUpdate()

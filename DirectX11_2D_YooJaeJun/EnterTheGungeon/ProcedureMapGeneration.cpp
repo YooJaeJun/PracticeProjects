@@ -322,32 +322,32 @@ namespace Gungeon
 
     void ProcedureMapGeneration::Loop()
     {
-        //int count = max(1, linesTriangulated.size() / 15);
+        int count = max(1, linesTriangulated.size() / 8);
 
-        //while (count--)
-        //{
-        //    float rand = RANDOM->Int(0, linesTriangulated.size() - 1);
-        //    bool flag = false;
-        //    for (auto& elem : linesMST)
-        //    {
-        //        if ((elem.V() == linesTriangulated[rand].V() && elem.W() == linesTriangulated[rand].W()) ||
-        //            (elem.V() == linesTriangulated[rand].W() && elem.W() == linesTriangulated[rand].V()))
-        //        {
-        //            count++;
-        //            flag = true;
-        //            break;
-        //        }
-        //    }
-        //    if (false == flag)
-        //    {
-        //        // 노드의 인덱스를 검사
-        //        linesTriangulated[rand].SetVIdx(triangulation.nodesForIndex[linesTriangulated[rand].V()]);
-        //        linesTriangulated[rand].SetWIdx(triangulation.nodesForIndex[linesTriangulated[rand].W()]);
+        while (count--)
+        {
+            float rand = RANDOM->Int(0, linesTriangulated.size() - 1);
+            bool flag = false;
+            for (auto& elem : linesMST)
+            {
+                if ((elem.V() == linesTriangulated[rand].V() && elem.W() == linesTriangulated[rand].W()) ||
+                    (elem.V() == linesTriangulated[rand].W() && elem.W() == linesTriangulated[rand].V()))
+                {
+                    count++;
+                    flag = true;
+                    break;
+                }
+            }
+            if (false == flag)
+            {
+                // 노드의 인덱스를 검사
+                linesTriangulated[rand].SetVIdx(triangulation.nodesForIndex[linesTriangulated[rand].V()]);
+                linesTriangulated[rand].SetWIdx(triangulation.nodesForIndex[linesTriangulated[rand].W()]);
 
-        //        linesTriangulated[rand].color = Color(0.5f, 0.5f, 1.0f);
-        //        linesMST.emplace_back(linesTriangulated[rand]);
-        //    }
-        //}
+                linesTriangulated[rand].color = Color(0.5f, 0.5f, 1.0f);
+                linesMST.emplace_back(linesTriangulated[rand]);
+            }
+        }
     }
 
     void ProcedureMapGeneration::Clean()
@@ -524,6 +524,12 @@ namespace Gungeon
                         SetDoor(curOn, curRoomIdx, curDir);
                         way.clear();
                         return curOn;
+                    }
+                    else if (!first &&
+                        curRoomIdx != destRoomIdx &&
+                        curTileState == TileState::wall)
+                    {
+                        SetDoor(curOn, curRoomIdx, curDir);
                     }
 
                     beforeOn = way[cur]->idx;

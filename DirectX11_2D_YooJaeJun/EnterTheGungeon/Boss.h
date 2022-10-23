@@ -11,7 +11,7 @@ namespace Gungeon
 		spiral,
 		trail,
 		miro,
-		tornado,
+		brute,
 		shuriken,
 		max
 	};
@@ -55,6 +55,7 @@ namespace Gungeon
 		void SpawnAnimEnd();
 		void CutSceneOn();
 		void CutSceneOff();
+		void UIOn(const bool on);
 		virtual void ColToggle() override;
 
 		void ChangePattern(const BossPattern newPattern);
@@ -64,7 +65,7 @@ namespace Gungeon
 		void InitSpiral();
 		void InitTrail();
 		void InitMiro();
-		void InitTornado();
+		void InitBrute();
 		void InitShuriken();
 		void UpdateBullet();
 		void UpdateCircular();
@@ -73,7 +74,7 @@ namespace Gungeon
 		void UpdateSpiral();
 		void UpdateTrail();
 		void UpdateMiro();
-		void UpdateTornado();
+		void UpdateBrute();
 		void UpdateShuriken();
 
 	private:
@@ -83,7 +84,7 @@ namespace Gungeon
 		const int			spiralMax = 60;
 		const int			trailMax = 30;
 		const int			miroMax = 75;
-		const int			tornadoMax = 150;
+		const int			bruteMax = 150;
 		const int			miroWidth = 35;
 		const int			miroHeight = 35;
 		const int			shurikenMax = 40;
@@ -100,6 +101,7 @@ namespace Gungeon
 		ObImage*			chairAttack2 = nullptr;
 		ObImage*			chairAttack3 = nullptr;
 		ObImage*			chairDie = nullptr;
+		Effect*				dieBomb[4];
 		Weapon*				weapon = nullptr;
 		ObCircle*			firePosTargeting = nullptr;
 		ObCircle*			firePosCannon = nullptr;
@@ -115,6 +117,8 @@ namespace Gungeon
 		vector<string>		candidateString;
 		int					candidateStringCount = 0;
 		bool				flagSpiralRespawn = false;
+		float				timeShieldSound = 0.0f;
+		float				intervalShieldSound = 0.5f;
 		vector<string>		miro;
 		bool				miroStart = false;
 		bool				pushingPlayer = false;
@@ -130,5 +134,9 @@ namespace Gungeon
 		bool				realDie = false;
 		float				timeInit = 0.0f;
 		float				intervalInit = 1.0f;
+		float				timeBombBetween = 0.0f;
+		float				intervalBombBetween = 0.3f;
+		float				intervalBombAnim = 0.1f;
+		bool				isUIRendering = true;
 	};
 }
