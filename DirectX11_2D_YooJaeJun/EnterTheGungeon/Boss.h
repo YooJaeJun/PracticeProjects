@@ -7,7 +7,7 @@ namespace Gungeon
 		none,
 		circular,
 		string,
-		shield,
+		tornado,
 		spiral,
 		trail,
 		miro,
@@ -61,7 +61,7 @@ namespace Gungeon
 		void ChangePattern(const BossPattern newPattern);
 		void InitCircular();
 		void InitString();
-		void InitShield();
+		void InitTornado();
 		void InitSpiral();
 		void InitTrail();
 		void InitMiro();
@@ -70,7 +70,7 @@ namespace Gungeon
 		void UpdateBullet();
 		void UpdateCircular();
 		void UpdateString();
-		void UpdateShield();
+		void UpdateTornado();
 		void UpdateSpiral();
 		void UpdateTrail();
 		void UpdateMiro();
@@ -80,7 +80,7 @@ namespace Gungeon
 	private:
 		const int			patternMax = static_cast<int>(BossPattern::max) - 1;
 		const int			circularMax = 180;
-		const int			shieldMax = 60;
+		const int			tornadoMax = 60;
 		const int			spiralMax = 60;
 		const int			trailMax = 30;
 		const int			miroMax = 75;
@@ -117,8 +117,8 @@ namespace Gungeon
 		vector<string>		candidateString;
 		int					candidateStringCount = 0;
 		bool				flagSpiralRespawn = false;
-		float				timeShieldSound = 0.0f;
-		float				intervalShieldSound = 0.5f;
+		float				timeTornadoSound = 0.0f;
+		float				intervalTornadoSound = 0.5f;
 		vector<string>		miro;
 		bool				miroStart = false;
 		bool				pushingPlayer = false;

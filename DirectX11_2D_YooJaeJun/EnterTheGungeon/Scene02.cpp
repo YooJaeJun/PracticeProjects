@@ -261,6 +261,7 @@ namespace Gungeon
                     if (false == mapGen->selectedRooms[afterRoomIdx]->cleared)
                     {
                         SpawnEffect();
+                        SOUND->Play("EnemySpawning");
 
                         int idx = 0;
                         for (auto& on : curRoom->doorTileIdxs)
@@ -622,7 +623,8 @@ namespace Gungeon
     {
         if (roomClearCount >= roomClearCountForBossBattle &&
             curRoom->roomType != RoomType::start &&
-            curRoom->roomType != RoomType::treasure)
+            curRoom->roomType != RoomType::treasure &&
+            curRoom->cleared)
         {
             roomClearCount = 0;
             gate->Spawn(curRoom->Pos());

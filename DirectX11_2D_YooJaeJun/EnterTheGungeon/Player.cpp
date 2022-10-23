@@ -102,6 +102,7 @@ namespace Gungeon
 		weapons[curWeaponIdx] = new Weapon1;
 		weapons[curWeaponIdx]->col->SetParentRT(*col);
 		weapons[curWeaponIdx]->col->SetLocalPos(Vector2(10.0f, -15.0f));
+		weapons[curWeaponIdx]->idle->isVisible = true;
 		weapons[curWeaponIdx]->Equip();
 
 		for (auto& elem : weapons[curWeaponIdx]->uiBullet)
@@ -403,7 +404,7 @@ namespace Gungeon
 		if (flagInteractionUI)
 		{
 			DWRITE->RenderText(L"E키 입력",
-				RECT{ (long)app.GetHalfWidth() + 100, (long)app.GetHalfHeight() + 50,
+				RECT{ (long)app.GetHalfWidth() + 30, (long)app.GetHalfHeight() + 10,
 				(long)app.GetWidth(), (long)app.GetHeight() },
 				30.0f,
 				L"PF스타더스트");

@@ -37,7 +37,7 @@ namespace Gungeon
         intervalFire[(int)BossPattern::none] = 0.0f;
         intervalFire[(int)BossPattern::circular] = 1.5f;
         intervalFire[(int)BossPattern::string] = 2.0f;
-        intervalFire[(int)BossPattern::shield] = 0.0f;
+        intervalFire[(int)BossPattern::tornado] = 0.0f;
         intervalFire[(int)BossPattern::spiral] = 0.05f;
         intervalFire[(int)BossPattern::trail] = 0.6f;
         intervalFire[(int)BossPattern::miro] = 0.3f;
@@ -47,7 +47,7 @@ namespace Gungeon
         intervalEnd[(int)BossPattern::none] = 0.0f;
         intervalEnd[(int)BossPattern::circular] = 5.8f;
         intervalEnd[(int)BossPattern::string] = 11.5f;
-        intervalEnd[(int)BossPattern::shield] = 12.0f;
+        intervalEnd[(int)BossPattern::tornado] = 12.0f;
         intervalEnd[(int)BossPattern::spiral] = 6.0f;
         intervalEnd[(int)BossPattern::trail] = 8.0f;
         intervalEnd[(int)BossPattern::miro] = 13.0f;
@@ -314,8 +314,8 @@ namespace Gungeon
         case Gungeon::BossPattern::string:
             InitString();
             break;
-        case Gungeon::BossPattern::shield:
-            InitShield();
+        case Gungeon::BossPattern::tornado:
+            InitTornado();
             break;
         case Gungeon::BossPattern::spiral:
             InitSpiral();
@@ -527,7 +527,7 @@ namespace Gungeon
 
             switch (pattern)
             {
-            case Gungeon::BossPattern::shield:
+            case Gungeon::BossPattern::tornado:
             case Gungeon::BossPattern::brute:
                 hit->isVisible = false;
                 attack1->isVisible = true;
@@ -562,11 +562,10 @@ namespace Gungeon
 
             switch (pattern)
             {
-            case Gungeon::BossPattern::shield:
+            case Gungeon::BossPattern::tornado:
             case Gungeon::BossPattern::brute:
                 if (attack1->frame.x == attack1->maxFrame.x - 1)
                 {
-                    SOUND->Stop("BulletKingSpin");
                     SOUND->Play("BulletKingSpin");
                 }
                 break;
@@ -576,7 +575,6 @@ namespace Gungeon
             case Gungeon::BossPattern::shuriken:
                 if (attack2->frame.x == attack2->maxFrame.x - 1)
                 {
-                    SOUND->Stop("BulletKingThrow");
                     SOUND->Play("BulletKingThrow");
                 }
                 break;
@@ -586,7 +584,6 @@ namespace Gungeon
             case Gungeon::BossPattern::trail:
                 if (attack3->frame.x == attack3->maxFrame.x - 1)
                 {
-                    SOUND->Stop("BulletKingChairDown");
                     SOUND->Play("BulletKingChairDown");
                 }
                 break;
@@ -676,6 +673,18 @@ namespace Gungeon
         else
         {
             hit->ChangeAnim(AnimState::once, 0.1f);
+
+            int r = RANDOM->Int(0, 1);
+            if (r)
+            {
+                SOUND->Stop("Voice_Boss_Hit1");
+                SOUND->Play("Voice_Boss_Hit1");
+            }
+            else
+            {
+                SOUND->Stop("Voice_Boss_Hit2");
+                SOUND->Play("Voice_Boss_Hit2");
+            }
         }
 
 
@@ -687,10 +696,6 @@ namespace Gungeon
         {
             hit->reverseLR = false;
         }
-
-        int r = RANDOM->Int(0, 1);
-        if (r) SOUND->Play("Voice_Boss_Hit1");
-        else SOUND->Play("Voice_Boss_Hit2");
     }
 
     void Boss::Hitting()
@@ -984,11 +989,11 @@ namespace Gungeon
         }
     }
 
-    void Boss::InitShield()
+    void Boss::InitTornado()
     {
         scalar *= 1.2f;
 
-        bullet.resize(shieldMax);
+        bullet.resize(tornadoMax);
 
         int idx = 0;
         for (auto& elem : bullet)
@@ -999,7 +1004,7 @@ namespace Gungeon
             elem->col->SetParentRT(*col);
             elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
             elem->idle->isVisible = true;
-            elem->idle->color = Color(0.7f, 0.7f, 0.0f, 1.0f);
+            elem->idle->color = Color(0.7f, 0.7f, 0.6f, 1.0f);
             idx++;
         }
 
@@ -1102,8 +1107,8 @@ namespace Gungeon
         case Gungeon::BossPattern::string:
             UpdateString();
             break;
-        case Gungeon::BossPattern::shield:
-            UpdateShield();
+        case Gungeon::BossPattern::tornado:
+            UpdateTornado();
             break;
         case Gungeon::BossPattern::spiral:
             UpdateSpiral();
@@ -1195,7 +1200,7 @@ namespace Gungeon
         }
     }
 
-    void Boss::UpdateShield()
+    void Boss::UpdateTornado()
     {
         int idx = 0;
         for (auto& elem : bullet)
@@ -1210,7 +1215,7 @@ namespace Gungeon
             idx++;
         }
 
-        if (TIMER->GetTick(timeShieldSound, intervalShieldSound))
+        if (TIMER->GetTick(timeTornadoSound, intervalTornadoSound))
         {
             SOUND->Stop("BulletKingThrow");
             SOUND->Play("BulletKingThrow");

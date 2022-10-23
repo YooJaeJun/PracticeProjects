@@ -166,7 +166,7 @@ namespace Gungeon
             case State::attack:
                 switch (boss->pattern)
                 {
-                case BossPattern::shield:
+                case BossPattern::tornado:
                 case BossPattern::trail:
                     boss->FindPath(MAP->tilemap);
                     break;
@@ -370,6 +370,7 @@ namespace Gungeon
             {
                 boss->SpawnAnim();
                 cinematic->cinematicState = CinematicState::bossSpawnAnim;
+                SOUND->Play("Voice_Boss_Spawn");
             }
             break;
         case Gungeon::CinematicState::bossSpawnAnim:

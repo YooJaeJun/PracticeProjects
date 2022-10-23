@@ -70,5 +70,6 @@ namespace Gungeon
 		float				g = 0.0f;	// ∫Ò¿≤
 		wstring				name;
 		wstring				desc;
+		float				timeTarget;
 	};
 }

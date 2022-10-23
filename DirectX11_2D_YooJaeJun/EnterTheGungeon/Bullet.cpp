@@ -91,7 +91,6 @@ namespace Gungeon
     void Bullet::Hit(const float damage)
     {
         hitBomb->Spawn(idle->GetWorldPos());
-        SOUND->Stop("Bomb");
         SOUND->Play("Bomb");
         Reload();
     }

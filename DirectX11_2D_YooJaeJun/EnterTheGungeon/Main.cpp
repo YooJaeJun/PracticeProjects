@@ -43,6 +43,8 @@ void Gungeon::Main::InitSound()
     SOUND->AddSound("EnterTheGungeon/BookCharge.ogg", "BookCharge", false);
     SOUND->AddSound("EnterTheGungeon/BookAttack.ogg", "BookAttack", false);
     SOUND->AddSound("EnterTheGungeon/BookDrop.ogg", "BookDrop", false);
+    SOUND->AddSound("EnterTheGungeon/EnemySpawning.ogg", "EnemySpawning", false);
+    SOUND->AddSound("EnterTheGungeon/EnemySpawn.ogg", "EnemySpawn", false);
     SOUND->AddSound("EnterTheGungeon/BulletManDeath.ogg", "BulletManDeath", false);
     SOUND->AddSound("EnterTheGungeon/BulletManHurt.ogg", "BulletManHurt", false);
     SOUND->AddSound("EnterTheGungeon/BossIntro.ogg", "BossIntro", false);
@@ -50,6 +52,7 @@ void Gungeon::Main::InitSound()
     SOUND->AddSound("EnterTheGungeon/BulletKingShot.ogg", "BulletKingShot", false);
     SOUND->AddSound("EnterTheGungeon/BulletKingThrow.ogg", "BulletKingThrow", false);
     SOUND->AddSound("EnterTheGungeon/BulletKingSpin.ogg", "BulletKingSpin", false);
+    SOUND->AddSound("EnterTheGungeon/Voice_Boss_Spawn.ogg", "Voice_Boss_Spawn", false);
     SOUND->AddSound("EnterTheGungeon/Voice_Boss_Tornado.ogg", "Voice_Boss_Tornado", false);
     SOUND->AddSound("EnterTheGungeon/Voice_Boss_Hit1.ogg", "Voice_Boss_Hit1", false);
     SOUND->AddSound("EnterTheGungeon/Voice_Boss_Hit2.ogg", "Voice_Boss_Hit2", false);
