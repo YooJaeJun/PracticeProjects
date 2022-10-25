@@ -394,9 +394,9 @@ namespace Gungeon
         for (auto& elem : enemy)
         {
             SafeRelease(elem);
-            int r = RANDOM->Int(0, 6);
-            if (r < 2) elem = new Enemy3();
-            else if (r < 4) elem = new Enemy1();
+            int randEnemyClass = RANDOM->Int(0, 6);
+            if (randEnemyClass < 2) elem = new Enemy3();
+            else if (randEnemyClass < 4) elem = new Enemy1();
             else elem = new Enemy2();
             if (curRoom) elem->Spawn(curRoom->enemySpawner[idx]->GetWorldPos());
             idx++;

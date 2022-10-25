@@ -82,12 +82,9 @@ namespace Gungeon
 
 	void Unit::SetTarget(Weapon*& weapon)
 	{
-		if (TIMER->GetTick(timeTarget, 0.1f))
-		{
-			targetDir = targetPos - Pos();
-			targetDir.Normalize();
-			SetDirState(targetDir, curTargetDirState);
-		}
+		targetDir = targetPos - Pos();
+		targetDir.Normalize();
+		SetDirState(targetDir, curTargetDirState);
 
 		idle->frame.y = curTargetDirState;
 		walk->frame.y = curTargetDirState;

@@ -2,7 +2,7 @@
 
 namespace Gungeon
 {
-	const int curWeaponMax = 3;
+	const int weaponMax = 3;
 	const int dustMax = 2;
 
 	class Player : public Unit
@@ -52,7 +52,7 @@ namespace Gungeon
 
 	public:
 		ObImage*			roll = nullptr;
-		Weapon*				weapons[curWeaponMax];
+		Weapon*				weapons[weaponMax];
 		int					curWeaponMax = 0;
 		int					curWeaponIdx = 0;
 		bool				canFireOnce[(int)WeaponType::max];

@@ -780,6 +780,7 @@ namespace Gungeon
 		Unit::StartIdle();
 		roll->isVisible = false;
 		respawn->isVisible = false;
+		weapons[curWeaponIdx]->idle->isVisible = true;
 	}
 
 	void Player::StartRoll()

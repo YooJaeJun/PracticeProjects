@@ -778,9 +778,9 @@ namespace Gungeon
                 InitBullet();
 
                 // test
-                //pattern = BossPattern::shuriken;
-                //ChangePattern(pattern);
-                //InitBullet();
+                pattern = BossPattern::string;
+                ChangePattern(pattern);
+                InitBullet();
 
                 state = State::attack;
                 attackState = BossAttackState::start;
@@ -959,7 +959,7 @@ namespace Gungeon
 
     void Boss::InitString()
     {
-        stringBullet.inputString = candidateString[RANDOM->Int(0, candidateStringCount - 1)];
+        // stringBullet.inputString = candidateString[RANDOM->Int(0, candidateStringCount - 1)];
         stringBullet.SetStringBullet();
         bullet.resize(stringBullet.inputString.size() * 25);
         bulletSpawnPos = firePosTargeting->GetWorldPos();
@@ -1286,7 +1286,6 @@ namespace Gungeon
                 {
                     PlusXY();
                 }
-
                 Bullet* elem = new BossBullet;
                 elem->Init();
                 elem->scalar = 100.0f;
