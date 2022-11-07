@@ -43,6 +43,8 @@ namespace Gungeon
         intervalFire[(int)BossPattern::miro] = 0.3f;
         intervalFire[(int)BossPattern::brute] = 0.2f;
         intervalFire[(int)BossPattern::shuriken] = 0.2f;
+        intervalFire[(int)BossPattern::gravity] = 0.3f;
+        intervalFire[(int)BossPattern::wave] = 0.5f;
 
         intervalEnd[(int)BossPattern::none] = 0.0f;
         intervalEnd[(int)BossPattern::circular] = 5.8f;
@@ -53,6 +55,8 @@ namespace Gungeon
         intervalEnd[(int)BossPattern::miro] = 13.0f;
         intervalEnd[(int)BossPattern::brute] = 4.0f;
         intervalEnd[(int)BossPattern::shuriken] = 6.0f;
+        intervalEnd[(int)BossPattern::gravity] = 12.0f;
+        intervalEnd[(int)BossPattern::wave] = 10.0f;
 
         candidateStringCount = 4;
         candidateString = {
@@ -332,6 +336,12 @@ namespace Gungeon
         case Gungeon::BossPattern::shuriken:
             InitShuriken();
             break;
+        case Gungeon::BossPattern::gravity:
+            InitGravity();
+            break;
+        case Gungeon::BossPattern::wave:
+            InitWave();
+            break;
         }//switch
     }
 
@@ -524,12 +534,13 @@ namespace Gungeon
             idle->isVisible = false;
             walk->isVisible = false;
             chairIdle->isVisible = false;
+            hit->isVisible = false;
 
             switch (pattern)
             {
             case Gungeon::BossPattern::tornado:
             case Gungeon::BossPattern::brute:
-                hit->isVisible = false;
+            case Gungeon::BossPattern::gravity:
                 attack1->isVisible = true;
                 chairAttack1->isVisible = true;
                 break;
@@ -537,7 +548,7 @@ namespace Gungeon
             case Gungeon::BossPattern::miro:
             case Gungeon::BossPattern::spiral:
             case Gungeon::BossPattern::shuriken:
-                hit->isVisible = false;
+            case Gungeon::BossPattern::wave:
                 attack2->isVisible = true;
                 chairAttack2->isVisible = true;
                 break;
@@ -545,7 +556,6 @@ namespace Gungeon
             case Gungeon::BossPattern::circular:
             case Gungeon::BossPattern::string:
             case Gungeon::BossPattern::trail:
-                hit->isVisible = false;
                 attack3->isVisible = true;
                 chairAttack3->isVisible = true;
                 break;
@@ -564,6 +574,7 @@ namespace Gungeon
             {
             case Gungeon::BossPattern::tornado:
             case Gungeon::BossPattern::brute:
+            case Gungeon::BossPattern::gravity:
                 if (attack1->frame.x == attack1->maxFrame.x - 1)
                 {
                     SOUND->Play("BulletKingSpin");
@@ -573,6 +584,7 @@ namespace Gungeon
             case Gungeon::BossPattern::miro:
             case Gungeon::BossPattern::spiral:
             case Gungeon::BossPattern::shuriken:
+            case Gungeon::BossPattern::wave:
                 if (attack2->frame.x == attack2->maxFrame.x - 1)
                 {
                     SOUND->Play("BulletKingThrow");
@@ -778,9 +790,9 @@ namespace Gungeon
                 InitBullet();
 
                 // test
-                pattern = BossPattern::string;
-                ChangePattern(pattern);
-                InitBullet();
+                // pattern = BossPattern::gravity;
+                // ChangePattern(pattern);
+                // InitBullet();
 
                 state = State::attack;
                 attackState = BossAttackState::start;
@@ -959,7 +971,7 @@ namespace Gungeon
 
     void Boss::InitString()
     {
-        // stringBullet.inputString = candidateString[RANDOM->Int(0, candidateStringCount - 1)];
+        stringBullet.inputString = candidateString[RANDOM->Int(0, candidateStringCount - 1)];
         stringBullet.SetStringBullet();
         bullet.resize(stringBullet.inputString.size() * 25);
         bulletSpawnPos = firePosTargeting->GetWorldPos();
@@ -1096,6 +1108,40 @@ namespace Gungeon
         }
     }
 
+    void Boss::InitGravity()
+    {
+        bullet.resize(gravityMax);
+        bulletSpawnPos = firePosCannon->GetWorldPos();
+
+        int idx = 0;
+        for (auto& elem : bullet)
+        {
+            elem = new GravityBullet;
+            elem->Init();
+            elem->scalar = 600.0f;
+            elem->col->SetParentRT(*col);
+            elem->idle->color = Color(0.5f, 0.5f, 0.5f);
+            idx++;
+        }
+    }
+
+    void Boss::InitWave()
+    {
+        bullet.resize(waveMax);
+        bulletSpawnPos = firePosCannon->GetWorldPos();
+
+        int idx = 0;
+        for (auto& elem : bullet)
+        {
+            elem = new BossBullet;
+            elem->Init();
+            elem->scalar = 600.0f;
+            elem->col->SetParentRT(*col);
+            elem->idle->color = Color(0.5f, 0.5f, 0.5f);
+            idx++;
+        }
+    }
+
 
     void Boss::UpdateBullet()
     {
@@ -1124,6 +1170,12 @@ namespace Gungeon
             break;
         case Gungeon::BossPattern::shuriken:
             UpdateShuriken();
+            break;
+        case Gungeon::BossPattern::gravity:
+            UpdateGravity();
+            break;
+        case Gungeon::BossPattern::wave:
+            UpdateWave();
             break;
         }
     }
@@ -1340,6 +1392,56 @@ namespace Gungeon
                     childElem->moveDir = targetPos - childElem->Pos();
                 }
             }
+            idx++;
+        }
+    }
+
+    void Boss::UpdateGravity()
+    {
+        if (TIMER->GetTick(timeFire, intervalFire[(int)BossPattern::gravity]))
+        {
+            bullet[curBulletIdx]->Spawn(bulletSpawnPos, 
+                Vector2(RANDOM->Float(-1.0f, 1.0f), 
+                    RANDOM->Float(0.0f, 1.0f)));
+            curBulletIdx++;
+            if (curBulletIdx >= gravityMax) curBulletIdx = 0;
+
+            SOUND->Stop("BulletKingShot");
+            SOUND->Play("BulletKingShot");
+        }
+    }
+
+    void Boss::UpdateWave()
+    {
+        if (TIMER->GetTick(timeFire, intervalFire[(int)BossPattern::wave]))
+        {
+            Vector2 fialSpawnPos = bulletSpawnPos;
+            bullet[curBulletIdx]->Spawn(fialSpawnPos, Vector2(-0.8f, -1.0f));
+            curBulletIdx++;
+            if (curBulletIdx >= waveMax) curBulletIdx = 0;
+
+            SOUND->Stop("BulletKingShot");
+            SOUND->Play("BulletKingShot");
+        }
+
+        int idx = 0;
+        for (auto& elem : bullet)
+        {
+            if (elem->isFired)
+            {
+                if (elem->increaseState) elem->moveDir.x += 6.0f * DELTA;
+                else elem->moveDir.x -= 6.0f * DELTA;
+
+                if (elem->moveDir.x > 0.8f)
+                {
+                    elem->increaseState = false;
+                }
+                else if (elem->moveDir.x < -0.8f)
+                {
+                    elem->increaseState = true;
+                }
+            }
+
             idx++;
         }
     }

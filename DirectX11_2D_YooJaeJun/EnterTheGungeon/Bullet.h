@@ -13,8 +13,8 @@ namespace Gungeon
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 
-		void Spawn(const Vector2& coord);
-		void Spawn(const Vector2& coord, const Vector2& fireDir);
+		virtual void Spawn(const Vector2& coord);
+		virtual void Spawn(const Vector2& coord, const Vector2& fireDir);
 		void Fire();
 		void Hit(const float damage);
 		virtual void Reload();
@@ -31,5 +31,7 @@ namespace Gungeon
 		float		moveFactor = 1.0f;
 		float		timeLife = 0.0f;
 		float		intervalLife = 10.0f;
+		float		gravity = 0.0f;
+		bool		increaseState = true;
 	};
 }

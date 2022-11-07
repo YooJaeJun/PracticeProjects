@@ -137,7 +137,7 @@ namespace Gungeon
 
     void Scene03::Update()
     {
-        if (INPUT->KeyDown('3'))
+        if (ImGui::Button("Current Scene"))
         {
             ChangeScene3();
         }
@@ -324,6 +324,22 @@ namespace Gungeon
                             bulletElem->moveDir.x *= -1.0f;
                         }
                         bulletElem->col->rotation = Utility::DirToRadian(bulletElem->moveDir);
+                        bulletElem->StepBack();
+                        bulletElem->Update();
+                    }
+                    break;
+                case BossPattern::gravity:
+                    if (MAP->tilemap->isOnWall(on))
+                    {
+                        if (on.y <= 6 || on.y >= 21)
+                        {
+                            bulletElem->moveDir.y *= -1.0f;
+                            bulletElem->gravity *= -0.8f;
+                        }
+                        else
+                        {
+                            bulletElem->moveDir.x *= -1.0f;
+                        }
                         bulletElem->StepBack();
                         bulletElem->Update();
                     }

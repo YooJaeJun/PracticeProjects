@@ -13,6 +13,8 @@ namespace Gungeon
 		miro,
 		brute,
 		shuriken,
+		gravity,
+		wave,
 		max
 	};
 
@@ -67,6 +69,9 @@ namespace Gungeon
 		void InitMiro();
 		void InitBrute();
 		void InitShuriken();
+		void InitGravity();
+		void InitWave();
+
 		void UpdateBullet();
 		void UpdateCircular();
 		void UpdateString();
@@ -76,6 +81,8 @@ namespace Gungeon
 		void UpdateMiro();
 		void UpdateBrute();
 		void UpdateShuriken();
+		void UpdateGravity();
+		void UpdateWave();
 
 	private:
 		const int			patternMax = static_cast<int>(BossPattern::max) - 1;
@@ -88,6 +95,8 @@ namespace Gungeon
 		const int			miroWidth = 35;
 		const int			miroHeight = 35;
 		const int			shurikenMax = 40;
+		const int			gravityMax = 60;
+		const int			waveMax = 500;
 
 	public:
 		ObImage*			attack1Start = nullptr;

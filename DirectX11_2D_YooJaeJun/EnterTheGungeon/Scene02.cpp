@@ -95,15 +95,17 @@ namespace Gungeon
 
     void Scene02::Update()
     {
-        if (INPUT->KeyDown('1'))
+        if (ImGui::Button("Prev Scene"))
         {
             ChangeScene1();
         }
-        else if (INPUT->KeyDown('2'))
+        ImGui::SameLine();
+        if (ImGui::Button("Current Scene"))
         {
             ChangeScene2();
         }
-        else if (INPUT->KeyDown('3'))
+        ImGui::SameLine();
+        if (ImGui::Button("Next Scene"))
         {
             ChangeScene3();
         }

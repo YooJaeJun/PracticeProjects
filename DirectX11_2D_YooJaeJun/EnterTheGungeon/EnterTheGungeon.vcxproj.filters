@@ -128,6 +128,9 @@
     <ClInclude Include="Cinematic.h">
       <Filter>GameObject\Level</Filter>
     </ClInclude>
+    <ClInclude Include="GravityBullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -226,6 +229,9 @@
     </ClCompile>
     <ClCompile Include="Cinematic.cpp">
       <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="GravityBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

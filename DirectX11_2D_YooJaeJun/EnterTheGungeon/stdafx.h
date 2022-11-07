@@ -11,6 +11,7 @@
 #include "BossBullet.h"
 #include "TrailBullet.h"
 #include "ShurikenBullet.h"
+#include "GravityBullet.h"
 #include "StringBulletData.h"
 #include "Item.h"
 #include "Weapon.h"
