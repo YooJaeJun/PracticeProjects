@@ -21,17 +21,19 @@ namespace Gungeon
 
 	public:
 		ObImage*	idle = nullptr;
+		Effect*		hitBomb = nullptr;
 		bool		isFired = false;
 		Vector2		moveDir;
 		int			damage = 1;
-		float		timeRespawn = 0.0f;
-		Effect*		hitBomb = nullptr;
 		float		angle = 0.0f;
 		float		atkAngle = 0.0f;
+		bool		increaseState = true;
+		float		gravity = 0.0f;
 		float		moveFactor = 1.0f;
+
+	private:
+		float		timeRespawn = 0.0f;
 		float		timeLife = 0.0f;
 		float		intervalLife = 10.0f;
-		float		gravity = 0.0f;
-		bool		increaseState = true;
 	};
 }

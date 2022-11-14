@@ -72,7 +72,7 @@ namespace Gungeon
 		void Save();
 		void Load();
 
-	public:
+	private:
 		const float timeDefault = 0.5f;
 		const int roomMax = 12;
 		const int gridMax = 7000;
@@ -90,12 +90,14 @@ namespace Gungeon
 		const Int2 propPitFloorImgMax = { 6, 8 };
 
 	public:
+		vector<Room*>				selectedRooms;
+
+	private:
 		// 동적할당하지 않은 변수들은 보여주기 용도
 		bool						autoProcess = false;
 		float						timer = 0.0f;
 		// Room
 		vector<Room*>				candidateRooms;
-		vector<Room*>				selectedRooms;
 		MapGenState					state = MapGenState::none;
 		MapGenState					finalState = MapGenState::none;
 		float						roomScaleForSelect = 0.0f;

@@ -99,6 +99,13 @@ namespace Gungeon
 		const int			waveMax = 500;
 
 	public:
+		ObCircle*			firePosTargeting = nullptr;
+		BossPattern         pattern = BossPattern::none;
+		bool				pushingPlayer = false;
+		UI*					cutScene = nullptr;
+		bool				realDie = false;
+
+	private:
 		ObImage*			attack1Start = nullptr;
 		ObImage*			attack1 = nullptr;
 		ObImage*			attack2 = nullptr;
@@ -112,11 +119,9 @@ namespace Gungeon
 		ObImage*			chairDie = nullptr;
 		Effect*				dieBomb[4];
 		Weapon*				weapon = nullptr;
-		ObCircle*			firePosTargeting = nullptr;
 		ObCircle*			firePosCannon = nullptr;
 		UI*					hpGuageBar = nullptr;
 		UI*					hpGuage = nullptr;
-		BossPattern         pattern = BossPattern::none;
 		StringBulletData    stringBullet;
 		Vector2				bulletSpawnPos;
 		float				timeSetMoveDir = 0.0f;
@@ -130,7 +135,6 @@ namespace Gungeon
 		float				intervalTornadoSound = 0.5f;
 		vector<string>		miro;
 		bool				miroStart = false;
-		bool				pushingPlayer = false;
 		int					curBulletX = 0;
 		int					curBulletY = 0;
 		float				timeAttackEnd = 0.0f;
@@ -139,8 +143,6 @@ namespace Gungeon
 		float				intervalEnd[(int)BossPattern::max];
 		Effect*				spawnPlayerByForce = nullptr;
 		bool				flagRandomPattern = false;
-		UI*					cutScene = nullptr;
-		bool				realDie = false;
 		float				timeInit = 0.0f;
 		float				intervalInit = 1.0f;
 		float				timeBombBetween = 0.0f;

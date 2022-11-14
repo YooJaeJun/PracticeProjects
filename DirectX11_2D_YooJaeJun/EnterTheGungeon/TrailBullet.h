@@ -11,7 +11,7 @@ namespace Gungeon
 		virtual void Update() override;
 		virtual void Render() override;
 
-	public:
+	private:
 		deque<ObImage*>	trails;
 		float			timeTrail;
 		float			timeSpawnTrail;

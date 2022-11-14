@@ -30,14 +30,14 @@ namespace Gungeon
 		void AttackToWalk();
 		virtual void ColToggle() override;
 
-	private:
-		float			timeSetMoveDir = 0.0f;
-		float			timeSetTargetDir = 0.0f;
-		float			pushedScalar = 400.0f;
-		float			timeAiming = 0.0f;
-
 	public:
-		float			timeSetDir = 0.0f;
-		Weapon*			weapon = nullptr;
+		float		timeSetDir = 0.0f;
+		Weapon*		weapon = nullptr;
+
+	private:
+		float		timeSetMoveDir = 0.0f;
+		float		timeSetTargetDir = 0.0f;
+		float		pushedScalar = 400.0f;
+		float		timeAiming = 0.0f;
 	};
 }

@@ -31,22 +31,26 @@ namespace Gungeon
 
 	public:
 		ObImage*			respawn = nullptr;
+		ObImage*			shadow = nullptr;
+		Item*				dropItem = nullptr;
+		vector<Bullet*>		bullet;
 		ObImage*			idle = nullptr;
 		ObImage*			walk = nullptr;
+		Vector2				targetPos;
+		wstring				name;
+		wstring				desc;
+
+	protected:
 		ObImage*			kick = nullptr;
 		ObImage*			hit = nullptr;
 		ObImage*			fall = nullptr;
 		ObImage*			die = nullptr;
 		ObImage*			attack = nullptr;
 		ObImage*			attackEnd = nullptr;
-		ObImage*			shadow = nullptr;
-		Item*				dropItem = nullptr;
-		vector<Bullet*>		bullet;
 		DirState			curMoveDirState = DirState::dirB;
 		DirState			curMoveDirStateBefore = DirState::dirB;
 		DirState			curTargetDirState = DirState::dirB;
 		DirState			curTargetDirStateBefore = DirState::dirB;
-		Vector2				targetPos;
 		Vector2				targetDir;
 		Vector2				targetDirBefore;
 		Vector2				originCamPos;
@@ -61,15 +65,15 @@ namespace Gungeon
 		float				timeHitAnim = 0.0f;
 		float				timeDieAnim = 0.0f;
 		float				timeRealDie = 0.0f;
-		vector<Tile*>		way;
-		Vector2				start;
-		Vector2				end;
 		float				timeAttackStart = 0.0f;
 		float				intervalAttackStart = 0.0f;
 		float				timeFindPath = 0.0f;
+		float				timeTarget = 0.0f;
+		vector<Tile*>		way;
+
+	private:
 		float				g = 0.0f;	// ∫Ò¿≤
-		wstring				name;
-		wstring				desc;
-		float				timeTarget;
+		Vector2				start;
+		Vector2				end;
 	};
 }

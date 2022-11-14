@@ -24,9 +24,11 @@ namespace Gungeon
 		void Spawn(const Vector2 wpos);
 
 	public:
-		ObImage*	open = nullptr;
-		TreasureState treasureState = TreasureState::none;
-		Weapon*		weapon[treasureWeaponNum];
-		Vector2		weaponDest[treasureWeaponNum];
+		TreasureState	treasureState = TreasureState::none;
+		Weapon*			weapon[treasureWeaponNum];
+
+	private:
+		ObImage*		open = nullptr;
+		Vector2			weaponDest[treasureWeaponNum];
 	};
 }

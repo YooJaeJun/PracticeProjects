@@ -28,7 +28,7 @@ namespace Gungeon
 		virtual void Fire() override;
 		virtual void StartDie() override;
 
-	public:
+	private:
 		Enemy3FireState		fireState = Enemy3FireState::none;
 		const int			bulletMax = 43;
 		float				timeBulletTarget = 0.0f;

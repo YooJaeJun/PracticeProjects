@@ -16,7 +16,9 @@ namespace Gungeon
 
 	public:
 		ObImage*	idle = nullptr;
-		float		timeDie = 0.0f;
 		float		intervalDie = 0.5f;
+
+	private:
+		float		timeDie = 0.0f;
 	};
 }

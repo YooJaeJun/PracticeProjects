@@ -24,12 +24,12 @@ namespace Gungeon
 		void ColToggle();
 
 	public:
-		Room* curRoom = nullptr;
 		Player* player = nullptr;
-		Boss* boss = nullptr;
-		Cinematic* cinematic = nullptr;
 
 	private:
+		Room*		curRoom = nullptr;
+		Boss*		boss = nullptr;
+		Cinematic*	cinematic = nullptr;
 		bool		isChangingScene = false;
 		float		timeFade = 0.0f;
 	};

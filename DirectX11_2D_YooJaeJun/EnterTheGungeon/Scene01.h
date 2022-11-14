@@ -22,6 +22,8 @@ namespace Gungeon
 	public:
 		ProcedureMapGeneration* mapGen = nullptr;
 		Player*					player = nullptr;
+
+	private:
 		bool					isChangingScene = false;
 		float					timeFade = 0.0f;
 	};

@@ -53,8 +53,12 @@ namespace Gungeon
 	public:
 		ObImage*			roll = nullptr;
 		Weapon*				weapons[weaponMax];
-		int					curWeaponMax = 0;
+		bool				flagInteractionUI = false;
+		bool				godMode = false;
 		int					curWeaponIdx = 0;
+
+	private:
+		int					curWeaponMax = 0;
 		bool				canFireOnce[(int)WeaponType::max];
 		bool				isReloading = false;
 		float				timeReload = 0.0f;
@@ -65,7 +69,6 @@ namespace Gungeon
 		float				timeHitCamShake = 0.0f;
 		UI*					uiReload = nullptr;
 		UI*					uiReloadBar = nullptr;
-		bool				godMode = false;
 		bool				godModeByForce = false;
 		float				timeLastPosForDust = 0.0f;
 		Effect*				dust[dustMax];
@@ -85,7 +88,6 @@ namespace Gungeon
 		float				intervalFallEnd = 1.2f;
 		float				timeRespawnEnd = 0.0f;
 		float				intervalRespawnEnd = 0.7f;
-		bool				flagInteractionUI = false;
 		float				timeWalkSound = 0.0f;
 		float				intervalWalkSound = 0.3f;
 		bool				isUIRendering = true;

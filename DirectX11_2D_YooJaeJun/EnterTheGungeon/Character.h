@@ -41,9 +41,11 @@ namespace Gungeon
 		GameObject*	col = nullptr;
 		ObRect*		colTile = nullptr;
 		State		state = State::idle;
+		float		scalar = 0.0f;
+
+	protected:
 		Vector2		moveDir;
 		Vector2		lastPos;
-		float		scalar = 0.0f;
 		int			curHp = 0;
 		int			maxHp = 0;
 		bool		isHit = false;
