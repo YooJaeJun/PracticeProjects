@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="Character.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Airplane.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Enemy.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage02.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage01.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Character.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Airplane.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage01.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage02.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{e78ff6b3-d312-4079-9e70-456687f1bd9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{749c94d5-fecb-403a-9751-169372e81e2f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
