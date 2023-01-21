@@ -1,0 +1,191 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33130.400
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Framework", "Framework\Framework.vcxproj", "{F0532F67-59D5-4CE4-AFED-9BE00CEB1498}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{D24B5670-D059-4FB3-94CB-1B985066BA23}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F0532F67-59D5-4CE4-AFED-9BE00CEB1498} = {F0532F67-59D5-4CE4-AFED-9BE00CEB1498}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Shaders", "_Shaders", "{BE66C2BC-815A-4B8F-8980-34FB17ED16BC}"
+	ProjectSection(SolutionItems) = preProject
+		..\_Shaders\04_Vertex.fx = ..\_Shaders\04_Vertex.fx
+		..\_Shaders\06_Triangle.fx = ..\_Shaders\06_Triangle.fx
+		..\_Shaders\07_Rect.fx = ..\_Shaders\07_Rect.fx
+		..\_Shaders\09_World.fx = ..\_Shaders\09_World.fx
+		..\_Shaders\10_World.fx = ..\_Shaders\10_World.fx
+		..\_Shaders\15_Cube.fx = ..\_Shaders\15_Cube.fx
+		..\_Shaders\16_Texture.fx = ..\_Shaders\16_Texture.fx
+		..\_Shaders\18_TextureSampler.fx = ..\_Shaders\18_TextureSampler.fx
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Libraries", "_Libraries", "{A2DC9248-6EB0-4816-A606-3A68E525ECAD}"
+	ProjectSection(SolutionItems) = preProject
+		..\_Libraries\assimp-vc140-mt.dll = ..\_Libraries\assimp-vc140-mt.dll
+		..\_Libraries\d3dx11effect.h = ..\_Libraries\d3dx11effect.h
+		..\_Libraries\DirectXTex.h = ..\_Libraries\DirectXTex.h
+		..\_Libraries\DirectXTex.inl = ..\_Libraries\DirectXTex.inl
+		..\_Libraries\DirectXTex.lib = ..\_Libraries\DirectXTex.lib
+		..\_Libraries\DirectXTex.pdb = ..\_Libraries\DirectXTex.pdb
+		..\_Libraries\Effects11d.lib = ..\_Libraries\Effects11d.lib
+		..\_Libraries\Effects11d.pdb = ..\_Libraries\Effects11d.pdb
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assimp", "Assimp", "{5F30655D-45BF-4566-88EB-70D57E83D3F7}"
+	ProjectSection(SolutionItems) = preProject
+		..\_Libraries\Assimp\.editorconfig = ..\_Libraries\Assimp\.editorconfig
+		..\_Libraries\Assimp\ai_assert.h = ..\_Libraries\Assimp\ai_assert.h
+		..\_Libraries\Assimp\anim.h = ..\_Libraries\Assimp\anim.h
+		..\_Libraries\Assimp\assimp-vc140-mt.dll = ..\_Libraries\Assimp\assimp-vc140-mt.dll
+		..\_Libraries\Assimp\assimp-vc140-mt.lib = ..\_Libraries\Assimp\assimp-vc140-mt.lib
+		..\_Libraries\Assimp\assimp-vc140-mt.pdb = ..\_Libraries\Assimp\assimp-vc140-mt.pdb
+		..\_Libraries\Assimp\BaseImporter.h = ..\_Libraries\Assimp\BaseImporter.h
+		..\_Libraries\Assimp\Bitmap.h = ..\_Libraries\Assimp\Bitmap.h
+		..\_Libraries\Assimp\BlobIOSystem.h = ..\_Libraries\Assimp\BlobIOSystem.h
+		..\_Libraries\Assimp\ByteSwapper.h = ..\_Libraries\Assimp\ByteSwapper.h
+		..\_Libraries\Assimp\camera.h = ..\_Libraries\Assimp\camera.h
+		..\_Libraries\Assimp\cexport.h = ..\_Libraries\Assimp\cexport.h
+		..\_Libraries\Assimp\cfileio.h = ..\_Libraries\Assimp\cfileio.h
+		..\_Libraries\Assimp\cimport.h = ..\_Libraries\Assimp\cimport.h
+		..\_Libraries\Assimp\color4.h = ..\_Libraries\Assimp\color4.h
+		..\_Libraries\Assimp\color4.inl = ..\_Libraries\Assimp\color4.inl
+		..\_Libraries\Assimp\config.h = ..\_Libraries\Assimp\config.h
+		..\_Libraries\Assimp\config.h.in = ..\_Libraries\Assimp\config.h.in
+		..\_Libraries\Assimp\CreateAnimMesh.h = ..\_Libraries\Assimp\CreateAnimMesh.h
+		..\_Libraries\Assimp\DefaultIOStream.h = ..\_Libraries\Assimp\DefaultIOStream.h
+		..\_Libraries\Assimp\DefaultIOSystem.h = ..\_Libraries\Assimp\DefaultIOSystem.h
+		..\_Libraries\Assimp\DefaultLogger.hpp = ..\_Libraries\Assimp\DefaultLogger.hpp
+		..\_Libraries\Assimp\Defines.h = ..\_Libraries\Assimp\Defines.h
+		..\_Libraries\Assimp\defs.h = ..\_Libraries\Assimp\defs.h
+		..\_Libraries\Assimp\Exceptional.h = ..\_Libraries\Assimp\Exceptional.h
+		..\_Libraries\Assimp\Exporter.hpp = ..\_Libraries\Assimp\Exporter.hpp
+		..\_Libraries\Assimp\fast_atof.h = ..\_Libraries\Assimp\fast_atof.h
+		..\_Libraries\Assimp\GenericProperty.h = ..\_Libraries\Assimp\GenericProperty.h
+		..\_Libraries\Assimp\Hash.h = ..\_Libraries\Assimp\Hash.h
+		..\_Libraries\Assimp\Importer.hpp = ..\_Libraries\Assimp\Importer.hpp
+		..\_Libraries\Assimp\importerdesc.h = ..\_Libraries\Assimp\importerdesc.h
+		..\_Libraries\Assimp\IOStream.hpp = ..\_Libraries\Assimp\IOStream.hpp
+		..\_Libraries\Assimp\IOStreamBuffer.h = ..\_Libraries\Assimp\IOStreamBuffer.h
+		..\_Libraries\Assimp\IOSystem.hpp = ..\_Libraries\Assimp\IOSystem.hpp
+		..\_Libraries\Assimp\irrXMLWrapper.h = ..\_Libraries\Assimp\irrXMLWrapper.h
+		..\_Libraries\Assimp\light.h = ..\_Libraries\Assimp\light.h
+		..\_Libraries\Assimp\LineSplitter.h = ..\_Libraries\Assimp\LineSplitter.h
+		..\_Libraries\Assimp\LogAux.h = ..\_Libraries\Assimp\LogAux.h
+		..\_Libraries\Assimp\Logger.hpp = ..\_Libraries\Assimp\Logger.hpp
+		..\_Libraries\Assimp\LogStream.hpp = ..\_Libraries\Assimp\LogStream.hpp
+		..\_Libraries\Assimp\Macros.h = ..\_Libraries\Assimp\Macros.h
+		..\_Libraries\Assimp\material.h = ..\_Libraries\Assimp\material.h
+		..\_Libraries\Assimp\material.inl = ..\_Libraries\Assimp\material.inl
+		..\_Libraries\Assimp\MathFunctions.h = ..\_Libraries\Assimp\MathFunctions.h
+		..\_Libraries\Assimp\matrix3x3.h = ..\_Libraries\Assimp\matrix3x3.h
+		..\_Libraries\Assimp\matrix3x3.inl = ..\_Libraries\Assimp\matrix3x3.inl
+		..\_Libraries\Assimp\matrix4x4.h = ..\_Libraries\Assimp\matrix4x4.h
+		..\_Libraries\Assimp\matrix4x4.inl = ..\_Libraries\Assimp\matrix4x4.inl
+		..\_Libraries\Assimp\MemoryIOWrapper.h = ..\_Libraries\Assimp\MemoryIOWrapper.h
+		..\_Libraries\Assimp\mesh.h = ..\_Libraries\Assimp\mesh.h
+		..\_Libraries\Assimp\metadata.h = ..\_Libraries\Assimp\metadata.h
+		..\_Libraries\Assimp\NullLogger.hpp = ..\_Libraries\Assimp\NullLogger.hpp
+		..\_Libraries\Assimp\ParsingUtils.h = ..\_Libraries\Assimp\ParsingUtils.h
+		..\_Libraries\Assimp\pbrmaterial.h = ..\_Libraries\Assimp\pbrmaterial.h
+		..\_Libraries\Assimp\postprocess.h = ..\_Libraries\Assimp\postprocess.h
+		..\_Libraries\Assimp\Profiler.h = ..\_Libraries\Assimp\Profiler.h
+		..\_Libraries\Assimp\ProgressHandler.hpp = ..\_Libraries\Assimp\ProgressHandler.hpp
+		..\_Libraries\Assimp\qnan.h = ..\_Libraries\Assimp\qnan.h
+		..\_Libraries\Assimp\quaternion.h = ..\_Libraries\Assimp\quaternion.h
+		..\_Libraries\Assimp\quaternion.inl = ..\_Libraries\Assimp\quaternion.inl
+		..\_Libraries\Assimp\RemoveComments.h = ..\_Libraries\Assimp\RemoveComments.h
+		..\_Libraries\Assimp\scene.h = ..\_Libraries\Assimp\scene.h
+		..\_Libraries\Assimp\SceneCombiner.h = ..\_Libraries\Assimp\SceneCombiner.h
+		..\_Libraries\Assimp\SGSpatialSort.h = ..\_Libraries\Assimp\SGSpatialSort.h
+		..\_Libraries\Assimp\SkeletonMeshBuilder.h = ..\_Libraries\Assimp\SkeletonMeshBuilder.h
+		..\_Libraries\Assimp\SmoothingGroups.h = ..\_Libraries\Assimp\SmoothingGroups.h
+		..\_Libraries\Assimp\SmoothingGroups.inl = ..\_Libraries\Assimp\SmoothingGroups.inl
+		..\_Libraries\Assimp\SpatialSort.h = ..\_Libraries\Assimp\SpatialSort.h
+		..\_Libraries\Assimp\StandardShapes.h = ..\_Libraries\Assimp\StandardShapes.h
+		..\_Libraries\Assimp\StreamReader.h = ..\_Libraries\Assimp\StreamReader.h
+		..\_Libraries\Assimp\StreamWriter.h = ..\_Libraries\Assimp\StreamWriter.h
+		..\_Libraries\Assimp\StringComparison.h = ..\_Libraries\Assimp\StringComparison.h
+		..\_Libraries\Assimp\StringUtils.h = ..\_Libraries\Assimp\StringUtils.h
+		..\_Libraries\Assimp\Subdivision.h = ..\_Libraries\Assimp\Subdivision.h
+		..\_Libraries\Assimp\texture.h = ..\_Libraries\Assimp\texture.h
+		..\_Libraries\Assimp\TinyFormatter.h = ..\_Libraries\Assimp\TinyFormatter.h
+		..\_Libraries\Assimp\types.h = ..\_Libraries\Assimp\types.h
+		..\_Libraries\Assimp\vector2.h = ..\_Libraries\Assimp\vector2.h
+		..\_Libraries\Assimp\vector2.inl = ..\_Libraries\Assimp\vector2.inl
+		..\_Libraries\Assimp\vector3.h = ..\_Libraries\Assimp\vector3.h
+		..\_Libraries\Assimp\vector3.inl = ..\_Libraries\Assimp\vector3.inl
+		..\_Libraries\Assimp\version.h = ..\_Libraries\Assimp\version.h
+		..\_Libraries\Assimp\Vertex.h = ..\_Libraries\Assimp\Vertex.h
+		..\_Libraries\Assimp\XMLTools.h = ..\_Libraries\Assimp\XMLTools.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compiler", "Compiler", "{07AA7A92-B115-4112-85D9-90539A322B9F}"
+	ProjectSection(SolutionItems) = preProject
+		..\_Libraries\Assimp\Compiler\poppack1.h = ..\_Libraries\Assimp\Compiler\poppack1.h
+		..\_Libraries\Assimp\Compiler\pstdint.h = ..\_Libraries\Assimp\Compiler\pstdint.h
+		..\_Libraries\Assimp\Compiler\pushpack1.h = ..\_Libraries\Assimp\Compiler\pushpack1.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "port", "port", "{D58021A7-3DB7-41C8-9906-909C2F5DD722}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AndroidJNI", "AndroidJNI", "{47F0D4FF-7B88-46C4-938F-C56AA40D4200}"
+	ProjectSection(SolutionItems) = preProject
+		..\_Libraries\Assimp\port\AndroidJNI\AndroidJNIIOSystem.h = ..\_Libraries\Assimp\port\AndroidJNI\AndroidJNIIOSystem.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImGui_New", "ImGui_New", "{A946BD8E-7D2D-4E41-AC99-282345C99279}"
+	ProjectSection(SolutionItems) = preProject
+		..\_Libraries\ImGui_New\imconfig.h = ..\_Libraries\ImGui_New\imconfig.h
+		..\_Libraries\ImGui_New\imgui.h = ..\_Libraries\ImGui_New\imgui.h
+		..\_Libraries\ImGui_New\ImGui.lib = ..\_Libraries\ImGui_New\ImGui.lib
+		..\_Libraries\ImGui_New\ImGui.pdb = ..\_Libraries\ImGui_New\ImGui.pdb
+		..\_Libraries\ImGui_New\imgui_impl_dx11.h = ..\_Libraries\ImGui_New\imgui_impl_dx11.h
+		..\_Libraries\ImGui_New\imgui_impl_win32.h = ..\_Libraries\ImGui_New\imgui_impl_win32.h
+		..\_Libraries\ImGui_New\imgui_internal.h = ..\_Libraries\ImGui_New\imgui_internal.h
+		..\_Libraries\ImGui_New\imstb_rectpack.h = ..\_Libraries\ImGui_New\imstb_rectpack.h
+		..\_Libraries\ImGui_New\imstb_textedit.h = ..\_Libraries\ImGui_New\imstb_textedit.h
+		..\_Libraries\ImGui_New\imstb_truetype.h = ..\_Libraries\ImGui_New\imstb_truetype.h
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F0532F67-59D5-4CE4-AFED-9BE00CEB1498}.Debug|x64.ActiveCfg = Debug|x64
+		{F0532F67-59D5-4CE4-AFED-9BE00CEB1498}.Debug|x64.Build.0 = Debug|x64
+		{F0532F67-59D5-4CE4-AFED-9BE00CEB1498}.Debug|x86.ActiveCfg = Debug|Win32
+		{F0532F67-59D5-4CE4-AFED-9BE00CEB1498}.Debug|x86.Build.0 = Debug|Win32
+		{F0532F67-59D5-4CE4-AFED-9BE00CEB1498}.Release|x64.ActiveCfg = Release|x64
+		{F0532F67-59D5-4CE4-AFED-9BE00CEB1498}.Release|x64.Build.0 = Release|x64
+		{F0532F67-59D5-4CE4-AFED-9BE00CEB1498}.Release|x86.ActiveCfg = Release|Win32
+		{F0532F67-59D5-4CE4-AFED-9BE00CEB1498}.Release|x86.Build.0 = Release|Win32
+		{D24B5670-D059-4FB3-94CB-1B985066BA23}.Debug|x64.ActiveCfg = Debug|x64
+		{D24B5670-D059-4FB3-94CB-1B985066BA23}.Debug|x64.Build.0 = Debug|x64
+		{D24B5670-D059-4FB3-94CB-1B985066BA23}.Debug|x86.ActiveCfg = Debug|Win32
+		{D24B5670-D059-4FB3-94CB-1B985066BA23}.Debug|x86.Build.0 = Debug|Win32
+		{D24B5670-D059-4FB3-94CB-1B985066BA23}.Release|x64.ActiveCfg = Release|x64
+		{D24B5670-D059-4FB3-94CB-1B985066BA23}.Release|x64.Build.0 = Release|x64
+		{D24B5670-D059-4FB3-94CB-1B985066BA23}.Release|x86.ActiveCfg = Release|Win32
+		{D24B5670-D059-4FB3-94CB-1B985066BA23}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5F30655D-45BF-4566-88EB-70D57E83D3F7} = {A2DC9248-6EB0-4816-A606-3A68E525ECAD}
+		{07AA7A92-B115-4112-85D9-90539A322B9F} = {5F30655D-45BF-4566-88EB-70D57E83D3F7}
+		{D58021A7-3DB7-41C8-9906-909C2F5DD722} = {5F30655D-45BF-4566-88EB-70D57E83D3F7}
+		{47F0D4FF-7B88-46C4-938F-C56AA40D4200} = {D58021A7-3DB7-41C8-9906-909C2F5DD722}
+		{A946BD8E-7D2D-4E41-AC99-282345C99279} = {A2DC9248-6EB0-4816-A606-3A68E525ECAD}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B8BD438-8E4F-4D91-BB42-07C8AB03C104}
+	EndGlobalSection
+EndGlobal
