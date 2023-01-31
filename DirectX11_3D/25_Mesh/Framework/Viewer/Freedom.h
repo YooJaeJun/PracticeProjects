@@ -12,6 +12,6 @@ public:
 	void Speed(float move, float rotation = 2.0f);
 
 private:
-	float move = 20.0f;
+	float move = 40.0f;
 	float rotation = 2.0f;
 };

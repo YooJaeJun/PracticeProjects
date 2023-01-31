@@ -1,4 +1,5 @@
 #pragma once
+
 class MeshQuad : public Mesh
 {
 public:
