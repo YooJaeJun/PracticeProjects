@@ -157,6 +157,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImGui_New", "ImGui_New", "{
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelEditor", "ModelEditor\ModelEditor.vcxproj", "{0A719ECC-62B8-4858-A6E3-E04C8186BBAC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F0532F67-59D5-4CE4-AFED-9BE00CEB1498} = {F0532F67-59D5-4CE4-AFED-9BE00CEB1498}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

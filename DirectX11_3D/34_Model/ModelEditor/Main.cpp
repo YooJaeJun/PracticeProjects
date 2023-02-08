@@ -2,11 +2,11 @@
 #include "Main.h"
 #include "Systems/Window.h"
 
-#include "CubeSkyDemo.h"
+#include "ExportFile.h"
 
 void Main::Initialize()
 {
-	Push(new CubeSkyDemo());
+	Push(new ExportFile());
 }
 
 void Main::Ready()

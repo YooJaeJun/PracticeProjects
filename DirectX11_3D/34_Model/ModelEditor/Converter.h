@@ -6,16 +6,16 @@ public:
 	Converter();
 	~Converter();
 
-	void ReadFile();
+	void ReadFile(wstring file);
 
 public:
 	void ExportMesh(wstring savePath);
 
 private:
 	void ReadBoneData(aiNode* node, int index, int parent);
-	void ReadBoneData(aiNode* node, int bone);
+	void ReadMeshData(aiNode* node, int bone);
 	void WriteMeshData(wstring savePath);
-	
+
 private:
 	wstring file;
 
