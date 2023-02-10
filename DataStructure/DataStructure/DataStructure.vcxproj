@@ -19,12 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Stack\StackByLinkedList.h" />
-    <ClInclude Include="Stack\Stack.h" />
+    <ClCompile Include="Stack\MyExecute.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Stack\StackByLinkedList.cpp" />
-    <ClCompile Include="Stack\Execute_StackByLinkedList.cpp" />
+    <ClInclude Include="Stack\MyStack.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
