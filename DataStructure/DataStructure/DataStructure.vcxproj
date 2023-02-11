@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Stack\MyExecute.cpp" />
+    <ClCompile Include="03_Queue\MyQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Stack\MyStack.h" />
+    <ClInclude Include="03_Queue\MyQueue.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
