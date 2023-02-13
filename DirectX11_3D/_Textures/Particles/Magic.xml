@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Particle xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <BlendState>1</BlendState>
+    <Loop>true</Loop>
+    <TextureFile>LensFlare.png</TextureFile>
+    <MaxParticles>746</MaxParticles>
+    <ReadyTime>1.087</ReadyTime>
+    <ReadyRandomTime>1.286</ReadyRandomTime>
+    <StartVelocity>1</StartVelocity>
+    <EndVelocity>0</EndVelocity>
+    <MinHorizontalVelocity>18.327999</MinHorizontalVelocity>
+    <MaxHorizontalVelocity>22.83</MaxHorizontalVelocity>
+    <MinVerticalVelocity>0.96499997</MinVerticalVelocity>
+    <MaxVerticalVelocity>2.8940001</MaxVerticalVelocity>
+    <Gravity X="0" Y="1.099" Z="0"/>
+    <ColorAmount>4.2280002</ColorAmount>
+    <MinColor R="0.57258064" G="0.5725804" B="0.1569979" A="1"/>
+    <MaxColor R="0.69999999" G="0" B="0.69999999" A="1"/>
+    <MinRotateSpeed>-6.0770001</MinRotateSpeed>
+    <MaxRotateSpeed>5</MaxRotateSpeed>
+    <MinStartSize>0</MinStartSize>
+    <MaxStartSize>2</MaxStartSize>
+    <MinEndSize>5</MinEndSize>
+    <MaxEndSize>20</MaxEndSize>
+</Particle>
