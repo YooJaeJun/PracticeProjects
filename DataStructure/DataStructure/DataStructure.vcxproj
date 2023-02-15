@@ -18,6 +18,13 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="04_Tree\MyBTree.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="04_Tree\MyOperator.cpp" />
+    <ClCompile Include="04_Tree\Order.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

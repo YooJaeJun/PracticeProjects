@@ -43,3 +43,7 @@
 **/Debug/
 **/Debug_Framework/
 **/Debug_ModelEditor/
+
+# C++ Folder
+**/x86/
+**/x64/
