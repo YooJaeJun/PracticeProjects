@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# Unreal Assets Folder
+**/Assets/
+
+# Unreal Temp Folder
+**/Binaries/
+**/DerivedDataCache/
+**/Intermediate/
+**/Saved/
