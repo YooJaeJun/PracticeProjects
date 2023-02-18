@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ExportFile.cpp" />
+    <ClCompile Include="ModelDemo.cpp">
+      <Filter>Demo</Filter>
+    </ClCompile>
+    <ClCompile Include="Converter.cpp">
+      <Filter>Writer</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationDemo.cpp">
+      <Filter>Demo</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Types.h" />
+    <ClInclude Include="ExportFile.h" />
+    <ClInclude Include="ModelDemo.h">
+      <Filter>Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="Converter.h">
+      <Filter>Writer</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationDemo.h">
+      <Filter>Demo</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Demo">
+      <UniqueIdentifier>{ea655ee2-20ea-4208-88b9-3a4afabc1bc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Writer">
+      <UniqueIdentifier>{ebccc54d-db53-4087-a99d-36754e2596e5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
