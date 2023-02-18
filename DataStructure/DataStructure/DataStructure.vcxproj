@@ -19,11 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="04_Tree\MyBTree.h" />
+    <ClInclude Include="04_Tree\Timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="04_Tree\MyOperator.cpp" />
-    <ClCompile Include="04_Tree\Order.cpp" />
+    <ClCompile Include="04_Tree\Execute.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

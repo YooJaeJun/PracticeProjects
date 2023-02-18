@@ -12,20 +12,59 @@ void Expression(const char* postfix, BTree<char>::Node** node)
 	
 	switch (tocken)
 	{
-	case '+': case '-': case '*': case '/': case '%':
-	{
-		*node = BTree<char>::CreateNode(tocken);
+		case '+': case '-': case '*': case '/': case '%':
+		{
+			*node = BTree<char>::CreateNode(tocken);
 
-		Expression(postfix, &(*node)->right);
-		Expression(postfix, &(*node)->left);
-	}
-	break;
+			Expression(postfix, &(*node)->right);
+			Expression(postfix, &(*node)->left);
+		}
+		break;
 
-	default:
-	{
-		*node = BTree<char>::CreateNode(tocken);
-	}//case
+		default:
+		{
+			*node = BTree<char>::CreateNode(tocken);
+		}//case
 	}//swith
+}
+
+float Evaluate(BTree<char>::Node* node)
+{
+	if (node == NULL)
+		return 0.0f;
+
+	switch (node->data)
+	{
+		case '+': case '-': case '*': case '/': case '%':
+		{
+			float left = Evaluate(node->left);
+			float right = Evaluate(node->right);
+
+			// TODO: ¿¬»ê
+			switch (node->data)
+			{
+				case '+': return left + right;
+				case '-': return left - right;
+				case '*': return left * right;
+				case '/': return left / right;
+				case '%': return (int)left % (int)right;
+			}
+		}
+		break;
+
+		default:
+		{
+			char temp[4];
+			memset(temp, 0, sizeof(temp));
+
+			temp[0] = node->data;
+
+			return atof(temp);
+		}
+		break;
+	}
+
+	return 0.0f;
 }
 
 int main()
@@ -46,6 +85,8 @@ int main()
 
 	cout << endl << endl << "-- Post Order--" << endl;
 	tree.PostOrder(root);
+
+	cout << endl << Evaluate(root) << endl;
 
 	return 0;
 }
