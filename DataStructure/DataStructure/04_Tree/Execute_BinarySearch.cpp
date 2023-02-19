@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include <stdio.h>
 #include "BinarySearch.h"
-#include "Timer.h"
+#include "../Timer.h"
 
 struct Data
 {
