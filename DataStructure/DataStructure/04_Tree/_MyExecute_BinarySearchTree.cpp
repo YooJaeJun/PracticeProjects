@@ -1,8 +1,8 @@
 #include <iostream>
-#include "BinarySearchTree.h"
+#include "_MyBinarySearchTree.h"
 using namespace std;
 
-typedef BinarySearchTree<int> Tree;
+typedef MyBinarySearchTree<int> Tree;
 
 int main()
 {

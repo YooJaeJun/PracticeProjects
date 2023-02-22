@@ -1,7 +1,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
-#include "MyBTree.h"
-#include "MyTree.h"
+#include "_MyBTree.h"
+#include "_MyTree.h"
 using namespace std;
 
 void BTreeProcess()

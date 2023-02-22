@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="04_Tree\BinarySearchTree.h" />
+    <ClInclude Include="04_Tree\_MyBinarySearchTree.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="04_Tree\Execute_BinarySearchTree.cpp" />
+    <ClCompile Include="04_Tree\_MyExecute_BinarySearchTree.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

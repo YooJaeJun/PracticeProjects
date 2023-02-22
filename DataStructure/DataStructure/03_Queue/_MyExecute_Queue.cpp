@@ -1,6 +1,6 @@
-#include "MyQueue.h"
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
+#include "_MyQueue.h"
 using namespace std;
 
 void MyQueueByLinkedListDemo()
