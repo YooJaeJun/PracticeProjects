@@ -29,7 +29,7 @@ void ModelAnimator::Update()
 	keyframeDesc.Clip %= model->ClipCount();
 
 	ImGui::InputInt("CurrFrame", (int *)&keyframeDesc.CurrFrame);
-	keyframeDesc.CurrFrame = model->ClipByIndex(keyframeDesc.Clip)->FrameCount();
+	keyframeDesc.CurrFrame %= model->ClipByIndex(keyframeDesc.Clip)->FrameCount();
 
 
 	if (texture == NULL)
@@ -98,7 +98,7 @@ void ModelAnimator::CreateTexture()
 		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 		desc.MipLevels = 1;
 		desc.SampleDesc.Count = 1;
-		
+
 		UINT pageSize = MAX_MODEL_TRANSFORMS * 4 * 16 * MAX_MODEL_KEYFRAMES;
 		//void* p = malloc(pageSize * model->ClipCount());
 		void* p = VirtualAlloc(NULL, pageSize * model->ClipCount(), MEM_RESERVE, PAGE_READWRITE);

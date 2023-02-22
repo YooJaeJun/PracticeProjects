@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Vertex_Line.cpp">
+      <Filter>Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertex_Line2.cpp">
+      <Filter>Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="TriangleList.cpp">
+      <Filter>Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="RectDemo.cpp">
+      <Filter>Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterfaceDemo.cpp">
+      <Filter>Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldDemo.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldDemo2.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldDemo3.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexDemo.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="GridDemo.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeDemo.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="RotationDemo.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureDemo.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoadDemo.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureSamplerDemo.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMapDemo.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalVectorDemo.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="GetHeightDemo.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="GetVerticalRaycast.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshDemo.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeMapDemo.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeSkyDemo.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Vertex_Line.h">
+      <Filter>Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex_Line2.h">
+      <Filter>Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="TriangleList.h">
+      <Filter>Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="RectDemo.h">
+      <Filter>Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterfaceDemo.h">
+      <Filter>Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldDemo.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldDemo2.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldDemo3.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexDemo.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="GridDemo.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeDemo.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="RotationDemo.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureDemo.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoadDemo.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureSamplerDemo.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMapDemo.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalVectorDemo.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="GetHeightDemo.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="GetVerticalRaycast.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshDemo.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeMapDemo.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeSkyDemo.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Vertex">
+      <UniqueIdentifier>{0f5e74cd-8acc-48d3-a953-d7ec6d96c7ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="World">
+      <UniqueIdentifier>{3b1898fb-da09-4a88-ac47-b96c8f5ee3a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{1a8f9e72-0e55-453c-8568-1235f4c0c2b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{a6b76bd6-106d-4c60-9528-775fd2a0ffe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain">
+      <UniqueIdentifier>{384bd1c4-67c0-477a-b594-30cbdd3c4070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{114e2363-26c9-4043-9f2b-167d2f97c78f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
