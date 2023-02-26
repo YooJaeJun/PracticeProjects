@@ -2,9 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="04_Tree\_MyBinarySearchTree.h" />
+    <ClInclude Include="04_Tree\Heap.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="04_Tree\_MyExecute_BinarySearchTree.cpp" />
+    <ClCompile Include="04_Tree\Heap.cpp" />
   </ItemGroup>
 </Project>
