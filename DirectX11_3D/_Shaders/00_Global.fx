@@ -16,11 +16,6 @@ cbuffer CB_World
     matrix World;
 };
 
-Texture2D DiffuseMap;
-Texture2D SpecularMap;
-Texture2D NormalMap;
-
-TextureCube SkyCubeMap;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -44,6 +39,16 @@ float4 ViewProjection(float4 position)
 float3 WorldNormal(float3 normal)
 {
     return mul(normal, (float3x3) World);
+}
+
+float3 WorldTangent(float3 tangent)
+{
+    return mul(tangent, (float3x3) World);
+}
+
+float3 ViewPosition()
+{
+    return ViewInverse._41_42_43;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -87,6 +92,52 @@ struct VertexTextureNormal
 
 ///////////////////////////////////////////////////////////////////////////////
 
+struct MeshOutput
+{
+    float4 Position : SV_Position0; //Rasterizing Position
+    float3 oPosition : Position1; //Original Position
+    float3 wPosition : Position2; //World Position
+    float4 wvpPosition : Position3; //WVP
+    float4 wvpPosition_Sub : Position4; //WVP
+    float4 sPosition : Position5; //Light WVP
+    
+    float3 Normal : Normal;
+    float3 Tangent : Tangent;
+    float2 Uv : Uv;
+    float4 Color : Color;
+};
+
+struct MeshGeometryOutput
+{
+    float4 Position : SV_Position0; //Rasterizing Position
+    float3 oPosition : Position1; //Original Position
+    float3 wPosition : Position2; //World Position
+    
+    float3 Normal : Normal;
+    float3 Tangent : Tangent;
+    float2 Uv : Uv;
+    float4 Color : Color;
+    
+    uint TargetIndex : SV_RenderTargetArrayIndex;
+};
+
+MeshOutput ConvetMeshOutput(MeshGeometryOutput input)
+{
+    MeshOutput output;
+    
+    output.Position = input.Position;
+    output.oPosition = input.oPosition;
+    output.wPosition = input.wPosition;
+    output.Normal = input.Normal;
+    output.Tangent = input.Tangent;
+    output.Uv = input.Uv;
+    output.Color = input.Color;
+    
+    return output;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 SamplerState LinearSampler
 {
     Filter = MIN_MAG_MIP_LINEAR;
@@ -113,11 +164,118 @@ RasterizerState FillMode_WireFrame
     FillMode = WireFrame;
 };
 
+RasterizerState CullMode_None
+{
+    CullMode = None;
+};
+
 DepthStencilState DepthEnable_False
 {
     DepthEnable = false;
 };
 
+BlendState OpaqueBlend
+{
+    BlendEnable[0] = true;
+    SrcBlend[0] = One;
+    DestBlend[0] = Zero;
+    BlendOp[0] = ADD;
+    
+    SrcBlendAlpha[0] = One;
+    DestBlendAlpha[0] = Zero;
+    BlendOpAlpha[0] = Add;
+    
+    RenderTargetWriteMask[0] = 15; //Ox0F
+};
+
+BlendState AlphaBlend
+{
+    AlphaToCoverageEnable = false;
+    
+    BlendEnable[0] = true;
+    SrcBlend[0] = SRC_ALPHA;
+    DestBlend[0] = INV_SRC_ALPHA;
+    BlendOp[0] = ADD;
+    
+    SrcBlendAlpha[0] = One;
+    DestBlendAlpha[0] = Zero;
+    BlendOpAlpha[0] = Add;
+    
+    RenderTargetWriteMask[0] = 15; //Ox0F
+};
+
+BlendState AlphaBlend_AlphaToCoverageEnable
+{
+    AlphaToCoverageEnable = true;
+    
+    BlendEnable[0] = true;
+    SrcBlend[0] = SRC_ALPHA;
+    DestBlend[0] = INV_SRC_ALPHA;
+    BlendOp[0] = ADD;
+    
+    SrcBlendAlpha[0] = One;
+    DestBlendAlpha[0] = Zero;
+    BlendOpAlpha[0] = Add;
+    
+    RenderTargetWriteMask[0] = 15; //Ox0F
+};
+
+BlendState AdditiveBlend
+{
+    AlphaToCoverageEnable = false;
+    
+    BlendEnable[0] = true;
+    SrcBlend[0] = One;
+    DestBlend[0] = One;
+    BlendOp[0] = ADD;
+    
+    SrcBlendAlpha[0] = One;
+    DestBlendAlpha[0] = Zero;
+    BlendOpAlpha[0] = Add;
+    
+    RenderTargetWriteMask[0] = 15; //Ox0F
+};
+
+BlendState AdditiveBlend_Particle
+{
+    AlphaToCoverageEnable = false;
+    
+    BlendEnable[0] = true;
+    SrcBlend[0] = SRC_ALPHA;
+    DestBlend[0] = One;
+    BlendOp[0] = ADD;
+    
+    SrcBlendAlpha[0] = One;
+    DestBlendAlpha[0] = Zero;
+    BlendOpAlpha[0] = Add;
+    
+    RenderTargetWriteMask[0] = 15; //Ox0F
+};
+
+BlendState AdditiveBlend_AlphaToCoverageEnable
+{
+    AlphaToCoverageEnable = true;
+    
+    BlendEnable[0] = true;
+    SrcBlend[0] = One;
+    DestBlend[0] = One;
+    BlendOp[0] = ADD;
+    
+    SrcBlendAlpha[0] = One;
+    DestBlendAlpha[0] = Zero;
+    BlendOpAlpha[0] = Add;
+    
+    RenderTargetWriteMask[0] = 15; //Ox0F
+};
+
+DepthStencilState DepthRead_Particle
+{
+    DepthEnable = true;
+    DepthFunc = Less_Equal;
+    DepthWriteMask = 0;
+};
+
+///////////////////////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////////////////////
