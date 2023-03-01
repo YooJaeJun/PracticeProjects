@@ -19,11 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="04_Tree\Heap.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="04_Tree\Heap.cpp" />
+    <ClCompile Include="06_Sort\QuickSort.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
