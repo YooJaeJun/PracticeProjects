@@ -12,7 +12,7 @@ class MYUNREALCPP_01_API AC02_Mesh : public AActor
 {
 	GENERATED_BODY()
 
-private:
+protected:
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* Mesh;
 
