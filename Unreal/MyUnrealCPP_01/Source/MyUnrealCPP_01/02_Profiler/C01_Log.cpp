@@ -21,11 +21,25 @@ void AC01_Log::BeginPlay()
 	CLog::Log(__FILE__);
 	CLog::Log(__FUNCTION__);
 	CLog::Log(__LINE__);
+
+	LogLine();
+
+
+	CLog::Print(10);
+	CLog::Print(PI);
+	CLog::Print("C01_Log");
+	CLog::Print(GetActorLocation());
+	CLog::Print(GetActorRotation());
+	CLog::Print(this);
+
+	PrintLine();
 }
 
 void AC01_Log::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	TotalTime += DeltaTime;
+	CLog::Print(TotalTime, 100);
 }
 
