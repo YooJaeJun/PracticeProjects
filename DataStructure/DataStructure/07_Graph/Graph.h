@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <queue>
 
 template<typename T>
 class Graph
@@ -49,7 +50,7 @@ public:
 		if ((node = head) == nullptr)
 			return;
 
-		while(node != nullptr)
+		while (node != nullptr)
 		{
 			std::cout << node->data << " : ";
 
@@ -73,6 +74,65 @@ public:
 		}
 
 		std::cout << '\n';
+	}
+
+	void DFS(Node* node)
+	{
+		std::cout << node->data;
+
+		node->visited = true;
+
+		Edge* edge = node->edge;
+		while (edge != nullptr)
+		{
+			if (edge->target != nullptr && edge->target->visited == false)
+				DFS(edge->target);
+
+			edge = edge->next;
+		}
+	}
+
+	void BFS(Node* node)
+	{
+		std::cout << node->data;
+
+		Edge* edge = node->edge;
+
+		node->visited = true;
+		q.push(node);
+
+		while (q.empty() == false)
+		{
+			Node* poped = q.front();
+			q.pop();
+
+			node = poped;
+			edge = node->edge;
+
+			while (edge != nullptr)
+			{
+				node = edge->target;
+
+				if (node != nullptr && node->visited == false)
+				{
+					std::cout << node->data;
+
+					node->visited = true;
+					q.push(node);
+				}
+
+				edge = edge->next;
+			}//while(edge)
+		}//while(q)
+	}
+
+	void InitVisited(Node* n)
+	{
+		while (n)
+		{
+			n->visited = false;
+			n = n->next;
+		}
 	}
 
 public:
@@ -109,10 +169,14 @@ public:
 
 		Node* next = nullptr;
 		Edge* edge = nullptr;
+
+		bool visited = false;
 	};
 
 private:
 	Node* head = nullptr;
 	int count = 0;
+
+	std::queue<Node*> q;
 };
 

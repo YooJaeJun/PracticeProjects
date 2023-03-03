@@ -1,6 +1,7 @@
-#include "FirstSearch.h"
+#include "Graph.h"
+using namespace std;
 
-typedef FirstSearch<char> G;
+typedef Graph<char> G;
 
 int main()
 {
@@ -40,6 +41,13 @@ int main()
 	graph.Print();
 
 	graph.DFS(n);
+	cout << endl << endl;
+
+	graph.InitVisited(n);
+
+	graph.BFS(n);
+	cout << endl << endl;
+
 
 	return 0;
 }

@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="07_Graph\FirstSearch.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="07_Graph\TopologicalSort.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_Graph\Execute_FirstSearch.cpp" />
+    <ClCompile Include="07_Graph\Execute_TopologicalSort.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

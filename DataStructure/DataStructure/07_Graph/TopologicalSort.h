@@ -1,9 +1,11 @@
 #pragma once
 
 #include <iostream>
+#include <queue>
+#include <list>
 
 template<typename T>
-class FirstSearch
+class Graph
 {
 public:
 	struct Edge;
@@ -75,9 +77,19 @@ public:
 		std::cout << '\n';
 	}
 
+	void Sort(Node* node)
+	{
+		while (node != nullptr && node->visited == false)
+		{
+			DFS(node);
+
+			node = node->next;
+		}
+	}
+
 	void DFS(Node* node)
 	{
-		std::cout << node->data;
+		// std::cout << node->data;
 
 		node->visited = true;
 
@@ -89,16 +101,27 @@ public:
 
 			edge = edge->next;
 		}
+
+		// std::cout << node->data;
+		l.push_front(node);
 	}
 
-	void BFS(Node* node)
+	void PrintResult()
 	{
-		std::cout << node->data;
+		while(l.empty() == false)
+		{
+			std::cout << l.front()->data;
+			l.pop_front();
+		}
+	}
 
-		node->visited = true;
-
-		Edge* edge = node->edge;
-
+	void InitVisited(Node* n)
+	{
+		while (n)
+		{
+			n->visited = false;
+			n = n->next;
+		}
 	}
 
 public:
@@ -142,5 +165,7 @@ public:
 private:
 	Node* head = nullptr;
 	int count = 0;
+
+	std::list<Node*> l;
 };
 
