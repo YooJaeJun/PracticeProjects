@@ -19,11 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="07_Graph\PQueue.h" />
+    <ClInclude Include="07_Graph\Graph_MST.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="07_Graph\TopologicalSort.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_Graph\Execute_TopologicalSort.cpp" />
+    <ClCompile Include="07_Graph\소스.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

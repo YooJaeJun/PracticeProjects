@@ -1,4 +1,4 @@
-#include "Graph_TopologicalSort.h"
+#include "Graph_MST.h"
 using namespace std;
 
 typedef Graph<char> G;
@@ -25,24 +25,24 @@ int main()
 	graph.AddNode(G);
 	graph.AddNode(H);
 
-	graph.AddEdge(A, G::CreateEdge(A, C));
-	graph.AddEdge(A, G::CreateEdge(A, D));
+	//graph.AddEdge(A, G::CreateEdge(A, C));
+	//graph.AddEdge(A, G::CreateEdge(A, D));
 
-	graph.AddEdge(B, G::CreateEdge(B, C));
-	graph.AddEdge(B, G::CreateEdge(B, E));
+	//graph.AddEdge(B, G::CreateEdge(B, C));
+	//graph.AddEdge(B, G::CreateEdge(B, E));
 
-	graph.AddEdge(C, G::CreateEdge(C, F));
+	//graph.AddEdge(C, G::CreateEdge(C, F));
 
-	graph.AddEdge(D, G::CreateEdge(D, F));
-	graph.AddEdge(D, G::CreateEdge(D, G));
+	//graph.AddEdge(D, G::CreateEdge(D, F));
+	//graph.AddEdge(D, G::CreateEdge(D, G));
 
-	graph.AddEdge(E, G::CreateEdge(E, G));
+	//graph.AddEdge(E, G::CreateEdge(E, G));
 
-	graph.AddEdge(F, G::CreateEdge(F, H));
+	//graph.AddEdge(F, G::CreateEdge(F, H));
 
-	graph.AddEdge(G, G::CreateEdge(G, H));
+	//graph.AddEdge(G, G::CreateEdge(G, H));
 
-	
+
 	graph.Sort(A);
 	graph.PrintResult();
 

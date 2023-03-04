@@ -2,9 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="07_Graph\TopologicalSort.h" />
+    <ClInclude Include="07_Graph\PQueue.h" />
+    <ClInclude Include="07_Graph\Graph_MST.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="07_Graph\Execute_TopologicalSort.cpp" />
+    <ClCompile Include="07_Graph\소스.cpp" />
   </ItemGroup>
 </Project>
