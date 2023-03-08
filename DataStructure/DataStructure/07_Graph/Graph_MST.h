@@ -3,6 +3,7 @@
 #include <iostream>
 #include <list>
 #include "PQueue.h"
+#include "DisjointSet.h"
 
 template<typename T>
 class Graph
@@ -93,7 +94,7 @@ public:
 
 		int* weights = new int[count];
 		Node** mstNodes = new Node * [count];
-		Node** friends = new Node * [count];
+		Node** connected = new Node * [count];
 		Node** parents = new Node * [count];
 
 		// 초기화
@@ -104,16 +105,17 @@ public:
 			Graph<T>::Node* newNode = CreateNode(currentNode->data);
 			graph->AddNode(newNode);
 
-			friends[index] = NULL;
-			parents[index] = NULL;
 			weights[index] = INT_MAX;
+			mstNodes[index] = newNode;
+			connected[index] = NULL;
+			parents[index] = NULL;
 			currentNode = currentNode->next;
 
 			index++;
 		}
 
 		// 본격 시작
-		PQueue<Node*> queue;
+		PQueue<Node*> queue(10);
 		PQueue<Node*>::Node startQueueNode = PQueue<Node*>::Node(0, startNode);
 
 		queue.Insert(startQueueNode);
@@ -125,14 +127,16 @@ public:
 			PQueue<Node*>::Node poped = queue.RemoveMin();
 
 			currentNode = poped.data;
-			friends[currentNode->index] = currentNode;
+			connected[currentNode->index] = currentNode;
+
+			// std::cout << currentNode->data;
 
 			currentEdge = currentNode->edge;
 			while (currentEdge != NULL)
 			{
 				Node* targetNode = currentEdge->target;		// 타겟 == 첨엔 헤드(B) 아래에 A 노드로 생각
 
-				if (friends[targetNode->index] == NULL &&	/* 리프노드가 아님 */
+				if (connected[targetNode->index] == NULL &&	/* 리프노드가 아님 */
 					currentEdge->weight < weights[targetNode->index])	/* 타겟에 있는 가중치가 자기보다 작은지 */
 				{
 					PQueue<Node*>::Node newNode = PQueue<Node*>::Node(currentEdge->weight, targetNode);
@@ -145,15 +149,97 @@ public:
 				currentEdge = currentEdge->next;
 			}//while(currentEdge)
 		}//while(queue)
+
+		//std::cout << '\n';
+
+		//for (int i = 0; i < count; i++)
+		//{
+		//	std::cout << i << "," << weights[i] << " / ";
+		//}
+
+		for (int i=0; i<count; i++)
+		{
+			int start, target;
+
+			if (parents[i] == NULL)
+				continue;
+
+			start = parents[i]->index;
+			target = i;
+
+			graph->AddEdge(mstNodes[start], Graph<T>::CreateEdge(mstNodes[start], mstNodes[target], weights[i]));
+			graph->AddEdge(mstNodes[target], Graph<T>::CreateEdge(mstNodes[target], mstNodes[start], weights[i]));
+
+			std::cout << mstNodes[start]->data << " -> " << mstNodes[target]->data << ", " << weights[i] << '\n';
+		}
+
+		cout << '\n';
+
+		delete[] weights;
+		delete[] mstNodes;
+		delete[] connected;
+		delete[] parents;
+	}
+
+	void Kruskal(Graph<T>* graph)
+	{
+		Node** mstNodes = new Node * [count];
+		PQueue<Edge*> queue(10);
+
+		DisjointSet<Node*>::Set** sets = new DisjointSet<Node*>::Set*[count];
+
+		int index = 0;
+		Node* currentNode = head;
+		Edge* currentEdge = NULL;
+		while (currentNode != NULL)
+		{
+			sets[index] = DisjointSet<Node*>::CreateSet(currentNode);
+			mstNodes[index] = CreateNode(currentNode->data);
+			graph->AddNode(mstNodes[index]);
+
+			currentEdge = currentNode->edge;
+			while (currentEdge != NULL)
+			{
+				PQueue<Edge*>::Node newNode = PQueue<Edge*>::Node(currentEdge->weight, currentEdge);
+				queue.Insert(newNode);
+
+				currentEdge = currentEdge->next;
+			}
+
+			currentNode = currentNode->next;
+			index++;
+		}
+
+		while (queue.Empty() == false)
+		{
+			PQueue<Edge*>::Node poped = queue.RemoveMin();
+			currentEdge = poped.data;
+			
+			int start = currentEdge->start->index;
+			int target = currentEdge->target->index;
+
+
+			// 핵심
+			if (DisjointSet<Node*>::FindSet(sets[start]) == DisjointSet<Node*>::FindSet(sets[target]))
+				continue;
+
+			DisjointSet<Node*>::UnionSet(sets[start], sets[target]);
+
+			graph->AddEdge(mstNodes[start], Graph<T>::CreateEdge(mstNodes[start], mstNodes[target], currentEdge->weight));
+			graph->AddEdge(mstNodes[target], Graph<T>::CreateEdge(mstNodes[target], mstNodes[start], currentEdge->weight));
+
+			std::cout << mstNodes[start]->data << " -> " << mstNodes[target]->data << ", " << currentEdge->weight << '\n';
+		}
 	}
 
 public:
-	static Edge* CreateEdge(Node* start, Node* target)
+	static Edge* CreateEdge(Node* start, Node* target, int weight)
 	{
 		Edge* edge = new Edge();
 		edge->start = start;
 		edge->target = target;
 		edge->next = nullptr;
+		edge->weight = weight;
 
 		return edge;
 	}
