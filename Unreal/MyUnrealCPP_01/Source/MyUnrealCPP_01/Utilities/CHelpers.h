@@ -59,4 +59,27 @@ public:
 		ConstructorHelpers::FClassFinder<T> asset(*InPath);
 		*OutClass = asset.Class;
 	}
+
+	template<typename T>
+	static T* findActor(UWorld* InWorld)
+	{
+		for (AActor* actor : InWorld->GetCurrentLevel()->Actors)
+		{
+			if (!!actor && actor->IsA<T>())
+				return Cast<T>(actor);
+		}
+
+		return nullptr;
+	}
+
+	template<typename T>
+	static void findActors(UWorld* InWorld, TArray<T*>& outActors)
+	{
+		for (AActor* actor : InWorld->GetCurrentLevel()->Actors)
+		{
+			if (!!actor && actor->IsA<T>())
+				OutActors.Add(Cast<T>(actor));
+		}
+	}
+
 };
