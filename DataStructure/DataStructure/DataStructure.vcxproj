@@ -22,7 +22,7 @@
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_DivideConquer\MergeSort.cpp" />
+    <ClCompile Include="10_DP\DynamicLCS.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

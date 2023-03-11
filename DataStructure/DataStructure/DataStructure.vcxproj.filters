@@ -4,6 +4,6 @@
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="09_DivideConquer\MergeSort.cpp" />
+    <ClCompile Include="10_DP\DynamicLCS.cpp" />
   </ItemGroup>
 </Project>
