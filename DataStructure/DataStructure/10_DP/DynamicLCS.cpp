@@ -33,10 +33,42 @@ int LCS(char* x, char* y, int i, int j, Table* table)
 	return table->Data[i][j];
 }
 
+void TrackBack(const char* x, const char* y, int m, int n, Table* table, const char* lcs)
+{
+	if (m == 0 || n == 0)
+		return;
+
+	bool a = true;
+	a &= table->Data[m][n] > table->Data[m][n - 1];
+	a &= table->Data[m][n];
+	a &= table->Data[m][n] > table->Data[m - 1][n - 1];
+
+	bool b = true;
+	b &= table->Data[m][n] > table->Data[m - 1][n];
+	b &= table->Data[m][n] > table->Data[m][n - 1];
+
+	if (a)
+	{
+		char temp[100];
+		strcpy_s(temp, lcs);
+
+		sprintf(const_cast<char*>(lcs), "%c %s", x[m - 1], temp);
+
+		TrackBack(x, y, m - 1, n - 1, table, lcs);
+	}
+	else if (b)
+	{
+		TrackBack(x, y, m - 1, n - 1, table, lcs);
+	}
+	else
+		TrackBack(x, y, m - 1, n, table, lcs);
+
+}
+
 int main()
 {
-	char* a = "GOOD MORNING.";
-	char* b = "GUTEN MORGEN.";
+	const char* a = "GOOD MORNING.";
+	const char* b = "GUTEN MORGEN.";
 
 	//char* a = "ABC";
 	//char* b = "EBF";
@@ -53,7 +85,7 @@ int main()
 		memset(table.Data[i], 0, sizeof(int) * (lenB + 1));
 	}
 
-	int result = LCS(a, b, lenA, lenB, &table);
+	int result = LCS(const_cast<char*>(a), const_cast<char*>(b), lenA, lenB, &table);
 
 	printf("\n%-04s", " ");
 
@@ -72,6 +104,33 @@ int main()
 	}
 
 	printf("%d", result);
+
+	printf("\n\n -- TrackBack\n");
+
+	char* lcs = (char*)malloc(sizeof(table.Data[lenA][lenB] + 1));
+	sprintf(lcs, "");
+
+	TrackBack(a, b, lenA, lenB, &table, lcs);
+
+	printf("\n%-04s", " ");
+
+	for (int i = 0; i <= lenA; i++)
+		printf("%c ", b[i]);
+	printf("\n");
+
+	for (int i = 0; i <= lenA; i++)
+	{
+		printf("%c ", a[i - 1]);
+
+		for (int j = 0; j <= lenB; j++)
+			printf("%d ", table.Data[i][j]);
+
+		printf("\n");
+	}
+
+	printf("%s | %d", lcs, result);
+
+	//free(lcs);
 
 	return 0;
 }
