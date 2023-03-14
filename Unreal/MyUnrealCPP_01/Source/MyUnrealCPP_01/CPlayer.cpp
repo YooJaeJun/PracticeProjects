@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 ACPlayer::ACPlayer()
 {
@@ -38,8 +39,16 @@ ACPlayer::ACPlayer()
 
 void ACPlayer::BeginPlay()
 {
+	TArray<UMaterialInterface*> materials = GetMesh()->GetMaterials();
+	for (int32 i = 0; i < materials.Num(); i++)
+	{
+		UMaterialInstanceDynamic* temp = UMaterialInstanceDynamic::Create(materials[i], this);
+		GetMesh()->SetMaterial(i, temp);
+
+		Materials.Add(temp);
+	}
+
 	Super::BeginPlay();
-	
 }
 
 void ACPlayer::Tick(float DeltaTime)
@@ -96,5 +105,11 @@ void ACPlayer::OnRun()
 void ACPlayer::OffRun()
 {
 	GetCharacterMovement()->MaxWalkSpeed = 400;
+}
+
+void ACPlayer::ChangeColor(FLinearColor InColor)
+{
+	for (UMaterialInstanceDynamic* material : Materials)
+		material->SetVectorParameterValue("BodyColor", InColor);
 }
 

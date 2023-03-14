@@ -61,7 +61,7 @@ public:
 	}
 
 	template<typename T>
-	static T* findActor(UWorld* InWorld)
+	static T* FindActor(UWorld* InWorld)
 	{
 		for (AActor* actor : InWorld->GetCurrentLevel()->Actors)
 		{
@@ -73,7 +73,7 @@ public:
 	}
 
 	template<typename T>
-	static void findActors(UWorld* InWorld, TArray<T*>& outActors)
+	static void FindActors(UWorld* InWorld, TArray<T*>& OutActors)
 	{
 		for (AActor* actor : InWorld->GetCurrentLevel()->Actors)
 		{
