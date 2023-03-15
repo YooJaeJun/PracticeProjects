@@ -31,9 +31,34 @@ void AC02_LineTrace::Tick(float DeltaTime)
 
 		DrawDebugLine(GetWorld(), start, end, FColor::Blue);
 	}
+
+	// LineTrace
+	{
+		start.Z += 40;
+		end.Z += 40;
+
+		TArray<AActor*> ignores;
+		ignores.Add(Cylinders[0]);
+		ignores.Add(Cylinders[1]);
+
+		FHitResult hitResult;
+
+		UKismetSystemLibrary::LineTraceSingleByProfile(GetWorld(), start, end, "Pawn", false, 
+			ignores, EDrawDebugTrace::ForOneFrame, hitResult, true);
+
+		if (hitResult.bBlockingHit)
+		{
+			if (OnLineTraceResult.IsBound())
+				OnLineTraceResult.Broadcast(hitResult.GetActor(), FLinearColor::MakeRandomColor());
+		}
+	}
 }
 
 void AC02_LineTrace::StartLaunch(AActor* InActor, FLinearColor InColor)
 {
+	ACharacter* character = Cast<ACharacter>(InActor);
+	CheckNull(character);
+
+	character->LaunchCharacter(FVector(0, 0, 50), true, false);
 }
 

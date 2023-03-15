@@ -39,9 +39,9 @@ void AC01_SphereTrace::BeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 	Particle->ResetParticles();
 	Particle->SetActive(true);
 
-	for (const FHitResult& hitReulst : hitResults)
+	for (const FHitResult& hitResult : hitResults)
 	{
-		UStaticMeshComponent* mesh = Cast<UStaticMeshComponent>(hitReulst.GetActor()->GetRootComponent());
+		UStaticMeshComponent* mesh = Cast<UStaticMeshComponent>(hitResult.GetActor()->GetRootComponent());
 		if (!!mesh && mesh->IsSimulatingPhysics())
 			mesh->AddRadialImpulse(location, 1000, 
 				(MaxMass - mesh->GetMass()) * ImpulseAmount, ERadialImpulseFalloff::RIF_Linear);

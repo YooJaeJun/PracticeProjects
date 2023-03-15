@@ -36,11 +36,4 @@ private:
 private:
 	void OnRun();
 	void OffRun();
-
-public:
-	UFUNCTION(BlueprintCallable, Category = "Color")
-		void ChangeColor(FLinearColor InColor);
-
-private:
-	TArray<class UMaterialInstanceDynamic*> Materials;
 };

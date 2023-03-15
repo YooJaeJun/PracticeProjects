@@ -18,5 +18,5 @@ public:
 	void NativeUpdateAnimation(float DeltaSeconds) override;
 
 private:
-	class ACharacter* OwnerCharacter;
+	class ACPlayer* OwnerCharacter;
 };

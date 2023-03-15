@@ -25,7 +25,8 @@ private:
 		void StartLaunch(class AActor* InActor, FLinearColor InColor);
 
 public:
-	FLineTraceResult OnLineTraceResult;
+	UPROPERTY(BlueprintAssignable)
+		FLineTraceResult OnLineTraceResult;
 
 private:
 	TArray<class AC02_Cylinder*> Cylinders;

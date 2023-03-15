@@ -19,8 +19,6 @@ void AC01_Trigger::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OnActorBeginOverlap;
-
 	AC01_SphereTrace* trace =  CHelpers::FindActor<AC01_SphereTrace>(GetWorld());
 	CheckNull(trace);
 
