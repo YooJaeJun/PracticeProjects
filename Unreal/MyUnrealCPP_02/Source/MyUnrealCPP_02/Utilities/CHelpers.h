@@ -41,6 +41,12 @@ public:
 	}
 
 	template<typename T>
+	static void CreateActorComponent(AActor* InActor, T** OutComponent, FName InName)
+	{
+		*OutComponent = InActor->CreateDefaultSubobject<T>(InName);
+	}
+
+	template<typename T>
 	static void GetAsset(T** OutObject, FString InPath)
 	{
 		ConstructorHelpers::FObjectFinder<T> asset(*InPath);
@@ -82,4 +88,29 @@ public:
 		}
 	}
 
+	template<typename T>
+	static T* GetComponent(AActor* InActor)
+	{
+		return Cast<T>(InActor->GetComponentByClass(T::StaticClass()));
+	}
+
+	template<typename T>
+	static T* GetComponent(AActor* InActor, const FString& InName)
+	{
+		TArray<T*> components;
+		InActor->GetComponents<T>(components);
+
+		for (T* component : components)
+		{
+			if (component->GetName() == InName)
+				return component;
+		}
+
+		return nullptr;
+	}
+
+	static void AttachTo(AActor* InActor, USceneComponent* InParent, FName InSocketName)
+	{
+		InActor->AttachToComponent(InParent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), InSocketName);
+	}
 };

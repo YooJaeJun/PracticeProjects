@@ -16,6 +16,10 @@ private:
 	UPROPERTY(VisibleAnywhere)
 		class UCameraComponent* Camera;
 
+private:
+	UPROPERTY(VisibleAnywhere)
+		class UCWeaponComponent* Weapon;
+
 public:
 	ACPlayer();
 
