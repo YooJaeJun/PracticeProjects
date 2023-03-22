@@ -14,8 +14,23 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
 		float Speed;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
+		float Pitch;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
+		float Direction;
+
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapons")
 		EWeaponType WeaponType = EWeaponType::Max;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapons")
+		bool bInAim;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapons")
+		bool bUseIK;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapons")
+		FVector LeftHandLocation;
 
 
 public:
@@ -29,4 +44,7 @@ private:
 private:
 	class ACPlayer* OwnerCharacter;
 	class UCWeaponComponent* Weapon;
+
+private:
+	FRotator PrevRotation;
 };

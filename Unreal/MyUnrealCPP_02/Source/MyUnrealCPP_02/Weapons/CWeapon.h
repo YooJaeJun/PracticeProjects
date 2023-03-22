@@ -42,6 +42,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Equip")
 		FName RightHandSocketName;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Equip")
+		FVector LeftHandLocation;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Aim")
 		FWeaponAimData BaseData;
@@ -55,6 +58,31 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Aim")
 		float AimingSpeed = 200.0f;
 
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Hit")
+		float HitDistance = 3000;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Hit")
+		class UMaterialInstanceConstant* HitDecal;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Hit")
+		class UParticleSystem* HitParticle;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Fire")
+		class UParticleSystem* FlashParticle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Fire")
+		class UParticleSystem* EjectParticle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Fire")
+		class USoundWave* FireSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Fire")
+		float RecoilAngle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Fire")
+		TSubclassOf<class UMatineeCameraShake> CameraShakeClass;
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -67,7 +95,11 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere)
 		class UTimelineComponent* Timeline;
-	
+
+public:
+	FORCEINLINE bool IsInAim() { return bInAim; }
+	FORCEINLINE FVector GetLeftHandLocation() { return LeftHandLocation; }
+
 public:	
 	ACWeapon();
 
@@ -94,6 +126,15 @@ public:
 private:
 	UFUNCTION()
 		void OnAiming(float Output);
+
+public:
+	bool CanFire();
+	void Begin_Fire();
+	void End_Fire();
+
+private:
+	UFUNCTION()
+		void OnFiring();
 
 private:
 	bool bEquipping;

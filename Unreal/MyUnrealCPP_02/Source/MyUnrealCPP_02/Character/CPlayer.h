@@ -10,6 +10,10 @@ class MYUNREALCPP_02_API ACPlayer : public ACharacter
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Camera")
+		FVector2D PitchRange = FVector2D(-40, +40);
+
+private:
 	UPROPERTY(VisibleAnywhere)
 		class USpringArmComponent* SpringArm;
 

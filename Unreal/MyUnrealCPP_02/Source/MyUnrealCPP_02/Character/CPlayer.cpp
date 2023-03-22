@@ -43,6 +43,9 @@ ACPlayer::ACPlayer()
 void ACPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetController<APlayerController>()->PlayerCameraManager->ViewPitchMin = PitchRange.X;
+	GetController<APlayerController>()->PlayerCameraManager->ViewPitchMax = PitchRange.Y;
 }
 
 void ACPlayer::Tick(float DeltaTime)
@@ -67,6 +70,9 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::Begin_Aim);
 	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Released, Weapon, &UCWeaponComponent::End_Aim);
+
+	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::Begin_Fire);
+	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Released, Weapon, &UCWeaponComponent::End_Fire);
 }
 
 void ACPlayer::OnMoveForward(const float InAxisValue)

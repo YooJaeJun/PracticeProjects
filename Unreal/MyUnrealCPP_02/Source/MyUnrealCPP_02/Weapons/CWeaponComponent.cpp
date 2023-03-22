@@ -2,10 +2,13 @@
 #include "Global.h"
 #include "CWeapon.h"
 #include "Character/CPlayer.h"
+#include "Widgets/CUserWidget_HUD.h"
 
 UCWeaponComponent::UCWeaponComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+
+	CHelpers::GetClass<UCUserWidget_HUD>(&HUDClass, "WidgetBlueprint'/Game/Widgets/WB_HUD.WB_HUD_C'");
 }
 
 void UCWeaponComponent::BeginPlay()
@@ -27,6 +30,13 @@ void UCWeaponComponent::BeginPlay()
 			Weapons.Add(weapon);
 		}
 	}
+
+	if (!!HUDClass)
+	{
+		HUD = CreateWidget<UCUserWidget_HUD, APlayerController>(Owner->GetController<APlayerController>(), HUDClass);
+		HUD->AddToViewport();
+		HUD->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 void UCWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -47,6 +57,9 @@ void UCWeaponComponent::SetUnarmedMode()
 
 	GetCurrWeapon()->Unequip();
 	ChangeType(EWeaponType::Max);
+
+	if (!!HUD)
+		HUD->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UCWeaponComponent::SetAR4Mode()
@@ -73,6 +86,9 @@ void UCWeaponComponent::SetMode(EWeaponType InType)
 	Weapons[(int32)InType]->Equip();
 
 	ChangeType(InType);
+
+	if (!!HUD)
+		HUD->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UCWeaponComponent::ChangeType(EWeaponType InType)
@@ -110,5 +126,34 @@ void UCWeaponComponent::End_Aim()
 	CheckNull(GetCurrWeapon());
 
 	GetCurrWeapon()->End_Aim();
+}
+
+void UCWeaponComponent::Begin_Fire()
+{
+	CheckNull(GetCurrWeapon());
+	CheckFalse(GetCurrWeapon()->CanFire());
+
+	GetCurrWeapon()->Begin_Fire();
+}
+
+void UCWeaponComponent::End_Fire()
+{
+	CheckNull(GetCurrWeapon());
+
+	GetCurrWeapon()->End_Fire();
+}
+
+bool UCWeaponComponent::IsInAim()
+{
+	CheckNullResult(GetCurrWeapon(), false);
+
+	return GetCurrWeapon()->IsInAim();
+}
+
+FVector UCWeaponComponent::GetLeftHandLocation()
+{
+	CheckNullResult(GetCurrWeapon(), FVector::ZeroVector);
+
+	return GetCurrWeapon()->GetLeftHandLocation();
 }
 
