@@ -27,16 +27,15 @@ VertexOutput VS(VertexInput input)
     return output;
 }
 
-
 SamplerState Samp;
-
 float4 PS(VertexOutput input) : SV_Target
 {
-    if (input.Uv.x < 0.5f)
+    if(input.Uv.x < 0.5f)
         return float4(1, 0, 0, 1);
     
     return Map.Sample(Samp, input.Uv);
 }
+
 
 uint Filter;
 
@@ -54,9 +53,10 @@ float4 PS_Filter(VertexOutput input) : SV_Target
 {
     if (Filter == 0)
         return Map.Sample(Sampler_Filter_Point, input.Uv);
-    else if (Filter == 1)
+    
+    if (Filter == 1)
         return Map.Sample(Sampler_Filter_Linear, input.Uv);
-        
+    
     return Map.Sample(Samp, input.Uv);
 }
 
@@ -93,16 +93,18 @@ float4 PS_Address(VertexOutput input) : SV_Target
 {
     if (Address == 0)
         return Map.Sample(Sampler_Address_Wrap, input.Uv);
-    else if (Address == 1)
+    
+    if (Address == 1)
         return Map.Sample(Sampler_Address_Mirror, input.Uv);
-    else if (Address == 2)
+    
+    if (Address == 2)
         return Map.Sample(Sampler_Address_Clamp, input.Uv);
-    else if (Address == 3)
+    
+    if (Address == 3)
         return Map.Sample(Sampler_Address_Border, input.Uv);
-        
+    
     return Map.Sample(Samp, input.Uv);
 }
-
 
 technique11 T0
 {

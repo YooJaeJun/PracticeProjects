@@ -25,7 +25,7 @@ VertexOutput VS(VertexTextureNormal input)
 
 float4 PS(VertexOutput input) : SV_Target
 {
-    float4 color = float4(sin(Time), 1, 1, 1);
+    float4 color = float4(sin(Time * 3), 1, 1, 1);
     
     return CubeMap.Sample(LinearSampler, input.oPosition) * color;
 }

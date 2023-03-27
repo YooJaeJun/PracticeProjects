@@ -1,7 +1,6 @@
 matrix World;
 matrix View;
 matrix Projection;
-Texture2D Map;
 
 struct VertexInput
 {
@@ -30,7 +29,6 @@ VertexOutput VS(VertexInput input)
 float4 PS(VertexOutput input) : SV_Target
 {
     return input.Color;
-
 }
 
 technique11 T0

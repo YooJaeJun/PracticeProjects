@@ -33,7 +33,7 @@ VertexOutput VS(VertexModel input)
     VertexOutput output;
     
     World = mul(BoneTransforms[BoneIndex], World);
-
+    
     output.Position = WorldPosition(input.Position);
     output.Position = ViewProjection(output.Position);
     

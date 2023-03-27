@@ -74,7 +74,7 @@ matrix BlendMode(uint index)
         boneIndex[0] = (frame.Clip[i].Clip * MAX_MODEL_KEYFRAMES * MAX_MODEL_TRANSFORMS);
         boneIndex[0] += (frame.Clip[i].CurrFrame * MAX_MODEL_TRANSFORMS);
         boneIndex[0] += AttachBoneIndex;
-
+    
         boneIndex[1] = (frame.Clip[i].Clip * MAX_MODEL_KEYFRAMES * MAX_MODEL_TRANSFORMS);
         boneIndex[1] += (frame.Clip[i].NextFrame * MAX_MODEL_TRANSFORMS);
         boneIndex[1] += AttachBoneIndex;

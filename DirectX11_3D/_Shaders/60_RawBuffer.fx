@@ -22,7 +22,7 @@ struct ComputeInput
 void CS(ComputeInput input)
 {
     Group group;
-    group.GroupID = asuint(input.GroupID); // asuint. 안정성 있는 캐스팅
+    group.GroupID = asuint(input.GroupID);
     group.GroupThreadID = asuint(input.GroupThreadID);
     group.DispatchThreadID = asuint(input.DispatchThreadID);
     group.GroupIndex = asuint(input.GroupIndex);
