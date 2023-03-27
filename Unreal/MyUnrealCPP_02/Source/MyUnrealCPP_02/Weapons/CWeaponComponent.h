@@ -66,6 +66,12 @@ public:
 	FVector GetLeftHandLocation();
 
 public:
+	void ToggleAutoFire();
+
+public:
+	void Reload();
+
+public:
 	FWeaponTypeChanged OnWeaponTypeChanged;
 
 private:

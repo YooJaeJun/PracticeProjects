@@ -9,19 +9,20 @@
 #include "Camera/CameraShake.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Particles/ParticleSystem.h"
+#include "Widgets/CUserWidget_CrossHair.h"
+#include "CBullet.h"
 
 void FWeaponAimData::SetData(ACharacter* InOwner)
 {
 	USpringArmComponent* springArm = CHelpers::GetComponent<USpringArmComponent>(InOwner);
 	springArm->TargetArmLength = TargetArmLength;
 	springArm->SocketOffset = SocketOffset;
+	springArm->bEnableCameraLag = bEnableCameraLag;
 }
 
 void FWeaponAimData::SetDataByNoneCurve(ACharacter* InOwner)
 {
-	USpringArmComponent* springArm = CHelpers::GetComponent<USpringArmComponent>(InOwner);
-	springArm->TargetArmLength = TargetArmLength;
-	springArm->SocketOffset = SocketOffset;
+	SetData(InOwner);
 
 	UCameraComponent* camera = CHelpers::GetComponent<UCameraComponent>(InOwner);
 	camera->FieldOfView = FieldOfView;
@@ -48,6 +49,7 @@ ACWeapon::ACWeapon()
 	CHelpers::GetAsset<UParticleSystem>(&FlashParticle, "ParticleSystem'/Game/Effects/P_Muzzleflash.P_Muzzleflash'");
 	CHelpers::GetAsset<UParticleSystem>(&EjectParticle, "ParticleSystem'/Game/Effects/P_Eject_bullet.P_Eject_bullet'");
 	CHelpers::GetAsset<USoundWave>(&FireSound, "SoundWave'/Game/Sounds/S_RifleShoot.S_RifleShoot'");
+	CHelpers::GetClass<ACBullet>(&BulletClass, "Blueprint'/Game/Weapons/BP_CBullet.BP_CBullet_C'");
 }
 
 void ACWeapon::BeginPlay()
@@ -69,11 +71,33 @@ void ACWeapon::BeginPlay()
 		Timeline->SetLooping(false);
 		Timeline->SetPlayRate(AimingSpeed);
 	}
+
+	if (!!CrossHairClass)
+	{
+		CrossHair = CreateWidget<UCUserWidget_CrossHair, APlayerController>(Owner->GetController<APlayerController>(), CrossHairClass);
+		CrossHair->AddToViewport();
+		CrossHair->SetVisibility(ESlateVisibility::Hidden);
+		CrossHair->UpdateSpreadRange(CurrSpreadRadius, MaxSpreadAlignment);
+	}
+
+	CurrMagazineCount = MaxMagazineCount;
 }
 
 void ACWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (LastAddSpreadTime >= 0.0f)
+	{
+		if (GetWorld()->GetTimeSeconds() - LastAddSpreadTime >= AutoFireInterval + 0.25f)
+		{
+			CurrSpreadRadius = 0.0f;
+			LastAddSpreadTime = 0.0f;
+
+			if (!!CrossHair)
+				CrossHair->UpdateSpreadRange(CurrSpreadRadius, MaxSpreadAlignment);
+		} //if
+	}
 }
 
 bool ACWeapon::CanEquip()
@@ -103,6 +127,9 @@ void ACWeapon::Begin_Equip()
 void ACWeapon::End_Equip()
 {
 	bEquipping = false;
+
+	if (!!CrossHair)
+		CrossHair->SetVisibility(ESlateVisibility::Visible);
 }
 
 bool ACWeapon::CanUnequip()
@@ -119,6 +146,9 @@ void ACWeapon::Unequip()
 {
 	if (HolsterSocketName.IsValid())
 		CHelpers::AttachTo(this, Owner->GetMesh(), HolsterSocketName);
+
+	if (!!CrossHair)
+		CrossHair->SetVisibility(ESlateVisibility::Hidden);
 }
 
 bool ACWeapon::CanAim()
@@ -182,12 +212,22 @@ void ACWeapon::Begin_Fire()
 {
 	bFiring = true;
 
+	if (bAutoFire)
+	{
+		GetWorld()->GetTimerManager().SetTimer(AutoFireHandle, this, &ACWeapon::OnFiring, AutoFireInterval, true, 0);
+
+		return;
+	}
+
 	OnFiring();
 }
 
 void ACWeapon::End_Fire()
 {
 	CheckFalse(bFiring);
+
+	if (GetWorld()->GetTimerManager().IsTimerActive(AutoFireHandle))
+		GetWorld()->GetTimerManager().ClearTimer(AutoFireHandle);
 
 	bFiring = false;
 }
@@ -250,4 +290,61 @@ void ACWeapon::OnFiring()
 		if (!!controller)
 			controller->PlayerCameraManager->StartCameraShake(CameraShakeClass);
 	}
+
+	Owner->AddControllerPitchInput(-RecoilRate * UKismetMathLibrary::RandomFloatInRange(0.8f, 1.2f));
+
+	if (CurrSpreadRadius <= 1.0f)
+	{
+		CurrSpreadRadius += SpreadSpeed * GetWorld()->GetDeltaSeconds();
+
+		if (!!CrossHair)
+			CrossHair->UpdateSpreadRange(CurrSpreadRadius, MaxSpreadAlignment);
+	}
+	LastAddSpreadTime = GetWorld()->GetTimeSeconds();
+
+	if (!!BulletClass)
+	{
+		FVector location = Mesh->GetSocketLocation("Muzzle_Bullet");
+
+		FActorSpawnParameters params;
+		params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		ACBullet* bullet = GetWorld()->SpawnActor<ACBullet>(BulletClass, location, direction.Rotation(), params);
+
+		if (!!bullet)
+			bullet->Shoot(direction);
+	}
+
+	if (CurrMagazineCount >= 1)
+		CurrMagazineCount--;
+	else
+	{
+		if (CanReload())
+			Reload();
+	}
+}
+
+void ACWeapon::ToggleAutoFire()
+{
+	bAutoFire = !bAutoFire;
+}
+
+bool ACWeapon::CanReload()
+{
+	bool b = false;
+	b |= bEquipping;
+	b |= bReload;
+
+	return !b;
+}
+
+void ACWeapon::Reload()
+{
+	//bReload = true;
+
+	End_Aim();
+	End_Fire();
+
+	if (!!ReloadMontage)
+		Owner->PlayAnimMontage(ReloadMontage, ReloadMontage_PlayRate);
 }

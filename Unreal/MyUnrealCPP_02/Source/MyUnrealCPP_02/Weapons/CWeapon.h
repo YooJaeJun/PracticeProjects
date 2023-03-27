@@ -19,6 +19,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		float FieldOfView;
 
+	UPROPERTY(EditAnywhere)
+		float bEnableCameraLag;
+
 public:
 	void SetData(class ACharacter* InOwner);
 	void SetDataByNoneCurve(class ACharacter* InOwner);
@@ -84,6 +87,35 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Fire")
 		TSubclassOf<class UMatineeCameraShake> CameraShakeClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Fire")
+		float AutoFireInterval;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Fire")
+		float RecoilRate;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Fire")
+		float SpreadSpeed;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Fire")
+		float MaxSpreadAlignment;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Fire")
+		TSubclassOf<class ACBullet> BulletClass;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<class UCUserWidget_CrossHair> CrossHairClass;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Magazine")
+		uint8 MaxMagazineCount;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Magazine")
+		class UAnimMontage* ReloadMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Magazine")
+		float ReloadMontage_PlayRate;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 		class USceneComponent* Root;
@@ -98,7 +130,11 @@ private:
 
 public:
 	FORCEINLINE bool IsInAim() { return bInAim; }
+	FORCEINLINE bool IsAutoFire() { return bAutoFire; }
 	FORCEINLINE FVector GetLeftHandLocation() { return LeftHandLocation; }
+
+	FORCEINLINE uint8 GetCurrMagazineCount() { return CurrMagazineCount; }
+	FORCEINLINE uint8 GetMaxMagazineCount() { return MaxMagazineCount; }
 
 public:	
 	ACWeapon();
@@ -136,6 +172,13 @@ private:
 	UFUNCTION()
 		void OnFiring();
 
+
+public:
+	void ToggleAutoFire();
+
+public:
+	bool CanReload();
+	void Reload();
 private:
 	bool bEquipping;
 	bool bInAim;
@@ -145,4 +188,17 @@ private:
 
 private:
 	class ACPlayer* Owner;
+
+private:
+	FTimerHandle AutoFireHandle;
+
+private:
+	class UCUserWidget_CrossHair* CrossHair;
+
+private:
+    float CurrSpreadRadius;
+    float LastAddSpreadTime;
+
+private:
+	uint8 CurrMagazineCount;
 };

@@ -3,6 +3,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraShake.h"
+#include "Widgets/CUserWidget_CrossHair.h"
 
 ACWeapon_AR4::ACWeapon_AR4()
 {
@@ -21,10 +22,12 @@ ACWeapon_AR4::ACWeapon_AR4()
 
 	//Aim
 	{
+		BaseData.bEnableCameraLag = true;
 		BaseData.TargetArmLength = 200;
 		BaseData.SocketOffset = FVector(0, 50, 15);
 		BaseData.FieldOfView = 90;
 
+		AimData.bEnableCameraLag = false;
 		AimData.TargetArmLength = 80;
 		AimData.SocketOffset = FVector(0, 55, 10);
 		AimData.FieldOfView = 65;
@@ -34,5 +37,21 @@ ACWeapon_AR4::ACWeapon_AR4()
 	{
 		RecoilAngle = 0.75f;
 		CHelpers::GetClass<UMatineeCameraShake>(&CameraShakeClass, "Blueprint'/Game/Weapons/BP_CameraShake_AR4.BP_CameraShake_AR4_C'");
+		AutoFireInterval = 0.15f;
+		RecoilRate = 0.04f;
+		SpreadSpeed = 2.0f;
+		MaxSpreadAlignment = 2.0f;
+	}
+
+	//UI
+	{
+		CHelpers::GetClass<UCUserWidget_CrossHair>(&CrossHairClass, "WidgetBlueprint'/Game/Widgets/WB_CrossHair.WB_CrossHair_C'");
+	}
+
+	//Magazine
+	{
+		MaxMagazineCount = 30;
+		CHelpers::GetAsset<UAnimMontage>(&ReloadMontage, "AnimMontage'/Game/Character/Animations/Rifle_Reload_Montage.Rifle_Reload_Montage'");
+		ReloadMontage_PlayRate = 1.5f;
 	}
 }

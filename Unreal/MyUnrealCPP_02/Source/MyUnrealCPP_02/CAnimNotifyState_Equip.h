@@ -3,9 +3,6 @@
 #include "Animation/AnimNotifies/AnimNotifyState.h"
 #include "CAnimNotifyState_Equip.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class MYUNREALCPP_02_API UCAnimNotifyState_Equip : public UAnimNotifyState
 {

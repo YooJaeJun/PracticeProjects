@@ -42,6 +42,22 @@ void UCWeaponComponent::BeginPlay()
 void UCWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if (!!HUD)
+	{
+		if (!!GetCurrWeapon())
+			GetCurrWeapon()->IsAutoFire() ? HUD->OnAutoFire() : HUD->OffAutoFire();
+		else
+			HUD->OffAutoFire();
+
+		if (!!GetCurrWeapon())
+		{
+			uint8 currCount = GetCurrWeapon()->GetCurrMagazineCount();
+			uint8 maxCount = GetCurrWeapon()->GetMaxMagazineCount();
+
+			HUD->UpdateMagazine(currCount, maxCount);
+		}
+	}
 }
 
 ACWeapon* UCWeaponComponent::GetCurrWeapon()
@@ -155,5 +171,19 @@ FVector UCWeaponComponent::GetLeftHandLocation()
 	CheckNullResult(GetCurrWeapon(), FVector::ZeroVector);
 
 	return GetCurrWeapon()->GetLeftHandLocation();
+}
+
+void UCWeaponComponent::ToggleAutoFire()
+{
+	CheckNull(GetCurrWeapon());
+
+	GetCurrWeapon()->ToggleAutoFire();
+}
+
+void UCWeaponComponent::Reload()
+{
+	CheckNull(GetCurrWeapon());
+
+	GetCurrWeapon()->Reload();
 }
 
