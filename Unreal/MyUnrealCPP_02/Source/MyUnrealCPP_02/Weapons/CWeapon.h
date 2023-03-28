@@ -116,6 +116,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Magazine")
 		float ReloadMontage_PlayRate;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Magazine")
+		FName MagazineBoneName;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Magazine")
+		TSubclassOf<class ACMagazine> MagazineClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Magazine")
+		FName MagazineSocketName;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 		class USceneComponent* Root;
@@ -179,6 +188,12 @@ public:
 public:
 	bool CanReload();
 	void Reload();
+
+	void Eject_Magazine();
+	void Spawn_Magazine();
+	void Load_Magazine();
+	void End_Reload();
+
 private:
 	bool bEquipping;
 	bool bInAim;
@@ -201,4 +216,6 @@ private:
 
 private:
 	uint8 CurrMagazineCount;
+
+	class ACMagazine* Magazine;
 };

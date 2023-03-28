@@ -187,3 +187,30 @@ void UCWeaponComponent::Reload()
 	GetCurrWeapon()->Reload();
 }
 
+void UCWeaponComponent::Eject_Magazine()
+{
+	CheckNull(GetCurrWeapon());
+
+	GetCurrWeapon()->Eject_Magazine();
+}
+
+void UCWeaponComponent::Spawn_Magazine()
+{
+	CheckNull(GetCurrWeapon());
+
+	GetCurrWeapon()->Spawn_Magazine();
+}
+
+void UCWeaponComponent::Load_Magazine()
+{
+	CheckNull(GetCurrWeapon());
+
+	GetCurrWeapon()->Load_Magazine();
+}
+
+void UCWeaponComponent::End_Reload()
+{
+	CheckNull(GetCurrWeapon());
+
+	GetCurrWeapon()->End_Reload();
+}

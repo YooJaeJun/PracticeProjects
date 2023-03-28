@@ -1,5 +1,7 @@
 #include "Weapons/CWeapon.h"
 #include "Global.h"
+#include "CBullet.h"
+#include "CMagazine.h"
 #include "Character/CPlayer.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/TimelineComponent.h"
@@ -10,7 +12,6 @@
 #include "Materials/MaterialInstanceConstant.h"
 #include "Particles/ParticleSystem.h"
 #include "Widgets/CUserWidget_CrossHair.h"
-#include "CBullet.h"
 
 void FWeaponAimData::SetData(ACharacter* InOwner)
 {
@@ -347,4 +348,46 @@ void ACWeapon::Reload()
 
 	if (!!ReloadMontage)
 		Owner->PlayAnimMontage(ReloadMontage, ReloadMontage_PlayRate);
+}
+
+void ACWeapon::Eject_Magazine()
+{
+	if (MagazineBoneName.IsValid())
+		Mesh->HideBoneByName(MagazineBoneName, EPhysBodyOp::PBO_None);
+
+	CheckNull(MagazineClass);
+
+	FTransform transform = Mesh->GetSocketTransform(MagazineBoneName);
+	ACMagazine* magazine = GetWorld()->SpawnActorDeferred<ACMagazine>(MagazineClass, transform, nullptr, nullptr, 
+		ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+	magazine->SetEject();
+	magazine->SetLifeSpan(5);
+	magazine->FinishSpawning(transform);
+}
+
+void ACWeapon::Spawn_Magazine()
+{
+	CheckNull(MagazineClass);
+
+	FActorSpawnParameters params;
+	params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	Magazine = GetWorld()->SpawnActor<ACMagazine>(MagazineClass, params);
+	CHelpers::AttachTo(Magazine, Owner->GetMesh(), MagazineSocketName);
+}
+
+void ACWeapon::Load_Magazine()
+{
+	CurrMagazineCount = MaxMagazineCount;
+
+	if (MagazineBoneName.IsValid())
+		Mesh->UnHideBoneByName(MagazineBoneName);
+
+	if (!!Magazine)
+		Magazine->Destroy();
+}
+
+void ACWeapon::End_Reload()
+{
+	bReload = false;
 }

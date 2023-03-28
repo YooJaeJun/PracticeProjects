@@ -1,5 +1,6 @@
 #include "Weapons/CWeapon_AR4.h"
 #include "Global.h"
+#include "CMagazine.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraShake.h"
@@ -53,5 +54,8 @@ ACWeapon_AR4::ACWeapon_AR4()
 		MaxMagazineCount = 30;
 		CHelpers::GetAsset<UAnimMontage>(&ReloadMontage, "AnimMontage'/Game/Character/Animations/Rifle_Reload_Montage.Rifle_Reload_Montage'");
 		ReloadMontage_PlayRate = 1.5f;
+		MagazineBoneName = "b_gun_mag";
+		CHelpers::GetClass<ACMagazine>(&MagazineClass, "Blueprint'/Game/Weapons/BP_CMagazine_AR4.BP_CMagazine_AR4_C'");
+		MagazineSocketName = "Rifle_Magazine";
 	}
 }

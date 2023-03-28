@@ -70,6 +70,10 @@ public:
 
 public:
 	void Reload();
+	void Eject_Magazine();
+	void Spawn_Magazine();
+	void Load_Magazine();
+	void End_Reload();
 
 public:
 	FWeaponTypeChanged OnWeaponTypeChanged;
