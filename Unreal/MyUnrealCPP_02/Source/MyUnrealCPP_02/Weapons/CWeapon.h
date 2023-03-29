@@ -157,8 +157,8 @@ public:
 public:
 	bool CanEquip();
 	void Equip();
-	void Begin_Equip();
-	void End_Equip();
+	virtual void Begin_Equip();
+	virtual void End_Equip();
 
 	bool CanUnequip();
 	void Unequip();
@@ -201,7 +201,7 @@ private:
 	bool bReload;
 	bool bAutoFire = true;
 
-private:
+protected:
 	class ACPlayer* Owner;
 
 private:

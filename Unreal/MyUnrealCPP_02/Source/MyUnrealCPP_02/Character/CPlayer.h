@@ -20,6 +20,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 		class UCameraComponent* Camera;
 
+	UPROPERTY(VisibleAnywhere)
+		class UStaticMeshComponent* Backpack;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 		class UCWeaponComponent* Weapon;

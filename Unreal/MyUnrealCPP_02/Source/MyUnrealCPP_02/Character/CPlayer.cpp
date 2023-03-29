@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "Components/StaticMeshComponent.h"
 #include "Weapons/CWeaponComponent.h"
 
 ACPlayer::ACPlayer()
@@ -15,6 +16,7 @@ ACPlayer::ACPlayer()
 
 	CHelpers::CreateComponent<USpringArmComponent>(this, &SpringArm, "SpringArm", GetCapsuleComponent());
 	CHelpers::CreateComponent<UCameraComponent>(this, &Camera, "Camera", SpringArm);
+	CHelpers::CreateComponent<UStaticMeshComponent>(this, &Backpack, "Backpack", GetMesh(), "Backpack");
 
 	CHelpers::CreateActorComponent<UCWeaponComponent>(this, &Weapon, "Weapon");
 
@@ -38,6 +40,11 @@ ACPlayer::ACPlayer()
 	SpringArm->TargetArmLength = 200;
 	SpringArm->bUsePawnControlRotation = true;
 	SpringArm->bEnableCameraLag = true;
+
+	UStaticMesh* staticMesh;
+	CHelpers::GetAsset<UStaticMesh>(&staticMesh, "StaticMesh'/Game/FPS_Weapon_Bundle/Backpack/Backpack.Backpack'");
+	Backpack->SetStaticMesh(staticMesh);
+	Backpack->SetCollisionProfileName("NoCollision");
 }
 
 void ACPlayer::BeginPlay()
@@ -67,6 +74,7 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Run", EInputEvent::IE_Released, this, &ACPlayer::OffRun);
 
 	PlayerInputComponent->BindAction("AR4", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SetAR4Mode);
+	PlayerInputComponent->BindAction("AK47", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SetAK47Mode);
 
 	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::Begin_Aim);
 	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Released, Weapon, &UCWeaponComponent::End_Aim);

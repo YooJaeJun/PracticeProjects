@@ -26,13 +26,13 @@ class MYUNREALCPP_02_API CHelpers
 {
 public:
 	template<typename T>
-	static void CreateComponent(AActor* InActor, T** OutComponent, FName InName, USceneComponent* InParent = nullptr)
+	static void CreateComponent(AActor* InActor, T** OutComponent, FName InName, USceneComponent* InParent = nullptr, FName InSocketName = NAME_None )
 	{
 		*OutComponent = InActor->CreateDefaultSubobject<T>(InName);
 
 		if (!!InParent)
 		{
-			(*OutComponent)->SetupAttachment(InParent);
+			(*OutComponent)->SetupAttachment(InParent, InSocketName);	// 소켓명 언더바 대신 띄어쓰기 써야 함
 
 			return;
 		}

@@ -44,6 +44,7 @@ private:
 public:
 	void SetUnarmedMode();
 	void SetAR4Mode();
+	void SetAK47Mode();
 
 private:
 	void SetMode(EWeaponType InType);

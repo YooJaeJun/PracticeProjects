@@ -83,6 +83,11 @@ void UCWeaponComponent::SetAR4Mode()
 	SetMode(EWeaponType::AR4);
 }
 
+void UCWeaponComponent::SetAK47Mode()
+{
+	SetMode(EWeaponType::AK47);
+}
+
 void UCWeaponComponent::SetMode(EWeaponType InType)
 {
 	if (Type == InType)
