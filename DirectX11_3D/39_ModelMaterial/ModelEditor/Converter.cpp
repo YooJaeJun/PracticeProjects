@@ -228,6 +228,7 @@ void Converter::WriteMaterialData(wstring savePath)
 		Xml::XMLElement* node = document->NewElement("Material");
 		root->LinkEndChild(node);
 
+
 		Xml::XMLElement* element = NULL;
 
 		element = document->NewElement("Name");

@@ -1,13 +1,15 @@
 #include "Framework.h"
 #include "MeshSphere.h"
 
-MeshSphere::MeshSphere(Shader* shader, float radius, UINT stackCount, UINT sliceCount)
+MeshSphere::MeshSphere(Shader * shader, float radius, UINT stackCount, UINT sliceCount)
 	: Mesh(shader), radius(radius), stackCount(stackCount), sliceCount(sliceCount)
 {
+
 }
 
 MeshSphere::~MeshSphere()
 {
+
 }
 
 void MeshSphere::Create()
@@ -37,55 +39,58 @@ void MeshSphere::Create()
 			D3DXVec3Normalize(&n, &p);
 
 			Vector2 uv = Vector2(theta / (Math::PI * 2), phi / Math::PI);
-
+			
 			v.push_back(MeshVertex(p.x, p.y, p.z, uv.x, uv.y, n.x, n.y, n.z));
 		}
 	}
-
 	v.push_back(MeshVertex(0, -radius, 0, 0, 0, 0, -1, 0));
+
 
 	vertices = new MeshVertex[v.size()];
 	vertexCount = v.size();
 
-	copy(v.begin(), v.end(), stdext::checked_array_iterator<MeshVertex*>(vertices, vertexCount));
+	copy(v.begin(), v.end(), stdext::checked_array_iterator<MeshVertex *>(vertices, vertexCount));
 
 
+	
 	vector<UINT> i;
-	for (UINT j = 1; j <= sliceCount; j++)
+	for (UINT k = 1; k <= sliceCount; k++)
 	{
 		i.push_back(0);
-		i.push_back(j + 1);
-		i.push_back(j);
+		i.push_back(k + 1);
+		i.push_back(k);
 	}
 
 	UINT baseIndex = 1;
 	UINT ringVertexCount = sliceCount + 1;
-	for (UINT j = 0; j < stackCount - 2; j++)
+	for (UINT k = 0; k < stackCount - 2; k++)
 	{
-		for (UINT k = 0; k < sliceCount; k++)
+		for (UINT j = 0; j < sliceCount; j++)
 		{
-			i.push_back(baseIndex + j * ringVertexCount + k);
-			i.push_back(baseIndex + j * ringVertexCount + k + 1);
-			i.push_back(baseIndex + (j + 1) * ringVertexCount + k);
+			i.push_back(baseIndex + k * ringVertexCount + j);
+			i.push_back(baseIndex + k * ringVertexCount + j + 1);
+			i.push_back(baseIndex + (k + 1) * ringVertexCount + j);
 
-			i.push_back(baseIndex + (j + 1) * ringVertexCount + k);
-			i.push_back(baseIndex + j * ringVertexCount + k + 1);
-			i.push_back(baseIndex + (j + 1) * ringVertexCount + k + 1);
+			i.push_back(baseIndex + (k + 1) * ringVertexCount + j);
+			i.push_back(baseIndex + k * ringVertexCount + j + 1);
+			i.push_back(baseIndex + (k + 1) * ringVertexCount + j + 1);
 		}
 	}
 
 	UINT southPoleIndex = v.size() - 1;
 	baseIndex = southPoleIndex - ringVertexCount;
 
-	for (UINT j = 0; j < sliceCount; j++)
+	for (UINT k = 0; k < sliceCount; k++)
 	{
 		i.push_back(southPoleIndex);
-		i.push_back(baseIndex + j);
-		i.push_back(baseIndex + j + 1);
+		i.push_back(baseIndex + k);
+		i.push_back(baseIndex + k + 1);
 	}
 
 	indices = new UINT[i.size()];
 	indexCount = i.size();
 
-	copy(i.begin(), i.end(), stdext::checked_array_iterator<UINT*>(indices, indexCount));
+	copy(i.begin(), i.end(), stdext::checked_array_iterator<UINT *>(indices, indexCount));
+
+	int a = 0;
 }

@@ -6,22 +6,23 @@ void RotationDemo::Initialize()
 	Context::Get()->GetCamera()->Position(0, 0, -5.0f);
 
 	shader = new Shader(L"09_World.fx");
-
+	
 	//vertices[0].Position = Vector3(+0.0f, +0.0f, 0.0f);
 	//vertices[1].Position = Vector3(+0.0f, +0.5f, 0.0f);
 	//vertices[2].Position = Vector3(+0.5f, +0.0f, 0.0f);
-	//	
 	//vertices[3].Position = Vector3(+0.5f, +0.0f, 0.0f);
 	//vertices[4].Position = Vector3(+0.0f, +0.5f, 0.0f);
 	//vertices[5].Position = Vector3(+0.5f, +0.5f, 0.0f);
 
+
 	vertices[0].Position = Vector3(-0.5f, -0.5f, 0.0f);
 	vertices[1].Position = Vector3(-0.5f, +0.5f, 0.0f);
 	vertices[2].Position = Vector3(+0.5f, -0.5f, 0.0f);
-		
 	vertices[3].Position = Vector3(+0.5f, -0.5f, 0.0f);
 	vertices[4].Position = Vector3(-0.5f, +0.5f, 0.0f);
 	vertices[5].Position = Vector3(+0.5f, +0.5f, 0.0f);
+
+
 
 	D3D11_BUFFER_DESC desc;
 	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -33,16 +34,14 @@ void RotationDemo::Initialize()
 
 	Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 
-	D3DXMatrixIdentity(&world);
-}
 
-void RotationDemo::Ready()
-{
+	D3DXMatrixIdentity(&world);
 }
 
 void RotationDemo::Destroy()
 {
 	SafeDelete(shader);
+
 	SafeRelease(vertexBuffer);
 }
 
@@ -50,18 +49,14 @@ void RotationDemo::Update()
 {
 	if (Keyboard::Get()->Press(VK_RIGHT))
 	{
-		z += 40 * Time::Delta();
+		z += 20 * Time::Delta();
 	}
 	else if (Keyboard::Get()->Press(VK_LEFT))
 	{
-		z -= 40 * Time::Delta();
+		z -= 20 * Time::Delta();
 	}
 
 	D3DXMatrixRotationZ(&world, Math::ToRadian(z));
-}
-
-void RotationDemo::PreRender()
-{
 }
 
 void RotationDemo::Render()
@@ -78,12 +73,4 @@ void RotationDemo::Render()
 	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	shader->Draw(0, 0, 6);
-}
-
-void RotationDemo::PostRender()
-{
-}
-
-void RotationDemo::ResizeScreen()
-{
 }

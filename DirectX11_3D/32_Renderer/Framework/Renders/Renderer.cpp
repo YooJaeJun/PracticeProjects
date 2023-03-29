@@ -1,7 +1,7 @@
 #include "Framework.h"
 #include "Renderer.h"
 
-Renderer::Renderer(Shader* shader)
+Renderer::Renderer(Shader * shader)
 	: shader(shader)
 {
 	Initialize();

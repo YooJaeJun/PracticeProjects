@@ -1,7 +1,7 @@
 #include "Framework.h"
 #include "CubeMap.h"
 
-CubeMap::CubeMap(Shader* shader)
+CubeMap::CubeMap(Shader * shader)
 	: shader(shader)
 {
 	//mesh = new MeshCube(shader);
@@ -13,7 +13,7 @@ CubeMap::CubeMap(Shader* shader)
 CubeMap::~CubeMap()
 {
 	SafeDelete(mesh);
-	
+
 	SafeRelease(srv);
 }
 

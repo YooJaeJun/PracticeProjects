@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Vertex_Line.cpp">
       <Filter>Vertex</Filter>
     </ClCompile>
@@ -19,19 +19,19 @@
       <Filter>Vertex</Filter>
     </ClCompile>
     <ClCompile Include="WorldDemo.cpp">
-      <Filter>Vertex</Filter>
+      <Filter>World</Filter>
     </ClCompile>
     <ClCompile Include="WorldDemo2.cpp">
-      <Filter>Vertex</Filter>
+      <Filter>World</Filter>
     </ClCompile>
     <ClCompile Include="WorldDemo3.cpp">
-      <Filter>Vertex</Filter>
+      <Filter>World</Filter>
     </ClCompile>
     <ClCompile Include="IndexDemo.cpp">
-      <Filter>Vertex</Filter>
+      <Filter>World</Filter>
     </ClCompile>
     <ClCompile Include="GridDemo.cpp">
-      <Filter>Vertex</Filter>
+      <Filter>World</Filter>
     </ClCompile>
     <ClCompile Include="CubeDemo.cpp">
       <Filter>Mesh</Filter>
@@ -56,19 +56,19 @@
       <Filter>Vertex</Filter>
     </ClInclude>
     <ClInclude Include="WorldDemo.h">
-      <Filter>Vertex</Filter>
+      <Filter>World</Filter>
     </ClInclude>
     <ClInclude Include="WorldDemo2.h">
-      <Filter>Vertex</Filter>
+      <Filter>World</Filter>
     </ClInclude>
     <ClInclude Include="WorldDemo3.h">
-      <Filter>Vertex</Filter>
+      <Filter>World</Filter>
     </ClInclude>
     <ClInclude Include="IndexDemo.h">
-      <Filter>Vertex</Filter>
+      <Filter>World</Filter>
     </ClInclude>
     <ClInclude Include="GridDemo.h">
-      <Filter>Vertex</Filter>
+      <Filter>World</Filter>
     </ClInclude>
     <ClInclude Include="CubeDemo.h">
       <Filter>Mesh</Filter>
@@ -76,10 +76,13 @@
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Vertex">
-      <UniqueIdentifier>{e5cda3c7-8b35-453f-8f01-a19923a5cba2}</UniqueIdentifier>
+      <UniqueIdentifier>{0f5e74cd-8acc-48d3-a953-d7ec6d96c7ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="World">
+      <UniqueIdentifier>{3b1898fb-da09-4a88-ac47-b96c8f5ee3a0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Mesh">
-      <UniqueIdentifier>{98a64e8c-8ce7-4f23-b8cc-ff7496919ec1}</UniqueIdentifier>
+      <UniqueIdentifier>{1a8f9e72-0e55-453c-8568-1235f4c0c2b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

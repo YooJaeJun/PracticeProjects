@@ -9,12 +9,16 @@ public:
 
 private:
 	void Create() override;
+
+private:
 	void BuildTopCap(vector<MeshVertex>& vertices, vector<UINT>& indices);
 	void BuildBottomCap(vector<MeshVertex>& vertices, vector<UINT>& indices);
 
+private:
 	float topRadius;
 	float bottomRadius;
 	float height;
+	
 
 	UINT stackCount;
 	UINT sliceCount;

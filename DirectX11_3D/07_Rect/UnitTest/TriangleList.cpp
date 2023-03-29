@@ -4,12 +4,14 @@
 void TriangleList::Initialize()
 {
 	shader = new Shader(L"06_Triangle.fx");
+	
 
-	// VertexBuffer
+	//VertexBuffer
 	{
 		vertices[0].Position = Vector3(-0.5f, +0.0f, 0.0f);
 		vertices[1].Position = Vector3(+0.0f, +0.5f, 0.0f);
 		vertices[2].Position = Vector3(+0.5f, +0.0f, 0.0f);
+
 
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -22,10 +24,12 @@ void TriangleList::Initialize()
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 	}
 
+	//VertexBuffer2
 	{
 		vertices2[0].Position = Vector3(-0.5f, -0.5f, 0.0f);
-		vertices2[1].Position = Vector3(+0.0f, +0.0f, 0.0f);
+		vertices2[1].Position = Vector3(+0.0f, -0.0f, 0.0f);
 		vertices2[2].Position = Vector3(+0.5f, -0.5f, 0.0f);
+
 
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -37,25 +41,20 @@ void TriangleList::Initialize()
 
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer2));
 	}
-}
-
-void TriangleList::Ready()
-{
+	
 }
 
 void TriangleList::Destroy()
 {
 	SafeDelete(shader);
+
 	SafeRelease(vertexBuffer);
 	SafeRelease(vertexBuffer2);
 }
 
 void TriangleList::Update()
 {
-}
 
-void TriangleList::PreRender()
-{
 }
 
 void TriangleList::Render()
@@ -68,17 +67,9 @@ void TriangleList::Render()
 
 	shader->Draw(0, 0, 3);
 
-
+	
 	D3D::GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer2, &stride, &offset);
 	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	shader->Draw(0, 1, 3);
-}
-
-void TriangleList::PostRender()
-{
-}
-
-void TriangleList::ResizeScreen()
-{
 }

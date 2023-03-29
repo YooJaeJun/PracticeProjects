@@ -2,14 +2,23 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
-    <ClCompile Include="Renders\Context.cpp">
+    <ClCompile Include="Renders\Texture.cpp">
       <Filter>Renders</Filter>
     </ClCompile>
-    <ClCompile Include="Renders\Texture.cpp">
+    <ClCompile Include="Renders\Context.cpp">
       <Filter>Renders</Filter>
     </ClCompile>
     <ClCompile Include="Renders\Shader.cpp">
       <Filter>Renders</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Mouse.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Time.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Window.cpp">
+      <Filter>Systems</Filter>
     </ClCompile>
     <ClCompile Include="Systems\D3D.cpp">
       <Filter>Systems</Filter>
@@ -20,14 +29,8 @@
     <ClCompile Include="Systems\Keyboard.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Systems\Mouse.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\Time.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Systems\Window.cpp">
-      <Filter>Systems</Filter>
+    <ClCompile Include="Utilities\Xml.cpp">
+      <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="Utilities\BinaryFile.cpp">
       <Filter>Utilities</Filter>
@@ -41,19 +44,16 @@
     <ClCompile Include="Utilities\String.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\Xml.cpp">
-      <Filter>Utilities</Filter>
+    <ClCompile Include="Viewer\Projection.cpp">
+      <Filter>Viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewer\Viewport.cpp">
+      <Filter>Viewer</Filter>
     </ClCompile>
     <ClCompile Include="Viewer\Orthographic.cpp">
       <Filter>Viewer</Filter>
     </ClCompile>
     <ClCompile Include="Viewer\Perspective.cpp">
-      <Filter>Viewer</Filter>
-    </ClCompile>
-    <ClCompile Include="Viewer\Projection.cpp">
-      <Filter>Viewer</Filter>
-    </ClCompile>
-    <ClCompile Include="Viewer\Viewport.cpp">
       <Filter>Viewer</Filter>
     </ClCompile>
     <ClCompile Include="Viewer\Camera.cpp">
@@ -63,7 +63,7 @@
       <Filter>Viewer</Filter>
     </ClCompile>
     <ClCompile Include="Environment\Terrain.cpp">
-      <Filter>Enviroment</Filter>
+      <Filter>Environment</Filter>
     </ClCompile>
     <ClCompile Include="Renders\DebugLine.cpp">
       <Filter>Renders</Filter>
@@ -90,7 +90,7 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Environment\CubeSky.cpp">
-      <Filter>Enviroment</Filter>
+      <Filter>Environment</Filter>
     </ClCompile>
     <ClCompile Include="Renders\Buffers.cpp">
       <Filter>Renders</Filter>
@@ -109,27 +109,44 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Filter Include="Renders">
+      <UniqueIdentifier>{5f17565d-bec0-49ff-bded-c0042d39088c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Systems">
+      <UniqueIdentifier>{72bf688a-4980-43d9-80e3-051ed42328b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{367fcd5f-51ce-4c19-9773-c1a4c30a3fcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Viewer">
+      <UniqueIdentifier>{d21c436c-8050-430b-ae49-edf729045aef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Environment">
+      <UniqueIdentifier>{421045ca-f3af-4694-940b-2d04575a650c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Meshes">
+      <UniqueIdentifier>{b6268246-9a0d-4351-960b-d095db9244fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{da5e3246-bede-4515-863b-c47d135441f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{9a376a1c-dad6-4aa7-83d2-b90ef186ee00}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="Framework.h" />
-    <ClInclude Include="Renders\Context.h">
-      <Filter>Renders</Filter>
-    </ClInclude>
     <ClInclude Include="Renders\Texture.h">
       <Filter>Renders</Filter>
     </ClInclude>
     <ClInclude Include="Renders\VertexLayouts.h">
       <Filter>Renders</Filter>
     </ClInclude>
-    <ClInclude Include="Renders\Shader.h">
+    <ClInclude Include="Renders\Context.h">
       <Filter>Renders</Filter>
     </ClInclude>
-    <ClInclude Include="Systems\D3D.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\Gui.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\IExecute.h">
-      <Filter>Systems</Filter>
+    <ClInclude Include="Renders\Shader.h">
+      <Filter>Renders</Filter>
     </ClInclude>
     <ClInclude Include="Systems\Keyboard.h">
       <Filter>Systems</Filter>
@@ -143,6 +160,18 @@
     <ClInclude Include="Systems\Window.h">
       <Filter>Systems</Filter>
     </ClInclude>
+    <ClInclude Include="Systems\D3D.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Gui.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\IExecute.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Xml.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
     <ClInclude Include="Utilities\BinaryFile.h">
       <Filter>Utilities</Filter>
     </ClInclude>
@@ -155,12 +184,6 @@
     <ClInclude Include="Utilities\String.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\Xml.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Viewer\Orthographic.h">
-      <Filter>Viewer</Filter>
-    </ClInclude>
     <ClInclude Include="Viewer\Perspective.h">
       <Filter>Viewer</Filter>
     </ClInclude>
@@ -170,6 +193,9 @@
     <ClInclude Include="Viewer\Viewport.h">
       <Filter>Viewer</Filter>
     </ClInclude>
+    <ClInclude Include="Viewer\Orthographic.h">
+      <Filter>Viewer</Filter>
+    </ClInclude>
     <ClInclude Include="Viewer\Camera.h">
       <Filter>Viewer</Filter>
     </ClInclude>
@@ -177,7 +203,7 @@
       <Filter>Viewer</Filter>
     </ClInclude>
     <ClInclude Include="Environment\Terrain.h">
-      <Filter>Enviroment</Filter>
+      <Filter>Environment</Filter>
     </ClInclude>
     <ClInclude Include="Renders\DebugLine.h">
       <Filter>Renders</Filter>
@@ -204,7 +230,7 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Environment\CubeSky.h">
-      <Filter>Enviroment</Filter>
+      <Filter>Environment</Filter>
     </ClInclude>
     <ClInclude Include="Renders\Buffers.h">
       <Filter>Renders</Filter>
@@ -221,31 +247,5 @@
     <ClInclude Include="Model\Model.h">
       <Filter>Model</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Viewer">
-      <UniqueIdentifier>{3cc3ca39-2a9e-453d-a9ef-b1edff74ac69}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utilities">
-      <UniqueIdentifier>{54811616-8866-49d4-8f1d-b24fdaf0054c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Systems">
-      <UniqueIdentifier>{cb8cbac5-c81e-41f1-a5bf-6acc7f2650c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Renders">
-      <UniqueIdentifier>{706644aa-b18b-4ad2-b8f7-eabdfff71ddb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Enviroment">
-      <UniqueIdentifier>{2bbd4152-0007-4209-9eb6-ec005249cb70}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Meshes">
-      <UniqueIdentifier>{1c24feae-3666-416f-9790-911f18a27c84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Objects">
-      <UniqueIdentifier>{cc8c7805-a30c-4e29-93e4-c88d5d75e4f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Model">
-      <UniqueIdentifier>{900eb768-19b8-412a-bec1-4fdbcb495d99}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
 </Project>

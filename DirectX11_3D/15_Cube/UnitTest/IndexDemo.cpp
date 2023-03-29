@@ -4,13 +4,13 @@
 void IndexDemo::Initialize()
 {
 	shader = new Shader(L"10_World.fx");
-
+	
 	vertices[0].Position = Vector3(-0.5f, -0.5f, 0.0f);
 	vertices[1].Position = Vector3(-0.5f, +0.5f, 0.0f);
 	vertices[2].Position = Vector3(+0.5f, -0.5f, 0.0f);
 	vertices[3].Position = Vector3(+0.5f, +0.5f, 0.0f);
 
-	// Create Vertex Buffer
+	//Create Vertex Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -23,6 +23,7 @@ void IndexDemo::Initialize()
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 	}
 
+
 	indices[0] = 0;
 	indices[1] = 1;
 	indices[2] = 2;
@@ -31,7 +32,7 @@ void IndexDemo::Initialize()
 	indices[4] = 1;
 	indices[5] = 3;
 
-	// Create Index Buffer
+	//Create Index Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -43,28 +44,23 @@ void IndexDemo::Initialize()
 
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &indexBuffer));
 	}
+	
+
 
 	D3DXMatrixIdentity(&world);
-}
-
-void IndexDemo::Ready()
-{
 }
 
 void IndexDemo::Destroy()
 {
 	SafeDelete(shader);
+
 	SafeRelease(vertexBuffer);
 	SafeRelease(indexBuffer);
 }
 
 void IndexDemo::Update()
 {
-
-}
-
-void IndexDemo::PreRender()
-{
+	
 }
 
 void IndexDemo::Render()
@@ -81,14 +77,6 @@ void IndexDemo::Render()
 	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	D3D::GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	D3D::GetDC()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
+	
 	shader->DrawIndexed(0, 1, 6);
-}
-
-void IndexDemo::PostRender()
-{
-}
-
-void IndexDemo::ResizeScreen()
-{
 }

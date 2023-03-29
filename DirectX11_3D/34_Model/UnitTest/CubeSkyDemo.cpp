@@ -6,15 +6,17 @@ void CubeSkyDemo::Initialize()
 	Context::Get()->GetCamera()->RotationDegree(20, 0, 0);
 	Context::Get()->GetCamera()->Position(1, 36, -85);
 
+
 	shader = new Shader(L"25_Mesh.fx");
 	sDirection = shader->AsVector("Direction");
 
 	sky = new CubeSky(L"Environment/GrassCube1024.dds");
-
+	
 	CreateMesh();
 
 	cubeMapShader = new Shader(L"29_CubeMap.fx");
 	cubeMap = new CubeMap(cubeMapShader);
+	//cubeMap->Texture(L"Environment/SunsetCube1024.dds");
 	cubeMap->Texture(L"Environment/Earth.dds");
 	cubeMap->GetTransform()->Position(0, 20, 0);
 	cubeMap->GetTransform()->Scale(10, 10, 10);
@@ -24,7 +26,7 @@ void CubeSkyDemo::Destroy()
 {
 	SafeDelete(shader);
 	SafeDelete(sky);
-
+	
 	SafeDelete(cube);
 	SafeDelete(grid);
 
@@ -33,7 +35,7 @@ void CubeSkyDemo::Destroy()
 		SafeDelete(cylinder[i]);
 		SafeDelete(sphere[i]);
 	}
-	
+
 	SafeDelete(cubeMapShader);
 	SafeDelete(cubeMap);
 }
@@ -59,7 +61,6 @@ void CubeSkyDemo::Render()
 	ImGui::SliderFloat3("Direction", direction, -1, +1);
 	sDirection->SetFloatVector(direction);
 
-
 	sky->Render();
 
 	cube->Render();
@@ -81,9 +82,10 @@ void CubeSkyDemo::CreateMesh()
 	cube->GetTransform()->Scale(20, 10, 20);
 	cube->DiffuseMap(L"Stones.png");
 
-	grid = new MeshGrid(shader, 5, 5);
+	grid = new MeshGrid(shader, 6, 6);
 	grid->GetTransform()->Scale(12, 1, 12);
 	grid->DiffuseMap(L"Floor.png");
+
 
 	for (UINT i = 0; i < 5; i++)
 	{
@@ -96,6 +98,7 @@ void CubeSkyDemo::CreateMesh()
 		cylinder[i * 2 + 1]->GetTransform()->Position(30, 6, (float)i * 15.0f - 15.0f);
 		cylinder[i * 2 + 1]->GetTransform()->Scale(5, 5, 5);
 		cylinder[i * 2 + 1]->DiffuseMap(L"Bricks.png");
+
 
 		sphere[i * 2] = new MeshSphere(shader, 0.5f, 20, 20);
 		sphere[i * 2]->GetTransform()->Position(-30, 15.5f, (float)i * 15.0f - 15.0f);

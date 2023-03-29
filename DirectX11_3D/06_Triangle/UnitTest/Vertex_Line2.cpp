@@ -7,10 +7,13 @@ void Vertex_Line2::Initialize()
 
 	vertices[0].Position = Vector3(0.0f, 0.0f, 0.0f);
 	vertices[1].Position = Vector3(1.0f, 0.0f, 0.0f);
+
 	vertices[2].Position = Vector3(0.0f, 0.5f, 0.0f);
 	vertices[3].Position = Vector3(1.0f, 0.5f, 0.0f);
+
 	vertices[4].Position = Vector3(0.0f, -0.5f, 0.0f);
 	vertices[5].Position = Vector3(1.0f, -0.5f, 0.0f);
+
 
 	D3D11_BUFFER_DESC desc;
 	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -23,10 +26,6 @@ void Vertex_Line2::Initialize()
 	Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 }
 
-void Vertex_Line2::Ready()
-{
-}
-
 void Vertex_Line2::Destroy()
 {
 	SafeDelete(shader);
@@ -35,10 +34,7 @@ void Vertex_Line2::Destroy()
 
 void Vertex_Line2::Update()
 {
-}
 
-void Vertex_Line2::PreRender()
-{
 }
 
 void Vertex_Line2::Render()
@@ -47,17 +43,9 @@ void Vertex_Line2::Render()
 	UINT offset = 0;
 
 	D3D::GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-	// D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	//D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
-	// shader->Draw(1, 0, 6, 2);
 	shader->Draw(0, 0, 6);
-}
-
-void Vertex_Line2::PostRender()
-{
-}
-
-void Vertex_Line2::ResizeScreen()
-{
+	//shader->Draw(1, 0, 2, 2);
 }

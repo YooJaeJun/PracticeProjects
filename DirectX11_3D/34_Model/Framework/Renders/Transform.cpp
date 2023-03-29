@@ -8,7 +8,7 @@ Transform::Transform()
 	D3DXMatrixIdentity(&bufferDesc.World);
 }
 
-Transform::Transform(Shader* shader)
+Transform::Transform(Shader * shader)
 	: position(0, 0, 0), scale(1, 1, 1), rotation(0, 0, 0)
 {
 	SetShader(shader);
@@ -21,7 +21,7 @@ Transform::~Transform()
 	SafeDelete(buffer);
 }
 
-void Transform::Set(Transform* transform)
+void Transform::Set(Transform * transform)
 {
 	position = transform->position;
 	scale = transform->scale;
@@ -43,14 +43,14 @@ void Transform::Position(float x, float y, float z)
 	Position(Vector3(x, y, z));
 }
 
-void Transform::Position(Vector3& vec)
+void Transform::Position(Vector3 & vec)
 {
 	position = vec;
 
 	UpdateWorld();
 }
 
-void Transform::Position(Vector3* vec)
+void Transform::Position(Vector3 * vec)
 {
 	*vec = position;
 }
@@ -60,14 +60,14 @@ void Transform::Scale(float x, float y, float z)
 	Scale(Vector3(x, y, z));
 }
 
-void Transform::Scale(Vector3& vec)
+void Transform::Scale(Vector3 & vec)
 {
 	scale = vec;
 
 	UpdateWorld();
 }
 
-void Transform::Scale(Vector3* vec)
+void Transform::Scale(Vector3 * vec)
 {
 	*vec = scale;
 }
@@ -77,14 +77,14 @@ void Transform::Rotation(float x, float y, float z)
 	Rotation(Vector3(x, y, z));
 }
 
-void Transform::Rotation(Vector3& vec)
+void Transform::Rotation(Vector3 & vec)
 {
 	rotation = vec;
 
 	UpdateWorld();
 }
 
-void Transform::Rotation(Vector3* vec)
+void Transform::Rotation(Vector3 * vec)
 {
 	*vec = rotation;
 }
@@ -94,7 +94,7 @@ void Transform::RotationDegree(float x, float y, float z)
 	RotationDegree(Vector3(x, y, z));
 }
 
-void Transform::RotationDegree(Vector3& vec)
+void Transform::RotationDegree(Vector3 & vec)
 {
 	Vector3 temp;
 
@@ -105,7 +105,7 @@ void Transform::RotationDegree(Vector3& vec)
 	Rotation(temp);
 }
 
-void Transform::RotationDegree(Vector3* vec)
+void Transform::RotationDegree(Vector3 * vec)
 {
 	Vector3 temp;
 
@@ -131,7 +131,7 @@ Vector3 Transform::Right()
 	return Vector3(bufferDesc.World._11, bufferDesc.World._12, bufferDesc.World._13);
 }
 
-void Transform::World(Matrix& matrix)
+void Transform::World(Matrix & matrix)
 {
 	Math::MatrixDecompose(matrix, scale, rotation, position);
 

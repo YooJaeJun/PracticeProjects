@@ -29,7 +29,7 @@ void ModelAnimator::Update()
 	keyframeDesc.Clip %= model->ClipCount();
 
 	ImGui::InputInt("CurrFrame", (int *)&keyframeDesc.CurrFrame);
-	keyframeDesc.CurrFrame %= model->ClipByIndex(keyframeDesc.Clip)->FrameCount();
+	keyframeDesc.CurrFrame = model->ClipByIndex(keyframeDesc.Clip)->FrameCount();
 
 
 	if (texture == NULL)

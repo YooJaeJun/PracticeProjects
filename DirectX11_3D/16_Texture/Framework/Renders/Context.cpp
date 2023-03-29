@@ -56,6 +56,7 @@ void Context::Render()
 {
 	viewport->RSSetViewport();
 
+	
 	string str = string("FrameRate : ") + to_string(ImGui::GetIO().Framerate);
 	Gui::Get()->RenderText(5, 5, 1, 1, 1, str);
 
@@ -82,7 +83,7 @@ Matrix Context::View()
 	return view;
 }
 
-Matrix Context::Projection()
+D3DXMATRIX Context::Projection()
 {
 	Matrix projection;
 	perspective->GetMatrix(&projection);

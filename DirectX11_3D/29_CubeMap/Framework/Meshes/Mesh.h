@@ -46,6 +46,7 @@ protected:
 private:
 	void UpdateWorld();
 
+
 protected:
 	MeshVertex* vertices = NULL;
 	UINT* indices = NULL;
@@ -63,12 +64,12 @@ private:
 
 	Matrix world;
 
-
 	ID3D11Buffer* vertexBuffer = NULL;
 	ID3D11Buffer* indexBuffer = NULL;
 
-	ID3DX11EffectMatrixVariable* sWorld, * sView, * sProjection;
-	
+
+	ID3DX11EffectMatrixVariable* sWorld, *sView, *sProjection;
+
 	Texture* diffuseMap = NULL;
 	ID3DX11EffectShaderResourceVariable* sDiffuseMap;
 };

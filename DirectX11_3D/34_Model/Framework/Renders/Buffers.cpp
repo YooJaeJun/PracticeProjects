@@ -1,7 +1,7 @@
 #include "Framework.h"
 #include "Buffers.h"
 
-VertexBuffer::VertexBuffer(void* data, UINT count, UINT stride, UINT slot, bool bCpuWrite, bool bGpuWrite)
+VertexBuffer::VertexBuffer(void * data, UINT count, UINT stride, UINT slot, bool bCpuWrite, bool bGpuWrite)
 	: data(data), count(count), stride(stride), slot(slot)
 	, bCpuWrite(bCpuWrite), bGpuWrite(bGpuWrite)
 {
@@ -49,7 +49,7 @@ void VertexBuffer::Render()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-IndexBuffer::IndexBuffer(void* data, UINT count)
+IndexBuffer::IndexBuffer(void * data, UINT count)
 	: data(data), count(count)
 {
 	D3D11_BUFFER_DESC desc;
@@ -78,7 +78,7 @@ void IndexBuffer::Render()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-ConstantBuffer::ConstantBuffer(void* data, UINT dataSize)
+ConstantBuffer::ConstantBuffer(void * data, UINT dataSize)
 	: data(data), dataSize(dataSize)
 {
 	D3D11_BUFFER_DESC desc;

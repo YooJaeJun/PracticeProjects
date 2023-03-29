@@ -6,7 +6,7 @@ void TextureLoadDemo::Initialize()
 	Context::Get()->GetCamera()->Position(0, 0, -5.0f);
 
 	shader = new Shader(L"16_Texture.fx");
-
+	
 	vertices[0].Position = Vector3(-0.5f, -0.5f, 0.0f);
 	vertices[1].Position = Vector3(-0.5f, +0.5f, 0.0f);
 	vertices[2].Position = Vector3(+0.5f, -0.5f, 0.0f);
@@ -18,11 +18,12 @@ void TextureLoadDemo::Initialize()
 	vertices[3].Uv = Vector2(1, 0);
 
 
-	// Create Vertex Buffer
+
+	//Create Vertex Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
-		desc.ByteWidth = sizeof(Vertex) * 4;
+		desc.ByteWidth = sizeof(VertexTexture) * 4;
 		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
 		D3D11_SUBRESOURCE_DATA subResource = { 0 };
@@ -31,7 +32,7 @@ void TextureLoadDemo::Initialize()
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 	}
 
-	// Create Index Buffer
+	//Create Index Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -43,25 +44,28 @@ void TextureLoadDemo::Initialize()
 
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &indexBuffer));
 	}
-	
+
+
 	D3DXMatrixIdentity(&world);
 }
 
 void TextureLoadDemo::Destroy()
 {
 	SafeDelete(shader);
+
 	SafeRelease(vertexBuffer);
 	SafeRelease(indexBuffer);
 
-	// SafeRelease(srv);
+	//SafeRelease(srv);
 	SafeDelete(texture);
 }
 
 void TextureLoadDemo::Update()
 {
-	if (ImGui::Button("Open"))
+	if (ImGui::Button("Open") == true)
 	{
 		function<void(wstring)> f = bind(&TextureLoadDemo::LoadTexture, this, placeholders::_1);
+
 		D3DDesc desc = D3D::GetDesc();
 		Path::OpenFileDialog(L"", Path::ImageFilter, L"../../_Textures/", f, desc.Handle);
 	}
@@ -73,11 +77,11 @@ void TextureLoadDemo::Render()
 	shader->AsMatrix("View")->SetMatrix(Context::Get()->View());
 	shader->AsMatrix("Projection")->SetMatrix(Context::Get()->Projection());
 
-	if (texture != NULL)
+	if(texture != NULL)
 		shader->AsSRV("Map")->SetResource(texture->SRV());
 
 
-	UINT stride = sizeof(Vertex);
+	UINT stride = sizeof(VertexTexture);
 	UINT offset = 0;
 
 	D3D::GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);

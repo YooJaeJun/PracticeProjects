@@ -21,6 +21,9 @@ private:
 	void Initialize();
 
 protected:
+	void Topology(D3D11_PRIMITIVE_TOPOLOGY val) { topology = val; }
+
+protected:
 	Shader* shader;
 
 	Transform* transform;

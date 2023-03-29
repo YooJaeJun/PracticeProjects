@@ -1,7 +1,7 @@
 #include "Framework.h"
 #include "Mesh.h"
 
-Mesh::Mesh(Shader* shader)
+Mesh::Mesh(Shader * shader)
 	: shader(shader)
 {
 	D3DXMatrixIdentity(&world);
@@ -26,6 +26,7 @@ Mesh::~Mesh()
 
 void Mesh::Update()
 {
+
 }
 
 void Mesh::Render()
@@ -53,20 +54,19 @@ void Mesh::Render()
 	shader->DrawIndexed(0, pass, indexCount);
 }
 
-
 void Mesh::Position(float x, float y, float z)
 {
 	Position(Vector3(x, y, z));
 }
 
-void Mesh::Position(Vector3& vec)
+void Mesh::Position(Vector3 & vec)
 {
 	position = vec;
 
 	UpdateWorld();
 }
 
-void Mesh::Position(Vector3* vec)
+void Mesh::Position(Vector3 * vec)
 {
 	*vec = position;
 }
@@ -76,14 +76,14 @@ void Mesh::Rotation(float x, float y, float z)
 	Rotation(Vector3(x, y, z));
 }
 
-void Mesh::Rotation(Vector3& vec)
+void Mesh::Rotation(Vector3 & vec)
 {
 	rotation = vec;
 
 	UpdateWorld();
 }
 
-void Mesh::Rotation(Vector3* vec)
+void Mesh::Rotation(Vector3 * vec)
 {
 	*vec = rotation;
 }
@@ -93,14 +93,14 @@ void Mesh::RotationDegree(float x, float y, float z)
 	RotationDegree(Vector3(x, y, z));
 }
 
-void Mesh::RotationDegree(Vector3& vec)
+void Mesh::RotationDegree(Vector3 & vec)
 {
 	rotation = vec * Math::PI / 180.0f;
 
 	UpdateWorld();
 }
 
-void Mesh::RotationDegree(Vector3* vec)
+void Mesh::RotationDegree(Vector3 * vec)
 {
 	*vec = rotation * 180.0f / Math::PI;
 }
@@ -110,14 +110,14 @@ void Mesh::Scale(float x, float y, float z)
 	Scale(Vector3(x, y, z));
 }
 
-void Mesh::Scale(Vector3& vec)
+void Mesh::Scale(Vector3 & vec)
 {
 	scale = vec;
 
 	UpdateWorld();
 }
 
-void Mesh::Scale(Vector3* vec)
+void Mesh::Scale(Vector3 * vec)
 {
 	*vec = scale;
 }
@@ -145,7 +145,7 @@ void Mesh::DiffuseMap(wstring file)
 }
 
 void Mesh::CreateBuffer()
-{	
+{
 	//Create Vertex Buffer
 	{
 		D3D11_BUFFER_DESC desc;

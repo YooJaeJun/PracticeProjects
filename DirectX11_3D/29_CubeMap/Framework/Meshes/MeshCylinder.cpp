@@ -1,18 +1,21 @@
 #include "Framework.h"
 #include "MeshCylinder.h"
 
-MeshCylinder::MeshCylinder(Shader* shader, float radius, float height, UINT stackCount, UINT sliceCount)
+MeshCylinder::MeshCylinder(Shader * shader, float radius, float height, UINT stackCount, UINT sliceCount)
 	: Mesh(shader), topRadius(radius), bottomRadius(radius), height(height), stackCount(stackCount), sliceCount(sliceCount)
 {
+
 }
 
-MeshCylinder::MeshCylinder(Shader* shader, float topRadius, float bottomRadius, float height, UINT stackCount, UINT sliceCount)
+MeshCylinder::MeshCylinder(Shader * shader, float topRadius, float bottomRadius, float height, UINT stackCount, UINT sliceCount)
 	: Mesh(shader), topRadius(topRadius), bottomRadius(bottomRadius), height(height), stackCount(stackCount), sliceCount(sliceCount)
 {
+
 }
 
 MeshCylinder::~MeshCylinder()
 {
+
 }
 
 void MeshCylinder::Create()
@@ -39,7 +42,7 @@ void MeshCylinder::Create()
 			vertex.Position = Vector3(r * c, y, r * s);
 			vertex.Uv = Vector2((float)k / (float)sliceCount, 1.0f - (float)i / (float)stackCount);
 
-
+			
 			Vector3 tangent = Vector3(-s, 0.0f, c);
 
 			float dr = bottomRadius - topRadius;
@@ -68,17 +71,18 @@ void MeshCylinder::Create()
 		}
 	}
 
+
 	BuildTopCap(v, i);
 	BuildBottomCap(v, i);
 
 
 	vertices = new MeshVertex[v.size()];
 	vertexCount = v.size();
-	copy(v.begin(), v.end(), stdext::checked_array_iterator<MeshVertex*>(vertices, vertexCount));
+	copy(v.begin(), v.end(), stdext::checked_array_iterator<MeshVertex *>(vertices, vertexCount));
 
 	indices = new UINT[i.size()];
 	indexCount = i.size();
-	copy(i.begin(), i.end(), stdext::checked_array_iterator<UINT*>(indices, indexCount));
+	copy(i.begin(), i.end(), stdext::checked_array_iterator<UINT *>(indices, indexCount));
 }
 
 void MeshCylinder::BuildTopCap(vector<MeshVertex>& vertices, vector<UINT>& indices)

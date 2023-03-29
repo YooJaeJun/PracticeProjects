@@ -10,6 +10,9 @@
 void Main::Initialize()
 {
 	Push(new RectDemo());
+	//Push(new TriangleList());
+	//Push(new Vertex_Line2());
+	//Push(new Vertex_Line());
 }
 
 void Main::Ready()

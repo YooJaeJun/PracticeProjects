@@ -1,7 +1,7 @@
 #include "Framework.h"
 #include "Mesh.h"
 
-Mesh::Mesh(Shader* shader)
+Mesh::Mesh(Shader * shader)
 	: Renderer(shader)
 {
 	sDiffuseMap = shader->AsSRV("DiffuseMap");
@@ -25,15 +25,15 @@ void Mesh::Render()
 	if (vertexBuffer == NULL && indexBuffer == NULL)
 	{
 		Create();
-
+		
 		vertexBuffer = new VertexBuffer(vertices, vertexCount, sizeof(MeshVertex));
 		indexBuffer = new IndexBuffer(indices, indexCount);
 	}
 
 
 	Super::Render();
-
-	if (diffuseMap != NULL)
+	
+	if(diffuseMap != NULL)
 		sDiffuseMap->SetResource(diffuseMap->SRV());
 
 	shader->DrawIndexed(0, Pass(), indexCount);

@@ -1,4 +1,5 @@
 #pragma once
+
 class Terrain
 {
 public:
@@ -24,6 +25,7 @@ private:
 
 	Texture* heightMap;
 
+
 	UINT width, height;
 
 	UINT vertexCount;
@@ -34,4 +36,3 @@ private:
 	UINT* indices;
 	ID3D11Buffer* indexBuffer;
 };
-

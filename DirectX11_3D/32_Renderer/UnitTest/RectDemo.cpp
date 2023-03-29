@@ -4,45 +4,38 @@
 void RectDemo::Initialize()
 {
 	shader = new Shader(L"07_Rect.fx");
+	
+	vertices[0].Position = Vector3(+0.0f, +0.0f, 0.0f);
+	vertices[1].Position = Vector3(+0.0f, +0.5f, 0.0f);
+	vertices[2].Position = Vector3(+0.5f, +0.0f, 0.0f);
 
-	// VertexBuffer
-	{
-		vertices[0].Position = Vector3(+0.0f, +0.0f, 0.0f);
-		vertices[1].Position = Vector3(+0.0f, +0.5f, 0.0f);
-		vertices[2].Position = Vector3(+0.5f, +0.0f, 0.0f);
-		
-		vertices[3].Position = Vector3(+0.5f, +0.0f, 0.0f);
-		vertices[4].Position = Vector3(+0.0f, +0.5f, 0.0f);
-		vertices[5].Position = Vector3(+0.5f, +0.5f, 0.0f);
+	vertices[3].Position = Vector3(+0.5f, +0.0f, 0.0f);
+	vertices[4].Position = Vector3(+0.0f, +0.5f, 0.0f);
+	vertices[5].Position = Vector3(+0.5f, +0.5f, 0.0f);
 
-		D3D11_BUFFER_DESC desc;
-		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
-		desc.ByteWidth = sizeof(Vertex) * 6;
-		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-		D3D11_SUBRESOURCE_DATA subResource = { 0 };
-		subResource.pSysMem = vertices;
 
-		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
-	}
-}
+	D3D11_BUFFER_DESC desc;
+	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
+	desc.ByteWidth = sizeof(Vertex) * 6;
+	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-void RectDemo::Ready()
-{
+	D3D11_SUBRESOURCE_DATA subResource = { 0 };
+	subResource.pSysMem = vertices;
+
+	Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));	
 }
 
 void RectDemo::Destroy()
 {
 	SafeDelete(shader);
+
 	SafeRelease(vertexBuffer);
 }
 
 void RectDemo::Update()
 {
-}
 
-void RectDemo::PreRender()
-{
 }
 
 void RectDemo::Render()
@@ -53,13 +46,5 @@ void RectDemo::Render()
 	D3D::GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	shader->Draw(0, 1, 6);
-}
-
-void RectDemo::PostRender()
-{
-}
-
-void RectDemo::ResizeScreen()
-{
+	shader->Draw(0, 1, 6);	
 }

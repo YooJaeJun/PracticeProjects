@@ -1,7 +1,7 @@
 #include "Framework.h"
 #include "Terrain.h"
 
-Terrain::Terrain(Shader* shader, wstring heightFile)
+Terrain::Terrain(Shader * shader, wstring heightFile)
 	: shader(shader)
 {
 	heightMap = new Texture(heightFile);
@@ -52,6 +52,7 @@ void Terrain::CreateVertexData()
 	width = heightMap->GetWidth();
 	height = heightMap->GetHeight();
 
+
 	vertexCount = width * height;
 	vertices = new TerrainVertex[vertexCount];
 	for (UINT z = 0; z < height; z++)
@@ -59,7 +60,7 @@ void Terrain::CreateVertexData()
 		for (UINT x = 0; x < width; x++)
 		{
 			UINT index = width * z + x;
-			UINT pixel = width * (height - 1 - z) + x;	// z값 뒤집은 것
+			UINT pixel = width * (height - 1 - z) + x;
 
 			vertices[index].Position.x = (float)x;
 			vertices[index].Position.y = heights[pixel].r * 255.0f / 10.0f;
@@ -70,7 +71,7 @@ void Terrain::CreateVertexData()
 
 void Terrain::CreateIndexData()
 {
-	indexCount = ((width - 1) * (height - 1)) * 6;
+	indexCount = (width - 1) * (height - 1) * 6;
 	indices = new UINT[indexCount];
 
 	UINT index = 0;
@@ -92,7 +93,7 @@ void Terrain::CreateIndexData()
 
 void Terrain::CreateBuffer()
 {
-	// Create Vertex Buffer
+	//Create Vertex Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -105,7 +106,7 @@ void Terrain::CreateBuffer()
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 	}
 
-	// Create Index Buffer
+	//Create Index Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));

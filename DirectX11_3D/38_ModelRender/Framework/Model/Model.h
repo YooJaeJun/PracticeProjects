@@ -19,7 +19,7 @@ public:
 	ModelBone* BoneByName(wstring name);
 
 	UINT MeshCount() { return meshes.size(); }
-	vector<ModelMesh*>& Meshes() { return meshes; }
+	vector<ModelMesh *>& Meshes() { return meshes; }
 	ModelMesh* MeshByIndex(UINT index) { return meshes[index]; }
 	ModelMesh* MeshByName(wstring name);
 

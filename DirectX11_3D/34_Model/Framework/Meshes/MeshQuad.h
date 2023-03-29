@@ -8,5 +8,4 @@ public:
 
 private:
 	void Create() override;
-
 };

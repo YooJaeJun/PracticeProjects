@@ -21,6 +21,7 @@ public:
 	void RotationDegree(Vector3& vec);
 	void RotationDegree(Vector3* vec);
 
+
 	void GetMatrix(Matrix* matrix);
 
 	Vector3 Forward() { return forward; }
@@ -35,7 +36,7 @@ protected:
 	void View();
 
 protected:
-	Matrix matView;		// 뷰 행렬
+	Matrix matView; //뷰 행렬
 
 private:
 	Vector3 position = Vector3(0, 0, 0);
@@ -45,5 +46,5 @@ private:
 	Vector3 up = Vector3(0, 1, 0);
 	Vector3 right = Vector3(1, 0, 0);
 
-	Matrix matRotation;	// 회전 행렬
+	Matrix matRotation; //회전 행렬
 };

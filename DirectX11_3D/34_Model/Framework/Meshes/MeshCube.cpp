@@ -1,13 +1,15 @@
 #include "Framework.h"
 #include "MeshCube.h"
 
-MeshCube::MeshCube(Shader* shader)
+MeshCube::MeshCube(Shader * shader)
 	: Mesh(shader)
 {
+
 }
 
 MeshCube::~MeshCube()
 {
+
 }
 
 void MeshCube::Create()
@@ -18,7 +20,7 @@ void MeshCube::Create()
 
 	vector<MeshVertex> v;
 
-	// Front
+	//Front
 	v.push_back(MeshVertex(-w, -h, -d, 0, 1, 0, 0, -1));
 	v.push_back(MeshVertex(-w, +h, -d, 0, 0, 0, 0, -1));
 	v.push_back(MeshVertex(+w, +h, -d, 1, 0, 0, 0, -1));
@@ -55,11 +57,11 @@ void MeshCube::Create()
 	v.push_back(MeshVertex(+w, -h, +d, 1, 1, 1, 0, 0));
 
 
-
 	vertices = new MeshVertex[v.size()];
 	vertexCount = v.size();
 
-	copy(v.begin(), v.end(), stdext::checked_array_iterator<MeshVertex*>(vertices, vertexCount));
+	copy(v.begin(), v.end(), stdext::checked_array_iterator<MeshVertex *>(vertices, vertexCount));
+
 
 	indexCount = 36;
 	this->indices = new UINT[indexCount]

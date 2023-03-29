@@ -15,19 +15,19 @@ void DebugLine::Delete()
 	SafeDelete(instance);
 }
 
-DebugLine* DebugLine::Get()
+DebugLine * DebugLine::Get()
 {
 	assert(instance != NULL);
 
 	return instance;
 }
 
-void DebugLine::RenderLine(Vector3& start, Vector3& end)
+void DebugLine::RenderLine(Vector3 & start, Vector3 & end)
 {
 	RenderLine(start, end, Color(0, 1, 0, 1));
 }
 
-void DebugLine::RenderLine(Vector3& start, Vector3& end, float r, float g, float b)
+void DebugLine::RenderLine(Vector3 & start, Vector3 & end, float r, float g, float b)
 {
 	RenderLine(start, end, Color(r, g, b, 1));
 }
@@ -42,12 +42,12 @@ void DebugLine::RenderLine(float x, float y, float z, float x2, float y2, float 
 	RenderLine(Vector3(x, y, z), Vector3(x2, y2, z2), Color(r, g, b, 1));
 }
 
-void DebugLine::RenderLine(float x, float y, float z, float x2, float y2, float z2, Color& color)
+void DebugLine::RenderLine(float x, float y, float z, float x2, float y2, float z2, Color & color)
 {
 	RenderLine(Vector3(x, y, z), Vector3(x2, y2, z2), color);
 }
 
-void DebugLine::RenderLine(Vector3& start, Vector3& end, Color& color)
+void DebugLine::RenderLine(Vector3 & start, Vector3 & end, Color & color)
 {
 	vertices[drawCount].Color = color;
 	vertices[drawCount++].Position = start;
@@ -71,6 +71,7 @@ void DebugLine::Render()
 	if (drawCount < 1) return;
 
 	D3D::GetDC()->UpdateSubresource(vertexBuffer, 0, NULL, vertices, sizeof(VertexColor) * drawCount, 0);
+
 
 	UINT stride = sizeof(VertexColor);
 	UINT offset = 0;
@@ -113,6 +114,6 @@ DebugLine::~DebugLine()
 {
 	SafeDelete(shader);
 
-	SafeRelease(vertexBuffer);
 	SafeDeleteArray(vertices);
+	SafeRelease(vertexBuffer);
 }

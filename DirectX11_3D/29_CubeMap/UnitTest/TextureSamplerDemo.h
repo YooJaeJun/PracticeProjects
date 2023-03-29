@@ -19,9 +19,9 @@ private:
 	VertexTexture vertices[6];
 	ID3D11Buffer* vertexBuffer;
 
-	UINT indices[6] = { 0,1,2,2,1,3 };
+	UINT indices[6] = { 0, 1, 2, 2, 1, 3 };
 	ID3D11Buffer* indexBuffer;
-	
+
 	Matrix world;
 	Texture* texture = NULL;
 };

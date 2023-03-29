@@ -4,15 +4,16 @@
 void WorldDemo2::Initialize()
 {
 	shader = new Shader(L"10_World.fx");
-
-	// Local
+	
+	//Local
 	vertices[0].Position = Vector3(+0.0f, +0.0f, 0.0f);
 	vertices[1].Position = Vector3(+0.0f, +0.5f, 0.0f);
 	vertices[2].Position = Vector3(+0.5f, +0.0f, 0.0f);
-		
+
 	vertices[3].Position = Vector3(+0.5f, +0.0f, 0.0f);
 	vertices[4].Position = Vector3(+0.0f, +0.5f, 0.0f);
 	vertices[5].Position = Vector3(+0.5f, +0.5f, 0.0f);
+
 
 
 	D3D11_BUFFER_DESC desc;
@@ -25,23 +26,21 @@ void WorldDemo2::Initialize()
 
 	Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 
-	for (int i=0; i<3; i++)
-		D3DXMatrixIdentity(&world[i]);
-}
 
-void WorldDemo2::Ready()
-{
+	for(int i = 0; i < 3; i++)
+		D3DXMatrixIdentity(&world[i]);
 }
 
 void WorldDemo2::Destroy()
 {
 	SafeDelete(shader);
+
 	SafeRelease(vertexBuffer);
 }
 
 void WorldDemo2::Update()
 {
-	ImGui::InputInt("Select", (int*)&index);
+	ImGui::InputInt("Select", (int *)&index);
 	index %= 3;
 
 	if (Keyboard::Get()->Press(VK_CONTROL))
@@ -65,12 +64,7 @@ void WorldDemo2::Update()
 		{
 			world[index]._22 -= 2.0f * Time::Delta();
 		}
-	}
-
-}
-
-void WorldDemo2::PreRender()
-{
+	}		
 }
 
 void WorldDemo2::Render()
@@ -97,12 +91,4 @@ void WorldDemo2::Render()
 	shader->AsScalar("Index")->SetInt(2);
 	shader->AsMatrix("World")->SetMatrix(world[2]);
 	shader->Draw(0, 0, 6);
-}
-
-void WorldDemo2::PostRender()
-{
-}
-
-void WorldDemo2::ResizeScreen()
-{
 }

@@ -205,10 +205,10 @@ void Window::MainRender()
 		Context::Get()->Render();
 		
 		mainExecute->Render();
-
 		DebugLine::Get()->Render();
 
 		mainExecute->PostRender();
+
 		Gui::Get()->Render();
 	}
 	D3D::Get()->Present();

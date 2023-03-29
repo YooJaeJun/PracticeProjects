@@ -3,7 +3,7 @@
 
 CubeSky::CubeSky(wstring file)
 {
-	shader = new Shader(L"30_CubeSky.fx");
+	shader = new Shader(L"29_CubeSky.fx");
 
 	sphere = new MeshSphere(shader, 0.5f);
 

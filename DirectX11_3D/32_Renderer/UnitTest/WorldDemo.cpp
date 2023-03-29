@@ -3,16 +3,18 @@
 
 void WorldDemo::Initialize()
 {
-	shader = new Shader(L"08_World.fx");
-
-	// Local
+	shader = new Shader(L"09_World.fx");
+	
+	//Local
 	vertices[0].Position = Vector3(+0.0f, +0.0f, 0.0f);
 	vertices[1].Position = Vector3(+0.0f, +0.5f, 0.0f);
 	vertices[2].Position = Vector3(+0.5f, +0.0f, 0.0f);
-		
+
 	vertices[3].Position = Vector3(+0.5f, +0.0f, 0.0f);
 	vertices[4].Position = Vector3(+0.0f, +0.5f, 0.0f);
 	vertices[5].Position = Vector3(+0.5f, +0.5f, 0.0f);
+
+
 
 	D3D11_BUFFER_DESC desc;
 	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -24,21 +26,24 @@ void WorldDemo::Initialize()
 
 	Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 
-	D3DXMatrixIdentity(&world);
-}
 
-void WorldDemo::Ready()
-{
+	D3DXMatrixIdentity(&world);
 }
 
 void WorldDemo::Destroy()
 {
 	SafeDelete(shader);
+
 	SafeRelease(vertexBuffer);
 }
 
 void WorldDemo::Update()
 {
+	//if (Keyboard::Get()->Press(VK_RIGHT))
+	//	world._41 += 2.0f * Time::Delta();
+	//else if (Keyboard::Get()->Press(VK_LEFT))
+	//	world._41 -= 2.0f * Time::Delta();
+
 	if (Keyboard::Get()->Press(VK_RIGHT))
 	{
 		world._11 += 2.0f * Time::Delta();
@@ -49,10 +54,6 @@ void WorldDemo::Update()
 		world._11 -= 2.0f * Time::Delta();
 		world._22 -= 2.0f * Time::Delta();
 	}
-}
-
-void WorldDemo::PreRender()
-{
 }
 
 void WorldDemo::Render()
@@ -69,12 +70,4 @@ void WorldDemo::Render()
 	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	shader->Draw(0, 0, 6);
-}
-
-void WorldDemo::PostRender()
-{
-}
-
-void WorldDemo::ResizeScreen()
-{
 }

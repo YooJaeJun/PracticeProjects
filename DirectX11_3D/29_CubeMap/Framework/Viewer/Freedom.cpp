@@ -4,27 +4,27 @@
 Freedom::Freedom()
 	: Camera()
 {
+
 }
 
 Freedom::~Freedom()
 {
+
 }
 
 void Freedom::Update()
 {
 	if (Mouse::Get()->Press(1) == false) return;
 
-	// 상대 공간
-	Vector3 f = Forward();	// Vector3(0, 0, 1);
-	Vector3 u = Up();		// Vector3(0, 1, 0);
-	Vector3 r = Right();	// Vector3(1, 0, 0);
+	Vector3 f = Forward();
+	Vector3 u = Up();
+	Vector3 r = Right();
 
-	// 절대 공간
-	// Vector3 f = Vector3(0, 0, 1);
-	// Vector3 u = Vector3(0, 1, 0);
-	// Vector3 r = Vector3(1, 0, 0);
+	//Vector3 f = Vector3(0, 0, 1);
+	//Vector3 u = Vector3(0, 1, 0);
+	//Vector3 r = Vector3(1, 0, 0);
 
-	// Move
+	//Move
 	{
 		Vector3 P;
 		Position(&P);
@@ -47,7 +47,8 @@ void Freedom::Update()
 		Position(P);
 	}
 
-	// Rotation
+
+	//Rotation
 	{
 		Vector3 R;
 		Rotation(&R);

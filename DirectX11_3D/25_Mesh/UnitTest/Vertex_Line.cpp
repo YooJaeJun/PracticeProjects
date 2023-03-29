@@ -19,10 +19,6 @@ void Vertex_Line::Initialize()
 	Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 }
 
-void Vertex_Line::Ready()
-{
-}
-
 void Vertex_Line::Destroy()
 {
 	SafeDelete(shader);
@@ -31,10 +27,7 @@ void Vertex_Line::Destroy()
 
 void Vertex_Line::Update()
 {
-}
 
-void Vertex_Line::PreRender()
-{
 }
 
 void Vertex_Line::Render()
@@ -46,12 +39,4 @@ void Vertex_Line::Render()
 	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	shader->Draw(1, 0, 2);
-}
-
-void Vertex_Line::PostRender()
-{
-}
-
-void Vertex_Line::ResizeScreen()
-{
 }

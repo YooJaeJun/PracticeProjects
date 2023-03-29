@@ -8,7 +8,7 @@
 void Main::Initialize()
 {
 	Push(new Vertex_Line2());
-	// Push(new Vertex_Line());
+	//Push(new Vertex_Line());
 }
 
 void Main::Ready()

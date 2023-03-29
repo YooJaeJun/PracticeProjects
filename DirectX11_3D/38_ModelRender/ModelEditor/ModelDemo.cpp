@@ -24,17 +24,6 @@ void ModelDemo::Initialize()
 
 }
 
-void ModelDemo::Destroy()
-{
-	SafeDelete(shader);
-	SafeDelete(airplane);
-	SafeDelete(tower);
-	SafeDelete(tank);
-	SafeDelete(sky);
-	SafeDelete(gridShader);
-	SafeDelete(grid);
-}
-
 void ModelDemo::Update()
 {
 	sky->Update();
@@ -53,7 +42,6 @@ void ModelDemo::Render()
 
 	static int pass = 0;
 	ImGui::InputInt("Pass", &pass);
-	pass = (pass < 0) ? 1 : pass;
 	pass %= 2;
 
 

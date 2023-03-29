@@ -20,7 +20,7 @@ public:
 	Matrix& Transform() { return transform; }
 	void Transform(Matrix& matrix) { transform = matrix; }
 
-	vector<ModelBone*>& Childs() { return childs; }
+	vector<ModelBone *>& Childs() { return childs; }
 
 private:
 	int index;
@@ -30,7 +30,7 @@ private:
 	ModelBone* parent;
 
 	Matrix transform;
-	vector<ModelBone*> childs;
+	vector<ModelBone *> childs;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

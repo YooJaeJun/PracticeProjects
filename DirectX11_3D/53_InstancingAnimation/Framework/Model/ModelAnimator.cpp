@@ -145,7 +145,7 @@ void ModelAnimator::Render()
 	instanceBuffer->Render();
 
 	for (ModelMesh* mesh : model->Meshes())
-		mesh->Render(transforms.size());
+		mesh->Render(transforms.size());	
 }
 
 void ModelAnimator::ReadMesh(wstring file)

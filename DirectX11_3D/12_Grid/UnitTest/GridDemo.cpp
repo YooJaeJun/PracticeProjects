@@ -4,8 +4,8 @@
 void GridDemo::Initialize()
 {
 	shader = new Shader(L"10_World.fx");
-
-
+	
+	
 	vertexCount = (width + 1) * (height + 1);
 	vertices = new Vertex[vertexCount];
 
@@ -21,7 +21,7 @@ void GridDemo::Initialize()
 		}
 	}
 
-	// Create Vertex Buffer
+	//Create Vertex Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -34,8 +34,8 @@ void GridDemo::Initialize()
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 	}
 
-
-
+	
+	
 	indexCount = (width * height) * 6;
 	indices = new UINT[indexCount];
 
@@ -54,8 +54,9 @@ void GridDemo::Initialize()
 			index += 6;
 		}
 	}
+	
 
-	// Create Index Buffer
+	//Create Index Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -67,31 +68,25 @@ void GridDemo::Initialize()
 
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &indexBuffer));
 	}
-
+	
 	SafeDeleteArray(vertices);
 	SafeDeleteArray(indices);
 
-	D3DXMatrixIdentity(&world);
-}
 
-void GridDemo::Ready()
-{
+	D3DXMatrixIdentity(&world);
 }
 
 void GridDemo::Destroy()
 {
 	SafeDelete(shader);
+
 	SafeRelease(vertexBuffer);
 	SafeRelease(indexBuffer);
 }
 
 void GridDemo::Update()
 {
-
-}
-
-void GridDemo::PreRender()
-{
+	
 }
 
 void GridDemo::Render()
@@ -108,14 +103,6 @@ void GridDemo::Render()
 	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	D3D::GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	D3D::GetDC()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
+	
 	shader->DrawIndexed(0, 1, indexCount);
-}
-
-void GridDemo::PostRender()
-{
-}
-
-void GridDemo::ResizeScreen()
-{
 }

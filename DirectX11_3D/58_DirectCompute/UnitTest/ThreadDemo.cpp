@@ -184,5 +184,5 @@ void ThreadDemo::ExecutePerfomence()
 	}
 	float last = p.End();
 
-	printf("총 수행시간 : %f\n", last);	// 1000에 1초
+	printf("총 수행시간 : %f\n", last);
 }

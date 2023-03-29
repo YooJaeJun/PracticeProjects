@@ -528,6 +528,7 @@ asClip * Converter::ReadClipData(aiAnimation * animation)
 
 	ReadKeyframeData(clip, scene->mRootNode, aniNodeInfos);
 
+
 	return clip;
 }
 

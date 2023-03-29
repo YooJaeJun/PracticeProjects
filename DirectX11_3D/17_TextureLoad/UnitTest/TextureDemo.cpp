@@ -6,7 +6,7 @@ void TextureDemo::Initialize()
 	Context::Get()->GetCamera()->Position(0, 0, -5.0f);
 
 	shader = new Shader(L"16_Texture.fx");
-
+	
 	vertices[0].Position = Vector3(-0.5f, -0.5f, 0.0f);
 	vertices[1].Position = Vector3(-0.5f, +0.5f, 0.0f);
 	vertices[2].Position = Vector3(+0.5f, -0.5f, 0.0f);
@@ -18,7 +18,8 @@ void TextureDemo::Initialize()
 	vertices[3].Uv = Vector2(1, 0);
 
 
-	// Create Vertex Buffer
+
+	//Create Vertex Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -31,7 +32,7 @@ void TextureDemo::Initialize()
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 	}
 
-	// Create Index Buffer
+	//Create Index Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -43,7 +44,8 @@ void TextureDemo::Initialize()
 
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &indexBuffer));
 	}
-	
+
+
 	D3DXMatrixIdentity(&world);
 
 	Check(D3DX11CreateShaderResourceViewFromFile
@@ -55,12 +57,13 @@ void TextureDemo::Initialize()
 void TextureDemo::Destroy()
 {
 	SafeDelete(shader);
+
 	SafeRelease(vertexBuffer);
 }
 
 void TextureDemo::Update()
 {
-
+	
 }
 
 void TextureDemo::Render()

@@ -6,15 +6,17 @@ void MeshDemo::Initialize()
 	Context::Get()->GetCamera()->RotationDegree(20, 0, 0);
 	Context::Get()->GetCamera()->Position(1, 36, -85);
 
+
 	shader = new Shader(L"25_Mesh.fx");
 	sDirection = shader->AsVector("Direction");
-
+	
 	CreateMesh();
 }
 
 void MeshDemo::Destroy()
 {
 	SafeDelete(shader);
+	
 	SafeDelete(cube);
 	SafeDelete(grid);
 
@@ -30,7 +32,6 @@ void MeshDemo::Update()
 	cube->Update();
 	grid->Update();
 
-
 	for (int i = 0; i < 10; i++)
 	{
 		cylinder[i]->Update();
@@ -43,10 +44,10 @@ void MeshDemo::Render()
 	ImGui::SliderFloat3("Direction", direction, -1, +1);
 	sDirection->SetFloatVector(direction);
 
-	static int pass = 1;
+	static int pass = 0;
 	ImGui::InputInt("Pass", &pass);
-	if (pass < 0) pass = 1;
 	pass %= 2;
+
 
 	cube->Render();
 	grid->Render();
@@ -68,9 +69,10 @@ void MeshDemo::CreateMesh()
 	cube->GetTransform()->Scale(20, 10, 20);
 	cube->DiffuseMap(L"Stones.png");
 
-	grid = new MeshGrid(shader, 5, 5);
+	grid = new MeshGrid(shader, 6, 6);
 	grid->GetTransform()->Scale(12, 1, 12);
 	grid->DiffuseMap(L"Floor.png");
+
 
 	for (UINT i = 0; i < 5; i++)
 	{
@@ -83,6 +85,7 @@ void MeshDemo::CreateMesh()
 		cylinder[i * 2 + 1]->GetTransform()->Position(30, 6, (float)i * 15.0f - 15.0f);
 		cylinder[i * 2 + 1]->GetTransform()->Scale(5, 5, 5);
 		cylinder[i * 2 + 1]->DiffuseMap(L"Bricks.png");
+
 
 		sphere[i * 2] = new MeshSphere(shader, 0.5f, 20, 20);
 		sphere[i * 2]->GetTransform()->Position(-30, 15.5f, (float)i * 15.0f - 15.0f);

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Vertex_Line.cpp">
       <Filter>Vertex</Filter>
     </ClCompile>
@@ -18,18 +18,6 @@
     <ClCompile Include="UserInterfaceDemo.cpp">
       <Filter>Vertex</Filter>
     </ClCompile>
-    <ClCompile Include="CubeDemo.cpp">
-      <Filter>Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="GridDemo.cpp">
-      <Filter>World</Filter>
-    </ClCompile>
-    <ClCompile Include="IndexDemo.cpp">
-      <Filter>World</Filter>
-    </ClCompile>
-    <ClCompile Include="RotationDemo.cpp">
-      <Filter>World</Filter>
-    </ClCompile>
     <ClCompile Include="WorldDemo.cpp">
       <Filter>World</Filter>
     </ClCompile>
@@ -37,6 +25,18 @@
       <Filter>World</Filter>
     </ClCompile>
     <ClCompile Include="WorldDemo3.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexDemo.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="GridDemo.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeDemo.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="RotationDemo.cpp">
       <Filter>World</Filter>
     </ClCompile>
     <ClCompile Include="TextureDemo.cpp">
@@ -82,18 +82,6 @@
     <ClInclude Include="UserInterfaceDemo.h">
       <Filter>Vertex</Filter>
     </ClInclude>
-    <ClInclude Include="CubeDemo.h">
-      <Filter>Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="GridDemo.h">
-      <Filter>World</Filter>
-    </ClInclude>
-    <ClInclude Include="IndexDemo.h">
-      <Filter>World</Filter>
-    </ClInclude>
-    <ClInclude Include="RotationDemo.h">
-      <Filter>World</Filter>
-    </ClInclude>
     <ClInclude Include="WorldDemo.h">
       <Filter>World</Filter>
     </ClInclude>
@@ -101,6 +89,18 @@
       <Filter>World</Filter>
     </ClInclude>
     <ClInclude Include="WorldDemo3.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexDemo.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="GridDemo.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeDemo.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="RotationDemo.h">
       <Filter>World</Filter>
     </ClInclude>
     <ClInclude Include="TextureDemo.h">
@@ -130,19 +130,19 @@
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Vertex">
-      <UniqueIdentifier>{e5cda3c7-8b35-453f-8f01-a19923a5cba2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Mesh">
-      <UniqueIdentifier>{98a64e8c-8ce7-4f23-b8cc-ff7496919ec1}</UniqueIdentifier>
+      <UniqueIdentifier>{0f5e74cd-8acc-48d3-a953-d7ec6d96c7ed}</UniqueIdentifier>
     </Filter>
     <Filter Include="World">
-      <UniqueIdentifier>{888056d8-0c7d-4747-906f-bda3419ac3c1}</UniqueIdentifier>
+      <UniqueIdentifier>{3b1898fb-da09-4a88-ac47-b96c8f5ee3a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{1a8f9e72-0e55-453c-8568-1235f4c0c2b5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Texture">
-      <UniqueIdentifier>{63b581e6-8aaa-4b4c-a8c3-0b003d500858}</UniqueIdentifier>
+      <UniqueIdentifier>{a6b76bd6-106d-4c60-9528-775fd2a0ffe2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Terrain">
-      <UniqueIdentifier>{7db9acea-afcd-4c0e-b3a1-7390c8af0614}</UniqueIdentifier>
+      <UniqueIdentifier>{384bd1c4-67c0-477a-b594-30cbdd3c4070}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

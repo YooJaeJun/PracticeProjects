@@ -37,7 +37,7 @@ void Converter::ExportMesh(wstring savePath)
 	WriteMeshData(savePath);
 }
 
-void Converter::ReadBoneData(aiNode* node, int index, int parent)
+void Converter::ReadBoneData(aiNode * node, int index, int parent)
 {
 	asBone* bone = new asBone();
 	bone->Index = index;
@@ -57,14 +57,14 @@ void Converter::ReadBoneData(aiNode* node, int index, int parent)
 	bone->Transform = bone->Transform * matParent;
 	bones.push_back(bone);
 
-
+	
 	ReadMeshData(node, index);
 
 	for (UINT i = 0; i < node->mNumChildren; i++)
 		ReadBoneData(node->mChildren[i], bones.size(), index);
 }
 
-void Converter::ReadMeshData(aiNode* node, int bone)
+void Converter::ReadMeshData(aiNode * node, int bone)
 {
 	if (node->mNumChildren < 1) return;
 
@@ -90,7 +90,7 @@ void Converter::ReadMeshData(aiNode* node, int bone)
 			if (srcMesh->HasTextureCoords(0))
 				memcpy(&vertex.Uv, &srcMesh->mTextureCoords[0][v], sizeof(Vector2));
 
-			if (srcMesh->HasNormals())
+			if(srcMesh->HasNormals())
 				memcpy(&vertex.Normal, &srcMesh->mNormals[v], sizeof(Vector3));
 
 			mesh->Vertices.push_back(vertex);
@@ -125,7 +125,7 @@ void Converter::WriteMeshData(wstring savePath)
 
 		SafeDelete(bone);
 	}
-
+	
 	w->UInt(meshes.size());
 	for (asMesh* meshData : meshes)
 	{

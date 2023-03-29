@@ -65,7 +65,7 @@ Matrix Context::View()
 	return view;
 }
 
-Matrix Context::Projection()
+D3DXMATRIX Context::Projection()
 {
 	Matrix projection;
 	perspective->GetMatrix(&projection);

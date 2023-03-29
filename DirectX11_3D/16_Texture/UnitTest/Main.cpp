@@ -3,10 +3,34 @@
 #include "Systems/Window.h"
 
 #include "TextureDemo.h"
+#include "RotationDemo.h"
+#include "CubeDemo.h"
+#include "GridDemo.h"
+#include "IndexDemo.h"
+#include "WorldDemo3.h"
+#include "WorldDemo2.h"
+#include "WorldDemo.h"
+#include "UserInterfaceDemo.h"
+#include "RectDemo.h"
+#include "TriangleList.h"
+#include "Vertex_Line2.h"
+#include "Vertex_Line.h"
 
 void Main::Initialize()
 {
 	Push(new TextureDemo());
+	//Push(new RotationDemo());
+	//Push(new CubeDemo());
+	//Push(new GridDemo());
+	//Push(new IndexDemo());
+	//Push(new WorldDemo3());
+	//Push(new WorldDemo2());
+	//Push(new WorldDemo());
+	//Push(new UserInterfaceDemo());
+	//Push(new RectDemo());
+	//Push(new TriangleList());
+	//Push(new Vertex_Line2());
+	//Push(new Vertex_Line());
 }
 
 void Main::Ready()

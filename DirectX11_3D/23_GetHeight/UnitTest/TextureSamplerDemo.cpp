@@ -3,10 +3,10 @@
 
 void TextureSamplerDemo::Initialize()
 {
-	Context::Get()->GetCamera()->Position(0.0f, 0.0f, -5.0f);
+	Context::Get()->GetCamera()->Position(0, 0, -0.5f);
 
 	shader = new Shader(L"18_TextureSampler.fx");
-
+	
 	vertices[0].Position = Vector3(-0.5f, -0.5f, 0.0f);
 	vertices[1].Position = Vector3(-0.5f, +0.5f, 0.0f);
 	vertices[2].Position = Vector3(+0.5f, -0.5f, 0.0f);
@@ -28,11 +28,12 @@ void TextureSamplerDemo::Initialize()
 	//vertices[3].Uv = Vector2(2, 0);
 
 
-	// Create Vertex Buffer
+
+	//Create Vertex Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
-		desc.ByteWidth = sizeof(Vertex) * 4;
+		desc.ByteWidth = sizeof(VertexTexture) * 4;
 		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
 		D3D11_SUBRESOURCE_DATA subResource = { 0 };
@@ -41,7 +42,7 @@ void TextureSamplerDemo::Initialize()
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 	}
 
-	// Create Index Buffer
+	//Create Index Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -53,7 +54,8 @@ void TextureSamplerDemo::Initialize()
 
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &indexBuffer));
 	}
-	
+
+
 	D3DXMatrixIdentity(&world);
 
 	texture = new Texture(L"Box.png");
@@ -62,6 +64,7 @@ void TextureSamplerDemo::Initialize()
 void TextureSamplerDemo::Destroy()
 {
 	SafeDelete(shader);
+
 	SafeRelease(vertexBuffer);
 	SafeRelease(indexBuffer);
 
@@ -71,15 +74,15 @@ void TextureSamplerDemo::Destroy()
 void TextureSamplerDemo::Update()
 {
 	static UINT filter = 0;
-	ImGui::InputInt("Filter", (int*)&filter);
+	ImGui::InputInt("Filter", (int *)&filter);
 	filter %= 2;
 
 	shader->AsScalar("Filter")->SetInt(filter);
 
 
 	static UINT address = 0;
-	ImGui::InputInt("Address", (int*)&address);
-	address %= 4;
+	ImGui::InputInt("Address", (int *)&address);
+	filter %= 4;
 
 	shader->AsScalar("Address")->SetInt(address);
 }
@@ -92,7 +95,7 @@ void TextureSamplerDemo::Render()
 	shader->AsSRV("Map")->SetResource(texture->SRV());
 
 
-	UINT stride = sizeof(Vertex);
+	UINT stride = sizeof(VertexTexture);
 	UINT offset = 0;
 
 	D3D::GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
@@ -100,6 +103,6 @@ void TextureSamplerDemo::Render()
 	D3D::GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	shader->DrawIndexed(0, 0, 6);
-	// shader->DrawIndexed(0, 1, 6);	// Filter
-	// shader->DrawIndexed(0, 2, 6);		// Address
+	//shader->DrawIndexed(0, 1, 6); //Filter
+	//shader->DrawIndexed(0, 2, 6); //Address
 }

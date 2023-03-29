@@ -1,7 +1,7 @@
 #include "Framework.h"
 #include "PerFrame.h"
 
-PerFrame::PerFrame(Shader* shader)
+PerFrame::PerFrame(Shader * shader)
 	: shader(shader)
 {
 	buffer = new ConstantBuffer(&desc, sizeof(Desc));

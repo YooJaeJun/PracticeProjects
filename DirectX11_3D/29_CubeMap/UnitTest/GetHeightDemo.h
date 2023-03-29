@@ -17,6 +17,7 @@ private:
 	Shader* shader;
 	Terrain* terrain;
 
+
 	Vector3 position = Vector3(0, 0, 0);
 
 	Shader* triShader;

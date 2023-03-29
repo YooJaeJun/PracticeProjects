@@ -1,13 +1,15 @@
 #include "Framework.h"
 #include "MeshQuad.h"
 
-MeshQuad::MeshQuad(Shader* shader)
+MeshQuad::MeshQuad(Shader * shader)
 	: Mesh(shader)
 {
+
 }
 
 MeshQuad::~MeshQuad()
 {
+
 }
 
 void MeshQuad::Create()
@@ -21,11 +23,13 @@ void MeshQuad::Create()
 	v.push_back(MeshVertex(+w, -h, 0, 1, 1, 0, 0, -1));
 	v.push_back(MeshVertex(+w, +h, 0, 1, 0, 0, 0, -1));
 
+	
 	vertices = new MeshVertex[v.size()];
 	vertexCount = v.size();
 
-	copy(v.begin(), v.end(), stdext::checked_array_iterator<MeshVertex*>(vertices, vertexCount));
+	copy(v.begin(), v.end(), stdext::checked_array_iterator<MeshVertex *>(vertices, vertexCount));
 
+	
 	indexCount = 6;
 	indices = new UINT[indexCount]{ 0, 1, 2, 2, 1, 3 };
 }

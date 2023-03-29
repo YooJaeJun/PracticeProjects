@@ -1,7 +1,7 @@
 #include "Framework.h"
 #include "Terrain.h"
 
-Terrain::Terrain(Shader* shader, wstring heightFile)
+Terrain::Terrain(Shader * shader, wstring heightFile)
 	: shader(shader)
 {
 	heightMap = new Texture(heightFile);
@@ -9,6 +9,7 @@ Terrain::Terrain(Shader* shader, wstring heightFile)
 	CreateVertexData();
 	CreateIndexData();
 	CreateNormalData();
+	
 	CreateBuffer();
 }
 
@@ -48,6 +49,7 @@ void Terrain::Render()
 	//	DebugLine::Get()->RenderLine(start, end, Color(0, 1, 0, 1));
 	//}
 
+
 	UINT stride = sizeof(TerrainVertex);
 	UINT offset = 0;
 
@@ -58,13 +60,14 @@ void Terrain::Render()
 	shader->DrawIndexed(0, pass, indexCount);
 }
 
-float Terrain::GetHeight(Vector3& position)
+float Terrain::GetHeight(Vector3 & position)
 {
 	UINT x = (UINT)position.x;
 	UINT z = (UINT)position.z;
 
 	if (x < 0 || x > width) return FLT_MIN;
 	if (z < 0 || z > height) return FLT_MIN;
+
 
 	UINT index[4];
 	index[0] = width * z + x;
@@ -76,12 +79,13 @@ float Terrain::GetHeight(Vector3& position)
 	for (int i = 0; i < 4; i++)
 		v[i] = vertices[index[i]].Position;
 
+
 	float ddx = (position.x - v[0].x) / 1.0f;
 	float ddz = (position.z - v[0].z) / 1.0f;
 
 	Vector3 result;
 
-	if (ddx + ddz <= 1.0f)
+	if(ddx + ddz <= 1.0f)
 		result = v[0] + (v[2] - v[0]) * ddx + (v[1] - v[0]) * ddz;
 	else
 	{
@@ -90,7 +94,6 @@ float Terrain::GetHeight(Vector3& position)
 
 		result = v[3] + (v[1] - v[3]) * ddx + (v[2] - v[3]) * ddz;
 	}
-
 
 	return result.y;
 }
@@ -103,6 +106,7 @@ void Terrain::CreateVertexData()
 	width = heightMap->GetWidth();
 	height = heightMap->GetHeight();
 
+
 	vertexCount = width * height;
 	vertices = new TerrainVertex[vertexCount];
 	for (UINT z = 0; z < height; z++)
@@ -110,7 +114,7 @@ void Terrain::CreateVertexData()
 		for (UINT x = 0; x < width; x++)
 		{
 			UINT index = width * z + x;
-			UINT pixel = width * (height - 1 - z) + x;	// z값 뒤집은 것
+			UINT pixel = width * (height - 1 - z) + x;
 
 			vertices[index].Position.x = (float)x;
 			vertices[index].Position.y = heights[pixel].r * 255.0f / 10.0f;
@@ -121,7 +125,7 @@ void Terrain::CreateVertexData()
 
 void Terrain::CreateIndexData()
 {
-	indexCount = ((width - 1) * (height - 1)) * 6;
+	indexCount = (width - 1) * (height - 1) * 6;
 	indices = new UINT[indexCount];
 
 	UINT index = 0;
@@ -153,6 +157,7 @@ void Terrain::CreateNormalData()
 		TerrainVertex v1 = vertices[index1];
 		TerrainVertex v2 = vertices[index2];
 
+
 		Vector3 a = v1.Position - v0.Position;
 		Vector3 b = v2.Position - v0.Position;
 
@@ -170,7 +175,7 @@ void Terrain::CreateNormalData()
 
 void Terrain::CreateBuffer()
 {
-	// Create Vertex Buffer
+	//Create Vertex Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
@@ -183,7 +188,7 @@ void Terrain::CreateBuffer()
 		Check(D3D::GetDevice()->CreateBuffer(&desc, &subResource, &vertexBuffer));
 	}
 
-	// Create Index Buffer
+	//Create Index Buffer
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));

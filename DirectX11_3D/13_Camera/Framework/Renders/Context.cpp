@@ -49,7 +49,7 @@ void Context::ResizeScreen()
 
 void Context::Update()
 {
-	ImGui::SliderFloat2("position", position, 0, 256);
+	ImGui::SliderFloat2("Position", position, 0, 256);
 	ImGui::SliderFloat("Z", &position.z, -100, 100);
 
 	Vector3 forward(0, 0, 1);
@@ -64,7 +64,7 @@ void Context::Render()
 	viewport->RSSetViewport();
 }
 
-Matrix Context::Projection()
+D3DXMATRIX Context::Projection()
 {
 	Matrix projection;
 	perspective->GetMatrix(&projection);
