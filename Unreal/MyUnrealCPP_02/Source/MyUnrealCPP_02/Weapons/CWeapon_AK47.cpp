@@ -1,7 +1,9 @@
 #include "Weapons/CWeapon_AK47.h"
 #include "Global.h"
 #include "CMagazine.h"
+#include "CWeaponComponent.h"
 #include "Character/CPlayer.h"
+#include "Components/StaticMeshComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraShake.h"
@@ -12,6 +14,14 @@ ACWeapon_AK47::ACWeapon_AK47()
 	USkeletalMesh* mesh;
 	CHelpers::GetAsset<USkeletalMesh>(&mesh, "SkeletalMesh'/Game/FPS_Weapon_Bundle/Weapons/Meshes/Ka47/SK_KA47.SK_KA47'");
 	Mesh->SetSkeletalMesh(mesh);
+
+	CHelpers::CreateComponent<UStaticMeshComponent>(this, &Sight, "Sight", Mesh, "Dotsight");
+
+	UStaticMesh* staticMesh;
+	CHelpers::GetAsset<UStaticMesh>(&staticMesh, "StaticMesh'/Game/FPS_Weapon_Bundle/Weapons/Meshes/Accessories/SM_T4_Sight.SM_T4_Sight'");
+	Sight->SetStaticMesh(staticMesh);
+	Sight->SetRelativeScale3D(FVector(1, 0.95f, 1));
+	Sight->SetCollisionProfileName("NoCollision");
 
 	//AK
 	{
@@ -76,4 +86,36 @@ void ACWeapon_AK47::End_Equip()
 {
 	Super::Begin_Equip();
 	Super::End_Equip();
+}
+
+void ACWeapon_AK47::Begin_Aim()
+{
+	Super::Begin_Aim();
+
+	if (!!CrossHair)
+		CrossHair->SetVisibility(ESlateVisibility::Hidden);
+
+	Owner->GetMesh()->SetVisibility(false);
+	Owner->GetBackpack()->SetVisibility(false);
+	Owner->GetArms()->SetVisibility(true);
+
+	CHelpers::AttachTo(this, Owner->GetArms(), RightHandSocketName);
+
+	CHelpers::GetComponent<UCWeaponComponent>(Owner)->OnWeaponAim_Arms_Begin.Broadcast(this);
+}
+
+void ACWeapon_AK47::End_Aim()
+{
+	Super::End_Aim();
+
+	if (!!CrossHair)
+		CrossHair->SetVisibility(ESlateVisibility::Visible);
+
+	Owner->GetMesh()->SetVisibility(true);
+	Owner->GetBackpack()->SetVisibility(true);
+	Owner->GetArms()->SetVisibility(false);
+
+	CHelpers::AttachTo(this, Owner->GetMesh(), RightHandSocketName);
+
+	CHelpers::GetComponent<UCWeaponComponent>(Owner)->OnWeaponAim_Arms_End.Broadcast();
 }

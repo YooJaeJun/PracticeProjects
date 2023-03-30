@@ -165,8 +165,8 @@ public:
 
 public:
 	bool CanAim();
-	void Begin_Aim();
-	void End_Aim();
+	virtual void Begin_Aim();
+	virtual void End_Aim();
 
 private:
 	UFUNCTION()
@@ -207,7 +207,7 @@ protected:
 private:
 	FTimerHandle AutoFireHandle;
 
-private:
+protected:
 	class UCUserWidget_CrossHair* CrossHair;
 
 private:

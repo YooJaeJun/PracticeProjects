@@ -27,9 +27,9 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	FRotator delta = UKismetMathLibrary::NormalizedDeltaRotator(rotator, rotator2);
 	PrevRotation = UKismetMathLibrary::RInterpTo(PrevRotation, delta, DeltaSeconds, 25);
 	Direction = PrevRotation.Yaw;
-
+	
 	Pitch = UKismetMathLibrary::FInterpTo(Pitch, OwnerCharacter->GetBaseAimRotation().Pitch, DeltaSeconds, 25);
-
+	
 	bInAim = Weapon->IsInAim();
 	bUseIK = Weapon->IsUnarmedMode() == false;
 	LeftHandLocation = Weapon->GetLeftHandLocation();

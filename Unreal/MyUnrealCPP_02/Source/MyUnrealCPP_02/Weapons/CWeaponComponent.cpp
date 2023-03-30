@@ -37,6 +37,9 @@ void UCWeaponComponent::BeginPlay()
 		HUD->AddToViewport();
 		HUD->SetVisibility(ESlateVisibility::Hidden);
 	}
+
+	OnWeaponAim_Arms_Begin.AddDynamic(this, &UCWeaponComponent::On_Begin_Aim);
+	OnWeaponAim_Arms_End.AddDynamic(this, &UCWeaponComponent::On_End_Aim);
 }
 
 void UCWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -218,4 +221,21 @@ void UCWeaponComponent::End_Reload()
 	CheckNull(GetCurrWeapon());
 
 	GetCurrWeapon()->End_Reload();
+}
+
+void UCWeaponComponent::On_Begin_Aim(ACWeapon* InThisWeapon)
+{
+	for (ACWeapon* weapon : Weapons)
+	{
+		if (weapon == InThisWeapon)
+			continue;
+
+		weapon->SetHidden(true);
+	}
+}
+
+void UCWeaponComponent::On_End_Aim()
+{
+	for (ACWeapon* weapon : Weapons)
+		weapon->SetHidden(false);
 }

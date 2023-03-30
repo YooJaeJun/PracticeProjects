@@ -10,6 +10,8 @@ enum class EWeaponType : uint8
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FWeaponTypeChanged, EWeaponType, InPrevType, EWeaponType, InNewType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FWeaponAim_Arms_Begin, class ACWeapon*, InThisWepaon);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponAim_Arms_End);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MYUNREALCPP_02_API UCWeaponComponent : public UActorComponent
@@ -28,7 +30,7 @@ public:
 	FORCEINLINE bool IsAR4Mode() { return Type == EWeaponType::AR4; }
 	FORCEINLINE bool IsAK47Mode() { return Type == EWeaponType::AK47; }
 	FORCEINLINE bool IsPistolMode() { return Type == EWeaponType::Pistol; }
-
+	
 public:	
 	UCWeaponComponent();
 
@@ -76,8 +78,17 @@ public:
 	void Load_Magazine();
 	void End_Reload();
 
+private:
+	UFUNCTION()
+		void On_Begin_Aim(class ACWeapon* InThisWeapon);
+
+	UFUNCTION()
+		void On_End_Aim();
+
 public:
 	FWeaponTypeChanged OnWeaponTypeChanged;
+	FWeaponAim_Arms_Begin OnWeaponAim_Arms_Begin;
+	FWeaponAim_Arms_End OnWeaponAim_Arms_End;
 
 private:
 	EWeaponType Type = EWeaponType::Max;

@@ -13,10 +13,17 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Equip")
 		FName LeftHandSocketName;
 
+private:
+	UPROPERTY(VisibleAnywhere)
+		class UStaticMeshComponent* Sight;
+
 public:
 	ACWeapon_AK47();
 
 public:
 	void Begin_Equip() override;
 	void End_Equip() override;
+
+	void Begin_Aim() override;
+	void End_Aim() override;
 };

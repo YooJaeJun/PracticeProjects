@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "CPlayer.generated.h"
@@ -23,9 +22,16 @@ private:
 	UPROPERTY(VisibleAnywhere)
 		class UStaticMeshComponent* Backpack;
 
+	UPROPERTY(VisibleAnywhere)
+		class USkeletalMeshComponent* Arms;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 		class UCWeaponComponent* Weapon;
+
+public:
+	FORCEINLINE UStaticMeshComponent* GetBackpack() { return Backpack; }
+	FORCEINLINE USkeletalMeshComponent* GetArms() { return Arms; }
 
 public:
 	ACPlayer();
