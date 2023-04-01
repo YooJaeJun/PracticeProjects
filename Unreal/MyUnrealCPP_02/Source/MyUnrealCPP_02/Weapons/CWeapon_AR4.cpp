@@ -16,7 +16,7 @@ ACWeapon_AR4::ACWeapon_AR4()
 	{
 		HolsterSocketName = "Rifle_AR4_Holster";
 		CHelpers::GetAsset<UAnimMontage>(&EquipMontage, "AnimMontage'/Game/Character/Animations/Rifle_Equip_Montage.Rifle_Equip_Montage'");
-		EquipMontage_PlayRate = 2.0f;
+		EquipMontage_PlayRate = 2;
 		RightHandSocketName = "Rifle_AR4_RightHand";
 		LeftHandLocation = FVector(-32.5f, 15.5f, 7);
 	}
@@ -39,7 +39,7 @@ ACWeapon_AR4::ACWeapon_AR4()
 		RecoilAngle = 0.75f;
 		CHelpers::GetClass<UMatineeCameraShake>(&CameraShakeClass, "Blueprint'/Game/Weapons/BP_CameraShake_AR4.BP_CameraShake_AR4_C'");
 		AutoFireInterval = 0.15f;
-		RecoilRate = 0.04f;
+		RecoilRate = 0.05f;
 		SpreadSpeed = 2.0f;
 		MaxSpreadAlignment = 2.0f;
 	}

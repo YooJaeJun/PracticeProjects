@@ -32,7 +32,7 @@ ACWeapon_AK47::ACWeapon_AK47()
 	{
 		HolsterSocketName = "Rifle_AK47_Holster";
 		CHelpers::GetAsset<UAnimMontage>(&EquipMontage, "AnimMontage'/Game/Character/Animations/Rifle_Equip_AK47_Montage.Rifle_Equip_AK47_Montage'");
-		EquipMontage_PlayRate = 2.0f;
+		EquipMontage_PlayRate = 2;
 		RightHandSocketName = "Rifle_AK47_RightHand";
 		LeftHandLocation = FVector(-35, 15.5f, 4);
 	}
@@ -53,9 +53,9 @@ ACWeapon_AK47::ACWeapon_AK47()
 	// Fire
 	{
 		RecoilAngle = 0.75f;
-		CHelpers::GetClass<UMatineeCameraShake>(&CameraShakeClass, "Blueprint'/Game/Weapons/BP_CameraShake_AR4.BP_CameraShake_AR4_C'");
+		CHelpers::GetClass<UMatineeCameraShake>(&CameraShakeClass, "Blueprint'/Game/Weapons/BP_CameraShake_AK47.BP_CameraShake_AK47_C'");
 		AutoFireInterval = 0.1f;
-		RecoilRate = 0.04f;
+		RecoilRate = 0.05f;
 		SpreadSpeed = 2.0f;
 		MaxSpreadAlignment = 2.0f;
 	}
@@ -74,12 +74,23 @@ ACWeapon_AK47::ACWeapon_AK47()
 		CHelpers::GetClass<ACMagazine>(&MagazineClass, "Blueprint'/Game/Weapons/BP_CMagazine_AK47.BP_CMagazine_AK47_C'");
 		MagazineSocketName = "Rifle_Magazine";
 	}
+
+	//Arms
+	{
+		ArmsMeshTransform.SetLocation(FVector(-14.25f, -5.85f, -156.935f));
+		ArmsMeshTransform.SetRotation(FQuat(FRotator(-0.5f, -11.85f, -1.2f)));
+
+		ArmsLeftHandTransform.SetLocation(FVector(-33, 11, -1.5f));
+		ArmsLeftHandTransform.SetRotation(FQuat(FRotator(-4, -138, 77)));
+	}
 }
 
 void ACWeapon_AK47::Begin_Equip()
 {
 	if (LeftHandSocketName.IsValid())
 		CHelpers::AttachTo(this, Owner->GetMesh(), LeftHandSocketName);
+
+	Owner->GetArms()->SetRelativeTransform(ArmsMeshTransform);
 }
 
 void ACWeapon_AK47::End_Equip()

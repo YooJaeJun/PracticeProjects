@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Weapons/CWeaponComponent.h"
 #include "CUserWidget_HUD.generated.h"
 
 UCLASS()
@@ -19,4 +20,8 @@ public:
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void UpdateMagazine(uint8 InCurr, uint8 InMax);
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateWeaponType(EWeaponType InType);
 };

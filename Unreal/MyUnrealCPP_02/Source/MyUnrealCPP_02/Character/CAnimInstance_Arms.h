@@ -13,6 +13,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapons")
 		EWeaponType WeaponType = EWeaponType::Max;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapons")
+		FTransform LeftHandTransform;
+
 public:
 	void NativeBeginPlay() override;
 	void NativeUpdateAnimation(float DeltaSeconds) override;

@@ -19,6 +19,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
 		float Direction;
 
+protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapons")
 		EWeaponType WeaponType = EWeaponType::Max;
 

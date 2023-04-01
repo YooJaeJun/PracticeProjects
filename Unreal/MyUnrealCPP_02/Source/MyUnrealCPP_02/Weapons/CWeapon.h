@@ -59,7 +59,7 @@ protected:
 		class UCurveFloat* AimCurve;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Aim")
-		float AimingSpeed = 200.0f;
+		float AimingSpeed = 200;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Hit")
@@ -125,6 +125,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Magazine")
 		FName MagazineSocketName;
 
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Arms")
+		FTransform ArmsMeshTransform;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Arms")
+		FTransform ArmsLeftHandTransform;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 		class USceneComponent* Root;
@@ -141,6 +148,8 @@ public:
 	FORCEINLINE bool IsInAim() { return bInAim; }
 	FORCEINLINE bool IsAutoFire() { return bAutoFire; }
 	FORCEINLINE FVector GetLeftHandLocation() { return LeftHandLocation; }
+	FORCEINLINE FTransform GetArmsLeftHandTransform() { return ArmsLeftHandTransform; }
+
 
 	FORCEINLINE uint8 GetCurrMagazineCount() { return CurrMagazineCount; }
 	FORCEINLINE uint8 GetMaxMagazineCount() { return MaxMagazineCount; }
@@ -180,7 +189,6 @@ public:
 private:
 	UFUNCTION()
 		void OnFiring();
-
 
 public:
 	void ToggleAutoFire();

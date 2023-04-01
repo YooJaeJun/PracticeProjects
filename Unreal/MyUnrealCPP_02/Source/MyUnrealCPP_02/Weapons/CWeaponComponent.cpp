@@ -2,6 +2,7 @@
 #include "Global.h"
 #include "CWeapon.h"
 #include "Character/CPlayer.h"
+#include "CWeaponComponent.h"
 #include "Widgets/CUserWidget_HUD.h"
 
 UCWeaponComponent::UCWeaponComponent()
@@ -59,6 +60,8 @@ void UCWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 			uint8 maxCount = GetCurrWeapon()->GetMaxMagazineCount();
 
 			HUD->UpdateMagazine(currCount, maxCount);
+
+			HUD->UpdateWeaponType(Type);
 		}
 	}
 }
@@ -89,6 +92,11 @@ void UCWeaponComponent::SetAR4Mode()
 void UCWeaponComponent::SetAK47Mode()
 {
 	SetMode(EWeaponType::AK47);
+}
+
+void UCWeaponComponent::SetPistolMode()
+{
+	SetMode(EWeaponType::Pistol);
 }
 
 void UCWeaponComponent::SetMode(EWeaponType InType)
@@ -179,6 +187,13 @@ FVector UCWeaponComponent::GetLeftHandLocation()
 	CheckNullResult(GetCurrWeapon(), FVector::ZeroVector);
 
 	return GetCurrWeapon()->GetLeftHandLocation();
+}
+
+FTransform UCWeaponComponent::GetLeftHandTransform()
+{
+	CheckNullResult(GetCurrWeapon(), FTransform());
+
+	return GetCurrWeapon()->GetArmsLeftHandTransform();
 }
 
 void UCWeaponComponent::ToggleAutoFire()

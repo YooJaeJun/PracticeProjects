@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "Weapons/CWeapon.h"
 #include "CWeapon_AK47.generated.h"

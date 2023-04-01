@@ -23,7 +23,10 @@ void FWeaponAimData::SetData(ACharacter* InOwner)
 
 void FWeaponAimData::SetDataByNoneCurve(ACharacter* InOwner)
 {
-	SetData(InOwner);
+	USpringArmComponent* springArm = CHelpers::GetComponent<USpringArmComponent>(InOwner);
+	springArm->TargetArmLength = TargetArmLength;
+	springArm->SocketOffset = SocketOffset;
+	springArm->bEnableCameraLag = bEnableCameraLag;
 
 	UCameraComponent* camera = CHelpers::GetComponent<UCameraComponent>(InOwner);
 	camera->FieldOfView = FieldOfView;
@@ -58,6 +61,7 @@ void ACWeapon::BeginPlay()
 	Super::BeginPlay();
 
 	Owner = Cast<ACPlayer>(GetOwner());
+
 	if (HolsterSocketName.IsValid())
 		CHelpers::AttachTo(this, Owner->GetMesh(), HolsterSocketName);
 
@@ -145,6 +149,8 @@ bool ACWeapon::CanUnequip()
 
 void ACWeapon::Unequip()
 {
+	End_Aim();
+
 	if (HolsterSocketName.IsValid())
 		CHelpers::AttachTo(this, Owner->GetMesh(), HolsterSocketName);
 
@@ -244,7 +250,7 @@ void ACWeapon::OnFiring()
 	direction = UKismetMathLibrary::RandomUnitVectorInConeInDegrees(direction, RecoilAngle);
 	FVector end = transform.GetLocation() + direction * HitDistance;
 
-	DrawDebugLine(GetWorld(), start, end, FColor::Red, true, 5);
+	//DrawDebugLine(GetWorld(), start, end, FColor::Red, true, 5);
 
 	TArray<AActor*> ignores;
 	FHitResult hitResult;
@@ -258,8 +264,8 @@ void ACWeapon::OnFiring()
 		{
 			FRotator rotator = hitResult.ImpactNormal.Rotation();
 
-			UDecalComponent* decal = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), HitDecal, FVector(5),
-				hitResult.Location, rotator, 10);
+			UDecalComponent* decal = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), HitDecal, 
+				FVector(5), hitResult.Location, rotator, 10);
 			decal->SetFadeScreenSize(0);
 		}
 
@@ -272,11 +278,13 @@ void ACWeapon::OnFiring()
 	}
 
 	if (!!FlashParticle)
-		UGameplayStatics::SpawnEmitterAttached(FlashParticle, Mesh, "Muzzle", FVector::ZeroVector, FRotator::ZeroRotator,
+		UGameplayStatics::SpawnEmitterAttached(FlashParticle, Mesh, "Muzzle", 
+			FVector::ZeroVector, FRotator::ZeroRotator,
 			EAttachLocation::KeepRelativeOffset);
 
 	if (!!EjectParticle)
-		UGameplayStatics::SpawnEmitterAttached(EjectParticle, Mesh, "Eject", FVector::ZeroVector, FRotator::ZeroRotator,
+		UGameplayStatics::SpawnEmitterAttached(EjectParticle, Mesh, "Eject", 
+			FVector::ZeroVector, FRotator::ZeroRotator,
 			EAttachLocation::KeepRelativeOffset);
 
 	FVector muzzleLocation = Mesh->GetSocketLocation("Muzzle");
@@ -341,7 +349,7 @@ bool ACWeapon::CanReload()
 
 void ACWeapon::Reload()
 {
-	//bReload = true;
+	bReload = true;
 
 	End_Aim();
 	End_Fire();
@@ -358,8 +366,8 @@ void ACWeapon::Eject_Magazine()
 	CheckNull(MagazineClass);
 
 	FTransform transform = Mesh->GetSocketTransform(MagazineBoneName);
-	ACMagazine* magazine = GetWorld()->SpawnActorDeferred<ACMagazine>(MagazineClass, transform, nullptr, nullptr, 
-		ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+	ACMagazine* magazine = GetWorld()->SpawnActorDeferred<ACMagazine>(MagazineClass, transform, nullptr,
+		nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 	magazine->SetEject();
 	magazine->SetLifeSpan(5);
 	magazine->FinishSpawning(transform);

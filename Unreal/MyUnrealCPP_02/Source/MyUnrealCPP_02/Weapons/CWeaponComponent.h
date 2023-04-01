@@ -10,7 +10,7 @@ enum class EWeaponType : uint8
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FWeaponTypeChanged, EWeaponType, InPrevType, EWeaponType, InNewType);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FWeaponAim_Arms_Begin, class ACWeapon*, InThisWepaon);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FWeaponAim_Arms_Begin, class ACWeapon*, InThisWeapon);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponAim_Arms_End);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -47,6 +47,7 @@ public:
 	void SetUnarmedMode();
 	void SetAR4Mode();
 	void SetAK47Mode();
+	void SetPistolMode();
 
 private:
 	void SetMode(EWeaponType InType);
@@ -67,6 +68,7 @@ public:
 public:
 	bool IsInAim();
 	FVector GetLeftHandLocation();
+	FTransform GetLeftHandTransform();
 
 public:
 	void ToggleAutoFire();
