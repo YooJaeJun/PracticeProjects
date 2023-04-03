@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "4.26",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "MyUnrealCPP_03",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
