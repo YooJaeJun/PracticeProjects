@@ -10,6 +10,8 @@ public class Example : ModuleRules
 
 		PublicDependencyModuleNames.Add("Core");
 
+		PrivateDependencyModuleNames.Add("MYUNREALCPP_03");
+
 		PrivateDependencyModuleNames.Add("CoreUObject");
 		PrivateDependencyModuleNames.Add("Engine");
 		PrivateDependencyModuleNames.Add("Slate");

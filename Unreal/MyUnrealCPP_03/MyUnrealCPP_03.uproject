@@ -7,7 +7,10 @@
 		{
 			"Name": "MyUnrealCPP_03",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
 		}
 	]
 }

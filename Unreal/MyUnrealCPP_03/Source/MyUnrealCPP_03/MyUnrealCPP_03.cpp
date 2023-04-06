@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "MyUnrealCPP_03.h"
 #include "Modules/ModuleManager.h"
 
