@@ -2,7 +2,7 @@
 #include "Global.h"
 #include "CMagazine.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "Animation/AnimInstance.h"
+#include "Animation/AnimMontage.h"
 #include "Camera/CameraShake.h"
 #include "Widgets/CUserWidget_CrossHair.h"
 

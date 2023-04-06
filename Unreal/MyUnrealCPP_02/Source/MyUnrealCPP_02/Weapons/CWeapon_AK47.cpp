@@ -5,7 +5,7 @@
 #include "Character/CPlayer.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "Animation/AnimInstance.h"
+#include "Animation/AnimMontage.h"
 #include "Camera/CameraShake.h"
 #include "Widgets/CUserWidget_CrossHair.h"
 

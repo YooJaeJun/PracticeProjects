@@ -250,7 +250,7 @@ void ACWeapon::OnFiring()
 	direction = UKismetMathLibrary::RandomUnitVectorInConeInDegrees(direction, RecoilAngle);
 	FVector end = transform.GetLocation() + direction * HitDistance;
 
-	//DrawDebugLine(GetWorld(), start, end, FColor::Red, true, 5);
+	// DrawDebugLine(GetWorld(), start, end, FColor::Red, true, 5);
 
 	TArray<AActor*> ignores;
 	FHitResult hitResult;

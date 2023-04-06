@@ -52,7 +52,7 @@ void CLog::Log(const FString& InFileName, const FString& InFuncName, int32 InLin
 	length = InFileName.Len() - 1;
 	FString fileName = InFileName.Right(length - index);
 
-	UE_LOG(GP, Display, TEXT("%s, %s, %d"), *InFileName, *InFuncName, InLineNumber);
+	UE_LOG(GP, Display, TEXT("%s, %s, %d"), *fileName, *InFuncName, InLineNumber);
 }
 
 void CLog::Print(int32 InValue, int32 InKey, float InDuration, FColor InColor)

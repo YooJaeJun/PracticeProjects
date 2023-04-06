@@ -14,7 +14,7 @@
 {\
 	CHelpers::CreateComponent<UTextRenderComponent>(this, &Text, "Text", Root);\
 	Text->SetRelativeLocation(FVector(0, 0, 100));\
-	Text->SetRelativeRotation(FRotator(0, 100, 0));\
+	Text->SetRelativeRotation(FRotator(0, 180, 0));\
 	Text->SetRelativeScale3D(FVector(2));\
 	Text->TextRenderColor = FColor::Red;\
 	Text->HorizontalAlignment = EHorizTextAligment::EHTA_Center;\
@@ -26,7 +26,7 @@ class MYUNREALCPP_02_API CHelpers
 {
 public:
 	template<typename T>
-	static void CreateComponent(AActor* InActor, T** OutComponent, FName InName, USceneComponent* InParent = nullptr, FName InSocketName = NAME_None )
+	static void CreateComponent(AActor* InActor, T** OutComponent, FName InName, USceneComponent* InParent = nullptr, FName InSocketName = NAME_None)
 	{
 		*OutComponent = InActor->CreateDefaultSubobject<T>(InName);
 

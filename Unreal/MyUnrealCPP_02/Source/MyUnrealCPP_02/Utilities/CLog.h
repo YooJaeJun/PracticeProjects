@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 
-
 #define  LogLine() {CLog::Log(__FILE__, __FUNCTION__, __LINE__);}
 #define  PrintLine() {CLog::Print(__FILE__, __FUNCTION__, __LINE__);}
 

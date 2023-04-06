@@ -4,7 +4,6 @@
 
 ACMagazine::ACMagazine()
 {
-	PrimaryActorTick.bCanEverTick = true;
 	CHelpers::CreateComponent<USceneComponent>(this, &Root, "Root");
 	CHelpers::CreateComponent<UStaticMeshComponent>(this, &Mesh_Full, "Mesh_Full", Root);
 	CHelpers::CreateComponent<UStaticMeshComponent>(this, &Mesh_Empty, "Mesh_Empty", Root);

@@ -20,7 +20,7 @@ public:
 		float FieldOfView;
 
 	UPROPERTY(EditAnywhere)
-		float bEnableCameraLag;
+		bool bEnableCameraLag;
 
 public:
 	void SetData(class ACharacter* InOwner);
@@ -225,5 +225,6 @@ private:
 private:
 	uint8 CurrMagazineCount;
 
+private:
 	class ACMagazine* Magazine;
 };

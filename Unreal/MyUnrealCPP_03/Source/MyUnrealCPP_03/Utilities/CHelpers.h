@@ -27,7 +27,7 @@ class MYUNREALCPP_03_API CHelpers
 {
 public:
 	template<typename T>
-	static void CreateComponent(AActor* InActor, T** OutComponent, FName InName, USceneComponent* InParent = nullptr, FName InSocketName = NAME_None )
+	static void CreateComponent(AActor* InActor, T** OutComponent, FName InName, USceneComponent* InParent = nullptr, FName InSocketName = NAME_None)
 	{
 		*OutComponent = InActor->CreateDefaultSubobject<T>(InName);
 

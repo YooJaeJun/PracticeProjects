@@ -28,7 +28,6 @@ public:
 	void Shoot(const FVector& InDirection);
 
 private:
-private:
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };
