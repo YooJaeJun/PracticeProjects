@@ -11,12 +11,25 @@ TSharedRef<IDetailCustomization> FStaticMesh_Detail::MakeInstance()
 void FStaticMesh_Detail::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 {
     IDetailCategoryBuilder& actor = DetailBuilder.EditCategory("Actor");
-    actor.SetCategoryVisibility(false);
+    // actor.SetCategoryVisibility(false);
+
+    TArray<TSharedRef<IPropertyHandle>> handles;
+    actor.GetDefaultProperties(handles);
+
+    for (TSharedRef<IPropertyHandle> handle : handles)
+    {
+        //GLog->Log(handle->GetProperty()->GetName());
+        //GLog->Log(handle->GetProperty()->GetPathName());
+        //GLog->Log(handle->GetProperty()->GetFullName());
+
+        if (handle->GetProperty()->GetName().Compare("bCanBeDamaged"))
+            DetailBuilder.HideProperty(handle);
+    }
+
 
     IDetailCategoryBuilder& mesh = DetailBuilder.EditCategory("Mesh");
 
     IDetailCategoryBuilder& lighting = DetailBuilder.EditCategory("Lighting");
-    // lighting.Get CastShadow
 
 
     // 검색어명
@@ -25,5 +38,22 @@ void FStaticMesh_Detail::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
     [
         SNew(STextBlock)
         .Text(FText::FromString("Color"))
+    ]
+    .ValueContent()
+        [
+        SNew(SButton)
+        .VAlign(VAlign_Center)
+        .HAlign(HAlign_Fill)
+        .OnClicked(this, &FStaticMesh_Detail::OnClicked_Paint)
+        //.Content()
+        [
+            SNew(STextBlock)
+            .Text(FText::FromString("Paint"))
+        ]
     ];
+}
+
+FReply FStaticMesh_Detail::OnClicked_Paint()
+{
+    return FReply::Handled();
 }

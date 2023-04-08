@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "IDetailCustomization.h"
 
@@ -11,4 +10,7 @@ public:
 
 public:
 	void CustomizeDetails(IDetailLayoutBuilder& DetailBuilder) override;
+
+private:
+	FReply OnClicked_Paint();
 };
