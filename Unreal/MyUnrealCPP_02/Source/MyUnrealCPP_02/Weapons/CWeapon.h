@@ -63,7 +63,7 @@ protected:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Hit")
-		float HitDistance = 3000;
+		float HitDistance = 5000;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Hit")
 		class UMaterialInstanceConstant* HitDecal;
