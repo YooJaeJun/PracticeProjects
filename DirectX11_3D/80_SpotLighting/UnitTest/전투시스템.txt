@@ -1,0 +1,21 @@
+Player, Monster - Hp바 표시
+
+Player 이동
+
+Player(공격 범위) -> Monster 공격
+
+최초 시작한 위치를 기준으로 지정한 범위 내에서 랜덤 위치 구해서 몬스터 이동(근처에 도달 범위, Patrol)
+Monster(탐지 범위) -> Player 추적
+
+Monster(공격 범위) -> Player 공격
+
+Player Dash 공격(Skill)
+
+Player Range 공격(Skill) - 카메라 흔들기
+
+아이템 드랍 시켜놓고 아이템에 충돌하면 무기 교체
+Unarmed, Sword, Bow
+
+Monster Type 분리 : Melee, Distance
+
+Monster(원거리용 탐지 / 공격 범위) -> Player 원거리 공격
