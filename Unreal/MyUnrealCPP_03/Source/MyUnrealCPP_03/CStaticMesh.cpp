@@ -13,6 +13,10 @@ ACStaticMesh::ACStaticMesh()
 
 	CHelpers::GetAsset<UMaterialInstanceConstant>(&Material, "MaterialInstanceConstant'/Game/M_StaticMesh_Inst.M_StaticMesh_Inst'");
 	Mesh->SetMaterial(0, Material);
+
+#if WITH_EDITOR
+	GLog->Log(GetActorLabel());
+#endif
 }
 
 void ACStaticMesh::BeginPlay()
@@ -20,3 +24,13 @@ void ACStaticMesh::BeginPlay()
 	Super::BeginPlay();
 }
 
+#if WITH_EDITOR
+void ACStaticMesh::Paint()
+{
+	for (const FVectorParameterValue& value : Material->VectorParameterValues)
+	{
+		if (value.ParameterInfo.Name.Compare("Color") == 0)
+			Material->SetVectorParameterValueEditorOnly(value.ParameterInfo, FLinearColor::MakeRandomColor());
+	}
+}
+#endif

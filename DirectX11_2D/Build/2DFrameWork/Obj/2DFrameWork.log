@@ -1,0 +1,94 @@
+﻿  Camera.cpp
+  Delaunay.cpp
+  Direct3D11.cpp
+  DWrite.cpp
+  GameObject.cpp
+  Gui.cpp
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\DWrite.cpp(174,5): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Input.cpp
+  Light.cpp
+  Map.cpp
+  ObCircle.cpp
+  ObImage.cpp
+  ObIso.cpp
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObCircle.cpp(15,24): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObCircle.cpp(88,24): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObIso.cpp(54,32): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObIso.cpp(55,33): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObIso.cpp(57,21): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObIso.cpp(58,21): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  ObLine.cpp
+  ObNode.cpp
+  ObRect.cpp
+  ObStar.cpp
+  ObStarPointed.cpp
+  ObTileMap.cpp
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObTileMap.cpp(171,24): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObTileMap.cpp(173,28): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObTileMap.cpp(246,51): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObTileMap.cpp(248,50): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObTileMap.cpp(272,26): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObTileMap.cpp(273,26): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObTileMap.cpp(296,59): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  ObTriangle.cpp
+  Random.cpp
+  SceneManager.cpp
+  Shader.cpp
+  Sound.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xstring(2857,53): warning C4244: '인수': 'wchar_t'에서 'const _Elem'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Elem=char
+          ] (소스 파일 컴파일 중 ObTileMap.cpp)
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xstring(2718,1): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct_from_iter<wchar_t*,wchar_t*,_Size_type>(_Iter,const _Sent,_Size)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Size_type=unsigned __int64,
+              _Iter=wchar_t *,
+              _Sent=wchar_t *,
+              _Size=unsigned __int64
+          ] (소스 파일 컴파일 중 ObTileMap.cpp)
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xstring(2718,37): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct_from_iter<wchar_t*,wchar_t*,_Size_type>(_Iter,const _Sent,_Size)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Size_type=unsigned __int64,
+              _Iter=wchar_t *,
+              _Sent=wchar_t *,
+              _Size=unsigned __int64
+          ] (소스 파일 컴파일 중 ObTileMap.cpp)
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xstring(3577,1): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<wchar_t*,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Iter=wchar_t *,
+              _Alloc=std::allocator<char>
+          ] (소스 파일 컴파일 중 ObTileMap.cpp)
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xstring(3577,32): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<wchar_t*,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Iter=wchar_t *,
+              _Alloc=std::allocator<char>
+          ] (소스 파일 컴파일 중 ObTileMap.cpp)
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObTileMap.cpp(347,13): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::assign<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(const _Iter,const _Iter)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>
+          ]
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObTileMap.cpp(347,31): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::assign<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(const _Iter,const _Iter)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>
+          ]
+  Texture.cpp
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObTriangle.cpp(166,43): warning C4244: '인수': 'long double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\ObTriangle.cpp(166,29): warning C4244: '인수': 'long double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\Texture.cpp(72,31): warning C4101: 'temp' :참조되지 않은 지역 변수입니다.
+  Timer.cpp
+  Utility.cpp
+  Window.cpp
+  Numeric.cpp
+  RenderOrder.cpp
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\Utility.cpp(45,14): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+B:\source\repos\SGA\DirectX11_2D\2DFrameWork\Utility.cpp(46,14): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  2DFrameWork.vcxproj -> B:\source\repos\SGA\DirectX11_2D\Build\2DFrameWork\2DFrameWork.lib

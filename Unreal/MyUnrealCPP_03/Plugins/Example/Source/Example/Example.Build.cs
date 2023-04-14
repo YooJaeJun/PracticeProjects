@@ -17,5 +17,7 @@ public class Example : ModuleRules
 		PrivateDependencyModuleNames.Add("Slate");
 		PrivateDependencyModuleNames.Add("SlateCore");
 		PrivateDependencyModuleNames.Add("GameplayDebugger");
+		PrivateDependencyModuleNames.Add("DesktopPlatform");
+		PrivateDependencyModuleNames.Add("MainFrame");
 	}
 }
