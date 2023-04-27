@@ -11,4 +11,10 @@ public:
 
 private:
 	TSharedPtr<class FExampleConsoleCommand> ConsoleCommand;
+
+private:
+	TSharedPtr<FExtender> Extender;
+
+private:
+	void AddToolBar(class FToolBarBuilder& InBuilder);
 };

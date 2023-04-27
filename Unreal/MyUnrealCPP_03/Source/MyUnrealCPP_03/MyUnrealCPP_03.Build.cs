@@ -16,5 +16,6 @@ public class MyUnrealCPP_03 : ModuleRules
         PrivateDependencyModuleNames.Add("HeadMountedDisplay");
         PrivateDependencyModuleNames.Add("NavigationSystem");
         PrivateDependencyModuleNames.Add("AIModule");
+        PrivateDependencyModuleNames.Add("ProceduralMeshComponent");
     }
 }

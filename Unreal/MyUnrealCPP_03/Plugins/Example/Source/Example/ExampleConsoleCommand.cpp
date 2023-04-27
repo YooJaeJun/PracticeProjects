@@ -2,6 +2,7 @@
 #include "HAL/IConsoleManager.h"
 #include "Misc/MessageDialog.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/PlayerController.h"
 
 FExampleConsoleCommand::FExampleConsoleCommand()
 {

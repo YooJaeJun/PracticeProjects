@@ -1,11 +1,14 @@
-#include "ExampleModule.h"
+ï»¿#include "ExampleModule.h"
+#include "ExampleStyle.h"
 #include "ExampleDebuggerCategory.h"
 #include "ExampleConsoleCommand.h"
 #include "StaticMesh_Detail.h"
+#include "ButtonCommand.h"
 
 #include "CStaticMesh.h"
 
 #include "GameplayDebugger.h"
+#include "LevelEditor.h"
 
 #define LOCTEXT_NAMESPACE "FExampleModule"
 	
@@ -13,6 +16,8 @@ IMPLEMENT_MODULE(FExampleModule, Example)
 
 void FExampleModule::StartupModule()
 {
+	FExampleStyle::Get();
+
 	// Debugger
 	{
 		IGameplayDebugger::FOnGetCategory category;
@@ -25,9 +30,9 @@ void FExampleModule::StartupModule()
 
 	// Console Command
 	{
-		// Shareable: µÑ´Ù»ı¼º°¡´É
-		// Shared: ±âÁ¸ Æ÷ÀÎÅÍ°¡ ÀÖ´Â »óÈ²¿¡¼­ sharedÆ÷ÀÎÅÍ »ı¼º ½Ã
-		// SharedRef: shared ·¹ÆÛ·±½º »ı¼º ½Ã
+		// Shareable: ë‘˜ë‹¤ìƒì„±ê°€ëŠ¥
+		// Shared: ê¸°ì¡´ í¬ì¸í„°ê°€ ìˆëŠ” ìƒí™©ì—ì„œ sharedí¬ì¸í„° ìƒì„± ì‹œ
+		// SharedRef: shared ë ˆí¼ëŸ°ìŠ¤ ìƒì„± ì‹œ
 		ConsoleCommand = MakeShareable(new FExampleConsoleCommand());
 	}
 
@@ -39,6 +44,23 @@ void FExampleModule::StartupModule()
 		FPropertyEditorModule& prop = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 		prop.RegisterCustomClassLayout(ACStaticMesh::StaticClass()->GetFName(), instance);
 	}
+
+	// ToolBar
+	{
+		FButtonCommand::Register();
+
+		Extender = MakeShareable(new FExtender());
+
+		FToolBarExtensionDelegate toolBar;
+		toolBar.BindRaw(this, &FExampleModule::AddToolBar);
+
+		Extender->AddToolBarExtension("Compile", EExtensionHook::Before, FButtonCommand::Get().Command, toolBar);
+
+		FLevelEditorModule& levelEditor = FModuleManager::LoadModuleChecked<FLevelEditorModule>("LevelEditor");
+		levelEditor.GetToolBarExtensibilityManager()->AddExtender(Extender);
+	}
+
+	FExampleStyle::Shutdown();
 }
 
 void FExampleModule::ShutdownModule()
@@ -48,6 +70,21 @@ void FExampleModule::ShutdownModule()
 
 	if (ConsoleCommand.IsValid())
 		ConsoleCommand.Reset();
+}
+
+void FExampleModule::AddToolBar(FToolBarBuilder& InBuilder)
+{
+	FString name = TEXT("ë©”ì‹œ");
+
+	InBuilder.AddSeparator();
+	InBuilder.AddToolBarButton
+	(
+		FButtonCommand::Get().LoadMesh,
+		"LoadMesh",
+		FText::FromString(name),
+		FText::FromString("Load Mesh Data"),
+		FExampleStyle::Get()->ToolBar_LoadMesh_Icon
+	);
 }
 
 #undef LOCTEXT_NAMESPACE

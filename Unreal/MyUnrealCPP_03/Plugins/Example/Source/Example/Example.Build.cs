@@ -19,5 +19,7 @@ public class Example : ModuleRules
 		PrivateDependencyModuleNames.Add("GameplayDebugger");
 		PrivateDependencyModuleNames.Add("DesktopPlatform");
 		PrivateDependencyModuleNames.Add("MainFrame");
+		PrivateDependencyModuleNames.Add("EditorStyle");
+		PrivateDependencyModuleNames.Add("UnrealEd");
 	}
 }
