@@ -234,8 +234,7 @@ void ComputeSpotLight(inout MaterialDesc output, float3 normal, float3 wPosition
         [flatten]
         if (dist > SpotLights[i].Range)
             continue;
-        
-        
+
         light /= dist; //Normalize
         
         result.Ambient = SpotLights[i].Ambient * Material.Ambient;

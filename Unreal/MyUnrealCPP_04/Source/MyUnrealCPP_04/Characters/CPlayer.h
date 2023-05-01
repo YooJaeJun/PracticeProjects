@@ -2,11 +2,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Characters/ICharacter.h"
 #include "Components/CStateComponent.h"
 #include "CPlayer.generated.h"
 
 UCLASS()
-class MYUNREALCPP_04_API ACPlayer : public ACharacter
+class MYUNREALCPP_04_API ACPlayer
+	: public ACharacter
+	, public IICharacter
 {
 	GENERATED_BODY()
 
@@ -18,6 +21,9 @@ private:
 		class UCameraComponent* Camera;
 
 private:
+	UPROPERTY(VisibleAnywhere)
+		class UCWeaponComponent* Weapon;
+
 	UPROPERTY(VisibleAnywhere)
 		class UCMontagesComponent* Montages;
 
@@ -45,4 +51,7 @@ private:
 
 private:
 	void BackStep();
+
+public:
+	void End_BackStep() override;
 };

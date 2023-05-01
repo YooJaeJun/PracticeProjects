@@ -35,22 +35,22 @@ void UCMontagesComponent::BeginPlay()
 			}
 		}//for(data)
 	}//for(i)
-}
 
 #if LOG_UCMontagesComponent
-for (FMontagesData* data : datas)
-{
-	if (data == nullptr)
-		continue;
+	for (FMontagesData* data : datas)
+	{
+		if (data == nullptr)
+			continue;
 
-	FString str;
-	str.Append(StaticEnum<EStateType>()->GetValueAsString(data->Type));
-	str.Append(" / ");
-	str.Append(data->Montage->GetPathName());
+		FString str;
+		str.Append(StaticEnum<EStateType>()->GetValueAsString(data->Type));
+		str.Append(" / ");
+		str.Append(data->Montage->GetPathName());
 
-	CLog::Log(str);
-}
+		CLog::Log(str);
+	}
 #endif
+}
 // StaticEnum
 // 리플렉션 - 자료형의 타입을 변수로 다룰 수 있다.
 // GetValueAsString - 자료형의 이름을 알 수 있음
