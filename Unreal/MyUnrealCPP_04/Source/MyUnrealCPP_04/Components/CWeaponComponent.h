@@ -17,7 +17,7 @@ class MYUNREALCPP_04_API UCWeaponComponent : public UActorComponent
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, Category = "DataAsset")
-		class UCWeaponAsset* DataAssets[(int32)EWeaponType::Max];
+		class UCWeaponAsset* DataAssets[static_cast<uint8>(EWeaponType::Max)];
 
 public:
 	FORCEINLINE bool IsUnarmedMode() { return Type == EWeaponType::Max; }
@@ -40,6 +40,7 @@ private:
 public:
 	class ACAttachment* GetAttachment();
 	class UCEquipment* GetEquipment();
+	class UCDoAction* GetDoAction();
 
 public:
 	void SetUnarmedMode();
@@ -49,6 +50,8 @@ public:
 	void SetWarpMode();
 	void SetAroundMode();
 	void SetBowMode();
+
+	void DoAction();
 
 private:
 	void SetMode(EWeaponType InType);

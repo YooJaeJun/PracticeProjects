@@ -37,6 +37,9 @@ void UCEquipment::Equip_Implementation()
 void UCEquipment::Begin_Equip_Implementation()
 {
 	bBeginEquip = true;
+
+	if (OnEquipmentBeginEquip.IsBound())
+		OnEquipmentBeginEquip.Broadcast();
 }
 
 void UCEquipment::End_Equip_Implementation()
@@ -52,4 +55,7 @@ void UCEquipment::Unequip_Implementation()
 {
 	bEquipped = false;
 	Movement->DisableControlRotation();
+
+	if (OnEquipmentUnequip.IsBound())
+		OnEquipmentUnequip.Broadcast();
 }

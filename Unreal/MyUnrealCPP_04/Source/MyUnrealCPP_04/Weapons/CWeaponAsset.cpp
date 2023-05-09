@@ -2,12 +2,14 @@
 #include "Global.h"
 #include "CAttachment.h"
 #include "CEquipment.h"
+#include "CDoAction.h"
 #include "GameFramework/Character.h"
 
 UCWeaponAsset::UCWeaponAsset()
 {
 	AttachmentClass = ACAttachment::StaticClass();
 	EquipmentClass = UCEquipment::StaticClass();
+	DoActionClass = UCDoAction::StaticClass();
 }
 
 void UCWeaponAsset::BeginPlay(ACharacter* InOwner)
@@ -17,12 +19,33 @@ void UCWeaponAsset::BeginPlay(ACharacter* InOwner)
 		FActorSpawnParameters params;
 		params.Owner = InOwner;
 
-		InOwner->GetWorld()->SpawnActor<ACAttachment>(AttachmentClass, params);
+		Attachment = InOwner->GetWorld()->SpawnActor<ACAttachment>(AttachmentClass, params);
 	}
 
 	if (!!EquipmentClass)
 	{
 		Equipment = NewObject<UCEquipment>(this, EquipmentClass);
 		Equipment->BeginPlay(InOwner, EquipmentData);
+
+		if (!!Attachment)
+		{
+			Equipment->OnEquipmentBeginEquip.AddDynamic(Attachment, &ACAttachment::OnBeginEquip);
+			Equipment->OnEquipmentUnequip.AddDynamic(Attachment, &ACAttachment::OnUnequip);
+		}
+	}
+
+	if (!!DoActionClass)
+	{
+		DoAction = NewObject<UCDoAction>(this, DoActionClass);
+		DoAction->BeginPlay(Attachment, Equipment, InOwner, DoActionDatas, HitDatas);
+
+		if (!!Attachment)
+		{
+			Attachment->OnAttachmentBeginCollision.AddDynamic(DoAction, &UCDoAction::OnAttachmentBeginCollision);
+			Attachment->OnAttachmentEndCollision.AddDynamic(DoAction, &UCDoAction::OnAttachmentEndCollision);
+
+			Attachment->OnAttachmentBeginOverlap.AddDynamic(DoAction, &UCDoAction::OnAttachmentBeginOverlap);
+			Attachment->OnAttachmentEndOverlap.AddDynamic(DoAction, &UCDoAction::OnAttachmentEndOverlap);
+		}
 	}
 }

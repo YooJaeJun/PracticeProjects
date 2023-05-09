@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "Weapons/CWeaponAsset.h"
 #include "Weapons/CAttachment.h"
+#include "Weapons/CDoAction.h"
 #include "Weapons/CEquipment.h"
 
 UCWeaponComponent::UCWeaponComponent()
@@ -22,7 +23,7 @@ void UCWeaponComponent::BeginPlay()
 	}
 }
 
-bool UCWeaponComponent::IsIdleMode()
+bool UCWeaponComponent::IsIdleMode()  
 {
 	return CHelpers::GetComponent<UCStateComponent>(OwnerCharacter)->IsIdleMode();
 }
@@ -30,17 +31,25 @@ bool UCWeaponComponent::IsIdleMode()
 ACAttachment* UCWeaponComponent::GetAttachment()
 {
 	CheckTrueResult(IsUnarmedMode(), nullptr);
-	CheckFalseResult(!!DataAssets[(int32)Type], nullptr);
+	CheckFalseResult(!!DataAssets[static_cast<uint8>(Type)], nullptr);
 
-	return DataAssets[(int32)Type]->GetAttachment();
+	return DataAssets[static_cast<uint8>(Type)]->GetAttachment();
 }
 
 UCEquipment* UCWeaponComponent::GetEquipment()
 {
 	CheckTrueResult(IsUnarmedMode(), nullptr);
+	CheckFalseResult(!!DataAssets[static_cast<uint8>(Type)], nullptr);
+
+	return DataAssets[static_cast<uint8>(Type)]->GetEquipment();
+}
+
+UCDoAction* UCWeaponComponent::GetDoAction()
+{
+	CheckTrueResult(IsUnarmedMode(), nullptr);
 	CheckFalseResult(!!DataAssets[(int32)Type], nullptr);
 
-	return DataAssets[(int32)Type]->GetEquipment();
+	return DataAssets[(int32)Type]->GetDoAction();
 }
 
 void UCWeaponComponent::SetUnarmedMode()
@@ -92,6 +101,12 @@ void UCWeaponComponent::SetBowMode()
 	SetMode(EWeaponType::Bow);
 }
 
+void UCWeaponComponent::DoAction()
+{
+	if (!!GetDoAction())
+		GetDoAction()->DoAction();
+}
+
 void UCWeaponComponent::SetMode(EWeaponType InType)
 {
 	if (Type == InType)
@@ -105,9 +120,9 @@ void UCWeaponComponent::SetMode(EWeaponType InType)
 		GetEquipment()->Unequip();
 	}
 
-	if (!!DataAssets[(int32)InType])
+	if (!!DataAssets[static_cast<uint8>(InType)])
 	{
-		DataAssets[(int32)InType]->GetEquipment()->Equip();
+		DataAssets[static_cast<uint8>(InType)]->GetEquipment()->Equip();
 
 		ChangeType(InType);
 	}

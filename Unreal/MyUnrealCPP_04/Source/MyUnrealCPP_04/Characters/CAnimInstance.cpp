@@ -9,6 +9,14 @@ void UCAnimInstance::NativeBeginPlay()
 	OwnerCharacter = Cast<ACharacter>(TryGetPawnOwner());
 	CheckNull(OwnerCharacter);
 
+	Weapon = CHelpers::GetComponent<UCWeaponComponent>(OwnerCharacter);
+	if (!!Weapon)
+		Weapon->OnWeaponTypeChange.AddDynamic(this, &UCAnimInstance::OnWeaponTypeChanged);
+}
+
+void UCAnimInstance::OnWeaponTypeChanged(EWeaponType InPrevType, EWeaponType InNewType)
+{
+	WeaponType = InNewType;
 }
 
 void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)

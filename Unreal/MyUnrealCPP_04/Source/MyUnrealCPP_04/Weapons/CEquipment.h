@@ -5,6 +5,9 @@
 #include "Weapons/CWeaponStructures.h"
 #include "CEquipment.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEquipmentBeginEquip);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEquipmentUnequip);
+
 UCLASS()
 class MYUNREALCPP_04_API UCEquipment : public UObject
 {
@@ -29,6 +32,10 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 		void Unequip();
 	void Unequip_Implementation();
+
+public:
+	FEquipmentBeginEquip OnEquipmentBeginEquip;
+	FEquipmentUnequip OnEquipmentUnequip;
 
 private:
 	class ACharacter* OwnerCharacter;

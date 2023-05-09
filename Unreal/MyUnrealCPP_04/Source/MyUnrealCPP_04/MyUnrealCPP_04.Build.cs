@@ -6,7 +6,8 @@ public class MyUnrealCPP_04 : ModuleRules
 {
 	public MyUnrealCPP_04(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+        PrivateDependencyModuleNames.AddRange(new string[] { "Niagara" });
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicIncludePaths.Add(ModuleDirectory);
 	
@@ -14,5 +15,6 @@ public class MyUnrealCPP_04 : ModuleRules
 		PublicDependencyModuleNames.Add("CoreUObject");
 		PublicDependencyModuleNames.Add("Engine");
 		PublicDependencyModuleNames.Add("InputCore");
-	}
+		PublicDependencyModuleNames.Add("Niagara");
+    }
 }
