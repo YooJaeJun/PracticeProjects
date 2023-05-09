@@ -283,20 +283,19 @@ void ComputeSpotLight(inout MaterialDesc output, float3 normal, float3 wPosition
 void NormalMapping(float2 uv, float3 normal, float3 tangent, SamplerState samp)
 {
     float4 map = NormalMap.Sample(samp, uv);
-    
+
     [flatten]
     if (any(map.rgb) == false)
         return;
 
     
     float3 coord = map.rgb * 2.0f - 1.0f; //-1 ~ +1
-    
-    
+
     //ÅºÁ¨Æ® °ø°£
     float3 N = normalize(normal); //Z
     float3 T = normalize(tangent - dot(tangent, N) * N); //X
     float3 B = cross(N, T); //Y
-    
+
     float3x3 TBN = float3x3(T, B, N);
     
     coord = mul(coord, TBN);
