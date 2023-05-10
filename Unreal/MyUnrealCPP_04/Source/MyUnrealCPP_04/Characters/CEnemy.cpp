@@ -3,10 +3,12 @@
 #include "CAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/CWeaponComponent.h"
 #include "Components/CMontagesComponent.h"
 #include "Components/CMovementComponent.h"
 #include "Weapons/CWeaponStructures.h"
+#include "Components/CStatusComponent.h"
 
 ACEnemy::ACEnemy()
 {
@@ -14,6 +16,7 @@ ACEnemy::ACEnemy()
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
 	CHelpers::CreateActorComponent<UCMovementComponent>(this, &Movement, "Movement");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
+	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
@@ -46,21 +49,27 @@ void ACEnemy::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 	switch (InNewType)
 	{
 	case EStateType::Hitted: Hitted(); break;
+	case EStateType::Dead: Dead(); break;
 	}
 }
 
 void ACEnemy::Hitted()
 {
-	//TODO: 대미지 처리
-	//TODO: 사망 처리
+	//Apply Damage
+	{
+		Status->Damage(Damage.Power);
+		Damage.Power = 0;
+	}
 
-	Change_Color(this, FLinearColor::Red);
+	//Change Color
+	{
+		Change_Color(this, FLinearColor::Red);
 
-	FTimerDelegate timerDelegate;
-	timerDelegate.BindUFunction(this, "RestoreColor");
+		FTimerDelegate timerDelegate;
+		timerDelegate.BindUFunction(this, "RestoreColor");
 
-	GetWorld()->GetTimerManager().SetTimer(RestoreColor_TimerHandle, timerDelegate, 0.2f, false);
-
+		GetWorld()->GetTimerManager().SetTimer(RestoreColor_TimerHandle, timerDelegate, 0.2f, false);
+	}
 
 	if (!!Damage.Event && !!Damage.Event->HitData)
 	{
@@ -69,11 +78,51 @@ void ACEnemy::Hitted()
 		data->PlayMontage(this);
 		data->PlayHitStop(GetWorld());
 		data->PlaySoundWave(this);
+		data->PlayEffect(GetWorld(), GetActorLocation(), GetActorRotation());
+
+		if (Status->IsDead() == false)
+		{
+			FVector start = GetActorLocation();
+			FVector target = Damage.Character->GetActorLocation();
+			FVector direction = target - start;
+			direction.Normalize();
+
+			LaunchCharacter(-direction * data->Launch, false, false);
+			SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
+		}
+	}
+
+	if (Status->IsDead())
+	{
+		State->SetDeadMode();
+
+		return;
 	}
 
 	Damage.Character = nullptr;
 	Damage.Causer = nullptr;
 	Damage.Event = nullptr;
+}
+
+void ACEnemy::End_Hitted()
+{
+	IICharacter::End_Hitted();
+
+	State->SetIdleMode();
+}
+
+void ACEnemy::Dead()
+{
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	Montages->PlayDeadMode();
+}
+
+void ACEnemy::End_Dead()
+{
+	IICharacter::End_Dead();
+
+	Destroy();
 }
 
 void ACEnemy::RestoreColor()
@@ -93,8 +142,8 @@ float ACEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 	Damage.Character = Cast<ACharacter>(EventInstigator->GetPawn());
 	Damage.Causer = DamageCauser;
 	// UObject가 아니기 때문에 Cast 사용 불가
-	// C 스타일 캐스팅 사용 시, 부모 포인터와 자식 포인터의 크기가 다르기 때문에
-	// 포인터 크기 동일하게 맞춰줌
+	// C 스타일 캐스팅 사용 시, 부모와 자식의 크기가 다르기 때문에
+	// '포인터'로 통일해 크기 동일하게 맞춰줌
 	Damage.Event = (FActionDamageEvent*)&DamageEvent;
 
 	State->SetHittedMode();

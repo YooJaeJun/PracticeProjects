@@ -22,6 +22,30 @@ void FDoActionData::DoAction(ACharacter* InOwner)
 		InOwner->PlayAnimMontage(Montage, PlayRate);
 }
 
+void FDoActionData::PlayEffect(UWorld* InWorld, const FVector& InLocation)
+{
+	CheckNull(Effect);
+
+	FTransform transform;
+	transform.SetLocation(EffectLocation);
+	transform.SetScale3D(EffectScale);
+	transform.AddToTranslation(InLocation);
+
+	CHelpers::PlayEffect(InWorld, Effect, transform);
+}
+
+void FDoActionData::PlayEffect(UWorld* InWorld, const FVector& InLocation, const FRotator& InRotation)
+{
+	CheckNull(Effect);
+
+	FTransform transform;
+	transform.SetLocation(InLocation + InRotation.RotateVector(EffectLocation));
+	transform.SetScale3D(EffectScale);
+
+	CHelpers::PlayEffect(InWorld, Effect, transform);
+}
+
+
 //////////////////////////////////////////////////////////////
 
 void FHitData::SendDamage(ACharacter* InAttacker, AActor* InAttackCauser, ACharacter* InOther)
@@ -61,6 +85,9 @@ void FHitData::PlayHitStop(UWorld* InWorld)
 		for (ACharacter* character : characters)
 			character->CustomTimeDilation = 1;
 	});
+
+	FTimerHandle timerHandle;
+	InWorld->GetTimerManager().SetTimer(timerHandle, timerDelegate, StopTime, false);
 }
 
 void FHitData::PlaySoundWave(ACharacter* InOwner)
@@ -71,4 +98,27 @@ void FHitData::PlaySoundWave(ACharacter* InOwner)
 	FVector location = InOwner->GetActorLocation();
 
 	UGameplayStatics::SpawnSoundAtLocation(world, Sound, location);
+}
+
+void FHitData::PlayEffect(UWorld* InWorld, const FVector& InLocation)
+{
+	CheckNull(Effect);
+
+	FTransform transform;
+	transform.SetLocation(EffectLocation);
+	transform.SetScale3D(EffectScale);
+	transform.AddToTranslation(InLocation);
+
+	CHelpers::PlayEffect(InWorld, Effect, transform);
+}
+
+void FHitData::PlayEffect(UWorld* InWorld, const FVector& InLocation, const FRotator& InRotation)
+{
+	CheckNull(Effect);
+
+	FTransform transform;
+	transform.SetLocation(InLocation + InRotation.RotateVector(EffectLocation));
+	transform.SetScale3D(EffectScale);
+
+	CHelpers::PlayEffect(InWorld, Effect, transform);
 }

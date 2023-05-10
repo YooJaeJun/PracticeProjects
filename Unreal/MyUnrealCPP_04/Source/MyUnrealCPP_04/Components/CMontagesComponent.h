@@ -40,6 +40,7 @@ protected:
 
 public:
 	void PlayBackStepMode();
+	void PlayDeadMode();
 
 private:
 	void PlayAnimMontage(EStateType InType);

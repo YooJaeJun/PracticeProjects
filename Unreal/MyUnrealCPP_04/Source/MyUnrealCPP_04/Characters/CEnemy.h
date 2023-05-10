@@ -29,6 +29,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 		class UCStateComponent* State;
 
+	UPROPERTY(VisibleAnywhere)
+		class UCStatusComponent* Status;
+
 public:
 	ACEnemy();
 
@@ -42,6 +45,16 @@ private:
 private:
 	void Hitted();
 
+public:
+	void End_Hitted() override;
+
+private:
+	void Dead();
+
+public:
+	void End_Dead() override;
+
+private:
 	UFUNCTION()
 		void RestoreColor();
 

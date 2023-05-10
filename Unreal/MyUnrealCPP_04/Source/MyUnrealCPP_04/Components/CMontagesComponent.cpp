@@ -60,6 +60,11 @@ void UCMontagesComponent::PlayBackStepMode()
 	PlayAnimMontage(EStateType::BackStep);
 }
 
+void UCMontagesComponent::PlayDeadMode()
+{
+	PlayAnimMontage(EStateType::Dead);
+}
+
 void UCMontagesComponent::PlayAnimMontage(EStateType InType)
 {
 	CheckNull(OwnerCharacter);

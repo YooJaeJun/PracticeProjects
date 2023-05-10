@@ -19,11 +19,14 @@ public:
 	void End_DoAction() override;
 
 public:
-	void OnAttachmentBeginOverlap(class ACharacter* InAttacker, AActor* InAttackCauser, class ACharacter* InOther) override;
+	virtual void OnAttachmentBeginOverlap(class ACharacter* InAttacker, AActor* InAttackCauser, class ACharacter* InOther) override;
+	virtual void OnAttachmentEndCollision() override;
 
 private:
 	int32 Index;
 
 	bool bEnable;
 	bool bExist;
+
+	TArray<class ACharacter*> Hitted;
 };
