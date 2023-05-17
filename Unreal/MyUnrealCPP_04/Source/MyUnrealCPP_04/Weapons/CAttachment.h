@@ -39,6 +39,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Attach")
 		void AttachTo(FName InSocketName);
 
+	UFUNCTION(BlueprintCallable, Category = "Attach")
+		void AttachToCollision(FName InCollisionName);
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Game")
 		class ACharacter* OwnerCharacter;
