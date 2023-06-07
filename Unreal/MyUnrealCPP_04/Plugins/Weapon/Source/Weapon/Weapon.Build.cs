@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 using UnrealBuildTool;
 
 public class Weapon : ModuleRules
@@ -20,5 +18,7 @@ public class Weapon : ModuleRules
         PrivateDependencyModuleNames.Add("SlateCore");
 
         PrivateDependencyModuleNames.Add("UnrealEd");
-	}
+        PrivateDependencyModuleNames.Add("EditorStyle");
+        PrivateDependencyModuleNames.Add("InputCore");
+    }
 }

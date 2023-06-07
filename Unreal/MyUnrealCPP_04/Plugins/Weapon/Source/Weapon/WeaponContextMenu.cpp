@@ -3,6 +3,7 @@
 
 FWeaponContextMenu::FWeaponContextMenu(EAssetTypeCategories::Type InCategory)
 {
+	Category = InCategory;
 }
 
 FText FWeaponContextMenu::GetName() const

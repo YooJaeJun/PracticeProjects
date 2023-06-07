@@ -35,7 +35,8 @@ FWeaponStyle::FWeaponStyle()
 
 FWeaponStyle::~FWeaponStyle()
 {
-    if (StyleSet.IsValid() == false) return;
+    if (StyleSet.IsValid() == false) 
+        return;
 
     FSlateStyleRegistry::UnRegisterSlateStyle(StyleSetName);
     StyleSet.Reset();
