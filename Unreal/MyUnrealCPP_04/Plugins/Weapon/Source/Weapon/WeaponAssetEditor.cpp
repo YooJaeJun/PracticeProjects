@@ -1,5 +1,7 @@
 #include "WeaponAssetEditor.h"
 #include "SWeaponLeftArea.h"
+#include "SWeaponDetailsView.h"
+#include "SWeaponEquipmentData.h"
 #include "Weapons/CWeaponAsset.h"
 
 const FName FWeaponAssetEditor::EditorName = "WeaponAssetEditor";
@@ -38,11 +40,26 @@ void FWeaponAssetEditor::Open(FString InAssetName)
 	LeftArea = SNew(SWeaponLeftArea)
 		.OnSelectedItem(this, &FWeaponAssetEditor::OnListViewSelectedItem);
 
+
 	FPropertyEditorModule& prop = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 
-	FDetailsViewArgs args(false, false, true, FDetailsViewArgs::HideNameArea);
-	args.ViewIdentifier = "WeaponAssetEditorDetailsView";
-	DetailsView = prop.CreateDetailView(args);
+	// DetailsView
+	{
+		FDetailsViewArgs args(false, false, true, FDetailsViewArgs::HideNameArea);
+		args.ViewIdentifier = "WeaponAssetEditorDetailsView";
+		DetailsView = prop.CreateDetailView(args);
+
+		FOnGetDetailCustomizationInstance detailView;
+		detailView.BindStatic(&SWeaponDetailsView::MakeInstance);
+		DetailsView->SetGenericLayoutDetailsDelegate(detailView);
+	}
+
+	// EquipmentData
+	{
+		FOnGetPropertyTypeCustomizationInstance instance;
+		instance.BindStatic(&SWeaponEquipmentData::MakeInstance);
+		prop.RegisterCustomPropertyTypeLayout("EquipmentData", instance);
+	}
 
 
 	TSharedRef<FTabManager::FLayout> layout = FTabManager::NewLayout("WeaponAssetEditor_Layout")
@@ -91,6 +108,12 @@ bool FWeaponAssetEditor::OnRequestClose()
 	{
 		if (!!GEditor && !!GEditor->GetEditorSubsystem<UAssetEditorSubsystem>())
 			GEditor->GetEditorSubsystem<UAssetEditorSubsystem>()->NotifyAssetClosed(GetEditingObject(), this);
+
+		if (FModuleManager::Get().IsModuleLoaded("PropertyEditor"))
+		{
+			FPropertyEditorModule& prop = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+			prop.UnregisterCustomPropertyTypeLayout("EquipmentData");
+		}
 	}
 
 	if (LeftArea.IsValid())
