@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SWeaponLeftArea.h"
 #include "Toolkits/AssetEditorToolkit.h"
 
 class WEAPON_API FWeaponAssetEditor

@@ -1,12 +1,14 @@
 #include "SWeaponDetailsView.h"
-#include "Weapons/CWeaponAsset.h"
+#include "SWeaponCheckBoxes.h"
+#include "SWeaponEquipmentData.h"
 #include "DetailLayoutBuilder.h"
 #include "DetailCategoryBuilder.h"
 #include "IDetailPropertyRow.h"
+#include "Weapons/CWeaponAsset.h"
 
 TSharedRef<IDetailCustomization> SWeaponDetailsView::MakeInstance()
 {
-	return MakeShareable(new SWeaponDetailsView);
+	return MakeShareable(new SWeaponDetailsView());
 }
 
 void SWeaponDetailsView::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
@@ -28,5 +30,7 @@ void SWeaponDetailsView::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 		IDetailCategoryBuilder& category = DetailBuilder.EditCategory("EquipmentData", FText::FromString("Equipment Data"));
 		IDetailPropertyRow& row = category.AddProperty("EquipmentData", type);
 
+		TSharedPtr<SWeaponCheckBoxes> checkBoxes = SWeaponEquipmentData::CreateCheckBoxes();
+		checkBoxes->AddProperties(row.GetPropertyHandle());
 	}
 }

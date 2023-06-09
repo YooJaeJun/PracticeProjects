@@ -2,15 +2,29 @@
 #include "IPropertyUtilities.h"
 #include "IDetailPropertyRow.h"
 #include "IDetailChildrenBuilder.h"
+#include "SWeaponCheckBoxes.h"
 #include "DetailWidgetRow.h"
+
+TSharedPtr<SWeaponCheckBoxes> SWeaponEquipmentData::CheckBoxes;
 
 TSharedRef<IPropertyTypeCustomization> SWeaponEquipmentData::MakeInstance()
 {
 	return MakeShareable(new SWeaponEquipmentData());
 }
 
+TSharedPtr<SWeaponCheckBoxes> SWeaponEquipmentData::CreateCheckBoxes()
+{
+	if (CheckBoxes.IsValid())
+	{
+		CheckBoxes.Reset();
+		CheckBoxes = nullptr;
+	}
+
+	return CheckBoxes = MakeShareable(new SWeaponCheckBoxes());
+}
+
 void SWeaponEquipmentData::CustomizeHeader(TSharedRef<IPropertyHandle> InPropertyHandle, FDetailWidgetRow& InHeaderRow,
-	IPropertyTypeCustomizationUtils& InCustomizationUtils)
+                                           IPropertyTypeCustomizationUtils& InCustomizationUtils)
 {
 	InHeaderRow
 	.NameContent()
@@ -21,7 +35,7 @@ void SWeaponEquipmentData::CustomizeHeader(TSharedRef<IPropertyHandle> InPropert
 	.MinDesiredWidth(FEditorStyle::GetFloat("StandardDialog.MinDesiredSlotWidth"))
 	.MaxDesiredWidth(FEditorStyle::GetFloat("StandardDialog.MaxDesiredSlotWidth"))
 	[
-		InPropertyHandle->CreatePropertyValueWidget()
+		CheckBoxes->Draw()
 	];
 }
 
@@ -36,14 +50,14 @@ void SWeaponEquipmentData::CustomizeChildren(TSharedRef<IPropertyHandle> InPrope
 		TSharedPtr<IPropertyHandle> handle = InPropertyHandle->GetChildHandle(i);
 		IDetailPropertyRow& row = InChildBuilder.AddProperty(handle.ToSharedRef());
 
-		FString name = FString("Name ") + FString::FromInt(i + 1);;
-
 		row.CustomWidget()
 		.NameContent()
 		[
 			handle->CreatePropertyNameWidget()
 		]
 		.ValueContent()
+		.MinDesiredWidth(FEditorStyle::GetFloat("StandardDialog.MinDesiredSlotWidth"))
+		.MaxDesiredWidth(FEditorStyle::GetFloat("StandardDialog.MaxDesiredSlotWidth"))
 		[
 			handle->CreatePropertyValueWidget()
 		];
