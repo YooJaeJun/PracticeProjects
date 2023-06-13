@@ -1,10 +1,14 @@
 #include "SWeaponDetailsView.h"
 #include "SWeaponCheckBoxes.h"
 #include "SWeaponEquipmentData.h"
+#include "SWeaponDoActionData.h"
 #include "DetailLayoutBuilder.h"
 #include "DetailCategoryBuilder.h"
 #include "IDetailPropertyRow.h"
 #include "Weapons/CWeaponAsset.h"
+#include "Animation/AnimMontage.h"
+
+bool SWeaponDetailsView::bRefreshByCheckBoxes = false;
 
 TSharedRef<IDetailCustomization> SWeaponDetailsView::MakeInstance()
 {
@@ -30,7 +34,41 @@ void SWeaponDetailsView::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 		IDetailCategoryBuilder& category = DetailBuilder.EditCategory("EquipmentData", FText::FromString("Equipment Data"));
 		IDetailPropertyRow& row = category.AddProperty("EquipmentData", type);
 
-		TSharedPtr<SWeaponCheckBoxes> checkBoxes = SWeaponEquipmentData::CreateCheckBoxes();
-		checkBoxes->AddProperties(row.GetPropertyHandle());
+		if (bRefreshByCheckBoxes == false)
+		{
+			TSharedPtr<SWeaponCheckBoxes> checkBoxes = SWeaponEquipmentData::CreateCheckBoxes();
+			checkBoxes->AddProperties(row.GetPropertyHandle());
+
+			FEquipmentData data;
+
+			int32 index = 0;
+			checkBoxes->CheckDefaultObject(index++, data.Montage);
+			checkBoxes->CheckDefaultValue(index++, data.PlayRate);
+			checkBoxes->CheckDefaultValue(index++, data.bCanMove);
+			checkBoxes->CheckDefaultValue(index++, data.bUseControlRotation);
+		}
+	}
+
+	//DoActionData
+	{
+		IDetailCategoryBuilder& category = DetailBuilder.EditCategory("DoActionData", FText::FromString("DoAction Data"));
+		IDetailPropertyRow& row = category.AddProperty("DoActionDatas", type);
+
+		if (bRefreshByCheckBoxes == false)
+		{
+			uint32 count = 0;
+			row.GetPropertyHandle()->GetNumChildren(count);
+
+			SWeaponDoActionData::EmptyCheckBoxes();
+
+			FDoActionData data;
+			for (uint32 i = 0; i < count; i++)
+			{
+				TSharedPtr<IPropertyHandle> handle = row.GetPropertyHandle()->GetChildHandle(i);
+
+				TSharedPtr<SWeaponCheckBoxes> checkBoxes = SWeaponDoActionData::AddCheckBoxes();
+				checkBoxes->AddProperties(handle);
+			}
+		}//if(bRefreshByCheckBoxes)
 	}
 }

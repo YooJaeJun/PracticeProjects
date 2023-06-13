@@ -9,9 +9,18 @@ public:
 	void AddProperties(TSharedPtr<IPropertyHandle> InHandle);
 
 	TSharedRef<SWidget> Draw(bool bBackground = false);
+	void DrawProperties(TSharedRef<IPropertyHandle> InPropertyHandle, IDetailChildrenBuilder* InChildrenBuilder);
+
+	void SetUtilities(TSharedPtr<class IPropertyUtilities> InUtilities);
 
 private:
 	void OnCheckStateChanged(ECheckBoxState InState, int32 InIndex);
+
+public:
+	void CheckDefaultObject(int32 InIndex, UObject* InValue);
+	void CheckDefaultValue(int32 InIndex, float InValue);
+	void CheckDefaultValue(int32 InIndex, bool InValue);
+	void CheckDefaultValue(int32 InIndex, const FVector& InValue);
 
 private:
 	struct FInternalData
@@ -29,4 +38,6 @@ private:
 		}
 	};
 	TArray<FInternalData> InternalDatas;
+
+	TSharedPtr<class IPropertyUtilities> Utilities;
 };

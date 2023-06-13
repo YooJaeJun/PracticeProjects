@@ -2,6 +2,7 @@
 #include "SWeaponLeftArea.h"
 #include "SWeaponDetailsView.h"
 #include "SWeaponEquipmentData.h"
+#include "SWeaponDoActionData.h"
 #include "Weapons/CWeaponAsset.h"
 
 const FName FWeaponAssetEditor::EditorName = "WeaponAssetEditor";
@@ -61,6 +62,13 @@ void FWeaponAssetEditor::Open(FString InAssetName)
 		prop.RegisterCustomPropertyTypeLayout("EquipmentData", instance);
 	}
 
+	// DoActionData
+	{
+		FOnGetPropertyTypeCustomizationInstance instance;
+		instance.BindStatic(&SWeaponDoActionData::MakeInstance);
+		prop.RegisterCustomPropertyTypeLayout("DoActionData", instance);
+	}
+
 
 	TSharedRef<FTabManager::FLayout> layout = FTabManager::NewLayout("WeaponAssetEditor_Layout")
 	->AddArea
@@ -113,6 +121,7 @@ bool FWeaponAssetEditor::OnRequestClose()
 		{
 			FPropertyEditorModule& prop = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 			prop.UnregisterCustomPropertyTypeLayout("EquipmentData");
+			prop.UnregisterCustomPropertyTypeLayout("DoActionData");
 		}
 	}
 
