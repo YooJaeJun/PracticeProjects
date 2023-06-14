@@ -17,6 +17,9 @@ private:
 	void OnCheckStateChanged(ECheckBoxState InState, int32 InIndex);
 
 public:
+	static bool CanDraw(TSharedPtr<IPropertyHandle> InHandle, int InCount);
+
+public:
 	void CheckDefaultObject(int32 InIndex, UObject* InValue);
 	void CheckDefaultValue(int32 InIndex, float InValue);
 	void CheckDefaultValue(int32 InIndex, bool InValue);

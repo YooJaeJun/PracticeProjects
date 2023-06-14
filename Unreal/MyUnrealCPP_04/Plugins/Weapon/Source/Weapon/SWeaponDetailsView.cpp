@@ -7,6 +7,8 @@
 #include "IDetailPropertyRow.h"
 #include "Weapons/CWeaponAsset.h"
 #include "Animation/AnimMontage.h"
+#include "Particles/ParticleSystem.h"
+#include "NiagaraSystem.h"
 
 bool SWeaponDetailsView::bRefreshByCheckBoxes = false;
 
@@ -68,6 +70,15 @@ void SWeaponDetailsView::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 
 				TSharedPtr<SWeaponCheckBoxes> checkBoxes = SWeaponDoActionData::AddCheckBoxes();
 				checkBoxes->AddProperties(handle);
+
+				int32 index = 0;
+				checkBoxes->CheckDefaultObject(index++, data.Montage);
+				checkBoxes->CheckDefaultValue(index++, data.PlayRate);
+				checkBoxes->CheckDefaultValue(index++, data.bCanMove);
+				checkBoxes->CheckDefaultValue(index++, data.bUseControlRotation);
+				checkBoxes->CheckDefaultObject(index++, data.Effect);
+				checkBoxes->CheckDefaultValue(index++, data.EffectLocation);
+				checkBoxes->CheckDefaultValue(index++, data.bFixedCamera);
 			}
 		}//if(bRefreshByCheckBoxes)
 	}

@@ -27,6 +27,8 @@ private:
 public:
 	FSlateIcon ToolBar_Icon;
 
+	TSharedPtr<struct FSlateImageBrush> Array_Image;
+
 public:
 	const FVector2D DesiredWidth = FVector2D(250, 1000);
 };

@@ -49,3 +49,13 @@ void UCWeaponAsset::BeginPlay(ACharacter* InOwner)
 		}
 	}
 }
+
+#if WITH_EDITOR
+void UCWeaponAsset::PostEditChangeChainProperty(FPropertyChangedChainEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeChainProperty(PropertyChangedEvent);
+
+	CLog::Log(PropertyChangedEvent.GetPropertyName().ToString());
+	CLog::Log((int32)PropertyChangedEvent.ChangeType);
+}
+#endif //WITH_EDITOR

@@ -36,7 +36,16 @@ TSharedRef<SWidget> SWeaponCheckBoxes::Draw(bool bBackground)
 		];
 	}
 
-	return panel.ToSharedRef();
+	if (bBackground == false)
+		return panel.ToSharedRef();
+
+	TSharedPtr<SBorder> border = SNew(SBorder)
+	.BorderImage(FWeaponStyle::Get()->Array_Image.Get())
+	[
+		panel.ToSharedRef()
+	];
+
+	return border.ToSharedRef();
 }
 
 void SWeaponCheckBoxes::DrawProperties(TSharedRef<IPropertyHandle> InPropertyHandle,
@@ -55,7 +64,7 @@ void SWeaponCheckBoxes::DrawProperties(TSharedRef<IPropertyHandle> InPropertyHan
 		[
 			handle->CreatePropertyNameWidget()
 		]
-	.ValueContent()
+		.ValueContent()
 		.MinDesiredWidth(FWeaponStyle::Get()->DesiredWidth.X)
 		.MaxDesiredWidth(FWeaponStyle::Get()->DesiredWidth.Y)
 		[
@@ -78,6 +87,18 @@ void SWeaponCheckBoxes::OnCheckStateChanged(ECheckBoxState InState, int32 InInde
 		Utilities->ForceRefresh();
 	}
 	SWeaponDetailsView::OffRefreshByCheckBoxes();
+}
+
+bool SWeaponCheckBoxes::CanDraw(TSharedPtr<IPropertyHandle> InHandle, int InCount)
+{
+	bool bCheck = true;
+	bCheck &= InCount > 0;
+
+	int32 index = InHandle->GetIndexInArray();
+	bCheck &= index >= 0;
+	bCheck &= index < InCount;
+
+	return bCheck;
 }
 
 void SWeaponCheckBoxes::CheckDefaultObject(int32 InIndex, UObject* InValue)

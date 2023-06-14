@@ -31,10 +31,17 @@ FWeaponStyle::FWeaponStyle()
     RegisterIcon("ToolBar_Icon", path / "weapon_thumnail_icon.png", FVector2D(40, 40), ToolBar_Icon);
 
     FSlateStyleRegistry::RegisterSlateStyle(*StyleSet.Get());
+
+    path = FPaths::EngineContentDir() / "Editor" / "Slate" / "Common/Selection.png";
+    Array_Image = MakeShareable(new FSlateImageBrush(path, 
+        FVector2D(8, 8), FLinearColor(1, 1, 1, 0.1f)));
 }
 
 FWeaponStyle::~FWeaponStyle()
 {
+    if (Array_Image.IsValid())
+        Array_Image.Reset();
+
     if (StyleSet.IsValid() == false) 
         return;
 

@@ -1,4 +1,5 @@
 #include "SWeaponEquipmentData.h"
+#include "WeaponStyle.h"
 #include "IPropertyUtilities.h"
 #include "IDetailPropertyRow.h"
 #include "IDetailChildrenBuilder.h"
@@ -34,8 +35,10 @@ void SWeaponEquipmentData::CustomizeHeader(TSharedRef<IPropertyHandle> InPropert
 		InPropertyHandle->CreatePropertyNameWidget()
 	]
 	.ValueContent()
-	.MinDesiredWidth(FEditorStyle::GetFloat("StandardDialog.MinDesiredSlotWidth"))
-	.MaxDesiredWidth(FEditorStyle::GetFloat("StandardDialog.MaxDesiredSlotWidth"))
+	//.MinDesiredWidth(FEditorStyle::GetFloat("StandardDialog.MinDesiredSlotWidth"))
+	//.MaxDesiredWidth(FEditorStyle::GetFloat("StandardDialog.MaxDesiredSlotWidth"))
+	.MinDesiredWidth(FWeaponStyle::Get()->DesiredWidth.X)
+	.MaxDesiredWidth(FWeaponStyle::Get()->DesiredWidth.Y)
 	[
 		CheckBoxes->Draw()
 	];
