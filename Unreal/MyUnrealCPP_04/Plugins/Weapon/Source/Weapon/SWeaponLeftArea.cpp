@@ -59,6 +59,7 @@ void SWeaponLeftArea::Construct(const FArguments& InArgs)
 			.ListItemsSource(&RowDatas)
 			.OnGenerateRow(this, &SWeaponLeftArea::OnGenerateRow)
 			.OnSelectionChanged(this, &SWeaponLeftArea::OnSelectionChanged)
+			.SelectionMode(ESelectionMode::Single)
 		]
 		+SVerticalBox::Slot()
 		.AutoHeight()
@@ -88,6 +89,27 @@ void SWeaponLeftArea::SelectDataPtr(UCWeaponAsset* InAsset)
 			return;
 		}
 	}
+}
+
+FWeaponRowDataPtr SWeaponLeftArea::GetRowDataPtrByName(FString InAssetName)
+{
+	for (FWeaponRowDataPtr ptr : RowDatas)
+	{
+		if (ptr->Name == InAssetName)
+			return ptr;
+	}
+
+	return nullptr;
+}
+
+FString SWeaponLeftArea::SelectedRowDataPtrName()
+{
+	TArray<FWeaponRowDataPtr> ptrs = ListView->GetSelectedItems();
+
+	if (ptrs.Num() > 0)
+		return ptrs[0]->Asset->GetName();
+
+	return "";
 }
 
 TSharedRef<ITableRow> SWeaponLeftArea::OnGenerateRow(FWeaponRowDataPtr InRow, const TSharedRef<STableViewBase>& InTable)

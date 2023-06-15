@@ -68,6 +68,9 @@ public:
 
 	void SelectDataPtr(class UCWeaponAsset* InAsset);
 
+	FWeaponRowDataPtr GetRowDataPtrByName(FString InAssetName);
+	FString SelectedRowDataPtrName();
+
 private:
 	TSharedRef<ITableRow> OnGenerateRow(FWeaponRowDataPtr InRow, const TSharedRef<STableViewBase>& InTable);
 	void OnSelectionChanged(FWeaponRowDataPtr InDataPtr, ESelectInfo::Type InType);

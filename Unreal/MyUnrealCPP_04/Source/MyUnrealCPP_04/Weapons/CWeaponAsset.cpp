@@ -54,8 +54,29 @@ void UCWeaponAsset::BeginPlay(ACharacter* InOwner)
 void UCWeaponAsset::PostEditChangeChainProperty(FPropertyChangedChainEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeChainProperty(PropertyChangedEvent);
+	CheckTrue(FApp::IsGame());
 
-	CLog::Log(PropertyChangedEvent.GetPropertyName().ToString());
-	CLog::Log((int32)PropertyChangedEvent.ChangeType);
+	bool bRefresh = false;
+
+	bRefresh |= (PropertyChangedEvent.GetPropertyName().Compare("DoActionDatas") == 0);
+	bRefresh |= (PropertyChangedEvent.GetPropertyName().Compare("HitDatas") == 0);
+
+	if (bRefresh)
+	{
+		bool bCheck = false;
+		bCheck |= PropertyChangedEvent.ChangeType == EPropertyChangeType::ArrayAdd;
+		bCheck |= PropertyChangedEvent.ChangeType == EPropertyChangeType::ArrayRemove;
+		bCheck |= PropertyChangedEvent.ChangeType == EPropertyChangeType::ArrayClear;
+		bCheck |= PropertyChangedEvent.ChangeType ==  EPropertyChangeType::Duplicate;
+
+		if (bCheck)
+		{
+			FPropertyEditorModule& prop = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+			TSharedPtr<IDetailsView> detailsView = prop.FindDetailView("WeaponAssetEditorDetailView");
+
+			if (detailsView.IsValid())
+				detailsView->ForceRefresh();
+		}
+	}
 }
 #endif //WITH_EDITOR

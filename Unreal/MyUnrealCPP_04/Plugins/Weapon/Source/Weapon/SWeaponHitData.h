@@ -1,9 +1,10 @@
+
 #pragma once
 
 #include "CoreMinimal.h"
 #include "IPropertyTypeCustomization.h"
 
-class WEAPON_API SWeaponDoActionData
+class WEAPON_API SWeaponHitData
 	: public IPropertyTypeCustomization
 {
 public:

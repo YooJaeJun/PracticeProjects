@@ -9,6 +9,8 @@
 #include "Animation/AnimMontage.h"
 #include "Particles/ParticleSystem.h"
 #include "NiagaraSystem.h"
+#include "SWeaponHitData.h"
+#include "Sound/SoundWave.h"
 
 bool SWeaponDetailsView::bRefreshByCheckBoxes = false;
 
@@ -21,7 +23,7 @@ void SWeaponDetailsView::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 {
 	UClass* type = UCWeaponAsset::StaticClass();
 
-	DetailBuilder.HideCategory("CWeaponAsset");
+	//DetailBuilder.HideCategory("CWeaponAsset");
 
 	//Class Settings
 	{
@@ -79,6 +81,40 @@ void SWeaponDetailsView::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 				checkBoxes->CheckDefaultObject(index++, data.Effect);
 				checkBoxes->CheckDefaultValue(index++, data.EffectLocation);
 				checkBoxes->CheckDefaultValue(index++, data.bFixedCamera);
+			}
+		}//if(bRefreshByCheckBoxes)
+	}
+
+	//HitData
+	{
+		IDetailCategoryBuilder& category = DetailBuilder.EditCategory("HitData", FText::FromString("Hit Data"));
+		IDetailPropertyRow& row = category.AddProperty("HitDatas", type);
+
+		if (bRefreshByCheckBoxes == false)
+		{
+			uint32 count = 0;
+			row.GetPropertyHandle()->GetNumChildren(count);
+
+			SWeaponHitData::EmptyCheckBoxes();
+
+			FHitData data;
+			for (uint32 i = 0; i < count; i++)
+			{
+				TSharedPtr<IPropertyHandle> handle = row.GetPropertyHandle()->GetChildHandle(i);
+
+				TSharedPtr<SWeaponCheckBoxes> checkBoxes = SWeaponHitData::AddCheckBoxes();
+				checkBoxes->AddProperties(handle);
+
+				int32 index = 0;
+				checkBoxes->CheckDefaultObject(index++, data.Montage);
+				checkBoxes->CheckDefaultValue(index++, data.PlayRate);
+				checkBoxes->CheckDefaultValue(index++, data.Power);
+				checkBoxes->CheckDefaultValue(index++, data.Launch);
+				checkBoxes->CheckDefaultValue(index++, data.StopTime);
+				checkBoxes->CheckDefaultObject(index++, data.Sound);
+				checkBoxes->CheckDefaultObject(index++, data.Effect);
+				checkBoxes->CheckDefaultValue(index++, data.EffectLocation);
+				checkBoxes->CheckDefaultValue(index++, data.EffectScale);
 			}
 		}//if(bRefreshByCheckBoxes)
 	}
