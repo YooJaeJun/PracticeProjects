@@ -47,7 +47,7 @@ void FExampleDebuggerCategory::CollectData(APlayerController* OwnerPC, AActor* D
 		FVector end = start + player->GetActorForwardVector() * TraceDistance;
 
 		FCollisionQueryParams params;
-		params.AddIgnoredActor(player);
+		params.AddIgnoredActor(player); 
 
 		player->GetWorld()->LineTraceSingleByChannel(hitResult, start, end, ECollisionChannel::ECC_Visibility, params);
 

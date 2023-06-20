@@ -1,6 +1,6 @@
 #include "WeaponContextMenu.h"
-#include "Weapons/CWeaponAsset.h"
 #include "WeaponAssetEditor.h"
+#include "Weapons/CWeaponAsset.h"
 
 FWeaponContextMenu::FWeaponContextMenu(EAssetTypeCategories::Type InCategory)
 {
@@ -30,13 +30,13 @@ uint32 FWeaponContextMenu::GetCategories()
 void FWeaponContextMenu::OpenAssetEditor(const TArray<UObject*>& InObjects,
 	TSharedPtr<IToolkitHost> EditWithinLevelEditor)
 {
-	FAssetTypeActions_Base::OpenAssetEditor(InObjects, EditWithinLevelEditor);
+	//FAssetTypeActions_Base::OpenAssetEditor(InObjects, EditWithinLevelEditor);
 
-	for (UObject* obj : InObjects)
-	{
-		if (!!obj)
-			GLog->Log(obj->GetName());
-	}
+	//for (UObject* obj : InObjects)
+	//{
+	//	if (!!obj)
+	//		GLog->Log(obj->GetName());
+	//}
 
 	if (InObjects.Num() < 1)
 		return;

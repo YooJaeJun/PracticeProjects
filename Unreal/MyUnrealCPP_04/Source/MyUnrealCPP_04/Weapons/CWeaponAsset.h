@@ -29,10 +29,14 @@ private:
 	UPROPERTY(EditAnywhere)
 		TArray<FHitData> HitDatas;
 
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class UCSubAction> SubActionClass;
+
 public:
 	FORCEINLINE class ACAttachment* GetAttachment() { return Attachment; }
 	FORCEINLINE class UCEquipment* GetEquipment() { return Equipment; }
 	FORCEINLINE class UCDoAction* GetDoAction() { return DoAction; }
+	FORCEINLINE class UCSubAction* GetSubAction() { return SubAction; }
 
 public:
 	UCWeaponAsset();
@@ -48,6 +52,9 @@ private:
 
 	UPROPERTY()
 		class UCDoAction* DoAction;
+
+	UPROPERTY()
+		class UCSubAction* SubAction;
 
 #if WITH_EDITOR
 	void PostEditChangeChainProperty(struct FPropertyChangedChainEvent& PropertyChangedEvent) override;

@@ -2,14 +2,15 @@
 #include "SWeaponCheckBoxes.h"
 #include "SWeaponEquipmentData.h"
 #include "SWeaponDoActionData.h"
+#include "SWeaponHitData.h"
 #include "DetailLayoutBuilder.h"
 #include "DetailCategoryBuilder.h"
 #include "IDetailPropertyRow.h"
 #include "Weapons/CWeaponAsset.h"
+
 #include "Animation/AnimMontage.h"
 #include "Particles/ParticleSystem.h"
 #include "NiagaraSystem.h"
-#include "SWeaponHitData.h"
 #include "Sound/SoundWave.h"
 
 bool SWeaponDetailsView::bRefreshByCheckBoxes = false;
@@ -31,6 +32,7 @@ void SWeaponDetailsView::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 		category.AddProperty("AttachmentClass", type);
 		category.AddProperty("EquipmentClass", type);
 		category.AddProperty("DoActionClass", type);
+		category.AddProperty("SubActionClass", type);
 	}
 
 	//EquipmentData
@@ -77,10 +79,10 @@ void SWeaponDetailsView::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 				checkBoxes->CheckDefaultObject(index++, data.Montage);
 				checkBoxes->CheckDefaultValue(index++, data.PlayRate);
 				checkBoxes->CheckDefaultValue(index++, data.bCanMove);
-				checkBoxes->CheckDefaultValue(index++, data.bUseControlRotation);
+				checkBoxes->CheckDefaultValue(index++, data.bFixedCamera);
 				checkBoxes->CheckDefaultObject(index++, data.Effect);
 				checkBoxes->CheckDefaultValue(index++, data.EffectLocation);
-				checkBoxes->CheckDefaultValue(index++, data.bFixedCamera);
+				checkBoxes->CheckDefaultValue(index++, data.EffectScale);
 			}
 		}//if(bRefreshByCheckBoxes)
 	}

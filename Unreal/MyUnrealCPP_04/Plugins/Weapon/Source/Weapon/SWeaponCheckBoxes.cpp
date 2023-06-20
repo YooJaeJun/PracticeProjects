@@ -59,16 +59,21 @@ void SWeaponCheckBoxes::DrawProperties(TSharedRef<IPropertyHandle> InPropertyHan
 		TSharedPtr<IPropertyHandle> handle = InPropertyHandle->GetChildHandle(i);
 		IDetailPropertyRow& row = InChildrenBuilder->AddProperty(handle.ToSharedRef());
 
+		TSharedPtr<SWidget> name;
+		TSharedPtr<SWidget> value;
+
+		row.GetDefaultWidgets(name, value);
+
 		row.CustomWidget()
 		.NameContent()
 		[
-			handle->CreatePropertyNameWidget()
+			name.ToSharedRef()
 		]
 		.ValueContent()
 		.MinDesiredWidth(FWeaponStyle::Get()->DesiredWidth.X)
 		.MaxDesiredWidth(FWeaponStyle::Get()->DesiredWidth.Y)
 		[
-			handle->CreatePropertyValueWidget()
+			value.ToSharedRef()
 		];
 	}
 }

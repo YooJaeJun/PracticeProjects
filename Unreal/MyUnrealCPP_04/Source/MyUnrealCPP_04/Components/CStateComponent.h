@@ -22,6 +22,7 @@ public:
 	FORCEINLINE bool IsHittedMode() { return Type == EStateType::Hitted; }
 	FORCEINLINE bool IsDeadMode() { return Type == EStateType::Dead; }
 	FORCEINLINE bool IsActionMode() { return Type == EStateType::Action; }
+	FORCEINLINE bool IsSubActionMode() { return bInSubActionMode; }
 
 public:	
 	UCStateComponent();
@@ -36,6 +37,8 @@ public:
 	void SetHittedMode();
 	void SetDeadMode();
 	void SetActionMode();
+	void OnSubActionMode();
+	void OffSubActionMode();
 
 private:
 	void ChangeType(EStateType InType);
@@ -45,4 +48,7 @@ public:
 
 private:
 	EStateType Type;
+
+private:
+	bool bInSubActionMode;
 };

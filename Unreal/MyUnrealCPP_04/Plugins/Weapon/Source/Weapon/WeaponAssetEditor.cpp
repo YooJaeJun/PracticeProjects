@@ -88,10 +88,9 @@ void FWeaponAssetEditor::Open(FString InAssetName)
 	// HitData
 	{
 		FOnGetPropertyTypeCustomizationInstance instance;
-		instance.BindStatic(&SWeaponDoActionData::MakeInstance);
+		instance.BindStatic(&SWeaponHitData::MakeInstance);
 		prop.RegisterCustomPropertyTypeLayout("HitData", instance);
 	}
-
 
 	TSharedRef<FTabManager::FLayout> layout = FTabManager::NewLayout("WeaponAssetEditor_Layout")
 	->AddArea
@@ -157,6 +156,7 @@ bool FWeaponAssetEditor::OnRequestClose()
 			FPropertyEditorModule& prop = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 			prop.UnregisterCustomPropertyTypeLayout("EquipmentData");
 			prop.UnregisterCustomPropertyTypeLayout("DoActionData");
+			prop.UnregisterCustomPropertyTypeLayout("HitData");
 		}
 	}
 

@@ -1,15 +1,17 @@
-#include "CWeaponAsset.h"
+#include "Weapons/CWeaponAsset.h"
 #include "Global.h"
 #include "CAttachment.h"
 #include "CEquipment.h"
 #include "CDoAction.h"
+#include "CSubAction.h"
 #include "GameFramework/Character.h"
 
 UCWeaponAsset::UCWeaponAsset()
 {
 	AttachmentClass = ACAttachment::StaticClass();
 	EquipmentClass = UCEquipment::StaticClass();
-	DoActionClass = UCDoAction::StaticClass();
+	//Abstract는 기본값이 들어있으면 안 됨
+	//DoActionClass = UCDoAction::StaticClass();
 }
 
 void UCWeaponAsset::BeginPlay(ACharacter* InOwner)
@@ -48,6 +50,12 @@ void UCWeaponAsset::BeginPlay(ACharacter* InOwner)
 			Attachment->OnAttachmentEndOverlap.AddDynamic(DoAction, &UCDoAction::OnAttachmentEndOverlap);
 		}
 	}
+
+	if (!!SubActionClass)
+	{
+		SubAction = NewObject<UCSubAction>(this, SubActionClass);
+		SubAction->BeginPlay(InOwner, Attachment, DoAction);
+	}
 }
 
 #if WITH_EDITOR
@@ -67,12 +75,12 @@ void UCWeaponAsset::PostEditChangeChainProperty(FPropertyChangedChainEvent& Prop
 		bCheck |= PropertyChangedEvent.ChangeType == EPropertyChangeType::ArrayAdd;
 		bCheck |= PropertyChangedEvent.ChangeType == EPropertyChangeType::ArrayRemove;
 		bCheck |= PropertyChangedEvent.ChangeType == EPropertyChangeType::ArrayClear;
-		bCheck |= PropertyChangedEvent.ChangeType ==  EPropertyChangeType::Duplicate;
+		bCheck |= PropertyChangedEvent.ChangeType == EPropertyChangeType::Duplicate;
 
 		if (bCheck)
 		{
 			FPropertyEditorModule& prop = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
-			TSharedPtr<IDetailsView> detailsView = prop.FindDetailView("WeaponAssetEditorDetailView");
+			TSharedPtr<IDetailsView> detailsView = prop.FindDetailView("WeaponAssetEditorDetailsView");
 
 			if (detailsView.IsValid())
 				detailsView->ForceRefresh();
