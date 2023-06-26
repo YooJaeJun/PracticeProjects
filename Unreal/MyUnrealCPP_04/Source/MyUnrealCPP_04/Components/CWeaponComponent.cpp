@@ -10,6 +10,7 @@
 
 UCWeaponComponent::UCWeaponComponent()
 {
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 void UCWeaponComponent::BeginPlay()
@@ -22,6 +23,14 @@ void UCWeaponComponent::BeginPlay()
 		if (!!DataAssets[i])
 			DataAssets[i]->BeginPlay(OwnerCharacter);
 	}
+}
+
+void UCWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if (!!GetSubAction())
+		GetSubAction()->Tick(DeltaTime);
 }
 
 bool UCWeaponComponent::IsIdleMode()  

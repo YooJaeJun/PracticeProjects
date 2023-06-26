@@ -4,6 +4,9 @@
 #include "Particles/ParticleSystem.h"
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
+#include "GameFramework/Character.h"
+#include "Components/CapsuleComponent.h"
+#include "Weapons/AddOns/CGhostTrail.h"
 
 #define CheckTrue(x) { if (x == true) return; }
 #define CheckTrueResult(x, y) { if (x == true) return y; }
@@ -158,4 +161,23 @@ public:
 			return;
 		}
 	};
+
+	static ACGhostTrail* Play_GhostTrail(TSubclassOf<ACGhostTrail>& InClass, class ACharacter* InOwner)
+	{
+		CheckNullResult(InClass, nullptr);
+		CheckNullResult(InOwner, nullptr);
+
+
+		FActorSpawnParameters params;
+		params.Owner = InOwner;
+		params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		FVector location = InOwner->GetActorLocation();
+		location.Z -= InOwner->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+
+		FTransform transform;
+		transform.SetTranslation(location);
+
+		return InOwner->GetWorld()->SpawnActor<ACGhostTrail>(InClass, transform, params);
+	}
 };

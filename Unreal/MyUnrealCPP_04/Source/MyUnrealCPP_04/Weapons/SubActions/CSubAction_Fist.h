@@ -16,12 +16,26 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Action")
 		TArray<FHitData> HitDatas;
 
+	UPROPERTY(EditAnywhere, Category = "Add-On")
+		TSubclassOf<class ACGhostTrail> GhostTrailClass;
+
 public:
 	void Pressed() override;
 
+	void Begin_SubAction_Implementation() override;
 	void End_SubAction_Implementation() override;
+
+private:
+	UFUNCTION()
+		void OnAttachmentEndCollision();
+
+	UFUNCTION()
+		void OnAttachmentBeginOverlap(class ACharacter* InAttacker, AActor* InAttackCauser, class ACharacter* InOther);
 
 private:
 	TArray<class ACharacter*> Hitted;
 	int32 HitIndex;
+
+private:
+	class ACGhostTrail* GhostTrail;
 };
