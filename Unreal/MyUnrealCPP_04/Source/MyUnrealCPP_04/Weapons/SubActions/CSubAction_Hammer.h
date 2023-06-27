@@ -10,6 +10,13 @@ class MYUNREALCPP_04_API UCSubAction_Hammer : public UCSubAction
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Aura")
+		TSubclassOf<class ACAura> AuraClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Aura")
+		FVector AuraLoction;
+
+private:
 	UPROPERTY(EditDefaultsOnly, Category = "Action")
 		FDoActionData ActionData;
 
