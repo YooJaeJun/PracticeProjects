@@ -22,6 +22,8 @@ public:
 		const TArray<FHitData>& InHitDatas
 	);
 
+	virtual void Tick(float InDeltaTime) {}
+
 public:
 	virtual void DoAction();
 	virtual void Begin_DoAction();
@@ -41,6 +43,7 @@ public:
 		virtual void OnAttachmentEndOverlap(class ACharacter* InAttacker, class ACharacter* InOther) { }
 
 protected:
+	bool bInAction;
 	bool bBeginAction;
 
 	class ACharacter* OwnerCharacter;
