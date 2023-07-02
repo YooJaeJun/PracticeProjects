@@ -41,6 +41,9 @@ public:
 	FORCEINLINE void EnableFixedCamera() { bFixedCamera = true; }
 	FORCEINLINE void DisableFixedCamera() { bFixedCamera = false; }
 
+	FORCEINLINE void EnableTopViewCamera() { bTopViewCamera = true; }
+	FORCEINLINE void DisableTopViewCamera() { bTopViewCamera = false; }
+
 public:	
 	UCMovementComponent();
 
@@ -70,4 +73,5 @@ private:
 private:
 	bool bCanMove = true;
 	bool bFixedCamera;
+	bool bTopViewCamera;
 };
