@@ -1,6 +1,8 @@
 #include "Characters/CAnimInstance.h"
 #include "Global.h"
 #include "GameFramework/Character.h"
+#include "Components/CStateComponent.h"
+#include "Weapons/CSubAction.h"
 
 void UCAnimInstance::NativeBeginPlay()
 {
@@ -33,4 +35,13 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Direction = PrevRotation.Yaw;
 
 	Pitch = UKismetMathLibrary::FInterpTo(Pitch, OwnerCharacter->GetBaseAimRotation().Pitch, DeltaSeconds, 25);
+
+	CheckNull(Weapon);
+
+	if (!!Weapon->GetSubAction())
+	{
+		bBow_Aiming = true;
+		bBow_Aiming &= WeaponType == EWeaponType::Bow;
+		bBow_Aiming &= Weapon->GetSubAction()->GetInAction();
+	}
 }

@@ -20,6 +20,9 @@ protected:
     UPROPERTY(BlueprintReadOnly, Category = "Animation")
         float Direction;
 
+    UPROPERTY(BlueprintReadOnly, Category = "Animation")
+        bool bBow_Aiming;
+
 protected:
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
         EWeaponType WeaponType = EWeaponType::Max;

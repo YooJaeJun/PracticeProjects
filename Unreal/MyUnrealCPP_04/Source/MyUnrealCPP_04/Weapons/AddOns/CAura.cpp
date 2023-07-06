@@ -1,6 +1,5 @@
 #include "Weapons/AddOns/CAura.h"
 #include "Global.h"
-#include "Global.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/Character.h"
 #include "Components/BoxComponent.h"
