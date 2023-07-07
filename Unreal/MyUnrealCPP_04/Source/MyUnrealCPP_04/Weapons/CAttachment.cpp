@@ -7,7 +7,6 @@
 ACAttachment::ACAttachment()
 {
 	CHelpers::CreateComponent(this, &Root, "Root");
-
 }
 
 void ACAttachment::BeginPlay()

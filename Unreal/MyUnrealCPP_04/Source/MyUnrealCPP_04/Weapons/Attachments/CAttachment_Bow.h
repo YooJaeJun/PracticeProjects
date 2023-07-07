@@ -29,6 +29,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
+	float* GetBend();
+
+public:
 	void OnBeginEquip_Implementation() override;
 	void OnUnequip_Implementation() override;
 

@@ -18,17 +18,17 @@ public:
 	virtual void BeginPlay(class ACharacter* InOwner, class ACAttachment* InAttachment, class UCDoAction* InDoAction);
 
 public:
-	virtual void Pressed() {}
-	virtual void Released() {}
+	virtual void Pressed();
+	virtual void Released();
 
 public:
 	UFUNCTION(BlueprintNativeEvent)
 		void Begin_SubAction();
-	virtual void Begin_SubAction_Implementation();
+	virtual void Begin_SubAction_Implementation() {}
 
 	UFUNCTION(BlueprintNativeEvent)
 		void End_SubAction();
-	virtual void End_SubAction_Implementation();
+	virtual void End_SubAction_Implementation() {}
 
 	UFUNCTION(BlueprintNativeEvent)
 		void Tick(float InDeltaTime);

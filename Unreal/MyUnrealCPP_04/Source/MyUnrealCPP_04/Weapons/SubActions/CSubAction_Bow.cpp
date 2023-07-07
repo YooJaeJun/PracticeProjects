@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CStateComponent.h"
+#include "Weapons/AnimInstances/CAnimInstance_Bow.h"
 #include "Weapons/Attachments/CAttachment_Bow.h"
 
 UCSubAction_Bow::UCSubAction_Bow()
@@ -70,6 +71,10 @@ void UCSubAction_Bow::BeginPlay(ACharacter* InOwner, ACAttachment* InAttachment,
 	Timeline.AddInterpVector(Curve, timeline);
 
 	Timeline.SetPlayRate(AimingSpeed);
+
+	ACAttachment_Bow* bow = Cast<ACAttachment_Bow>(InAttachment);
+	if (!!bow)
+		Bend = bow->GetBend();
 }
 
 void UCSubAction_Bow::Tick_Implementation(float InDeltaTime)
@@ -82,4 +87,7 @@ void UCSubAction_Bow::Tick_Implementation(float InDeltaTime)
 void UCSubAction_Bow::OnAiming(FVector Output)
 {
 	Camera->FieldOfView = Output.X;
+
+	if (!!Bend)
+		*Bend = Output.Y;
 }
