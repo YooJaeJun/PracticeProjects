@@ -92,7 +92,7 @@ void FWeaponAssetEditor::Open(FString InAssetName)
 		prop.RegisterCustomPropertyTypeLayout("HitData", instance);
 	}
 
-	TSharedRef<FTabManager::FLayout> layout = FTabManager::NewLayout("WeaponAssetEditor_Layout")
+	const TSharedRef<FTabManager::FLayout> layout = FTabManager::NewLayout("WeaponAssetEditor_Layout")
 	->AddArea
 	(
 		FTabManager::NewPrimaryArea()->SetOrientation(Orient_Vertical)
@@ -182,7 +182,7 @@ void FWeaponAssetEditor::RegisterTabSpawners(const TSharedRef<FTabManager>& InTa
 	TabManager->RegisterTabSpawner(DetailTabId, tab2);
 }
 
-TSharedRef<SDockTab> FWeaponAssetEditor::Spawn_LeftAreaTab(const FSpawnTabArgs& InArgs)
+TSharedRef<SDockTab> FWeaponAssetEditor::Spawn_LeftAreaTab(const FSpawnTabArgs& InArgs) const
 {
 	//TSharedPtr<SDockTab> tab = SNew(SDockTab)
 	//[

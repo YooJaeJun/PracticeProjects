@@ -80,7 +80,7 @@ void SWeaponLeftArea::SelectDataPtr(UCWeaponAsset* InAsset)
 	if (HasRowDataPtr() == false)
 		return;
 
-	for (FWeaponRowDataPtr ptr : RowDatas)
+	for (const FWeaponRowDataPtr ptr : RowDatas)
 	{
 		if (ptr->Asset == InAsset)
 		{
@@ -93,7 +93,7 @@ void SWeaponLeftArea::SelectDataPtr(UCWeaponAsset* InAsset)
 
 FWeaponRowDataPtr SWeaponLeftArea::GetRowDataPtrByName(FString InAssetName)
 {
-	for (FWeaponRowDataPtr ptr : RowDatas)
+	for (const FWeaponRowDataPtr ptr : RowDatas)
 	{
 		if (ptr->Name == InAssetName)
 			return ptr;
@@ -102,9 +102,9 @@ FWeaponRowDataPtr SWeaponLeftArea::GetRowDataPtrByName(FString InAssetName)
 	return nullptr;
 }
 
-FString SWeaponLeftArea::SelectedRowDataPtrName()
+FString SWeaponLeftArea::SelectedRowDataPtrName() const
 {
-	TArray<FWeaponRowDataPtr> ptrs = ListView->GetSelectedItems();
+	const TArray<FWeaponRowDataPtr> ptrs = ListView->GetSelectedItems();
 
 	if (ptrs.Num() > 0)
 		return ptrs[0]->Asset->GetName();
@@ -112,7 +112,7 @@ FString SWeaponLeftArea::SelectedRowDataPtrName()
 	return "";
 }
 
-TSharedRef<ITableRow> SWeaponLeftArea::OnGenerateRow(FWeaponRowDataPtr InRow, const TSharedRef<STableViewBase>& InTable)
+TSharedRef<ITableRow> SWeaponLeftArea::OnGenerateRow(FWeaponRowDataPtr InRow, const TSharedRef<STableViewBase>& InTable) const
 {
 	return SNew(SWeaponTableRow, InTable)
 		.RowData(InRow);
@@ -128,7 +128,7 @@ void SWeaponLeftArea::ReadDataAssetList()
 	int32 index = 0;
 	for (UObject* obj : objects)
 	{
-		UCWeaponAsset* asset = Cast<UCWeaponAsset>(obj);
+		const TWeakObjectPtr<UCWeaponAsset> asset = Cast<UCWeaponAsset>(obj);
 		if (asset == nullptr)
 			continue;
 
@@ -139,7 +139,7 @@ void SWeaponLeftArea::ReadDataAssetList()
 				continue;
 		}
 
-		RowDatas.Add(FWeaponRowData::Make(++index, name, asset));
+		RowDatas.Add(FWeaponRowData::Make(++index, name, asset.Get()));
 	}
 
 	RowDatas.Sort([](const FWeaponRowDataPtr& A, const FWeaponRowDataPtr& B)
@@ -152,7 +152,7 @@ void SWeaponLeftArea::ReadDataAssetList()
 
 FText SWeaponLeftArea::OnGetAssetCount() const
 {
-	FString str = FString::Printf(L"%d 에셋", RowDatas.Num());
+	const FString str = FString::Printf(L"%d 에셋", RowDatas.Num());
 
 	return FText::FromString(str);
 }
@@ -171,7 +171,7 @@ void SWeaponLeftArea::OnTextCommitted(const FText& InText, ETextCommit::Type InT
 	OnTextChanged(InText);
 }
 
-void SWeaponLeftArea::OnSelectionChanged(FWeaponRowDataPtr InDataPtr, ESelectInfo::Type InType)
+void SWeaponLeftArea::OnSelectionChanged(FWeaponRowDataPtr InDataPtr, ESelectInfo::Type InType) const
 {
 	if (InDataPtr.IsValid() == false)
 		return;

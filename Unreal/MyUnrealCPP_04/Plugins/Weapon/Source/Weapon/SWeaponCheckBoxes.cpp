@@ -39,7 +39,7 @@ TSharedRef<SWidget> SWeaponCheckBoxes::Draw(bool bBackground)
 	if (bBackground == false)
 		return panel.ToSharedRef();
 
-	TSharedPtr<SBorder> border = SNew(SBorder)
+	const TSharedPtr<SBorder> border = SNew(SBorder)
 	.BorderImage(FWeaponStyle::Get()->Array_Image.Get())
 	[
 		panel.ToSharedRef()
@@ -99,7 +99,7 @@ bool SWeaponCheckBoxes::CanDraw(TSharedPtr<IPropertyHandle> InHandle, int InCoun
 	bool bCheck = true;
 	bCheck &= InCount > 0;
 
-	int32 index = InHandle->GetIndexInArray();
+	const int32 index = InHandle->GetIndexInArray();
 	bCheck &= index >= 0;
 	bCheck &= index < InCount;
 

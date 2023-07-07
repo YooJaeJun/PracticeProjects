@@ -49,7 +49,7 @@ FWeaponStyle::~FWeaponStyle()
     StyleSet.Reset();
 }
 
-void FWeaponStyle::RegisterIcon(const FString& InName, const FString& InPath, const FVector2D& InIconSize, FSlateIcon& OutSlateIcon)
+void FWeaponStyle::RegisterIcon(const FString& InName, const FString& InPath, const FVector2D& InIconSize, FSlateIcon& OutSlateIcon) const
 {
     FSlateImageBrush* brush = new FSlateImageBrush(InPath, InIconSize);
 

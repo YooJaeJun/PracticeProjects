@@ -18,23 +18,23 @@ private:
 	void Open(FString InAssetName);
 
 protected:
-	bool OnRequestClose() override;
+	virtual bool OnRequestClose() override;
 
 public:
 	void RegisterTabSpawners(const TSharedRef<FTabManager>& InTabManager) override;
 
 private:
-	TSharedRef<SDockTab> Spawn_LeftAreaTab(const FSpawnTabArgs& InArgs);
+	TSharedRef<SDockTab> Spawn_LeftAreaTab(const FSpawnTabArgs& InArgs) const;
 	TSharedRef<SDockTab> Spawn_DetailsViewTab(const FSpawnTabArgs& InArgs);
 
 private:
 	void OnListViewSelectedItem(FWeaponRowDataPtr InDataPtr);
 
 public:
-	FName GetToolkitFName() const override;
-	FText GetBaseToolkitName() const override;
-	FString GetWorldCentricTabPrefix() const override;
-	FLinearColor GetWorldCentricTabColorScale() const override;
+	virtual FName GetToolkitFName() const override;
+	virtual FText GetBaseToolkitName() const override;
+	virtual FString GetWorldCentricTabPrefix() const override;
+	virtual FLinearColor GetWorldCentricTabColorScale() const override;
 
 private:
 	TSharedPtr<class SWeaponLeftArea> LeftArea;

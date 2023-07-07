@@ -11,6 +11,12 @@ class WEAPON_API UWeaponAssetFactory : public UFactory
 public:
 	UWeaponAssetFactory();
 
-	UObject* FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, 
-		EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn, FName CallingContext) override;
+	virtual UObject* FactoryCreateNew(
+		UClass* InClass, 
+		UObject* InParent, 
+		FName InName, 
+		EObjectFlags Flags, 
+		UObject* Context, 
+		FFeedbackContext* Warn, 
+		FName CallingContext) override;
 };

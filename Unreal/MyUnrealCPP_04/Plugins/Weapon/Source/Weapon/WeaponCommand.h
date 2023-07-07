@@ -8,12 +8,12 @@ class WEAPON_API FWeaponCommand
 {
 public:
 	FWeaponCommand();
-	~FWeaponCommand();
+	virtual ~FWeaponCommand() override;
 
 	void Startup();
 
 public:
-	void RegisterCommands() override;
+	virtual void RegisterCommands() override;
 
 private:
 	TSharedPtr<FExtender> Extender;
@@ -22,6 +22,6 @@ private:
 	TSharedPtr<FUICommandInfo> Id;
 
 private:
-	void AddToolBar(FToolBarBuilder& InBuilder);
+	void AddToolBar(FToolBarBuilder& InBuilder) const;
 	void OnClicked();
 };

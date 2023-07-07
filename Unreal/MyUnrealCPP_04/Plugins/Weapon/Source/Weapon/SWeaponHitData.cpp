@@ -15,8 +15,8 @@ TSharedRef<IPropertyTypeCustomization> SWeaponHitData::MakeInstance()
 
 TSharedPtr<SWeaponCheckBoxes> SWeaponHitData::AddCheckBoxes()
 {
-	TSharedPtr<SWeaponCheckBoxes> checkBoxes = MakeShareable(new SWeaponCheckBoxes());
-	int32 index = CheckBoxes.Add(checkBoxes);
+	const TSharedPtr<SWeaponCheckBoxes> checkBoxes = MakeShareable(new SWeaponCheckBoxes());
+	const int32 index = CheckBoxes.Add(checkBoxes);
 
 	return CheckBoxes[index];
 }
@@ -52,7 +52,7 @@ void SWeaponHitData::CustomizeHeader(TSharedRef<IPropertyHandle> InPropertyHandl
 		return;
 	}
 
-	int32 index = InPropertyHandle->GetIndexInArray();
+	const int32 index = InPropertyHandle->GetIndexInArray();
 
 	CheckBoxes[index]->SetUtilities(InCustomizationUtils.GetPropertyUtilities());
 
@@ -110,6 +110,6 @@ void SWeaponHitData::CustomizeChildren(TSharedRef<IPropertyHandle> InPropertyHan
 		return;
 	}
 
-	int32 index = InPropertyHandle->GetIndexInArray();
+	const int32 index = InPropertyHandle->GetIndexInArray();
 	CheckBoxes[index]->DrawProperties(InPropertyHandle, &InChildBuilder);
 }

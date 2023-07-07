@@ -15,8 +15,8 @@ TSharedRef<IPropertyTypeCustomization> SWeaponDoActionData::MakeInstance()
 
 TSharedPtr<SWeaponCheckBoxes> SWeaponDoActionData::AddCheckBoxes()
 {
-	TSharedPtr<SWeaponCheckBoxes> checkBoxes = MakeShareable(new SWeaponCheckBoxes());
-	int32 index = CheckBoxes.Add(checkBoxes);
+	const TSharedPtr<SWeaponCheckBoxes> checkBoxes = MakeShareable(new SWeaponCheckBoxes());
+	const int32 index = CheckBoxes.Add(checkBoxes);
 
 	return CheckBoxes[index];
 }
@@ -53,7 +53,7 @@ void SWeaponDoActionData::CustomizeHeader(TSharedRef<IPropertyHandle> InProperty
 	}
 
 
-	int32 index = InPropertyHandle->GetIndexInArray();
+	const int32 index = InPropertyHandle->GetIndexInArray();
 
 	CheckBoxes[index]->SetUtilities(InCustomizationUtils.GetPropertyUtilities());
 

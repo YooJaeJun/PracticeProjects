@@ -13,7 +13,7 @@ void FWeaponModule::StartupModule()
 	FWeaponStyle::Get();
 
 	IAssetTools& assetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
-	EAssetTypeCategories::Type categories = 
+	const EAssetTypeCategories::Type categories = 
 		assetTools.RegisterAdvancedAssetCategory("WeaponAsset", FText::FromString("Weapon"));
 
 	ContextMenu = MakeShareable(new FWeaponContextMenu(categories));

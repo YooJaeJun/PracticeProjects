@@ -25,7 +25,7 @@ void FWeaponCommand::Startup()
 	Extender = MakeShareable(new FExtender());
 
 
-	FToolBarExtensionDelegate toolbar = FToolBarExtensionDelegate::CreateRaw(this, &FWeaponCommand::AddToolBar);
+	const FToolBarExtensionDelegate toolbar = FToolBarExtensionDelegate::CreateRaw(this, &FWeaponCommand::AddToolBar);
 	Extender->AddToolBarExtension("Settings", EExtensionHook::After, Command, toolbar);
 
 	FLevelEditorModule& levelEditor = FModuleManager::LoadModuleChecked<FLevelEditorModule>("LevelEditor");
@@ -45,9 +45,9 @@ void FWeaponCommand::RegisterCommands()
 	Command->MapAction(Id, action, FCanExecuteAction());
 }
 
-void FWeaponCommand::AddToolBar(FToolBarBuilder& InBuilder)
+void FWeaponCommand::AddToolBar(FToolBarBuilder& InBuilder) const
 {
-	FString name = TEXT("웨폰");
+	const FString name = TEXT("무기");
 
 	InBuilder.AddSeparator();
 	InBuilder.AddToolBarButton(Id, NAME_None, FText::FromString(name), FText::FromString("Weapon Asset Editor"), FWeaponStyle::Get()->ToolBar_Icon, NAME_None);

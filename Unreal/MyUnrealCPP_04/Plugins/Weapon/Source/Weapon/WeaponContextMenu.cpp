@@ -27,7 +27,8 @@ uint32 FWeaponContextMenu::GetCategories()
 	return Category;
 }
 
-void FWeaponContextMenu::OpenAssetEditor(const TArray<UObject*>& InObjects,
+void FWeaponContextMenu::OpenAssetEditor(
+	const TArray<UObject*>& InObjects,
 	TSharedPtr<IToolkitHost> EditWithinLevelEditor)
 {
 	//FAssetTypeActions_Base::OpenAssetEditor(InObjects, EditWithinLevelEditor);

@@ -70,9 +70,9 @@ void SWeaponDetailsView::CustomizeDetails(IDetailLayoutBuilder& DetailBuilder)
 			FDoActionData data;
 			for (uint32 i = 0; i < count; i++)
 			{
-				TSharedPtr<IPropertyHandle> handle = row.GetPropertyHandle()->GetChildHandle(i);
+				const TSharedPtr<IPropertyHandle> handle = row.GetPropertyHandle()->GetChildHandle(i);
 
-				TSharedPtr<SWeaponCheckBoxes> checkBoxes = SWeaponDoActionData::AddCheckBoxes();
+				const TSharedPtr<SWeaponCheckBoxes> checkBoxes = SWeaponDoActionData::AddCheckBoxes();
 				checkBoxes->AddProperties(handle);
 
 				int32 index = 0;

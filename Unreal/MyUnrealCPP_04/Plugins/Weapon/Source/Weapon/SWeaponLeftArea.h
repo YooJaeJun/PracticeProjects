@@ -10,7 +10,7 @@ struct FWeaponRowData
 	FString Name;
 	class UCWeaponAsset* Asset;
 
-	FWeaponRowData()
+	FWeaponRowData(): Number(0), Asset(nullptr)
 	{
 	}
 
@@ -41,7 +41,7 @@ public:
 	void Construct(const FArguments& InArgs, const TSharedRef<STableViewBase>& InOwnerTable);
 
 protected:
-	TSharedRef<SWidget> GenerateWidgetForColumn(const FName& InColumnName) override;
+	virtual TSharedRef<SWidget> GenerateWidgetForColumn(const FName& InColumnName) override;
 
 private:
 	FWeaponRowDataPtr Data;
@@ -63,17 +63,17 @@ public:
 	void Construct(const FArguments& InArgs);
 
 public:
-	bool HasRowDataPtr() { return RowDatas.Num() > 0; }
+	bool HasRowDataPtr() const { return RowDatas.Num() > 0; }
 	FWeaponRowDataPtr GetFirstDataPtr() { return RowDatas[0]; }
 
 	void SelectDataPtr(class UCWeaponAsset* InAsset);
 
 	FWeaponRowDataPtr GetRowDataPtrByName(FString InAssetName);
-	FString SelectedRowDataPtrName();
+	FString SelectedRowDataPtrName() const;
 
 private:
-	TSharedRef<ITableRow> OnGenerateRow(FWeaponRowDataPtr InRow, const TSharedRef<STableViewBase>& InTable);
-	void OnSelectionChanged(FWeaponRowDataPtr InDataPtr, ESelectInfo::Type InType);
+	TSharedRef<ITableRow> OnGenerateRow(FWeaponRowDataPtr InRow, const TSharedRef<STableViewBase>& InTable) const;
+	void OnSelectionChanged(FWeaponRowDataPtr InDataPtr, ESelectInfo::Type InType) const;
 
 	FText OnGetAssetCount() const;
 
