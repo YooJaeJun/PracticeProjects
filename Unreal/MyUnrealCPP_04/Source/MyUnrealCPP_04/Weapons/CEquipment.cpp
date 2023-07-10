@@ -17,6 +17,10 @@ void UCEquipment::Equip_Implementation()
 {
 	State->SetEquipMode();
 
+	if (OnEquipmentEquip.IsBound())
+		OnEquipmentEquip.Broadcast();
+
+
 	if (Data.bCanMove == false)
 		Movement->Stop();
 

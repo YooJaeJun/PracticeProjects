@@ -28,6 +28,7 @@ void ACAttachment::BeginPlay()
 			Collisions.Add(shape);
 		}
 	}
+
 	OffCollisions();
 
 	Super::BeginPlay();

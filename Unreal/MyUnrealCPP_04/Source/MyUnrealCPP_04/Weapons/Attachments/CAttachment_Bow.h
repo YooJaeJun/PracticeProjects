@@ -20,6 +20,9 @@ private:
 		class UPoseableMeshComponent* PoseableMesh;
 
 public:
+	float* GetBend();
+
+public:
 	ACAttachment_Bow();
 
 protected:
@@ -27,9 +30,6 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
-
-public:
-	float* GetBend();
 
 public:
 	void OnBeginEquip_Implementation() override;

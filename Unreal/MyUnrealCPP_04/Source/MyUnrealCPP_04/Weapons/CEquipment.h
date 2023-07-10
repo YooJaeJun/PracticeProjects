@@ -5,6 +5,7 @@
 #include "Weapons/CWeaponStructures.h"
 #include "CEquipment.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEquipmentEquip);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEquipmentBeginEquip);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEquipmentUnequip);
 
@@ -12,6 +13,9 @@ UCLASS()
 class MYUNREALCPP_04_API UCEquipment : public UObject
 {
 	GENERATED_BODY()
+
+public:
+	FORCEINLINE const bool* GetEquipped() { return &bEquipped; }
 
 public:
 	void BeginPlay(class ACharacter* InOwner, const FEquipmentData& InData);
@@ -34,6 +38,7 @@ public:
 	void Unequip_Implementation();
 
 public:
+	FEquipmentEquip OnEquipmentEquip;
 	FEquipmentBeginEquip OnEquipmentBeginEquip;
 	FEquipmentUnequip OnEquipmentUnequip;
 

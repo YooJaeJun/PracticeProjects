@@ -44,13 +44,6 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Attach")
 		void AttachToCollision(FName InCollisionName);
 
-protected:
-	UPROPERTY(BlueprintReadOnly, Category = "Game")
-		class ACharacter* OwnerCharacter;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Game")
-		TArray<class UShapeComponent*> Collisions;
-
 private:
 	UFUNCTION()
 		void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -64,4 +57,11 @@ public:
 
 	FAttachmentBeginOverlap OnAttachmentBeginOverlap;
 	FAttachmentEndOverlap OnAttachmentEndOverlap;
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "Game")
+		class ACharacter* OwnerCharacter;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Game")
+		TArray<class UShapeComponent*> Collisions;
 };

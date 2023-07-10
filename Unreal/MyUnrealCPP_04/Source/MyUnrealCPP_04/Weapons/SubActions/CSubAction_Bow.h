@@ -63,9 +63,6 @@ private:
     FTimeline Timeline;
 
 private:
-    bool bAiming;
-
-private:
     FAimData OriginData;
 
 private:

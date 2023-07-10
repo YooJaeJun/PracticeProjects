@@ -38,12 +38,7 @@ void ACAttachment_Bow::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	PoseableMesh->CopyPoseFromSkeletalComponent(SkeletalMesh);
-}
-
-float* ACAttachment_Bow::GetBend()
-{
-	return Cast<UCAnimInstance_Bow>(SkeletalMesh->GetAnimInstance())->GetBend();
+	//PoseableMesh->CopyPoseFromSkeletalComponent(SkeletalMesh);
 }
 
 void ACAttachment_Bow::OnBeginEquip_Implementation()
@@ -77,3 +72,7 @@ void ACAttachment_Bow::OnUnequip_Implementation()
 	}
 }
 
+float* ACAttachment_Bow::GetBend()
+{
+	return Cast<UCAnimInstance_Bow>(SkeletalMesh->GetAnimInstance())->GetBend();
+}

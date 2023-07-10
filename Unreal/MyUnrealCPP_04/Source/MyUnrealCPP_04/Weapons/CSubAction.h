@@ -35,7 +35,7 @@ public:
 	virtual void Tick_Implementation(float InDeltaTime) {}
 
 protected:
-	bool bInAction = false;
+	bool bInAction;
 
 	class ACharacter* Owner;
 	class ACAttachment* Attachment;

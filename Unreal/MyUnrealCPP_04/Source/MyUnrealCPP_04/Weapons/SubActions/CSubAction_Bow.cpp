@@ -13,6 +13,39 @@ UCSubAction_Bow::UCSubAction_Bow()
 	CHelpers::GetAsset<UCurveVector>(&Curve, "CurveVector'/Game/Weapons/Bow/Curve_Aiming.Curve_Aiming'");
 }
 
+void UCSubAction_Bow::BeginPlay(ACharacter* InOwner, ACAttachment* InAttachment, UCDoAction* InDoAction)
+{
+	Super::BeginPlay(InOwner, InAttachment, InDoAction);
+
+	SpringArm = CHelpers::GetComponent<USpringArmComponent>(InOwner);
+	Camera = CHelpers::GetComponent<UCameraComponent>(InOwner);
+
+	FOnTimelineVector timeline;
+	timeline.BindUFunction(this, "OnAiming");
+
+	Timeline.AddInterpVector(Curve, timeline);
+	Timeline.SetPlayRate(AimingSpeed);
+
+	ACAttachment_Bow* bow = Cast<ACAttachment_Bow>(InAttachment);
+	if (!!bow)
+		Bend = bow->GetBend();
+}
+
+void UCSubAction_Bow::Tick_Implementation(float InDeltaTime)
+{
+	Super::Tick_Implementation(InDeltaTime);
+
+	Timeline.TickTimeline(InDeltaTime);
+}
+
+void UCSubAction_Bow::OnAiming(FVector Output)
+{
+	Camera->FieldOfView = Output.X;
+
+	if (!!Bend)
+		*Bend = Output.Y;
+}
+
 void UCSubAction_Bow::Pressed()
 {
 	CheckTrue(State->IsSubActionMode());
@@ -23,7 +56,6 @@ void UCSubAction_Bow::Pressed()
 	Super::Pressed();
 
 	State->OnSubActionMode();
-	bAiming = true;
 
 	OriginData.TargetArmLength = SpringArm->TargetArmLength;
 	OriginData.SocketOffset = SpringArm->SocketOffset;
@@ -48,7 +80,6 @@ void UCSubAction_Bow::Released()
 	Super::Released();
 
 	State->OffSubActionMode();
-	bAiming = false;
 
 	SpringArm->TargetArmLength = OriginData.TargetArmLength;
 	SpringArm->SocketOffset = OriginData.SocketOffset;
@@ -56,38 +87,4 @@ void UCSubAction_Bow::Released()
 	Camera->SetRelativeLocation(OriginData.CameraLocation);
 
 	Timeline.ReverseFromEnd();
-}
-
-void UCSubAction_Bow::BeginPlay(ACharacter* InOwner, ACAttachment* InAttachment, UCDoAction* InDoAction)
-{
-	Super::BeginPlay(InOwner, InAttachment, InDoAction);
-
-	SpringArm = CHelpers::GetComponent<USpringArmComponent>(InOwner);
-	Camera = CHelpers::GetComponent<UCameraComponent>(InOwner);
-
-	FOnTimelineVector timeline;
-	timeline.BindUFunction(this, "OnAiming");
-
-	Timeline.AddInterpVector(Curve, timeline);
-
-	Timeline.SetPlayRate(AimingSpeed);
-
-	ACAttachment_Bow* bow = Cast<ACAttachment_Bow>(InAttachment);
-	if (!!bow)
-		Bend = bow->GetBend();
-}
-
-void UCSubAction_Bow::Tick_Implementation(float InDeltaTime)
-{
-	Super::Tick_Implementation(InDeltaTime);
-
-	Timeline.TickTimeline(InDeltaTime);
-}
-
-void UCSubAction_Bow::OnAiming(FVector Output)
-{
-	Camera->FieldOfView = Output.X;
-
-	if (!!Bend)
-		*Bend = Output.Y;
 }
