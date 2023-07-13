@@ -18,7 +18,7 @@ public:
         class ACharacter* InOwner,
         const TArray<FDoActionData>& InDoActionData,
         const TArray<FHitData>& InHitData
-    );
+    ) override;
 
     void Tick(float InDeltaTime) override;
 

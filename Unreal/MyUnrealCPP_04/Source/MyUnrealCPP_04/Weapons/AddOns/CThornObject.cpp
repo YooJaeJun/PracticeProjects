@@ -27,7 +27,6 @@ void ACThornObject::ReceiveParticleData_Implementation(const TArray<FBasicPartic
 {
 	CheckFalse(Data.Num() > 0);
 
-
 	static TArray<AActor*> ignores;
 	ignores.AddUnique(GetOwner());
 
