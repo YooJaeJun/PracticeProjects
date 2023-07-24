@@ -25,6 +25,10 @@ private:
 	//UPROPERTY(EditAnywhere, Category = "Key")
 	//	FName LocationKey = "AvoidLocation";
 
+public:
+	class ACharacter* GetTarget();
+	//FVector GetLocation();
+
 private:
 	EAIStateType GetType();
 
@@ -45,10 +49,6 @@ protected:
 
 public:
 	FORCEINLINE void SetBlackboard(class UBlackboardComponent* InBlackboard) { Blackboard = InBlackboard; }
-
-public:
-	class ACharacter* GetTarget();
-	//FVector GetLocation();
 
 public:
 	void SetWaitMode();

@@ -5,14 +5,20 @@
 #include "Characters/ICharacter.h"
 #include "Components/CStateComponent.h"
 #include "Parkour/CParkourComponent.h"
+#include "GenericTeamAgentInterface.h"
 #include "CPlayer.generated.h"
 
 UCLASS()
 class MYUNREALCPP_04_API ACPlayer
 	: public ACharacter
 	, public IICharacter
+	, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Team")
+		uint8 TeamID = 1;
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -54,6 +60,7 @@ protected:
 
 public:	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(TeamID); }
 
 private:
 	UFUNCTION()

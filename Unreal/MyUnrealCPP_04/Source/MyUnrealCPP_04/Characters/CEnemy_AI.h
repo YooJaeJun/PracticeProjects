@@ -12,6 +12,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		class UBehaviorTree* BehaviorTree;
 
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+		uint8 TeamID = 2;
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Label")
 		float LabelViewAmount = 3000.0f;
@@ -28,6 +31,10 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCAIBehaviorComponent* Behavior;
+
+public:
+	FORCEINLINE uint8 GetTeamID() { return TeamID; }
+	FORCEINLINE class UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
 
 public:
 	ACEnemy_AI();

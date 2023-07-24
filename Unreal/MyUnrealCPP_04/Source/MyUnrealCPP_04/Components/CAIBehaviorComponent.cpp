@@ -13,6 +13,11 @@ void UCAIBehaviorComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
+ACharacter* UCAIBehaviorComponent::GetTarget()
+{
+	return Cast<ACharacter>(Blackboard->GetValueAsObject(TargetKey));
+}
+
 EAIStateType UCAIBehaviorComponent::GetType()
 {
 	return (EAIStateType)Blackboard->GetValueAsEnum(AIStateTypeKey);
