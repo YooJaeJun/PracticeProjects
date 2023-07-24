@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "Components/CWeaponComponent.h"
+#include "Components/CFeetComponent.h"
 #include "CAnimInstance.generated.h"
 
 UCLASS()
@@ -11,17 +12,27 @@ class MYUNREALCPP_04_API UCAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 protected:
-    UPROPERTY(BlueprintReadOnly, Category = "Animation")
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
         float Speed;
 
-    UPROPERTY(BlueprintReadOnly, Category = "Animation")
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
         float Pitch;
 
-    UPROPERTY(BlueprintReadOnly, Category = "Animation")
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
         float Direction;
 
-    UPROPERTY(BlueprintReadOnly, Category = "Animation")
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+        bool bFalling;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
         bool bBow_Aiming;
+
+protected:
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "InverseKinemetics")
+        bool bFeet;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "InverseKinemetics")
+        FFeetData FeetData;
 
 protected:
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")

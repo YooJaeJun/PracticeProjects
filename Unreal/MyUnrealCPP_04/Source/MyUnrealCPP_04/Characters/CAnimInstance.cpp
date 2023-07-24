@@ -2,7 +2,10 @@
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "Components/CStateComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Weapons/CSubAction.h"
+#include "Parkour/CParkourComponent.h"
+#include "Components/CFeetComponent.h"
 
 void UCAnimInstance::NativeBeginPlay()
 {
@@ -35,6 +38,29 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Direction = PrevRotation.Yaw;
 
 	Pitch = UKismetMathLibrary::FInterpTo(Pitch, OwnerCharacter->GetBaseAimRotation().Pitch, DeltaSeconds, 25);
+	bFalling = OwnerCharacter->GetCharacterMovement()->IsFalling();
+
+	UCParkourComponent* parkour = CHelpers::GetComponent<UCParkourComponent>(OwnerCharacter);
+	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(OwnerCharacter);
+
+
+	bFeet = false;
+
+	CheckNull(Weapon);
+	CheckFalse(Weapon->IsUnarmedMode());
+
+	if (!!parkour && !!feet)
+	{
+		bFeet = parkour->IsExecuting() == false;
+		FeetData = feet->GetData();
+	}
+	else if (!!feet)
+	{
+		bFeet = true;
+		FeetData = feet->GetData();
+	}
+
+
 
 	CheckNull(Weapon);
 

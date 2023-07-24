@@ -13,12 +13,9 @@ class MYUNREALCPP_04_API ACEnemy
 {
 	GENERATED_BODY()
 
-private:
+protected:
 	UPROPERTY(EditAnywhere, Category = "Color")
 		FLinearColor OriginColor = FLinearColor::White;
-
-	UPROPERTY(VisibleAnywhere)
-		class UCWeaponComponent* Weapon;
 
 	UPROPERTY(VisibleAnywhere)
 		class UCMontagesComponent* Montages;

@@ -37,6 +37,9 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCParkourComponent* Parkour;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCZoomComponent* Zoom;
+
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class USceneComponent* ArrowGroup;
@@ -64,4 +67,13 @@ private:
 
 public:
 	void End_BackStep() override;
+
+public:
+	void Click_RightButton();
+
+public:
+	void Landed(const FHitResult& Hit) override;
+
+private:
+	void SetZooming(float InValue);
 };

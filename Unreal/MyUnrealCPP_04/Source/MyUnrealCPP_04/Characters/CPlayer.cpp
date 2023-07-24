@@ -10,6 +10,7 @@
 #include "Components/CMontagesComponent.h"
 #include "Components/CMovementComponent.h"
 #include "Components/ArrowComponent.h"
+#include "Components/CZoomComponent.h"
 
 ACPlayer::ACPlayer()
 {
@@ -21,7 +22,7 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateActorComponent<UCMovementComponent>(this, &Movement, "Movement");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 	CHelpers::CreateActorComponent<UCParkourComponent>(this, &Parkour, "Parkour");
-
+	CHelpers::CreateActorComponent<UCZoomComponent>(this, &Zoom, "Zoom");
 
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
@@ -104,6 +105,9 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("VerticalLook", Movement, &UCMovementComponent::OnVerticalLook);
 	PlayerInputComponent->BindAxis("HorizontalLook", Movement, &UCMovementComponent::OnHorizontalLook);
 
+	//PlayerInputComponent->BindAxis("Zoom", Zoom, &UCZoomComponent::SetZoomValue);
+	PlayerInputComponent->BindAxis("Zoom", this, &ACPlayer::SetZooming);
+
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, Movement, &UCMovementComponent::OnSprint);
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Released, Movement, &UCMovementComponent::OnRun);
 
@@ -118,7 +122,8 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::DoAction);
 
-	PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SubAction_Pressed);
+	//PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SubAction_Pressed);
+	PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Pressed, this, &ACPlayer::Click_RightButton);
 	PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Released, Weapon, &UCWeaponComponent::SubAction_Released);
 }
 
@@ -154,4 +159,30 @@ void ACPlayer::End_BackStep()
 	Movement->DisableControlRotation();
 
 	State->SetIdleMode();
+}
+
+void ACPlayer::Click_RightButton()
+{
+	if (Weapon->IsUnarmedMode())
+	{
+		Parkour->DoParkour();
+
+		return;
+	}
+
+	Weapon->SubAction_Pressed();
+}
+
+void ACPlayer::Landed(const FHitResult& Hit)
+{
+	Super::Landed(Hit);
+
+	Parkour->DoParkour(true);
+}
+
+void ACPlayer::SetZooming(float InValue)
+{
+	CheckTrue(Weapon->IsBowMode());
+
+	Zoom->SetZoomValue(InValue);
 }
