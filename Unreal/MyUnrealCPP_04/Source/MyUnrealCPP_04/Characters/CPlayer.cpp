@@ -123,8 +123,8 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::DoAction);
 
 	//PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SubAction_Pressed);
-	PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Pressed, this, &ACPlayer::Click_RightButton);
-	PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Released, Weapon, &UCWeaponComponent::SubAction_Released);
+	PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Pressed, this, &ACPlayer::OnRightButton);
+	PlayerInputComponent->BindAction("SubAction", EInputEvent::IE_Released, this, &ACPlayer::OffRightButton);
 }
 
 void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
@@ -161,7 +161,7 @@ void ACPlayer::End_BackStep()
 	State->SetIdleMode();
 }
 
-void ACPlayer::Click_RightButton()
+void ACPlayer::OnRightButton()
 {
 	if (Weapon->IsUnarmedMode())
 	{
@@ -170,7 +170,18 @@ void ACPlayer::Click_RightButton()
 		return;
 	}
 
+	if (Weapon->IsBowMode())
+		Zoom->SetComponentTickEnabled(false);
+
 	Weapon->SubAction_Pressed();
+}
+
+void ACPlayer::OffRightButton()
+{
+	if (Weapon->IsBowMode())
+		Zoom->SetComponentTickEnabled(true);
+
+	Weapon->SubAction_Released();
 }
 
 void ACPlayer::Landed(const FHitResult& Hit)

@@ -30,8 +30,6 @@ private:
 
 public:
 	FORCEINLINE bool CanMove() { return bCanMove; }
-	FORCEINLINE void Move() { bCanMove = true; }
-	FORCEINLINE void Stop() { bCanMove = false; }
 
 	FORCEINLINE float GetWalkSpeed() { return Speed[(int32)ESpeedType::Walk]; }
 	FORCEINLINE float GetRunSpeed() { return Speed[(int32)ESpeedType::Run]; }
@@ -50,7 +48,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-private:
+public:
 	void SetSpeed(ESpeedType InType);
 
 public:
@@ -66,6 +64,9 @@ public:
 	void OnMoveRight(float InAxis);
 	void OnHorizontalLook(float InAxis);
 	void OnVerticalLook(float InAxis);
+
+	void Move();
+	void Stop();
 
 private:
 	class ACharacter* OwnerCharacter;

@@ -15,5 +15,6 @@ public class MyUnrealCPP_04 : ModuleRules
 		PublicDependencyModuleNames.Add("Niagara");
 		PublicDependencyModuleNames.Add("AIModule");
 		PublicDependencyModuleNames.Add("GameplayTasks");
-    }
+        PublicDependencyModuleNames.Add("NavigationSystem");
+	}
 }

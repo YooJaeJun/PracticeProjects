@@ -19,6 +19,11 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Label")
 		float LabelViewAmount = 3000.0f;
 
+private:
+	// 기존 참조하던 객체 참조 시 TSoftObjectPtr 사용 안 함
+	UPROPERTY(EditAnywhere, Category = "Patrol")
+		class ACPatrolPath* PatrolPath;
+
 #if WITH_EDITOR
 private:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -36,6 +41,8 @@ public:
 	FORCEINLINE uint8 GetTeamID() { return TeamID; }
 	FORCEINLINE class UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
 
+	FORCEINLINE class ACPatrolPath* GetPatrolPath() { return PatrolPath; }
+
 public:
 	ACEnemy_AI();
 
@@ -47,4 +54,10 @@ public:
 
 private:
 	void UpdateLabelRenderScale();
+
+protected:
+	void Hitted() override;
+
+public:
+	void End_Hitted() override;
 };

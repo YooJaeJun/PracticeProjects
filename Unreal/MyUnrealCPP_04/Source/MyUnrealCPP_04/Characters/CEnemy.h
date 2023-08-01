@@ -39,11 +39,11 @@ private:
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
 
-private:
-	void Hitted();
+protected:
+	virtual void Hitted();
 
 public:
-	void End_Hitted() override;
+	virtual void End_Hitted() override;
 
 private:
 	void Dead();

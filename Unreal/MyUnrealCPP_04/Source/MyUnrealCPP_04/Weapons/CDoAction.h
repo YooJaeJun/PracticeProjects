@@ -11,6 +11,9 @@ class MYUNREALCPP_04_API UCDoAction : public UObject
 	GENERATED_BODY()
 
 public:
+	FORCEINLINE bool GetInAction() { return bInAction; }
+
+public:
 	UCDoAction();
 
 	virtual void BeginPlay

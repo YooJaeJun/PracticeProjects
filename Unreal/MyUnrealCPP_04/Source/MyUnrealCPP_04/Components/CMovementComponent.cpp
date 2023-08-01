@@ -1,5 +1,6 @@
 #include "Components/CMovementComponent.h"
 #include "Global.h"
+#include "AIController.h"
 
 UCMovementComponent::UCMovementComponent()
 {
@@ -82,4 +83,14 @@ void UCMovementComponent::OnVerticalLook(float InAxis)
 	CheckTrue(bFixedCamera);
 
 	OwnerCharacter->AddControllerPitchInput(InAxis * VerticalLook * GetWorld()->GetDeltaSeconds());
+}
+
+void UCMovementComponent::Move()
+{
+	bCanMove = true;
+}
+
+void UCMovementComponent::Stop()
+{
+	bCanMove = false;
 }

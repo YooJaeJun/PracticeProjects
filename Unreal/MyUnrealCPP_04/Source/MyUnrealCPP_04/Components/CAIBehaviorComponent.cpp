@@ -18,6 +18,16 @@ ACharacter* UCAIBehaviorComponent::GetTarget()
 	return Cast<ACharacter>(Blackboard->GetValueAsObject(TargetKey));
 }
 
+FVector UCAIBehaviorComponent::GetPatrolLocation()
+{
+	return Blackboard->GetValueAsVector(PatrolLocationKey);
+}
+
+void UCAIBehaviorComponent::SetPatrolLocation(const FVector& InLocation)
+{
+	return Blackboard->SetValueAsVector(PatrolLocationKey, InLocation);
+}
+
 EAIStateType UCAIBehaviorComponent::GetType()
 {
 	return (EAIStateType)Blackboard->GetValueAsEnum(AIStateTypeKey);

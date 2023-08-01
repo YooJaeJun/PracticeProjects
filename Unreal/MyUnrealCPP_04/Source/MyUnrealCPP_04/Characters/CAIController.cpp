@@ -15,8 +15,8 @@ ACAIController::ACAIController()
 
 
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight");
-	Sight->SightRadius = 600;
-	Sight->LoseSightRadius = 800;
+	Sight->SightRadius = 800;
+	Sight->LoseSightRadius = 1000;
 	Sight->PeripheralVisionAngleDegrees = 45;
 	Sight->SetMaxAge(2);
 

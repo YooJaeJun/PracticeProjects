@@ -20,6 +20,9 @@ class MYUNREALCPP_04_API UCWeaponComponent : public UActorComponent
 		class UCWeaponAsset* DataAssets[static_cast<uint8>(EWeaponType::Max)];
 
 public:
+	FORCEINLINE EWeaponType GetWeaponType() { return Type; }
+
+public:
 	FORCEINLINE bool IsUnarmedMode() { return Type == EWeaponType::Max; }
 	FORCEINLINE bool IsFistMode() { return Type == EWeaponType::Fist; }
 	FORCEINLINE bool IsSwordMode() { return Type == EWeaponType::Sword; }
@@ -71,4 +74,8 @@ private:
 	class ACharacter* OwnerCharacter;
 
 	EWeaponType Type = EWeaponType::Max;
+
+private:
+	UPROPERTY()
+		class UCWeaponData* Datas[(int32)EWeaponType::Max];
 };

@@ -33,28 +33,9 @@ private:
 		TSubclassOf<class UCSubAction> SubActionClass;
 
 public:
-	FORCEINLINE class ACAttachment* GetAttachment() { return Attachment; }
-	FORCEINLINE class UCEquipment* GetEquipment() { return Equipment; }
-	FORCEINLINE class UCDoAction* GetDoAction() { return DoAction; }
-	FORCEINLINE class UCSubAction* GetSubAction() { return SubAction; }
-
-public:
 	UCWeaponAsset();
 
-	void BeginPlay(class ACharacter* InOwner);
-
-private:
-	UPROPERTY()
-		class ACAttachment* Attachment;
-
-	UPROPERTY()
-		class UCEquipment* Equipment;
-
-	UPROPERTY()
-		class UCDoAction* DoAction;
-
-	UPROPERTY()
-		class UCSubAction* SubAction;
+	void BeginPlay(class ACharacter* InOwner, class UCWeaponData** OutWeaponData);
 
 #if WITH_EDITOR
 	void PostEditChangeChainProperty(struct FPropertyChangedChainEvent& PropertyChangedEvent) override;

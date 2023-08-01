@@ -22,12 +22,11 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Key")
 		FName TargetKey = "Target";
 
+	UPROPERTY(EditAnywhere, Category = "Key")
+		FName PatrolLocationKey = "Patrol_Location";
+
 	//UPROPERTY(EditAnywhere, Category = "Key")
 	//	FName LocationKey = "AvoidLocation";
-
-public:
-	class ACharacter* GetTarget();
-	//FVector GetLocation();
 
 private:
 	EAIStateType GetType();
@@ -49,6 +48,14 @@ protected:
 
 public:
 	FORCEINLINE void SetBlackboard(class UBlackboardComponent* InBlackboard) { Blackboard = InBlackboard; }
+
+public:
+	class ACharacter* GetTarget();
+	//FVector GetLocation();
+
+public:
+	FVector GetPatrolLocation();
+	void SetPatrolLocation(const FVector& InLocation);
 
 public:
 	void SetWaitMode();

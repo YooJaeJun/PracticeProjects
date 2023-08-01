@@ -40,14 +40,24 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Pitch = UKismetMathLibrary::FInterpTo(Pitch, OwnerCharacter->GetBaseAimRotation().Pitch, DeltaSeconds, 25);
 	bFalling = OwnerCharacter->GetCharacterMovement()->IsFalling();
 
-	UCParkourComponent* parkour = CHelpers::GetComponent<UCParkourComponent>(OwnerCharacter);
-	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(OwnerCharacter);
-
-
-	bFeet = false;
 
 	CheckNull(Weapon);
 	CheckFalse(Weapon->IsUnarmedMode());
+
+	CheckNull(Weapon);
+
+	if (!!Weapon->GetSubAction())
+	{
+		bBow_Aiming = true;
+		bBow_Aiming &= WeaponType == EWeaponType::Bow;
+		bBow_Aiming &= Weapon->GetSubAction()->GetInAction();
+	}
+
+
+	UCParkourComponent* parkour = CHelpers::GetComponent<UCParkourComponent>(OwnerCharacter);
+	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(OwnerCharacter);
+
+	bFeet = false;
 
 	if (!!parkour && !!feet)
 	{
@@ -58,16 +68,5 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	{
 		bFeet = true;
 		FeetData = feet->GetData();
-	}
-
-
-
-	CheckNull(Weapon);
-
-	if (!!Weapon->GetSubAction())
-	{
-		bBow_Aiming = true;
-		bBow_Aiming &= WeaponType == EWeaponType::Bow;
-		bBow_Aiming &= Weapon->GetSubAction()->GetInAction();
 	}
 }
