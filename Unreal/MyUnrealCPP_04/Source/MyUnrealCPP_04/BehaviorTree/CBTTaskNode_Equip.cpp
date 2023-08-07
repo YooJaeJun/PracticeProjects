@@ -29,6 +29,7 @@ EBTNodeResult::Type UCBTTaskNode_Equip::ExecuteTask(UBehaviorTreeComponent& Owne
 	switch (Type)
 	{
 		case EWeaponType::Sword: weapon->SetSwordMode(); break;
+		case EWeaponType::Bow: weapon->SetBowMode(); break;
 	}
 
 	return EBTNodeResult::InProgress;
@@ -46,12 +47,9 @@ void UCBTTaskNode_Equip::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	const bool* bEquipped = weapon->GetEquipment()->GetEquipped();
 
 	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(ai);
-	if (state->IsIdleMode() && *bEquipped)
-	{
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 
+	if (state->IsIdleMode() && *bEquipped)
 		return;
-	}
 }
 
 EBTNodeResult::Type UCBTTaskNode_Equip::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -63,11 +61,7 @@ EBTNodeResult::Type UCBTTaskNode_Equip::AbortTask(UBehaviorTreeComponent& OwnerC
 
 	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(ai);
 	if (weapon == nullptr)
-	{
-		FinishLatentAbort(OwnerComp);
-
 		return EBTNodeResult::Failed;
-	}
 
 	bool bBeginEquip = weapon->GetEquipment()->GetBeginEquip();
 	if (bBeginEquip == false)
