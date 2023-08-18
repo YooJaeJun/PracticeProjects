@@ -1,5 +1,6 @@
 #include "Weapons/DoActions/CDoAction_Bow.h"
 #include "Global.h"
+#include "AIController.h"
 #include "Weapons/CEquipment.h"
 #include "Weapons/Attachments/CAttachment_Bow.h"
 #include "Weapons/AddOns/CArrow.h"
